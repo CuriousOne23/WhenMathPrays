@@ -1,110 +1,102 @@
-# **ssg_py_struc_pgm.md**  
-### *Structural Program for SSG — Python Implementation Scaffold*  
-### *Aligned with 20.47_ssg_prim.md, theoretical_utility_of_ssg.md, ts_meaning_theory.md, and Path‑A Progressive Lineup Testing*
+# **ssg_py_struc_pgm.md — Structural Program for SSG (Python Implementation Scaffold)**  
+### *Aligned with revised 20.47_ssg_prim.md and Path‑A progressive lineup testing*  
+### *Informative — Implementation Guidance Only*
 
 ---
 
-## **1. Purpose of ssg.py**
+# **1. Purpose**
 
-`ssg.py` implements the **Structural Signal Generator (SSG)** primitive in Python.
+`ssg.py` implements the **Structural Signature Generator (SSG‑prm)** as defined in **20.47**.
 
 SSG’s structural program:
 
-- consumes **SmOB’s pre‑semantic residue and cue vector**  
-- integrates **read‑only TP metadata** (context, MSL, continuity, identity, semantic‑importance, semantic‑residue, CCR, CIL)  
-- constructs a **deterministic structural manifold**  
-- freezes **structural entropy**  
-- produces **geometric invariants** for routing, scoring, continuity, and identity  
-- writes into **TP.metadata.semantic_layer_metadata** and SSG‑owned fields only  
-- obeys **primitive boundary discipline**, **provenance rules**, and **deterministic replay** requirements
+- consumes **only** the SmOB structural graph and structural‑adjacent metadata  
+- computes **five structural invariant families**  
+- assembles a **fixed‑length vector**  
+- performs **L2 normalization**  
+- writes **only** the four SSG‑owned TP fields:  
+  - `tp.ssg_signature`  
+  - `tp.ssg_layer_bitmap`  
+  - `tp.ssg_reason_code`  
+  - `tp.ssg_status`  
+- obeys **primitive boundary discipline**  
+- supports **deterministic replay**  
+- supports **progressive lineup testing**  
+- produces **no semantic‑layer fields**  
+- produces **no manifold geometry**  
+- produces **no routing geometry**  
+- produces **no semantic‑adjacent signals**
 
-`ssg.py` is the Python reference implementation used by:
+This scaffold ensures that:
 
-- Path‑A progressive lineup testing  
-- parity checks against future C++ implementations  
-- deterministic testbench runs under `testbenches/path_a/structure/ssg_testbench.*`  
-
----
-
-## **2. Inputs and Outputs**
-
-### **2.1 Inputs (from TP and SmOB)**
-
-`ssg.py` consumes:
-
-- **SmOB outputs** (owned by OB‑Set, read‑only to SSG):  
-  - `TP.metadata.residue.structural_residue`  
-  - `TP.metadata.residue.refinement_residue`  
-  - `TP.metadata.residue.constraint_residue`  
-  - `TP.metadata.residue.semantic_adjacent_residue`  
-  - `TP.metadata.residue.presemantic_hash`  
-  - `TP.metadata.residue.residue_provenance`  
-
-- **Constraint lineage (via SmOB, read‑only):**  
-  - CnOB constraint families (C1–C7)  
-  - constraint importance and residue (encoded upstream)  
-
-- **Context and MSL (read‑only):**  
-  - `TP.metadata.context.*`  
-  - `TP.metadata.msl.*`  
-
-- **Continuity and identity (read‑only):**  
-  - `TP.metadata.continuity_*`  
-  - `TP.metadata.identity.*`  
-
-- **Semantic‑importance (read‑only):**  
-  - `TP.semantic.importance.entities[]`  
-  - `TP.semantic.importance.facts[]`  
-
-- **Semantic‑residue alignment (read‑only):**  
-  - `TP.metadata.semantic_residue.entities[]`  
-  - `TP.metadata.semantic_residue.facts[]`  
-  - `TP.metadata.semantic_residue.alignment_scores`  
-
-- **CCR output (read‑only):**  
-  - `TP.cex.ccr.alignment.*`  
-  - `TP.cex.ccr.scores.*`  
-  - `TP.cex.ccr.decision`  
-  - `TP.cex.ccr.selected_conversation`  
-
-- **CIL substrate metadata (read‑only):**  
-  - `TP.metadata.cil.selected_conversation`  
-  - `TP.metadata.cil.cil_reference`  
-
-- **Provenance (read‑only):**  
-  - `TP.metadata.provenance.*`  
-
-All inputs are accessed via **canonical nested TP paths** (no `TP.` prefix in code; the TP object is passed in).
+- `ssg.py` can be implemented deterministically  
+- `ssg_testbench.py`, `ssg_testbench.yaml`, `ssg_rulechecker.py`, and `ssg_input.yaml` can be written directly  
+- C++ parity implementations can be validated  
+- Path‑A routing (RB‑prm) receives a correct structural coordinate chart
 
 ---
 
-### **2.2 Outputs (SSG‑owned fields)**
+# **2. Inputs and Outputs**
 
-`ssg.py` writes only SSG‑owned fields:
+## **2.1 Inputs (read‑only)**
 
-- **Semantic layer metadata (20.105.010):**  
-  - `TP.metadata.semantic_layer.semantic_adjacent_signals`  
-  - `TP.metadata.semantic_layer.semantic_layer_hash`  
-  - `TP.metadata.semantic_layer.referent_adjacent_signals`  
-  - `TP.metadata.semantic_layer.modality_stance_cues`  
-  - `TP.metadata.semantic_layer.semantic_layer_provenance`  
+`ssg.py` consumes **only structural inputs**, consistent with 20.47:
 
-- **Optional SSG‑specific structural manifold fields (if defined in 20.47):**  
-  - `TP.metadata.semantic_layer.structural_manifold_geometry`  
-  - `TP.metadata.semantic_layer.structural_manifold_hash`  
-  - `TP.metadata.semantic_layer.routing_eligibility_geometry`  
+### **SmOB structural graph**
+- `tp.metadata.residue.structural_residue`  
+- `tp.metadata.residue.refinement_residue`  
+- `tp.metadata.residue.constraint_residue`  
+- `tp.metadata.residue.semantic_adjacent_residue`  
+- `tp.metadata.residue.presemantic_hash`  
+- `tp.metadata.residue.residue_provenance`
 
-All outputs:
+### **Structural‑adjacent metadata**
+- continuity metadata (COB, CIL, CST)  
+- expressive metadata (IIInB, IE)  
+- normalization metadata (IE)  
+- provenance metadata  
+- lineage metadata  
+- entropy/signature histories
 
-- are **deterministic**  
-- are **bounded**  
-- are **replay‑safe**  
-- record **provenance** (`origin = SSG`, `last_update = SSG`, commit lineage via TPU)  
-- obey **immutability after TPU commit**
+### **Forbidden inputs**
+SSG must **not** read:
+
+- semantic_layer_metadata  
+- routing_metadata  
+- semantic ΔH%  
+- truth/done fields  
+- identity metadata  
+- meaning metadata  
+- TP.semantic.*  
+- TP.context.*  
+- TP.intake.*  
+- any Pipeline‑B envelopes
+
+This matches 20.47 exactly.
 
 ---
 
-## **3. High‑Level Program Structure**
+## **2.2 Outputs (SSG‑owned fields only)**
+
+`ssg.py` writes **only**:
+
+- `tp.ssg_signature`  
+- `tp.ssg_layer_bitmap`  
+- `tp.ssg_reason_code`  
+- `tp.ssg_status`
+
+No other TP fields may be modified.
+
+This ensures:
+
+- deterministic replay  
+- primitive boundary discipline  
+- compatibility with STPX, TR, RB, IdOB, RBU  
+- compatibility with progressive lineup testing
+
+---
+
+# **3. High‑Level Program Structure**
 
 `ssg.py` follows a **single entrypoint** pattern:
 
@@ -113,193 +105,202 @@ PRIMITIVE_NAME = "SSG"
 
 def run(tp):
     """
-    Structural Signal Generator (SSG) entrypoint.
+    Structural Signature Generator (SSG) entrypoint.
 
     Args:
-        tp: Thought Packet object (mutable), carrying metadata and residue fields.
+        tp: Thought Packet (mutable).
 
     Returns:
-        tp: Updated Thought Packet with SSG semantic_layer_metadata fields set.
+        tp: Updated TP with SSG-owned fields set.
     """
-    # 1. Extract inputs (SmOB residue + TP metadata)
-    # 2. Build structural manifold
-    # 3. Freeze structural entropy (canonicalization)
-    # 4. Compute semantic_layer_hash and geometric invariants
-    # 5. Write SSG-owned fields into TP.metadata.semantic_layer_*
-    # 6. Record provenance
-    # 7. Return updated TP
+    inputs = _extract_ssg_inputs(tp)
+    invariants = _compute_structural_invariants(inputs)
+    signature, bitmap, reason_code, status = _assemble_signature(invariants)
+    _write_ssg_outputs(tp, signature, bitmap, reason_code, status)
+    _record_provenance(tp)
+    return tp
 ```
 
 The structural program is organized into **pure helper functions**:
 
 ```python
 def _extract_ssg_inputs(tp):
-    # Read SmOB residue and TP metadata (read-only)
-    # Return a structured input bundle
+    # Read SmOB structural graph + structural-adjacent metadata (read-only)
+    # Return structured input bundle
 
-def _build_structural_manifold(inputs):
-    # Construct manifold from residue, constraints, context, continuity, identity
-    # Return manifold object
+def _compute_structural_invariants(inputs):
+    # Compute f1..f5 invariant families
+    # Return dict of invariant vectors
 
-def _freeze_structural_entropy(manifold):
-    # Canonicalize ordering, adjacency, constraint families
-    # Return frozen manifold
+def _assemble_signature(invariants):
+    # Concatenate invariants
+    # Compute L2 normalization
+    # Compute bitmap, reason_code, status
+    # Return (signature, bitmap, reason_code, status)
 
-def _compute_geometric_invariants(frozen_manifold):
-    # Compute semantic_layer_hash, adjacency signals, referent signals, modality/stance cues
-    # Return invariants dict
-
-def _write_ssg_outputs(tp, invariants):
-    # Write SSG-owned fields into TP.metadata.semantic_layer_*
-    # Do not modify upstream fields
-    # Return updated TP
+def _write_ssg_outputs(tp, signature, bitmap, reason_code, status):
+    # Write SSG-owned fields only
+    # No other TP fields may be modified
 
 def _record_provenance(tp):
-    # Set origin = SSG, last_update = SSG, update commit lineage placeholder
-    # Return updated TP
+    # Append ssg_ref to exec_trace
 ```
 
-`run(tp)` orchestrates these steps in order.
+This structure ensures:
+
+- deterministic execution  
+- testbench compatibility  
+- C++ parity  
+- clear primitive boundaries
 
 ---
 
-## **4. Invariants and Constraints**
+# **4. Structural Invariant Computation**
 
-`ssg.py` must enforce the following invariants:
+SSG computes the five invariant families defined in 20.47:
 
-- **Determinism:**  
-  - Same TP input → same SSG outputs.  
-  - No randomness, no sampling, no non‑deterministic ordering.
+### **Arc patterns ($f_1$)**
+Normalized frequency distribution over arc labels.
 
-- **Primitive boundaries:**  
-  - Read‑only: all upstream fields (SmOB, CnOB, SROB, SOB, context, MSL, continuity, identity, semantic‑importance, semantic‑residue, CCR, CIL).  
-  - Write‑only: SSG‑owned semantic_layer_metadata fields.  
-  - No modification of semantic‑importance, semantic‑residue, CCR output, CIL metadata, context, MSL, continuity, identity, routing, scoring, freeze metadata.
+### **Binding depth ($f_2$)**
+Maximum and mean depth of directed binding chains.
 
-- **Canonical nested paths:**  
-  - Use `tp["metadata"]["semantic_layer"]["..."]` style access.  
-  - No `TP.` prefix in code; TP is the object.
+### **Residue entropy ($f_3$)**
+Shannon entropy over residue‑address distribution.
 
-- **Replay safety:**  
-  - Outputs must be stable across runs.  
-  - Hashes must be deterministic functions of inputs.
+### **Curvature ($f_4$)**
+Cycle density and clustering coefficient.
 
-- **Boundedness:**  
-  - Manifold representation must be small, laptop‑scale.  
-  - No unbounded embeddings or large tensors.
+### **Motif frequencies ($f_5$)**
+Normalized counts of canonical structural motifs.
 
-- **Provenance discipline:**  
-  - `semantic_layer_provenance.origin = "SSG"`  
-  - `semantic_layer_provenance.last_update = "SSG"`  
-  - TPU later appends commit identifiers and lineage.
+These are concatenated:
 
----
+$$
+\varphi(G) = [\, f_1(G) \ \|\ f_2(G) \ \|\ f_3(G) \ \|\ f_4(G) \ \|\ f_5(G) \,]
+$$
 
-## **5. Structural Manifold Construction (Conceptual Outline)**
+Then normalized:
 
-The structural manifold is built by:
+$$
+\sigma = \frac{\varphi(G)}{\lVert \varphi(G) \rVert_2}
+$$
 
-1. **Integrating SmOB residue:**  
-   - structural_residue  
-   - refinement_residue  
-   - constraint_residue  
-   - semantic_adjacent_residue  
-   - presemantic_hash  
+If $\varphi(G) = \mathbf{0}$, then:
 
-2. **Integrating constraint families (C1–C7):**  
-   - adjacency constraints  
-   - ordering constraints  
-   - identity/continuity constraints  
-   - semantic‑adjacent constraints  
+$$
+\sigma = \mathbf{0}
+$$
 
-3. **Integrating contextual metadata:**  
-   - topic, stance, direction, coherence, importance  
-   - continuity flags, identity anchors, referent lineage  
-   - MSL qualifiers, clarifications, shading, intent  
-
-4. **Constructing manifold:**  
-   - nodes: structural units (segments, constraints, cues)  
-   - edges: adjacency, ordering, continuity relations  
-   - labels: constraint families, semantic‑adjacent roles, importance  
-
-The manifold is then **canonicalized**:
-
-- sorted by stable keys (e.g., segment index, constraint family, importance)  
-- adjacency lists normalized  
-- referent and identity links stabilized  
-- conflict and underspecification signals encoded deterministically  
+This matches 20.47 exactly.
 
 ---
 
-## **6. Geometric Invariants**
+# **5. Layer Bitmap, Reason Code, Status**
 
-From the frozen manifold, `ssg.py` computes:
+### **Bitmap**
+Computed from invariant presence:
 
-- `semantic_layer_hash`  
-  - a deterministic hash of the manifold structure and labels  
+$$
+b_i =
+\begin{cases}
+1 & \varphi_i(G_{L_i}) \neq \mathbf{0} \\
+0 & \text{otherwise}
+\end{cases}
+$$
 
-- `semantic_adjacent_signals`  
-  - signals indicating semantic‑adjacent structure (e.g., emphasis, contrast, hedging)  
+### **Reason Code**
+- FULL  
+- PARTIAL  
+- EMPTY  
 
-- `referent_adjacent_signals`  
-  - signals indicating referent continuity, shifts, or ambiguity  
+### **Status**
+- OK  
+- MISSING_INPUT  
+- DEGENERATE  
+- PARTIAL  
 
-- `modality_stance_cues`  
-  - signals indicating modality (possibility, necessity) and stance (agreement, doubt, critique)  
-
-These invariants are written into `TP.metadata.semantic_layer_*` and consumed downstream by:
-
-- STPX  
-- RBU  
-- TR  
-- RB  
-- IdOB  
-- WrdNm → ISc  
-- refinement loop  
+All logic matches 20.47.
 
 ---
 
-## **7. Error Handling and Testbench Integration**
+# **6. Primitive Boundary Discipline**
+
+`ssg.py` must enforce:
+
+- **read‑only** access to all upstream fields  
+- **write‑only** access to SSG‑owned fields  
+- **no semantic‑layer writes**  
+- **no routing‑layer writes**  
+- **no meaning‑layer writes**  
+- **no identity‑layer writes**  
+- **no cue extraction**  
+- **no manifold geometry**  
+- **no semantic_adjacent_signals**  
+- **no referent_adjacent_signals**  
+- **no modality/stance cues**
+
+This ensures compatibility with:
+
+- STPX (structural cue extractor)  
+- TR (meaning‑layer routing vector)  
+- RB (relational routing)  
+- IdOB (identity‑conditioned meaning refinement)  
+- RBU (meaning‑side commit)
+
+---
+
+# **7. Determinism, Replay, and Testbench Compatibility**
 
 `ssg.py` must:
 
-- **Fail loudly** on malformed TP structures (missing required fields, wrong types).  
-- Use **simple, explicit exceptions** (e.g., `ValueError`, `KeyError`) with clear messages.  
-- Avoid silent failure or implicit defaulting that hides structural problems.
+- produce identical outputs for identical inputs  
+- avoid randomness  
+- avoid non‑deterministic ordering  
+- use stable sorting for canonicalization  
+- use pure functions for invariant computation  
+- record provenance deterministically  
+- support progressive lineup testing
 
-The deterministic testbench under:
+The testbench will verify:
 
-```
-testbenches/path_a/structure/ssg_testbench.py
-testbenches/path_a/structure/ssg_testbench.yaml
-```
-
-will:
-
-- feed known TP fixtures into `run(tp)`  
-- assert deterministic outputs  
-- assert correct provenance  
-- assert primitive boundary discipline  
-- assert correct nested path usage  
-- assert replay determinism across runs  
-
----
-
-## **8. Relationship to Other Artifacts**
-
-`ssg_py_struc_pgm.md` is the structural program specification for:
-
-- `20.47_ssg_prim.md` (normative primitive requirements)  
-- `theoretical_utility_of_ssg.md` (architectural and meaning‑theory role)  
-- `ts_meaning_theory.md` (meaning = stated × context; SSG encodes context)  
-- `progressive_lineup_testing.md` (testing framework and primitive discipline)  
-
-It is the **bridge** between theory and implementation, ensuring that `ssg.py`:
-
-- respects Path‑A invariants  
-- respects meaning theory constraints  
-- remains testable, inspectable, and revisable  
-- supports laptop‑scale deterministic cognition.
+- correct signature computation  
+- correct bitmap formation  
+- correct reason code  
+- correct status  
+- correct provenance  
+- correct primitive boundaries  
+- correct nested path usage  
+- replay determinism
 
 ---
 
+# **8. Error Handling**
+
+`ssg.py` must:
+
+- raise clear exceptions for malformed TP structures  
+- set `tp.ssg_status = MISSING_INPUT` when SmOB output is absent  
+- set `tp.ssg_status = DEGENERATE` when invariants collapse  
+- never silently default or repair structural errors
+
+---
+
+# **9. Relationship to Other Artifacts**
+
+This document is the implementation scaffold for:
+
+- **20.47_ssg_prim.md** (normative)  
+- **progressive_lineup_testing.md** (testbench discipline)  
+- **ssg.py** (Python implementation)  
+- **ssg_testbench.py / .yaml** (deterministic tests)  
+- **ssg_rulechecker.py** (rule enforcement)  
+- **ssg_input.yaml** (fixtures)
+
+It ensures that all SSG artifacts can be written deterministically and consistently.
+
+---
+
+# **End of Document — ssg_py_struc_pgm.md (Unified Structural‑Only Rewrite)**
+
+---
