@@ -1,1 +1,202 @@
+# ============================================================
+# SSG Testbench (v1.0) — Deterministic cases
+# Exact-equality comparison in testbench mode for status/reason/bitmap
+# and structural presence of signature. Vector values use nearly-equal
+# comparison in the testbench runner (L2 / zero).
+# ============================================================
 
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Clean simple structural graph
+  # ----------------------------------------------------------
+  - id: ssg_clean_simple
+    description: Minimal non-empty graph with arcs → signature present, status OK
+    enabled: true
+    input:
+      metadata:
+        residue:
+          structural_residue:
+            nodes:
+              - id: a
+                label: segment
+                layer: 3
+              - id: b
+                label: segment
+                layer: 3
+            arcs:
+              - src: a
+                dst: b
+                label: bind
+                layer: 3
+          refinement_residue: []
+          constraint_residue: []
+          semantic_adjacent_residue: []
+          presemantic_hash: "clean_simple"
+          residue_provenance:
+            origin: SmOB
+            last_update: SmOB
+        context:
+          topic: clean
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      ssg_status: OK
+      ssg_reason_code: PARTIAL   # only layer 3 tagged
+      ssg_layer_bitmap: 8        # 1 << 3
+      # signature: present, L2-normalized (checked by nearly-equal / rules)
+
+  # ----------------------------------------------------------
+  # 2. Empty graph under residue
+  # ----------------------------------------------------------
+  - id: ssg_empty_graph
+    description: Residue present but empty nodes/arcs → EMPTY / zero signature
+    enabled: true
+    input:
+      metadata:
+        residue:
+          structural_residue:
+            nodes: []
+            arcs: []
+          refinement_residue: []
+          constraint_residue: []
+          semantic_adjacent_residue: []
+          presemantic_hash: "empty"
+          residue_provenance:
+            origin: SmOB
+            last_update: SmOB
+        context:
+          topic: empty
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      ssg_status: OK
+      ssg_reason_code: EMPTY
+      ssg_layer_bitmap: 0
+      ssg_signature: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+  # ----------------------------------------------------------
+  # 3. Missing structural input
+  # ----------------------------------------------------------
+  - id: ssg_missing_input
+    description: No residue and no structural_graph → MISSING_INPUT, no signature
+    enabled: true
+    input:
+      metadata:
+        context:
+          topic: missing
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      ssg_status: MISSING_INPUT
+      ssg_reason_code: EMPTY
+      ssg_layer_bitmap: 0
+      # ssg_signature intentionally absent
+
+  # ----------------------------------------------------------
+  # 4. Multi-layer tagged nodes
+  # ----------------------------------------------------------
+  - id: ssg_multi_layer
+    description: Nodes/arcs across layers → higher bitmap bits set
+    enabled: true
+    input:
+      metadata:
+        residue:
+          structural_residue:
+            nodes:
+              - id: s0
+                label: seg
+                layer: 0
+              - id: s1
+                label: ref
+                layer: 1
+              - id: s2
+                label: con
+                layer: 2
+              - id: s3
+                label: sem
+                layer: 3
+            arcs:
+              - src: s0
+                dst: s1
+                label: order
+                layer: 0
+              - src: s1
+                dst: s2
+                label: refine
+                layer: 1
+              - src: s2
+                dst: s3
+                label: constrain
+                layer: 2
+              - src: s3
+                dst: s0
+                label: bind
+                layer: 3
+          refinement_residue: []
+          constraint_residue: []
+          semantic_adjacent_residue: []
+          presemantic_hash: "multi_layer"
+          residue_provenance:
+            origin: SmOB
+            last_update: SmOB
+        context:
+          topic: multilayer
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: high
+    expected:
+      ssg_status: OK
+      ssg_reason_code: FULL
+      ssg_layer_bitmap: 15       # 0b1111
+      # signature present and L2-normalized
+
+  # ----------------------------------------------------------
+  # 5. Degenerate proxy / stable path (non-empty, expect OK or DEGENERATE)
+  # ----------------------------------------------------------
+  - id: ssg_degenerate_proxy
+    description: Single isolated node (no arcs) — foundation path stays OK/EMPTY or DEGENERATE
+    enabled: true
+    input:
+      metadata:
+        residue:
+          structural_residue:
+            nodes:
+              - id: only
+                label: isolated
+                layer: 3
+            arcs: []
+          refinement_residue: []
+          constraint_residue: []
+          semantic_adjacent_residue: []
+          presemantic_hash: "isolated"
+          residue_provenance:
+            origin: SmOB
+            last_update: SmOB
+        context:
+          topic: isolated
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      ssg_status: OK
+      ssg_reason_code: PARTIAL
+      ssg_layer_bitmap: 8
