@@ -105,20 +105,20 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
     # **************************** CE Test bench ******************************************************
-    (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
-        {
-            "mode": "testbench",     # "general" or "testbench"
-            "use_inb": False,
-            "use_iiinb": False,
-            "use_ie": False,
-            "use_cex_ie": False,
-            "use_cex_ccr": False,
-            "use_cex_pck": False,
-            "use_ce": True,
-            "tests_to_run": "see ce_tests_to_run.yaml",
-        }
-    ),
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": True,
+    #         "tests_to_run": "see ce_tests_to_run.yaml",
+    #     }
+    # ),
     # **************************** TPU Test bench ******************************************************
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.transform.tpu_testbench",
@@ -153,10 +153,6 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
     # **************************** SROB Test bench ******************************************************
-    # Highest upstream True = SROB (primitive under test)
-    # Pipeline: SROB only (or progressive from SOB if desired), input from:
-    #   • srob_testbench.yaml (mode = "testbench") — post-SOB shaped TP + expected
-    #   • srob_input.yaml (mode = "general") — post-SOB TP, rule-checked
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.srob_testbench",
     #     {
@@ -175,10 +171,6 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
     # **************************** CnOB Test bench ******************************************************
-    # Highest upstream True = CnOB (primitive under test)
-    # Pipeline: CnOB only (post-SROB shaped TP), input from:
-    #   • cnob_testbench.yaml (mode = "testbench")
-    #   • cnob_input.yaml (mode = "general")
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cnob_testbench",
     #     {
@@ -192,16 +184,12 @@ ACTIVE_TEST_MODULES = [
     #         "use_ce": False,
     #         "use_tpu": False,
     #         "use_sob": False,
-    #         "use_srob": False,       # Set True for progressive SROB → CnOB later
-    #         "use_cnob": True,        # Primitive under test
+    #         "use_srob": False,
+    #         "use_cnob": True,
     #         "tests_to_run": "see cnob_tests_to_run.yaml",
     #     }
     # ),
     # **************************** SmOB Test bench ******************************************************
-    # Highest upstream True = SmOB (primitive under test)
-    # Pipeline: SmOB only (post-CnOB shaped TP), input from:
-    #   • smob_testbench.yaml (mode = "testbench")
-    #   • smob_input.yaml (mode = "general")
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.smob_testbench",
     #     {
@@ -216,8 +204,8 @@ ACTIVE_TEST_MODULES = [
     #         "use_tpu": False,
     #         "use_sob": False,
     #         "use_srob": False,
-    #         "use_cnob": False,       # Set True for progressive CnOB → SmOB later
-    #         "use_smob": True,        # Primitive under test
+    #         "use_cnob": False,
+    #         "use_smob": True,
     #         "tests_to_run": "see smob_tests_to_run.yaml",
     #     }
     # ),
@@ -246,6 +234,33 @@ ACTIVE_TEST_MODULES = [
     #         "tests_to_run": "see wrdnm_tests_to_run.yaml",
     #     }
     # ),
+    # **************************** ISc Test bench ******************************************************
+    # Highest upstream True = ISc (primitive under test)
+    # Pipeline position: after WrdNm (CE candidate_set + optional wrdnm vectors → scores)
+    # Input from:
+    #   • isc_testbench.yaml (mode = "testbench")
+    #   • isc_input.yaml (mode = "general")
+    (
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.isc_testbench",
+        {
+            "mode": "testbench",     # "general" or "testbench"
+            "use_inb": False,
+            "use_iiinb": False,
+            "use_ie": False,
+            "use_cex_ie": False,
+            "use_cex_ccr": False,
+            "use_cex_pck": False,
+            "use_ce": False,
+            "use_tpu": False,
+            "use_sob": False,
+            "use_srob": False,
+            "use_cnob": False,
+            "use_smob": False,
+            "use_wrdnm": False,      # Set True later for progressive WrdNm → ISc
+            "use_isc": True,         # Primitive under test
+            "tests_to_run": "see isc_tests_to_run.yaml",
+        }
+    ),
 ]
 
 # ============================================================
