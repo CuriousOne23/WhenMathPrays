@@ -1,0 +1,51 @@
+# ============================================================
+# SSG General-Mode Input (v1.0)
+# Loaded only when mode == "general"
+# ============================================================
+
+mode: general
+primitive: ssg
+version: "1.0"
+notes: Minimal SmOB-shaped structural residue for rule-driven SSG validation
+
+metadata:
+  residue:
+    structural_residue:
+      nodes:
+        - id: n0
+          label: segment
+          layer: 3
+        - id: n1
+          label: constraint
+          layer: 2
+        - id: n2
+          label: segment
+          layer: 3
+      arcs:
+        - src: n0
+          dst: n1
+          label: constrain
+          layer: 2
+        - src: n1
+          dst: n2
+          label: bind
+          layer: 3
+        - src: n0
+          dst: n2
+          label: order
+          layer: 3
+    refinement_residue: []
+    constraint_residue: []
+    semantic_adjacent_residue: []
+    presemantic_hash: "general_ssg_fixture_v1"
+    residue_provenance:
+      origin: SmOB
+      last_update: SmOB
+  context:
+    topic: structure_probe
+    stance: neutral
+    intent: probe
+    continuity: new
+    direction: forward
+    coherence: stable
+    importance: medium

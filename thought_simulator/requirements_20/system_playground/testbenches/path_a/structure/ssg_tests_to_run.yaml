@@ -1,0 +1,24 @@
+# ============================================================
+# SSG Tests To Run (v1.0)
+# ============================================================
+
+tests:
+  - id: ssg_clean_simple
+    enabled: true
+    description: Minimal non-empty structural graph → OK signature + PARTIAL/FULL
+
+  - id: ssg_empty_graph
+    enabled: true
+    description: Empty nodes/arcs under residue → EMPTY / zero signature
+
+  - id: ssg_missing_input
+    enabled: true
+    description: No residue and no structural_graph → MISSING_INPUT
+
+  - id: ssg_multi_layer
+    enabled: true
+    description: Nodes tagged across layers → non-zero bitmap
+
+  - id: ssg_degenerate_proxy
+    enabled: true
+    description: Single isolated node (no arcs) — foundation path stays OK/EMPTY or DEGENERATE

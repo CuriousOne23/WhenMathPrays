@@ -1,0 +1,19 @@
+# ============================================================
+# SSG Rules To Check (selector / enable list)
+# Mirrors progressive pattern; which rules the rulechecker exercises.
+# ============================================================
+
+version: "1.0"
+primitive: SSG
+
+# Enable all rules defined in ssg_rules.yaml for general-mode validation
+enabled_rules:
+  - ssg_replay_001
+  - ssg_status_001
+  - ssg_reason_001
+  - ssg_bitmap_001
+  - ssg_signature_001
+  - ssg_l2_001
+  - ssg_forbidden_001
+  - ssg_missing_001
+  - ssg_progressive_001

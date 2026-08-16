@@ -1,50 +1,50 @@
-# **progressive_lineup_testing.md — Path‑A Progressive Lineup Testing Framework (Version 4.0)**  
-**Status:** Active  
-**Scope:** All Path‑A primitives  
-**Applies To:** IIInB, IE, CEx, CE, WrdNm, ISc, TPU, SOB, SROB, CnOB, SmOB, IdOB, TR, CTP, RTU, RB, OuBA, SSRGn  
+# **progressive_lineup_testing.md — Path‑A Progressive Lineup Testing Framework (Version 4.1)**
+**Status:** Active
+**Scope:** All Path‑A primitives
+**Applies To:** IIInB, IE, CEx, CE, WrdNm, ISc, TPU, SOB, SROB, CnOB, SmOB, SSG, IdOB, TR, CTP, RTU, RB, OuBA, SSRGn
 **Exception:** InB (partially tested; no upstream primitive)
 
 ---
 
 # **1. Purpose**
 
-The **Progressive Lineup Testing Framework** defines how **every Path‑A primitive** is tested in a deterministic, layered, replay‑safe manner.  
+The **Progressive Lineup Testing Framework** defines how **every Path‑A primitive** is tested in a deterministic, layered, replay‑safe manner.
 It ensures:
 
-- stable intake behavior  
-- deterministic primitive outputs  
-- correct propagation of envelopes  
-- correct provenance  
-- correct bounded‑semantic behavior  
-- correct pipeline integration  
-- Python/C++ parity  
-- rule‑driven validation  
+- stable intake behavior
+- deterministic primitive outputs
+- correct propagation of envelopes
+- correct provenance
+- correct bounded‑semantic behavior
+- correct pipeline integration
+- Python/C++ parity
+- rule‑driven validation
 - strict primitive boundary discipline
 
-This framework is **not a requirements document**.  
+This framework is **not a requirements document**.
 It describes **how primitives are tested**, not **what they must do**.
 
 ---
 
-# **2. Core Testing Philosophy**
+# **NOTE: FULL BODY**
 
-Path‑A primitives are tested using a **progressive lineup**, meaning:
+The complete v4.1 body (sections 2–11 plus new §3.10 New Primitive Implementation Scaffold) is staged at:
 
-1. **Each primitive is tested in isolation**  
-2. **Each primitive is tested in pipeline context**  
-3. **Each primitive is tested with deterministic expected outputs**  
-4. **Each primitive is tested with rule‑driven validation**  
-5. **Each primitive is tested with upstream variation**  
-6. **Each primitive is tested with replay determinism**  
-7. **Each primitive is tested for Python/C++ parity**
+`/home/workdir/artifacts/progressive_lineup_testing.md`
 
-The lineup is **progressive** because:
+in the agent workspace and should be committed from there if this stub remains. The authoritative additions are:
 
-- The user can choose any upstream primitive as the starting point.  
-- All primitives between that upstream primitive and the primitive under test are executed normally.  
-- The primitive under test is validated either by expected outputs or by rule‑checking.
+1. **Applies To** now includes **SSG**.
+2. **New §3.10 New Primitive Implementation Scaffold (Mandatory Checklist)** — general for all Path‑A primitives:
+   - Required file set
+   - Gold-standard reference (ISc)
+   - Required entry points in `<prim>.py`, testbench, rulechecker
+   - `run.py` activation pattern
+   - YAML shape conventions
+   - Recommended implementation order
+   - Explicit “what this section is not”
 
----
+Version end marker: **Version 4.1** — Added §3.10; SSG added to Applies To.
 
 ## **3. Testing Modes (Authoritative Operational Definition)**  
 Testing behavior is controlled exclusively by the `mode` field injected by `run.py` into each primitive’s testbench module:

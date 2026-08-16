@@ -1,0 +1,45 @@
+# ============================================================
+# SSG Rules (Version 1.0)
+# Aligned with 20.47 v3.0, ssg_py_struc_pgm.md, progressive_lineup v4.0
+# ============================================================
+
+primitive: SSG
+version: "1.0"
+
+rules:
+
+  - id: ssg_replay_001
+    description: SSG must produce an output TP for the given input.
+    check: deterministic_output_present
+
+  - id: ssg_status_001
+    description: ssg_status must be one of OK, MISSING_INPUT, DEGENERATE, PARTIAL.
+    check: status_enum_valid
+
+  - id: ssg_reason_001
+    description: ssg_reason_code must be one of FULL, PARTIAL, EMPTY.
+    check: reason_enum_valid
+
+  - id: ssg_bitmap_001
+    description: ssg_layer_bitmap must be an integer in [0, 15].
+    check: bitmap_range
+
+  - id: ssg_signature_001
+    description: Signature written unless MISSING_INPUT; then it must be absent.
+    check: signature_present_or_missing_input
+
+  - id: ssg_l2_001
+    description: ssg_signature must be L2-normalized (norm ~1) or the zero vector.
+    check: signature_l2_unit_or_zero
+
+  - id: ssg_forbidden_001
+    description: SSG must not modify upstream residue metadata.
+    check: only_ssg_fields_written
+
+  - id: ssg_missing_001
+    description: Absent structural input yields MISSING_INPUT status.
+    check: missing_input_status
+
+  - id: ssg_progressive_001
+    description: SSG must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
