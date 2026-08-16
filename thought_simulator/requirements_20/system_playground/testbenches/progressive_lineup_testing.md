@@ -26,27 +26,27 @@ It describes **how primitives are tested**, not **what they must do**.
 
 ---
 
-# **NOTE: FULL BODY**
+# **2. Core Testing Philosophy**
 
-The complete v4.1 body (sections 2–11 plus new §3.10 New Primitive Implementation Scaffold) is staged at:
+Path‑A primitives are tested using a **progressive lineup**, meaning:
 
-`/home/workdir/artifacts/progressive_lineup_testing.md`
+1. **Each primitive is tested in isolation**  
+2. **Each primitive is tested in pipeline context**  
+3. **Each primitive is tested with deterministic expected outputs**  
+4. **Each primitive is tested with rule‑driven validation**  
+5. **Each primitive is tested with upstream variation**  
+6. **Each primitive is tested with replay determinism**  
+7. **Each primitive is tested for Python/C++ parity**
 
-in the agent workspace and should be committed from there if this stub remains. The authoritative additions are:
+The lineup is **progressive** because:
 
-1. **Applies To** now includes **SSG**.
-2. **New §3.10 New Primitive Implementation Scaffold (Mandatory Checklist)** — general for all Path‑A primitives:
-   - Required file set
-   - Gold-standard reference (ISc)
-   - Required entry points in `<prim>.py`, testbench, rulechecker
-   - `run.py` activation pattern
-   - YAML shape conventions
-   - Recommended implementation order
-   - Explicit “what this section is not”
+- The user can choose any upstream primitive as the starting point.  
+- All primitives between that upstream primitive and the primitive under test are executed normally.  
+- The primitive under test is validated either by expected outputs or by rule‑checking.
 
-Version end marker: **Version 4.1** — Added §3.10; SSG added to Applies To.
+---
 
-## **3. Testing Modes (Authoritative Operational Definition)**  
+# **3. Testing Modes (Authoritative Operational Definition)**  
 Testing behavior is controlled exclusively by the `mode` field injected by `run.py` into each primitive’s testbench module:
 
 ```
@@ -888,7 +888,7 @@ This is essential for:
 Every primitive is tested in full pipeline context:
 
 ```
-InB → IIInB → IE → CEx → CE → WrdNm → ISc → TPU → SOB → SROB → CnOB → SmOB → IdOB → TR → CTP → RTU → RB → OuBA → SSRGn
+InB → IIInB → IE → CEx → CE → WrdNm → ISc → TPU → SOB → SROB → CnOB → SmOB → SSG → IdOB → TR → CTP → RTU → RB → OuBA → SSRGn
 ```
 
 The lineup verifies:
@@ -1071,6 +1071,6 @@ This document is now fully aligned with:
 
 ---
 
-# **End of Document — progressive_lineup_testing.md (Version 4.0)**
+# **End of Document — progressive_lineup_testing.md (Version 4.1)**
 
 ---
