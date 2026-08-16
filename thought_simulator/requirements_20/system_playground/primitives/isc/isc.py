@@ -17,7 +17,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 PRIMITIVE_NAME = "isc"
 
-# Default scoring config (ISc-owned). YAML may override later.
 DEFAULT_FFTM_WEIGHTS = {
     "w_s": 0.15,
     "w_b": 0.20,
@@ -26,7 +25,7 @@ DEFAULT_FFTM_WEIGHTS = {
 }
 DEFAULT_COP = {
     "threshold_amb": 0.85,   # entropy / log2(N)
-    "threshold_col": 0.95,   # top normalized mass
+    "threshold_col": 0.90,   # top-two conflict (near-tie)
     "threshold_drift": 25.0, # |ΔH%|
 }
 ENTROPY_LOG_BASE = 2.0
@@ -37,7 +36,6 @@ def get_primitive_name() -> str:
 
 
 def _field_feature(value: Any) -> float:
-    """Deterministic presence feature in {0.0, 1.0}."""
     if value is None:
         return 0.0
     if isinstance(value, str) and value.strip() == "":
@@ -70,8 +68,7 @@ class ISc:
 
         scored: List[Dict[str, Any]] = []
         for cand in candidates:
-            entry = self._score_one(cand)
-            scored.append(entry)
+            scored.append(self._score_one(cand))
 
         raw_scores = [e["raw_score"] for e in scored]
         normalized = self._normalize(raw_scores)
@@ -80,8 +77,8 @@ class ISc:
 
         entropy = self._entropy(normalized)
         delta_h = self._delta_h_percent(entropy, prior_entropy)
-        cop_flag = self._check_cop(normalized, entropy, delta_h)
         conflict = self._score_conflict(normalized)
+        cop_flag = self._check_cop(normalized, entropy, delta_h, conflict)
         reason = self._reason_code(scored, cop_flag, conflict)
 
         record = self._assemble_record(
@@ -93,10 +90,6 @@ class ISc:
         self._write(record, metadata)
         return self.tp
 
-    # ------------------------------------------------------------------
-    # Intake
-    # ------------------------------------------------------------------
-
     def _load_candidates(self, tp: dict) -> List[dict]:
         ce = tp.get("ce") or {}
         cs = ce.get("candidate_set")
@@ -106,21 +99,15 @@ class ISc:
 
     def _prior_entropy(self, tp: dict) -> Optional[float]:
         history = tp.get("isc_output") or []
-        if not history:
-            meta = (tp.get("metadata") or {}).get("scoring_metadata") or {}
-            h = meta.get("entropy")
+        if history and isinstance(history[-1], dict):
+            h = history[-1].get("entropy")
             if isinstance(h, (int, float)):
                 return float(h)
-            return None
-        last = history[-1] if isinstance(history[-1], dict) else {}
-        h = last.get("entropy")
+        meta = (tp.get("metadata") or {}).get("scoring_metadata") or {}
+        h = meta.get("entropy")
         if isinstance(h, (int, float)):
             return float(h)
         return None
-
-    # ------------------------------------------------------------------
-    # Scoring
-    # ------------------------------------------------------------------
 
     def _score_one(self, cand: dict) -> Dict[str, Any]:
         fftm = (cand or {}).get("fftm_fields") or {}
@@ -148,21 +135,13 @@ class ISc:
         if not reason_codes:
             reason_codes.append("zero_score")
 
-        cid = cand.get("candidate_id")
-        if cid is None:
-            cid = -1
-
+        cid = cand.get("candidate_id", -1)
         return {
             "candidate_id": cid,
             "raw_score": float(raw),
             "normalized_score": 0.0,
             "reason_codes": reason_codes,
-            "fftm_components": {
-                "f_s": f_s,
-                "f_b": f_b,
-                "f_e": f_e,
-                "f_i": f_i,
-            },
+            "fftm_components": {"f_s": f_s, "f_b": f_b, "f_e": f_e, "f_i": f_i},
             "structural_cues": {},
             "semantic_adjacent_cues": {},
         }
@@ -188,29 +167,29 @@ class ISc:
             return 0.0
         return float((current - prior) / prior * 100.0)
 
+    def _score_conflict(self, probs: List[float]) -> float:
+        if len(probs) < 2:
+            return 0.0
+        ordered = sorted(probs, reverse=True)
+        gap = ordered[0] - ordered[1]
+        return float(max(0.0, 1.0 - gap))
+
     def _check_cop(
-        self, probs: List[float], entropy: float, delta_h: float
+        self,
+        probs: List[float],
+        entropy: float,
+        delta_h: float,
+        conflict: float,
     ) -> bool:
         n = len(probs)
         if n == 0:
             return False
         max_h = _log(float(n)) if n > 1 else 0.0
         amb = (entropy / max_h) if max_h > 0.0 else 0.0
-        top = max(probs) if probs else 0.0
-        # collapse uses high top mass; ambiguity uses high relative entropy
         amb_hit = amb > self.cop_cfg["threshold_amb"]
-        col_hit = top > self.cop_cfg["threshold_col"] and n > 1
+        col_hit = conflict >= self.cop_cfg["threshold_col"]
         drift_hit = abs(delta_h) > self.cop_cfg["threshold_drift"]
         return bool(amb_hit or col_hit or drift_hit)
-
-    def _score_conflict(self, probs: List[float]) -> float:
-        if len(probs) < 2:
-            return 0.0
-        ordered = sorted(probs, reverse=True)
-        gap = ordered[0] - ordered[1]
-        # conflict high when top-two are close
-        conflict = max(0.0, 1.0 - gap)
-        return float(conflict)
 
     def _reason_code(
         self, scored: List[dict], cop_flag: bool, conflict: float
@@ -225,10 +204,6 @@ class ISc:
             return "SCORE_CONFLICT"
         return "SCORED_OK"
 
-    # ------------------------------------------------------------------
-    # Output assembly
-    # ------------------------------------------------------------------
-
     def _assemble_record(
         self,
         scored: List[dict],
@@ -241,24 +216,16 @@ class ISc:
         distribution = []
         score_set = []
         for e in scored:
-            distribution.append(
-                {
-                    "candidate_id": e["candidate_id"],
-                    "normalized_score": e["normalized_score"],
-                    "rationale": ",".join(e["reason_codes"]),
-                }
-            )
-            score_set.append(
-                {
-                    "candidate_id": e["candidate_id"],
-                    "score": e["normalized_score"],
-                }
-            )
-
-        confidence = 0.0
-        if scored:
-            confidence = max(e["normalized_score"] for e in scored)
-
+            distribution.append({
+                "candidate_id": e["candidate_id"],
+                "normalized_score": e["normalized_score"],
+                "rationale": ",".join(e["reason_codes"]),
+            })
+            score_set.append({
+                "candidate_id": e["candidate_id"],
+                "score": e["normalized_score"],
+            })
+        confidence = max((e["normalized_score"] for e in scored), default=0.0)
         return {
             "distribution": distribution,
             "entropy": entropy,
@@ -288,18 +255,6 @@ class ISc:
             {"candidate_id": e["candidate_id"], "score": e["normalized_score"]}
             for e in scored
         ]
-        fftm_log = {
-            str(e["candidate_id"]): e["fftm_components"] for e in scored
-        }
-        decisions = [
-            {
-                "candidate_id": e["candidate_id"],
-                "raw_score": e["raw_score"],
-                "normalized_score": e["normalized_score"],
-                "reason_codes": e["reason_codes"],
-            }
-            for e in scored
-        ]
         return {
             "score_set": score_set,
             "score_conflict": conflict,
@@ -308,16 +263,23 @@ class ISc:
             "entropy": entropy,
             "delta_h_percent": delta_h,
             "rationale_record": {
-                "fftm_components": fftm_log,
+                "fftm_components": {
+                    str(e["candidate_id"]): e["fftm_components"] for e in scored
+                },
                 "structural_cues": {},
                 "semantic_adjacent_cues": {},
-                "scoring_decisions": decisions,
+                "scoring_decisions": [
+                    {
+                        "candidate_id": e["candidate_id"],
+                        "raw_score": e["raw_score"],
+                        "normalized_score": e["normalized_score"],
+                        "reason_codes": e["reason_codes"],
+                    }
+                    for e in scored
+                ],
                 "cop_flags": ["cop_triggered"] if cop_flag else [],
             },
-            "provenance": {
-                "origin": "ISc",
-                "last_update": "ISc",
-            },
+            "provenance": {"origin": "ISc", "last_update": "ISc"},
         }
 
     def _defect_record(self, reason: str) -> Tuple[dict, dict]:
@@ -350,10 +312,7 @@ class ISc:
                 "scoring_decisions": [],
                 "cop_flags": [],
             },
-            "provenance": {
-                "origin": "ISc",
-                "last_update": "ISc",
-            },
+            "provenance": {"origin": "ISc", "last_update": "ISc"},
         }
         return record, metadata
 
