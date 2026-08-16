@@ -1,6 +1,6 @@
-# **theoretical_utility_of_smob.md**  
+# **theoretical_utility_of_smob.md — Corrected & Aligned Version**  
 ### *Semantic‑Adjacent Origin Block — Theoretical Utility, Placement, Necessity, and Function in Path‑A*  
-### *Aligned with 20.40.040, ts_meaning_theory.md, and the OB‑Set Structural Pipeline*
+### *Aligned with 20.40.040, revised 20.47, STPX, TR, RB, IdOB, RBU, and ts_meaning_theory.md*
 
 ---
 
@@ -12,14 +12,19 @@ The Semantic‑Adjacent Origin Block (SmOB) is the **fourth primitive** in the O
 SOB → SROB → CnOB → SmOB → SSG
 ```
 
-SmOB introduces the **semantic‑adjacent layer** of Path‑A — the first point where structural constraints (from CnOB) are transformed into **semantic‑adjacent cues**, **semantic‑adjacent residue**, and **pre‑semantic residue**.
+SmOB introduces the **semantic‑adjacent layer** of Path‑A — the first point where structural constraints (from CnOB) are transformed into **semantic‑adjacent cues** and **pre‑semantic residue**.
 
 Meaning theory defines:
 
 > **Meaning = (what is stated) × (the context in which it is stated)**
 
-SmOB is the primitive that **begins encoding semantic‑adjacent context**, bridging structural constraints and semantic scoring.  
-It produces the substrate that SSG uses to construct the structural manifold.
+SmOB is the primitive that begins encoding the **semantic‑adjacent portion of context**, bridging structural constraints and downstream structural‑adjacent processing.
+
+SmOB does **not** produce semantic‑layer geometry.  
+SmOB does **not** produce routing‑eligibility geometry.  
+SmOB does **not** produce manifold geometry.
+
+SmOB produces **semantic‑adjacent residue**, which SSG uses as **structural‑adjacent metadata** when computing structural invariants.
 
 SmOB is the **semantic‑adjacent root** of the turn.
 
@@ -30,13 +35,13 @@ SmOB is the **semantic‑adjacent root** of the turn.
 SmOB appears immediately after CnOB:
 
 ```
-CE → WrdNm → ISc → TPU → SOB → SROB → CnOB → SmOB → SSG → STPX → RBU → TR → RB → refinement loop
+SOB → SROB → CnOB → SmOB → SSG → STPX → TR → RB → RTU → IdOB → RBU
 ```
 
 This placement is intentional:
 
-- **Upstream**: SmOB receives constraint families, constraint residue, and constraint‑importance from CnOB.  
-- **Downstream**: SmOB provides semantic‑adjacent cues and pre‑semantic residue to SSG.
+- **Upstream:** SmOB receives constraint families, constraint residue, and constraint‑importance from CnOB.  
+- **Downstream:** SmOB provides semantic‑adjacent cues and pre‑semantic residue to SSG, which uses them as **structural‑adjacent metadata**.
 
 SmOB is the **semantic‑adjacent formation root** of the turn.
 
@@ -60,29 +65,29 @@ SmOB computes cues that are *not semantic content*, but *semantic‑adjacent sig
 
 These cues are essential for:
 
-- SSG → manifold geometry  
-- ISc → semantic scoring  
-- IdOB → identity continuity  
-- STPX → discourse normalization  
-- RBU → routing arbitration  
-- TR → truth‑relation mapping  
-- RB → routing decisions  
+- **SSG → structural‑adjacent metadata for invariant extraction**  
+- **STPX → structural cue extraction**  
+- **IdOB → identity continuity**  
+- **TR → meaning‑layer routing vector**  
+- **RB → relational routing**  
+- **RBU → meaning‑side commit**
 
 ### **2. Pre‑semantic residue**  
 SmOB produces **pre‑semantic residue**, which is consumed by:
 
-- SSG → structural manifold construction  
-- STPX → discourse normalization  
-- RBU → routing arbitration  
+- **SSG → structural‑adjacent metadata**  
+- **STPX → structural cue extraction**  
+- **IdOB → meaning refinement**  
+- **RBU → meaning‑side commit**
 
 Pre‑semantic residue is the **semantic‑adjacent substrate** of the turn.
 
 ### **3. Semantic‑adjacent importance**  
-SmOB computes **semantic‑adjacent importance**, which is used by:
+SmOB computes **semantic‑adjacent importance**, used by:
 
-- SSG → manifold weighting  
-- ISc → semantic scoring  
-- IdOB → identity continuity weighting  
+- **IdOB → identity‑conditioned weighting**  
+- **STPX → structural cue weighting**  
+- **TR → meaning‑layer routing vector weighting**
 
 ### **4. Semantic‑adjacent continuity**  
 SmOB identifies:
@@ -92,7 +97,7 @@ SmOB identifies:
 - semantic‑adjacent adjacency continuity  
 - semantic‑adjacent ordering continuity  
 
-These continuity anchors are required by IdOB, STPX, and SSG.
+These continuity anchors are required by IdOB, STPX, and TR.
 
 ### **5. Deterministic replay**  
 Replay determinism requires:
@@ -114,18 +119,18 @@ SmOB produces a bounded semantic‑adjacent representation that downstream primi
 SmOB consumes:
 
 ### **4.1 CnOB constraint structure (read‑only)**  
-- cnob_families.C1–C7  
-- cnob_residue  
-- cnob_importance  
-- cnob_continuity  
-- cnob_provenance  
+- C1–C7 constraint families  
+- constraint residue  
+- constraint importance  
+- constraint continuity  
+- constraint provenance  
 
 ### **4.2 SROB refined structure (read‑only)**  
-- srob_segments[]  
-- srob_adjacency  
-- srob_ordering  
-- srob_residue  
-- srob_continuity  
+- segments  
+- adjacency  
+- ordering  
+- residue  
+- continuity  
 
 ### **4.3 Contextual metadata (read‑only)**  
 - continuity metadata  
@@ -157,7 +162,8 @@ SmOB extracts semantic‑adjacent cues from:
 - constraint families  
 - constraint residue  
 - adjacency and ordering  
-- continuity and identity metadata  
+- continuity metadata  
+- identity metadata  
 - referent metadata  
 - stance and direction metadata  
 
@@ -172,15 +178,14 @@ These cues include:
 - conflict adjacency  
 - underspecification adjacency  
 
-These cues are essential for:
+These cues are consumed downstream by:
 
-- SSG → manifold geometry  
-- ISc → semantic scoring  
-- IdOB → identity continuity  
-- STPX → discourse normalization  
-- RBU → routing arbitration  
-- TR → truth‑relation mapping  
-- RB → routing decisions  
+- **SSG → structural‑adjacent metadata**  
+- **STPX → structural cue extraction**  
+- **IdOB → identity continuity**  
+- **TR → meaning‑layer routing vector**  
+- **RB → relational routing**  
+- **RBU → meaning‑side commit**
 
 ---
 
@@ -196,9 +201,9 @@ SmOB produces **pre‑semantic residue**, including:
 
 This residue is consumed by:
 
-- SSG → structural manifold geometry  
-- STPX → discourse normalization  
-- RBU → routing arbitration  
+- **SSG → structural‑adjacent metadata**  
+- **STPX → structural cue extraction**  
+- **IdOB → meaning refinement**
 
 Pre‑semantic residue is the **semantic‑adjacent substrate** of the turn.
 
@@ -206,11 +211,11 @@ Pre‑semantic residue is the **semantic‑adjacent substrate** of the turn.
 
 ## **Job 3 — Semantic‑Adjacent Importance Computation**
 
-SmOB computes **semantic‑adjacent importance**, which is used by:
+SmOB computes **semantic‑adjacent importance**, used by:
 
-- SSG → manifold weighting  
-- ISc → semantic scoring  
-- IdOB → identity continuity weighting  
+- **IdOB → identity‑conditioned weighting**  
+- **STPX → structural cue weighting**  
+- **TR → meaning‑layer routing vector weighting**
 
 Semantic‑adjacent importance is a **semantic‑adjacent weighting** of the turn.
 
@@ -227,31 +232,34 @@ SmOB writes:
 - `TP.metadata.semantic_adjacent.smob_provenance`  
 - `TP.metadata.residue.presemantic_hash`  
 
-These outputs form the **semantic‑adjacent substrate** for SSG.
+These outputs form the **semantic‑adjacent substrate** for SSG, STPX, IdOB, TR, RB, and RBU.
+
+SmOB does **not** produce semantic‑layer geometry.
 
 ---
 
 # **7. Downstream Consumers of SmOB Output**
 
-SmOB’s semantic‑adjacent cues and residue are consumed by:
-
 ### **SSG**  
-Builds the structural manifold using SmOB semantic‑adjacent cues and pre‑semantic residue.
+Uses SmOB semantic‑adjacent residue as **structural‑adjacent metadata** for invariant extraction.
 
 ### **STPX**  
-Normalizes discourse structure using SmOB semantic‑adjacent residue.
+Uses semantic‑adjacent residue for structural cue extraction.
 
-### **RBU / TR / RB**  
-Use SmOB semantic‑adjacent cues for routing and truth‑relation mapping.
+### **TR**  
+Uses semantic‑adjacent cues (via STPX) for meaning‑layer routing vector construction.
+
+### **RB**  
+Uses structural cues (via STPX) and TR for relational routing.
 
 ### **IdOB**  
-Uses SmOB semantic‑adjacent continuity and importance for identity continuity.
+Uses semantic‑adjacent continuity and importance for identity continuity.
 
-### **ISc**  
-Uses SmOB semantic‑adjacent importance for semantic scoring.
+### **RBU**  
+Uses semantic‑adjacent cues for meaning‑side commit.
 
 ### **Refinement Loop**  
-Uses SmOB semantic‑adjacent cues as the semantic‑adjacent baseline.
+Uses semantic‑adjacent cues as the semantic‑adjacent baseline.
 
 ---
 
@@ -272,7 +280,7 @@ SmOB encodes the **semantic‑adjacent portion** of the context operand by:
 
 This semantic‑adjacent formation is the **fourth structural representation** of context.
 
-Downstream primitives refine this representation until SSG produces the final structural manifold.
+Downstream primitives refine this representation until SSG produces the final **structural signature**.
 
 Thus:
 
@@ -292,8 +300,6 @@ Replay determinism requires:
 
 SmOB provides all of these.
 
-Without SmOB, replay determinism would fail at the semantic‑adjacent level.
-
 ---
 
 # **10. SmOB and Laptop‑Scale Cognition**
@@ -303,9 +309,10 @@ SmOB enables laptop‑scale cognition by:
 - producing bounded semantic‑adjacent cues  
 - producing bounded pre‑semantic residue  
 - producing bounded semantic‑adjacent importance  
-- enabling efficient manifold construction  
-- enabling efficient semantic scoring  
-- enabling efficient routing and truth‑relation mapping  
+- enabling efficient structural signature computation (SSG)  
+- enabling efficient structural cue extraction (STPX)  
+- enabling efficient meaning‑layer routing (TR)  
+- enabling efficient relational routing (RB)
 
 SmOB is the **first bounded semantic‑adjacent representation** of the turn.
 
@@ -318,21 +325,16 @@ SmOB is the **semantic‑adjacent formation root** of the turn.
 It is necessary because:
 
 - meaning requires semantic‑adjacent context  
-- structural manifolds require semantic‑adjacent cues  
-- semantic scoring requires semantic‑adjacent importance  
-- continuity requires semantic‑adjacent anchors  
-- identity requires semantic‑adjacent anchors  
+- structural signatures require semantic‑adjacent metadata  
+- structural cue extraction requires semantic‑adjacent residue  
+- identity continuity requires semantic‑adjacent anchors  
 - routing requires semantic‑adjacent cues  
 - truth‑relation mapping requires semantic‑adjacent cues  
 - replay determinism requires semantic‑adjacent stability  
 - laptop‑scale cognition requires bounded semantic‑adjacent representation  
 
-SmOB consumes CnOB constraints and SROB refined structure, produces semantic‑adjacent cues, pre‑semantic residue, semantic‑adjacent importance, and semantic‑adjacent continuity, and provides the substrate for SSG.
+SmOB consumes CnOB constraints and SROB refined structure, produces semantic‑adjacent cues, pre‑semantic residue, semantic‑adjacent importance, and semantic‑adjacent continuity, and provides the substrate for SSG, STPX, TR, RB, IdOB, and RBU.
 
 SmOB is the **fourth step** in the structural meaning pipeline.
 
 ---
-
-Or we can move downstream to STPX, RBU, TR, RB, IdOB, or OuBA.
-
-Just tell me what you want next.
