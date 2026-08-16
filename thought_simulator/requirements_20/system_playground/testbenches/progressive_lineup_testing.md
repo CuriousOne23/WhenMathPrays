@@ -780,6 +780,46 @@ With this section:
 - developers can instantly see context values  
 - rule violations become easy to interpret  
 
+# ⭐ **3.10 New Primitive Implementation Scaffold (Mandatory Checklist)**
+
+This section is **general** — it applies to every new Path‑A primitive.
+It exists so an implementer (human or AI) can create a complete testbench suite
+without reverse‑engineering a prior primitive.
+
+It does **not** define what the primitive computes. That stays in the
+primitive’s HLR (20.xx) and structural program (`*_py_struc_pgm.md`).
+
+## **3.10.1 Required File Set**
+- `primitives/<prim>/<prim>.py`
+- `testbenches/path_a/<category>/`:
+  - `<prim>_testbench.py`
+  - `<prim>_testbench.yaml`
+  - `<prim>_input.yaml`
+  - `<prim>_rules.yaml`
+  - `<prim>_rules_to_check.yaml` (optional)
+  - `<prim>_rulechecker.py`
+  - `<prim>_tests_to_run.yaml`
+
+## **3.10.2 Gold‑Standard Reference**
+**ISc** is the control-flow reference. Copy structure from ISc; replace domain logic only.
+
+## **3.10.3–3.10.5 Entry points**
+- `<prim>.py`: `PRIMITIVE_NAME`, `get_primitive_name()`, class with `process()` (or `run(tp)`)
+- `<prim>_testbench.py`: `set_testbench_config`, `run_testbench`, §3.7 import path, both modes
+- `<prim>_rulechecker.py`: class with `run()`; methods named by `check:` in rules YAML
+
+## **3.10.6 run.py activation**
+Comment previous active block; insert new module path; `"use_<prim>": True`; all other `use_*` False.
+
+## **3.10.7 YAML shapes**
+Standard `tests:` / `input` / `expected` / `rules` shapes as used by ISc.
+
+## **3.10.8 Implementation order**
+HLR → structural program → primitive → rules/rulechecker → fixtures → testbench → run.py → green → then refine internals.
+
+## **3.10.9 Not**
+Not a substitute for HLR; not a place for domain formulas; not a license for new test architectures.
+
 ---
 
 # **4. Progressive Upstream Selection**
