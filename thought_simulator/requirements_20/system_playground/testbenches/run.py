@@ -240,8 +240,36 @@ ACTIVE_TEST_MODULES = [
     # Input from:
     #   • isc_testbench.yaml (mode = "testbench")
     #   • isc_input.yaml (mode = "general")
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.isc_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": False,
+    #         "use_wrdnm": False,      # Set True later for progressive WrdNm → ISc
+    #         "use_isc": True,         # Primitive under test
+    #         "tests_to_run": "see isc_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** SSG Test bench ******************************************************
+    # Highest upstream True = SSG (primitive under test)
+    # Pipeline position: after SmOB (structural graph → fixed-length structural signature)
+    # Input from:
+    #   • ssg_testbench.yaml (mode = "testbench")
+    #   • ssg_input.yaml (mode = "general")
+    # Location: path_a/structure/
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.isc_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.ssg_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
@@ -256,9 +284,10 @@ ACTIVE_TEST_MODULES = [
             "use_srob": False,
             "use_cnob": False,
             "use_smob": False,
-            "use_wrdnm": False,      # Set True later for progressive WrdNm → ISc
-            "use_isc": True,         # Primitive under test
-            "tests_to_run": "see isc_tests_to_run.yaml",
+            "use_wrdnm": False,
+            "use_isc": False,
+            "use_ssg": True,         # Primitive under test
+            "tests_to_run": "see ssg_tests_to_run.yaml",
         }
     ),
 ]
