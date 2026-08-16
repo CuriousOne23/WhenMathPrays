@@ -453,7 +453,6 @@ with `"use_ssg": True`.
 **Must prove:** four-field contract; no upstream residue mutation; status/reason/bitmap enums; L2 unit or zero; MISSING_INPUT does not write signature; determinism / progressive mechanics.
 
 **Deferred:** final f1..f5 formulas; final motif catalog; empirical clustering for RB.
-```
 
 ---
 
