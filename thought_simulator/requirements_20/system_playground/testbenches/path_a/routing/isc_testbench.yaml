@@ -1,1 +1,454 @@
+# ============================================================
+# ISc Testbench (v1.0) — Deterministic cases
+# Exact-equality comparison in testbench mode
+# Candidate authority: TP.ce.candidate_set[] (CE / 20.108.010)
+# ============================================================
 
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Clean single-candidate FFTM scoring
+  # ----------------------------------------------------------
+  - id: isc_clean_single
+    description: Single full-FFTM candidate → score 1.0, entropy 0, SCORED_OK
+    enabled: true
+    input:
+      ce:
+        candidate_set:
+          - candidate_id: 0
+            fftm_fields:
+              token_surface: hello
+              token_base: hello
+              token_expression: statement
+              token_intent: inform
+            structural_features:
+              surface_id: 100.0
+              lemma_id: 100.0
+              expression_id: 50.0
+              ordering_id: 0.0
+              constraint_family_id: 0.0
+              next_context_id: 10.0
+            semantic_adjacent_features:
+              semantic_residue: ""
+              structural_residue: ""
+            next_context:
+              topic: greeting
+              stance: neutral
+              intent: inform
+              continuity: new
+              direction: forward
+              coherence: stable
+              importance: medium
+            provenance:
+              origin: CE
+              last_update: CE
+              note: default
+      metadata:
+        context:
+          topic: greeting
+          stance: neutral
+          intent: inform
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      isc_output:
+        - distribution:
+            - candidate_id: 0
+              normalized_score: 1.0
+              rationale: fftm_surface,fftm_base,fftm_expression,fftm_intent
+          entropy: 0.0
+          delta_h_percent: 0.0
+          confidence: 1.0
+          cop_triggered: false
+          score_set:
+            - candidate_id: 0
+              score: 1.0
+          score_conflict: 0.0
+          score_reason_code: SCORED_OK
+          provenance:
+            origin: ISc
+            last_update: ISc
+            timestamp: deterministic
+      isc:
+        score_set:
+          - candidate_id: 0
+            score: 1.0
+        score_conflict: 0.0
+        score_reason_code: SCORED_OK
+        cop_triggered: false
+      metadata:
+        scoring_metadata:
+          score_set:
+            - candidate_id: 0
+              score: 1.0
+          score_conflict: 0.0
+          score_reason_code: SCORED_OK
+          cop_triggered: false
+          entropy: 0.0
+          delta_h_percent: 0.0
+
+  # ----------------------------------------------------------
+  # 2. Two equal full candidates → uniform, high conflict, COP
+  # ----------------------------------------------------------
+  - id: isc_two_equal
+    description: Two full-FFTM candidates → 0.5/0.5, entropy 1.0, COP_TRIGGERED
+    enabled: true
+    input:
+      ce:
+        candidate_set:
+          - candidate_id: 0
+            fftm_fields:
+              token_surface: alpha
+              token_base: alpha
+              token_expression: statement
+              token_intent: inform
+            structural_features:
+              surface_id: 1.0
+              lemma_id: 1.0
+              expression_id: 1.0
+              ordering_id: 0.0
+              constraint_family_id: 0.0
+              next_context_id: 0.0
+            semantic_adjacent_features:
+              semantic_residue: ""
+              structural_residue: ""
+            next_context: {}
+            provenance:
+              origin: CE
+              last_update: CE
+              note: c0
+          - candidate_id: 1
+            fftm_fields:
+              token_surface: beta
+              token_base: beta
+              token_expression: statement
+              token_intent: inform
+            structural_features:
+              surface_id: 2.0
+              lemma_id: 2.0
+              expression_id: 2.0
+              ordering_id: 1.0
+              constraint_family_id: 0.0
+              next_context_id: 0.0
+            semantic_adjacent_features:
+              semantic_residue: ""
+              structural_residue: ""
+            next_context: {}
+            provenance:
+              origin: CE
+              last_update: CE
+              note: c1
+      metadata:
+        context:
+          topic: choice
+          stance: neutral
+          intent: decide
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: high
+    expected:
+      isc_output:
+        - distribution:
+            - candidate_id: 0
+              normalized_score: 0.5
+              rationale: fftm_surface,fftm_base,fftm_expression,fftm_intent
+            - candidate_id: 1
+              normalized_score: 0.5
+              rationale: fftm_surface,fftm_base,fftm_expression,fftm_intent
+          entropy: 1.0
+          delta_h_percent: 0.0
+          confidence: 0.5
+          cop_triggered: true
+          score_set:
+            - candidate_id: 0
+              score: 0.5
+            - candidate_id: 1
+              score: 0.5
+          score_conflict: 1.0
+          score_reason_code: COP_TRIGGERED
+          provenance:
+            origin: ISc
+            last_update: ISc
+            timestamp: deterministic
+      isc:
+        score_set:
+          - candidate_id: 0
+            score: 0.5
+          - candidate_id: 1
+            score: 0.5
+        score_conflict: 1.0
+        score_reason_code: COP_TRIGGERED
+        cop_triggered: true
+      metadata:
+        scoring_metadata:
+          score_set:
+            - candidate_id: 0
+              score: 0.5
+            - candidate_id: 1
+              score: 0.5
+          score_conflict: 1.0
+          score_reason_code: COP_TRIGGERED
+          cop_triggered: true
+          entropy: 1.0
+          delta_h_percent: 0.0
+
+  # ----------------------------------------------------------
+  # 3. Zero-score fallback → uniform distribution
+  # ----------------------------------------------------------
+  - id: isc_zero_score_uniform
+    description: Empty FFTM fields → uniform 0.5/0.5, ZERO_SCORE_UNIFORM
+    enabled: true
+    input:
+      ce:
+        candidate_set:
+          - candidate_id: 0
+            fftm_fields:
+              token_surface: ""
+              token_base: ""
+              token_expression: ""
+              token_intent: ""
+            structural_features:
+              surface_id: 0.0
+              lemma_id: 0.0
+              expression_id: 0.0
+              ordering_id: 0.0
+              constraint_family_id: 0.0
+              next_context_id: 0.0
+            semantic_adjacent_features:
+              semantic_residue: ""
+              structural_residue: ""
+            next_context: {}
+            provenance:
+              origin: CE
+              last_update: CE
+              note: empty0
+          - candidate_id: 1
+            fftm_fields:
+              token_surface: ""
+              token_base: ""
+              token_expression: ""
+              token_intent: ""
+            structural_features:
+              surface_id: 0.0
+              lemma_id: 0.0
+              expression_id: 0.0
+              ordering_id: 1.0
+              constraint_family_id: 0.0
+              next_context_id: 0.0
+            semantic_adjacent_features:
+              semantic_residue: ""
+              structural_residue: ""
+            next_context: {}
+            provenance:
+              origin: CE
+              last_update: CE
+              note: empty1
+      metadata:
+        context:
+          topic: empty
+          stance: neutral
+          intent: none
+          continuity: new
+          direction: hold
+          coherence: low
+          importance: low
+    expected:
+      isc_output:
+        - distribution:
+            - candidate_id: 0
+              normalized_score: 0.5
+              rationale: zero_score
+            - candidate_id: 1
+              normalized_score: 0.5
+              rationale: zero_score
+          entropy: 1.0
+          delta_h_percent: 0.0
+          confidence: 0.5
+          cop_triggered: true
+          score_set:
+            - candidate_id: 0
+              score: 0.5
+            - candidate_id: 1
+              score: 0.5
+          score_conflict: 1.0
+          score_reason_code: ZERO_SCORE_UNIFORM
+          provenance:
+            origin: ISc
+            last_update: ISc
+            timestamp: deterministic
+      isc:
+        score_set:
+          - candidate_id: 0
+            score: 0.5
+          - candidate_id: 1
+            score: 0.5
+        score_conflict: 1.0
+        score_reason_code: ZERO_SCORE_UNIFORM
+        cop_triggered: true
+      metadata:
+        scoring_metadata:
+          score_set:
+            - candidate_id: 0
+              score: 0.5
+            - candidate_id: 1
+              score: 0.5
+          score_conflict: 1.0
+          score_reason_code: ZERO_SCORE_UNIFORM
+          cop_triggered: true
+          entropy: 1.0
+          delta_h_percent: 0.0
+
+  # ----------------------------------------------------------
+  # 4. Empty candidate_set → TP defect path
+  # ----------------------------------------------------------
+  - id: isc_empty_candidate_set
+    description: Missing/empty candidate_set → TP_DEFECT, no expansion
+    enabled: true
+    input:
+      ce:
+        candidate_set: []
+      metadata:
+        context:
+          topic: none
+          stance: neutral
+          intent: none
+          continuity: new
+          direction: hold
+          coherence: low
+          importance: low
+    expected:
+      isc_output:
+        - distribution: []
+          entropy: 0.0
+          delta_h_percent: 0.0
+          confidence: 0.0
+          cop_triggered: false
+          score_set: []
+          score_conflict: 0.0
+          score_reason_code: TP_DEFECT_EMPTY_CANDIDATE_SET
+          provenance:
+            origin: ISc
+            last_update: ISc
+            timestamp: deterministic
+      isc:
+        score_set: []
+        score_conflict: 0.0
+        score_reason_code: TP_DEFECT_EMPTY_CANDIDATE_SET
+        cop_triggered: false
+      metadata:
+        scoring_metadata:
+          score_set: []
+          score_conflict: 0.0
+          score_reason_code: TP_DEFECT_EMPTY_CANDIDATE_SET
+          cop_triggered: false
+          entropy: 0.0
+          delta_h_percent: 0.0
+
+  # ----------------------------------------------------------
+  # 5. Dominant vs empty → decisive ranking, no COP
+  # ----------------------------------------------------------
+  - id: isc_dominant_vs_empty
+    description: Full vs empty FFTM → 1.0/0.0, SCORED_OK, order preserved
+    enabled: true
+    input:
+      ce:
+        candidate_set:
+          - candidate_id: 0
+            fftm_fields:
+              token_surface: win
+              token_base: win
+              token_expression: statement
+              token_intent: assert
+            structural_features:
+              surface_id: 10.0
+              lemma_id: 10.0
+              expression_id: 10.0
+              ordering_id: 0.0
+              constraint_family_id: 0.0
+              next_context_id: 0.0
+            semantic_adjacent_features:
+              semantic_residue: ""
+              structural_residue: ""
+            next_context: {}
+            provenance:
+              origin: CE
+              last_update: CE
+              note: win
+          - candidate_id: 1
+            fftm_fields:
+              token_surface: ""
+              token_base: ""
+              token_expression: ""
+              token_intent: ""
+            structural_features:
+              surface_id: 0.0
+              lemma_id: 0.0
+              expression_id: 0.0
+              ordering_id: 1.0
+              constraint_family_id: 0.0
+              next_context_id: 0.0
+            semantic_adjacent_features:
+              semantic_residue: ""
+              structural_residue: ""
+            next_context: {}
+            provenance:
+              origin: CE
+              last_update: CE
+              note: lose
+      metadata:
+        context:
+          topic: rank
+          stance: confident
+          intent: assert
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: high
+    expected:
+      isc_output:
+        - distribution:
+            - candidate_id: 0
+              normalized_score: 1.0
+              rationale: fftm_surface,fftm_base,fftm_expression,fftm_intent
+            - candidate_id: 1
+              normalized_score: 0.0
+              rationale: zero_score
+          entropy: 0.0
+          delta_h_percent: 0.0
+          confidence: 1.0
+          cop_triggered: false
+          score_set:
+            - candidate_id: 0
+              score: 1.0
+            - candidate_id: 1
+              score: 0.0
+          score_conflict: 0.0
+          score_reason_code: SCORED_OK
+          provenance:
+            origin: ISc
+            last_update: ISc
+            timestamp: deterministic
+      isc:
+        score_set:
+          - candidate_id: 0
+            score: 1.0
+          - candidate_id: 1
+            score: 0.0
+        score_conflict: 0.0
+        score_reason_code: SCORED_OK
+        cop_triggered: false
+      metadata:
+        scoring_metadata:
+          score_set:
+            - candidate_id: 0
+              score: 1.0
+            - candidate_id: 1
+              score: 0.0
+          score_conflict: 0.0
+          score_reason_code: SCORED_OK
+          cop_triggered: false
+          entropy: 0.0
+          delta_h_percent: 0.0
