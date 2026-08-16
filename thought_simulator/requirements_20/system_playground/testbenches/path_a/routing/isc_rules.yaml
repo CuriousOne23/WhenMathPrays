@@ -1,1 +1,45 @@
+# ============================================================
+# ISc Rules (Version 1.0)
+# Aligned with isc_py_struc_pgm.md v2.0, 20.45, progressive_lineup v4.0
+# ============================================================
 
+primitive: ISc
+version: "1.0"
+
+rules:
+
+  - id: isc_replay_001
+    description: ISc must produce output for identical inputs.
+    check: deterministic_output_present
+
+  - id: isc_candidate_source_001
+    description: ISc scores only ce.candidate_set (no expansion).
+    check: no_candidate_expansion
+
+  - id: isc_distribution_001
+    description: Normalized scores must sum to approximately 1.0 when non-empty.
+    check: distribution_normalized
+
+  - id: isc_entropy_001
+    description: Entropy must be present and finite on scoring_metadata.
+    check: entropy_present
+
+  - id: isc_cop_001
+    description: cop_triggered must be a boolean.
+    check: cop_flag_boolean
+
+  - id: isc_write_envelope_001
+    description: ISc must write isc_output and scoring_metadata.
+    check: write_envelope_present
+
+  - id: isc_forbidden_001
+    description: ISc must not modify CE candidate_set contents.
+    check: upstream_ce_read_only
+
+  - id: isc_ordering_001
+    description: Distribution candidate_id order matches input order.
+    check: candidate_order_preserved
+
+  - id: isc_progressive_001
+    description: ISc must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
