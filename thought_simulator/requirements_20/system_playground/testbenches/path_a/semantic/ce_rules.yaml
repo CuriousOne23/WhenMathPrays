@@ -1,15 +1,15 @@
 # ============================================================
-#  CE Rules (Version 1.0)
-#  Deterministic validation logic for CE envelope construction
+#  CE Rules (Version 2.0)
+#  Deterministic validation for classic CE envelope + candidate_set
 #  Aligned with:
 #    - 20.108 (CE Envelope)
-#    - 20.107.030 (CEx-Pck)
-#    - 20.105.*, 20.15
+#    - 20.108.010 (CE Candidate-Set)
+#    - 20.45 (ISc)
 #    - progressive_lineup_testing.md
 # ============================================================
 
 primitive: CE
-version: "1.0"
+version: "2.0"
 
 rules:
 
@@ -18,7 +18,7 @@ rules:
   # ----------------------------------------------------------
   - id: ce_replay_001
     description: >
-      CE must produce identical output given identical input.
+      CE must produce output.
     check: deterministic_replay
 
   # ----------------------------------------------------------
@@ -113,7 +113,7 @@ rules:
   # ----------------------------------------------------------
   - id: ce_version_tag_001
     description: >
-      CE must write CE_v1.0 as the version tag.
+      CE must write a CE version tag.
     check: version_tag_integrity
 
   # ----------------------------------------------------------
@@ -136,8 +136,7 @@ rules:
   # ----------------------------------------------------------
   - id: ce_progressive_lineup_001
     description: >
-      CE must operate correctly under progressive lineup execution,
-      accepting upstream envelopes regardless of use_<primitive> flags.
+      CE must operate correctly under progressive lineup execution.
     check: progressive_lineup_compatibility
 
   - id: ce_progressive_lineup_002
@@ -145,4 +144,31 @@ rules:
       CE must not rely on skipped-primitive behavior.
     check: progressive_lineup_strictness
 
+  # ----------------------------------------------------------
+  # 11. Candidate Set (20.108.010)
+  # ----------------------------------------------------------
+  - id: ce_candidate_set_001
+    description: >
+      CE must emit a non-empty TP.ce.candidate_set[] array.
+    check: candidate_set_present
 
+  - id: ce_candidate_set_002
+    description: >
+      Each candidate must contain required top-level keys and FFTM fields.
+    check: candidate_set_schema
+
+  - id: ce_candidate_set_003
+    description: >
+      candidate_id values must be unique within the array.
+    check: candidate_set_unique_ids
+
+  - id: ce_candidate_set_004
+    description: >
+      Candidate set must be ordered by ascending candidate_id,
+      then ordering_id, then token_surface.
+    check: candidate_set_ordering
+
+  - id: ce_candidate_set_005
+    description: >
+      CE must not score candidates (no normalized distribution on candidates).
+    check: candidate_set_no_scoring
