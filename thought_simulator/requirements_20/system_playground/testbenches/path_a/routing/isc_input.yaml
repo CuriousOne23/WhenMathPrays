@@ -1,1 +1,78 @@
+# ============================================================
+# ISc General-Mode Input (v1.0)
+# Loaded only when mode == "general"
+# ============================================================
 
+mode: general
+primitive: isc
+version: "1.0"
+notes: CE-shaped candidate_set for rule-driven ISc validation
+
+ce:
+  candidate_set:
+    - candidate_id: 0
+      fftm_fields:
+        token_surface: hello
+        token_base: hello
+        token_expression: statement
+        token_intent: inform
+      structural_features:
+        surface_id: 100.0
+        lemma_id: 100.0
+        expression_id: 50.0
+        ordering_id: 0.0
+        constraint_family_id: 0.0
+        next_context_id: 10.0
+      semantic_adjacent_features:
+        semantic_residue: ""
+        structural_residue: ""
+      next_context:
+        topic: greeting
+        stance: neutral
+        intent: inform
+        continuity: new
+        direction: forward
+        coherence: stable
+        importance: medium
+      provenance:
+        origin: CE
+        last_update: CE
+        note: general_default
+    - candidate_id: 1
+      fftm_fields:
+        token_surface: hi
+        token_base: hi
+        token_expression: statement
+        token_intent: greet
+      structural_features:
+        surface_id: 90.0
+        lemma_id: 90.0
+        expression_id: 50.0
+        ordering_id: 1.0
+        constraint_family_id: 0.0
+        next_context_id: 10.0
+      semantic_adjacent_features:
+        semantic_residue: ""
+        structural_residue: ""
+      next_context:
+        topic: greeting
+        stance: neutral
+        intent: greet
+        continuity: new
+        direction: forward
+        coherence: stable
+        importance: medium
+      provenance:
+        origin: CE
+        last_update: CE
+        note: general_alt
+
+metadata:
+  context:
+    topic: greeting
+    stance: neutral
+    intent: inform
+    continuity: new
+    direction: forward
+    coherence: stable
+    importance: medium
