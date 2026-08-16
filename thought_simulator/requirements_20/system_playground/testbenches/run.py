@@ -34,7 +34,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
     #     {
-    #         "mode": "general",
+    #         "mode": "general",     # "general" or "testbench"
     #         "use_inb": True,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -45,7 +45,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
     #     {
-    #         "mode": "testbench",
+    #         "mode": "testbench",     # "general" or "testbench"
     #         "use_inb": False,
     #         "use_iiinb": True,
     #         "use_ie": False,
@@ -56,7 +56,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
     #     {
-    #         "mode": "testbench",
+    #         "mode": "testbench",     # "general" or "testbench"
     #         "use_inb": False,
     #         "use_iiinb": False,
     #         "use_ie": True,
@@ -67,7 +67,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_ie_testbench",
     #     {
-    #         "mode": "testbench",
+    #         "mode": "testbench",     # "general" or "testbench"
     #         "use_inb": False,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -79,7 +79,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_ccr_testbench",
     #     {
-    #         "mode": "testbench",
+    #         "mode": "testbench",     # "general" or "testbench"
     #         "use_inb": False,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -93,7 +93,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_pck_testbench",
     #     {
-    #         "mode": "testbench",
+    #         "mode": "testbench",     # "general" or "testbench"
     #         "use_inb": False,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -105,25 +105,25 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
     # **************************** CE Test bench ******************************************************
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
-    #     {
-    #         "mode": "testbench",
-    #         "use_inb": False,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "use_cex_ie": False,
-    #         "use_cex_ccr": False,
-    #         "use_cex_pck": False,
-    #         "use_ce": True,
-    #         "tests_to_run": "see ce_tests_to_run.yaml",
-    #     }
-    # ),
+    (
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
+        {
+            "mode": "testbench",     # "general" or "testbench"
+            "use_inb": False,
+            "use_iiinb": False,
+            "use_ie": False,
+            "use_cex_ie": False,
+            "use_cex_ccr": False,
+            "use_cex_pck": False,
+            "use_ce": True,
+            "tests_to_run": "see ce_tests_to_run.yaml",
+        }
+    ),
     # **************************** TPU Test bench ******************************************************
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.transform.tpu_testbench",
     #     {
-    #         "mode": "general",
+    #         "mode": "general",     # "general" or "testbench"
     #         "use_inb": False,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -139,7 +139,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.sob_testbench",
     #     {
-    #         "mode": "general",
+    #         "mode": "general",     # "general" or "testbench"
     #         "use_inb": False,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -226,26 +226,26 @@ ACTIVE_TEST_MODULES = [
     # Pipeline: WrdNm only (structured TP fields → numeric vector), input from:
     #   • wrdnm_testbench.yaml (mode = "testbench")
     #   • wrdnm_input.yaml (mode = "general")
-    (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.encoder.wrdnm_testbench",
-        {
-            "mode": "testbench",     # "general" or "testbench"
-            "use_inb": False,
-            "use_iiinb": False,
-            "use_ie": False,
-            "use_cex_ie": False,
-            "use_cex_ccr": False,
-            "use_cex_pck": False,
-            "use_ce": False,
-            "use_tpu": False,
-            "use_sob": False,
-            "use_srob": False,
-            "use_cnob": False,
-            "use_smob": False,
-            "use_wrdnm": True,       # Primitive under test
-            "tests_to_run": "see wrdnm_tests_to_run.yaml",
-        }
-    ),
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.encoder.wrdnm_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": False,
+    #         "use_wrdnm": True,       # Primitive under test
+    #         "tests_to_run": "see wrdnm_tests_to_run.yaml",
+    #     }
+    # ),
 ]
 
 # ============================================================
