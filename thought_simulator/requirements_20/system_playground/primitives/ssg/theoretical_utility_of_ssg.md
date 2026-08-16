@@ -32,7 +32,7 @@ It encodes the structured context into a geometric manifold that ISc and downstr
 SSG appears **after semantic scoring** and **before routing**, in the canonical pipeline:
 
 ```
-SOB → SROB → CnOB → SmOB → ISc → SSG → STPX → RBU → TR → RB → refinement loop → TPU → OuBA
+SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → RBU → TR → RB → refinement loop → TPU → OuBA
 ```
 
 This placement is intentional:
