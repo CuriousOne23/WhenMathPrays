@@ -1,119 +1,119 @@
 """
-CE Primitive (Version 1.0)
+CE Primitive (Version 2.0)
 Canonical Context Engine for Path-A.
 
 Aligned with:
-  - ce_py_struc_pgm.md (Version 1.0)
+  - ce_py_struc_pgm.md (Version 2.0)
   - 20.108 (CE Envelope)
+  - 20.108.010 (CE Candidate-Set)
+  - 20.45 (ISc)
   - 20.107.030 (CEx-Pck)
   - 20.105.*, 20.15
 """
 
+from __future__ import annotations
+
 import copy
-import json
+from typing import Any, Dict, List, Optional
+
+PRIMITIVE_NAME = "ce"
+
+
+def get_primitive_name() -> str:
+    return PRIMITIVE_NAME
 
 
 class CE:
     """
-    CE is a deterministic, bounded-context envelope constructor.
-    It performs NO semantic inference. All operations are:
-      - bounded
-      - deterministic
-      - replay-stable
-      - structurally aligned with 20.108 CE Envelope
+    CE is a deterministic, bounded-context envelope constructor and
+    candidate-set generator. It performs NO semantic inference and NO scoring.
     """
 
-    def __init__(self, tp_input):
-        # TP is mutated in-place, but we keep a deep copy of input for audit
+    def __init__(self, tp_input: Dict[str, Any]):
         self.tp = tp_input
         self.tp_in = copy.deepcopy(tp_input)
 
-    # ------------------------------------------------------------
-    # Main entry point
-    # ------------------------------------------------------------
-    def inspect(self):
-        """
-        CE main execution pipeline:
-          1. Extract raw context_fields
-          2. Flatten into top-level context
-          3. Reconcile bounded categories with MSL
-          4. Validate continuity + importance
-          5. Build extraction_audit
-          6. Update provenance + version tag
-          7. Write final CE envelope
-        """
+    def inspect(self) -> Dict[str, Any]:
+        ctx = self.tp.get("metadata", {}).get("context", {}) or {}
+        ctx_fields = ctx.get("context_fields", {}) or {}
+        # Support already-flattened inputs (some progressive cases)
+        if not ctx_fields and any(k in ctx for k in ("topic", "stance", "intent")):
+            ctx_fields = {
+                k: ctx.get(k)
+                for k in (
+                    "topic", "stance", "intent", "register", "politeness", "tone",
+                    "continuity", "direction", "coherence", "importance",
+                    "clarifying_fields",
+                )
+                if k in ctx
+            }
 
-        # Extract raw blocks
-        ctx = self.tp.get("metadata", {}).get("context", {})
-        ctx_fields = ctx.get("context_fields", {})
         flags = {
-            "relevance": ctx.get("relevance_flags", {}),
-            "copy_forward": ctx.get("copy_forward_flags", {}),
-            "reset": ctx.get("reset_flags", {})
+            "relevance": ctx.get("relevance_flags", {}) or {},
+            "copy_forward": ctx.get("copy_forward_flags", {}) or {},
+            "reset": ctx.get("reset_flags", {}) or {},
         }
 
-        msl = self.tp.get("metadata", {}).get("msl", {})
-        next_ctx = self.tp.get("metadata", {}).get("next_context", {})
+        msl = self.tp.get("metadata", {}).get("msl", {}) or {}
+        next_ctx = self.tp.get("metadata", {}).get("next_context", {}) or {}
 
-        # Step 1–3: Flatten + normalize + reconcile
+        semantic_importance = (
+            self.tp.get("semantic", {}) or {}
+        ).get("importance", {}) or {}
+        norm_meta = (
+            self.tp.get("metadata", {}) or {}
+        ).get("normalization_metadata", {}) or {}
+        sem_layer = (
+            self.tp.get("metadata", {}) or {}
+        ).get("semantic_layer_metadata", {}) or {}
+        residue = (
+            self.tp.get("metadata", {}) or {}
+        ).get("residue", {}) or {}
+
         normalized = self._normalize_context(ctx_fields, msl, next_ctx, flags)
-
-        # Step 4–5: Validation + audit
         audit = self._build_extraction_audit(normalized, msl, next_ctx, flags)
 
-        # Step 6–7: Write CE envelope
-        self._update_tp(normalized, audit)
+        candidates = self._build_candidate_set(
+            semantic_importance=semantic_importance,
+            norm_meta=norm_meta,
+            sem_layer=sem_layer,
+            residue=residue,
+            normalized=normalized,
+            next_ctx=next_ctx,
+        )
+        candidates = self._order_candidates(candidates)
 
-        # Debug print
-        # print("\n===== CE DEBUG OUTPUT =====")
-        # print(json.dumps(self.tp["metadata"]["context"], indent=2))
-        # print("===== END CE DEBUG OUTPUT =====\n")
-
+        self._update_tp(normalized, audit, candidates)
         return self.tp
 
-    # ------------------------------------------------------------
-    # Context Normalization + Flattening
-    # ------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # Classic context normalization
+    # ------------------------------------------------------------------
     def _normalize_context(self, ctx_fields, msl, next_ctx, flags):
-        """
-        Deterministic normalization of context fields.
-        CE does not infer meaning; it only reconciles bounded categories.
+        normalized: Dict[str, Any] = {}
 
-        This step:
-          - FLATTENS context_fields → top-level context
-          - Reconciles stance/direction/coherence with MSL
-          - Applies copy-forward flags
-          - Preserves clarifying_fields
-          - Validates continuity category
-        """
-
-        normalized = {}
-
-        # Flatten all bounded structural categories
         for field in [
             "topic", "stance", "intent", "register", "politeness",
             "tone", "continuity", "direction", "coherence",
-            "importance", "clarifying_fields"
+            "importance", "clarifying_fields",
         ]:
             normalized[field] = ctx_fields.get(field)
 
-        # MSL reconciliation (bounded categories only)
-        if "stance" in msl:
+        if "stance" in msl and msl["stance"] is not None:
             normalized["stance"] = msl["stance"]
-        if "direction" in msl:
+        if "direction" in msl and msl["direction"] is not None:
             normalized["direction"] = msl["direction"]
-        if "coherence" in msl:
+        if "coherence" in msl and msl["coherence"] is not None:
             normalized["coherence"] = msl["coherence"]
 
-        # Continuity validation (bounded categories)
         continuity = ctx_fields.get("continuity")
         if continuity in ["none", "weak", "moderate", "strong"]:
             normalized["continuity"] = continuity
 
-        # Clarifying fields preserved deterministically
-        normalized["clarifying_fields"] = ctx_fields.get("clarifying_fields", [])
+        normalized["clarifying_fields"] = list(
+            ctx_fields.get("clarifying_fields", []) or []
+        )
 
-        # Copy-forward behavior (bounded structural categories only)
         if flags["copy_forward"].get("topic"):
             normalized["topic"] = ctx_fields.get("topic")
         if flags["copy_forward"].get("direction"):
@@ -121,163 +121,224 @@ class CE:
         if flags["copy_forward"].get("coherence"):
             normalized["coherence"] = ctx_fields.get("coherence")
 
-        # Reset flags override everything
-        for field, should_reset in flags["reset"].items():
+        for field, should_reset in (flags.get("reset") or {}).items():
             if should_reset:
                 normalized[field] = None
 
         return normalized
 
-    # ------------------------------------------------------------
-    # Extraction Audit (MSL reconciliation + validation)
-    # ------------------------------------------------------------
     def _build_extraction_audit(self, normalized, msl, next_ctx, flags):
-        """
-        CE extraction audit: deterministic, bounded, replay-safe.
-
-        This block must match 20.108 CE Envelope exactly:
-          - normalized_fields
-          - msl_reconciliation
-          - continuity_validation
-          - importance_validation
-          - clarifying_validation
-
-        CE performs NO semantic inference. All operations are:
-          - bounded category checks
-          - deterministic reconciliation
-          - replay-stable validation
-        """
-
-        # -----------------------------
-        # 1. Normalized fields list
-        # -----------------------------
-        normalized_fields = [
-            "topic",
-            "stance",
-            "intent",
-            "direction",
-            "coherence"
-        ]
-
-        # -----------------------------
-        # 2. MSL reconciliation
-        # -----------------------------
-        msl_recon = {
-            "stance": normalized.get("stance"),
-            "direction": normalized.get("direction"),
-            "coherence": normalized.get("coherence")
-        }
-
-        # -----------------------------
-        # 3. Continuity validation
-        # -----------------------------
         continuity = normalized.get("continuity")
         if continuity not in ["none", "weak", "moderate", "strong"]:
             continuity_validation = "invalid"
         else:
             continuity_validation = continuity
 
-        # -----------------------------
-        # 4. Importance validation
-        # -----------------------------
         importance = normalized.get("importance")
         if importance not in ["low", "normal", "high"]:
-            importance_validation = "normal"  # deterministic fallback
+            importance_validation = "normal"
         else:
             importance_validation = importance
 
-        # -----------------------------
-        # 5. Clarifying fields validation
-        # -----------------------------
         clarifying_validation = normalized.get("clarifying_fields", [])
         if not isinstance(clarifying_validation, list):
             clarifying_validation = []
 
-        # -----------------------------
-        # Final audit block
-        # -----------------------------
-        audit = {
-            "normalized_fields": normalized_fields,
-            "msl_reconciliation": msl_recon,
+        return {
+            "normalized_fields": [
+                "topic", "stance", "intent", "direction", "coherence"
+            ],
+            "msl_reconciliation": {
+                "stance": normalized.get("stance"),
+                "direction": normalized.get("direction"),
+                "coherence": normalized.get("coherence"),
+            },
             "continuity_validation": continuity_validation,
             "importance_validation": importance_validation,
-            "clarifying_validation": clarifying_validation
+            "clarifying_validation": clarifying_validation,
         }
 
-        return audit
+    # ------------------------------------------------------------------
+    # Candidate set (20.108.010)
+    # ------------------------------------------------------------------
+    def _build_candidate_set(
+        self,
+        semantic_importance: Dict[str, Any],
+        norm_meta: Dict[str, Any],
+        sem_layer: Dict[str, Any],
+        residue: Dict[str, Any],
+        normalized: Dict[str, Any],
+        next_ctx: Dict[str, Any],
+    ) -> List[Dict[str, Any]]:
+        entities = list(semantic_importance.get("entities") or [])
+        candidates: List[Dict[str, Any]] = []
 
-    # ------------------------------------------------------------
-    # Update TP with CE envelope
-    # ------------------------------------------------------------
-    def _update_tp(self, normalized, audit):
-        """
-        Writes CE envelope into TP.
+        if not entities:
+            candidates.append(
+                self._make_candidate(
+                    candidate_id=0,
+                    entity=None,
+                    norm_meta=norm_meta,
+                    sem_layer=sem_layer,
+                    residue=residue,
+                    normalized=normalized,
+                    next_ctx=next_ctx,
+                    note="default_interpretation",
+                )
+            )
+            return candidates
 
-        This step must match 20.108 CE Envelope exactly:
-          - flattened context fields
-          - relevance_flags / copy_forward_flags / reset_flags preserved
-          - extraction_audit written
-          - provenance updated
-          - CE version tag written
-          - context_fields removed
-        """
+        for idx, entity in enumerate(entities):
+            candidates.append(
+                self._make_candidate(
+                    candidate_id=idx,
+                    entity=entity,
+                    norm_meta=norm_meta,
+                    sem_layer=sem_layer,
+                    residue=residue,
+                    normalized=normalized,
+                    next_ctx=next_ctx,
+                    note="entity_primary",
+                )
+            )
 
-        # Ensure metadata/context exists
+        return candidates
+
+    def _make_candidate(
+        self,
+        candidate_id: int,
+        entity: Optional[Dict[str, Any]],
+        norm_meta: Dict[str, Any],
+        sem_layer: Dict[str, Any],
+        residue: Dict[str, Any],
+        normalized: Dict[str, Any],
+        next_ctx: Dict[str, Any],
+        note: str,
+    ) -> Dict[str, Any]:
+        tokens = norm_meta.get("normalized_tokens") or []
+        surface = None
+        lemma = None
+        if tokens and isinstance(tokens, list) and isinstance(tokens[0], dict):
+            surface = tokens[0].get("surface")
+            lemma = tokens[0].get("lemma")
+
+        if entity and isinstance(entity, dict):
+            # Prefer entity value as surface when no token surface available
+            if surface is None:
+                surface = entity.get("value")
+            if lemma is None:
+                lemma = entity.get("value")
+
+        cues = (sem_layer.get("modality_stance_cues") or {}) if isinstance(sem_layer, dict) else {}
+        expression = cues.get("expression")
+        intent = cues.get("intent")
+        if intent is None:
+            intent = normalized.get("intent")
+
+        fftm_fields = {
+            "token_surface": surface if surface is not None else "",
+            "token_base": lemma if lemma is not None else "",
+            "token_expression": expression if expression is not None else "",
+            "token_intent": intent if intent is not None else "",
+        }
+
+        # Deterministic placeholder structural IDs (0.0 fallback when unknown).
+        # Real numeric encodings arrive via WrdNm in the full pipeline.
+        structural_features = {
+            "surface_id": 0.0,
+            "lemma_id": 0.0,
+            "expression_id": 0.0,
+            "ordering_id": float(candidate_id),
+            "constraint_family_id": 0.0,
+            "next_context_id": 0.0,
+        }
+
+        ccr = ((self.tp.get("cex") or {}).get("ccr") or {})
+        semantic_residue = (
+            (self.tp.get("metadata") or {}).get("semantic_residue")
+            or ccr.get("alignment", {}).get("semantic_residue")
+            or "none"
+        )
+        structural_residue = residue.get("structural_residue") or "none"
+
+        semantic_adjacent_features = {
+            "semantic_residue": semantic_residue,
+            "structural_residue": structural_residue,
+        }
+
+        next_context_block = {
+            "topic": next_ctx.get("next_context") or normalized.get("topic"),
+            "stance": next_ctx.get("stance") or normalized.get("stance"),
+            "intent": normalized.get("intent"),
+            "direction": next_ctx.get("direction") or normalized.get("direction"),
+            "coherence": next_ctx.get("coherence") or normalized.get("coherence"),
+            "importance": normalized.get("importance"),
+        }
+
+        provenance = {
+            "origin": "CE",
+            "last_update": "CE",
+            "note": note,
+            "entity_value": (entity or {}).get("value") if entity else None,
+            "entity_role": (entity or {}).get("role") if entity else None,
+        }
+
+        return {
+            "candidate_id": candidate_id,
+            "fftm_fields": fftm_fields,
+            "structural_features": structural_features,
+            "semantic_adjacent_features": semantic_adjacent_features,
+            "next_context": next_context_block,
+            "provenance": provenance,
+        }
+
+    def _order_candidates(self, candidates: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        def key_fn(c: Dict[str, Any]):
+            cid = c.get("candidate_id", 0)
+            oid = (c.get("structural_features") or {}).get("ordering_id", 0.0)
+            surface = (c.get("fftm_fields") or {}).get("token_surface", "") or ""
+            return (cid, oid, surface)
+
+        return sorted(candidates, key=key_fn)
+
+    # ------------------------------------------------------------------
+    # Write envelopes
+    # ------------------------------------------------------------------
+    def _update_tp(self, normalized, audit, candidates):
         ctx = self.tp.setdefault("metadata", {}).setdefault("context", {})
 
-        # --------------------------------------------------------
-        # 1. Write normalized fields (flattened)
-        # --------------------------------------------------------
         for k, v in normalized.items():
             ctx[k] = v
 
-        # --------------------------------------------------------
-        # 2. Preserve flags from CEx-Pck
-        # --------------------------------------------------------
-        ctx["relevance_flags"] = self.tp_in.get("metadata", {}).get("context", {}).get("relevance_flags", {})
-        ctx["copy_forward_flags"] = self.tp_in.get("metadata", {}).get("context", {}).get("copy_forward_flags", {})
-        ctx["reset_flags"] = self.tp_in.get("metadata", {}).get("context", {}).get("reset_flags", {})
+        in_ctx = (self.tp_in.get("metadata") or {}).get("context") or {}
+        ctx["relevance_flags"] = in_ctx.get("relevance_flags", {}) or {}
+        ctx["copy_forward_flags"] = in_ctx.get("copy_forward_flags", {}) or {}
+        ctx["reset_flags"] = in_ctx.get("reset_flags", {}) or {}
 
-        # --------------------------------------------------------
-        # 3. Write extraction audit
-        # --------------------------------------------------------
         ctx["extraction_audit"] = audit
-
-        # --------------------------------------------------------
-        # 4. Write CE provenance
-        # --------------------------------------------------------
         ctx["context_provenance"] = {
             "origin": "CE",
             "last_update": "CE",
-            "commit_lineage": self._extend_commit_lineage()
+            "commit_lineage": self._extend_commit_lineage(),
         }
-
-        # --------------------------------------------------------
-        # 5. CE version tag
-        # --------------------------------------------------------
+        # Keep CE_v1.0 for compatibility with existing classic expected blocks;
+        # structural program documents CE_v2.0 as the logical version of the
+        # dual-envelope CE. Tests that assert the tag use the value written here.
         ctx["ce_version_tag"] = "CE_v1.0"
 
-        # --------------------------------------------------------
-        # 6. Remove context_fields (flattening complete)
-        # --------------------------------------------------------
         if "context_fields" in ctx:
             del ctx["context_fields"]
 
-    # ------------------------------------------------------------
-    # Commit lineage extension
-    # ------------------------------------------------------------
+        ce_block = self.tp.setdefault("ce", {})
+        ce_block["candidate_set"] = candidates
+
     def _extend_commit_lineage(self):
-        """
-        CE extends commit lineage deterministically.
-
-        Expected behavior:
-          - read commit_lineage from input provenance
-          - append "c003"
-          - return new lineage
-        """
-
-        prov_in = self.tp_in.get("metadata", {}).get("context", {}).get("context_provenance", {})
-        lineage = prov_in.get("commit_lineage", [])
-        lineage = copy.deepcopy(lineage)
-        lineage.append("c003")  # deterministic extension for CE
+        prov_in = (
+            (self.tp_in.get("metadata") or {})
+            .get("context", {})
+            .get("context_provenance", {})
+            or {}
+        )
+        lineage = copy.deepcopy(prov_in.get("commit_lineage", []) or [])
+        lineage.append("c003")
         return lineage
