@@ -1038,7 +1038,54 @@ All primitives follow the same two‑mode testing system.
 
 ---
 
-# **11. Summary**
+# **11. Location of Testbench Primitive files**  
+
+**testbenches/path_a/**  
+  
+intake:
+- inb
+- iinb
+- ie
+
+encoder:
+- cex_ie
+- cex_ccr
+- cex_pck
+- ce
+
+transform:
+- tpu
+
+semantic:
+- sob
+- srob
+- cnob
+- smob
+
+structure:
+- wrdnm
+- isc
+- ssg
+- stpx
+- rbu
+
+routing:
+- dcb
+- rb
+- tr
+- ctp
+- rtu
+
+identitiy:
+- idob
+- mcb
+
+output:
+- ouba
+
+--- 
+
+# **12. Summary**
 
 The **Progressive Lineup Testing Framework** is the authoritative testing strategy for **all Path‑A primitives**.
 
