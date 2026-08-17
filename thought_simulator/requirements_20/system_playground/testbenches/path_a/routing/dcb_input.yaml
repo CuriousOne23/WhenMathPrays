@@ -1,0 +1,32 @@
+# ============================================================
+# DCB General-Mode Input (v1.0)
+# Loaded only when mode == "general"
+# ============================================================
+
+mode: general
+primitive: dcb
+version: "1.0"
+notes: Sequential RBU→DCB fixture for rule-driven DCB validation
+
+_dcb_cycle_context:
+  current_primitive_id: "DCB"
+  cycle_id: 1
+  timestamp: 2000.0
+
+metadata:
+  geometric_state:
+    position: 1
+    direction: 2
+    curvature: 0.0
+    step_index: 0
+    lane_id: 0
+  geometric_history: []
+  dcb_events: []
+  context:
+    topic: flow_index
+    stance: neutral
+    intent: probe
+    continuity: same
+    direction: forward
+    coherence: stable
+    importance: medium
