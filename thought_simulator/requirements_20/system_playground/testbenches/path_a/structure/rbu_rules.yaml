@@ -1,1 +1,37 @@
+# ============================================================
+# RBU Rules (Version 1.0)
+# Aligned with 20.51 v4.0, rbu_py_struc_pgm.md, progressive_lineup v4.1
+# ============================================================
 
+primitive: RBU
+version: "1.0"
+
+rules:
+
+  - id: rbu_output_001
+    description: RBU must produce an output TP for the given input.
+    check: deterministic_output_present
+
+  - id: rbu_meaning_shape_001
+    description: semantic.identity/stance/register/tone/tags and metadata.lineage_markers must be present after commit.
+    check: meaning_fields_present
+
+  - id: rbu_provenance_001
+    description: metadata.provenance must record origin and last_update as RBU.
+    check: provenance_rbu_origin
+
+  - id: rbu_write_boundary_001
+    description: RBU must not modify structural, SSG, process, context, or intake fields.
+    check: only_rbu_fields_written
+
+  - id: rbu_no_forbidden_001
+    description: RBU must not write TPTB, TPSF, truth, done, or Path-B fields.
+    check: no_forbidden_layer_writes
+
+  - id: rbu_empty_001
+    description: Absent meaning inputs still yield minimal commit shape + provenance.
+    check: empty_input_still_writes
+
+  - id: rbu_progressive_001
+    description: RBU must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
