@@ -1,1 +1,24 @@
+# ============================================================
+# STPX Tests To Run (v1.0)
+# ============================================================
 
+tests:
+  - id: stpx_clean_with_tokens
+    enabled: true
+    description: Tokens + structural residue + SSG fields → four-family cues present
+
+  - id: stpx_empty_cues
+    enabled: true
+    description: No geometry and no tokens → empty cue families + provenance
+
+  - id: stpx_ssg_only
+    enabled: true
+    description: SSG outputs present, minimal residue → structural cues from SSG
+
+  - id: stpx_lexical_markers
+    enabled: true
+    description: Contrast/temporal tokens → lexical family populated
+
+  - id: stpx_constraint_and_repair
+    enabled: true
+    description: Constraint arcs + alignment map → constraint + repair families
