@@ -297,8 +297,38 @@ ACTIVE_TEST_MODULES = [
     #   • stpx_testbench.yaml (mode = "testbench")
     #   • stpx_input.yaml (mode = "general")
     # Location: path_a/structure/
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.stpx_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": False,
+    #         "use_wrdnm": False,
+    #         "use_isc": False,
+    #         "use_ssg": False,
+    #         "use_stpx": True,        # Primitive under test
+    #         "tests_to_run": "see stpx_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** RBU Test bench ******************************************************
+    # Highest upstream True = RBU (primitive under test)
+    # Pipeline position: after IdOB (meaning-side commit of identity/stance/register/tone/tags)
+    # Input from:
+    #   • rbu_testbench.yaml (mode = "testbench")
+    #   • rbu_input.yaml (mode = "general")
+    # Location: path_a/structure/
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.stpx_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.rbu_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
@@ -316,8 +346,9 @@ ACTIVE_TEST_MODULES = [
             "use_wrdnm": False,
             "use_isc": False,
             "use_ssg": False,
-            "use_stpx": True,        # Primitive under test
-            "tests_to_run": "see stpx_tests_to_run.yaml",
+            "use_stpx": False,
+            "use_rbu": True,         # Primitive under test
+            "tests_to_run": "see rbu_tests_to_run.yaml",
         }
     ),
 ]
