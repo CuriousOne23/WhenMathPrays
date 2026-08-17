@@ -1,0 +1,45 @@
+# ============================================================
+# DCB Rules (Version 1.0)
+# Aligned with 20.106 v5.3, dcb_py_struc_pgm.md, progressive_lineup v4.1
+# ============================================================
+
+primitive: DCB
+version: "1.0"
+
+rules:
+
+  - id: dcb_output_001
+    description: DCB must produce an output TP for the given input.
+    check: deterministic_output_present
+
+  - id: dcb_state_shape_001
+    description: geometric_state must contain exactly five scalar fields with correct types.
+    check: geometric_state_five_scalars
+
+  - id: dcb_lane_001
+    description: lane_id must be 0 in v1.
+    check: lane_id_zero
+
+  - id: dcb_history_001
+    description: geometric_history must gain exactly one entry per invocation.
+    check: one_history_append
+
+  - id: dcb_events_001
+    description: First cycle emits cycle_start; later cycles emit delta when state changes.
+    check: event_policy
+
+  - id: dcb_curvature_001
+    description: curvature must be 0.0 or 1.0.
+    check: binary_curvature
+
+  - id: dcb_write_boundary_001
+    description: DCB must not modify semantic, residue, or SSG fields.
+    check: only_dcb_fields_written
+
+  - id: dcb_provenance_001
+    description: provenance.dcb_last_update must be set.
+    check: provenance_dcb_last_update
+
+  - id: dcb_progressive_001
+    description: DCB must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
