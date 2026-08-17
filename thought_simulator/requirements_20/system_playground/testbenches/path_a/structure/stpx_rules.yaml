@@ -1,1 +1,37 @@
+# ============================================================
+# STPX Rules (Version 1.0)
+# Aligned with 20.49 v4.0, stpx_py_struc_pgm.md, progressive_lineup v4.1
+# ============================================================
 
+primitive: STPX
+version: "1.0"
+
+rules:
+
+  - id: stpx_output_001
+    description: STPX must produce an output TP for the given input.
+    check: deterministic_output_present
+
+  - id: stpx_cues_shape_001
+    description: stpx_cues must contain the four families lexical/structural/constraint/repair as lists.
+    check: cues_four_families_present
+
+  - id: stpx_provenance_001
+    description: semantic_layer_provenance must record origin and last_update as STPX.
+    check: provenance_stpx_origin
+
+  - id: stpx_write_boundary_001
+    description: STPX must not modify upstream residue or SSG fields.
+    check: only_stpx_fields_written
+
+  - id: stpx_no_forbidden_001
+    description: STPX must not write semantic, routing, identity, or truth fields.
+    check: no_forbidden_layer_writes
+
+  - id: stpx_empty_001
+    description: Absent geometry and tokens yields empty families but still writes cues + provenance.
+    check: empty_input_still_writes
+
+  - id: stpx_progressive_001
+    description: STPX must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
