@@ -1,1 +1,69 @@
+# ============================================================
+# STPX General-Mode Input (v1.0)
+# Loaded only when mode == "general"
+# ============================================================
 
+mode: general
+primitive: stpx
+version: "1.0"
+notes: Minimal post-SSG structural fixture for rule-driven STPX validation
+
+metadata:
+  residue:
+    structural_residue:
+      nodes:
+        - id: n0
+          label: segment
+          layer: 3
+        - id: n1
+          label: constraint
+          layer: 2
+        - id: n2
+          label: segment
+          layer: 3
+      arcs:
+        - src: n0
+          dst: n1
+          label: constrain
+          layer: 2
+        - src: n1
+          dst: n2
+          label: bind
+          layer: 3
+        - src: n0
+          dst: n2
+          label: order
+          layer: 3
+    refinement_residue: []
+    constraint_residue: []
+    semantic_adjacent_residue: []
+    presemantic_hash: "general_stpx_fixture_v1"
+    residue_provenance:
+      origin: SmOB
+      last_update: SSG
+  normalization_metadata:
+    normalized_tokens: ["but", "then", "however", "the", "structure"]
+    token_alignment_map: {}
+  expressive_metadata:
+    elongation_patterns: []
+    abbreviation_patterns: []
+    omission_patterns: []
+  continuity_metadata:
+    identity_anchors: []
+    continuity_flags: []
+  provenance_metadata:
+    commit_id: "c_stpx_general"
+    primitive_origin: "SSG"
+  context:
+    topic: structure_probe
+    stance: neutral
+    intent: probe
+    continuity: new
+    direction: forward
+    coherence: stable
+    importance: medium
+
+ssg_signature: [0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+ssg_layer_bitmap: 12
+ssg_reason_code: PARTIAL
+ssg_status: OK
