@@ -268,8 +268,37 @@ ACTIVE_TEST_MODULES = [
     #   • ssg_testbench.yaml (mode = "testbench")
     #   • ssg_input.yaml (mode = "general")
     # Location: path_a/structure/
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.ssg_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": False,
+    #         "use_wrdnm": False,
+    #         "use_isc": False,
+    #         "use_ssg": True,         # Primitive under test
+    #         "tests_to_run": "see ssg_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** STPX Test bench ******************************************************
+    # Highest upstream True = STPX (primitive under test)
+    # Pipeline position: after SSG (structural cues → four-family cue_envelope)
+    # Input from:
+    #   • stpx_testbench.yaml (mode = "testbench")
+    #   • stpx_input.yaml (mode = "general")
+    # Location: path_a/structure/
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.ssg_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.stpx_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
@@ -286,8 +315,9 @@ ACTIVE_TEST_MODULES = [
             "use_smob": False,
             "use_wrdnm": False,
             "use_isc": False,
-            "use_ssg": True,         # Primitive under test
-            "tests_to_run": "see ssg_tests_to_run.yaml",
+            "use_ssg": False,
+            "use_stpx": True,        # Primitive under test
+            "tests_to_run": "see stpx_tests_to_run.yaml",
         }
     ),
 ]
