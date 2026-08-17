@@ -1,0 +1,24 @@
+# ============================================================
+# DCB Tests To Run (v1.0)
+# ============================================================
+
+tests:
+  - id: dcb_first_cycle
+    enabled: true
+    description: No prev state → cycle_start, step_index 0, curvature 0
+
+  - id: dcb_steady_from_rbu
+    enabled: true
+    description: Sequential RBU→DCB → curvature 0, delta, step_index+1
+
+  - id: dcb_deviation
+    enabled: true
+    description: Non-predecessor prev → curvature 1.0
+
+  - id: dcb_write_boundary
+    enabled: true
+    description: Non-geometric fields unchanged
+
+  - id: dcb_wrap_mcb
+    enabled: true
+    description: MCB direction wraps to STPX ordinal 0
