@@ -1,1 +1,197 @@
+# ============================================================
+# RBU Testbench (v1.0) — Deterministic cases
+# Structural / shape comparison in testbench mode.
+# Aligned with 20.51 v4.0, rbu_py_struc_pgm.md, progressive_lineup v4.1
+# ============================================================
 
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Clean full IdOB-refined payload
+  # ----------------------------------------------------------
+  - id: rbu_clean_full
+    description: Full IdOB identity/stance/register/tone/tags + lineage → all six fields committed + provenance
+    enabled: true
+    input:
+      semantic:
+        identity:
+          persona: "assistant"
+          subculture: "technical"
+          role: "explainer"
+        stance:
+          polarity: "neutral"
+          certainty: "high"
+          direction: "explanatory"
+        register:
+          formality: "formal"
+          domain: "technical"
+        tone:
+          affect: "calm"
+          intensity: "moderate"
+        tags:
+          - "path_a"
+          - "routing"
+          - "identity_conditioned"
+      metadata:
+        lineage_markers:
+          conversation_id: "conv_001"
+          turn_id: "t_005"
+          identity_cycle: 2
+        semantic_layer_metadata:
+          idob_origin: "IdOB"
+          idob_cycle: 2
+        continuity_metadata:
+          continuity_flags: ["stable"]
+          direction: "explanatory"
+        expressive_metadata:
+          formality_hint: "formal"
+          affect_hint: "calm"
+        provenance_metadata:
+          commit_id: "c_rbu_clean"
+          primitive_origin: "IdOB"
+          commit_sequence: ["IdOB"]
+        context:
+          topic: clean
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+      lineage_log:
+        - { primitive: "IdOB", cycle: 1 }
+        - { primitive: "IdOB", cycle: 2 }
+    expected:
+      meaning_fields_present: true
+      provenance_origin: RBU
+      identity_persona: "assistant"
+      tags_nonempty: true
+
+  # ----------------------------------------------------------
+  # 2. Empty / missing meaning fields
+  # ----------------------------------------------------------
+  - id: rbu_empty_minimal
+    description: No IdOB meaning fields → minimal commit shape + provenance still written
+    enabled: true
+    input:
+      metadata:
+        context:
+          topic: empty
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      meaning_fields_present: true
+      empty_commit: true
+      provenance_origin: RBU
+
+  # ----------------------------------------------------------
+  # 3. Partial IdOB payload (identity + stance only)
+  # ----------------------------------------------------------
+  - id: rbu_partial_identity_stance
+    description: Only identity + stance present → commit those; others become empty structures
+    enabled: true
+    input:
+      semantic:
+        identity:
+          persona: "assistant"
+          role: "helper"
+        stance:
+          polarity: "supportive"
+          certainty: "medium"
+      metadata:
+        provenance_metadata:
+          commit_id: "c_partial"
+          primitive_origin: "IdOB"
+        context:
+          topic: partial
+          stance: supportive
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      meaning_fields_present: true
+      provenance_origin: RBU
+      identity_persona: "assistant"
+
+  # ----------------------------------------------------------
+  # 4. Lineage consolidation from lineage_log
+  # ----------------------------------------------------------
+  - id: rbu_lineage_consolidation
+    description: lineage_log with IdOB cycles → identity_cycle derived into lineage_markers
+    enabled: true
+    input:
+      semantic:
+        identity:
+          persona: "assistant"
+          subculture: "general"
+        stance:
+          polarity: "neutral"
+        tags:
+          - "cycle"
+      metadata:
+        lineage_markers:
+          conversation_id: "conv_lineage"
+          turn_id: "t_010"
+        provenance_metadata:
+          commit_id: "c_lineage"
+          primitive_origin: "IdOB"
+          commit_sequence: ["IdOB"]
+        context:
+          topic: lineage
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+      lineage_log:
+        - { primitive: "IdOB", cycle: 1 }
+        - { primitive: "IdOB", cycle: 2 }
+        - { primitive: "IdOB", cycle: 3 }
+    expected:
+      meaning_fields_present: true
+      provenance_origin: RBU
+      identity_cycle: 3
+
+  # ----------------------------------------------------------
+  # 5. Expressive hints fill empty register/tone slots
+  # ----------------------------------------------------------
+  - id: rbu_expressive_fill
+    description: Empty register/tone + expressive hints → light fill; IdOB values remain authoritative
+    enabled: true
+    input:
+      semantic:
+        identity:
+          persona: "assistant"
+        stance:
+          polarity: "neutral"
+        register: {}
+        tone: {}
+        tags:
+          - "hint_fill"
+      metadata:
+        expressive_metadata:
+          formality_hint: "casual"
+          affect_hint: "warm"
+        provenance_metadata:
+          commit_id: "c_hint"
+          primitive_origin: "IdOB"
+        context:
+          topic: hints
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      meaning_fields_present: true
+      provenance_origin: RBU
+      register_formality: "casual"
+      tone_affect: "warm"
