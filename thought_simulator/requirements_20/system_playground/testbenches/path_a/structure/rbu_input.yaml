@@ -1,1 +1,60 @@
+# ============================================================
+# RBU General-Mode Input (v1.0)
+# Loaded only when mode == "general"
+# ============================================================
 
+mode: general
+primitive: rbu
+version: "1.0"
+notes: Minimal IdOB-refined meaning fixture for rule-driven RBU validation
+
+semantic:
+  identity:
+    persona: "assistant"
+    subculture: "technical"
+    role: "explainer"
+  stance:
+    polarity: "neutral"
+    certainty: "high"
+    direction: "explanatory"
+  register:
+    formality: "formal"
+    domain: "technical"
+  tone:
+    affect: "calm"
+    intensity: "moderate"
+  tags:
+    - "path_a"
+    - "routing"
+    - "identity_conditioned"
+
+metadata:
+  lineage_markers:
+    conversation_id: "conv_general"
+    turn_id: "t_020"
+    identity_cycle: 2
+  semantic_layer_metadata:
+    idob_origin: "IdOB"
+    idob_cycle: 2
+  continuity_metadata:
+    continuity_flags: ["stable"]
+    direction: "explanatory"
+  expressive_metadata:
+    formality_hint: "formal"
+    affect_hint: "calm"
+  provenance_metadata:
+    commit_id: "c_rbu_general"
+    primitive_origin: "IdOB"
+    commit_sequence: ["IdOB"]
+  context:
+    topic: meaning_commit
+    stance: neutral
+    intent: probe
+    continuity: same
+    direction: forward
+    coherence: stable
+    importance: medium
+
+lineage_log:
+  - { primitive: "IdOB", cycle: 1 }
+  - { primitive: "IdOB", cycle: 2 }
