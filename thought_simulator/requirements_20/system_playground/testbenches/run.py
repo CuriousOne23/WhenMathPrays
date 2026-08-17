@@ -210,95 +210,47 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
     # **************************** WrdNm Test bench ******************************************************
-    # Highest upstream True = WrdNm (primitive under test)
-    # Pipeline: WrdNm only (structured TP fields → numeric vector), input from:
-    #   • wrdnm_testbench.yaml (mode = "testbench")
-    #   • wrdnm_input.yaml (mode = "general")
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.encoder.wrdnm_testbench",
     #     {
-    #         "mode": "testbench",     # "general" or "testbench"
-    #         "use_inb": False,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "use_cex_ie": False,
-    #         "use_cex_ccr": False,
-    #         "use_cex_pck": False,
-    #         "use_ce": False,
-    #         "use_tpu": False,
-    #         "use_sob": False,
-    #         "use_srob": False,
-    #         "use_cnob": False,
-    #         "use_smob": False,
-    #         "use_wrdnm": True,       # Primitive under test
+    #         "mode": "testbench",
+    #         "use_wrdnm": True,
     #         "tests_to_run": "see wrdnm_tests_to_run.yaml",
     #     }
     # ),
     # **************************** ISc Test bench ******************************************************
-    # Highest upstream True = ISc (primitive under test)
-    # Pipeline position: after WrdNm (CE candidate_set + optional wrdnm vectors → scores)
-    # Input from:
-    #   • isc_testbench.yaml (mode = "testbench")
-    #   • isc_input.yaml (mode = "general")
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.isc_testbench",
     #     {
-    #         "mode": "testbench",     # "general" or "testbench"
-    #         "use_inb": False,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "use_cex_ie": False,
-    #         "use_cex_ccr": False,
-    #         "use_cex_pck": False,
-    #         "use_ce": False,
-    #         "use_tpu": False,
-    #         "use_sob": False,
-    #         "use_srob": False,
-    #         "use_cnob": False,
-    #         "use_smob": False,
-    #         "use_wrdnm": False,      # Set True later for progressive WrdNm → ISc
-    #         "use_isc": True,         # Primitive under test
+    #         "mode": "testbench",
+    #         "use_isc": True,
     #         "tests_to_run": "see isc_tests_to_run.yaml",
     #     }
     # ),
     # **************************** SSG Test bench ******************************************************
-    # Highest upstream True = SSG (primitive under test)
-    # Pipeline position: after SmOB (structural graph → fixed-length structural signature)
-    # Input from:
-    #   • ssg_testbench.yaml (mode = "testbench")
-    #   • ssg_input.yaml (mode = "general")
-    # Location: path_a/structure/
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.ssg_testbench",
     #     {
-    #         "mode": "testbench",     # "general" or "testbench"
-    #         "use_inb": False,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "use_cex_ie": False,
-    #         "use_cex_ccr": False,
-    #         "use_cex_pck": False,
-    #         "use_ce": False,
-    #         "use_tpu": False,
-    #         "use_sob": False,
-    #         "use_srob": False,
-    #         "use_cnob": False,
-    #         "use_smob": False,
-    #         "use_wrdnm": False,
-    #         "use_isc": False,
-    #         "use_ssg": True,         # Primitive under test
+    #         "mode": "testbench",
+    #         "use_ssg": True,
     #         "tests_to_run": "see ssg_tests_to_run.yaml",
     #     }
     # ),
     # **************************** STPX Test bench ******************************************************
-    # Highest upstream True = STPX (primitive under test)
-    # Pipeline position: after SSG (structural cues → four-family cue_envelope)
-    # Input from:
-    #   • stpx_testbench.yaml (mode = "testbench")
-    #   • stpx_input.yaml (mode = "general")
-    # Location: path_a/structure/
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.stpx_testbench",
+    #     {
+    #         "mode": "testbench",
+    #         "use_stpx": True,
+    #         "tests_to_run": "see stpx_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** RBU Test bench ******************************************************
+    # Highest upstream True = RBU (primitive under test)
+    # Pipeline position: after IdOB (meaning-side commit)
+    # Location: path_a/structure/
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.rbu_testbench",
     #     {
     #         "mode": "testbench",     # "general" or "testbench"
     #         "use_inb": False,
@@ -316,19 +268,20 @@ ACTIVE_TEST_MODULES = [
     #         "use_wrdnm": False,
     #         "use_isc": False,
     #         "use_ssg": False,
-    #         "use_stpx": True,        # Primitive under test
-    #         "tests_to_run": "see stpx_tests_to_run.yaml",
+    #         "use_stpx": False,
+    #         "use_rbu": True,         # Primitive under test
+    #         "tests_to_run": "see rbu_tests_to_run.yaml",
     #     }
     # ),
-    # **************************** RBU Test bench ******************************************************
-    # Highest upstream True = RBU (primitive under test)
-    # Pipeline position: after IdOB (meaning-side commit of identity/stance/register/tone/tags)
+    # **************************** DCB Test bench ******************************************************
+    # Highest upstream True = DCB (primitive under test)
+    # Pipeline position: after RBU (execution-flow geometric_state / history / events)
     # Input from:
-    #   • rbu_testbench.yaml (mode = "testbench")
-    #   • rbu_input.yaml (mode = "general")
-    # Location: path_a/structure/
+    #   • dcb_testbench.yaml (mode = "testbench")
+    #   • dcb_input.yaml (mode = "general")
+    # Location: path_a/routing/
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.rbu_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.dcb_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
@@ -347,8 +300,9 @@ ACTIVE_TEST_MODULES = [
             "use_isc": False,
             "use_ssg": False,
             "use_stpx": False,
-            "use_rbu": True,         # Primitive under test
-            "tests_to_run": "see rbu_tests_to_run.yaml",
+            "use_rbu": False,
+            "use_dcb": True,         # Primitive under test
+            "tests_to_run": "see dcb_tests_to_run.yaml",
         }
     ),
 ]
