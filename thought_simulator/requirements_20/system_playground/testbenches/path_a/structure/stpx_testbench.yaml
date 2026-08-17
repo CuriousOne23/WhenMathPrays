@@ -1,0 +1,219 @@
+# ============================================================
+# STPX Testbench (v1.0) — Deterministic cases
+# Exact-equality / structural comparison in testbench mode.
+# ============================================================
+
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Clean case with tokens + residue + SSG
+  # ----------------------------------------------------------
+  - id: stpx_clean_with_tokens
+    description: Tokens + structural residue + SSG fields → four-family cues present
+    enabled: true
+    input:
+      metadata:
+        residue:
+          structural_residue:
+            nodes:
+              - id: a
+                label: segment
+                layer: 3
+              - id: b
+                label: segment
+                layer: 3
+            arcs:
+              - src: a
+                dst: b
+                label: bind
+                layer: 3
+          refinement_residue: []
+          constraint_residue: []
+          semantic_adjacent_residue: []
+          presemantic_hash: "clean_stpx"
+          residue_provenance:
+            origin: SmOB
+            last_update: SSG
+        normalization_metadata:
+          normalized_tokens: ["but", "then", "the", "structure"]
+          token_alignment_map: {}
+        expressive_metadata:
+          elongation_patterns: []
+          abbreviation_patterns: []
+          omission_patterns: []
+        continuity_metadata:
+          identity_anchors: []
+          continuity_flags: []
+        provenance_metadata:
+          commit_id: "c_clean"
+          primitive_origin: "SSG"
+        context:
+          topic: clean
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: medium
+      ssg_signature: [0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      ssg_layer_bitmap: 8
+      ssg_reason_code: PARTIAL
+      ssg_status: OK
+    expected:
+      # Structural presence of families and provenance (checked by runner)
+      stpx_cues_families: [lexical, structural, constraint, repair]
+      provenance_origin: STPX
+
+  # ----------------------------------------------------------
+  # 2. Empty / missing geometry and tokens
+  # ----------------------------------------------------------
+  - id: stpx_empty_cues
+    description: No geometry and no tokens → empty cue families + provenance still written
+    enabled: true
+    input:
+      metadata:
+        context:
+          topic: empty
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      stpx_cues_families: [lexical, structural, constraint, repair]
+      empty_families: true
+      provenance_origin: STPX
+
+  # ----------------------------------------------------------
+  # 3. SSG-only (minimal residue)
+  # ----------------------------------------------------------
+  - id: stpx_ssg_only
+    description: SSG outputs present, minimal residue → structural cues from SSG
+    enabled: true
+    input:
+      metadata:
+        residue:
+          structural_residue:
+            nodes:
+              - id: only
+                label: isolated
+                layer: 3
+            arcs: []
+          refinement_residue: []
+          constraint_residue: []
+          semantic_adjacent_residue: []
+          presemantic_hash: "ssg_only"
+          residue_provenance:
+            origin: SmOB
+            last_update: SSG
+        normalization_metadata:
+          normalized_tokens: []
+        context:
+          topic: ssg_only
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+      ssg_signature: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+      ssg_layer_bitmap: 8
+      ssg_reason_code: PARTIAL
+      ssg_status: OK
+    expected:
+      stpx_cues_families: [lexical, structural, constraint, repair]
+      provenance_origin: STPX
+
+  # ----------------------------------------------------------
+  # 4. Lexical markers focus
+  # ----------------------------------------------------------
+  - id: stpx_lexical_markers
+    description: Contrast/temporal tokens → lexical family populated
+    enabled: true
+    input:
+      metadata:
+        residue:
+          structural_residue:
+            nodes:
+              - id: s1
+                label: seg
+                layer: 3
+            arcs: []
+          refinement_residue: []
+          constraint_residue: []
+          semantic_adjacent_residue: []
+          presemantic_hash: "lexical"
+          residue_provenance:
+            origin: SmOB
+            last_update: SSG
+        normalization_metadata:
+          normalized_tokens: ["but", "however", "then", "after", "the"]
+          token_alignment_map: {}
+        context:
+          topic: lexical
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+      ssg_status: OK
+      ssg_reason_code: PARTIAL
+      ssg_layer_bitmap: 8
+    expected:
+      stpx_cues_families: [lexical, structural, constraint, repair]
+      lexical_nonempty: true
+      provenance_origin: STPX
+
+  # ----------------------------------------------------------
+  # 5. Constraint + repair
+  # ----------------------------------------------------------
+  - id: stpx_constraint_and_repair
+    description: Constraint arcs + alignment map → constraint + repair families
+    enabled: true
+    input:
+      metadata:
+        residue:
+          structural_residue:
+            nodes:
+              - id: e1
+                label: event
+                layer: 2
+              - id: e2
+                label: event
+                layer: 2
+            arcs:
+              - src: e1
+                dst: e2
+                label: constrain
+                layer: 2
+          refinement_residue: []
+          constraint_residue:
+            - type: causal_surface
+          semantic_adjacent_residue: []
+          presemantic_hash: "constraint_repair"
+          residue_provenance:
+            origin: SmOB
+            last_update: SSG
+        normalization_metadata:
+          normalized_tokens: ["because", "the", "link"]
+          token_alignment_map:
+            original_a: corrected_a
+            same: same
+        context:
+          topic: constraint
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: high
+      ssg_status: OK
+      ssg_reason_code: PARTIAL
+      ssg_layer_bitmap: 4
+    expected:
+      stpx_cues_families: [lexical, structural, constraint, repair]
+      constraint_nonempty: true
+      repair_nonempty: true
+      provenance_origin: STPX
