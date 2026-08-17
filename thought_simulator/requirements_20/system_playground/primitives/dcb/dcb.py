@@ -11,6 +11,9 @@ Execution-flow indexer for Path-A routing loop. Writes only:
   TP.metadata.dcb_events[]
   TP.metadata.provenance.dcb_last_update
 No semantic, structural, identity, or routing interpretation.
+
+Curvature (v1): 0.0 when current position is the sequential successor of
+prev.position under PATH_A; else 1.0. First cycle always 0.0.
 """
 
 from __future__ import annotations
@@ -124,8 +127,9 @@ class DCB:
             curvature = 0.0
         else:
             step_index = int(prev["step_index"]) + 1
-            expected_direction = (int(prev["position"]) + 1) % N
-            curvature = 0.0 if direction == expected_direction else 1.0
+            # Sequential trajectory: arrived at expected next ordinal from prev.position
+            expected_position = (int(prev["position"]) + 1) % N
+            curvature = 0.0 if position == expected_position else 1.0
 
         return {
             "position": position,
