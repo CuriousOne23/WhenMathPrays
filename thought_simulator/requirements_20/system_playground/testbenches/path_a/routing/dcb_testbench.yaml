@@ -1,0 +1,194 @@
+# ============================================================
+# DCB Testbench (v1.0) — Deterministic cases
+# Structural comparison in testbench mode.
+# Aligned with 20.106 v5.3, dcb_py_struc_pgm.md, progressive_lineup v4.1
+# PATH_A = [STPX, RBU, DCB, TR, CTP, ISc, RTU, RB, IdOB, MCB]
+# ============================================================
+
+tests:
+
+  # ----------------------------------------------------------
+  # 1. First cycle — no previous geometric_state
+  # ----------------------------------------------------------
+  - id: dcb_first_cycle
+    description: No prev state → step_index 0, curvature 0, cycle_start event, one history entry
+    enabled: true
+    input:
+      _dcb_cycle_context:
+        current_primitive_id: "RBU"
+        cycle_id: 0
+        timestamp: 1000.0
+      metadata:
+        context:
+          topic: first
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      geometric_state:
+        position: 1
+        direction: 2
+        curvature: 0.0
+        step_index: 0
+        lane_id: 0
+      history_len: 1
+      event_type: cycle_start
+      provenance_dcb_last_update: 1000.0
+
+  # ----------------------------------------------------------
+  # 2. Steady sequential (prev RBU → current DCB) → curvature 0
+  # ----------------------------------------------------------
+  - id: dcb_steady_from_rbu
+    description: prev at RBU, current DCB → curvature 0, step_index+1, delta event
+    enabled: true
+    input:
+      _dcb_cycle_context:
+        current_primitive_id: "DCB"
+        cycle_id: 1
+        timestamp: 1001.0
+      metadata:
+        geometric_state:
+          position: 1
+          direction: 2
+          curvature: 0.0
+          step_index: 0
+          lane_id: 0
+        geometric_history: []
+        dcb_events: []
+        context:
+          topic: steady
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      geometric_state:
+        position: 2
+        direction: 3
+        curvature: 0.0
+        step_index: 1
+        lane_id: 0
+      history_len: 1
+      event_type: delta
+      provenance_dcb_last_update: 1001.0
+
+  # ----------------------------------------------------------
+  # 3. Deviation — curvature 1.0
+  # ----------------------------------------------------------
+  - id: dcb_deviation
+    description: prev position not predecessor of current → curvature 1.0, delta event
+    enabled: true
+    input:
+      _dcb_cycle_context:
+        current_primitive_id: "TR"
+        cycle_id: 2
+        timestamp: 1002.0
+      metadata:
+        geometric_state:
+          position: 0
+          direction: 1
+          curvature: 0.0
+          step_index: 5
+          lane_id: 0
+        geometric_history: []
+        context:
+          topic: deviation
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: high
+    expected:
+      geometric_state:
+        position: 3
+        direction: 4
+        curvature: 1.0
+        step_index: 6
+        lane_id: 0
+      history_len: 1
+      event_type: delta
+      provenance_dcb_last_update: 1002.0
+
+  # ----------------------------------------------------------
+  # 4. Write boundary — non-geometric fields unchanged
+  # ----------------------------------------------------------
+  - id: dcb_write_boundary
+    description: semantic/residue/ssg fields must remain unchanged after DCB
+    enabled: true
+    input:
+      _dcb_cycle_context:
+        current_primitive_id: "STPX"
+        cycle_id: 3
+        timestamp: 1003.0
+      semantic:
+        identity:
+          persona: "assistant"
+        tags:
+          - "boundary"
+      ssg_status: OK
+      ssg_reason_code: PARTIAL
+      metadata:
+        residue:
+          presemantic_hash: "leave_me"
+        context:
+          topic: boundary
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      geometric_state:
+        position: 0
+        direction: 1
+        curvature: 0.0
+        step_index: 0
+        lane_id: 0
+      history_len: 1
+      event_type: cycle_start
+      check_write_boundary: true
+      provenance_dcb_last_update: 1003.0
+
+  # ----------------------------------------------------------
+  # 5. Wrap-around direction (MCB → next STPX ordinal 0)
+  # ----------------------------------------------------------
+  - id: dcb_wrap_mcb
+    description: current MCB → direction wraps to 0 (STPX); steady from IdOB → curvature 0
+    enabled: true
+    input:
+      _dcb_cycle_context:
+        current_primitive_id: "MCB"
+        cycle_id: 4
+        timestamp: 1004.0
+      metadata:
+        geometric_state:
+          position: 8
+          direction: 9
+          curvature: 0.0
+          step_index: 10
+          lane_id: 0
+        context:
+          topic: wrap
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      geometric_state:
+        position: 9
+        direction: 0
+        curvature: 0.0
+        step_index: 11
+        lane_id: 0
+      history_len: 1
+      event_type: delta
+      provenance_dcb_last_update: 1004.0
