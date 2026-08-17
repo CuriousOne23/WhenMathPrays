@@ -67,7 +67,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.41_opbeh_requirements.md](20.41_opbeh_requirements.md)
 - [20.42_obg_requirements.md](20.42_obg_requirements.md)
 - [20.43_xlater_requirements.md](20.43_xlater_requirements.md)
-- [20.44_ts_isc_scoring.md](20.44_ts_isc_scoring.md)
+- [20.44_wrdnm_primitive.md](20.44_wrdnm_primitive.md)
 - [20.45_ts_isc_scoring.md](20.45_ts_isc_scoring.md)
 - [20.46_tpu_req.md](20.46_tpu_req.md)  
 - [20.47_ssg_prim.md](20.47_ssg_prim.md)
