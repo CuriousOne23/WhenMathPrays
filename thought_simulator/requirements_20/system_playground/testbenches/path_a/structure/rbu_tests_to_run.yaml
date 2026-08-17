@@ -1,0 +1,24 @@
+# ============================================================
+# RBU Tests To Run (v1.0)
+# ============================================================
+
+tests:
+  - id: rbu_clean_full
+    enabled: true
+    description: Full IdOB identity/stance/register/tone/tags + lineage → all six fields committed
+
+  - id: rbu_empty_minimal
+    enabled: true
+    description: No IdOB meaning fields → minimal commit shape + provenance
+
+  - id: rbu_partial_identity_stance
+    enabled: true
+    description: Only identity + stance present → commit those; others empty structures
+
+  - id: rbu_lineage_consolidation
+    enabled: true
+    description: lineage_log with IdOB cycles → identity_cycle derived into lineage_markers
+
+  - id: rbu_expressive_fill
+    enabled: true
+    description: Empty register/tone + expressive hints → light fill; IdOB authoritative
