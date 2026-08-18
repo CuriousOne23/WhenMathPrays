@@ -1,5 +1,5 @@
-# ⭐ **ts_tr_semantic_geometry.md**  
-### *Geometric Substrate for TR Semantic Routing*  
+# ⭐ **ts_tr_semantic_geometry.md**
+### *Geometric Substrate for TR Semantic Routing*
 ### *Theory Foundation (Informative + Proposed Normative Expansion)*
 
 ---
@@ -10,31 +10,31 @@
 
 The purpose of **ts_tr_semantic_geometry.md** is to define the **geometric substrate** required for TR to compute:
 
-- stance  
-- affect  
-- epistemic_shading  
-- politeness  
-- tension  
+- stance
+- affect
+- epistemic_shading
+- politeness
+- tension
 
-These five fields depend on **semantic geometry**, not just symbolic cues.  
+These five fields depend on **semantic geometry**, not just symbolic cues.
 This paper provides:
 
-- geometric axes  
-- geometric distances  
-- geometric continuity  
-- geometric drift  
-- geometric curvature  
-- geometric adjacency  
+- geometric axes
+- geometric distances
+- geometric continuity
+- geometric drift
+- geometric curvature
+- geometric adjacency
 
 This geometry is the missing foundation beneath the mapping families defined in **ts_tr_mapping_families.md**.
 
 Without semantic geometry:
 
-- stance cannot be computed deterministically  
-- affect cannot be computed deterministically  
-- shading cannot be computed deterministically  
-- politeness cannot be computed deterministically  
-- tension cannot be computed deterministically  
+- stance cannot be computed deterministically
+- affect cannot be computed deterministically
+- shading cannot be computed deterministically
+- politeness cannot be computed deterministically
+- tension cannot be computed deterministically
 
 This paper closes that gap.
 
@@ -44,23 +44,25 @@ This paper closes that gap.
 
 This paper defines:
 
-- semantic axes  
-- geometric coordinate system  
-- geometric adjacency  
-- geometric continuity  
-- geometric drift  
-- geometric curvature  
-- geometric projection rules  
-- geometric stability rules  
-- geometric SSR rules  
+- semantic axes
+- geometric coordinate system
+- geometric adjacency
+- geometric continuity
+- geometric drift
+- geometric curvature
+- geometric projection rules
+- geometric stability rules
+- geometric SSR rules
+- **composition order** for multi-signal updates
+- **minimal-input geometry path** (diagnostic signals absent)
 
 It also defines:
 
-- how meaning‑semantics is projected into geometry  
-- how identity‑conditioned meaning modifies geometry  
-- how adjacency modifies geometry  
-- how continuity modifies geometry  
-- how curvature modifies geometry  
+- how meaning‑semantics is projected into geometry
+- how identity‑conditioned meaning modifies geometry
+- how adjacency modifies geometry
+- how continuity modifies geometry
+- how curvature modifies geometry
 
 This paper is **normative for geometry**, but **informative for mapping**.
 
@@ -70,12 +72,12 @@ This paper is **normative for geometry**, but **informative for mapping**.
 
 This paper does **not** define:
 
-- mapping families (already defined in ts_tr_mapping_families.md)  
-- invariant drift estimator $H_t$  
-- lineage append predicate  
-- routing_fields schema  
-- adjacency theory (full version)  
-- continuity‑curvature interaction theory (full version)  
+- mapping families (already defined in ts_tr_mapping_families.md)
+- invariant drift estimator $H_t$
+- lineage append predicate
+- routing_fields schema
+- adjacency theory (full version)
+- continuity‑curvature interaction theory (full version)
 
 Those are separate papers.
 
@@ -87,29 +89,29 @@ This paper defines **geometry only**.
 
 This paper defines:
 
-- semantic coordinate system  
-- geometric axes  
-- geometric distances  
-- geometric drift  
-- geometric curvature  
-- geometric adjacency  
-- geometric continuity  
-- geometric projection rules  
+- semantic coordinate system
+- geometric axes
+- geometric distances
+- geometric drift
+- geometric curvature
+- geometric adjacency
+- geometric continuity
+- geometric projection rules
 
 It defines geometry for:
 
-- stance  
-- affect  
-- shading  
-- politeness  
-- tension  
+- stance
+- affect
+- shading
+- politeness
+- tension
 
 It does **not** define geometry for:
 
-- logical_structure  
-- epistemic_delta_h  
-- lineage_additions  
-- routing_fields  
+- logical_structure
+- epistemic_delta_h
+- lineage_additions
+- routing_fields
 
 Those are non‑geometric fields.
 
@@ -125,11 +127,11 @@ $$
 
 Where:
 
-- $x_s$ = stance axis  
-- $x_a$ = affect axis  
-- $x_e$ = epistemic shading axis  
-- $x_p$ = politeness axis  
-- $x_t$ = tension axis  
+- $x_s$ = stance axis
+- $x_a$ = affect axis
+- $x_e$ = epistemic shading axis
+- $x_p$ = politeness axis
+- $x_t$ = tension axis
 
 Each axis is **ordinal**, **bounded**, and **SSR‑projectable**.
 
@@ -147,11 +149,11 @@ $$
 
 Where:
 
-- 0 = supportive  
-- 1 = neutral  
-- 2 = corrective  
-- 3 = adversarial  
-- 4 = exploratory  
+- 0 = supportive
+- 1 = neutral
+- 2 = corrective
+- 3 = adversarial
+- 4 = exploratory
 
 This axis measures **identity‑conditioned semantic direction**.
 
@@ -167,9 +169,9 @@ $$
 
 Where:
 
-- -1 = negative  
-- 0 = neutral  
-- +1 = positive  
+- -1 = negative
+- 0 = neutral
+- +1 = positive
 
 This axis measures **semantic adjacency valence**.
 
@@ -185,10 +187,10 @@ $$
 
 Where:
 
-- 0 = confident  
-- 1 = neutral  
-- 2 = uncertain  
-- 3 = speculative  
+- 0 = confident
+- 1 = neutral
+- 2 = uncertain
+- 3 = speculative
 
 This axis measures **epistemic stability**.
 
@@ -204,9 +206,9 @@ $$
 
 Where:
 
-- 0 = direct  
-- 1 = neutral  
-- 2 = polite  
+- 0 = direct
+- 1 = neutral
+- 2 = polite
 
 This axis measures **semantic adjacency softening**.
 
@@ -222,9 +224,9 @@ $$
 
 Where:
 
-- 0 = low  
-- 1 = medium  
-- 2 = high  
+- 0 = low
+- 1 = medium
+- 2 = high
 
 This axis measures **curvature‑derived instability**.
 
@@ -245,23 +247,23 @@ $$
 
 This distance is:
 
-- deterministic  
-- bounded  
-- SSR‑projectable  
-- stable under replay  
+- deterministic
+- bounded
+- SSR‑projectable
+- stable under replay
 
 Manhattan distance is chosen because:
 
-- axes are ordinal  
-- axes are independent  
-- axes are bounded  
-- axes are discrete  
+- axes are ordinal
+- axes are independent
+- axes are bounded
+- axes are discrete
 
 Euclidean distance is not used because:
 
-- axes are not continuous  
-- axes are not metric‑smooth  
-- axes do not support interpolation  
+- axes are not continuous
+- axes are not metric‑smooth
+- axes do not support interpolation
 
 ---
 
@@ -275,21 +277,21 @@ $$
 
 Where:
 
-- $\mathbb{S}_t$ = semantic state at cycle $t$  
-- $\mathbb{S}_{t+1}$ = semantic state at cycle $t+1$  
+- $\mathbb{S}_t$ = semantic state at cycle $t$
+- $\mathbb{S}_{t+1}$ = semantic state at cycle $t+1$
 
 Drift is:
 
-- deterministic  
-- bounded  
-- SSR‑projectable  
+- deterministic
+- bounded
+- SSR‑projectable
 
 Drift is used to compute:
 
-- tension  
-- shading  
-- stance stability  
-- adjacency stability  
+- tension
+- shading
+- stance stability
+- adjacency stability
 
 ---
 
@@ -305,20 +307,20 @@ $$
 
 Curvature is:
 
-- positive → instability increasing  
-- zero → stable  
-- negative → instability decreasing  
+- positive → instability increasing
+- zero → stable
+- negative → instability decreasing
 
 Curvature is used to compute:
 
-- tension  
-- stance instability  
-- shading instability  
+- tension
+- stance instability
+- shading instability
 
 Curvature is **not** used to compute:
 
-- affect  
-- politeness  
+- affect
+- politeness
 
 Those depend on adjacency, not curvature.
 
@@ -328,12 +330,12 @@ Those depend on adjacency, not curvature.
 
 Semantic adjacency is the geometric representation of *how close* the user’s phrasing is to:
 
-- positive affect  
-- negative affect  
-- hedging  
-- directness  
-- softening  
-- intensification  
+- positive affect
+- negative affect
+- hedging
+- directness
+- softening
+- intensification
 
 Adjacency is represented as a **signed scalar**:
 
@@ -343,16 +345,16 @@ $$
 
 Where:
 
-- $A = +1$ → positive adjacency (praise, agreement, softening)  
-- $A = 0$ → neutral adjacency  
+- $A = +1$ → positive adjacency (praise, agreement, softening)
+- $A = 0$ → neutral adjacency
 - $A = -1$ → negative adjacency (critique, disagreement, intensification)
 
 Adjacency influences:
 
-- affect ($x_a$)  
-- politeness ($x_p$)  
-- stance ($x_s$)  
-- reservation ($x_r$)  
+- affect ($x_a$)
+- politeness ($x_p$)
+- stance ($x_s$)
+- reservation
 
 ### **Adjacency Projection**
 
@@ -375,7 +377,7 @@ $$
 x_s = x_s + \text{adjacency\_modifier}(A)
 $$
 
-Where adjacency_modifier is a bounded integer in $\{-1,0,+1\}$.
+Where `adjacency_modifier` is a **versioned free parameter**, provisional default bounded in $\{-1,0,+1\}$ (see §13).
 
 ---
 
@@ -383,10 +385,10 @@ Where adjacency_modifier is a bounded integer in $\{-1,0,+1\}$.
 
 Continuity measures whether the user’s semantic trajectory is:
 
-- stable  
-- drifting  
-- oscillating  
-- reversing  
+- stable
+- drifting
+- oscillating
+- reversing
 
 Continuity is represented as:
 
@@ -396,15 +398,15 @@ $$
 
 Where:
 
-- $C = +1$ → stable continuation  
-- $C = 0$ → neutral / ambiguous continuation  
-- $C = -1$ → reversal / discontinuity  
+- $C = +1$ → stable continuation
+- $C = 0$ → neutral / ambiguous continuation
+- $C = -1$ → reversal / discontinuity
 
 Continuity influences:
 
-- stance stability  
-- shading stability  
-- tension stability  
+- stance stability
+- shading stability
+- tension stability
 
 ### **Continuity Projection**
 
@@ -420,8 +422,8 @@ $$
 
 Meaning:
 
-- stable continuation → stance becomes more supportive/neutral  
-- discontinuity → shading becomes more uncertain/speculative  
+- stable continuation → stance becomes more supportive/neutral
+- discontinuity → shading becomes more uncertain/speculative
 
 ---
 
@@ -429,10 +431,10 @@ Meaning:
 
 Identity‑conditioned meaning modifies geometry based on:
 
-- commitments  
-- freeze signatures  
-- referent lineage  
-- qualifier lineage  
+- commitments
+- freeze signatures
+- referent lineage
+- qualifier lineage
 
 Identity geometry is represented as:
 
@@ -442,15 +444,15 @@ $$
 
 Where:
 
-- $I = +1$ → identity‑aligned meaning  
-- $I = 0$ → identity‑neutral meaning  
-- $I = -1$ → identity‑conflicting meaning  
+- $I = +1$ → identity‑aligned meaning
+- $I = 0$ → identity‑neutral meaning
+- $I = -1$ → identity‑conflicting meaning
 
 Identity geometry influences:
 
-- stance  
-- shading  
-- tension  
+- stance
+- shading
+- tension
 
 ### **Identity Projection**
 
@@ -468,8 +470,8 @@ $$
 
 Meaning:
 
-- identity alignment → stance stabilizes  
-- identity conflict → shading and tension increase  
+- identity alignment → stance stabilizes
+- identity conflict → shading and tension increase
 
 ---
 
@@ -483,24 +485,32 @@ $$
 
 Where each axis is computed from:
 
-- meaning‑semantics  
-- adjacency  
-- continuity  
-- identity geometry  
-- curvature  
+- meaning‑semantics
+- adjacency
+- continuity
+- identity geometry
+- curvature
 
-The combined update rule is:
+---
+
+# **9.1 Composition Order (Authoritative)**
+
+When multiple signals are present, projections **must** be applied in the following fixed order so that structural programs and progressive tests remain unambiguous:
+
+1. **Base from meaning-semantics** — initialize $x_s, x_e$ from $M$ (and defaults for others).
+2. **Adjacency** — set $x_a$, $x_p$; apply `adjacency_modifier` to $x_s$.
+3. **Continuity** — add $C$ effects to $x_s$ and $x_e$.
+4. **Identity** — add $I$ effects to $x_s$, $x_e$, $x_t$.
+5. **Curvature** — set / update $x_t$ from curvature (may overwrite or clamp after identity contribution; implementation must document the chosen clamp rule and keep it deterministic).
+6. **Clamp** — force every axis into its declared ordinal range.
+
+Formally (after clamp):
 
 $$
-\mathbb{S}_{t+1} = 
-\mathbb{S}_t 
-+ \Delta A 
-+ \Delta C 
-+ \Delta I 
-+ \Delta curvature
+\mathbb{S}_{t+1} = \mathrm{clamp}\big(\mathbb{S}_{\text{base}} + \Delta A + \Delta C + \Delta I + \Delta K\big)
 $$
 
-Where each $\Delta$ term is bounded and deterministic.
+Companion papers (continuity-curvature, adjacency, invariant drift) **must** respect this order when describing joint effects. If a companion paper defines a local formula, the global order above remains authoritative for the final $\mathbb{S}$.
 
 ---
 
@@ -570,25 +580,41 @@ $$
 
 ---
 
-# **11. SSR Projection Rules**
+# **11. Minimal-Input Geometry Path (Diagnostic Signals Absent)**
+
+When only the **narrow normative read-set** (20.37) is present and diagnostic signals (adjacency, continuity, identity geometry, full curvature envelope, etc.) are missing, geometry **must** collapse to the following deterministic defaults:
+
+```
+x_s = 1          # neutral
+x_a = 0          # neutral
+x_e = 1          # neutral
+x_p = 1          # neutral
+x_t = 0          # low
+```
+
+No invention of missing signals is permitted. Meaning-semantics (if present) may still seed $x_s$ / $x_e$ via $f_s$, $f_e$; all other axes remain at the defaults above. This path guarantees that TR remains fully deterministic and progressive-lineup green under minimal inputs.
+
+---
+
+# **12. SSR Projection Rules**
 
 Semantic geometry must be SSR‑projectable:
 
-### **11.1 Stability Under Replay**
+### **12.1 Stability Under Replay**
 
 $$
 SSR(\mathbb{S}) = \mathbb{S}
 $$
 
-### **11.2 No Ephemeral Geometry**
+### **12.2 No Ephemeral Geometry**
 
 All axes must be:
 
-- bounded  
-- deterministic  
-- ordinal  
+- bounded
+- deterministic
+- ordinal
 
-### **11.3 No Nondeterministic Drift**
+### **12.3 No Nondeterministic Drift**
 
 Drift must satisfy:
 
@@ -598,7 +624,7 @@ $$
 
 Where $d$ is Manhattan distance.
 
-### **11.4 No Nondeterministic Curvature**
+### **12.4 No Nondeterministic Curvature**
 
 Curvature must satisfy:
 
@@ -608,34 +634,32 @@ $$
 
 ---
 
-# **12. Closing Summary**
+# **13. Versioned Free Parameters (Provisional Defaults)**
 
-This paper defines the **semantic geometry** required for TR routing:
+The following parameters are **versioned free parameters**. Implementations and progressive tests must lock the provisional defaults below until a later refinement is promoted:
 
-- 5‑axis semantic coordinate system  
-- stance axis  
-- affect axis  
-- shading axis  
-- politeness axis  
-- tension axis  
-- adjacency geometry  
-- continuity geometry  
-- identity geometry  
-- curvature geometry  
-- projection rules  
-- SSR rules  
+| Parameter | Provisional default | Notes |
+|-----------|---------------------|-------|
+| `adjacency_modifier` range | $\{-1,0,+1\}$ | applied to $x_s$ |
+| stance base from missing $M$ | 1 (neutral) | minimal-input path |
+| shading base from missing $M$ | 1 (neutral) | minimal-input path |
+| curvature → $x_t$ map | 0→0, mild→1, strong→2 | see continuity-curvature paper |
 
-This geometry is the foundation beneath:
-
-- stance mapping  
-- affect mapping  
-- shading mapping  
-- politeness mapping  
-- tension mapping  
-
-It completes the geometric substrate required for deterministic TR routing.
+Changing a provisional default is a **minor version** event and requires fixture updates.
 
 ---
 
+# **14. Closing Summary**
 
-Just say **“next”** and I’ll deliver Delivery 2.
+This paper defines the **semantic geometry** required for TR routing:
+
+- 5‑axis semantic coordinate system
+- stance / affect / shading / politeness / tension axes
+- adjacency, continuity, identity, curvature geometry
+- **authoritative composition order**
+- **minimal-input geometry path**
+- projection rules, SSR rules, versioned free parameters
+
+This geometry is the foundation beneath stance, affect, shading, politeness, and tension mapping and keeps TR deterministic under both full and minimal input conditions.
+
+---
