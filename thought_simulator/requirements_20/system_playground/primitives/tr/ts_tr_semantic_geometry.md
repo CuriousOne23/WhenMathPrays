@@ -144,7 +144,7 @@ Each axis is **ordinal**, **bounded**, and **SSR‑projectable**.
 Stance is represented on an ordinal axis:
 
 $$
-x_s \in \{0,1,2,3,4\}
+x_s \in \\{0,1,2,3,4\\}
 $$
 
 Where:
@@ -164,7 +164,7 @@ This axis measures **identity‑conditioned semantic direction**.
 Affect is represented on a signed axis:
 
 $$
-x_a \in \{-1,0,+1\}
+x_a \in \\{-1,0,+1\\}
 $$
 
 Where:
@@ -182,7 +182,7 @@ This axis measures **semantic adjacency valence**.
 Shading is represented on an ordinal axis:
 
 $$
-x_e \in \{0,1,2,3\}
+x_e \in \\{0,1,2,3\\}
 $$
 
 Where:
@@ -201,7 +201,7 @@ This axis measures **epistemic stability**.
 Politeness is represented on an ordinal axis:
 
 $$
-x_p \in \{0,1,2\}
+x_p \in \\{0,1,2\\}
 $$
 
 Where:
@@ -219,7 +219,7 @@ This axis measures **semantic adjacency softening**.
 Tension is represented on an ordinal axis:
 
 $$
-x_t \in \{0,1,2\}
+x_t \in \\{0,1,2\\}
 $$
 
 Where:
@@ -374,7 +374,7 @@ x_p =
 $$
 
 $$
-x_s = x_s + \text{adjacency\_modifier}(A)
+x_s = x_s + \text{adjacency\\_modifier}(A)
 $$
 
 Where `adjacency_modifier` is a **versioned free parameter**, provisional default bounded in $\{-1,0,+1\}$ (see §13).
@@ -393,7 +393,7 @@ Continuity measures whether the user’s semantic trajectory is:
 Continuity is represented as:
 
 $$
-C \in \{-1,0,+1\}
+C \in \\{-1,0,+1\\}
 $$
 
 Where:
@@ -439,7 +439,7 @@ Identity‑conditioned meaning modifies geometry based on:
 Identity geometry is represented as:
 
 $$
-I \in \{-1,0,+1\}
+I \in \\{-1,0,+1\\}
 $$
 
 Where:
@@ -640,7 +640,7 @@ The following parameters are **versioned free parameters**. Implementations and 
 
 | Parameter | Provisional default | Notes |
 |-----------|---------------------|-------|
-| `adjacency_modifier` range | $\{-1,0,+1\}$ | applied to $x_s$ |
+| `adjacency_modifier` range | $\\{-1,0,+1\\}$ | applied to $x_s$ |
 | stance base from missing $M$ | 1 (neutral) | minimal-input path |
 | shading base from missing $M$ | 1 (neutral) | minimal-input path |
 | curvature → $x_t$ map | 0→0, mild→1, strong→2 | see continuity-curvature paper |
