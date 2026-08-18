@@ -1,5 +1,5 @@
 """
-RB — Relational Basin (Version 1.0)
+RB — Relational Basin (Version 1.1)
 Aligned with:
   - 20.50_rb_requirements.md (v3.0)
   - rb_py_struc_pgm.md
@@ -13,11 +13,10 @@ Does not mutate TR, tr_needs_update, IdOB, or DCB geometry ownership.
 from __future__ import annotations
 
 import copy
-from typing import Any, Dict, List, Optional, Tuple
+from typing import List, Optional
 
 PRIMITIVE_NAME = "rb"
 
-# Foundation placeholders (relational model)
 H_SMALL = 0.15
 H_CRIT = 0.40
 A_LOCAL = 0.30
@@ -25,6 +24,9 @@ A_NONLOCAL = 0.70
 
 DEFAULT_MAX_FANOUT = 8
 DEFAULT_MAX_LANE_DEPTH = 4
+
+# Required for inventing RED labels when enable_red is true.
+RED_REQUIRED_KEYS = ("I_stab", "R_res", "Rt_adj")
 
 
 def get_primitive_name() -> str:
@@ -52,7 +54,6 @@ class RB:
         self._append_audit_optional(rf)
         return self.tp
 
-    # ------------------------------------------------------------------
     def _extract_routing_inputs(self, tp: dict) -> dict:
         process = tp.get("process") if isinstance(tp.get("process"), dict) else {}
         routing_metadata = (
@@ -107,7 +108,6 @@ class RB:
         rm = inputs["routing_metadata"]
         policy = rm.get("policy") if isinstance(rm.get("policy"), dict) else {}
         max_fanout = int(policy.get("max_ob_fanout", DEFAULT_MAX_FANOUT))
-        # stable order before truncate
         ordered = sorted(candidates, key=lambda o: str(o.get("ob_id")))
         return ordered[: max(0, max_fanout)]
 
@@ -135,16 +135,26 @@ class RB:
             rationales.append("core_local_ok")
         return sorted(rationales)
 
+    def _red_inputs_complete(self, foundation: dict) -> bool:
+        for key in RED_REQUIRED_KEYS:
+            if key not in foundation or foundation.get(key) is None:
+                return False
+        return True
+
     def _compute_red_fields(self, inputs: dict) -> dict:
+        null_red = {
+            "adjacency_class": None,
+            "rt_adj": None,
+            "regime_hint": None,
+            "displacement_scale": None,
+            "route_proposal": None,
+        }
         foundation = inputs.get("foundation") or {}
         if not foundation.get("enable_red"):
-            return {
-                "adjacency_class": None,
-                "rt_adj": None,
-                "regime_hint": None,
-                "displacement_scale": None,
-                "route_proposal": None,
-            }
+            return null_red
+        if not self._red_inputs_complete(foundation):
+            # HLR-20.050-077: do not invent labels when foundation is incomplete.
+            return null_red
 
         try:
             rt = float(foundation.get("Rt_adj", foundation.get("rt_adj", 0.0)))
@@ -171,7 +181,6 @@ class RB:
 
         regime_hint = self._regime_hint(foundation, dh, adjacency_class)
 
-        # Prefer local under Stable/Refinement unless already non_local from hard conditions
         if regime_hint in ("Stable", "Refinement") and not (
             rt > A_NONLOCAL or dh > H_CRIT
         ):
@@ -179,18 +188,18 @@ class RB:
             if dh < H_SMALL:
                 displacement_scale = "small"
 
-        # Must not force false local under Transition/Collapse
-        if regime_hint in ("Transition", "Collapse") and (rt > A_NONLOCAL or dh > H_CRIT):
+        # Collapse / Transition: must not force a false local label.
+        if regime_hint == "Collapse":
             adjacency_class = "non_local"
-
-        route_proposal = foundation.get("route_proposal")
+        elif regime_hint == "Transition" and (rt > A_NONLOCAL or dh > H_CRIT):
+            adjacency_class = "non_local"
 
         return {
             "adjacency_class": adjacency_class,
             "rt_adj": rt,
             "regime_hint": regime_hint,
             "displacement_scale": displacement_scale,
-            "route_proposal": route_proposal,
+            "route_proposal": foundation.get("route_proposal"),
         }
 
     def _regime_hint(self, foundation: dict, dh: float, adjacency_class: str) -> str:
@@ -203,10 +212,11 @@ class RB:
         i_stab = f("I_stab")
         r_res = f("R_res")
         p_cont = f("P_cont")
+        rt = f("Rt_adj")
 
         if i_stab < 0.3 and r_res < 0.3:
             return "Collapse"
-        if dh >= H_CRIT or adjacency_class == "non_local" and (rt := f("Rt_adj")) > A_NONLOCAL:
+        if dh >= H_CRIT or (adjacency_class == "non_local" and rt > A_NONLOCAL):
             return "Transition"
         if i_stab < 0.5 or p_cont < 0.4:
             return "Drift"
