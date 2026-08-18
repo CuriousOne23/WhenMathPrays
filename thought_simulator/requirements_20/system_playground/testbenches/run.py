@@ -46,8 +46,6 @@ ACTIVE_TEST_MODULES = [
     #     {"mode": "testbench", "use_rbu": True, "tests_to_run": "see rbu_tests_to_run.yaml"}
     # ),
     # **************************** DCB Test bench ******************************************************
-    # Highest upstream True = DCB (primitive under test)
-    # Location: path_a/routing/
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.dcb_testbench",
     #     {
@@ -57,14 +55,41 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
     # **************************** RB Test bench ******************************************************
-    # Highest upstream True = RB (primitive under test)
-    # Pipeline position: routing after DCB / RTU family (relational topology + optional RED)
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.rb_testbench",
+    #     {
+    #         "mode": "testbench",
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": False,
+    #         "use_wrdnm": False,
+    #         "use_isc": False,
+    #         "use_ssg": False,
+    #         "use_stpx": False,
+    #         "use_rbu": False,
+    #         "use_dcb": False,
+    #         "use_rb": True,
+    #         "tests_to_run": "see rb_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** TR Test bench ******************************************************
+    # Highest upstream True = TR (primitive under test)
+    # Pipeline position: Path-A meaning-layer routing-vector constructor (before CTP / RTU / RB)
     # Input from:
-    #   • rb_testbench.yaml (mode = "testbench")
-    #   • rb_input.yaml (mode = "general")
+    #   • tr_testbench.yaml (mode = "testbench")
+    #   • tr_input.yaml (mode = "general")
     # Location: path_a/routing/
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.rb_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.tr_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
@@ -85,8 +110,9 @@ ACTIVE_TEST_MODULES = [
             "use_stpx": False,
             "use_rbu": False,
             "use_dcb": False,
-            "use_rb": True,          # Primitive under test
-            "tests_to_run": "see rb_tests_to_run.yaml",
+            "use_rb": False,
+            "use_tr": True,          # Primitive under test
+            "tests_to_run": "see tr_tests_to_run.yaml",
         }
     ),
 ]
