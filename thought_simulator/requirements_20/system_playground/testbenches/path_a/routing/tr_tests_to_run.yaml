@@ -1,1 +1,76 @@
+# ============================================================
+# TR Tests To Run (v1.0)
+# ============================================================
 
+tests:
+  - id: tr_minimal_gate_true
+    enabled: true
+    description: Narrow 20.37 path → omission defaults + flag clear
+
+  - id: tr_gate_false_noop
+    enabled: true
+    description: Clean flag → TR unchanged
+
+  - id: tr_clears_dirty_flag
+    enabled: true
+    description: Gated success clears dirty flag
+
+  - id: tr_write_boundary
+    enabled: true
+    description: IdOB / DCB / RB filter / residue untouched
+
+  - id: tr_stpx_intent_request
+    enabled: true
+    description: STPX question → intent request
+
+  - id: tr_stpx_intent_inform
+    enabled: true
+    description: STPX declarative → intent inform
+
+  - id: tr_diag_positive_adjacency
+    enabled: true
+    description: A=+1 → positive affect, polite
+
+  - id: tr_diag_negative_adjacency
+    enabled: true
+    description: A=-1 → negative affect, direct
+
+  - id: tr_dcb_curvature_hint
+    enabled: true
+    description: curvature 1.0 → tension medium
+
+  - id: tr_dcb_curvature_stable
+    enabled: true
+    description: curvature 0.0 → tension low
+
+  - id: tr_routing_fields_complete
+    enabled: true
+    description: All 14 routing_fields keys present
+
+  - id: tr_lineage_bound
+    enabled: true
+    description: lineage_additions length ≤ 3
+
+  - id: tr_replay_identical
+    enabled: true
+    description: Deterministic double-run
+
+  - id: tr_messy_partial
+    enabled: true
+    description: Noisy/partial → still defaults
+
+  - id: tr_diagnostics_absent
+    enabled: true
+    description: No diagnostics → minimal path
+
+  - id: tr_delta_h_omission
+    enabled: true
+    description: Missing H → delta_h 0
+
+  - id: tr_stpx_intent_correct
+    enabled: true
+    description: STPX correction_marker → intent correct
+
+  - id: tr_combined_stpx_diag
+    enabled: true
+    description: STPX question + positive adjacency combined
