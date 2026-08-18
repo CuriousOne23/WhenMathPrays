@@ -1,1 +1,49 @@
+# ============================================================
+# TR Rules (Version 1.0)
+# Aligned with 20.37 v3.0, tr_py_struc_pgm.md, progressive_lineup v4.2
+# ============================================================
 
+primitive: TR
+version: "1.0"
+
+rules:
+
+  - id: tr_output_001
+    description: TR must produce an output TP for the given input.
+    check: deterministic_output_present
+
+  - id: tr_block_001
+    description: After gated run, TP.TR must exist with required fields.
+    check: tr_block_present
+
+  - id: tr_fields_001
+    description: All required TR keys must be present.
+    check: tr_required_fields_present
+
+  - id: tr_rf_001
+    description: routing_fields must contain the complete key set.
+    check: routing_fields_complete
+
+  - id: tr_gate_001
+    description: After gated success, tr_needs_update must be false.
+    check: dirty_flag_cleared_when_ran
+
+  - id: tr_noop_001
+    description: When tr_needs_update is false, TR must remain unchanged.
+    check: noop_when_clean
+
+  - id: tr_boundary_001
+    description: TR must not mutate IdOB, DCB ownership, RB filter, or residue.
+    check: idob_dcb_rb_untouched
+
+  - id: tr_omission_001
+    description: Minimal inputs must yield omission defaults.
+    check: omission_defaults_when_minimal
+
+  - id: tr_lineage_001
+    description: lineage_additions length must be ≤ k (3).
+    check: lineage_bounded
+
+  - id: tr_progressive_001
+    description: TR must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
