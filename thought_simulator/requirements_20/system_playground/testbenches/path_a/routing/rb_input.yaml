@@ -1,0 +1,41 @@
+# ============================================================
+# RB General-Mode Input (v1.0)
+# ============================================================
+
+mode: general
+primitive: rb
+version: "1.0"
+notes: Core-local routing with RED enabled for rule-driven validation
+
+tr_needs_update: false
+TR:
+  version: 1
+  committed: true
+
+process:
+  deltaH: 0.05
+  routing_metadata:
+    core_id: core_0
+    orthogonality_signature: A
+    candidate_obs:
+      - { ob_id: ob_b, core_id: core_0, orthogonality_signature: A }
+      - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+
+metadata:
+  context:
+    topic: route
+    stance: neutral
+    intent: probe
+    continuity: same
+    direction: forward
+    coherence: stable
+    importance: medium
+
+_rb_foundation:
+  enable_red: true
+  I_stab: 0.8
+  R_res: 0.7
+  P_cont: 0.6
+  Rt_adj: 0.2
+  delta_H: 0.05
+  timestamp: 2000.0
