@@ -53,7 +53,7 @@ These are **rudimentary, directional relationships**—they state how invariants
 
 - **Law IR‑2 (qualitative):**  
   - **High $L\_{depth}$ + high $P\_{cont}$ ⇒ coherent long‑range process.**  
-  - **High $L\_{depth} + low $P\_{cont}$ ⇒ accumulated drift / noise.**
+  - **High $L\_{depth}$ + low $P\_{cont}$ ⇒ accumulated drift / noise.**
 
 - **Interpretation:**  
   Deep lineage is only cognitively meaningful when provenance remains continuous.
@@ -85,8 +85,8 @@ These are **rudimentary, directional relationships**—they state how invariants
 ### 3.5 Identity stability ($I\_{stab}$) ↔ routing adjacency ($Rt\_{adj}$)
 
 - **Law IR‑5 (qualitative):**  
-  - **High $I\_{stab} ⇒ $Rt\_{adj}$ remains within a small neighborhood** (local routing).  
-  - **Low $I\_{stab} ⇒ $Rt\_{adj}$ frequently jumps across neighborhoods** (non‑local routing).
+  - **High $I\_{stab}$ ⇒ $Rt\_{adj}$ remains within a small neighborhood** (local routing).  
+  - **Low $I\_{stab}$ ⇒ $Rt\_{adj}$ frequently jumps across neighborhoods** (non‑local routing).
 
 - **Interpretation:**  
   Who is “thinking” is reflected in where the thinking goes.
