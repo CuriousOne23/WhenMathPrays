@@ -1,4 +1,4 @@
-# ⭐ **ts_tr_semantic_geometry.md — DELIVERY 1 OF 2**  
+# ⭐ **ts_tr_semantic_geometry.md**  
 ### *Geometric Substrate for TR Semantic Routing*  
 ### *Theory Foundation (Informative + Proposed Normative Expansion)*
 
@@ -321,21 +321,6 @@ Curvature is **not** used to compute:
 - politeness  
 
 Those depend on adjacency, not curvature.
-
----
-
-Jeff — continuing **ts_tr_semantic_geometry.md**, Delivery **2 of 2**, with clarity, coverage, and brevity as a subgoal.
-
-No agent.  
-No delegation.  
-Pure manual theory.
-
-This completes the paper.
-
----
-
-# ⭐ **ts_tr_semantic_geometry.md — DELIVERY 2 OF 2**  
-### *Semantic Adjacency, Continuity Geometry, Identity Geometry, Projection Rules, SSR Rules, Closing Summary*
 
 ---
 
