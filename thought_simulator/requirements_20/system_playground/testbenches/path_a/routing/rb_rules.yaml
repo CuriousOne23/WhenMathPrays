@@ -1,0 +1,43 @@
+# ============================================================
+# RB Rules (Version 1.0)
+# ============================================================
+
+primitive: RB
+version: "1.0"
+
+rules:
+  - id: rb_output_001
+    description: RB must produce an output TP.
+    check: deterministic_output_present
+
+  - id: rb_filter_001
+    description: process.routing_filter must exist.
+    check: routing_filter_present
+
+  - id: rb_order_001
+    description: selected_ob_ids must be canonically sorted.
+    check: canonical_ob_ordering
+
+  - id: rb_tr_readonly_001
+    description: TR and tr_needs_update must not be mutated.
+    check: tr_fields_unchanged
+
+  - id: rb_core_001
+    description: Selected OBs must match TP core_id when candidates specify core.
+    check: no_foreign_core_obs
+
+  - id: rb_boundary_001
+    description: Semantic identity, residue, and DCB geometric_state must not be mutated.
+    check: idob_dcb_semantic_untouched
+
+  - id: rb_red_001
+    description: When adjacency_class set, it must be local or non_local.
+    check: red_fields_consistent
+
+  - id: rb_gate_001
+    description: transition_rationale must reflect tr_needs_update.
+    check: tr_gate_rationale_present
+
+  - id: rb_progressive_001
+    description: Output must be usable in progressive lineup.
+    check: progressive_lineup_compatibility
