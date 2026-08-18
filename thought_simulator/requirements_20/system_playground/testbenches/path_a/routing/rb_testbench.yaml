@@ -1,5 +1,5 @@
 # ============================================================
-# RB Testbench (v1.0) — Deterministic foundation cases
+# RB Testbench (v1.1) — Deterministic foundation + thin cluster
 # Aligned with 20.50 v3.0, rb_py_struc_pgm.md, progressive_lineup v4.2
 # ============================================================
 
@@ -176,3 +176,326 @@ tests:
     expected:
       selected_ob_ids: [ob_a, ob_b]
       max_len: 2
+
+  - id: rb_replay_identical
+    description: Same input processed twice yields identical routing_filter
+    enabled: true
+    input:
+      tr_needs_update: false
+      TR:
+        version: 1
+        committed: true
+      process:
+        deltaH: 0.08
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_b, core_id: core_0, orthogonality_signature: A }
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: replay
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      selected_ob_ids: [ob_a, ob_b]
+      check_replay: true
+
+  - id: rb_canonical_order
+    description: Unsorted candidate_obs become canonically sorted ids
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.0
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_z, core_id: core_0, orthogonality_signature: A }
+            - { ob_id: ob_m, core_id: core_0, orthogonality_signature: A }
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: sort
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      selected_ob_ids: [ob_a, ob_m, ob_z]
+
+  - id: rb_idob_view_readonly
+    description: IdOB view present; RB does not mutate it
+    enabled: true
+    input:
+      tr_needs_update: false
+      semantic:
+        identity:
+          persona: witness
+          roles: [observer]
+        idob:
+          roles: [observer]
+          stability: 0.8
+          residue: persist
+      process:
+        deltaH: 0.05
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: idob
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+      _rb_foundation:
+        enable_red: true
+        I_stab: 0.8
+        R_res: 0.7
+        P_cont: 0.6
+        Rt_adj: 0.2
+        delta_H: 0.05
+    expected:
+      selected_ob_ids: [ob_a]
+      check_idob_view_unchanged: true
+      adjacency_class: local
+
+  - id: rb_red_missing_foundation
+    description: enable_red with incomplete F — do not invent RED labels
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.05
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: missing
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+      _rb_foundation:
+        enable_red: true
+        timestamp: 1010.0
+    expected:
+      selected_ob_ids: [ob_a]
+      adjacency_class: null
+      regime_hint: null
+      displacement_scale: null
+
+  - id: rb_messy_partial_metadata
+    description: Partial routing_metadata; no candidate_obs; no invented semantics
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.0
+        routing_metadata:
+          core_id: core_0
+      metadata:
+        context:
+          topic: messy
+          stance: "???"
+          intent: test
+          continuity: unknown
+          direction: forward
+          coherence: noisy
+          importance: low
+    expected:
+      selected_ob_ids: []
+      rationale_contains: no_core_local_obs
+      tr_gate_rationale_contains: tr_gate:false
+
+  - id: rb_merge_split_exposure
+    description: Policy allow_merge/allow_split exposed deterministically
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.0
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          policy:
+            allow_merge: true
+            allow_split: true
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: merge
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      selected_ob_ids: [ob_a]
+      merge_eligibility: true
+      split_directive: true
+
+  - id: rb_write_boundary_explicit
+    description: TR, IdOB semantic, DCB geometric_state all unchanged
+    enabled: true
+    input:
+      tr_needs_update: false
+      TR:
+        version: 7
+        committed: true
+        note: do_not_touch
+      semantic:
+        identity:
+          persona: locked
+        idob:
+          roles: [locked]
+      process:
+        deltaH: 0.02
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        geometric_state:
+          position: 7
+          direction: 8
+          curvature: 0.0
+          step_index: 3
+          lane_id: 0
+        residue:
+          marker: locked
+        context:
+          topic: boundary
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: high
+    expected:
+      selected_ob_ids: [ob_a]
+      check_tr_unchanged: true
+      check_write_boundary: true
+      check_idob_view_unchanged: true
+
+  - id: rb_regime_refinement
+    description: Small ΔH, local, residue not fully stable → Refinement prefers local
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.05
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: refine
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+      _rb_foundation:
+        enable_red: true
+        I_stab: 0.75
+        R_res: 0.5
+        P_cont: 0.6
+        Rt_adj: 0.15
+        delta_H: 0.05
+    expected:
+      selected_ob_ids: [ob_a]
+      regime_hint: Refinement
+      adjacency_class: local
+      displacement_scale: small
+
+  - id: rb_regime_drift
+    description: Medium adjacency / weak stability — Drift does not force local
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.2
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: drift
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: unstable
+          importance: medium
+      _rb_foundation:
+        enable_red: true
+        I_stab: 0.4
+        R_res: 0.5
+        P_cont: 0.3
+        Rt_adj: 0.55
+        delta_H: 0.2
+    expected:
+      selected_ob_ids: [ob_a]
+      regime_hint: Drift
+      adjacency_class: non_local
+      displacement_scale: medium
+
+  - id: rb_regime_collapse
+    description: Low I_stab and R_res — Collapse must not fake local
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.05
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: collapse
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: broken
+          importance: high
+      _rb_foundation:
+        enable_red: true
+        I_stab: 0.2
+        R_res: 0.2
+        P_cont: 0.2
+        Rt_adj: 0.1
+        delta_H: 0.05
+    expected:
+      selected_ob_ids: [ob_a]
+      regime_hint: Collapse
+      adjacency_class: non_local
