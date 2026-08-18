@@ -31,10 +31,11 @@ InB → IIInB → IE
 → CEx (IE → CCR → Pck) → CE
 → TPU
 → SOB → SROB → CnOB → SmOB
+→ WrdNm
 → ISc
 → SSG → STPX
-→ RBU → DCB → TR → CTP → ISc → RTU → RB
-→ IdOB → MCB
+→ RBU → DCB → TR → RB → CTP → WrdNm → ISc → RTU 
+→ TR → RB → IdOB → MCB
 → (repeat routing loop until stable)
 → OuBA
 ```
@@ -42,7 +43,7 @@ InB → IIInB → IE
 A commit path may occur when RB selects the commit basin:
 
 ```
-RBU → DCB → TR → CTP → ISc → RTU → RB → OuBA
+RBU → DCB → TR → CTP → ISc → RTU → TR → RB → OuBA
 ```
 
 Below is the movement‑aligned breakdown.
@@ -100,7 +101,7 @@ Below is the movement‑aligned breakdown.
 After IdOB → MCB, the pipeline returns to:
 
 ```
-RBU → DCB → TR → CTP → ISc → RTU → RB
+RBU → DCB → TR → RB → CTP → WrdNm → ISc → RTU
 ```
 
 until RB selects commit or another IdOB cycle.
