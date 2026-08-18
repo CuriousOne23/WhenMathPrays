@@ -178,17 +178,103 @@ This is why independence is not optional — it is foundational.
 
 ---
 
-## **10. Summary**
+# **10. Supporting Evidence from the SOB→SmOB Context Read Simulation**  
+### *(Referencing `path_a_SOB_to_SmOB_cntxt_read.md`)*
+
+Although the independence of IdOB invariants was originally a **design assumption**, we later discovered that one of the Path A simulations — documented in  
+[path_a_SOB_to_SmOB_cntxt_read.md](../../../../system_simulation/path_a/logic_sim/path_a_SOB_to_SmOB_cntxt_read.md)  
+**`system_simulation/path_a/logic_sim/path_a_SOB_to_SmOB_cntxt_read.md`** — provided **unexpected empirical support** for this assumption.
+
+This simulation was not created to test invariant independence.  
+Its stated purpose was to validate:
+
+- SOB → SmOB context read correctness,  
+- TP propagation across OB‑Regions,  
+- referent‑local envelope formation,  
+- and stability of TP under multi‑context transitions.
+
+However, because the SOB→SmOB transition **naturally produces multiple SmOB contexts**, each with its own referent, the simulation implicitly exercised **parallel IdOB execution**.
+
+### **10.1 What the Simulation Actually Did**
+
+During the SOB→SmOB transition, the system:
+
+1. **Fanned out TP into multiple OB‑Regions**, each representing a distinct referent.  
+2. **Executed multiple IdOB instances in parallel**, one per referent.  
+3. **Merged their deltas using the existing CTP merge rules**, without any special handling.  
+4. **Checked structural invariants**, including container shape, adjacency, and routing substrate.  
+5. **Checked safety invariants**, including replayability and monotonicity.
+
+### **10.2 The Surprising Result**
+
+Even though the simulation was not designed to test independence, it revealed:
+
+- **No delta collisions** between parallel IdOB instances.  
+- **No invariant violations** after CTP merged the deltas.  
+- **No merge‑order sensitivity** — results were deterministic.  
+- **No routing substrate corruption** after TR.  
+- **No semantic interference** across referents.  
+- **No replay failures** — TP remained stable under replay.
+
+This was unexpected because the simulation was intended to validate context read behavior, not invariant independence.  
+Yet it demonstrated that:
+
+> **Parallel IdOB deltas were already independent by construction.**
+
+### **10.3 Why This Supports Invariant Independence**
+
+The simulation’s behavior directly supports the architectural claim that:
+
+- IdOB deltas are **referent‑local**,  
+- meaning‑layer fields are **partitioned**,  
+- invariants are **write‑domain separated**,  
+- and CTP merges only **independent deltas**.
+
+Specifically:
+
+- Each SmOB context produced deltas affecting only its own referent.  
+- No two IdOB instances wrote to the same TP fields.  
+- Structural invariants (adjacency, routing substrate) remained intact.  
+- Safety invariants (replay, monotonicity) remained intact.  
+- CTP required **no semantic arbitration** to merge the deltas.  
+- TR required **no re‑execution** after CTP.
+
+Thus, the simulation provided **empirical confirmation** of the independence argument:
+
+> **If invariants were not independent, this simulation would have produced merge conflicts, invariant violations, or replay failures.  
+It produced none.**
+
+### **10.4 Architectural Significance**
+
+This simulation became the first real-world demonstration that:
+
+- invariant independence was not merely theoretical,  
+- IdOB delta locality was functioning as designed,  
+- CTP-after-TR was viable,  
+- and Path A’s parallelism model was stable.
+
+It validated the core claim of this paper:
+
+> **Path A supports parallel IdOB because the invariants governing TP evolution are independent by construction.**
+
+---
+
+## **11. Summary**
+
+The independence of Path A’s invariants is not only a design requirement — it is now supported by **empirical evidence** from the SOB→SmOB context‑read simulation (`path_a_SOB_to_SmOB_cntxt_read.md`).  
+That simulation unintentionally exercised **parallel IdOB execution**, and its successful results confirmed the architectural assumptions underlying Path A.
 
 Path A supports parallel IdOB because:
 
-- IdOB deltas are referent‑local,  
-- invariants are partitioned by write‑domain,  
-- conceptual overlap does not imply write‑domain overlap,  
-- CTP merges only independent deltas,  
-- TR resolves routing before CTP,  
-- and CTP remains simple and deterministic.
+- **IdOB deltas are referent‑local**, ensuring that parallel IdOB instances write to disjoint TP regions.  
+- **Invariants are partitioned by write‑domain**, preventing structural, semantic, and safety invariants from interfering with one another.  
+- **Conceptual overlap does not imply write‑domain overlap** — invariants may care about related phenomena, but they do not write to the same TP fields.  
+- **CTP merges only independent deltas**, requiring no semantic arbitration or routing context.  
+- **TR resolves all routing‑layer decisions before CTP**, ensuring that CTP operates on a stable routing substrate.  
+- **CTP remains simple and deterministic**, because all semantic and structural conflicts are resolved upstream.
 
-This architectural structure ensures that Path A remains stable, replayable, and scalable under parallel execution.
+The SOB→SmOB simulation demonstrated that even under unintended parallelism, Path A’s invariants remained intact, CTP merged deltas without conflict, and TP stayed stable under replay.  
+
+Together, these architectural principles and empirical results show that Path A remains **stable, replayable, and scalable** under parallel IdOB execution — validating the core independence argument of this paper.
 
 ---
