@@ -1,5 +1,5 @@
 # ============================================================
-# RB Tests To Run (v1.0)
+# RB Tests To Run (v1.1) — foundation + thin cluster
 # ============================================================
 
 tests:
@@ -22,3 +22,43 @@ tests:
   - id: rb_fanout_bound
     enabled: true
     description: Fanout bound enforcement
+
+  - id: rb_replay_identical
+    enabled: true
+    description: Same input twice yields identical routing_filter
+
+  - id: rb_canonical_order
+    enabled: true
+    description: Unsorted candidates become sorted selected_ob_ids
+
+  - id: rb_idob_view_readonly
+    enabled: true
+    description: IdOB view read-only (not mutated)
+
+  - id: rb_red_missing_foundation
+    enabled: true
+    description: enable_red with missing F fields does not invent labels
+
+  - id: rb_messy_partial_metadata
+    enabled: true
+    description: Partial routing_metadata stays deterministic
+
+  - id: rb_merge_split_exposure
+    enabled: true
+    description: Policy-allowed merge/split fields are exposed
+
+  - id: rb_write_boundary_explicit
+    enabled: true
+    description: TR + IdOB + DCB fields untouched
+
+  - id: rb_regime_refinement
+    enabled: true
+    description: Refinement prefers local
+
+  - id: rb_regime_drift
+    enabled: true
+    description: Drift does not over-stabilize to local
+
+  - id: rb_regime_collapse
+    enabled: true
+    description: Collapse must not fake local
