@@ -577,7 +577,7 @@ List of lineage extensions.
 Lineage additions must be bounded:
 
 $$
-|lineage\_additions| \le k
+|lineage\\_additions| \le k
 $$
 
 (The concrete bound $k$ and the exact append predicate remain open; see §6 and §12.10.)
@@ -673,7 +673,7 @@ new semantic lineage entries added by TR
 - freeze signatures
 
 ### Properties
-- lineage additions must be bounded ($|lineage\_additions| \le k$; concrete $k$ deferred)
+- lineage additions must be bounded ($|lineage\\_additions| \le k$; concrete $k$ deferred)
 - lineage additions must respect identity continuity
 - lineage additions must respect freeze signatures
 - lineage additions must be deterministic
@@ -777,14 +777,14 @@ Routing fields must satisfy:
 If no drift is detected:
 
 $$
-routing\_fields_{t+1} = routing\_fields_t
+routing\\_fields_{t+1} = routing\\_fields_t
 $$
 
 ### **Rule 2 — Monotonicity under drift**
 If drift increases:
 
 $$
-curvature\_level_{t+1} \ge curvature\_level_t
+curvature\\_level_{t+1} \ge curvature\\_level_t
 $$
 
 ### **Rule 3 — Freeze-signature dominance**
@@ -890,7 +890,7 @@ This ordering is required for:
 Lineage additions must satisfy:
 
 $$
-lineage\_additions_{t+1} = g(lineage_t, signals)
+lineage\\_additions_{t+1} = g(lineage_t, signals)
 $$
 
 Where:
