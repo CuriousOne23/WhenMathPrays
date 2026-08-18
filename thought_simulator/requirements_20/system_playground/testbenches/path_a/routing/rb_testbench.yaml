@@ -1,0 +1,178 @@
+# ============================================================
+# RB Testbench (v1.0) — Deterministic foundation cases
+# Aligned with 20.50 v3.0, rb_py_struc_pgm.md, progressive_lineup v4.2
+# ============================================================
+
+tests:
+
+  - id: rb_clean_local
+    description: Core-local OBs only; TR gate false; RED local/small/Stable
+    enabled: true
+    input:
+      tr_needs_update: false
+      TR:
+        version: 1
+        committed: true
+      semantic:
+        identity:
+          persona: assistant
+      process:
+        deltaH: 0.05
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_b, core_id: core_0, orthogonality_signature: A }
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+            - { ob_id: ob_x, core_id: core_1, orthogonality_signature: B }
+      metadata:
+        geometric_state:
+          position: 2
+          direction: 3
+          curvature: 0.0
+          step_index: 1
+          lane_id: 0
+        residue:
+          marker: leave_me
+        context:
+          topic: clean
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+      _rb_foundation:
+        enable_red: true
+        I_stab: 0.85
+        R_res: 0.75
+        P_cont: 0.7
+        Rt_adj: 0.2
+        delta_H: 0.05
+        timestamp: 1000.0
+    expected:
+      selected_ob_ids: [ob_a, ob_b]
+      tr_gate_rationale_contains: tr_gate:false
+      adjacency_class: local
+      displacement_scale: small
+      regime_hint: Stable
+      check_write_boundary: true
+      check_tr_unchanged: true
+
+  - id: rb_tr_gate_true
+    description: TR gate true appears in rationale; TR fields not written
+    enabled: true
+    input:
+      tr_needs_update: true
+      TR:
+        version: 1
+        committed: true
+      process:
+        deltaH: 0.1
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: gate
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: high
+    expected:
+      selected_ob_ids: [ob_a]
+      tr_gate_rationale_contains: tr_gate:true
+      check_tr_unchanged: true
+
+  - id: rb_core_isolation
+    description: Foreign-core OBs excluded; empty selection + rationale
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.0
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_foreign, core_id: core_9, orthogonality_signature: Z }
+      metadata:
+        context:
+          topic: iso
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      selected_ob_ids: []
+      rationale_contains: no_core_local_obs
+
+  - id: rb_nonlocal_entropy
+    description: High ΔH / Rt_adj → non_local large displacement
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.55
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          candidate_obs:
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+      _rb_foundation:
+        enable_red: true
+        I_stab: 0.4
+        R_res: 0.4
+        P_cont: 0.3
+        Rt_adj: 0.8
+        delta_H: 0.55
+        timestamp: 1002.0
+      metadata:
+        context:
+          topic: jump
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: unstable
+          importance: high
+    expected:
+      selected_ob_ids: [ob_a]
+      adjacency_class: non_local
+      displacement_scale: large
+      regime_hint_in: [Transition, Drift, Collapse]
+
+  - id: rb_fanout_bound
+    description: Fanout capped at policy max_ob_fanout
+    enabled: true
+    input:
+      tr_needs_update: false
+      process:
+        deltaH: 0.0
+        routing_metadata:
+          core_id: core_0
+          orthogonality_signature: A
+          policy:
+            max_ob_fanout: 2
+          candidate_obs:
+            - { ob_id: ob_c, core_id: core_0, orthogonality_signature: A }
+            - { ob_id: ob_a, core_id: core_0, orthogonality_signature: A }
+            - { ob_id: ob_b, core_id: core_0, orthogonality_signature: A }
+      metadata:
+        context:
+          topic: fanout
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      selected_ob_ids: [ob_a, ob_b]
+      max_len: 2
