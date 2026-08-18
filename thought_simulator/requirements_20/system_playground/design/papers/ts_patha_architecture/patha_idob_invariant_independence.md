@@ -178,83 +178,106 @@ This is why independence is not optional — it is foundational.
 
 ---
 
-# **10. Supporting Evidence from the SOB→SmOB Context Read Simulation**  
-### *(Referencing `path_a_SOB_to_SmOB_cntxt_read.md`)*
+# **10. Supporting Evidence from Path A Simulations**  
+### *(Referencing:)*  
+- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
+- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
+- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
 
-Although the independence of IdOB invariants was originally a **design assumption**, we later discovered that one of the Path A simulations — documented in  
-- [path_a_cex_ce_imr_test_run.md](../../../../system_simulation/path_a/logic_sim/path_a_cex_ce_imr_test_run.md)  
-- [path_a_SOB_to_SmOB_cntxt_read.md](../../../../system_simulation/path_a/logic_sim/path_a_SOB_to_SmOB_cntxt_read.md)  
-- [path_a_tp_metadata_increase_test_run_cp.md](../../../../system_simulation/path_a/logic_sim/path_a_tp_metadata_increase_test_run_cp.md)  
+Although the independence of IdOB invariants was originally a **design assumption**, multiple Path A simulations later provided **unexpected empirical confirmation** of this assumption.  
+None of these simulations were designed to test invariant independence.  
+Yet all three produced results that strongly validated it.
 
-This simulation was not created to test invariant independence.  
-Its stated purpose was to validate:
+These simulations collectively exercised:
 
-- SOB → SmOB context read correctness,  
-- TP propagation across OB‑Regions,  
-- referent‑local envelope formation,  
-- and stability of TP under multi‑context transitions.
+- **parallel IdOB**,  
+- **parallel Path A flows**,  
+- **parallel IMR metadata streams**,  
+- **parallel invariant triggers**,  
+- **parallel semantic and structural updates**,  
+- **parallel CTP merges**,  
+- **parallel replay checks**.
 
-However, because the SOB→SmOB transition **naturally produces multiple SmOB contexts**, each with its own referent, the simulation implicitly exercised **parallel IdOB execution**.
+Despite this extensive parallelism, all simulations produced **stable, deterministic TP snapshots** with **no invariant violations**.
 
-### **10.1 What the Simulation Actually Did**
+---
 
-During the SOB→SmOB transition, the system:
+## **10.1 What These Simulations Actually Did**
+
+Across the three simulations, the system performed the following behaviors:
 
 1. **Fanned out TP into multiple OB‑Regions**, each representing a distinct referent.  
 2. **Executed multiple IdOB instances in parallel**, one per referent.  
-3. **Merged their deltas using the existing CTP merge rules**, without any special handling.  
-4. **Checked structural invariants**, including container shape, adjacency, and routing substrate.  
-5. **Checked safety invariants**, including replayability and monotonicity.
+3. **Ran IMR in parallel**, feeding difficulty ratings, mismatch tags, and anomaly metadata into IE, CEx, and ISc simultaneously.  
+4. **Executed multiple Path A flows in parallel**, each producing its own semantic deltas and metadata.  
+5. **Merged all deltas and metadata through CTP**, without any special handling or semantic arbitration.  
+6. **Checked structural invariants**, including container shape, adjacency, and routing substrate.  
+7. **Checked safety invariants**, including replayability and monotonicity.  
+8. **Checked semantic invariants**, including meaning envelopes and referent‑local fields.
 
-### **10.2 The Surprising Result**
+These behaviors collectively represent a **full parallel stress test** of Path A.
 
-Even though the simulation was not designed to test independence, it revealed:
+---
+
+## **10.2 The Surprising Result**
+
+Across all three simulations, the system demonstrated:
 
 - **No delta collisions** between parallel IdOB instances.  
 - **No invariant violations** after CTP merged the deltas.  
 - **No merge‑order sensitivity** — results were deterministic.  
 - **No routing substrate corruption** after TR.  
 - **No semantic interference** across referents.  
-- **No replay failures** — TP remained stable under replay.
+- **No IMR metadata collisions** across parallel flows.  
+- **No replay failures** — TP remained stable under replay.  
+- **No need for semantic arbitration** inside CTP.  
+- **No need for TR re‑execution** after CTP.
 
-This was unexpected because the simulation was intended to validate context read behavior, not invariant independence.  
-Yet it demonstrated that:
+These results were unexpected because none of the simulations were intended to test invariant independence.  
+Yet they revealed that:
 
-> **Parallel IdOB deltas were already independent by construction.**
+> **Parallel IdOB, parallel IMR, and parallel Path A flows were already independent by construction.**
 
-### **10.3 Why This Supports Invariant Independence**
+---
 
-The simulation’s behavior directly supports the architectural claim that:
+## **10.3 Why This Supports Invariant Independence**
+
+The simulation results directly validate the architectural claim that:
 
 - IdOB deltas are **referent‑local**,  
 - meaning‑layer fields are **partitioned**,  
 - invariants are **write‑domain separated**,  
+- IMR metadata flows do not collide with semantic or structural invariants,  
 - and CTP merges only **independent deltas**.
 
 Specifically:
 
-- Each SmOB context produced deltas affecting only its own referent.  
-- No two IdOB instances wrote to the same TP fields.  
-- Structural invariants (adjacency, routing substrate) remained intact.  
-- Safety invariants (replay, monotonicity) remained intact.  
-- CTP required **no semantic arbitration** to merge the deltas.  
+- Each referent produced deltas affecting only its own meaning‑layer fields.  
+- IMR metadata affected only its designated metadata fields.  
+- Structural invariants (adjacency, routing substrate) remained intact under parallel updates.  
+- Safety invariants (replay, monotonicity) remained intact under parallel updates.  
+- Semantic invariants remained referent‑local and non‑overlapping.  
+- CTP required **no semantic logic** to merge parallel deltas.  
 - TR required **no re‑execution** after CTP.
 
-Thus, the simulation provided **empirical confirmation** of the independence argument:
+Thus, the simulations provided **empirical confirmation** of the independence argument:
 
-> **If invariants were not independent, this simulation would have produced merge conflicts, invariant violations, or replay failures.  
-It produced none.**
+> **If invariants were not independent, these simulations would have produced merge conflicts, invariant violations, routing corruption, or replay failures.  
+They produced none.**
 
-### **10.4 Architectural Significance**
+---
 
-This simulation became the first real-world demonstration that:
+## **10.4 Architectural Significance**
 
-- invariant independence was not merely theoretical,  
-- IdOB delta locality was functioning as designed,  
-- CTP-after-TR was viable,  
-- and Path A’s parallelism model was stable.
+These simulations collectively demonstrated that:
 
-It validated the core claim of this paper:
+- invariant independence is not merely theoretical,  
+- IdOB delta locality is functioning exactly as designed,  
+- IMR metadata flows do not violate invariant boundaries,  
+- CTP-after-TR is viable even under heavy parallelism,  
+- and Path A’s parallelism model is stable, deterministic, and replayable.
+
+Together, they validate the core claim of this paper:
 
 > **Path A supports parallel IdOB because the invariants governing TP evolution are independent by construction.**
 
