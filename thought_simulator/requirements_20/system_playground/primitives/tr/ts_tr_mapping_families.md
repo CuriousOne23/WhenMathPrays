@@ -344,21 +344,6 @@ tension = low
 
 ---
 
-Understood, Jeff — delivering **ts_tr_mapping_families.md (Delivery 2 of 2)** with **clarity**, **coverage**, and **brevity as a subgoal**, exactly as you requested.
-
-No agent.  
-No delegation.  
-Pure manual theory.
-
-This continues directly from Delivery 1.
-
----
-
-# ⭐ **ts_tr_mapping_families.md — DELIVERY 2 OF 2**  
-*(Final half of the paper)*
-
----
-
 # **7. politeness — Mapping Family**
 
 ### **7.1 Allowed Inputs**
