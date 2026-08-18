@@ -86,7 +86,7 @@ Novelty, ambiguity-resolution, and drift-detection tests are as previously speci
 # **8. Bounding Rules**
 
 $$
-|lineage\_additions| \le k
+|lineage\\_additions| \le k
 $$
 
 **Provisional default:** $k = 3$. Changing $k$ is a **minor version** event and requires progressive-lineup fixture updates.
@@ -110,7 +110,7 @@ $$
 Preserve order, boundedness, determinism, SSR projection:
 
 $$
-SSR(lineage\_additions) = lineage\_additions
+SSR(lineage\\_additions) = lineage\\_additions
 $$
 
 ---
