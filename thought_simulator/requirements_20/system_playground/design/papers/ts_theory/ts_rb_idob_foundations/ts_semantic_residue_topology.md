@@ -8,50 +8,29 @@ It complements:
 - `ts_invariant_relational_model.md`
 - `ts_invariant_to_idob_theory.md`
 - `ts_identity_geometry.md`
+- `ts_routing_entropy_dynamics.md`
 
-by describing how semantic residue behaves as a **topological object** in the invariant space.
+by describing how semantic residue behaves as a **topological object** relevant to **IdOB inheritance/reset** and **RB continuity signals**.
 
-Semantic residue topology provides:
-
-- structure for IdOB semantic persistence,
-- a basis for residue‑driven stability analysis,
-- a way to measure residue drift and collapse,
-- and a scientific framework for TR refinement behavior.
-
-This is a **rudimentary, first‑order model** intended for early testing and refinement.
+This is a **rudimentary, first‑order model** for observation and early IdOB design—not a finished semantic theory.
 
 ---
 
-## 2. Semantic residue space
+## 2. Semantic residue space (SRT)
 
-Semantic residue lives in a residue vector:
-
-$$
-\mathbf{R} =
-\left(
-r_1, r_2, \ldots, r_n
-\right)
-$$
-
-where each $r_i$ is a residue token or residue feature extracted from TS cycles.
-
-Residue persistence is measured by the invariant:
+Residue vector:
 
 $$
-R_{\text{res}}
+\mathbf{R} = (r_1, r_2, \ldots, r_n)
 $$
 
-Residue topology is defined over the space of all residue vectors.
+Persistence invariant: $R_{\text{res}}$ (definition and measurement in the relational model).
 
-We call this space the **Semantic Residue Topology (SRT)**.
+Regimes that govern residue inherit vs reset use the **shared regime table** (Stable / Refinement / Drift / Transition / Collapse).
 
 ---
 
-## 3. Residue clusters
-
-Residue clusters are groups of residue vectors that share similar semantic features.
-
-We define residue distance:
+## 3. Residue distance, clusters, attractors
 
 $$
 d_R(\mathbf{R}_1, \mathbf{R}_2)
@@ -59,215 +38,90 @@ d_R(\mathbf{R}_1, \mathbf{R}_2)
 \sum_i w_i \, |R_{1,i} - R_{2,i}|
 $$
 
-Two residue vectors belong to the same cluster if:
+Same cluster if $d_R < \epsilon_{\text{cluster}}$.
 
-$$
-d_R(\mathbf{R}_1, \mathbf{R}_2) < \epsilon_{\text{cluster}}
-$$
+Residue attractor $\mathbf{A}_R$: distance decreases over multiple cycles.
 
-Clusters represent:
-
-- persistent semantic themes,
-- stable conceptual anchors,
-- residue families.
+**IdOB:** attractors support stable identity anchors.  
+**RB:** persistent residue clusters bias local routing under Stable/Refinement.
 
 ---
 
-## 4. Residue attractors
+## 4. Persistence trails
 
-Residue attractors are residue vectors toward which residue trajectories converge.
+Sequence $\mathbf{R}_{t-k}, \ldots, \mathbf{R}_{t}$.
 
-A residue attractor $\mathbf{A}_R$ satisfies:
+First‑order persistence form:
 
 $$
-d_R(\mathbf{R}_{t+1}, \mathbf{A}_R)
-<
-d_R(\mathbf{R}_{t}, \mathbf{A}_R)
+R_{\text{res}}
+=
+\frac{|\mathbf{R}_{t} \cap \mathbf{R}_{t-1}|}
+{\max(1, |\mathbf{R}_{t}|)}
 $$
 
-for multiple cycles.
+- High → strong semantic continuity
+- Low → semantic reset pressure (Collapse / hard Transition)
 
-Residue attractors correspond to:
-
-- stable semantic motifs,
-- persistent conceptual anchors,
-- long‑range semantic continuity.
-
-These attractors are essential for **identity stability**.
+**Must observe:** does IdOB residue field track this scalar directionally?
 
 ---
 
-## 5. Residue persistence trails
-
-A residue persistence trail is the sequence:
+## 5. Drift and curvature
 
 $$
-\mathbf{R}_{t-k}, \ldots, \mathbf{R}_{t-1}, \mathbf{R}_{t}
-$$
-
-Persistence is measured by:
-
-$$
-R_{\text{res}} =
-\frac{
-|\mathbf{R}_{t} \cap \mathbf{R}_{t-1}|
-}{
-|\mathbf{R}_{t}|
-}
-$$
-
-Interpretation:
-
-- High $R_{\text{res}}$ → strong semantic continuity  
-- Medium $R_{\text{res}}$ → partial continuity  
-- Low $R_{\text{res}}$ → semantic reset  
-
-Persistence trails define **semantic memory** in TS.
-
----
-
-## 6. Residue drift vectors
-
-Residue drift is the movement of residue across the SRT.
-
-We define the drift vector:
-
-$$
-\vec{D}_R =
-\mathbf{R}_{t+1} - \mathbf{R}_{t}
-$$
-
-Magnitude:
-
-$$
+\vec{D}_R = \mathbf{R}_{t+1} - \mathbf{R}_{t},
+\qquad
 \|\vec{D}_R\| = d_R(\mathbf{R}_{t+1}, \mathbf{R}_{t})
 $$
 
-Interpretation:
+Residue curvature $\kappa_R$ uses the same three‑point ratio form as $\kappa_{\text{id}}$, on residue space.
 
-- Small $\|\vec{D}_R\|$ → residue refinement  
-- Medium $\|\vec{D}_R\|$ → residue drift  
-- Large $\|\vec{D}_R\|$ → residue transition  
-
-Residue drift is a key indicator of **identity drift**.
+- Small drift → refinement
+- Large drift → transition / reconfiguration
 
 ---
 
-## 7. Residue curvature
+## 6. Collapse and transition surfaces
 
-Curvature measures how residue trajectory bends over time.
+- **Collapse:** $R_{\text{res}} < 0.3$ (aligned with shared Collapse when also low $I_{\text{stab}}$).
+- **Transition surface:** $\|\vec{D}_R\| = D_{R,\text{crit}}$ (placeholder).
 
-Given three successive residue vectors:
-
-$$
-\mathbf{R}_{t-1},\;
-\mathbf{R}_{t},\;
-\mathbf{R}_{t+1}
-$$
-
-We define curvature:
-
-$$
-\kappa_R
-=
-\frac{
-d_R(\mathbf{R}_{t-1}, \mathbf{R}_{t+1})
-}{
-d_R(\mathbf{R}_{t-1}, \mathbf{R}_{t}) + d_R(\mathbf{R}_{t}, \mathbf{R}_{t+1})
-}
-$$
-
-Interpretation:
-
-- $\kappa_R \approx 0$ → stable semantic trajectory  
-- $\kappa_R \approx 1$ → sharp semantic turn  
-
-Curvature is essential for detecting **semantic transitions**.
+Effects: residue reset, weakened identity stability, provenance coherence risk.
 
 ---
 
-## 8. Residue collapse regions
+## 7. Builder hooks (IdOB / RB)
 
-Residue collapse occurs when residue persistence falls below a threshold.
-
-Defined by:
-
-$$
-R_{\text{res}} < r_{\text{collapse}}
-$$
-
-Typical first‑order threshold:
-
-- $r_{\text{collapse}} = 0.3$
-
-Effects:
-
-- residue resets,
-- semantic continuity breaks,
-- identity stability decreases,
-- provenance coherence weakens.
-
-This is the **semantic collapse regime**.
+| Question | Why it matters |
+|----------|----------------|
+| Does IdOB reset residue only under Collapse/Transition? | Prevents silent residue loss in Stable windows |
+| Does high $R_{\text{res}}$ predict RB local adjacency? | Tests IR‑1 / IR‑5 coupling |
+| Are residue clusters stable when roles are stable? | Validates attractor language |
+| Which TP field is the actual $\mathbf{R}$ source? | Bridge map completeness |
 
 ---
 
-## 9. Residue transition surfaces
+## 8. Must‑observe vs defer
 
-Transition surfaces separate stable residue regions from drift or collapse regions.
+**Must observe**
 
-A transition surface $\Sigma_R$ is defined by:
+- Log $R_{\text{res}}$ and residual field presence per cycle.
+- Compare IdOB residue inherit/reset with regime label.
+- Check IR‑1: high $I_{\text{stab}}$ vs high $R_{\text{res}}$.
 
-$$
-\|\vec{D}_R\| = D_{R,\text{crit}}
-$$
+**Defer**
 
-Crossing $\Sigma_R$ indicates:
-
-- semantic jump,
-- residue reconfiguration,
-- identity geometry shift,
-- entropy‑driven semantic transition.
-
-This is the **semantic transition regime**.
+- Rich residue feature learning.
+- Final cluster algorithms.
+- Continuous topological invariants beyond first‑order distance.
 
 ---
 
-## 10. Residue topology summary
+## 9. Status and next steps
 
-Semantic residue topology provides:
+**Status:** First‑order residue topology for IdOB/RB examination.
 
-- **clusters** → semantic families  
-- **attractors** → persistent semantic anchors  
-- **persistence trails** → semantic memory  
-- **drift vectors** → semantic movement  
-- **curvature** → semantic bending  
-- **collapse regions** → semantic resets  
-- **transition surfaces** → semantic jumps  
+**Next steps:** Wire residue logging to progressive tests; validate clusters against IdOB outputs; keep thresholds provisional.
 
-These topological structures are essential for:
-
-- IdOB formation,
-- TR refinement behavior,
-- identity stability analysis,
-- invariant measurement,
-- cognitive research.
-
----
-
-## 11. Status and next steps
-
-**Status:**  
-- This is a first‑order topological model.  
-- All definitions are provisional.  
-- Thresholds are placeholders.
-
-**Next steps:**  
-- Integrate with progressive lineup testing.  
-- Empirically validate residue clusters and attractors.  
-- Connect residue topology to identity geometry.  
-- Connect residue topology to routing‑entropy dynamics.  
-- Use residue topology to refine IdOB grouping and hashing.
-
-This document is the topological foundation of  
-**TS Semantic Dynamics**.
-
+This document is the topological foundation of **TS Semantic Dynamics** for first‑order identity work.
