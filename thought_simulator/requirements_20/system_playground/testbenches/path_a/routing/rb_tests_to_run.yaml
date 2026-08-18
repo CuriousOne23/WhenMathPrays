@@ -1,0 +1,24 @@
+# ============================================================
+# RB Tests To Run (v1.0)
+# ============================================================
+
+tests:
+  - id: rb_clean_local
+    enabled: true
+    description: Core-local selection + RED local/Stable
+
+  - id: rb_tr_gate_true
+    enabled: true
+    description: TR gate rationale without TR mutation
+
+  - id: rb_core_isolation
+    enabled: true
+    description: Foreign core excluded
+
+  - id: rb_nonlocal_entropy
+    enabled: true
+    description: Non-local RED under high entropy
+
+  - id: rb_fanout_bound
+    enabled: true
+    description: Fanout bound enforcement
