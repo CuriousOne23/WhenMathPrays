@@ -432,7 +432,7 @@ epistemic_delta_h = 0
 ### **12.2 Mapping Function**
 
 $$
-lineage\_additions = f_{la}(L)
+lineage\\_additions = f_{la}(L)
 $$
 
 ### **12.3 Deterministic Omission Rule**
@@ -446,7 +446,7 @@ lineage_additions = []
 ### **12.4 Bounding Rule**
 
 $$
-|lineage\_additions| \le k
+|lineage\\_additions| \le k
 $$
 
 Where provisional default $k = 3$ (see `ts_tr_lineage_extension_theory.md`). Changing $k$ is a versioned event.
@@ -464,7 +464,7 @@ Where provisional default $k = 3$ (see `ts_tr_lineage_extension_theory.md`). Cha
 ### **13.2 Mapping Function**
 
 $$
-routing\_fields = f_{rf}(metadata)
+routing\\_fields = f_{rf}(metadata)
 $$
 
 ### **13.3 Deterministic Omission Rule**
