@@ -1,4 +1,3 @@
-```markdown
 # ts_invariant_relational_model.md
 
 ## 1. Purpose
@@ -18,14 +17,14 @@ This is a **rudimentary, first‑order model**—intended as a starting point fo
 
 **Invariant set (symbolic):**
 
-- **I\_stab:** Identity stability  
-- **R\_res:** Semantic‑residue persistence  
-- **P\_cont:** Provenance continuity  
-- **L\_depth:** Lineage depth  
-- **Rt\_adj:** Routing adjacency (local vs non‑local transitions)  
+- **$I\_{stab}$:** Identity stability  
+- **$R\_{res}$:** Semantic‑residue persistence  
+- **$P\_{cont}$:** Provenance continuity  
+- **$L\_{depth}$:** Lineage depth  
+- **$Rt\_{adj}$:** Routing adjacency (local vs non‑local transitions)  
 - **ΔH:** Entropy change per cycle  
-- **E\_dens:** Expressive metadata density  
-- **C\_coh:** Continuity metadata coherence  
+- **$E\_{dens}$:** Expressive metadata density  
+- **$C\_{coh}$:** Continuity metadata coherence  
 
 Each invariant is assumed to be:
 
@@ -42,8 +41,8 @@ These are **rudimentary, directional relationships**—they state how invariants
 ### 3.1 Identity stability ↔ semantic‑residue persistence
 
 - **Law IR‑1 (qualitative):**  
-  - If **I\_stab is high**, then **R\_res tends to be high**.  
-  - If **I\_stab is low**, then **R\_res tends to be low** or frequently reset.
+  - If **$I\_{stab}$ is high**, then **$R\_{res}$ tends to be high**.  
+  - If **$I\_{stab}$ is low**, then **$R\_{res}$ tends to be low** or frequently reset.
 
 - **Interpretation:**  
   Stable identities carry stable semantic trails; unstable identities shed or reset residue.
@@ -53,8 +52,8 @@ These are **rudimentary, directional relationships**—they state how invariants
 ### 3.2 Lineage depth ↔ provenance continuity
 
 - **Law IR‑2 (qualitative):**  
-  - **High L\_depth + high P\_cont ⇒ coherent long‑range process.**  
-  - **High L\_depth + low P\_cont ⇒ accumulated drift / noise.**
+  - **High $L\_{depth}$ + high $P\_{cont}$ ⇒ coherent long‑range process.**  
+  - **High $L\_{depth} + low $P\_{cont}$ ⇒ accumulated drift / noise.**
 
 - **Interpretation:**  
   Deep lineage is only cognitively meaningful when provenance remains continuous.
@@ -72,22 +71,22 @@ These are **rudimentary, directional relationships**—they state how invariants
 
 ---
 
-### 3.4 Expressive density (E\_dens) ↔ continuity coherence (C\_coh)
+### 3.4 Expressive density ($E\_{dens}) ↔ continuity coherence ($C\_{coh}$)
 
 - **Law IR‑4 (qualitative):**  
-  - **High E\_dens + high C\_coh ⇒ structured, sustained expression.**  
-  - **High E\_dens + low C\_coh ⇒ fragmented, unstable expression.**
+  - **High $E\_{dens}$ + high $C\_{coh}$ ⇒ structured, sustained expression.**  
+  - **High $E\_{dens}$ + low $C\_{coh}$ ⇒ fragmented, unstable expression.**
 
 - **Interpretation:**  
   Rich expression without continuity is spray; rich expression with continuity is narrative.
 
 ---
 
-### 3.5 Identity stability (I\_stab) ↔ routing adjacency (Rt\_adj)
+### 3.5 Identity stability ($I\_{stab}$) ↔ routing adjacency ($Rt\_{adj}$)
 
 - **Law IR‑5 (qualitative):**  
-  - **High I\_stab ⇒ Rt\_adj remains within a small neighborhood** (local routing).  
-  - **Low I\_stab ⇒ Rt\_adj frequently jumps across neighborhoods** (non‑local routing).
+  - **High $I\_{stab} ⇒ $Rt\_{adj}$ remains within a small neighborhood** (local routing).  
+  - **Low $I\_{stab} ⇒ $Rt\_{adj}$ frequently jumps across neighborhoods** (non‑local routing).
 
 - **Interpretation:**  
   Who is “thinking” is reflected in where the thinking goes.
@@ -98,28 +97,28 @@ These are **rudimentary, directional relationships**—they state how invariants
 
 These are **suggested measurement forms**, not yet canon.
 
-- **I\_stab:**  
+- **$I\_{stab}$:**  
   Fraction of cycles in a window where identity descriptors remain within a small variation band.
 
-- **R\_res:**  
+- **$R\_{res}$:**  
   Fraction of semantic‑residue tokens that persist across cycles in a window.
 
-- **P\_cont:**  
+- **$P\_{cont}$:**  
   Fraction of steps where provenance chains remain unbroken (no missing or ambiguous links).
 
-- **L\_depth:**  
+- **$L\_{depth}$:**  
   Maximum lineage length (number of linked cycles) for the current identity trajectory.
 
-- **Rt\_adj:**  
+- **$Rt\_{adj}$:**  
   Count or rate of routing transitions that stay within vs leave a defined OB/role neighborhood.
 
 - **ΔH:**  
   Scalar entropy difference between successive cycles, using a fixed TS entropy definition.
 
-- **E\_dens:**  
+- **$E\_{dens}$:**  
   Count or normalized density of expressive metadata tokens per cycle.
 
-- **C\_coh:**  
+- **$C\_{coh}$:**  
   Coherence score over continuity metadata (e.g., overlap of topic/goal markers across cycles).
 
 All of these should be:
@@ -134,10 +133,10 @@ All of these should be:
 The invariant relational model provides a **feature space** and **relational structure** for IdOB grouping:
 
 - **Feature vector for an IdOB (first‑order):**
-
-  $$
-  \mathbf{F}_{\text{IdOB}} = (I\_stab, R\_res, P\_cont, L\_depth, Rt\_adj, \Delta H, E\_dens, C\_coh)
-  $$
+  
+$$
+  \mathbf{F}_{\text{IdOB}} = (I\_{stab}, R\_{res}, P\_{cont}, L\_{depth}, Rt\_{adj}, \Delta H, E\_{dens}, C\_{coh})
+$$
 
 - **Relational constraints:**  
   - IR‑1 … IR‑5 define expected co‑variation patterns.  
