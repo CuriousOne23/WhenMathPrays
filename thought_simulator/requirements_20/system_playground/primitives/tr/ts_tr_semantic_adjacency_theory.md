@@ -75,7 +75,7 @@ x_p =
 $$
 
 $$
-x_s = x_s + adjacency\_modifier(A)
+x_s = x_s + adjacency\\_modifier(A)
 $$
 
 `adjacency_modifier` is a **versioned free parameter**, provisional range $\{-1,0,+1\}$.
@@ -148,5 +148,5 @@ Adjacency is the semantic relational direction of the utterance and is essential
 # **Appendix — Versioned Parameters & Composition**
 
 - Axis updates driven by adjacency **must** respect `ts_tr_semantic_geometry.md` §9.1 composition order.
-- `adjacency_modifier` provisional range $\{-1,0,+1\}$; changing it is a minor version event.
+- `adjacency_modifier` provisional range $\\{-1,0,+1\\}$; changing it is a minor version event.
 - Missing adjacency → $A=0$ and minimal-input geometry path.
