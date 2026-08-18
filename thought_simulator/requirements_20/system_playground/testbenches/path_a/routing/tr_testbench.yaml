@@ -1,1 +1,676 @@
+# ============================================================
+# TR Testbench (v1.0) — Deterministic foundation cases
+# Structural comparison in testbench mode.
+# Aligned with 20.37 v3.0, tr_py_struc_pgm.md, progressive_lineup v4.2
+# Theory: ts_tr_readset_update_proposal, mapping_families, semantic_geometry
+# ============================================================
+#
+# Comparison policy (structural foundation):
+#   - tr_needs_update expected value
+#   - TR required fields (labels)
+#   - routing_fields complete key set + specified values
+#   - lineage_additions when specified
+#   - write-boundary / unchanged checks when flagged
+#   - gate-false: TR structurally unchanged
+#
+# v1 curvature→tension policy (tr_py_struc_pgm §9.10):
+#   geometric_state.curvature 0.0 → tension low
+#   geometric_state.curvature 1.0 → tension medium
+#
+# ============================================================
 
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Minimal gate true — pure omission defaults
+  # ----------------------------------------------------------
+  - id: tr_minimal_gate_true
+    description: Narrow 20.37 inputs only; full TR block with omission defaults; dirty flag cleared
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata:
+          core_id: core_0
+      metadata:
+        context:
+          topic: minimal
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      tr_needs_update: false
+      TR:
+        stance: neutral
+        intent: inform
+        affect: neutral
+        epistemic_shading: neutral
+        tension: low
+        politeness: neutral
+        commitment: weak
+        reservation: none
+        logical_structure: additive
+        epistemic_delta_h: 0
+        lineage_additions: []
+        routing_fields:
+          semantic_drift: false
+          identity_drift: false
+          commitment_instability: false
+          freeze_conflict: false
+          topology_instability: false
+          curvature_level: 0
+          stance_instability: false
+          shading_instability: false
+          tension_instability: false
+          lineage_instability: false
+          adjacency_valence: 0
+          continuity_state: 0
+          invariant_delta_h: 0
+          routing_severity: 0
+      check_routing_fields_complete: true
+
+  # ----------------------------------------------------------
+  # 2. Gate false — no-op (TR unchanged)
+  # ----------------------------------------------------------
+  - id: tr_gate_false_noop
+    description: tr_needs_update false → no rewrite of existing TR; flag stays false
+    enabled: true
+    input:
+      tr_needs_update: false
+      TR:
+        stance: corrective
+        intent: correct
+        affect: neutral
+        epistemic_shading: neutral
+        tension: low
+        politeness: neutral
+        commitment: weak
+        reservation: none
+        logical_structure: additive
+        epistemic_delta_h: 0
+        lineage_additions: []
+        routing_fields:
+          semantic_drift: false
+          identity_drift: false
+          commitment_instability: false
+          freeze_conflict: false
+          topology_instability: false
+          curvature_level: 0
+          stance_instability: false
+          shading_instability: false
+          tension_instability: false
+          lineage_instability: false
+          adjacency_valence: 0
+          continuity_state: 0
+          invariant_delta_h: 0
+          routing_severity: 0
+      metadata:
+        context:
+          topic: noop
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      tr_needs_update: false
+      TR_unchanged: true
+      TR:
+        stance: corrective
+        intent: correct
+
+  # ----------------------------------------------------------
+  # 3. Dirty flag must clear after successful gated run
+  # ----------------------------------------------------------
+  - id: tr_clears_dirty_flag
+    description: Gated success always clears tr_needs_update
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic: {}
+      process:
+        routing_metadata: {}
+      metadata:
+        context:
+          topic: clear
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      tr_needs_update: false
+      TR_present: true
+      TR:
+        stance: neutral
+        intent: inform
+
+  # ----------------------------------------------------------
+  # 4. Write boundary — IdOB / DCB / RB / residue unchanged
+  # ----------------------------------------------------------
+  - id: tr_write_boundary
+    description: TR must not mutate IdOB semantic, DCB geometric ownership, RB filter, or residue
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        identity:
+          persona: locked
+        idob:
+          roles: [locked]
+          stability: 0.9
+        lineage: []
+      process:
+        routing_filter:
+          selected_ob_ids: [ob_locked]
+          note: do_not_touch
+        routing_metadata:
+          core_id: core_0
+      metadata:
+        geometric_state:
+          position: 7
+          direction: 8
+          curvature: 0.0
+          step_index: 3
+          lane_id: 0
+        geometric_history:
+          - { position: 6, direction: 7, curvature: 0.0, step_index: 2, lane_id: 0 }
+        residue:
+          marker: locked
+        context:
+          topic: boundary
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: high
+    expected:
+      tr_needs_update: false
+      TR:
+        stance: neutral
+        intent: inform
+        tension: low
+      check_write_boundary: true
+      check_idob_view_unchanged: true
+      check_dcb_unchanged: true
+      check_rb_filter_unchanged: true
+
+  # ----------------------------------------------------------
+  # 5. STPX structural cue seeds intent (question → request)
+  # ----------------------------------------------------------
+  - id: tr_stpx_intent_request
+    description: STPX structural question cue maps intent to request; other fields omission defaults
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      STPX:
+        cues:
+          structural: [question]
+      metadata:
+        context:
+          topic: question
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      tr_needs_update: false
+      TR:
+        intent: request
+        stance: neutral
+        affect: neutral
+        tension: low
+        logical_structure: additive
+
+  # ----------------------------------------------------------
+  # 6. STPX declarative → inform (baseline cue)
+  # ----------------------------------------------------------
+  - id: tr_stpx_intent_inform
+    description: STPX declarative cue keeps intent inform
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      STPX:
+        cues:
+          structural: [declarative]
+      metadata:
+        context:
+          topic: declare
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      tr_needs_update: false
+      TR:
+        intent: inform
+
+  # ----------------------------------------------------------
+  # 7. Diagnostics — positive adjacency
+  # ----------------------------------------------------------
+  - id: tr_diag_positive_adjacency
+    description: Optional diagnostics A=+1 → positive affect, polite, adjacency_valence 1
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      _tr_diagnostics:
+        enable_diagnostics: true
+        adjacency: 1
+        continuity: 1
+        identity_geometry: 1
+      metadata:
+        context:
+          topic: soft
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      tr_needs_update: false
+      TR:
+        affect: positive
+        politeness: polite
+        routing_fields:
+          adjacency_valence: 1
+          continuity_state: 1
+
+  # ----------------------------------------------------------
+  # 8. Diagnostics — negative adjacency
+  # ----------------------------------------------------------
+  - id: tr_diag_negative_adjacency
+    description: Optional diagnostics A=-1 → negative affect, direct politeness
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      _tr_diagnostics:
+        enable_diagnostics: true
+        adjacency: -1
+        continuity: 0
+        identity_geometry: 0
+      metadata:
+        context:
+          topic: sharp
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: unstable
+          importance: high
+    expected:
+      tr_needs_update: false
+      TR:
+        affect: negative
+        politeness: direct
+        routing_fields:
+          adjacency_valence: -1
+          continuity_state: 0
+
+  # ----------------------------------------------------------
+  # 9. DCB curvature hint → tension medium (v1 policy)
+  # ----------------------------------------------------------
+  - id: tr_dcb_curvature_hint
+    description: geometric_state.curvature 1.0 maps to tension medium under v1 policy
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      metadata:
+        geometric_state:
+          position: 3
+          direction: 4
+          curvature: 1.0
+          step_index: 2
+          lane_id: 0
+        context:
+          topic: curve
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: unstable
+          importance: high
+    expected:
+      tr_needs_update: false
+      TR:
+        tension: medium
+        routing_fields:
+          curvature_level: 1
+      check_dcb_unchanged: true
+
+  # ----------------------------------------------------------
+  # 10. DCB curvature 0 → tension low
+  # ----------------------------------------------------------
+  - id: tr_dcb_curvature_stable
+    description: geometric_state.curvature 0.0 maps to tension low
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      metadata:
+        geometric_state:
+          position: 2
+          direction: 3
+          curvature: 0.0
+          step_index: 1
+          lane_id: 0
+        context:
+          topic: stable_curve
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      tr_needs_update: false
+      TR:
+        tension: low
+        routing_fields:
+          curvature_level: 0
+
+  # ----------------------------------------------------------
+  # 11. routing_fields completeness (all 14 keys)
+  # ----------------------------------------------------------
+  - id: tr_routing_fields_complete
+    description: Every gated run emits complete routing_fields key set; no extras required
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata:
+          core_id: core_0
+      metadata:
+        context:
+          topic: rf_complete
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      tr_needs_update: false
+      check_routing_fields_complete: true
+      TR:
+        routing_fields:
+          semantic_drift: false
+          identity_drift: false
+          commitment_instability: false
+          freeze_conflict: false
+          topology_instability: false
+          curvature_level: 0
+          stance_instability: false
+          shading_instability: false
+          tension_instability: false
+          lineage_instability: false
+          adjacency_valence: 0
+          continuity_state: 0
+          invariant_delta_h: 0
+          routing_severity: 0
+
+  # ----------------------------------------------------------
+  # 12. Lineage bound k=3 under diagnostic pressure
+  # ----------------------------------------------------------
+  - id: tr_lineage_bound
+    description: Even if diagnostics suggest many candidates, lineage_additions length ≤ 3
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage:
+          - ref_a
+          - ref_b
+      process:
+        routing_metadata: {}
+      _tr_diagnostics:
+        enable_diagnostics: true
+        adjacency: 0
+        continuity: -1
+        identity_geometry: -1
+        referent_lineage: [r1, r2, r3, r4, r5]
+        qualifier_lineage: [q1, q2, q3, q4]
+      metadata:
+        context:
+          topic: lineage
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: unstable
+          importance: high
+    expected:
+      tr_needs_update: false
+      lineage_additions_max_len: 3
+      TR:
+        # concrete contents may be empty or ≤3 elements depending on append predicate
+        # structural check is the bound, not exact membership in v1
+        routing_fields:
+          continuity_state: -1
+
+  # ----------------------------------------------------------
+  # 13. Deterministic replay (same input twice)
+  # ----------------------------------------------------------
+  - id: tr_replay_identical
+    description: Identical inputs yield identical TR block (testbench runs process twice)
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata:
+          core_id: core_0
+      metadata:
+        context:
+          topic: replay
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      tr_needs_update: false
+      check_replay: true
+      TR:
+        stance: neutral
+        intent: inform
+        tension: low
+
+  # ----------------------------------------------------------
+  # 14. Messy / partial meaning — still deterministic defaults
+  # ----------------------------------------------------------
+  - id: tr_messy_partial
+    description: Partial semantic and noisy context; no invented signals; defaults apply
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: null
+      process:
+        routing_metadata:
+          core_id: core_0
+      metadata:
+        context:
+          topic: messy
+          stance: "???"
+          intent: test
+          continuity: unknown
+          direction: forward
+          coherence: noisy
+          importance: low
+    expected:
+      tr_needs_update: false
+      TR:
+        stance: neutral
+        intent: inform
+        affect: neutral
+        epistemic_shading: neutral
+        tension: low
+        lineage_additions: []
+      check_routing_fields_complete: true
+
+  # ----------------------------------------------------------
+  # 15. Diagnostics disabled / absent — ignore enrichment
+  # ----------------------------------------------------------
+  - id: tr_diagnostics_absent
+    description: No _tr_diagnostics block; behave as pure minimal path
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      metadata:
+        context:
+          topic: no_diag
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      tr_needs_update: false
+      TR:
+        affect: neutral
+        politeness: neutral
+        routing_fields:
+          adjacency_valence: 0
+          continuity_state: 0
+
+  # ----------------------------------------------------------
+  # 16. Epistemic delta_h zero when invariant signals missing
+  # ----------------------------------------------------------
+  - id: tr_delta_h_omission
+    description: Missing H_t / H_t1 → epistemic_delta_h 0 and invariant_delta_h 0
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      metadata:
+        context:
+          topic: delta_h
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      tr_needs_update: false
+      TR:
+        epistemic_delta_h: 0
+        routing_fields:
+          invariant_delta_h: 0
+
+  # ----------------------------------------------------------
+  # 17. Correction cue (STPX) → intent correct when mapped
+  # ----------------------------------------------------------
+  - id: tr_stpx_intent_correct
+    description: STPX correction marker maps intent to correct
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata: {}
+      STPX:
+        cues:
+          structural: [correction_marker]
+      metadata:
+        context:
+          topic: correct
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      tr_needs_update: false
+      TR:
+        intent: correct
+
+  # ----------------------------------------------------------
+  # 18. Combined — STPX question + positive adjacency diagnostics
+  # ----------------------------------------------------------
+  - id: tr_combined_stpx_diag
+    description: Question cue + positive adjacency; intent request and polite affect
+    enabled: true
+    input:
+      tr_needs_update: true
+      semantic:
+        lineage: []
+      process:
+        routing_metadata:
+          core_id: core_0
+      STPX:
+        cues:
+          structural: [question]
+      _tr_diagnostics:
+        enable_diagnostics: true
+        adjacency: 1
+        continuity: 1
+        identity_geometry: 1
+      metadata:
+        context:
+          topic: combined
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      tr_needs_update: false
+      TR:
+        intent: request
+        affect: positive
+        politeness: polite
+        routing_fields:
+          adjacency_valence: 1
+          continuity_state: 1
