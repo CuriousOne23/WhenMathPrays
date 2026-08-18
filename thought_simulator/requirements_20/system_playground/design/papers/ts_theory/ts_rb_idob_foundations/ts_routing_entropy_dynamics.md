@@ -2,313 +2,200 @@
 
 ## 1. Purpose
 
-This document defines the **first‑order dynamical model of routing and entropy** in TS.  
+This document defines the **first‑order dynamical model of routing and entropy** in TS and the **RB operator sketch** builders need to enter the space.
+
 It complements:
 
-- `ts_invariant_relational_model.md`
-- `ts_invariant_to_idob_theory.md`
+- `ts_invariant_relational_model.md` (invariants, shared regimes, TP bridge)
+- `ts_invariant_to_idob_theory.md` (IdOB operator $\mathcal{I}$)
 - `ts_identity_geometry.md`
 - `ts_semantic_residue_topology.md`
 
-by describing how routing behavior and entropy changes interact to produce:
+by describing how routing behavior and entropy changes interact, and what **RB** is responsible for as a first‑order Path‑A primitive concept.
 
-- cognitive transitions,
-- refinement cycles,
-- identity shifts,
-- semantic jumps,
-- and routing‑driven IdOB evolution.
-
-This is a **rudimentary, first‑order model** intended for early testing and refinement.
+This is a **rudimentary guide for building RB**, not a finished dynamics theory.
 
 ---
 
-## 2. Routing space
+## 2. Routing space and RED
 
-Routing operates over the identity geometry manifold (IGM).  
-Each routing step moves from one identity point to another:
+Routing operates over the identity geometry manifold (IGM). Each cognitive routing step moves:
 
 $$
 \mathbf{F}_t \rightarrow \mathbf{F}_{t+1}
 $$
 
-Routing adjacency is measured by the invariant:
+- Routing adjacency: $Rt_{\text{adj}}$
+- Entropy change: $\Delta H = H_{t+1} - H_t$
 
-$$
-Rt_{\text{adj}}
-$$
+Together they define **Routing–Entropy Dynamics (RED)**.
 
-Entropy change is measured by:
+**Naming**
 
-$$
-\Delta H = H_{t+1} - H_t
-$$
-
-Routing and entropy together define the **Routing–Entropy Dynamics (RED)**.
+- $\kappa_{\text{route}}$ — routing trajectory curvature on IGM (this paper)
+- $\kappa_{\text{id}}$ — identity trajectory curvature (identity geometry paper)
+- $\kappa_{\text{exec}}$ — DCB Path‑A execution‑flow curvature (**not** used as routing curvature)
 
 ---
 
-## 3. Local vs non‑local routing
+## 3. RB operator (first‑order)
 
-Routing is classified into two first‑order categories:
+RB is the Path‑A concept responsible for **routing proposals and adjacency observation** under RED. IdOB forms identity; RB proposes where thinking goes next in neighborhood terms.
 
-### 3.1 Local routing
+$$
+\mathcal{R} : (\mathbf{F}, \text{IdOB}_{\text{view}}, \text{context}_{\text{allowed}}) \rightarrow \text{RB\_out}
+$$
 
-Local routing occurs when:
+### 3.1 RB_out (first‑order envelope)
+
+| Field | Intent |
+|-------|--------|
+| `route_proposal` | Next neighborhood / role‑family target (symbolic or ordinal proxy) |
+| `adjacency_class` | `local` \| `non_local` (first‑order) |
+| `rt_adj` | Scalar or structured $Rt_{\text{adj}}$ observation/update |
+| `regime_hint` | Stable / Refinement / Drift / Transition / Collapse (from shared table) |
+| `displacement_scale` | Small / medium / large from RED interaction law |
+
+### 3.2 Read set (first‑order)
+
+- $\mathbf{F}$ components available (especially $I_{\text{stab}}$, $\Delta H$, $Rt_{\text{adj}}$ prior)
+- IdOB stability / geometry **view** (read‑only; no IdOB mutation)
+- Allowed continuity / context markers
+- Optional: DCB `geometric_state` as **execution‑flow context only** (do not reinterpret as identity curvature)
+
+### 3.3 Write set (first‑order)
+
+- RB_out fields only (TP paths RB will own in its primitive requirements)
+- **Must not** write IdOB envelope, DCB geometric history ownership, RBU meaning commits, or Path‑B truth fields
+
+### 3.4 Determinism
+
+Same $\mathbf{F}$ + IdOB view + allowed context → same RB_out.
+
+---
+
+## 4. Local vs non‑local routing
+
+Use shared placeholders $a_{\text{local}}$, $a_{\text{nonlocal}}$, $H_{\text{small}}$, $H_{\text{crit}}$ from the relational model.
+
+### 4.1 Local routing
 
 $$
 Rt_{\text{adj}} < a_{\text{local}}
+\quad\text{and}\quad
+\|\Delta H\| < H_{\text{small}}
 $$
 
-and
+Effects: small geometric displacement; refinement; stable trajectory; residue strengthening tendency.
 
-$$
-|\Delta H| < H_{\text{small}}
-$$
-
-Effects:
-
-- small geometric displacement,
-- refinement behavior,
-- stable identity trajectory,
-- residue strengthening.
-
-### 3.2 Non‑local routing
-
-Non‑local routing occurs when:
+### 4.2 Non‑local routing
 
 $$
 Rt_{\text{adj}} > a_{\text{nonlocal}}
+\quad\text{or}\quad
+\|\Delta H\| > H_{\text{crit}}
 $$
 
-or
+Effects: large displacement; identity shift pressure; residue reconfiguration; provenance branching risk.
 
-$$
-|\Delta H| > H_{\text{crit}}
-$$
-
-Effects:
-
-- large geometric displacement,
-- identity shift,
-- residue reconfiguration,
-- provenance branching.
+**RB rule (first‑order):** Prefer local proposals when regime is Stable or Refinement; allow non‑local proposals when regime is Transition (and do not fake locality under Collapse).
 
 ---
 
-## 4. Entropy regimes
+## 5. Entropy regimes (aligned to shared table)
 
-Entropy defines the dynamical regime of routing.
-
-### 4.1 Refinement regime
-
-$$
-|\Delta H| < H_{\text{small}}
-$$
-
-Identity behavior:
-
-- small adjustments,
-- local refinement,
-- stable residue,
-- stable provenance.
-
-### 4.2 Drift regime
-
-$$
-H_{\text{small}} \le |\Delta H| < H_{\text{medium}}
-$$
-
-Identity behavior:
-
-- moderate adjustments,
-- partial residue drift,
-- weakening provenance,
-- increased curvature.
-
-### 4.3 Transition regime
-
-$$
-|\Delta H| \ge H_{\text{crit}}
-$$
-
-Identity behavior:
-
-- large jumps,
-- identity geometry shift,
-- residue reconfiguration,
-- provenance branching or collapse.
+| RED emphasis | Shared regime link | Identity / routing behavior |
+|--------------|--------------------|-----------------------------|
+| $\|\Delta H\| < H_{\text{small}}$ | Refinement (and often Stable) | Local refinement, stable residue/provenance |
+| moderate $\|\Delta H\|$ | Drift | Partial residue drift, weakening provenance, higher $\kappa_{\text{route}}$ |
+| $\|\Delta H\| \ge H_{\text{crit}}$ | Transition | Jumps, geometry shift, branching |
+| with collapse thresholds | Collapse | Reset pressures; RB must not invent false continuity |
 
 ---
 
-## 5. Routing–entropy interaction law
-
-Routing and entropy interact through the first‑order law:
+## 6. Routing–entropy interaction law
 
 $$
-\text{routing displacement} \propto Rt_{\text{adj}} \cdot |\Delta H|
+\text{routing displacement} \propto Rt_{\text{adj}} \cdot \|\Delta H\|
 $$
 
-Interpretation:
+| Adjacency | Entropy | Displacement (first‑order) |
+|-----------|---------|----------------------------|
+| Local | Small | Small |
+| Local | Large | Medium |
+| Non‑local | Small | Medium |
+| Non‑local | Large | Large |
 
-- Local adjacency + small entropy → small displacement  
-- Local adjacency + large entropy → medium displacement  
-- Non‑local adjacency + small entropy → medium displacement  
-- Non‑local adjacency + large entropy → large displacement  
-
-This law governs **cognitive motion** in TS.
+This is the **cognitive motion** sketch RB implements as `displacement_scale`.
 
 ---
 
-## 6. Routing curvature
+## 7. Routing curvature
 
-Routing curvature measures how routing direction changes over time.
-
-Given three successive identity points:
-
-$$
-\mathbf{F}_{t-1},\;
-\mathbf{F}_{t},\;
-\mathbf{F}_{t+1}
-$$
-
-Routing curvature is:
+Given $\mathbf{F}_{t-1}, \mathbf{F}_{t}, \mathbf{F}_{t+1}$:
 
 $$
 \kappa_{\text{route}}
 =
 \frac{
-d(\mathbf{F}_{t-1}, \mathbf{F}_{t+1})
-}{
-d(\mathbf{F}_{t-1}, \mathbf{F}_{t}) + d(\mathbf{F}_{t}, \mathbf{F}_{t+1})
-}
+d(\mathbf{F}_{t-1}, \mathbf{F}_{t+1})}
+{d(\mathbf{F}_{t-1}, \mathbf{F}_{t}) + d(\mathbf{F}_{t}, \mathbf{F}_{t+1})}
 $$
 
-Interpretation:
+- $\kappa_{\text{route}} \approx 0$ → stable routing direction
+- $\kappa_{\text{route}} \approx 1$ → routing turn / shift
 
-- $\kappa_{\text{route}} \approx 0$ → stable routing direction  
-- $\kappa_{\text{route}} \approx 1$ → routing turn / identity shift  
-
-Curvature is essential for detecting **routing transitions**.
+Use for **observation and diagnostics**, not as a substitute for DCB $\kappa_{\text{exec}}$.
 
 ---
 
-## 7. Routing attractors
+## 8. Attractors, collapse, transition surfaces
 
-Routing attractors are identity points toward which routing tends to converge.
-
-A routing attractor $\mathbf{A}_{\text{route}}$ satisfies:
-
-$$
-d(\mathbf{F}_{t+1}, \mathbf{A}_{\text{route}})
-<
-d(\mathbf{F}_{t}, \mathbf{A}_{\text{route}})
-$$
-
-for multiple cycles.
-
-Routing attractors correspond to:
-
-- stable identity roles,
-- persistent semantic anchors,
-- long‑range cognitive continuity.
+- **Routing attractors:** points $\mathbf{A}$ with decreasing distance over multiple cycles (stable roles / anchors).
+- **Collapse surface (joint):** high $Rt_{\text{adj}}$ and high $\|\Delta H\|$ with Collapse regime → identity/residue/provenance reset pressure.
+- **Transition surface:** $\|\Delta H\| = H_{\text{crit}}$ → non‑local pressure, geometry jump, residue reconfiguration.
 
 ---
 
-## 8. Routing collapse surfaces
+## 9. Must‑prove vs defer (RB v1 foundation)
 
-Routing collapse occurs when entropy and adjacency jointly exceed critical thresholds.
+**Must prove**
 
-Defined by:
+- Deterministic $\mathcal{R}$ for fixed inputs.
+- Clear local vs non‑local classification.
+- `displacement_scale` consistent with RED interaction law directionally.
+- Write boundary: no IdOB / DCB ownership leakage.
+- Regime_hint consistent with shared regime table given $\mathbf{F}$.
+- Progressive‑test structural checks on RB_out shape.
 
-$$
-Rt_{\text{adj}} > a_{\text{collapse}}
-\quad\text{and}\quad
-|\Delta H| > H_{\text{collapse}}
-$$
+**Defer**
 
-Effects:
-
-- identity collapse,
-- residue reset,
-- provenance break,
-- geometry reinitialization.
-
-This is the **routing collapse regime**.
+- Multi‑lane / rich continuous routing geometry.
+- Learned adjacency metrics.
+- Full attractor discovery algorithms.
+- Binding RB proposals to final TR policy (TR remains downstream).
 
 ---
 
-## 9. Routing transition surfaces
+## 10. Observation questions (proper questions for RB)
 
-Transition surfaces separate refinement regions from drift or collapse regions.
-
-A transition surface $\Sigma_{\text{route}}$ is defined by:
-
-$$
-|\Delta H| = H_{\text{crit}}
-$$
-
-Crossing $\Sigma_{\text{route}}$ indicates:
-
-- non‑local routing,
-- identity geometry jump,
-- semantic residue reconfiguration,
-- provenance branching.
-
-This is the **routing transition regime**.
+1. When $I_{\text{stab}}$ is high, does RB actually keep `adjacency_class = local`?
+2. When $\|\Delta H\|$ crosses $H_{\text{crit}}$, does RB emit non‑local without waiting for IdOB collapse?
+3. Does RB over‑stabilize (force local) under Drift, masking real transitions?
+4. How does RB behave if IdOB view is missing vs present?
+5. Are $Rt_{\text{adj}}$ logs consistent with DCB execution order, or do they conflict (exec vs cognitive layers)?
 
 ---
 
-## 10. Routing–entropy topology
+## 11. Status and next steps
 
-Routing–entropy dynamics form a topological structure over the IGM:
+**Status:** First‑order RED model + **RB operator** build guide.
 
-- **refinement basins** → stable routing  
-- **drift corridors** → moderate entropy movement  
-- **transition surfaces** → entropy‑driven jumps  
-- **collapse regions** → routing breakdown  
-- **routing attractors** → stable identity anchors  
+**Next steps:**
 
-These structures define the **global shape** of TS cognitive motion.
+- Draft RB primitive requirements + structural program from $\mathcal{R}$.
+- Log RB_out beside $\mathbf{F}$ and IdOB envelope in progressive tests.
+- Falsify local/non‑local and displacement laws before enriching geometry.
+- Keep IdOB as identity engine; RB as routing proposal engine; DCB as execution‑flow indexer.
 
----
-
-## 11. Routing–entropy summary
-
-Routing–entropy dynamics provide:
-
-- **local vs non‑local routing** → adjacency behavior  
-- **entropy regimes** → refinement, drift, transition  
-- **routing displacement law** → geometric motion  
-- **routing curvature** → trajectory bending  
-- **routing attractors** → stable cognitive anchors  
-- **collapse surfaces** → identity resets  
-- **transition surfaces** → entropy‑driven jumps  
-
-These dynamical structures are essential for:
-
-- TR behavior,
-- IdOB formation,
-- invariant analysis,
-- identity geometry,
-- semantic residue topology,
-- cognitive research.
-
----
-
-## 12. Status and next steps
-
-**Status:**  
-- This is a first‑order dynamical model.  
-- All definitions are provisional.  
-- Thresholds are placeholders.
-
-**Next steps:**  
-- Integrate with progressive lineup testing.  
-- Empirically validate routing–entropy regimes.  
-- Connect routing dynamics to identity geometry.  
-- Connect routing dynamics to residue topology.  
-- Use routing–entropy dynamics to refine IdOB grouping and hashing.
-
-This document is the dynamical foundation of  
-**TS Routing and Entropy Dynamics**.
-
+This document is the dynamical foundation of **TS Routing and Entropy Dynamics** and the first‑order **RB build guide**.
