@@ -43,7 +43,7 @@ InB → IIInB → IE
 A commit path may occur when RB selects the commit basin:
 
 ```
-RBU → DCB → TR → CTP → ISc → RTU → TR → RB → OuBA
+RBU → DCB → TR → RB → CTP → WrdNm → ISc → RTU → TR → RB → OuBA
 ```
 
 Below is the movement‑aligned breakdown.
