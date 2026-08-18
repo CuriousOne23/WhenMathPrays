@@ -1,65 +1,59 @@
-# **ts_tr_mapping_families.md**  
-### *Deterministic Mapping Families for TR Fields*  
+# **ts_tr_mapping_families.md**
+### *Deterministic Mapping Families for TR Fields*
 ### *Version: Theory Foundation (Informative + Proposed Normative Expansion)*
 
 ---
 
 # **0. What This Paper Does, Doesn’t Do, and Purpose**
 
-## **0.1 What This Paper *Does***  
+## **0.1 What This Paper *Does***
 This paper defines the **deterministic mapping families** for every TR output field:
 
-- stance  
-- intent  
-- affect  
-- epistemic_shading  
-- tension  
-- politeness  
-- commitment  
-- reservation  
-- logical_structure  
-- epistemic_delta_h  
-- lineage_additions  
-- routing_fields  
+- stance
+- intent
+- affect
+- epistemic_shading
+- tension
+- politeness
+- commitment
+- reservation
+- logical_structure
+- epistemic_delta_h
+- lineage_additions
+- routing_fields
 
 For each field, this paper provides:
 
-- allowed inputs  
-- deterministic mapping family  
-- mapping formula (GitHub math)  
-- stability rules  
-- ordering rules  
-- SSR projection rules  
-- deterministic omission rules  
-- example mapping tables  
+- allowed inputs
+- deterministic mapping family
+- mapping formula (GitHub math)
+- stability rules
+- ordering rules
+- SSR projection rules
+- deterministic omission rules
+- example mapping tables
 
 This paper is the **mapping‑side companion** to:
 
-- `ts_tr_semantic_routing_theory.md`  
+- `ts_tr_semantic_routing_theory.md`
 - `ts_tr_readset_update_proposal.md`
+- `ts_tr_semantic_geometry.md` (composition order + minimal-input path)
 
 Together, these papers make TR implementable.
 
 ---
 
-## **0.2 What This Paper *Does Not* Do**  
+## **0.2 What This Paper *Does Not* Do**
 This paper does **not** define:
 
-- semantic geometry (stance/affect/shading/politeness/tension geometry)  
-- invariant drift estimator $H_t$  
-- lineage append predicate  
-- routing_fields key set  
-- continuity‑curvature interaction theory  
-- semantic adjacency theory  
+- semantic geometry (stance/affect/shading/politeness/tension geometry)
+- invariant drift estimator $H_t$
+- lineage append predicate
+- routing_fields key set
+- continuity‑curvature interaction theory
+- semantic adjacency theory
 
-Those are separate papers:
-
-- ts_tr_semantic_geometry.md  
-- ts_tr_invariant_drift_theory.md  
-- ts_tr_lineage_extension_theory.md  
-- ts_tr_routing_fields_spec.md  
-- ts_tr_continuity_and_curvature_interaction.md  
-- ts_tr_semantic_adjacency_theory.md  
+Those are separate papers.
 
 This paper defines **mapping families only**, using signals available under the current read‑set discipline.
 
@@ -69,12 +63,12 @@ This paper defines **mapping families only**, using signals available under the 
 
 The purpose of this paper is to:
 
-- provide deterministic mapping families for TR  
-- eliminate ambiguity in TR structural program  
-- support progressive lineup test construction  
-- prepare the ground for future 20.37 updates  
-- ensure replay determinism and SSR projection  
-- define stable, bounded, deterministic mapping rules  
+- provide deterministic mapping families for TR
+- eliminate ambiguity in TR structural program
+- support progressive lineup test construction
+- prepare the ground for future 20.37 updates
+- ensure replay determinism and SSR projection
+- define stable, bounded, deterministic mapping rules
 
 This paper is **normative for mapping**, but **informative for read‑set expansion**.
 
@@ -84,56 +78,32 @@ This paper is **normative for mapping**, but **informative for read‑set expans
 
 Each TR field has a mapping family defined as:
 
-1. **Allowed Inputs**  
-2. **Mapping Function**  
-3. **Stability Rules**  
-4. **Ordering Rules**  
-5. **SSR Projection Rules**  
-6. **Deterministic Omission Rules**  
-7. **Example Mapping Table**  
+1. **Allowed Inputs**
+2. **Mapping Function**
+3. **Stability Rules**
+4. **Ordering Rules**
+5. **SSR Projection Rules**
+6. **Deterministic Omission Rules**
+7. **Example Mapping Table**
 
-All math uses GitHub formatting:
-
-Inline: `$x$`  
-Block:
-
-```
-$$
-x = y
-$$
-```
+Geometry-backed fields (stance, affect, shading, politeness, tension) **must** respect the composition order defined in `ts_tr_semantic_geometry.md` §9.1.
 
 ---
 
 # **2. stance — Mapping Family**
 
 ### **2.1 Allowed Inputs**
-- semantic meaning‑semantics  
-- idob_semantics  
-- qualifier lineage  
-- continuity signals  
-- semantic importance residues  
+- semantic meaning‑semantics
+- idob_semantics
+- qualifier lineage
+- continuity signals
+- semantic importance residues
 
 ### **2.2 Mapping Function**
-
-Stance is computed as:
-
-```
-stance = f_s(meaning, identity, continuity, adjacency)
-```
-
-Or in math:
 
 $$
 stance = f_s(M, I, C, A)
 $$
-
-Where:
-
-- $M$ = meaning‑semantics  
-- $I$ = identity‑conditioned meaning  
-- $C$ = continuity signals  
-- $A$ = semantic adjacency  
 
 ### **2.3 Ordinal Values**
 
@@ -158,7 +128,7 @@ $$
 If adjacency or continuity signals are missing:
 
 ```
-stance = neutral
+stance = neutral   # value 1
 ```
 
 ### **2.6 Example Mapping Table**
@@ -174,20 +144,15 @@ stance = neutral
 # **3. intent — Mapping Family**
 
 ### **3.1 Allowed Inputs**
-- semantic meaning‑semantics  
-- STPX cues  
-- semantic adjacency  
+- semantic meaning‑semantics
+- STPX cues
+- semantic adjacency
 
 ### **3.2 Mapping Function**
 
 $$
 intent = f_i(M, S)
 $$
-
-Where:
-
-- $M$ = meaning‑semantics  
-- $S$ = STPX structural cues  
 
 ### **3.3 Categories**
 
@@ -208,31 +173,19 @@ If STPX cues are missing:
 intent = inform
 ```
 
-### **3.5 Example Mapping Table**
-
-| STPX cue | meaning | intent |
-|----------|---------|--------|
-| question | request |
-| correction marker | correct |
-| declarative | inform |
-
 ---
 
 # **4. affect — Mapping Family**
 
 ### **4.1 Allowed Inputs**
-- semantic adjacency  
-- semantic importance residues  
+- semantic adjacency
+- semantic importance residues
 
 ### **4.2 Mapping Function**
 
 $$
 affect = f_a(A)
 $$
-
-Where:
-
-- $A$ = semantic adjacency  
 
 ### **4.3 Ordinal Values**
 
@@ -247,36 +200,23 @@ Where:
 If adjacency is missing:
 
 ```
-affect = neutral
+affect = neutral   # 0
 ```
-
-### **4.5 Example Mapping Table**
-
-| adjacency cue | affect |
-|---------------|--------|
-| praise | positive |
-| insult | negative |
-| neutral phrasing | neutral |
 
 ---
 
 # **5. epistemic_shading — Mapping Family**
 
 ### **5.1 Allowed Inputs**
-- semantic meaning‑semantics  
-- invariant drift  
-- commitments  
+- semantic meaning‑semantics
+- invariant drift
+- commitments
 
 ### **5.2 Mapping Function**
 
 $$
 shading = f_e(\Delta H, C)
 $$
-
-Where:
-
-- $\Delta H$ = invariant drift  
-- $C$ = commitment strength  
 
 ### **5.3 Ordinal Values**
 
@@ -292,25 +232,17 @@ Where:
 If $\Delta H$ is missing:
 
 ```
-epistemic_shading = neutral
+epistemic_shading = neutral   # 1
 ```
-
-### **5.5 Example Mapping Table**
-
-| ΔH | commitment | shading |
-|----|------------|---------|
-| 0 | strong | confident |
-| 1 | weak | uncertain |
-| 2 | weak | speculative |
 
 ---
 
 # **6. tension — Mapping Family**
 
 ### **6.1 Allowed Inputs**
-- curvature  
-- semantic drift  
-- identity drift  
+- curvature
+- semantic drift
+- identity drift
 
 ### **6.2 Mapping Function**
 
@@ -331,36 +263,22 @@ $$
 If curvature is missing:
 
 ```
-tension = low
+tension = low   # 0
 ```
-
-### **6.5 Example Mapping Table**
-
-| curvature | tension |
-|-----------|---------|
-| stable | low |
-| mild instability | medium |
-| strong instability | high |
 
 ---
 
 # **7. politeness — Mapping Family**
 
 ### **7.1 Allowed Inputs**
-- semantic adjacency  
-- qualifier lineage  
+- semantic adjacency
+- qualifier lineage
 
 ### **7.2 Mapping Function**
-
-Politeness is derived from adjacency cues:
 
 $$
 politeness = f_p(A)
 $$
-
-Where:
-
-- $A$ = semantic adjacency (hedging, softening, directness)
 
 ### **7.3 Ordinal Values**
 
@@ -375,36 +293,22 @@ Where:
 If adjacency is missing:
 
 ```
-politeness = neutral
+politeness = neutral   # 1
 ```
-
-### **7.5 Example Mapping Table**
-
-| adjacency cue | politeness |
-|---------------|------------|
-| hedging | polite |
-| blunt phrasing | direct |
-| neutral phrasing | neutral |
 
 ---
 
 # **8. commitment — Mapping Family**
 
 ### **8.1 Allowed Inputs**
-- commitments  
-- identity continuity  
+- commitments
+- identity continuity
 
 ### **8.2 Mapping Function**
-
-Commitment strength is mapped as:
 
 $$
 commitment = f_c(C)
 $$
-
-Where:
-
-- $C$ = commitment strength from IdOB
 
 ### **8.3 Ordinal Values**
 
@@ -419,7 +323,7 @@ Where:
 If commitments are missing:
 
 ```
-commitment = weak
+commitment = weak   # 0
 ```
 
 ### **8.5 Stability Rule**
@@ -435,12 +339,10 @@ $$
 # **9. reservation — Mapping Family**
 
 ### **9.1 Allowed Inputs**
-- semantic adjacency  
-- epistemic_shading  
+- semantic adjacency
+- epistemic_shading
 
 ### **9.2 Mapping Function**
-
-Reservation increases with epistemic uncertainty:
 
 $$
 reservation = f_r(shading)
@@ -459,36 +361,22 @@ $$
 If shading is missing:
 
 ```
-reservation = none
+reservation = none   # 0
 ```
-
-### **9.5 Example Mapping Table**
-
-| shading | reservation |
-|---------|-------------|
-| confident | none |
-| uncertain | mild |
-| speculative | strong |
 
 ---
 
 # **10. logical_structure — Mapping Family**
 
 ### **10.1 Allowed Inputs**
-- STPX cues  
-- structural residue  
+- STPX cues
+- structural residue
 
 ### **10.2 Mapping Function**
-
-Logical structure is derived from STPX markers:
 
 $$
 logical\_structure = f_l(S)
 $$
-
-Where:
-
-- $S$ = STPX structural cues
 
 ### **10.3 Categories**
 
@@ -513,18 +401,16 @@ logical_structure = additive
 # **11. epistemic_delta_h — Mapping Family**
 
 ### **11.1 Allowed Inputs**
-- invariant drift  
-- semantic lineage  
+- invariant drift
+- semantic lineage
 
 ### **11.2 Mapping Function**
-
-Epistemic delta is:
 
 $$
 \Delta H = H_{t+1} - H_t
 $$
 
-Where $H_t$ is the invariant state (defined in a separate paper).
+Where $H_t$ is defined in `ts_tr_invariant_drift_theory.md`.
 
 ### **11.3 Deterministic Omission Rule**
 
@@ -534,34 +420,20 @@ If either $H_t$ or $H_{t+1}$ is missing:
 epistemic_delta_h = 0
 ```
 
-### **11.4 Stability Rule**
-
-If invariant drift is stable:
-
-$$
-\Delta H = 0
-$$
-
 ---
 
 # **12. lineage_additions — Mapping Family**
 
 ### **12.1 Allowed Inputs**
-- semantic lineage  
-- referent lineage  
-- qualifier lineage  
+- semantic lineage
+- referent lineage
+- qualifier lineage
 
 ### **12.2 Mapping Function**
-
-Lineage additions occur when new referents or qualifiers appear:
 
 $$
 lineage\_additions = f_{la}(L)
 $$
-
-Where:
-
-- $L$ = lineage signals
 
 ### **12.3 Deterministic Omission Rule**
 
@@ -577,21 +449,19 @@ $$
 |lineage\_additions| \le k
 $$
 
-Where $k$ is defined in `ts_tr_lineage_extension_theory.md`.
+Where provisional default $k = 3$ (see `ts_tr_lineage_extension_theory.md`). Changing $k$ is a versioned event.
 
 ---
 
 # **13. routing_fields — Mapping Family**
 
 ### **13.1 Allowed Inputs**
-- routing_metadata  
-- semantic adjacency  
-- identity continuity  
-- curvature  
+- routing_metadata
+- semantic adjacency
+- identity continuity
+- curvature
 
 ### **13.2 Mapping Function**
-
-Routing fields are constructed as:
 
 $$
 routing\_fields = f_{rf}(metadata)
@@ -605,15 +475,7 @@ If metadata is missing:
 routing_fields = {}
 ```
 
-### **13.4 Example Keys**  
-*(Full key set defined in ts_tr_routing_fields_spec.md)*
-
-- semantic_drift  
-- identity_drift  
-- structural_drift  
-- commitment_instability  
-- freeze_conflict  
-- curvature_level  
+(Full key set and construction in `ts_tr_routing_fields_spec.md`.)
 
 ---
 
@@ -621,23 +483,11 @@ routing_fields = {}
 
 All TR fields must satisfy:
 
-### **14.1 Stability Under Replay**
-
 $$
 SSR(TR_v) = TR_v
 $$
 
-### **14.2 No Ephemeral Fields**
-
-All fields must be:
-
-- stable  
-- bounded  
-- deterministic  
-
-### **14.3 No Nondeterministic Lineage**
-
-Lineage additions must be deterministic and bounded.
+All fields must be stable, bounded, and deterministic. Lineage additions must be deterministic and bounded.
 
 ---
 
@@ -645,52 +495,42 @@ Lineage additions must be deterministic and bounded.
 
 If any diagnostic signal is missing:
 
-- stance → neutral  
-- intent → inform  
-- affect → neutral  
-- shading → neutral  
-- tension → low  
-- politeness → neutral  
-- commitment → weak  
-- reservation → none  
-- logical_structure → additive  
-- epistemic_delta_h → 0  
-- lineage_additions → []  
-- routing_fields → {}  
+- stance → neutral (1)
+- intent → inform
+- affect → neutral (0)
+- shading → neutral (1)
+- tension → low (0)
+- politeness → neutral (1)
+- commitment → weak (0)
+- reservation → none (0)
+- logical_structure → additive
+- epistemic_delta_h → 0
+- lineage_additions → []
+- routing_fields → {}
 
-This ensures TR is fully deterministic under minimal inputs.
-
----
-
-# **16. Closing Summary**
-
-This paper defines the **deterministic mapping families** for all TR fields.
-
-It provides:
-
-- mapping functions  
-- stability rules  
-- ordering rules  
-- SSR rules  
-- deterministic omission rules  
-- example mapping tables  
-
-This paper **does not** define:
-
-- semantic geometry  
-- invariant drift estimator  
-- lineage append predicate  
-- routing_fields schema  
-- adjacency theory  
-- continuity‑curvature theory  
-
-Those are separate papers.
-
-This paper is the **mapping backbone** required for:
-
-- TR structural program  
-- progressive lineup tests  
-- future 20.37 updates  
+This aligns with the minimal-input geometry path in `ts_tr_semantic_geometry.md` §11.
 
 ---
 
+# **16. Versioned Free Parameters (Provisional Defaults)**
+
+| Parameter | Provisional default | Owner paper |
+|-----------|---------------------|-------------|
+| stance omission | neutral (1) | this paper + geometry |
+| intent omission | inform | this paper |
+| affect / politeness / shading omission | neutral | this paper + geometry |
+| tension omission | low (0) | this paper + geometry |
+| lineage bound $k$ | 3 | lineage_extension_theory |
+| $\tau_s$ (semantic drift threshold) | 2 | routing_fields_spec |
+| severity_classifier | deterministic table TBD | routing_fields_spec |
+| adjacency_modifier | $\{-1,0,+1\}$ | semantic_geometry |
+
+Changing a provisional default is a **minor version** event and requires progressive-lineup fixture updates.
+
+---
+
+# **17. Closing Summary**
+
+This paper defines the **deterministic mapping families** for all TR fields, with explicit omission defaults and versioned free parameters aligned to the geometry composition order and minimal-input path. It is the mapping backbone for the TR structural program and progressive lineup tests.
+
+---
