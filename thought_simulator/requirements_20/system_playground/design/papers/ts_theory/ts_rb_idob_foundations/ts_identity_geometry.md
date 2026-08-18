@@ -5,24 +5,24 @@
 This document defines the **first‑order geometric model of identity** in TS.  
 It extends:
 
-- `ts_invariant_relational_model.md`  
+- `ts_invariant_relational_model.md`
 - `ts_invariant_to_idob_theory.md`
 
 by describing how identity behaves as a **geometric object** in the invariant space.
 
 Identity geometry provides:
 
-- structure for IdOB grouping,  
-- a basis for statistical hashing,  
-- a way to measure identity drift and stability,  
-- a foundation for routing and ΔH interpretation,  
-- and a scientific framework for TR behavior.
+- structure for IdOB grouping,
+- a basis for statistical hashing,
+- measures of identity drift and stability,
+- language for RB neighborhood proposals,
+- and a framework for observing TR‑relevant identity motion.
 
-This is a **rudimentary, first‑order model** intended for early testing and refinement.
+This is a **rudimentary, first‑order model** for early testing and IdOB guidance—not a finished manifold theory.
 
 ---
 
-## 2. Identity geometry space
+## 2. Identity geometry space (IGM)
 
 Identity geometry lives in the invariant vector space:
 
@@ -40,17 +40,28 @@ C_{\text{coh}}
 \right)
 $$
 
-Each IdOB corresponds to a point in this space.
-
+Each IdOB / cycle observation corresponds to a point in this space.  
 We call this space the **Identity Geometry Manifold (IGM)**.
+
+Regimes on the IGM use the **shared regime table** in `ts_invariant_relational_model.md`.
 
 ---
 
-## 3. Identity neighborhoods
+## 3. Curvature naming (do not collapse layers)
 
-An identity neighborhood is defined as a region of the IGM where identity points remain close under a chosen metric.
+| Symbol | Layer | Use |
+|--------|-------|-----|
+| $\kappa_{\text{id}}$ | Identity trajectory on IGM | This paper; IdOB geometry diagnostics |
+| $\kappa_{\text{route}}$ | Routing trajectory | RED / RB paper |
+| $\kappa_{\text{exec}}$ | Path‑A execution‑flow (DCB) | **Not** an identity geometry quantity |
 
-We define the first‑order identity distance:
+Builders: never feed DCB `geometric_state.curvature` into $\kappa_{\text{id}}$ formulas without an explicit, separate bridge experiment.
+
+---
+
+## 4. Identity neighborhoods
+
+First‑order identity distance:
 
 $$
 d(\mathbf{F}_1, \mathbf{F}_2)
@@ -58,241 +69,94 @@ d(\mathbf{F}_1, \mathbf{F}_2)
 \sum_i w_i \, |F_{1,i} - F_{2,i}|
 $$
 
-where:
+- $w_i$ initially uniform.
+- Same neighborhood if $d(\mathbf{F}_1, \mathbf{F}_2) < \epsilon_{\text{nbhd}}$.
 
-- $w_i$ are invariant weights (initially uniform),
-- $F_{1,i}$ and $F_{2,i}$ are invariant components.
-
-Two IdOBs belong to the same neighborhood if:
-
-$$
-d(\mathbf{F}_1, \mathbf{F}_2) < \epsilon_{\text{nbhd}}
-$$
-
-This defines **identity locality**.
+**IdOB use:** grouping candidates; **RB use:** local vs non‑local adjacency class.
 
 ---
 
-## 4. Identity stability basins
+## 5. Stability basins
 
-Identity stability basins are regions where identity tends to remain over multiple cycles.
-
-A stability basin is defined by:
+Aligned to **Stable** regime (shared table):
 
 $$
-I_{\text{stab}} > s_{\text{min}}
+I_{\text{stab}} \ge 0.7
 \quad\text{and}\quad
-R_{\text{res}} > r_{\text{min}}
+R_{\text{res}} \ge 0.6
 $$
 
-with typical first‑order thresholds:
-
-- $s_{\text{min}} = 0.7$
-- $r_{\text{min}} = 0.6$
-
-Inside a basin:
-
-- identity roles persist,
-- residue persists,
-- routing remains local,
-- ΔH remains small.
-
-This is the **stable identity regime**.
+Inside a basin: roles persist, residue persists, routing tends local, $\|\Delta H\|$ tends small.
 
 ---
 
-## 5. Identity drift vectors
-
-Identity drift is the movement of identity across the IGM.
-
-We define the drift vector:
+## 6. Drift vectors
 
 $$
-\vec{D} =
-\mathbf{F}_{t+1} - \mathbf{F}_{t}
-$$
-
-Magnitude:
-
-$$
+\vec{D} = \mathbf{F}_{t+1} - \mathbf{F}_{t},
+\qquad
 \|\vec{D}\| = d(\mathbf{F}_{t+1}, \mathbf{F}_{t})
 $$
 
-Interpretation:
+- Small $\|\vec{D}\|$ → refinement
+- Medium → drift
+- Large → transition
 
-- Small $\|\vec{D}\|$ → refinement  
-- Medium $\|\vec{D}\|$ → drift  
-- Large $\|\vec{D}\|$ → transition  
-
-This provides a **geometric measure of identity change**.
+**Observation:** log $\|\vec{D}\|$ beside IdOB envelope and RB `adjacency_class`.
 
 ---
 
-## 6. Identity curvature
+## 7. Identity curvature $\kappa_{\text{id}}$
 
-Curvature measures how identity trajectory bends over time.
-
-Given three successive points:
+Given $\mathbf{F}_{t-1}, \mathbf{F}_{t}, \mathbf{F}_{t+1}$:
 
 $$
-\mathbf{F}_{t-1},\;
-\mathbf{F}_{t},\;
-\mathbf{F}_{t+1}
-$$
-
-We define curvature:
-
-$$
-\kappa
+\kappa_{\text{id}}
 =
 \frac{
-d(\mathbf{F}_{t-1}, \mathbf{F}_{t+1})
-}{
-d(\mathbf{F}_{t-1}, \mathbf{F}_{t}) + d(\mathbf{F}_{t}, \mathbf{F}_{t+1})
-}
+d(\mathbf{F}_{t-1}, \mathbf{F}_{t+1})}
+{d(\mathbf{F}_{t-1}, \mathbf{F}_{t}) + d(\mathbf{F}_{t}, \mathbf{F}_{t+1})}
 $$
 
-Interpretation:
-
-- $\kappa \approx 0$ → straight trajectory (stable thinking)  
-- $\kappa \approx 1$ → sharp turn (identity shift)  
-
-Curvature is essential for detecting **cognitive transitions**.
+- $\kappa_{\text{id}} \approx 0$ → straight trajectory (stable thinking)
+- $\kappa_{\text{id}} \approx 1$ → sharp turn (identity shift)
 
 ---
 
-## 7. Identity manifolds
+## 8. Manifolds, attractors, collapse, transition
 
-Identity manifolds are clusters of identity points with similar geometric properties.
-
-A manifold $\mathcal{M}$ is defined as:
-
-$$
-\mathcal{M} =
-\left\{
-\mathbf{F} \;\middle|\;
-d(\mathbf{F}, \mathbf{F}_{\text{center}}) < \epsilon_{\mathcal{M}}
-\right\}
-$$
-
-Manifolds represent:
-
-- identity families,  
-- role families,  
-- cognitive modes,  
-- stable identity attractors.
-
-These are the geometric structures TR navigates.
+- **Manifold $\mathcal{M}$:** cluster of points with $d(\mathbf{F}, \mathbf{F}_{\text{center}}) < \epsilon_{\mathcal{M}}$ (families, modes, attractors).
+- **Attractor $\mathbf{A}$:** $d(\mathbf{F}_{t+1}, \mathbf{A}) < d(\mathbf{F}_{t}, \mathbf{A})$ over multiple cycles.
+- **Collapse region:** shared **Collapse** regime ($I_{\text{stab}} < 0.3$ and $R_{\text{res}} < 0.3$).
+- **Transition surface:** $\|\Delta H\| = H_{\text{crit}}$ (shared placeholders).
 
 ---
 
-## 8. Identity attractors
+## 9. How IdOB and RB use this geometry (first‑order)
 
-Identity attractors are points or regions where identity trajectories tend to converge.
-
-An attractor $\mathbf{A}$ satisfies:
-
-$$
-d(\mathbf{F}_{t+1}, \mathbf{A}) < d(\mathbf{F}_{t}, \mathbf{A})
-$$
-
-for multiple cycles.
-
-Attractors correspond to:
-
-- stable roles,  
-- persistent identity candidates,  
-- long‑range provenance anchors.
-
-They are the **fixed points** of TS identity dynamics.
+| Actor | Geometric use |
+|-------|----------------|
+| **IdOB** | Place/update identity point; report neighborhood membership; detect basin vs collapse |
+| **RB** | Read neighborhood / stability; classify local vs non‑local; propose next neighborhood |
+| **DCB** | Independent execution‑flow indexer; supplies cycle context, not $\kappa_{\text{id}}$ |
 
 ---
 
-## 9. Identity collapse regions
+## 10. Must‑observe (geometry layer)
 
-Collapse regions occur when identity stability and residue persistence fall below thresholds.
+Before enriching geometry:
 
-Defined by:
-
-$$
-I_{\text{stab}} < s_{\text{collapse}}
-\quad\text{and}\quad
-R_{\text{res}} < r_{\text{collapse}}
-$$
-
-Typical first‑order thresholds:
-
-- $s_{\text{collapse}} = 0.3$
-- $r_{\text{collapse}} = 0.3$
-
-Effects:
-
-- identity roles reset,  
-- residue resets,  
-- provenance breaks,  
-- geometry reinitializes.
-
-This is the **collapse regime**.
+1. Can we log $\mathbf{F}$ each cycle?
+2. Do Stable basins co‑occur with IdOB role inheritance?
+3. Do large $\|\vec{D}\|$ co‑occur with RB non‑local and Transition regime?
+4. Is $\kappa_{\text{id}}$ distinguishable from $\kappa_{\text{exec}}$ in real runs?
 
 ---
 
-## 10. Identity transition surfaces
+## 11. Status and next steps
 
-Transition surfaces separate stable basins from drift or collapse regions.
+**Status:** First‑order geometric language for IdOB/RB examination.
 
-A transition surface $\Sigma$ is defined by:
+**Next steps:** Integrate logging; validate neighborhoods empirically; connect residue topology; keep thresholds provisional.
 
-$$
-|\Delta H| = H_{\text{crit}}
-$$
-
-Crossing $\Sigma$ indicates:
-
-- non‑local routing,  
-- large entropy change,  
-- identity geometry jump.
-
-This is the **transition regime**.
-
----
-
-## 11. Identity geometry summary
-
-Identity geometry provides:
-
-- **neighborhoods** → local identity behavior  
-- **basins** → stable identity regions  
-- **drift vectors** → movement across the space  
-- **curvature** → trajectory bending  
-- **manifolds** → identity families  
-- **attractors** → stable identity points  
-- **collapse regions** → identity resets  
-- **transition surfaces** → entropy‑driven jumps  
-
-These geometric structures are essential for:
-
-- TR behavior,  
-- IdOB formation,  
-- statistical hashing,  
-- invariant analysis,  
-- cognitive research.
-
----
-
-## 12. Status and next steps
-
-**Status:**  
-- This is a first‑order geometric model.  
-- All definitions are provisional.  
-- Thresholds are placeholders.
-
-**Next steps:**  
-- Integrate with progressive lineup testing.  
-- Empirically validate geometric structures.  
-- Connect geometry to semantic residue topology.  
-- Connect geometry to routing‑entropy dynamics.  
-- Use geometry to refine IdOB grouping and hashing.
-
-This document is the geometric foundation of  
-**TS Identity Dynamics**.
-
+This document is the geometric foundation of **TS Identity Dynamics** for first‑order IdOB work.
