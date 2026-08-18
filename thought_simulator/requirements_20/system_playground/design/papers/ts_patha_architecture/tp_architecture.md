@@ -303,6 +303,8 @@ SSR is:
 
 Freeze is the architectural guarantee that meaning cannot drift.
 
+TP also supports deterministic replay through its execution‑flow history (DCB) and cognitive‑history layer (CTP), which record cycle‑level state for analysis and verification.
+
 ---
 
 # **11. TP → Primitive Mapping**
