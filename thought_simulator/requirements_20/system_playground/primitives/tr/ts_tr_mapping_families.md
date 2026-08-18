@@ -375,7 +375,7 @@ reservation = none   # 0
 ### **10.2 Mapping Function**
 
 $$
-logical\_structure = f_l(S)
+logical\\_structure = f_l(S)
 $$
 
 ### **10.3 Categories**
