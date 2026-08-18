@@ -1,5 +1,5 @@
 """
-RB Testbench (Version 1.0)
+RB Testbench (Version 1.1)
   • mode == "testbench" → rb_testbench.yaml structural match
   • mode == "general"   → rb_input.yaml + rb_rules.yaml
 Aligned with progressive_lineup_testing.md v4.2, 20.50 v3.0, rb_py_struc_pgm.md.
@@ -66,7 +66,7 @@ def _rf(tp):
     return rf if isinstance(rf, dict) else {}
 
 
-def _compare_rb(actual_tp, expected, tp_input):
+def _compare_rb(actual_tp, expected, tp_input, replay_rf=None):
     rf = _rf(actual_tp)
 
     if "selected_ob_ids" in expected:
@@ -91,17 +91,11 @@ def _compare_rb(actual_tp, expected, tp_input):
         if tok not in rationales:
             return False, f"missing rationale token {tok!r} in {rationales!r}"
 
-    if "adjacency_class" in expected:
-        if rf.get("adjacency_class") != expected["adjacency_class"]:
-            return False, f"adjacency_class: expected {expected['adjacency_class']!r}, got {rf.get('adjacency_class')!r}"
-
-    if "displacement_scale" in expected:
-        if rf.get("displacement_scale") != expected["displacement_scale"]:
-            return False, f"displacement_scale: expected {expected['displacement_scale']!r}, got {rf.get('displacement_scale')!r}"
-
-    if "regime_hint" in expected:
-        if rf.get("regime_hint") != expected["regime_hint"]:
-            return False, f"regime_hint: expected {expected['regime_hint']!r}, got {rf.get('regime_hint')!r}"
+    for key in ("adjacency_class", "displacement_scale", "regime_hint",
+                "merge_eligibility", "split_directive"):
+        if key in expected:
+            if rf.get(key) != expected[key]:
+                return False, f"{key}: expected {expected[key]!r}, got {rf.get(key)!r}"
 
     if "regime_hint_in" in expected:
         allowed = expected["regime_hint_in"] or []
@@ -124,6 +118,18 @@ def _compare_rb(actual_tp, expected, tp_input):
                 return False, "metadata.residue was modified by RB"
             if "geometric_state" in in_meta and in_meta.get("geometric_state") != out_meta.get("geometric_state"):
                 return False, "metadata.geometric_state was modified by RB"
+
+    if expected.get("check_idob_view_unchanged"):
+        in_sem = tp_input.get("semantic") or {}
+        out_sem = actual_tp.get("semantic") or {}
+        if in_sem != out_sem:
+            return False, "IdOB/semantic view was modified by RB"
+
+    if expected.get("check_replay"):
+        if replay_rf is None:
+            return False, "replay comparison missing second routing_filter"
+        if replay_rf != rf:
+            return False, "replay routing_filter mismatch"
 
     return True, None
 
@@ -158,7 +164,11 @@ def run_single_test(test_entry):
     rb = RB(copy.deepcopy(tp_input))
     tp_output = rb.process()
 
-    structural_match, diff_msg = _compare_rb(tp_output, expected, tp_input)
+    replay_rf = None
+    if expected.get("check_replay"):
+        replay_rf = _rf(RB(copy.deepcopy(tp_input)).process())
+
+    structural_match, diff_msg = _compare_rb(tp_output, expected, tp_input, replay_rf=replay_rf)
 
     checker = RBRuleChecker(tp_input, tp_output, rules)
     rule_errors = checker.run()
