@@ -182,7 +182,8 @@ This is why independence is not optional — it is foundational.
 ### *(Referencing `path_a_SOB_to_SmOB_cntxt_read.md`)*
 
 Although the independence of IdOB invariants was originally a **design assumption**, we later discovered that one of the Path A simulations — documented in  
-[path_a_SOB_to_SmOB_cntxt_read.md](../../../../system_simulation/path_a/logic_sim/path_a_SOB_to_SmOB_cntxt_read.md)  
+- [path_a_cex_ce_imr_test_run.md](../../../../system_simulation/path_a/logic_sim/path_a_cex_ce_imr_test_run.md)  
+- [path_a_SOB_to_SmOB_cntxt_read.md](../../../../system_simulation/path_a/logic_sim/path_a_SOB_to_SmOB_cntxt_read.md)   
 **`system_simulation/path_a/logic_sim/path_a_SOB_to_SmOB_cntxt_read.md`** — provided **unexpected empirical support** for this assumption.
 
 This simulation was not created to test invariant independence.  
