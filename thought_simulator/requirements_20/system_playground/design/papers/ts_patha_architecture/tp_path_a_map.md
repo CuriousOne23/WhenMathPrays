@@ -83,7 +83,7 @@ Below is the movement‑aligned breakdown.
 | **RBU** | Latest cues; routing state | Updated routing state (tentative) | Routing update step. |
 | **DCB** | Cue history; trajectory | Curvature / instability signals | Supports TR and RB. |
 | **TR** | OB residues; DCB signals | Routing vector | Guides RB; does not select. |
-| **CTP** | IdOB outputs (from prior cycle) | Consolidated IdOB packet | Read‑only w.r.t. meaning. |
+| **CTP** | IdOB outputs (from prior cycle); frozen TP snapshot | Consolidated IdOB packet; append‑only cognitive‑history entry (`TP.metadata.cognitive_history[]`); snapshot freeze | Read‑only w.r.t. meaning; structural bookkeeping only. |
 | **ISc** (second pass) | Consolidated packet; context | Updated scoring | Used in routing loop. |
 | **RTU** | Consolidated state; routing decision | Routing commit/update (tentative) | Pre‑RB consolidation. |
 | **RB** | Context Frame; MSL; residues; semantic‑importance; identity flags; commitments; freeze signatures; curvature; TR vector | Basin decision; routing metadata | **Active baton.** No meaning writes. |
