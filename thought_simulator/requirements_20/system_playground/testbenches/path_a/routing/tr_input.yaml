@@ -1,1 +1,28 @@
+# ============================================================
+# TR General-Mode Input (v1.0)
+# Loaded only when mode == "general"
+# ============================================================
 
+mode: general
+primitive: tr
+version: "1.0"
+notes: Minimal gated TR fixture for rule-driven validation
+
+tr_needs_update: true
+
+semantic:
+  lineage: []
+
+process:
+  routing_metadata:
+    core_id: core_0
+
+metadata:
+  context:
+    topic: route_vector
+    stance: neutral
+    intent: probe
+    continuity: new
+    direction: forward
+    coherence: stable
+    importance: medium
