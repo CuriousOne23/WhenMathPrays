@@ -196,7 +196,7 @@ $$
 ### **14.4 stance stability**
 
 $$
-x_s = x_s + \text{stance\_modifier}(\Delta H)
+x_s = x_s + \text{stance\\_modifier}(\Delta H)
 $$
 
 `stance_modifier` is a **versioned free parameter**, provisional range $\{-1,0,+1\}$. Changing it is a minor version event.
