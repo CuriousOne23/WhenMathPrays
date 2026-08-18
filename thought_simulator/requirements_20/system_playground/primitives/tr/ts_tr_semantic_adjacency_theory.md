@@ -78,7 +78,7 @@ $$
 x_s = x_s + adjacency\\_modifier(A)
 $$
 
-`adjacency_modifier` is a **versioned free parameter**, provisional range $\{-1,0,+1\}$.
+`adjacency_modifier` is a **versioned free parameter**, provisional range $\\{-1,0,+1\\}$.
 
 Reservation: $reservation = f_r(A)$.
 
