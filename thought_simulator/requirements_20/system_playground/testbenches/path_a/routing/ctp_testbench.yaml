@@ -1,1 +1,565 @@
+# ============================================================
+# CTP Testbench (v1.0) — Deterministic foundation cases
+# Structural comparison in testbench mode.
+# Aligned with 20.145 v3.0, ctp_py_struc_pgm.md, progressive_lineup v4.2
+# Path-A adjacency: DCB → TR → CTP → RB → …
+# ============================================================
+#
+# Comparison policy (structural foundation):
+#   - history_len (absolute after process)
+#   - last_entry field equality where specified
+#   - check_history_schema_complete
+#   - provenance_ctp_last_update
+#   - write-boundary / unchanged checks when flagged
+#   - check_replay / prior_entry_unchanged
+#
+# Missing sources → null (never omit keys, never invent)
+# ============================================================
 
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Minimal — all history sources null
+  # ----------------------------------------------------------
+  - id: ctp_minimal_null_history
+    description: Missing sources → full schema with nulls; history len +1
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 0
+        timestamp: 1000.0
+      metadata:
+        context:
+          topic: minimal
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 0
+        timestamp: 1000.0
+        invariants:
+          I_stab: null
+          R_res: null
+          P_cont: null
+          L_depth: null
+          Rt_adj: null
+          delta_H: null
+          E_dens: null
+          C_coh: null
+        idob_geometry:
+          neighborhood: null
+          k_id: null
+        idob_roles: null
+        idob_residue: null
+        idob_stability: null
+        rb_adjacency_class: null
+        rb_displacement_scale: null
+        rb_regime_hint: null
+        rb_route_proposal: null
+      provenance_ctp_last_update: 1000.0
+      check_write_boundary: true
+      check_history_schema_complete: true
+
+  # ----------------------------------------------------------
+  # 2. Foundation present via _ctp_foundation
+  # ----------------------------------------------------------
+  - id: ctp_foundation_copy
+    description: Copy foundation proxies into invariants without recomputation
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 1
+        timestamp: 1001.0
+      _ctp_foundation:
+        I_stab: 0.85
+        R_res: 0.75
+        P_cont: 0.7
+        L_depth: 2
+        Rt_adj: 0.2
+        delta_H: 0.05
+        E_dens: 0.4
+        C_coh: 0.9
+      metadata:
+        context:
+          topic: foundation
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 1
+        timestamp: 1001.0
+        invariants:
+          I_stab: 0.85
+          R_res: 0.75
+          P_cont: 0.7
+          L_depth: 2
+          Rt_adj: 0.2
+          delta_H: 0.05
+          E_dens: 0.4
+          C_coh: 0.9
+        idob_geometry:
+          neighborhood: null
+          k_id: null
+        idob_roles: null
+        idob_residue: null
+        idob_stability: null
+        rb_adjacency_class: null
+        rb_displacement_scale: null
+        rb_regime_hint: null
+        rb_route_proposal: null
+      provenance_ctp_last_update: 1001.0
+
+  # ----------------------------------------------------------
+  # 3. IdOB observation present — copy only; leave IdOB unchanged
+  # ----------------------------------------------------------
+  - id: ctp_idob_present
+    description: Copy IdOB observation fields; do not mutate IdOB
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 2
+        timestamp: 1002.0
+      semantic:
+        idob:
+          roles: [observer]
+          residue: persist
+          stability: 0.8
+          geometry:
+            neighborhood: local
+            k_id: 3
+      metadata:
+        context:
+          topic: idob
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 2
+        timestamp: 1002.0
+        idob_roles: [observer]
+        idob_residue: persist
+        idob_stability: 0.8
+        idob_geometry:
+          neighborhood: local
+          k_id: 3
+      check_idob_unchanged: true
+      provenance_ctp_last_update: 1002.0
+
+  # ----------------------------------------------------------
+  # 4. RB RED fields present on routing_filter
+  # ----------------------------------------------------------
+  - id: ctp_rb_fields_present
+    description: Copy RB RED observation fields; do not mutate routing_filter
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 3
+        timestamp: 1003.0
+      process:
+        routing_filter:
+          selected_ob_ids: [ob_a]
+          adjacency_class: local
+          displacement_scale: small
+          regime_hint: Stable
+          route_proposal: null
+      metadata:
+        context:
+          topic: rb
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 3
+        timestamp: 1003.0
+        rb_adjacency_class: local
+        rb_displacement_scale: small
+        rb_regime_hint: Stable
+        rb_route_proposal: null
+      check_rb_filter_unchanged: true
+      provenance_ctp_last_update: 1003.0
+
+  # ----------------------------------------------------------
+  # 5. Write boundary — TR / DCB / residue / context unchanged
+  # ----------------------------------------------------------
+  - id: ctp_write_boundary
+    description: CTP must not mutate TR, DCB geometry, RB filter, residue, context
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 4
+        timestamp: 1004.0
+      tr_needs_update: false
+      TR:
+        stance: neutral
+        intent: inform
+        affect: neutral
+        epistemic_shading: neutral
+        tension: low
+        politeness: neutral
+        commitment: weak
+        reservation: none
+        logical_structure: additive
+        epistemic_delta_h: 0
+        lineage_additions: []
+        routing_fields:
+          semantic_drift: false
+          identity_drift: false
+          commitment_instability: false
+          freeze_conflict: false
+          topology_instability: false
+          curvature_level: 0
+          stance_instability: false
+          shading_instability: false
+          tension_instability: false
+          lineage_instability: false
+          adjacency_valence: 0
+          continuity_state: 0
+          invariant_delta_h: 0
+          routing_severity: 0
+      process:
+        routing_filter:
+          selected_ob_ids: [ob_locked]
+          note: do_not_touch
+      semantic:
+        identity:
+          persona: locked
+      metadata:
+        geometric_state:
+          position: 3
+          direction: 4
+          curvature: 0.0
+          step_index: 2
+          lane_id: 0
+        geometric_history:
+          - { position: 2, direction: 3, curvature: 0.0, step_index: 1, lane_id: 0, cycle_id: 3, timestamp: 1003.0 }
+        residue:
+          marker: locked
+        context:
+          topic: boundary
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: high
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 4
+        timestamp: 1004.0
+      check_write_boundary: true
+      check_tr_unchanged: true
+      check_dcb_unchanged: true
+      check_rb_filter_unchanged: true
+      provenance_ctp_last_update: 1004.0
+
+  # ----------------------------------------------------------
+  # 6. Append-only — pre-seeded history
+  # ----------------------------------------------------------
+  - id: ctp_append_only
+    description: Prior cognitive_history entries must remain unmodified
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 5
+        timestamp: 1005.0
+      metadata:
+        cognitive_history:
+          - cycle_id: 0
+            timestamp: 900.0
+            invariants:
+              I_stab: null
+              R_res: null
+              P_cont: null
+              L_depth: null
+              Rt_adj: null
+              delta_H: null
+              E_dens: null
+              C_coh: null
+            idob_geometry:
+              neighborhood: null
+              k_id: null
+            idob_roles: null
+            idob_residue: null
+            idob_stability: null
+            rb_adjacency_class: null
+            rb_displacement_scale: null
+            rb_regime_hint: null
+            rb_route_proposal: null
+        context:
+          topic: append
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      history_len: 2
+      prior_entry_unchanged: true
+      last_entry:
+        cycle_id: 5
+        timestamp: 1005.0
+      provenance_ctp_last_update: 1005.0
+
+  # ----------------------------------------------------------
+  # 7. cycle_id from geometric_history when context omits it
+  # ----------------------------------------------------------
+  - id: ctp_cycle_from_dcb_history
+    description: Fallback cycle_id from last geometric_history entry
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        timestamp: 1006.0
+      metadata:
+        geometric_history:
+          - position: 2
+            direction: 3
+            curvature: 0.0
+            step_index: 1
+            lane_id: 0
+            cycle_id: 7
+            timestamp: 1005.0
+        context:
+          topic: cycle_src
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 7
+        timestamp: 1006.0
+      provenance_ctp_last_update: 1006.0
+
+  # ----------------------------------------------------------
+  # 8. Deterministic replay
+  # ----------------------------------------------------------
+  - id: ctp_replay_identical
+    description: Same input processed twice yields identical last history entry
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 8
+        timestamp: 1008.0
+      _ctp_foundation:
+        I_stab: 0.5
+        R_res: 0.5
+        P_cont: 0.5
+        L_depth: 1
+        Rt_adj: 0.1
+        delta_H: 0.0
+        E_dens: 0.2
+        C_coh: 0.8
+      metadata:
+        context:
+          topic: replay
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      history_len: 1
+      check_replay: true
+      last_entry:
+        cycle_id: 8
+        timestamp: 1008.0
+        invariants:
+          I_stab: 0.5
+          R_res: 0.5
+          P_cont: 0.5
+          L_depth: 1
+          Rt_adj: 0.1
+          delta_H: 0.0
+          E_dens: 0.2
+          C_coh: 0.8
+
+  # ----------------------------------------------------------
+  # 9. Schema completeness (all keys present)
+  # ----------------------------------------------------------
+  - id: ctp_schema_complete
+    description: Last entry must contain full cognitive-history key set
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 9
+        timestamp: 1009.0
+      metadata:
+        context:
+          topic: schema
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      history_len: 1
+      check_history_schema_complete: true
+      last_entry:
+        cycle_id: 9
+        timestamp: 1009.0
+      provenance_ctp_last_update: 1009.0
+
+  # ----------------------------------------------------------
+  # 10. Partial foundation — unspecified keys null, no invention
+  # ----------------------------------------------------------
+  - id: ctp_partial_foundation
+    description: Only provided foundation keys copied; rest null
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 10
+        timestamp: 1010.0
+      _ctp_foundation:
+        I_stab: 0.9
+      metadata:
+        context:
+          topic: partial
+          stance: neutral
+          intent: test
+          continuity: new
+          direction: forward
+          coherence: stable
+          importance: low
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 10
+        timestamp: 1010.0
+        invariants:
+          I_stab: 0.9
+          R_res: null
+          P_cont: null
+          L_depth: null
+          Rt_adj: null
+          delta_H: null
+          E_dens: null
+          C_coh: null
+      provenance_ctp_last_update: 1010.0
+
+  # ----------------------------------------------------------
+  # 11. Combined TR + foundation + IdOB (pre-RB package view)
+  # ----------------------------------------------------------
+  - id: ctp_combined_pre_rb
+    description: Pre-RB view with TR and IdOB present; CTP only histories
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 11
+        timestamp: 1011.0
+      _ctp_foundation:
+        I_stab: 0.7
+        R_res: 0.6
+        P_cont: 0.5
+        L_depth: 1
+        Rt_adj: 0.3
+        delta_H: 0.1
+        E_dens: 0.3
+        C_coh: 0.7
+      TR:
+        stance: neutral
+        intent: inform
+        tension: low
+      semantic:
+        idob:
+          roles: [assistant]
+          stability: 0.7
+          residue: light
+          geometry:
+            neighborhood: local
+            k_id: 1
+      metadata:
+        context:
+          topic: combined
+          stance: neutral
+          intent: test
+          continuity: same
+          direction: forward
+          coherence: stable
+          importance: medium
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 11
+        timestamp: 1011.0
+        invariants:
+          I_stab: 0.7
+          R_res: 0.6
+          P_cont: 0.5
+          L_depth: 1
+          Rt_adj: 0.3
+          delta_H: 0.1
+          E_dens: 0.3
+          C_coh: 0.7
+        idob_roles: [assistant]
+        idob_residue: light
+        idob_stability: 0.7
+        idob_geometry:
+          neighborhood: local
+          k_id: 1
+      check_tr_unchanged: true
+      check_idob_unchanged: true
+      provenance_ctp_last_update: 1011.0
+
+  # ----------------------------------------------------------
+  # 12. Missing metadata block resilience
+  # ----------------------------------------------------------
+  - id: ctp_missing_metadata_block
+    description: No metadata key on input; CTP creates history + provenance
+    enabled: true
+    input:
+      _ctp_cycle_context:
+        cycle_id: 12
+        timestamp: 1012.0
+    expected:
+      history_len: 1
+      last_entry:
+        cycle_id: 12
+        timestamp: 1012.0
+        invariants:
+          I_stab: null
+          R_res: null
+          P_cont: null
+          L_depth: null
+          Rt_adj: null
+          delta_H: null
+          E_dens: null
+          C_coh: null
+        idob_geometry:
+          neighborhood: null
+          k_id: null
+        idob_roles: null
+        idob_residue: null
+        idob_stability: null
+        rb_adjacency_class: null
+        rb_displacement_scale: null
+        rb_regime_hint: null
+        rb_route_proposal: null
+      provenance_ctp_last_update: 1012.0
+      check_history_schema_complete: true
