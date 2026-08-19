@@ -180,9 +180,9 @@ This is why independence is not optional — it is foundational.
 
 # **10. Supporting Evidence from Path A Simulations**  
 ### *(Referencing:)*  
-- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
-- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
-- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
+- [path_a_cex_ce_imr_test_run.md](../../../../system_simulation/path_a/logic_sim/path_a_cex_ce_imr_test_run.md)  
+- [path_a_SOB_to_SmOB_cntxt_read.md](../../../../system_simulation/path_a/logic_sim/path_a_SOB_to_SmOB_cntxt_read.md)  
+- [path_a_tp_metadata_increase_test_run_cp.md](../../../../system_simulation/path_a/logic_sim/path_a_tp_metadata_increase_test_run_cp.md)  
 
 Although the independence of IdOB invariants was originally a **design assumption**, multiple Path A simulations later provided **unexpected empirical confirmation** of this assumption.  
 None of these simulations were designed to test invariant independence.  
