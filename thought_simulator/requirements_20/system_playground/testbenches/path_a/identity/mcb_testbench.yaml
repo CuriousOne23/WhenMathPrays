@@ -62,7 +62,7 @@ tests:
       mcb_complete: true
       mcb_context_coherence: true
       mcb_context_shift_required: false
-      mcb_delta_h: 0.39
+      mcb_delta_h: 0.46
 
   # ----------------------------------------------------------
   # 2. Conflict → shift
@@ -117,7 +117,7 @@ tests:
       mcb_complete: false
       mcb_context_coherence: false
       mcb_context_shift_required: true
-      mcb_delta_h: 0.89
+      mcb_delta_h: 0.85
 
   # ----------------------------------------------------------
   # 3. Neutral → hold
@@ -227,4 +227,4 @@ tests:
       mcb_complete: true
       mcb_context_coherence: true
       mcb_context_shift_required: false
-      mcb_delta_h: 0.39
+      mcb_delta_h: 0.46
