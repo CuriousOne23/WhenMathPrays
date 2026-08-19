@@ -240,7 +240,7 @@ Yet they revealed that:
 
 ---
 
-## **10.3 Why This Supports Invariant Independence**
+# **10.3 Why This Supports Invariant Independence**
 
 The simulation results directly validate the architectural claim that:
 
@@ -260,14 +260,19 @@ Specifically:
 - CTP required **no semantic logic** to merge parallel deltas.  
 - TR required **no re‑execution** after CTP.
 
+Importantly, these results do **not** rely on exhaustive enumeration of all possible IdOB deltas or invariant triggers.  
+Invariant independence in Path A is a **structural property**, not an empirical one:  
+write‑domains are partitioned by construction, routing is finalized by TR, and CTP performs a purely mechanical merge.  
+The simulations serve as **representative stress tests** that exercise the architectural pressure points where independence would fail if it were not structurally guaranteed.
+
 Thus, the simulations provided **empirical confirmation** of the independence argument:
 
 > **If invariants were not independent, these simulations would have produced merge conflicts, invariant violations, routing corruption, or replay failures.  
-They produced none.**
+They produced none — because the architecture prevents such collisions by design.**
 
 ---
 
-## **10.4 Architectural Significance**
+# **10.4 Architectural Significance**
 
 These simulations collectively demonstrated that:
 
@@ -277,9 +282,20 @@ These simulations collectively demonstrated that:
 - CTP-after-TR is viable even under heavy parallelism,  
 - and Path A’s parallelism model is stable, deterministic, and replayable.
 
-Together, they validate the core claim of this paper:
+Although the simulations are not exhaustive — and do not need to be — they exercised the exact architectural stress points where independence would break if it were not structurally enforced:
 
-> **Path A supports parallel IdOB because the invariants governing TP evolution are independent by construction.**
+- parallel IdOB execution,  
+- parallel IMR metadata flows,  
+- parallel invariant triggers,  
+- parallel CTP merges,  
+- and replay under parallel updates.
+
+Because each primitive writes to a **disjoint, non-overlapping region** of TP, and because TR finalizes routing before CTP, the merge performed by CTP is **mechanical, deterministic, and conflict‑free**.  
+This structural partitioning is what guarantees independence; the simulations simply confirm that the architecture behaves exactly as intended under realistic parallel conditions.
+
+Together, these results validate the core claim of this paper:
+
+> **Path A supports parallel IdOB because the invariants governing TP evolution are independent by construction — and the simulations confirm that this architectural independence holds under parallel execution.**
 
 ---
 
