@@ -1,22 +1,22 @@
 # **idob_realization_input_output_examples.md**  
-### *Ten Realistic IdOB Input/Output Examples with Actual YAML Field Structures*  
-### *Identity Geometry, Continuity, Pressure, Residuals, Freeze, and Basin/Surface Evolution Across a Single Topic Cluster*
+### *Ten Strict IdOB Input/Output Examples Using Only Valid Semantic Universe Fields*  
+### *Identity Geometry, Continuity, Pressure, Residuals, Freeze, Basin/Surface Evolution Across a Single Topic Cluster*
 
 ---
 
 # **1. Purpose of This Paper**
 
-This paper provides **ten realistic IdOB examples**, each showing:
+This paper provides **ten strict IdOB examples**, each showing:
 
-- the **actual TP metadata fields IdOB reads** (input YAML)  
-- the **actual TP metadata fields IdOB writes** (output YAML)  
-- a **short explanation** of what is happening  
+- **TP.metadata input** (valid fields only)  
+- **IdOB output** (valid fields only)  
+- a **short explanation** of the identity behavior class  
 
 All examples follow a **single conversation topic**:
 
 > **“What is the project’s purpose?”**
 
-This topic naturally evolves, corrects, drifts, bifurcates, converges, and stabilizes — ideal for demonstrating IdOB behavior.
+This topic naturally evolves through formation, refinement, correction, drift, conflict, bifurcation, stabilization, convergence, alignment, and closure.
 
 ---
 
@@ -24,7 +24,7 @@ This topic naturally evolves, corrects, drifts, bifurcates, converges, and stabi
 
 The ten examples follow this natural progression:
 
-1. Initial identity formation  
+1. Identity formation  
 2. Identity refinement  
 3. Identity correction  
 4. Identity drift  
@@ -37,77 +37,83 @@ The ten examples follow this natural progression:
 
 ---
 
-# **3. Ten IdOB Realization Examples (with YAML)**
+# **3. Ten IdOB Realization Examples (Strict YAML)**
+
+Each example uses **only valid fields** from:
+
+- `identity`  
+- `stance`  
+- `direction`  
+- `pressure`  
+- `continuity`  
+- `residuals`  
+- `freeze`  
+- `basin_surface`  
+- `routing`  
+- `importance`
+
+All YAML is **strict**, **nested**, and **schema‑aligned**.
 
 ---
 
-# **Example 1 — Initial Identity Formation**
+# **Example 1 — Identity Formation**
 
-### **Explanation**
-The user proposes an initial identity: “semantic engine.”  
-Upstream fields are stable; IdOB forms a new identity basin.
+### **Explanation**  
+User proposes an initial identity: “semantic engine.”
 
-### **Input YAML (IdOB reads)**
+### **Input YAML**
 
 ```yaml
 utterance: "Is the project mainly about defining a new semantic engine?"
 
 TP.metadata:
-  semantic_geometry: stable
-  structural_geometry: stable
-  continuity:
-    geometry: neutral
-    drift: low
-    correction: none
-    continuity_next: continuation
-  semantic_importance: medium
-  routing:
-    regime: Stable
-    adjacency: low
-    displacement: low
   identity:
+    geometry: formation
+    continuity: continuation
     pressure: low
     residuals:
-      geometry: small
-      continuity: small
-      pressure: small
-      curvature: low
-      entropy: low
-  freeze:
-    current: none
-    next: none
-  global_geometry:
-    basin_state: none
-    surface_state: none
+      magnitude: small
+      pattern: small
+    freeze:
+      state: none
+    basin_surface:
+      region: none
+
+  stance:
+    category: clarify
+
+  direction:
+    flow: next
+
+  routing:
+    mode: forward
+
+  importance:
+    level: medium
 ```
 
-### **Output YAML (IdOB writes)**
+### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "semantic_engine"
-  geometry_update: basin_entry
-  continuity_next: continuation
-  pressure_next: low
-  residuals_next:
-    geometry: small
-    continuity: small
-    pressure: small
-    curvature: low
-    entropy: low
+  geometry: formation
+  continuity: continuation
+  pressure: low
+  residuals:
+    magnitude: small
+    pattern: small
   freeze:
-    current: none
-    next: none
-  basin_state: basin
-  surface_state: none
+    state: none
+  basin_surface:
+    region: basin
 ```
 
 ---
 
 # **Example 2 — Identity Refinement**
 
-### **Explanation**
-Identity is refined: “deterministic semantic engine.”
+### **Explanation**  
+Identity refines toward “deterministic semantic engine.”
 
 ### **Input YAML**
 
@@ -115,32 +121,52 @@ Identity is refined: “deterministic semantic engine.”
 utterance: "So it's not just an engine — it's a deterministic semantic engine, right?"
 
 TP.metadata:
-  semantic_geometry: refined
-  continuity:
-    geometry: stable
-    drift: low
-    correction: none
-  semantic_importance: medium
-  routing.regime: Stable
-  identity.residuals.geometry: small
+  identity:
+    geometry: refinement
+    continuity: continuation
+    pressure: low
+    residuals:
+      magnitude: small
+      pattern: small
+    freeze:
+      state: none
+    basin_surface:
+      region: basin
+
+  stance:
+    category: confirm
+
+  direction:
+    flow: next
+
+  routing:
+    mode: forward
+
+  importance:
+    level: medium
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "deterministic_semantic_engine"
-  geometry_update: refinement
-  continuity_next: continuation
-  pressure_next: low
-  residuals_next.geometry: collapsing
+  geometry: refinement
+  continuity: continuation
+  pressure: low
+  residuals:
+    magnitude: small
+    pattern: collapsed
+  freeze:
+    state: none
+  basin_surface:
+    region: basin
 ```
 
 ---
 
 # **Example 3 — Identity Correction**
 
-### **Explanation**
+### **Explanation**  
 Identity shifts: “semantic operating system.”
 
 ### **Input YAML**
@@ -149,29 +175,52 @@ Identity shifts: “semantic operating system.”
 utterance: "Actually, it's more than an engine — it's a whole semantic operating system."
 
 TP.metadata:
-  semantic_geometry: expanding
-  continuity.drift: medium
-  routing.regime: Transition
-  identity.pressure: medium
-  identity.residuals.geometry: medium
+  identity:
+    geometry: correction
+    continuity: drift
+    pressure: medium
+    residuals:
+      magnitude: medium
+      pattern: medium
+    freeze:
+      state: none
+    basin_surface:
+      region: unstable
+
+  stance:
+    category: clarify
+
+  direction:
+    flow: next
+
+  routing:
+    mode: branch
+
+  importance:
+    level: medium
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "semantic_operating_system"
-  geometry_update: correction
-  continuity_next: correction
-  pressure_next: medium
-  residuals_next.geometry: medium
+  geometry: correction
+  continuity: correction
+  pressure: medium
+  residuals:
+    magnitude: medium
+    pattern: medium
+  freeze:
+    state: none
+  basin_surface:
+    region: unstable
 ```
 
 ---
 
 # **Example 4 — Identity Drift**
 
-### **Explanation**
+### **Explanation**  
 Identity drifts toward “research framework.”
 
 ### **Input YAML**
@@ -180,30 +229,52 @@ Identity drifts toward “research framework.”
 utterance: "But maybe it's really a research framework, not an operating system."
 
 TP.metadata:
-  semantic_geometry: drifting
-  continuity.drift: medium
-  identity.pressure: medium
-  identity.residuals.geometry: medium
-  freeze.current: none
+  identity:
+    geometry: drift
+    continuity: drift
+    pressure: medium
+    residuals:
+      magnitude: medium
+      pattern: medium
+    freeze:
+      state: none
+    basin_surface:
+      region: unstable
+
+  stance:
+    category: uncertain
+
+  direction:
+    flow: next
+
+  routing:
+    mode: branch
+
+  importance:
+    level: medium
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "research_framework"
-  geometry_update: drift
-  continuity_next: correction
-  pressure_next: medium
-  residuals_next.geometry: medium
-  freeze.current: identity_freeze
+  geometry: drift
+  continuity: correction
+  pressure: medium
+  residuals:
+    magnitude: medium
+    pattern: medium
+  freeze:
+    state: identity_freeze
+  basin_surface:
+    region: unstable
 ```
 
 ---
 
 # **Example 5 — Identity Conflict**
 
-### **Explanation**
+### **Explanation**  
 Identity conflict emerges.
 
 ### **Input YAML**
@@ -212,32 +283,52 @@ Identity conflict emerges.
 utterance: "No, that doesn't sound right — it's definitely not just a research framework."
 
 TP.metadata:
-  semantic_geometry: conflict
-  continuity.drift: high
-  identity.pressure: high
-  identity.residuals.geometry: large
-  freeze.current: forming
-  global_geometry.surface_state: active
+  identity:
+    geometry: conflict
+    continuity: drift
+    pressure: high
+    residuals:
+      magnitude: large
+      pattern: explosion
+    freeze:
+      state: identity_freeze
+    basin_surface:
+      region: transition_surface
+
+  stance:
+    category: reject
+
+  direction:
+    flow: next
+
+  routing:
+    mode: branch
+
+  importance:
+    level: high
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "conflict_os_vs_framework"
-  geometry_update: conflict
-  continuity_next: correction
-  pressure_next: high
-  residuals_next.geometry: explosion
-  freeze.current: identity_freeze
-  surface_state: transition_surface
+  geometry: conflict
+  continuity: correction
+  pressure: high
+  residuals:
+    magnitude: large
+    pattern: explosion
+  freeze:
+    state: identity_freeze
+  basin_surface:
+    region: transition_surface
 ```
 
 ---
 
 # **Example 6 — Identity Bifurcation**
 
-### **Explanation**
+### **Explanation**  
 Two identity basins form: OS vs framework.
 
 ### **Input YAML**
@@ -246,33 +337,52 @@ Two identity basins form: OS vs framework.
 utterance: "Maybe it's both — a semantic OS and a research framework."
 
 TP.metadata:
-  semantic_geometry: bifurcating
-  continuity.drift: high
-  identity.pressure: high
-  identity.residuals.geometry: two_clusters
-  freeze.current: active
+  identity:
+    geometry: bifurcation
+    continuity: bifurcation
+    pressure: high
+    residuals:
+      magnitude: large
+      pattern: two_clusters
+    freeze:
+      state: identity_freeze
+    basin_surface:
+      region: split
+
+  stance:
+    category: clarify
+
+  direction:
+    flow: next
+
+  routing:
+    mode: branch
+
+  importance:
+    level: high
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry:
-    basin_1: "semantic_operating_system"
-    basin_2: "research_framework"
-  geometry_update: bifurcation
-  continuity_next: bifurcation
-  pressure_next: high
-  residuals_next.geometry: two_clusters
-  freeze.current: identity_freeze
-  basin_state: split
+  geometry: bifurcation
+  continuity: bifurcation
+  pressure: high
+  residuals:
+    magnitude: large
+    pattern: two_clusters
+  freeze:
+    state: identity_freeze
+  basin_surface:
+    region: split
 ```
 
 ---
 
 # **Example 7 — Identity Stabilization**
 
-### **Explanation**
+### **Explanation**  
 Identity stabilizes toward OS as primary.
 
 ### **Input YAML**
@@ -281,31 +391,53 @@ Identity stabilizes toward OS as primary.
 utterance: "Okay, but the OS part feels more central."
 
 TP.metadata:
-  semantic_geometry: converging
-  continuity.geometry: stabilizing
-  identity.pressure: medium
-  identity.residuals.geometry: collapsing
-  freeze.current: resolving
+  identity:
+    geometry: stabilization
+    continuity: stabilization
+    pressure: medium
+    residuals:
+      magnitude: medium
+      pattern: collapsing
+    freeze:
+      state: none
+    basin_surface:
+      region: basin
+
+  stance:
+    category: emphasize
+
+  direction:
+    flow: next
+
+  routing:
+    mode: merge
+
+  importance:
+    level: medium
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "semantic_os_primary"
-  geometry_update: convergence
-  continuity_next: continuation
-  pressure_next: medium
-  residuals_next.geometry: collapsing
-  freeze.current: none
+  geometry: stabilization
+  continuity: continuation
+  pressure: medium
+  residuals:
+    magnitude: medium
+    pattern: collapsing
+  freeze:
+    state: none
+  basin_surface:
+    region: basin
 ```
 
 ---
 
 # **Example 8 — Identity Convergence**
 
-### **Explanation**
-Identity merges: OS primary + framework secondary.
+### **Explanation**  
+Identity converges: OS primary + framework secondary.
 
 ### **Input YAML**
 
@@ -313,28 +445,52 @@ Identity merges: OS primary + framework secondary.
 utterance: "And the research framework is more like a secondary role."
 
 TP.metadata:
-  semantic_geometry: convergent
-  continuity.geometry: stable
-  identity.pressure: low
-  identity.residuals.geometry: small
+  identity:
+    geometry: convergence
+    continuity: continuation
+    pressure: low
+    residuals:
+      magnitude: small
+      pattern: small
+    freeze:
+      state: none
+    basin_surface:
+      region: basin
+
+  stance:
+    category: clarify
+
+  direction:
+    flow: next
+
+  routing:
+    mode: merge
+
+  importance:
+    level: low
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "os_primary_framework_secondary"
-  geometry_update: merge
-  continuity_next: continuation
-  pressure_next: low
-  residuals_next.geometry: small
+  geometry: convergence
+  continuity: continuation
+  pressure: low
+  residuals:
+    magnitude: small
+    pattern: small
+  freeze:
+    state: none
+  basin_surface:
+    region: basin
 ```
 
 ---
 
 # **Example 9 — Identity Alignment**
 
-### **Explanation**
+### **Explanation**  
 Identity aligns fully.
 
 ### **Input YAML**
@@ -343,29 +499,52 @@ Identity aligns fully.
 utterance: "So the project's purpose is to define a deterministic semantic OS that also supports research."
 
 TP.metadata:
-  semantic_geometry: stable
-  continuity.geometry: stable
-  identity.pressure: low
-  identity.residuals.geometry: collapsing
+  identity:
+    geometry: alignment
+    continuity: continuation
+    pressure: low
+    residuals:
+      magnitude: medium
+      pattern: collapsed
+    freeze:
+      state: none
+    basin_surface:
+      region: basin
+
+  stance:
+    category: confirm
+
+  direction:
+    flow: next
+
+  routing:
+    mode: forward
+
+  importance:
+    level: high
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "deterministic_semantic_os_with_research_support"
-  geometry_update: stable
-  continuity_next: continuation
-  pressure_next: low
-  residuals_next.geometry: collapsed
-  basin_state: basin
+  geometry: alignment
+  continuity: continuation
+  pressure: low
+  residuals:
+    magnitude: medium
+    pattern: collapsed
+  freeze:
+    state: none
+  basin_surface:
+    region: basin
 ```
 
 ---
 
 # **Example 10 — Identity Closure**
 
-### **Explanation**
+### **Explanation**  
 Identity is stable; IdOB cycle ends.
 
 ### **Input YAML**
@@ -374,24 +553,45 @@ Identity is stable; IdOB cycle ends.
 utterance: "Yes, that's exactly what I meant."
 
 TP.metadata:
-  semantic_geometry: stable
-  continuity.geometry: stable
-  identity.pressure: low
-  identity.residuals.geometry: collapsed
-  freeze.current: none
+  identity:
+    geometry: closure
+    continuity: continuation
+    pressure: low
+    residuals:
+      magnitude: medium
+      pattern: collapsed
+    freeze:
+      state: none
+    basin_surface:
+      region: basin
+
+  stance:
+    category: confirm
+
+  direction:
+    flow: stable
+
+  routing:
+    mode: hold
+
+  importance:
+    level: high
 ```
 
 ### **Output YAML**
 
 ```yaml
 TP.metadata.identity:
-  geometry: "deterministic_semantic_os_with_research_support"
-  geometry_update: stable
-  continuity_next: continuation
-  pressure_next: low
-  residuals_next.geometry: collapsed
-  basin_state: basin
-  surface_state: none
+  geometry: closure
+  continuity: continuation
+  pressure: low
+  residuals:
+    magnitude: medium
+    pattern: collapsed
+  freeze:
+    state: none
+  basin_surface:
+    region: basin
   idob_stability: stable
 ```
 
@@ -401,9 +601,9 @@ TP.metadata.identity:
 
 This paper provides:
 
-- **10 realistic IdOB examples**  
-- **Actual TP metadata field names**  
-- **Actual YAML input/output structures**  
+- **10 strict IdOB examples**  
+- **Valid TP.metadata field names**  
+- **Strict YAML input/output structures**  
 - **Natural identity evolution across a single topic**  
 - **Full coverage of geometry, continuity, pressure, residuals, freeze, basin/surface**  
 
