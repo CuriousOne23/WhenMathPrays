@@ -68,62 +68,28 @@ ACTIVE_TEST_MODULES = [
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.tr_testbench",
     #     {
     #         "mode": "testbench",
-    #         "use_inb": False,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "use_cex_ie": False,
-    #         "use_cex_ccr": False,
-    #         "use_cex_pck": False,
-    #         "use_ce": False,
-    #         "use_tpu": False,
-    #         "use_sob": False,
-    #         "use_srob": False,
-    #         "use_cnob": False,
-    #         "use_smob": False,
-    #         "use_wrdnm": False,
-    #         "use_isc": False,
-    #         "use_ssg": False,
-    #         "use_stpx": False,
-    #         "use_rbu": False,
-    #         "use_dcb": False,
-    #         "use_rb": False,
     #         "use_tr": True,
     #         "tests_to_run": "see tr_tests_to_run.yaml",
     #     }
     # ),
-    # **************************** CTP Test bench ******************************************************
-    # Highest upstream True = CTP (primitive under test)
-    # Pipeline position: Path-A always-before-RB barrier (TR → CTP → RB)
-    # Input from:
-    #   • ctp_testbench.yaml (mode = "testbench")
-    #   • ctp_input.yaml (mode = "general")
-    # Location: path_a/routing/
+    # **************************** CTP Test bench (previously active) *********************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.ctp_testbench",
+    #     {
+    #         "mode": "testbench",
+    #         "use_ctp": True,
+    #         "tests_to_run": "see ctp_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** IdOB Test bench (ACTIVE) *******************************************
+    # Category: path_a/identity/
+    # Dual-mode: testbench (idob_testbench.yaml) | general (idob_input.yaml + rules)
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.ctp_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.identity.idob_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
-            "use_inb": False,
-            "use_iiinb": False,
-            "use_ie": False,
-            "use_cex_ie": False,
-            "use_cex_ccr": False,
-            "use_cex_pck": False,
-            "use_ce": False,
-            "use_tpu": False,
-            "use_sob": False,
-            "use_srob": False,
-            "use_cnob": False,
-            "use_smob": False,
-            "use_wrdnm": False,
-            "use_isc": False,
-            "use_ssg": False,
-            "use_stpx": False,
-            "use_rbu": False,
-            "use_dcb": False,
-            "use_rb": False,
-            "use_tr": False,
-            "use_ctp": True,         # Primitive under test
-            "tests_to_run": "see ctp_tests_to_run.yaml",
+            "use_idob": True,        # Primitive under test
+            "tests_to_run": "see idob_tests_to_run.yaml",
         }
     ),
 ]
