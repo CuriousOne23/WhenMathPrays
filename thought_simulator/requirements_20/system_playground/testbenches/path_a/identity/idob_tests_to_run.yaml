@@ -1,1 +1,44 @@
+# ============================================================
+# IdOB Tests To Run (v0.1)
+# ============================================================
 
+tests:
+  - id: idob_01_formation
+    enabled: true
+    description: Initial proposal — TS as deterministic semantic engine
+
+  - id: idob_02_refinement
+    enabled: true
+    description: Sharpen to fixed-time-step state machine
+
+  - id: idob_03_correction
+    enabled: true
+    description: Shift toward semantic operating system framing
+
+  - id: idob_04_drift
+    enabled: true
+    description: Drift toward ontological claim for the manifold
+
+  - id: idob_05_conflict
+    enabled: true
+    description: Explicit rejection of ontological reading
+
+  - id: idob_06_bifurcation
+    enabled: true
+    description: Temporary coexistence of two identity basins
+
+  - id: idob_07_stabilization
+    enabled: true
+    description: Primary identity settles on deterministic state machine
+
+  - id: idob_08_convergence
+    enabled: true
+    description: Manifold kept as secondary / optional viz
+
+  - id: idob_09_alignment
+    enabled: true
+    description: Alignment with stated epistemic stance
+
+  - id: idob_10_closure
+    enabled: true
+    description: Identity work on this topic cluster complete

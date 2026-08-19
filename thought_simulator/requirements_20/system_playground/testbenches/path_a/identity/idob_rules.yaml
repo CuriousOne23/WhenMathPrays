@@ -1,1 +1,34 @@
+# ============================================================
+# IdOB Rules (Version 0.1)
+# Aligned with 20.40.050 v3.0, idob_py_struc_pgm.md v0.1,
+# progressive_lineup_testing.md v4.2
+# ============================================================
 
+primitive: IdOB
+version: "0.1"
+
+rules:
+
+  - id: idob_output_001
+    description: IdOB must produce an output TP for the given input.
+    check: deterministic_output_present
+
+  - id: idob_identity_shape_001
+    description: metadata.identity must contain geometry, continuity, pressure, residuals, freeze, basin_surface after process.
+    check: identity_envelope_present
+
+  - id: idob_write_boundary_001
+    description: IdOB must not mutate RB routing_filter or DCB geometric_state.
+    check: no_routing_or_dcb_writes
+
+  - id: idob_no_structural_001
+    description: IdOB must not produce structural residue or modify SSG fields.
+    check: no_structural_writes
+
+  - id: idob_completion_001
+    description: idob_complete and path_b_eligible must be boolean and consistent with geometry.
+    check: completion_flags_consistent
+
+  - id: idob_progressive_001
+    description: IdOB must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility

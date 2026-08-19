@@ -1,1 +1,29 @@
+# ============================================================
+# IdOB general-mode input (v0.1)
+# Used when mode == "general"
+# ============================================================
 
+utterance: "Is the Thought Simulator primarily a deterministic state machine for meaning?"
+
+metadata:
+  identity:
+    geometry: formation
+    continuity: continuation
+    pressure: low
+    residuals:
+      magnitude: small
+      pattern: small
+    freeze:
+      state: none
+    basin_surface:
+      region: none
+  stance:
+    category: clarify
+  direction:
+    flow: next
+  routing:
+    mode: forward
+  importance:
+    level: medium
+  process:
+    routing_committed: true
