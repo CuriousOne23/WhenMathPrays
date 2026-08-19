@@ -1,1 +1,45 @@
+# ============================================================
+# CTP Rules (Version 1.0)
+# Aligned with 20.145 v3.0, ctp_py_struc_pgm.md, progressive_lineup v4.2
+# ============================================================
 
+primitive: CTP
+version: "1.0"
+
+rules:
+
+  - id: ctp_output_001
+    description: CTP must produce an output TP for the given input.
+    check: deterministic_output_present
+
+  - id: ctp_history_001
+    description: cognitive_history must gain exactly one entry per invocation.
+    check: one_history_append
+
+  - id: ctp_schema_001
+    description: Last cognitive_history entry must contain the complete key set.
+    check: history_entry_schema_complete
+
+  - id: ctp_null_001
+    description: Missing sources must be null, not omitted or invented.
+    check: missing_sources_are_null
+
+  - id: ctp_append_001
+    description: Prior cognitive_history entries must remain unchanged.
+    check: prior_history_unchanged
+
+  - id: ctp_provenance_001
+    description: provenance.ctp_last_update must be set when timestamp is known.
+    check: provenance_ctp_last_update
+
+  - id: ctp_boundary_001
+    description: CTP must not mutate TR, RB filter, IdOB, DCB, or context.
+    check: only_ctp_fields_written
+
+  - id: ctp_no_reject_001
+    description: CTP must succeed without IdOB present.
+    check: succeeds_without_idob
+
+  - id: ctp_progressive_001
+    description: CTP must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
