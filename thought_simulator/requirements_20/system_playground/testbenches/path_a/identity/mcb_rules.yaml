@@ -1,1 +1,34 @@
+# ============================================================
+# MCB Rules (Version 0.1)
+# Aligned with 20.40.055 v2.0, mcb_py_struc_pgm.md v0.1,
+# progressive_lineup_testing.md v4.2
+# ============================================================
 
+primitive: MCB
+version: "0.1"
+
+rules:
+
+  - id: mcb_output_001
+    description: MCB must produce an output TP for the given input.
+    check: deterministic_output_present
+
+  - id: mcb_next_context_001
+    description: TP.next_context must be present and contain required fields after process.
+    check: next_context_present
+
+  - id: mcb_write_boundary_001
+    description: MCB must not mutate routing_filter, geometric_state, or current-turn clarifying fields.
+    check: no_forbidden_writes
+
+  - id: mcb_tpu_payload_001
+    description: TPU.mcb_update must contain the mandatory HLR-030 fields.
+    check: tpu_mcb_update_shape
+
+  - id: mcb_completion_001
+    description: mcb_complete must be boolean; next_ob_candidates consistent with complete flag.
+    check: completion_flags_consistent
+
+  - id: mcb_progressive_001
+    description: MCB must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
