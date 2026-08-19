@@ -26,13 +26,13 @@ They are **instantiations** of the Semantic Universe and IdOB schema.
 
 This is required because:
 
-### ✔ idob.py expects a **single, stable object schema**  
-### ✔ TS expects a **single, stable TP metadata structure**  
-### ✔ MCB expects a **single, stable stability structure**  
-### ✔ Path‑A primitives expect **consistent meaning fields**  
-### ✔ replay determinism requires **identical structure**  
-### ✔ testbenches require **consistent YAML structure**  
-### ✔ versioning requires **modular files**  
+- idob.py expects a **single, stable object schema**  
+- TS expects a **single, stable TP metadata structure**  
+- MCB expects a **single, stable stability structure**  
+- Path‑A primitives expect **consistent meaning fields**  
+- replay determinism requires **identical structure**  
+- testbenches require **consistent YAML structure**  
+- versioning requires **modular files**
 
 If the examples used custom formats, the entire system would break.
 
@@ -122,32 +122,15 @@ idob_example_10_identity_closure.yaml
 
 Each file contains:
 
-### ✔ TP metadata input  
-(using dictionaries, fields, subfields, gradients)
-
-### ✔ IdOB object output  
-(using `idob_schema.yaml`)
-
-### ✔ Identity behavior class  
-(one of the 10)
-
-### ✔ Stability state  
-(using `idob_stability_contract.md`)
-
-### ✔ Continuity state  
-(using semantic_subfields.yaml)
-
-### ✔ Pressure state  
-(using semantic_gradients.yaml)
-
-### ✔ Residual pattern  
-(using semantic_objects.yaml)
-
-### ✔ Freeze state  
-(using semantic_objects.yaml)
-
-### ✔ Basin/surface state  
-(using semantic_field_definitions.yaml)
+- **TP metadata input** (using dictionaries, fields, subfields, gradients)  
+- **IdOB object output** (using `idob_schema.yaml`)  
+- **Identity behavior class** (one of the 10)  
+- **Stability state** (using `idob_stability_contract.md`)  
+- **Continuity state** (using `semantic_subfields.yaml`)  
+- **Pressure state** (using `semantic_gradients.yaml`)  
+- **Residual pattern** (using `semantic_objects.yaml`)  
+- **Freeze state** (using `semantic_objects.yaml`)  
+- **Basin/surface state** (using `semantic_field_definitions.yaml`)
 
 This is the **correct software‑realization structure**.
 
@@ -157,11 +140,11 @@ This is the **correct software‑realization structure**.
 
 Separate YAML files are required because:
 
-### ✔ Each example is a separate identity behavior class  
-### ✔ Each example is a separate testbench unit  
-### ✔ Each example is a separate stability unit  
-### ✔ Each example is a separate replay determinism unit  
-### ✔ Each example is a separate versioning unit  
+- Each example is a separate identity behavior class  
+- Each example is a separate testbench unit  
+- Each example is a separate stability unit  
+- Each example is a separate replay determinism unit  
+- Each example is a separate versioning unit  
 
 But all examples must use the **same structure**.
 
@@ -180,14 +163,14 @@ This is how real semantic engines maintain:
 
 idob.py:
 
-1. **Loads the example YAML file**  
-2. **Validates it against idob_schema.yaml**  
-3. **Reads TP metadata**  
-4. **Runs IdOB logic**  
-5. **Produces deterministic IdOB output**  
-6. **Hands output to MCB**  
-7. **MCB evaluates stability**  
-8. **TS decides whether IdOB runs again**
+1. Loads the example YAML file  
+2. Validates it against `idob_schema.yaml`  
+3. Reads TP metadata  
+4. Runs IdOB logic  
+5. Produces deterministic IdOB output  
+6. Hands output to MCB  
+7. MCB evaluates stability  
+8. TS decides whether IdOB runs again  
 
 This is why the structure must be identical across all examples.
 
@@ -248,17 +231,10 @@ These files grow **in size**, not in number.
 
 These files will **multiply**:
 
-### ✔ Example YAML files  
-More identity behavior examples → more YAML files.
-
-### ✔ Testbench YAML files  
-More test cases → more YAML files.
-
-### ✔ Category-specific example sets  
-More drift/conflict/bifurcation examples → more YAML files.
-
-### ✔ Domain-specific example sets (optional)  
-If you add domain-specific identity examples → more YAML files.
+- **Example YAML files**  
+- **Testbench YAML files**  
+- **Category-specific example sets**  
+- **Domain-specific example sets (optional)**  
 
 These files grow **in number**, not in size.
 
