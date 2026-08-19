@@ -1,0 +1,254 @@
+# =====================================================================
+# idob_schema.yaml
+# ---------------------------------------------------------------------
+# Purpose:
+#   Defines the full IdOB (Identity Object) schema used by Path A and
+#   idob.py. Every IdOB example YAML file must conform to this schema.
+#   This schema ensures deterministic identity interpretation, stable
+#   TP metadata consumption, and replay-safe behavior across all
+#   identity behavior classes.
+#
+# Location note (2026-08-19):
+#   Placed under primitives/idob/ as a local exclusive table.
+#   Loaders look here first. The copy under papers/ is historical.
+#
+# Relationship to Other Files:
+#   - Supports: idob_realization_input_output_examples.md
+#   - Supports: idob_yaml_files_support_10_examples.md
+#   - Consumed by: idob.py (runtime identity interpretation)
+#   - Required by: idob_py_struc_pgm.md
+# =====================================================================
+
+idob_schema:
+
+  # --------------------------------------------------------------
+  # Identity Object (Core)
+  # --------------------------------------------------------------
+  identity:
+    geometry:
+      type: enum
+      allowed_values:
+        - formation
+        - refinement
+        - correction
+        - drift
+        - conflict
+        - bifurcation
+        - stabilization
+        - convergence
+        - alignment
+        - closure
+
+    continuity:
+      type: enum
+      allowed_values:
+        - continuation
+        - correction
+        - oscillation
+        - drift
+        - bifurcation
+        - stabilization
+
+    pressure:
+      type: enum
+      allowed_values:
+        - low
+        - medium
+        - high
+        - escalate
+        - de-escalate
+        - insist
+        - withdraw
+
+    residuals:
+      type: enum
+      allowed_values:
+        - small
+        - medium
+        - large
+        - explosion
+        - two_clusters
+        - collapsed
+
+    freeze:
+      type: enum
+      allowed_values:
+        - none
+        - identity_freeze
+        - propagation_active
+
+    basin_surface:
+      type: enum
+      allowed_values:
+        - basin
+        - split
+        - unstable
+        - transition_surface
+        - none
+
+  # --------------------------------------------------------------
+  # Stance Object
+  # --------------------------------------------------------------
+  stance:
+    category:
+      type: enum
+      allowed_values:
+        - agree
+        - disagree
+        - clarify
+        - confirm
+        - reject
+        - redirect
+        - uncertain
+        - emphasize
+        - de-emphasize
+
+  # --------------------------------------------------------------
+  # Direction Object
+  # --------------------------------------------------------------
+  direction:
+    flow:
+      type: enum
+      allowed_values:
+        - next
+        - previous
+        - stable
+        - unknown
+
+  # --------------------------------------------------------------
+  # Pressure Object (Secondary)
+  # --------------------------------------------------------------
+  pressure_object:
+    level:
+      type: enum
+      allowed_values:
+        - low
+        - medium
+        - high
+
+    gradient:
+      type: enum
+      allowed_values:
+        - escalate
+        - de-escalate
+
+    behavior:
+      type: enum
+      allowed_values:
+        - insist
+        - withdraw
+
+  # --------------------------------------------------------------
+  # Continuity Object (Secondary)
+  # --------------------------------------------------------------
+  continuity_object:
+    mode:
+      type: enum
+      allowed_values:
+        - continuation
+        - correction
+        - oscillation
+        - drift
+        - bifurcation
+        - stabilization
+
+  # --------------------------------------------------------------
+  # Geometry Object (Secondary)
+  # --------------------------------------------------------------
+  geometry_object:
+    behavior:
+      type: enum
+      allowed_values:
+        - formation
+        - refinement
+        - correction
+        - drift
+        - conflict
+        - bifurcation
+        - stabilization
+        - convergence
+        - alignment
+        - closure
+
+  # --------------------------------------------------------------
+  # Residuals Object (Secondary)
+  # --------------------------------------------------------------
+  residuals_object:
+    magnitude:
+      type: enum
+      allowed_values:
+        - small
+        - medium
+        - large
+
+    pattern:
+      type: enum
+      allowed_values:
+        - explosion
+        - two_clusters
+        - collapsed
+
+  # --------------------------------------------------------------
+  # Freeze Object (Secondary)
+  # --------------------------------------------------------------
+  freeze_object:
+    state:
+      type: enum
+      allowed_values:
+        - none
+        - identity_freeze
+        - propagation_active
+
+  # --------------------------------------------------------------
+  # Basin/Surface Object (Secondary)
+  # --------------------------------------------------------------
+  basin_surface_object:
+    region:
+      type: enum
+      allowed_values:
+        - basin
+        - split
+        - unstable
+        - transition_surface
+        - none
+
+  # --------------------------------------------------------------
+  # Routing Object
+  # --------------------------------------------------------------
+  routing:
+    mode:
+      type: enum
+      allowed_values:
+        - forward
+        - backward
+        - branch
+        - merge
+        - hold
+
+  # --------------------------------------------------------------
+  # Importance Object
+  # --------------------------------------------------------------
+  importance:
+    level:
+      type: enum
+      allowed_values:
+        - low
+        - medium
+        - high
+        - critical
+
+  # --------------------------------------------------------------
+  # Domain Object (Expandable)
+  # --------------------------------------------------------------
+  domain:
+    category:
+      type: enum
+      allowed_values:
+        - object
+        - event
+        - process
+        - system
+        - structure
+        - behavior
+        - state
+        - transition
