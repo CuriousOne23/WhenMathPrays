@@ -1,0 +1,308 @@
+# =====================================================================
+# semantic_objects.yaml
+# ---------------------------------------------------------------------
+# Purpose:
+#   Defines the structured semantic objects used by Path A and IdOB.
+#   These objects are instantiated by TP metadata and consumed by
+#   idob.py during identity interpretation. Every IdOB example YAML
+#   file must conform to these object definitions.
+#
+# Relationship to Other Files:
+#   - Supports: idob_realization_input_output_examples.md
+#   - Supports: idob_yaml_files_support_10_examples.md
+#   - Consumed by: idob_schema.yaml
+#   - Consumed by: semantic_universe_to_tp_mapping.md
+#   - Required by: idob_preconditions_contract.md
+#
+# Notes:
+#   - Objects are domain-agnostic and describe meaning behavior,
+#     not world categories (e.g., not baseball, politics, economics).
+#   - As Path A gains capability, this file will expand with additional
+#     objects or refinements.
+# =====================================================================
+
+semantic_objects:
+
+  # --------------------------------------------------------------
+  # Identity Object
+  # --------------------------------------------------------------
+  identity_object:
+    description: >
+      Captures the evolving meaning identity across turns. This object
+      is the core of IdOB interpretation and contains geometry,
+      continuity, pressure, residuals, freeze, and basin/surface states.
+
+    fields:
+      geometry:
+        type: enum
+        values:
+          - formation
+          - refinement
+          - correction
+          - drift
+          - conflict
+          - bifurcation
+          - stabilization
+          - convergence
+          - alignment
+          - closure
+
+      continuity:
+        type: enum
+        values:
+          - continuation
+          - correction
+          - oscillation
+          - drift
+          - bifurcation
+          - stabilization
+
+      pressure:
+        type: enum
+        values:
+          - low
+          - medium
+          - high
+          - escalate
+          - de-escalate
+          - insist
+          - withdraw
+
+      residuals:
+        type: enum
+        values:
+          - small
+          - medium
+          - large
+          - explosion
+          - two_clusters
+          - collapsed
+
+      freeze:
+        type: enum
+        values:
+          - none
+          - identity_freeze
+          - propagation_active
+
+      basin_surface:
+        type: enum
+        values:
+          - basin
+          - split
+          - unstable
+          - transition_surface
+          - none
+
+  # --------------------------------------------------------------
+  # Stance Object
+  # --------------------------------------------------------------
+  stance_object:
+    description: >
+      Represents the user's attitude or position toward the identity.
+      Used by Path A routing and TS orchestration.
+
+    fields:
+      category:
+        type: enum
+        values:
+          - agree
+          - disagree
+          - clarify
+          - confirm
+          - reject
+          - redirect
+          - uncertain
+          - emphasize
+          - de-emphasize
+
+  # --------------------------------------------------------------
+  # Direction Object
+  # --------------------------------------------------------------
+  direction_object:
+    description: >
+      Represents the directional flow of meaning across turns.
+
+    fields:
+      flow:
+        type: enum
+        values:
+          - next
+          - previous
+          - stable
+          - unknown
+
+  # --------------------------------------------------------------
+  # Pressure Object
+  # --------------------------------------------------------------
+  pressure_object:
+    description: >
+      Quantifies the intensity and change of meaning pressure.
+
+    fields:
+      level:
+        type: enum
+        values:
+          - low
+          - medium
+          - high
+
+      gradient:
+        type: enum
+        values:
+          - escalate
+          - de-escalate
+
+      behavior:
+        type: enum
+        values:
+          - insist
+          - withdraw
+
+  # --------------------------------------------------------------
+  # Continuity Object
+  # --------------------------------------------------------------
+  continuity_object:
+    description: >
+      Describes how meaning persists or changes across turns.
+
+    fields:
+      mode:
+        type: enum
+        values:
+          - continuation
+          - correction
+          - oscillation
+          - drift
+          - bifurcation
+          - stabilization
+
+  # --------------------------------------------------------------
+  # Geometry Object
+  # --------------------------------------------------------------
+  geometry_object:
+    description: >
+      Describes the structural behavior of identity meaning.
+
+    fields:
+      behavior:
+        type: enum
+        values:
+          - formation
+          - refinement
+          - correction
+          - drift
+          - conflict
+          - bifurcation
+          - stabilization
+          - convergence
+          - alignment
+          - closure
+
+  # --------------------------------------------------------------
+  # Residuals Object
+  # --------------------------------------------------------------
+  residuals_object:
+    description: >
+      Captures leftover meaning differences between identity states.
+
+    fields:
+      magnitude:
+        type: enum
+        values:
+          - small
+          - medium
+          - large
+
+      pattern:
+        type: enum
+        values:
+          - explosion
+          - two_clusters
+          - collapsed
+
+  # --------------------------------------------------------------
+  # Freeze Object
+  # --------------------------------------------------------------
+  freeze_object:
+    description: >
+      Indicates whether identity meaning is frozen or propagating.
+
+    fields:
+      state:
+        type: enum
+        values:
+          - none
+          - identity_freeze
+          - propagation_active
+
+  # --------------------------------------------------------------
+  # Basin/Surface Object
+  # --------------------------------------------------------------
+  basin_surface_object:
+    description: >
+      Represents the stability region of identity meaning.
+
+    fields:
+      region:
+        type: enum
+        values:
+          - basin
+          - split
+          - unstable
+          - transition_surface
+          - none
+
+  # --------------------------------------------------------------
+  # Routing Object
+  # --------------------------------------------------------------
+  routing_object:
+    description: >
+      Describes how meaning should move through Path A.
+
+    fields:
+      mode:
+        type: enum
+        values:
+          - forward
+          - backward
+          - branch
+          - merge
+          - hold
+
+  # --------------------------------------------------------------
+  # Importance Object
+  # --------------------------------------------------------------
+  importance_object:
+    description: >
+      Describes the significance of the identity for TS prioritization.
+
+    fields:
+      level:
+        type: enum
+        values:
+          - low
+          - medium
+          - high
+          - critical
+
+  # --------------------------------------------------------------
+  # Domain Object (Expandable)
+  # --------------------------------------------------------------
+  domain_object:
+    description: >
+      Domain-neutral placeholders for world concepts. These expand as
+      Path A gains capability to describe more of the world.
+
+    fields:
+      category:
+        type: enum
+        values:
+          - object
+          - event
+          - process
+          - system
+          - structure
+          - behavior
+          - state
+          - transition
