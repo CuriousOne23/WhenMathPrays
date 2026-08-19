@@ -1,1 +1,40 @@
+# ============================================================
+# MCB general-mode input (v0.1)
+# Used when mode == "general"
+# ============================================================
 
+utterance: "Yes — that framing of the deterministic state machine still holds."
+
+metadata:
+  identity:
+    geometry: alignment
+    continuity: continuation
+    pressure: low
+    residuals:
+      magnitude: small
+      pattern: collapsed
+    freeze:
+      state: none
+    basin_surface:
+      region: basin
+  stance:
+    category: confirm
+  direction:
+    flow: next
+  importance:
+    level: medium
+  context:
+    topic: "Thought Simulator identity"
+    stance: confirm
+    intent: continue
+    register: neutral
+    politeness: neutral
+    continuity: continuation
+    direction: next
+    importance: medium
+  process:
+    routing_committed: true
+
+semantic:
+  meaning_delta_h: 0.12
+  meaning_semantics: []
