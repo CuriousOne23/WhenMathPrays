@@ -1,1 +1,230 @@
+# ============================================================
+# MCB Testbench (v0.1) — Deterministic cases
+# Structural / foundation comparison in testbench mode.
+# Aligned with 20.40.055 v2.0, mcb_py_struc_pgm.md v0.1,
+# progressive_lineup_testing.md v4.2
+#
+# Topic: Thought Simulator identity framing (continuation of IdOB cluster)
+# ============================================================
 
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Reinforcement → continue
+  # ----------------------------------------------------------
+  - id: mcb_01_reinforcement_continue
+    description: Meaning and clarifying align — reinforcement, continue context
+    enabled: true
+    input:
+      utterance: "Yes — that framing of the deterministic state machine still holds."
+      metadata:
+        identity:
+          geometry: alignment
+          continuity: continuation
+          pressure: low
+          residuals:
+            magnitude: small
+            pattern: collapsed
+          freeze:
+            state: none
+          basin_surface:
+            region: basin
+        stance:
+          category: confirm
+        direction:
+          flow: next
+        importance:
+          level: medium
+        context:
+          topic: "Thought Simulator identity"
+          stance: confirm
+          intent: continue
+          register: neutral
+          politeness: neutral
+          continuity: continuation
+          direction: next
+          importance: medium
+        process:
+          routing_committed: true
+      semantic:
+        meaning_delta_h: 0.12
+        meaning_semantics: []
+    expected:
+      next_context:
+        topic: "Thought Simulator identity"
+        stance: confirm
+        intent: continue
+        continuity: continuation
+        direction: next
+        coherence: true
+        shift_required: false
+        importance: medium
+      mcb_complete: true
+      mcb_context_coherence: true
+      mcb_context_shift_required: false
+      mcb_delta_h: 0.39
+
+  # ----------------------------------------------------------
+  # 2. Conflict → shift
+  # ----------------------------------------------------------
+  - id: mcb_02_conflict_shift
+    description: Clarifying rejects meaning stance — conflict, shift required
+    enabled: true
+    input:
+      utterance: "No — the manifold-as-ontology reading is the wrong identity claim."
+      metadata:
+        identity:
+          geometry: conflict
+          continuity: correction
+          pressure: high
+          residuals:
+            magnitude: large
+            pattern: explosion
+          freeze:
+            state: identity_freeze
+          basin_surface:
+            region: transition_surface
+        stance:
+          category: confirm
+        direction:
+          flow: next
+        importance:
+          level: high
+        context:
+          topic: "Thought Simulator identity"
+          stance: reject
+          intent: correct
+          register: firm
+          politeness: neutral
+          continuity: shift
+          direction: pivot
+          importance: high
+        process:
+          routing_committed: true
+      semantic:
+        meaning_delta_h: 0.35
+        meaning_semantics: []
+    expected:
+      next_context:
+        topic: "Thought Simulator identity"
+        stance: reject
+        intent: correct
+        continuity: shift
+        direction: pivot
+        coherence: false
+        shift_required: true
+        importance: high
+      mcb_complete: false
+      mcb_context_coherence: false
+      mcb_context_shift_required: true
+      mcb_delta_h: 0.89
+
+  # ----------------------------------------------------------
+  # 3. Neutral → hold
+  # ----------------------------------------------------------
+  - id: mcb_03_neutral_hold
+    description: Insufficient signal — neutral outcome, hold continuity
+    enabled: true
+    input:
+      utterance: "Hmm, maybe we should look at the continuity layer next."
+      metadata:
+        identity:
+          geometry: refinement
+          continuity: continuation
+          pressure: low
+          residuals:
+            magnitude: small
+            pattern: small
+          freeze:
+            state: none
+          basin_surface:
+            region: basin
+        stance:
+          category: clarify
+        direction:
+          flow: next
+        importance:
+          level: low
+        context:
+          topic: "Thought Simulator continuity"
+          stance: clarify
+          intent: explore
+          register: neutral
+          politeness: neutral
+          continuity: hold
+          direction: next
+          importance: low
+        process:
+          routing_committed: true
+      semantic:
+        meaning_delta_h: 0.05
+        meaning_semantics: []
+    expected:
+      next_context:
+        topic: "Thought Simulator continuity"
+        stance: clarify
+        intent: explore
+        continuity: hold
+        direction: next
+        coherence: false
+        shift_required: false
+        importance: low
+      mcb_complete: true
+      mcb_context_coherence: false
+      mcb_context_shift_required: false
+      mcb_delta_h: 0.0
+
+  # ----------------------------------------------------------
+  # 4. Completion (coherent reinforcement)
+  # ----------------------------------------------------------
+  - id: mcb_04_completion
+    description: Coherent reinforcement completes the MCB cycle
+    enabled: true
+    input:
+      utterance: "For now the identity framing is settled and we can move forward."
+      metadata:
+        identity:
+          geometry: closure
+          continuity: continuation
+          pressure: low
+          residuals:
+            magnitude: small
+            pattern: collapsed
+          freeze:
+            state: none
+          basin_surface:
+            region: basin
+        stance:
+          category: emphasize
+        direction:
+          flow: next
+        importance:
+          level: medium
+        context:
+          topic: "Thought Simulator identity"
+          stance: emphasize
+          intent: close
+          register: neutral
+          politeness: neutral
+          continuity: continuation
+          direction: next
+          importance: medium
+        process:
+          routing_committed: true
+      semantic:
+        meaning_delta_h: 0.08
+        meaning_semantics: []
+    expected:
+      next_context:
+        topic: "Thought Simulator identity"
+        stance: emphasize
+        intent: close
+        continuity: continuation
+        direction: next
+        coherence: true
+        shift_required: false
+        importance: medium
+      mcb_complete: true
+      mcb_context_coherence: true
+      mcb_context_shift_required: false
+      mcb_delta_h: 0.39
