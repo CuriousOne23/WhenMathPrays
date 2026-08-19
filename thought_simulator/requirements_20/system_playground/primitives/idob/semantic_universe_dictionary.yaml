@@ -1,0 +1,119 @@
+# =====================================================================
+# semantic_universe_dictionary.yaml
+# ---------------------------------------------------------------------
+# Purpose:
+#   This file defines the top-level lexical dictionary for the Semantic
+#   Universe. All IdOB examples, IdOB schema objects, TP metadata
+#   mappings, and Path A meaning extraction depend on this dictionary.
+#
+# Location note (2026-08-19):
+#   Placed under primitives/idob/ as a local exclusive table.
+#   Loaders look here first. The copy under papers/ is historical.
+# =====================================================================
+
+semantic_universe_dictionary:
+
+  identity_terms:
+    - identity
+    - concept
+    - meaning
+    - interpretation
+    - definition
+    - refinement
+    - correction
+    - drift
+    - conflict
+    - bifurcation
+    - convergence
+    - alignment
+    - closure
+
+  stance_terms:
+    - agree
+    - disagree
+    - clarify
+    - confirm
+    - reject
+    - redirect
+    - uncertain
+    - emphasize
+    - de-emphasize
+
+  pressure_terms:
+    - low
+    - medium
+    - high
+    - escalate
+    - de-escalate
+    - insist
+    - withdraw
+
+  continuity_terms:
+    - continuation
+    - correction
+    - oscillation
+    - drift
+    - bifurcation
+    - stabilization
+
+  geometry_terms:
+    - formation
+    - refinement
+    - correction
+    - drift
+    - conflict
+    - bifurcation
+    - stabilization
+    - convergence
+    - alignment
+    - closure
+
+  residual_terms:
+    - small
+    - medium
+    - large
+    - explosion
+    - two_clusters
+    - collapsed
+
+  freeze_terms:
+    - none
+    - identity_freeze
+    - propagation_active
+
+  basin_surface_terms:
+    - basin
+    - split
+    - unstable
+    - transition_surface
+    - none
+
+  routing_terms:
+    - forward
+    - backward
+    - branch
+    - merge
+    - hold
+
+  direction_terms:
+    - next
+    - previous
+    - unknown
+    - stable
+
+  importance_terms:
+    - low
+    - medium
+    - high
+    - critical
+
+  domain_terms:
+    # Domain-neutral placeholders; expanded as Path A grows
+    - object
+    - event
+    - process
+    - system
+    - structure
+    - behavior
+    - state
+    - transition
