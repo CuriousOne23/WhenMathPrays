@@ -1,0 +1,153 @@
+# semantic_subfields.yaml
+# Location: primitives/idob/ (local exclusive table)
+# Relocated 2026-08-19 from papers/
+
+semantic_subfields:
+
+  identity:
+    geometry:
+      - formation
+      - refinement
+      - correction
+      - drift
+      - conflict
+      - bifurcation
+      - stabilization
+      - convergence
+      - alignment
+      - closure
+    continuity:
+      - continuation
+      - correction
+      - oscillation
+      - drift
+      - bifurcation
+      - stabilization
+    pressure:
+      - low
+      - medium
+      - high
+      - escalate
+      - de-escalate
+      - insist
+      - withdraw
+    residuals:
+      - small
+      - medium
+      - large
+      - explosion
+      - two_clusters
+      - collapsed
+    freeze:
+      - none
+      - identity_freeze
+      - propagation_active
+    basin_surface:
+      - basin
+      - split
+      - unstable
+      - transition_surface
+      - none
+
+  stance:
+    category:
+      - agree
+      - disagree
+      - clarify
+      - confirm
+      - reject
+      - redirect
+      - uncertain
+      - emphasize
+      - de-emphasize
+
+  direction:
+    flow:
+      - next
+      - previous
+      - stable
+      - unknown
+
+  pressure:
+    level:
+      - low
+      - medium
+      - high
+    gradient:
+      - escalate
+      - de-escalate
+    behavior:
+      - insist
+      - withdraw
+
+  continuity:
+    mode:
+      - continuation
+      - correction
+      - oscillation
+      - drift
+      - bifurcation
+      - stabilization
+
+  geometry:
+    behavior:
+      - formation
+      - refinement
+      - correction
+      - drift
+      - conflict
+      - bifurcation
+      - stabilization
+      - convergence
+      - alignment
+      - closure
+
+  residuals:
+    magnitude:
+      - small
+      - medium
+      - large
+    pattern:
+      - explosion
+      - two_clusters
+      - collapsed
+
+  freeze:
+    state:
+      - none
+      - identity_freeze
+      - propagation_active
+
+  basin_surface:
+    region:
+      - basin
+      - split
+      - unstable
+      - transition_surface
+      - none
+
+  routing:
+    mode:
+      - forward
+      - backward
+      - branch
+      - merge
+      - hold
+
+  importance:
+    level:
+      - low
+      - medium
+      - high
+      - critical
+
+  domain:
+    category:
+      - object
+      - event
+      - process
+      - system
+      - structure
+      - behavior
+      - state
+      - transition

@@ -1,0 +1,87 @@
+# semantic_gradients.yaml
+# Location: primitives/idob/ (local exclusive table)
+# Relocated 2026-08-19 from papers/
+
+semantic_gradients:
+
+  magnitude:
+    - none
+    - low
+    - medium
+    - high
+
+  pressure:
+    level:
+      - low
+      - medium
+      - high
+    change:
+      - escalate
+      - de-escalate
+
+  drift:
+    intensity:
+      - small
+      - medium
+      - large
+    behavior:
+      - slow
+      - moderate
+      - rapid
+
+  residuals:
+    magnitude:
+      - small
+      - medium
+      - large
+    pattern:
+      - explosion
+      - two_clusters
+      - collapsed
+
+  stability:
+    region:
+      - basin
+      - split
+      - unstable
+      - transition_surface
+      - none
+    confidence:
+      - low
+      - medium
+      - high
+
+  continuity:
+    persistence:
+      - weak
+      - moderate
+      - strong
+    change_rate:
+      - slow
+      - medium
+      - fast
+
+  freeze:
+    state:
+      - none
+      - identity_freeze
+      - propagation_active
+
+  routing:
+    strength:
+      - weak
+      - moderate
+      - strong
+    mode:
+      - forward
+      - backward
+      - branch
+      - merge
+      - hold
+
+  importance:
+    level:
+      - low
+      - medium
+      - high
+      - critical

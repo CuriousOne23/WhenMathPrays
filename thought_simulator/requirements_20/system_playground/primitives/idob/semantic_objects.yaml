@@ -1,0 +1,79 @@
+# semantic_objects.yaml
+# Location: primitives/idob/ (local exclusive table)
+# Relocated 2026-08-19 from papers/
+
+semantic_objects:
+
+  identity_object:
+    description: >
+      Captures the evolving meaning identity across turns. Core of IdOB.
+    fields:
+      geometry:
+        type: enum
+        values: [formation, refinement, correction, drift, conflict, bifurcation, stabilization, convergence, alignment, closure]
+      continuity:
+        type: enum
+        values: [continuation, correction, oscillation, drift, bifurcation, stabilization]
+      pressure:
+        type: enum
+        values: [low, medium, high, escalate, de-escalate, insist, withdraw]
+      residuals:
+        type: enum
+        values: [small, medium, large, explosion, two_clusters, collapsed]
+      freeze:
+        type: enum
+        values: [none, identity_freeze, propagation_active]
+      basin_surface:
+        type: enum
+        values: [basin, split, unstable, transition_surface, none]
+
+  stance_object:
+    fields:
+      category:
+        type: enum
+        values: [agree, disagree, clarify, confirm, reject, redirect, uncertain, emphasize, de-emphasize]
+
+  direction_object:
+    fields:
+      flow:
+        type: enum
+        values: [next, previous, stable, unknown]
+
+  pressure_object:
+    fields:
+      level: {type: enum, values: [low, medium, high]}
+      gradient: {type: enum, values: [escalate, de-escalate]}
+      behavior: {type: enum, values: [insist, withdraw]}
+
+  continuity_object:
+    fields:
+      mode: {type: enum, values: [continuation, correction, oscillation, drift, bifurcation, stabilization]}
+
+  geometry_object:
+    fields:
+      behavior: {type: enum, values: [formation, refinement, correction, drift, conflict, bifurcation, stabilization, convergence, alignment, closure]}
+
+  residuals_object:
+    fields:
+      magnitude: {type: enum, values: [small, medium, large]}
+      pattern: {type: enum, values: [explosion, two_clusters, collapsed]}
+
+  freeze_object:
+    fields:
+      state: {type: enum, values: [none, identity_freeze, propagation_active]}
+
+  basin_surface_object:
+    fields:
+      region: {type: enum, values: [basin, split, unstable, transition_surface, none]}
+
+  routing_object:
+    fields:
+      mode: {type: enum, values: [forward, backward, branch, merge, hold]}
+
+  importance_object:
+    fields:
+      level: {type: enum, values: [low, medium, high, critical]}
+
+  domain_object:
+    fields:
+      category: {type: enum, values: [object, event, process, system, structure, behavior, state, transition]}
