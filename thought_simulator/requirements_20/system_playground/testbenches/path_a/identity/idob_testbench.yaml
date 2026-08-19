@@ -1,0 +1,464 @@
+# ============================================================
+# IdOB Testbench (v0.1) — Deterministic cases
+# Structural / foundation comparison in testbench mode.
+# Aligned with 20.40.050 v3.0, idob_py_struc_pgm.md v0.1,
+# progressive_lineup_testing.md v4.2, idob_schema.yaml (local)
+#
+# Conversation topic documented in:
+#   primitives/idob/idob_10_conversation_cases.md
+# Topic: core identity of the Thought Simulator
+#        (deterministic state machine vs ontological manifold claim)
+# ============================================================
+
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Identity Formation
+  # ----------------------------------------------------------
+  - id: idob_01_formation
+    description: Initial proposal — TS as deterministic semantic engine
+    enabled: true
+    input:
+      utterance: "Is the Thought Simulator mainly about defining a deterministic semantic engine?"
+      metadata:
+        identity:
+          geometry: formation
+          continuity: continuation
+          pressure: low
+          residuals:
+            magnitude: small
+            pattern: small
+          freeze:
+            state: none
+          basin_surface:
+            region: none
+        stance:
+          category: clarify
+        direction:
+          flow: next
+        routing:
+          mode: forward
+        importance:
+          level: medium
+        # committed routing snapshot equivalent for progressive isolation
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: formation
+        continuity: continuation
+        pressure: low
+        residuals:
+          magnitude: small
+          pattern: small
+        freeze:
+          state: none
+        basin_surface:
+          region: basin
+      idob_complete: false
+      path_b_eligible: false
+
+  # ----------------------------------------------------------
+  # 2. Identity Refinement
+  # ----------------------------------------------------------
+  - id: idob_02_refinement
+    description: Sharpen to fixed-time-step state machine
+    enabled: true
+    input:
+      utterance: "So it is not just an engine — it is a deterministic fixed-time-step state machine for meaning, right?"
+      metadata:
+        identity:
+          geometry: refinement
+          continuity: continuation
+          pressure: low
+          residuals:
+            magnitude: small
+            pattern: small
+          freeze:
+            state: none
+          basin_surface:
+            region: basin
+        stance:
+          category: confirm
+        direction:
+          flow: next
+        routing:
+          mode: forward
+        importance:
+          level: medium
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: refinement
+        continuity: continuation
+        pressure: low
+        residuals:
+          magnitude: small
+          pattern: collapsed
+        freeze:
+          state: none
+        basin_surface:
+          region: basin
+      idob_complete: false
+      path_b_eligible: false
+
+  # ----------------------------------------------------------
+  # 3. Identity Correction
+  # ----------------------------------------------------------
+  - id: idob_03_correction
+    description: Shift toward "semantic operating system" framing
+    enabled: true
+    input:
+      utterance: "Actually it feels bigger than a state machine — more like a whole semantic operating system."
+      metadata:
+        identity:
+          geometry: correction
+          continuity: drift
+          pressure: medium
+          residuals:
+            magnitude: medium
+            pattern: medium
+          freeze:
+            state: none
+          basin_surface:
+            region: unstable
+        stance:
+          category: clarify
+        direction:
+          flow: next
+        routing:
+          mode: branch
+        importance:
+          level: medium
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: correction
+        continuity: correction
+        pressure: medium
+        residuals:
+          magnitude: medium
+          pattern: medium
+        freeze:
+          state: none
+        basin_surface:
+          region: unstable
+      idob_complete: false
+      path_b_eligible: false
+
+  # ----------------------------------------------------------
+  # 4. Identity Drift
+  # ----------------------------------------------------------
+  - id: idob_04_drift
+    description: Drift toward ontological claim for the manifold
+    enabled: true
+    input:
+      utterance: "Or maybe the Relational Manifold itself is the real identity claim, not just a convenience."
+      metadata:
+        identity:
+          geometry: drift
+          continuity: drift
+          pressure: medium
+          residuals:
+            magnitude: medium
+            pattern: medium
+          freeze:
+            state: none
+          basin_surface:
+            region: unstable
+        stance:
+          category: uncertain
+        direction:
+          flow: next
+        routing:
+          mode: branch
+        importance:
+          level: medium
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: drift
+        continuity: correction
+        pressure: medium
+        residuals:
+          magnitude: medium
+          pattern: medium
+        freeze:
+          state: identity_freeze
+        basin_surface:
+          region: unstable
+      idob_complete: false
+      path_b_eligible: false
+
+  # ----------------------------------------------------------
+  # 5. Identity Conflict
+  # ----------------------------------------------------------
+  - id: idob_05_conflict
+    description: Explicit rejection of ontological reading
+    enabled: true
+    input:
+      utterance: "No — that does not sound right. The manifold is only a modeling convenience until evidence proves otherwise."
+      metadata:
+        identity:
+          geometry: conflict
+          continuity: drift
+          pressure: high
+          residuals:
+            magnitude: large
+            pattern: explosion
+          freeze:
+            state: identity_freeze
+          basin_surface:
+            region: transition_surface
+        stance:
+          category: reject
+        direction:
+          flow: next
+        routing:
+          mode: branch
+        importance:
+          level: high
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: conflict
+        continuity: correction
+        pressure: high
+        residuals:
+          magnitude: large
+          pattern: explosion
+        freeze:
+          state: identity_freeze
+        basin_surface:
+          region: transition_surface
+      idob_complete: false
+      path_b_eligible: false
+
+  # ----------------------------------------------------------
+  # 6. Identity Bifurcation
+  # ----------------------------------------------------------
+  - id: idob_06_bifurcation
+    description: Temporary coexistence of two identity basins
+    enabled: true
+    input:
+      utterance: "Maybe both can coexist for a while — state machine primary, manifold as optional layer."
+      metadata:
+        identity:
+          geometry: bifurcation
+          continuity: bifurcation
+          pressure: high
+          residuals:
+            magnitude: large
+            pattern: two_clusters
+          freeze:
+            state: identity_freeze
+          basin_surface:
+            region: split
+        stance:
+          category: clarify
+        direction:
+          flow: next
+        routing:
+          mode: branch
+        importance:
+          level: high
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: bifurcation
+        continuity: bifurcation
+        pressure: high
+        residuals:
+          magnitude: large
+          pattern: two_clusters
+        freeze:
+          state: identity_freeze
+        basin_surface:
+          region: split
+      idob_complete: false
+      path_b_eligible: false
+
+  # ----------------------------------------------------------
+  # 7. Identity Stabilization
+  # ----------------------------------------------------------
+  - id: idob_07_stabilization
+    description: Primary identity settles on deterministic state machine
+    enabled: true
+    input:
+      utterance: "Okay — the deterministic fixed-time-step state machine feels more central."
+      metadata:
+        identity:
+          geometry: stabilization
+          continuity: stabilization
+          pressure: medium
+          residuals:
+            magnitude: medium
+            pattern: collapsing
+          freeze:
+            state: none
+          basin_surface:
+            region: basin
+        stance:
+          category: emphasize
+        direction:
+          flow: next
+        routing:
+          mode: merge
+        importance:
+          level: medium
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: stabilization
+        continuity: continuation
+        pressure: medium
+        residuals:
+          magnitude: medium
+          pattern: collapsing
+        freeze:
+          state: none
+        basin_surface:
+          region: basin
+      idob_complete: false
+      path_b_eligible: false
+
+  # ----------------------------------------------------------
+  # 8. Identity Convergence
+  # ----------------------------------------------------------
+  - id: idob_08_convergence
+    description: Manifold kept as secondary / optional viz
+    enabled: true
+    input:
+      utterance: "And the Relational Manifold stays secondary — an optional visualization and modeling layer."
+      metadata:
+        identity:
+          geometry: convergence
+          continuity: continuation
+          pressure: low
+          residuals:
+            magnitude: small
+            pattern: small
+          freeze:
+            state: none
+          basin_surface:
+            region: basin
+        stance:
+          category: clarify
+        direction:
+          flow: next
+        routing:
+          mode: merge
+        importance:
+          level: low
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: convergence
+        continuity: continuation
+        pressure: low
+        residuals:
+          magnitude: small
+          pattern: small
+        freeze:
+          state: none
+        basin_surface:
+          region: basin
+      idob_complete: false
+      path_b_eligible: false
+
+  # ----------------------------------------------------------
+  # 9. Identity Alignment
+  # ----------------------------------------------------------
+  - id: idob_09_alignment
+    description: Alignment with stated epistemic stance
+    enabled: true
+    input:
+      utterance: "That matches the project's stated stance — manifold as modeling convenience until evidence proves otherwise."
+      metadata:
+        identity:
+          geometry: alignment
+          continuity: continuation
+          pressure: low
+          residuals:
+            magnitude: small
+            pattern: collapsed
+          freeze:
+            state: none
+          basin_surface:
+            region: basin
+        stance:
+          category: confirm
+        direction:
+          flow: next
+        routing:
+          mode: forward
+        importance:
+          level: low
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: alignment
+        continuity: continuation
+        pressure: low
+        residuals:
+          magnitude: small
+          pattern: collapsed
+        freeze:
+          state: none
+        basin_surface:
+          region: basin
+      idob_complete: false
+      path_b_eligible: true
+
+  # ----------------------------------------------------------
+  # 10. Identity Closure
+  # ----------------------------------------------------------
+  - id: idob_10_closure
+    description: Identity work on this topic cluster complete
+    enabled: true
+    input:
+      utterance: "For now the identity of TS as deterministic meaning state machine (with optional manifold layer) is closed."
+      metadata:
+        identity:
+          geometry: closure
+          continuity: continuation
+          pressure: low
+          residuals:
+            magnitude: small
+            pattern: collapsed
+          freeze:
+            state: none
+          basin_surface:
+            region: basin
+        stance:
+          category: confirm
+        direction:
+          flow: next
+        routing:
+          mode: hold
+        importance:
+          level: low
+        process:
+          routing_committed: true
+    expected:
+      identity:
+        geometry: closure
+        continuity: continuation
+        pressure: low
+        residuals:
+          magnitude: small
+          pattern: collapsed
+        freeze:
+          state: none
+        basin_surface:
+          region: basin
+      idob_complete: true
+      path_b_eligible: true
