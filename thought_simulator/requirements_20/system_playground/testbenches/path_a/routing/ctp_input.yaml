@@ -1,1 +1,33 @@
+# ============================================================
+# CTP General-Mode Input (v1.0)
+# Loaded only when mode == "general"
+# ============================================================
 
+mode: general
+primitive: ctp
+version: "1.0"
+notes: Minimal CTP fixture for rule-driven validation
+
+_ctp_cycle_context:
+  cycle_id: 0
+  timestamp: 2000.0
+
+_ctp_foundation:
+  I_stab: 0.8
+  R_res: 0.7
+  P_cont: 0.6
+  L_depth: 1
+  Rt_adj: 0.2
+  delta_H: 0.05
+  E_dens: 0.4
+  C_coh: 0.9
+
+metadata:
+  context:
+    topic: freeze_bookkeep
+    stance: neutral
+    intent: probe
+    continuity: same
+    direction: forward
+    coherence: stable
+    importance: medium
