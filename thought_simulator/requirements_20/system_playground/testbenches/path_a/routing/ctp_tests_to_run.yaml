@@ -1,1 +1,52 @@
+# ============================================================
+# CTP Tests To Run (v1.0)
+# ============================================================
 
+tests:
+  - id: ctp_minimal_null_history
+    enabled: true
+    description: Missing sources → full schema with nulls
+
+  - id: ctp_foundation_copy
+    enabled: true
+    description: Copy foundation proxies into invariants
+
+  - id: ctp_idob_present
+    enabled: true
+    description: Copy IdOB observation; IdOB unchanged
+
+  - id: ctp_rb_fields_present
+    enabled: true
+    description: Copy RB RED fields; filter unchanged
+
+  - id: ctp_write_boundary
+    enabled: true
+    description: TR / DCB / RB / residue / context untouched
+
+  - id: ctp_append_only
+    enabled: true
+    description: Prior cognitive_history entries unmodified
+
+  - id: ctp_cycle_from_dcb_history
+    enabled: true
+    description: cycle_id fallback from geometric_history
+
+  - id: ctp_replay_identical
+    enabled: true
+    description: Deterministic double-run
+
+  - id: ctp_schema_complete
+    enabled: true
+    description: Full cognitive-history key set present
+
+  - id: ctp_partial_foundation
+    enabled: true
+    description: Partial foundation; rest null
+
+  - id: ctp_combined_pre_rb
+    enabled: true
+    description: TR + IdOB + foundation pre-RB view
+
+  - id: ctp_missing_metadata_block
+    enabled: true
+    description: No metadata on input; still succeeds
