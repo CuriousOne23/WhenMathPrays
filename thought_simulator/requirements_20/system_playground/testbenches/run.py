@@ -59,6 +59,15 @@ ACTIVE_TEST_MODULES = [
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.rb_testbench",
     #     {
     #         "mode": "testbench",
+    #         "use_rb": True,
+    #         "tests_to_run": "see rb_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** TR Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.tr_testbench",
+    #     {
+    #         "mode": "testbench",
     #         "use_inb": False,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -77,19 +86,20 @@ ACTIVE_TEST_MODULES = [
     #         "use_stpx": False,
     #         "use_rbu": False,
     #         "use_dcb": False,
-    #         "use_rb": True,
-    #         "tests_to_run": "see rb_tests_to_run.yaml",
+    #         "use_rb": False,
+    #         "use_tr": True,
+    #         "tests_to_run": "see tr_tests_to_run.yaml",
     #     }
     # ),
-    # **************************** TR Test bench ******************************************************
-    # Highest upstream True = TR (primitive under test)
-    # Pipeline position: Path-A meaning-layer routing-vector constructor (before CTP / RTU / RB)
+    # **************************** CTP Test bench ******************************************************
+    # Highest upstream True = CTP (primitive under test)
+    # Pipeline position: Path-A always-before-RB barrier (TR → CTP → RB)
     # Input from:
-    #   • tr_testbench.yaml (mode = "testbench")
-    #   • tr_input.yaml (mode = "general")
+    #   • ctp_testbench.yaml (mode = "testbench")
+    #   • ctp_input.yaml (mode = "general")
     # Location: path_a/routing/
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.tr_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.ctp_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
@@ -111,8 +121,9 @@ ACTIVE_TEST_MODULES = [
             "use_rbu": False,
             "use_dcb": False,
             "use_rb": False,
-            "use_tr": True,          # Primitive under test
-            "tests_to_run": "see tr_tests_to_run.yaml",
+            "use_tr": False,
+            "use_ctp": True,         # Primitive under test
+            "tests_to_run": "see ctp_tests_to_run.yaml",
         }
     ),
 ]
