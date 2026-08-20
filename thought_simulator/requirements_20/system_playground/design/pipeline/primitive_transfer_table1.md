@@ -1,6 +1,66 @@
 # 📘 **Primitive Transfer Table (Compressed Hybrid Edition)**  
 **Path‑A Pipeline: InB → IIInB → IE → CE → TPU → SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → DCB → RB**
 
+## Path A – Bounded Semantics Requirement
+
+Path A primitives are semantic, but only within bounded scope. Each primitive must
+perform the meaning work inherent to its primary job, and no more. Meaning in Path A
+is not forbidden; it is constrained, localized, and explicitly recorded.
+
+### Core Principle
+Every primitive in Path A operates under domain‑specific semantic assumptions required
+to perform its function (normalization, segmentation, routing, clarification, repair,
+naming, classification, update, join, constraint extraction, cue extraction, etc.).
+These assumptions must be:
+- recognized,
+- bounded to the primitive’s domain,
+- explicitly defined in the primitive’s transfer function,
+- recorded in TP fields for downstream use,
+- deterministic and replay‑safe.
+
+Path A primitives do **not** hunt for meaning or perform global interpretation. They
+simply acknowledge that their structural operations inherently rely on semantic
+assumptions, and they record those assumptions so downstream primitives do not need
+to reconstruct them.
+
+### Why Bounded Semantics Are Required
+Meaning is subjective, probabilistic, and distributed. If meaning were restricted only
+to “meaning primitives,” those primitives would become overloaded, forced to replicate
+semantic work that upstream primitives already implicitly performed. Downstream
+primitives often operate in different semantic domains (conceptual, unification,
+extraction, stability), making reconstruction unreliable and domain‑inappropriate.
+
+Bounded semantics distributes interpretation across the pipeline in a way that mirrors
+natural cognition: surface → lexical → structural → routing → update → conceptual →
+extraction → stability. Each primitive contributes only the meaning appropriate to its
+role.
+
+### Invariants for Bounded Semantics
+All Path A primitives must satisfy:
+
+1. **Domain‑Bound Semantics**  
+   Semantic effects must remain strictly within the primitive’s defined domain.
+
+2. **Explicit Recording**  
+   All semantic assumptions required for the primitive’s job must be written into TP
+   fields; no hidden semantics.
+
+3. **Determinism & Replay Safety**  
+   All semantic effects must be deterministic, auditable, and replay‑safe.
+
+4. **No Unbounded or Inferential Semantics**  
+   No primitive may perform global interpretation, inference, or meaning expansion
+   beyond its domain.
+
+5. **Downstream Compatibility**  
+   Downstream primitives may rely on upstream recorded semantics and must not be
+   forced to reconstruct meaning from scratch.
+
+### Architectural Outcome
+Path A is not “structure‑only.”  
+Path A is **structure + bounded meaning**, producing a deterministic, domain‑layered,
+replay‑safe TP ready for stability (COB/CST) and meaning‑layer progression.
+
 ---
 
 # **1. Pipeline Summary Table (Ultra‑Compressed)**
