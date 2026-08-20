@@ -1,0 +1,178 @@
+source:
+  message_file: canonical_msg5_tp.yaml
+  stage: ouba_input
+  pipeline_applied:
+  - mcb
+  - rbu
+  - tr
+  - ctp
+  - cex-ie
+  - cex-ccr
+  - cex-pck
+  - cob
+  - cil
+  - cst-core
+  - cst-ms
+  - cst-mux
+semantic_envelope:
+  semantic_core:
+    summary: The manifold is only a modeling convenience.
+    stability: 0.685
+    source: idob_snapshot
+  proposition_set:
+  - The manifold is only a modeling convenience.
+  - Prior drift toward manifold-as-identity is rejected.
+  truth_evidence:
+  - type: reversal
+    detail: User negates manifold identity claim.
+  - type: assertion
+    detail: User re-establishes deterministic identity anchor.
+  completion_state: in_progress
+  semantic_tags:
+  - semantic_engine
+  - modeling_convenience
+  - identity_conflict
+  lane_local_identity:
+    mode: technical_user
+    context: TS_identity_discussion
+  messy_input_record:
+  - Strong reversal of prior drift; semantic conflict introduced.
+epistemic_envelope:
+  delta_h_percent: 0.61
+  entropy_history:
+  - 0.41
+  - 0.47
+  - 0.52
+  - 0.58
+  - 0.63
+  - 0.61
+context_envelope:
+  next_context:
+    topic: TS_identity
+    stance: assert
+    intent: identity_recovery
+    register: technical
+    continuity: adjust
+    importance: 0.78
+    politeness: neutral
+    epistemic_shading: qualified
+    direction: next
+    shift_required: true
+    coherence: false
+    clarifying_fields:
+    - messy_input_clarification
+  current_context:
+    topic: TS_identity
+    stance: assert
+    intent: identity_recovery
+    register: technical
+    continuity: adjust
+    importance: 0.78
+    politeness: neutral
+    epistemic_shading: qualified
+    direction: next
+    shift_required: true
+    coherence: false
+    clarifying_fields:
+    - messy_input_clarification
+provenance_envelope:
+  lineage_log:
+  - turn_01.identity_formation
+  - turn_02.identity_refinement
+  - turn_03.identity_correction
+  - turn_04.identity_drift
+  - turn_05.identity_conflict
+  - stage.mcb
+  - stage.rbu
+  - stage.tr
+  - stage.ctp
+  - stage.cex-ie
+  - stage.cex-ccr
+  - stage.cex-pck
+  - stage.cob
+  - stage.cil
+  - stage.cst-core
+  - stage.cst-ms
+  - stage.cst-mux
+  sob_id: sob_05
+  srob_id: srob_05
+  cnob_id: cnob_05
+  smob_id: smob_05
+  idob_id: idob_05
+  routing_path:
+  - sob
+  - srob
+  - cnob
+  - smob
+  - idob
+  - mcb
+  - rbu
+  - tr
+  - ctp
+  - cex-ie
+  - cex-ccr
+  - cex-pck
+  - cob
+  - cil
+  - cst-core
+  - cst-ms
+  - cst-mux
+  ruleset_ids:
+  - policy_v3
+  - safety_ruleset_12
+metadata_envelope:
+  policy_markers:
+  - policy.safe_completion_required
+  signature_history:
+  - sig_001
+  - sig_002
+  - sig_003
+  - sig_004
+  - sig_005
+  contextual_alignment_record:
+    alignment: aligned
+    source: mcb
+  identity_shift_record:
+    changed: false
+    geometry: conflict
+  topic_anchor_record:
+    anchor: TS_identity
+  continuity_record:
+    state: adjust
+    source: ctp
+  intent_record:
+    final_intent: identity_recovery
+  cst_core_metrics:
+    stability: 0.39
+    drift: 0.61
+    freeze_signal: false
+  cst_ms_summary:
+    stability_band: medium
+    command: stabilize
+  unified_stability_packet:
+    core:
+      stability: 0.39
+      drift: 0.61
+      freeze_signal: false
+    summary:
+      stability_band: medium
+      command: stabilize
+    usp_id: usp_b0b983f2ad5b
+trace_envelope:
+  ob_trace:
+  - OB.lexical_parse
+  - OB.semantic_role_assignment
+  tb_trace:
+  - TB.contextual_alignment
+  - TB.mcb_alignment
+  - TB.rbu_commit
+  - TB.tr_routing_decision
+  - TB.ctp_transition
+  - TB.cex_ie_extract
+  - TB.cex_ccr_canonicalize
+  - TB.cex_pck_pack
+  - TB.cob_output
+  - TB.cil_linkage
+  - TB.cst_core_metrics
+  - TB.cst_ms_synthesis
+  - TB.cst_mux_unified_packet
