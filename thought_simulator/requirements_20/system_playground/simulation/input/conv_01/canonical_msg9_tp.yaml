@@ -1,0 +1,108 @@
+# Canonical TP Snapshot — conv_01 / msg9
+# Pipeline Position: IdOB Output (TP after IdOB processes message 9)
+# Field Schema: 20.40.060.700 — OuBA Field Reference
+# Source: idob_10_conversations_ex.md (Case #9: Reinforcement)
+
+semantic_envelope:
+  proposition_set:
+    - "Deterministic framing is the correct identity."
+    - "The system should be understood primarily as a deterministic state machine."
+  truth_evidence:
+    - type: "affirmation"
+      detail: "User confirms deterministic identity as correct."
+    - type: "reinforcement"
+      detail: "User strengthens stabilized identity from prior turns."
+  semantic_tags:
+    - "semantic_engine"
+    - "deterministic_state_machine"
+    - "identity_reinforcement"
+  messy_input_record:
+    - "Strong affirmation of stabilized identity."
+
+epistemic_envelope:
+  delta_h_percent: 0.55
+  entropy_history:
+    - 0.41
+    - 0.47
+    - 0.52
+    - 0.58
+    - 0.63
+    - 0.66
+    - 0.61
+    - 0.59
+    - 0.55
+
+identity_envelope:
+  lane_local_identity:
+    mode: "technical_user"
+    context: "TS_identity_discussion"
+  identity_geometry: "reinforcement"
+  identity_continuity: "strengthen"
+  identity_pressure: "low"
+  identity_residuals:
+    magnitude: "minimal"
+    pattern: "none"
+  identity_freeze:
+    state: "none"
+  identity_basin_surface:
+    region: "deep_basin"
+
+context_envelope:
+  next_context:
+    topic: "TS_identity"
+    stance: "affirm"
+    intent: "identity_strengthening"
+    register: "technical"
+    continuity: "strengthen"
+    importance: 0.69
+
+provenance_envelope:
+  lineage_log:
+    - "turn_01.identity_formation"
+    - "turn_02.identity_refinement"
+    - "turn_03.identity_correction"
+    - "turn_04.identity_drift"
+    - "turn_05.identity_conflict"
+    - "turn_06.identity_bifurcation"
+    - "turn_07.identity_stabilization"
+    - "turn_08.identity_continuation"
+    - "turn_09.identity_reinforcement"
+  sob_id: "sob_09"
+  srob_id: "srob_09"
+  cnob_id: "cnob_09"
+  smob_id: "smob_09"
+  idob_id: "idob_09"
+  routing_path:
+    - "sob"
+    - "srob"
+    - "cnob"
+    - "smob"
+    - "idob"
+  ruleset_ids:
+    - "policy_v3"
+    - "safety_ruleset_12"
+
+metadata_envelope:
+  policy_markers:
+    - "policy.safe_completion_required"
+  signature_history:
+    - "sig_001"
+    - "sig_002"
+    - "sig_003"
+    - "sig_004"
+    - "sig_005"
+    - "sig_006"
+    - "sig_007"
+    - "sig_008"
+    - "sig_009"
+  routing_epoch_id: "epoch_2026_08_20_10:24:00"
+  tpsns_id: "tpsns_9009"
+  commit_timestamp: "2026-08-20T10:24:00Z"
+  commit_hash: "conv01_msg9_001"
+
+trace_envelope:
+  ob_trace:
+    - "OB.lexical_parse"
+    - "OB.semantic_role_assignment"
+  tb_trace:
+    - "TB.contextual_alignment"
