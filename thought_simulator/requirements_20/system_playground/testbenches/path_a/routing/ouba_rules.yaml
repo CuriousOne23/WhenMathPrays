@@ -1,0 +1,36 @@
+# ============================================================
+# OuBA Rules (Version 0.1)
+# Aligned with 20.40.060.xxx, ouba_py_struc_pgm.md, progressive_lineup
+# ============================================================
+
+primitive: OUBA
+version: "0.1"
+
+rules:
+  - id: ouba_output_001
+    description: OuBA must produce an output TP.
+    check: deterministic_output_present
+
+  - id: ouba_commit_001
+    description: OuBA must emit both TPSnS and CTP envelopes.
+    check: commit_envelopes_present
+
+  - id: ouba_commit_002
+    description: TPSnS must contain the required complete key set.
+    check: tpsns_required_keys_present
+
+  - id: ouba_commit_003
+    description: CTP must match TPSnS exactly.
+    check: ctp_equals_tpsns
+
+  - id: ouba_commit_004
+    description: commit_hash must match canonical deterministic hash.
+    check: commit_hash_valid
+
+  - id: ouba_context_001
+    description: next_context must contain the full required field set.
+    check: required_context_fields_present
+
+  - id: ouba_boundary_001
+    description: OuBA must not modify forbidden upstream fields.
+    check: no_forbidden_mutation

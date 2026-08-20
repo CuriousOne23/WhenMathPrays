@@ -1,0 +1,20 @@
+# ============================================================
+# OuBA Tests To Run (v0.1)
+# ============================================================
+
+tests:
+  - id: ouba_commit_minimal
+    enabled: true
+    description: Deterministic minimal commit with required fields
+
+  - id: ouba_boundary_preservation
+    enabled: true
+    description: Write-boundary preservation for TR/RB/DCB-owned fields
+
+  - id: ouba_replay_identical
+    enabled: true
+    description: Deterministic replay yields identical TPSnS
+
+  - id: ouba_context_full_shape
+    enabled: true
+    description: Full next_context envelope preserved exactly

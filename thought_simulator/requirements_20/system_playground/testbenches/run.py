@@ -92,15 +92,26 @@ ACTIVE_TEST_MODULES = [
     #         "tests_to_run": "see idob_tests_to_run.yaml",
     #     }
     # ),
-    # **************************** MCB Test bench (ACTIVE) ********************************************
+    # **************************** MCB Test bench (previously active) *********************************
     # Category: path_a/identity/
     # Dual-mode: testbench (mcb_testbench.yaml) | general (mcb_input.yaml + rules)
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.identity.mcb_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_mcb": True,         # Primitive under test
+    #         "tests_to_run": "see mcb_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** OuBA Test bench (ACTIVE) ********************************************
+    # Category: path_a/routing/
+    # Dual-mode: testbench (ouba_testbench.yaml) | general (ouba_input.yaml + rules)
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.identity.mcb_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.ouba_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
-            "use_mcb": True,         # Primitive under test
-            "tests_to_run": "see mcb_tests_to_run.yaml",
+            "use_ouba": True,         # Primitive under test
+            "tests_to_run": "see ouba_tests_to_run.yaml",
         }
     ),
 ]
