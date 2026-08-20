@@ -1,0 +1,96 @@
+# Canonical TP Snapshot — conv_01 / msg5
+# Pipeline Position: IdOB Output (TP after IdOB processes message 5)
+# Field Schema: 20.40.060.700 — OuBA Field Reference
+# Source: idob_10_conversations_ex.md (Case #5: Conflict)
+
+semantic_envelope:
+  proposition_set:
+    - "The manifold is only a modeling convenience."
+    - "Prior drift toward manifold-as-identity is rejected."
+  truth_evidence:
+    - type: "reversal"
+      detail: "User negates manifold identity claim." 
+    - type: "assertion"
+      detail: "User re-establishes deterministic identity anchor."
+  semantic_tags:
+    - "semantic_engine"
+    - "modeling_convenience"
+    - "identity_conflict"
+  messy_input_record:
+    - "Strong reversal of prior drift; semantic conflict introduced."
+
+epistemic_envelope:
+  delta_h_percent: 0.63
+  entropy_history:
+    - 0.41
+    - 0.47
+    - 0.52
+    - 0.58
+    - 0.63
+
+identity_envelope:
+  lane_local_identity:
+    mode: "technical_user"
+    context: "TS_identity_discussion"
+  identity_geometry: "conflict"
+  identity_continuity: "break"
+  identity_pressure: "high"
+  identity_residuals:
+    magnitude: "explosive"
+    pattern: "burst"
+  identity_freeze:
+    state: "partial"
+  identity_basin_surface:
+    region: "transition_surface"
+
+context_envelope:
+  next_context:
+    topic: "TS_identity"
+    stance: "assert"
+    intent: "identity_recovery"
+    register: "technical"
+    continuity: "break"
+    importance: 0.78
+
+provenance_envelope:
+  lineage_log:
+    - "turn_01.identity_formation"
+    - "turn_02.identity_refinement"
+    - "turn_03.identity_correction"
+    - "turn_04.identity_drift"
+    - "turn_05.identity_conflict"
+  sob_id: "sob_05"
+  srob_id: "srob_05"
+  cnob_id: "cnob_05"
+  smob_id: "smob_05"
+  idob_id: "idob_05"
+  routing_path:
+    - "sob"
+    - "srob"
+    - "cnob"
+    - "smob"
+    - "idob"
+  ruleset_ids:
+    - "policy_v3"
+    - "safety_ruleset_12"
+
+metadata_envelope:
+  policy_markers:
+    - "policy.safe_completion_required"
+  signature_history:
+    - "sig_001"
+    - "sig_002"
+    - "sig_003"
+    - "sig_004"
+    - "sig_005"
+  routing_epoch_id: "epoch_2026_08_20_09_55_00"
+  tpsns_id: "tpsns_9005"
+  commit_timestamp: "2026-08-20T09:55:00Z"
+  commit_hash: "conv01_msg5_001"
+
+trace_envelope:
+  ob_trace:
+    - "OB.lexical_parse"
+    - "OB.semantic_role_assignment"
+  tb_trace:
+    - "TB.contextual_alignment"
