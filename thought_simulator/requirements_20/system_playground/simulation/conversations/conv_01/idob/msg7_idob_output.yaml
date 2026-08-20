@@ -1,26 +1,26 @@
-# Canonical TP Snapshot — conv_01 / msg10
-# Pipeline Position: IdOB Output (TP after IdOB processes message 10)
+# IdOB Output TP Snapshot — conv_01 / msg7
+# Pipeline Position: IdOB Output (TP after IdOB processes message 7)
 # Field Schema: 20.40.060.700 — OuBA Field Reference
-# Source: idob_10_conversations_ex.md (Case #10: Closure)
+# Source: idob_10_conversations_ex.md (Case #7: Stabilization)
 
 semantic_envelope:
   proposition_set:
-    - "Identity work on this cluster is complete for now."
-    - "Deterministic identity is fully established and sealed."
+    - "The primary identity is the deterministic state machine."
+    - "The manifold interpretation is secondary or optional."
   truth_evidence:
-    - type: "closure"
-      detail: "User signals completion of identity work."
-    - type: "confirmation"
-      detail: "User affirms final stabilized identity."
+    - type: "assertion"
+      detail: "User re-establishes deterministic identity as primary."
+    - type: "resolution"
+      detail: "User collapses dual identity introduced in bifurcation."
   semantic_tags:
     - "semantic_engine"
     - "deterministic_state_machine"
-    - "identity_closure"
+    - "identity_stabilization"
   messy_input_record:
-    - "Identity cluster sealed; no further semantic movement."
+    - "Stabilization following dual-identity bifurcation."
 
 epistemic_envelope:
-  delta_h_percent: 0.50
+  delta_h_percent: 0.61
   entropy_history:
     - 0.41
     - 0.47
@@ -29,35 +29,30 @@ epistemic_envelope:
     - 0.63
     - 0.66
     - 0.61
-    - 0.59
-    - 0.55
-    - 0.50
 
 identity_envelope:
   lane_local_identity:
     mode: "technical_user"
     context: "TS_identity_discussion"
-  identity_geometry: "closure"
-  identity_continuity: "seal"
-  identity_pressure: "minimal"
+  identity_geometry: "stabilization"
+  identity_continuity: "repair"
+  identity_pressure: "medium"
   identity_residuals:
-    magnitude: "none"
-    pattern: "none"
+    magnitude: "medium"
+    pattern: "collapsing"
   identity_freeze:
-    state: "full"
+    state: "none"
   identity_basin_surface:
-    region: "attractor"
-  idob_complete: true
-  path_b_eligible: true
+    region: "basin"
 
 context_envelope:
   next_context:
     topic: "TS_identity"
-    stance: "close"
-    intent: "identity_completion"
+    stance: "assert"
+    intent: "identity_stabilization"
     register: "technical"
-    continuity: "seal"
-    importance: 0.65
+    continuity: "repair"
+    importance: 0.72
 
 provenance_envelope:
   lineage_log:
@@ -68,14 +63,11 @@ provenance_envelope:
     - "turn_05.identity_conflict"
     - "turn_06.identity_bifurcation"
     - "turn_07.identity_stabilization"
-    - "turn_08.identity_continuation"
-    - "turn_09.identity_reinforcement"
-    - "turn_10.identity_closure"
-  sob_id: "sob_10"
-  srob_id: "srob_10"
-  cnob_id: "cnob_10"
-  smob_id: "smob_10"
-  idob_id: "idob_10"
+  sob_id: "sob_07"
+  srob_id: "srob_07"
+  cnob_id: "cnob_07"
+  smob_id: "smob_07"
+  idob_id: "idob_07"
   routing_path:
     - "sob"
     - "srob"
@@ -97,13 +89,10 @@ metadata_envelope:
     - "sig_005"
     - "sig_006"
     - "sig_007"
-    - "sig_008"
-    - "sig_009"
-    - "sig_010"
-  routing_epoch_id: "epoch_2026_08_20_10:32:00"
-  tpsns_id: "tpsns_9010"
-  commit_timestamp: "2026-08-20T10:32:00Z"
-  commit_hash: "conv01_msg10_001"
+  routing_epoch_id: "epoch_2026_08_20_10:10:00"
+  tpsns_id: "tpsns_9007"
+  commit_timestamp: "2026-08-20T10:10:00Z"
+  commit_hash: "conv01_msg7_001"
 
 trace_envelope:
   ob_trace:

@@ -1,12 +1,12 @@
-# 📄 **canonical_tp.md**  
-### *Canonical Semantic Narrative for conv_01 (10‑Message IdOB Arc)*
+# 📄 **idob_10_output_cnv_summary.md**  
+### *IdOB Output Conversation Summary (10‑Message IdOB Arc)*
 
 ---
 
 # 1. Overview
 
-This document provides the **canonical semantic narrative** for the 10‑message conversation stored in `conv_01`.  
-It integrates all TP snapshots (`canonical_msg1_tp.yaml` → `canonical_msg10_tp.yaml`) and describes:
+This document provides the **10 message IdOB Conversation** for the 10‑message conversation stored in `conv_01`.  
+It integrates all TP snapshots (`msgx_idob_output.yaml` → `msgx_idob_output.yaml`) and describes:
 
 - semantic evolution  
 - identity geometry evolution  

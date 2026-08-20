@@ -1,26 +1,26 @@
-# Canonical TP Snapshot — conv_01 / msg7
-# Pipeline Position: IdOB Output (TP after IdOB processes message 7)
+# IdOB Output TP Snapshot — conv_01 / msg8
+# Pipeline Position: IdOB Output (TP after IdOB processes message 8)
 # Field Schema: 20.40.060.700 — OuBA Field Reference
-# Source: idob_10_conversations_ex.md (Case #7: Stabilization)
+# Source: idob_10_conversations_ex.md (Case #8: Continuation)
 
 semantic_envelope:
   proposition_set:
-    - "The primary identity is the deterministic state machine."
-    - "The manifold interpretation is secondary or optional."
+    - "We should continue with the deterministic framing."
+    - "The stabilized identity from the previous turn remains primary."
   truth_evidence:
     - type: "assertion"
-      detail: "User re-establishes deterministic identity as primary."
-    - type: "resolution"
-      detail: "User collapses dual identity introduced in bifurcation."
+      detail: "User reinforces deterministic identity."
+    - type: "continuation"
+      detail: "User extends stabilized identity forward."
   semantic_tags:
     - "semantic_engine"
     - "deterministic_state_machine"
-    - "identity_stabilization"
+    - "identity_continuation"
   messy_input_record:
-    - "Stabilization following dual-identity bifurcation."
+    - "Continuation of stabilized identity."
 
 epistemic_envelope:
-  delta_h_percent: 0.61
+  delta_h_percent: 0.59
   entropy_history:
     - 0.41
     - 0.47
@@ -29,30 +29,31 @@ epistemic_envelope:
     - 0.63
     - 0.66
     - 0.61
+    - 0.59
 
 identity_envelope:
   lane_local_identity:
     mode: "technical_user"
     context: "TS_identity_discussion"
-  identity_geometry: "stabilization"
-  identity_continuity: "repair"
-  identity_pressure: "medium"
+  identity_geometry: "continuation"
+  identity_continuity: "extend"
+  identity_pressure: "low"
   identity_residuals:
-    magnitude: "medium"
-    pattern: "collapsing"
+    magnitude: "low"
+    pattern: "none"
   identity_freeze:
     state: "none"
   identity_basin_surface:
-    region: "basin"
+    region: "deep_basin"
 
 context_envelope:
   next_context:
     topic: "TS_identity"
-    stance: "assert"
-    intent: "identity_stabilization"
+    stance: "continue"
+    intent: "identity_extension"
     register: "technical"
-    continuity: "repair"
-    importance: 0.72
+    continuity: "extend"
+    importance: 0.70
 
 provenance_envelope:
   lineage_log:
@@ -63,11 +64,12 @@ provenance_envelope:
     - "turn_05.identity_conflict"
     - "turn_06.identity_bifurcation"
     - "turn_07.identity_stabilization"
-  sob_id: "sob_07"
-  srob_id: "srob_07"
-  cnob_id: "cnob_07"
-  smob_id: "smob_07"
-  idob_id: "idob_07"
+    - "turn_08.identity_continuation"
+  sob_id: "sob_08"
+  srob_id: "srob_08"
+  cnob_id: "cnob_08"
+  smob_id: "smob_08"
+  idob_id: "idob_08"
   routing_path:
     - "sob"
     - "srob"
@@ -89,10 +91,11 @@ metadata_envelope:
     - "sig_005"
     - "sig_006"
     - "sig_007"
-  routing_epoch_id: "epoch_2026_08_20_10:10:00"
-  tpsns_id: "tpsns_9007"
-  commit_timestamp: "2026-08-20T10:10:00Z"
-  commit_hash: "conv01_msg7_001"
+    - "sig_008"
+  routing_epoch_id: "epoch_2026_08_20_10:17:00"
+  tpsns_id: "tpsns_9008"
+  commit_timestamp: "2026-08-20T10:17:00Z"
+  commit_hash: "conv01_msg8_001"
 
 trace_envelope:
   ob_trace:
