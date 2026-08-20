@@ -1,0 +1,90 @@
+# Canonical TP Snapshot — conv_01 / msg3
+# Pipeline Position: IdOB Output (TP after IdOB processes message 3)
+# Field Schema: 20.40.060.700 — OuBA Field Reference
+# Source: idob_10_conversations_ex.md (Case #3: Correction)
+
+semantic_envelope:
+  proposition_set:
+    - "TS is not strictly a fixed-time-step machine; that was an over-specification."
+    - "The system behaves more like a semantic state-transition engine."
+  truth_evidence:
+    - type: "correction"
+      detail: "User retracts prior over-specific claim."
+    - type: "support"
+      detail: "User clarifies semantic engine behavior."
+  semantic_tags:
+    - "semantic_engine"
+    - "state_transition"
+    - "identity_correction"
+  messy_input_record:
+    - "Correction of prior refinement."
+
+epistemic_envelope:
+  delta_h_percent: 0.52
+  entropy_history:
+    - 0.41
+    - 0.47
+    - 0.52
+
+identity_envelope:
+  lane_local_identity:
+    mode: "technical_user"
+    context: "TS_identity_discussion"
+  identity_geometry: "correction"
+  identity_continuity: "adjustment"
+  identity_pressure: "medium_high"
+  identity_residuals:
+    magnitude: "high"
+    pattern: "unstable"
+  identity_freeze:
+    state: "none"
+  identity_basin_surface:
+    region: "rim"
+
+context_envelope:
+  next_context:
+    topic: "TS_identity"
+    stance: "correct"
+    intent: "semantic_alignment"
+    register: "technical"
+    continuity: "adjust"
+    importance: 0.71
+
+provenance_envelope:
+  lineage_log:
+    - "turn_01.identity_formation"
+    - "turn_02.identity_refinement"
+    - "turn_03.identity_correction"
+  sob_id: "sob_03"
+  srob_id: "srob_03"
+  cnob_id: "cnob_03"
+  smob_id: "smob_03"
+  idob_id: "idob_03"
+  routing_path:
+    - "sob"
+    - "srob"
+    - "cnob"
+    - "smob"
+    - "idob"
+  ruleset_ids:
+    - "policy_v3"
+    - "safety_ruleset_12"
+
+metadata_envelope:
+  policy_markers:
+    - "policy.safe_completion_required"
+  signature_history:
+    - "sig_001"
+    - "sig_002"
+    - "sig_003"
+  routing_epoch_id: "epoch_2026_08_20_09_41_00"
+  tpsns_id: "tpsns_9003"
+  commit_timestamp: "2026-08-20T09:41:00Z"
+  commit_hash: "conv01_msg3_001"
+
+trace_envelope:
+  ob_trace:
+    - "OB.lexical_parse"
+    - "OB.semantic_role_assignment"
+  tb_trace:
+    - "TB.contextual_alignment"
