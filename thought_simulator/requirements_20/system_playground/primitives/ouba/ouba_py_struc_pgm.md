@@ -295,7 +295,7 @@ Per progressive lineup framework:
 
 Mandatory category placement for OuBA in this repository:
 
-- testbenches/path_a/routing/
+- testbenches/path_a/output/
 
 Required OuBA testbench file set:
 

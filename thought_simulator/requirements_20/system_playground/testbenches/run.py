@@ -104,10 +104,10 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
     # **************************** OuBA Test bench (ACTIVE) ********************************************
-    # Category: path_a/routing/
+    # Category: path_a/output/
     # Dual-mode: testbench (ouba_testbench.yaml) | general (ouba_input.yaml + rules)
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.ouba_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.output.ouba_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_ouba": True,         # Primitive under test
