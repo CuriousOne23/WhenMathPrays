@@ -1,5 +1,5 @@
 # Canonical TP Snapshot — conv_01 / msg1
-# Pipeline Position: IdOB Output (TP after IdOB processes message X)
+# Pipeline Position: IdOB Output (TP after IdOB processes message 1)
 # Field Schema: 20.40.060.700 — OuBA Field Reference
 # Source: idob_10_conversations_ex.md (Case 1)
 
