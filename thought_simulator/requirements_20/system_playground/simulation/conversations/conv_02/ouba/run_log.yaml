@@ -1,0 +1,90 @@
+conversation: conv_02
+source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob_input_output_examples.md
+source_type: IdOB Output YAML blocks
+messages_processed: 10
+files_generated: 20
+pipeline:
+- mcb
+- rbu
+- tr
+- ctp
+- cex-ie
+- cex-ccr
+- cex-pck
+- cob
+- cil
+- cst-core
+- cst-ms
+- cst-mux
+- ouba
+entries:
+- message: 1
+  input_file: msg1_ouba_input.yaml
+  output_file: msg1_ouba_output.yaml
+  tpsns_id: tpsns-d99f6ee5cc4cc6fc
+  commit_timestamp: 1900000001.0
+  commit_hash: b8de26c1cb3fd4aed648943625c812cd115548038e542edac3c8ae922e8f0475
+  routing_epoch_id: route-47dbcdd14497
+- message: 2
+  input_file: msg2_ouba_input.yaml
+  output_file: msg2_ouba_output.yaml
+  tpsns_id: tpsns-371cf1d9b9f5fcbe
+  commit_timestamp: 1900000002.0
+  commit_hash: 38ab3e78652cf2e3570486500c164ef0126b5205295cfc56ee684ad62b52367e
+  routing_epoch_id: route-09dee9d7a3bc
+- message: 3
+  input_file: msg3_ouba_input.yaml
+  output_file: msg3_ouba_output.yaml
+  tpsns_id: tpsns-6ab8b98dc7e0e106
+  commit_timestamp: 1900000003.0
+  commit_hash: e73937126677867d4ef79e693eb858964923b309272313c94fdb08ce59e5c383
+  routing_epoch_id: route-e9cf6680cc9f
+- message: 4
+  input_file: msg4_ouba_input.yaml
+  output_file: msg4_ouba_output.yaml
+  tpsns_id: tpsns-2d8430c7b9d4250f
+  commit_timestamp: 1900000004.0
+  commit_hash: 9014e45f58e3fa854c6a9ae05383419024ba685550a45d233d2318ed5dfdf69b
+  routing_epoch_id: route-1deb0a9fc504
+- message: 5
+  input_file: msg5_ouba_input.yaml
+  output_file: msg5_ouba_output.yaml
+  tpsns_id: tpsns-3a3daf6ddb2ce05f
+  commit_timestamp: 1900000005.0
+  commit_hash: 81a1692f99a419e12c2e1c70abfb1e95a7cf9b0174cce33724c1a4abeb7159e3
+  routing_epoch_id: route-abcf950714e5
+- message: 6
+  input_file: msg6_ouba_input.yaml
+  output_file: msg6_ouba_output.yaml
+  tpsns_id: tpsns-f8c4d87b708bbadd
+  commit_timestamp: 1900000006.0
+  commit_hash: d78a30b34a81200bf5268a64557ad0d8395db71c2543d287848328840dc43135
+  routing_epoch_id: route-a7dd258c62bf
+- message: 7
+  input_file: msg7_ouba_input.yaml
+  output_file: msg7_ouba_output.yaml
+  tpsns_id: tpsns-1ab791896f6eed93
+  commit_timestamp: 1900000007.0
+  commit_hash: f7fcded5069c3835fe3b8d225852f5aaa333dc3abb9be4bfa5b801758ad0e72f
+  routing_epoch_id: route-6ed21e2d421b
+- message: 8
+  input_file: msg8_ouba_input.yaml
+  output_file: msg8_ouba_output.yaml
+  tpsns_id: tpsns-aef88d8f93211cfc
+  commit_timestamp: 1900000008.0
+  commit_hash: f27035eae55f0448b40d42a342c1e6e7e95a8092f3a001540b1b056eb94581a2
+  routing_epoch_id: route-c18ad3cef62d
+- message: 9
+  input_file: msg9_ouba_input.yaml
+  output_file: msg9_ouba_output.yaml
+  tpsns_id: tpsns-869d2a70d88db2c3
+  commit_timestamp: 1900000009.0
+  commit_hash: 9d490902431f75deeead0f0387a23302c53cfa309677b0d218313f924d505d7d
+  routing_epoch_id: route-2b96f29e6d61
+- message: 10
+  input_file: msg10_ouba_input.yaml
+  output_file: msg10_ouba_output.yaml
+  tpsns_id: tpsns-dec620d62fc80b00
+  commit_timestamp: 1900000010.0
+  commit_hash: c9d70c32e46a36e9e1bd27c1c276259f301d539c250b8083b9429a0c81bcc46d
+  routing_epoch_id: route-efca9beaba5f

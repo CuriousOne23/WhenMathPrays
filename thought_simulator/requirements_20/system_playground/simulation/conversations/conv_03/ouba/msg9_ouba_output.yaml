@@ -1,0 +1,423 @@
+source:
+  conversation: conv_03
+  message: 9
+  stage: ouba_output
+ouba_input_snapshot:
+  source:
+    conversation: conv_03
+    message: 9
+    stage: ouba_input
+    pipeline_applied:
+    - mcb
+    - rbu
+    - tr
+    - ctp
+    - cex-ie
+    - cex-ccr
+    - cex-pck
+    - cob
+    - cil
+    - cst-core
+    - cst-ms
+    - cst-mux
+  semantic_envelope:
+    semantic_core:
+      summary: conv_03 msg9 identity state formation
+      stability: 0.85
+      source: idob_output
+    proposition_set:
+    - Identity geometry is formation.
+    - Continuity surface is probability_reframe.
+    truth_evidence:
+    - type: support
+      detail: Derived from conv_03 msg9 IdOB output YAML.
+    completion_state: in_progress
+    semantic_tags:
+    - identity_formation
+    - regime_low_tension
+    - topic_decision_quality
+    lane_local_identity:
+      mode: technical_user
+      context: decision_quality
+    messy_input_record:
+    - probability_reframe
+  epistemic_envelope:
+    delta_h_percent: 0.62
+    entropy_history:
+    - 0.64
+    - 0.62
+  context_envelope:
+    next_context:
+      topic: decision_quality
+      stance: pro_probability
+      intent: probabilistic_counter
+      register: technical
+      politeness: neutral
+      epistemic_shading: analytic
+      continuity: probability_reframe
+      direction: next
+      coherence: true
+      shift_required: false
+      importance: 0.82
+      clarifying_fields:
+      - identity_geometry
+      - continuity_surface
+    current_context:
+      topic: decision_quality
+      stance: pro_probability
+      intent: probabilistic_counter
+      register: technical
+      politeness: neutral
+      epistemic_shading: analytic
+      continuity: probability_reframe
+      direction: next
+      coherence: true
+      shift_required: false
+      importance: 0.82
+      clarifying_fields:
+      - identity_geometry
+      - continuity_surface
+  provenance_envelope:
+    lineage_log:
+    - decision_quality
+    - panic_management
+    - probability_priority
+    - stage.mcb
+    - stage.rbu
+    - stage.tr
+    - stage.ctp
+    - stage.cex-ie
+    - stage.cex-ccr
+    - stage.cex-pck
+    - stage.cob
+    - stage.cil
+    - stage.cst-core
+    - stage.cst-ms
+    - stage.cst-mux
+    sob_id: sob_09
+    srob_id: srob_09
+    cnob_id: cnob_09
+    smob_id: smob_09
+    idob_id: idob_09
+    routing_path:
+    - sob
+    - srob
+    - cnob
+    - smob
+    - idob
+    - mcb
+    - rbu
+    - tr
+    - ctp
+    - cex-ie
+    - cex-ccr
+    - cex-pck
+    - cob
+    - cil
+    - cst-core
+    - cst-ms
+    - cst-mux
+    ruleset_ids:
+    - policy_v3
+    - safety_ruleset_12
+  metadata_envelope:
+    policy_markers:
+    - policy.safe_completion_required
+    signature_history:
+    - sig_009
+    contextual_alignment_record:
+      alignment: aligned
+      source: mcb
+    identity_shift_record:
+      changed: false
+      geometry: formation
+    topic_anchor_record:
+      anchor: decision_quality
+    continuity_record:
+      state: probability_reframe
+    intent_record:
+      final_intent: probabilistic_counter
+    cst_core_metrics:
+      stability: 0.38
+      drift: 0.62
+    cst_ms_summary:
+      stability_band: medium
+      command: stabilize
+    unified_stability_packet:
+      core:
+        stability: 0.38
+        drift: 0.62
+      summary:
+        stability_band: medium
+        command: stabilize
+      usp_id: usp_b0b983f2ad5b
+  trace_envelope:
+    ob_trace:
+    - OB.lexical_parse
+    - OB.semantic_role_assignment
+    tb_trace:
+    - TB.contextual_alignment
+    - TB.mcb_alignment
+    - TB.rbu_commit
+    - TB.tr_routing_decision
+    - TB.ctp_transition
+    - TB.cex_ie_extract
+    - TB.cex_ccr_canonicalize
+    - TB.cex_pck_pack
+    - TB.cob_output
+    - TB.cil_linkage
+    - TB.cst_core_metrics
+    - TB.cst_ms_synthesis
+    - TB.cst_mux_unified_packet
+ouba_output:
+  ouba_complete: true
+  TPSnS:
+    tpsns_id: tpsns-4d0ba3656874205d
+    commit_timestamp: 1900000009.0
+    commit_hash: 8ea93228f5992f373497495abdfd9632da8e24b8e72a6c92472383af87f194bb
+    routing_epoch_id: route-084a03042edd
+    semantic_core:
+      summary: conv_03 msg9 identity state formation
+      stability: 0.85
+      source: idob_output
+    proposition_set:
+    - Identity geometry is formation.
+    - Continuity surface is probability_reframe.
+    truth_evidence:
+    - type: support
+      detail: Derived from conv_03 msg9 IdOB output YAML.
+    completion_state: in_progress
+    semantic_tags:
+    - identity_formation
+    - regime_low_tension
+    - topic_decision_quality
+    lane_local_identity:
+      mode: technical_user
+      context: decision_quality
+    messy_input_record:
+    - probability_reframe
+    delta_h_percent: 0.62
+    ob_trace:
+    - OB.lexical_parse
+    - OB.semantic_role_assignment
+    tb_trace:
+    - TB.contextual_alignment
+    - TB.mcb_alignment
+    - TB.rbu_commit
+    - TB.tr_routing_decision
+    - TB.ctp_transition
+    - TB.cex_ie_extract
+    - TB.cex_ccr_canonicalize
+    - TB.cex_pck_pack
+    - TB.cob_output
+    - TB.cil_linkage
+    - TB.cst_core_metrics
+    - TB.cst_ms_synthesis
+    - TB.cst_mux_unified_packet
+    policy_markers:
+    - policy.safe_completion_required
+    next_context:
+      topic: decision_quality
+      stance: pro_probability
+      intent: probabilistic_counter
+      register: technical
+      politeness: neutral
+      epistemic_shading: analytic
+      continuity: probability_reframe
+      direction: next
+      coherence: true
+      shift_required: false
+      importance: 0.82
+      clarifying_fields:
+      - identity_geometry
+      - continuity_surface
+    lineage_log:
+    - decision_quality
+    - panic_management
+    - probability_priority
+    - stage.mcb
+    - stage.rbu
+    - stage.tr
+    - stage.ctp
+    - stage.cex-ie
+    - stage.cex-ccr
+    - stage.cex-pck
+    - stage.cob
+    - stage.cil
+    - stage.cst-core
+    - stage.cst-ms
+    - stage.cst-mux
+    cob_state_snapshot:
+      identity_mode: technical_user
+      continuity_state: probability_reframe
+      topic_anchor: decision_quality
+    contextual_alignment_record:
+      alignment: aligned
+      source: mcb
+    identity_shift_record:
+      changed: false
+      geometry: formation
+    topic_anchor_record:
+      anchor: decision_quality
+    continuity_record:
+      state: probability_reframe
+    intent_record:
+      final_intent: probabilistic_counter
+    provenance:
+      sob_id: sob_09
+      srob_id: srob_09
+      cnob_id: cnob_09
+      smob_id: smob_09
+      idob_id: idob_09
+      routing_path:
+      - sob
+      - srob
+      - cnob
+      - smob
+      - idob
+      - mcb
+      - rbu
+      - tr
+      - ctp
+      - cex-ie
+      - cex-ccr
+      - cex-pck
+      - cob
+      - cil
+      - cst-core
+      - cst-ms
+      - cst-mux
+      ruleset_ids:
+      - policy_v3
+      - safety_ruleset_12
+    metadata:
+      entropy_history:
+      - 0.64
+      - 0.62
+      signature_history:
+      - sig_009
+  CTP:
+    tpsns_id: tpsns-4d0ba3656874205d
+    commit_timestamp: 1900000009.0
+    commit_hash: 8ea93228f5992f373497495abdfd9632da8e24b8e72a6c92472383af87f194bb
+    routing_epoch_id: route-084a03042edd
+    semantic_core:
+      summary: conv_03 msg9 identity state formation
+      stability: 0.85
+      source: idob_output
+    proposition_set:
+    - Identity geometry is formation.
+    - Continuity surface is probability_reframe.
+    truth_evidence:
+    - type: support
+      detail: Derived from conv_03 msg9 IdOB output YAML.
+    completion_state: in_progress
+    semantic_tags:
+    - identity_formation
+    - regime_low_tension
+    - topic_decision_quality
+    lane_local_identity:
+      mode: technical_user
+      context: decision_quality
+    messy_input_record:
+    - probability_reframe
+    delta_h_percent: 0.62
+    ob_trace:
+    - OB.lexical_parse
+    - OB.semantic_role_assignment
+    tb_trace:
+    - TB.contextual_alignment
+    - TB.mcb_alignment
+    - TB.rbu_commit
+    - TB.tr_routing_decision
+    - TB.ctp_transition
+    - TB.cex_ie_extract
+    - TB.cex_ccr_canonicalize
+    - TB.cex_pck_pack
+    - TB.cob_output
+    - TB.cil_linkage
+    - TB.cst_core_metrics
+    - TB.cst_ms_synthesis
+    - TB.cst_mux_unified_packet
+    policy_markers:
+    - policy.safe_completion_required
+    next_context:
+      topic: decision_quality
+      stance: pro_probability
+      intent: probabilistic_counter
+      register: technical
+      politeness: neutral
+      epistemic_shading: analytic
+      continuity: probability_reframe
+      direction: next
+      coherence: true
+      shift_required: false
+      importance: 0.82
+      clarifying_fields:
+      - identity_geometry
+      - continuity_surface
+    lineage_log:
+    - decision_quality
+    - panic_management
+    - probability_priority
+    - stage.mcb
+    - stage.rbu
+    - stage.tr
+    - stage.ctp
+    - stage.cex-ie
+    - stage.cex-ccr
+    - stage.cex-pck
+    - stage.cob
+    - stage.cil
+    - stage.cst-core
+    - stage.cst-ms
+    - stage.cst-mux
+    cob_state_snapshot:
+      identity_mode: technical_user
+      continuity_state: probability_reframe
+      topic_anchor: decision_quality
+    contextual_alignment_record:
+      alignment: aligned
+      source: mcb
+    identity_shift_record:
+      changed: false
+      geometry: formation
+    topic_anchor_record:
+      anchor: decision_quality
+    continuity_record:
+      state: probability_reframe
+    intent_record:
+      final_intent: probabilistic_counter
+    provenance:
+      sob_id: sob_09
+      srob_id: srob_09
+      cnob_id: cnob_09
+      smob_id: smob_09
+      idob_id: idob_09
+      routing_path:
+      - sob
+      - srob
+      - cnob
+      - smob
+      - idob
+      - mcb
+      - rbu
+      - tr
+      - ctp
+      - cex-ie
+      - cex-ccr
+      - cex-pck
+      - cob
+      - cil
+      - cst-core
+      - cst-ms
+      - cst-mux
+      ruleset_ids:
+      - policy_v3
+      - safety_ruleset_12
+    metadata:
+      entropy_history:
+      - 0.64
+      - 0.62
+      signature_history:
+      - sig_009

@@ -1,0 +1,32 @@
+source:
+  conversation: conv_03
+  message: 4
+  stage: idob_output
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_03/idob/idob_conv_3.md
+idob_output:
+  tp:
+    metadata:
+      identity_layer: grounded_identity
+      identity_residue:
+      - recklessness_warning
+      continuity_surface: grounding_reframe
+      delta_h: 0.39
+      lineage:
+      - decision_quality
+      - risk_management
+      - harm_avoidance
+      - prudence
+      semantic_role: grounding_counter
+      routing_fields:
+        stance: pro_balance
+        affect: neutral
+        epistemic_shading: realistic
+        commitment: medium
+        reservation: implicit
+      adjacency_class: identity_counter
+      displacement_scale: 0.48
+      regime_hint: peak_tension
+      stability_metrics:
+        coherence: 0.79
+        tension: 0.47
+        drift: 0.33

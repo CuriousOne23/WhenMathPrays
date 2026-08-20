@@ -1,0 +1,17 @@
+source:
+  conversation: conv_02
+  message: 6
+  stage: idob_output
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_output:
+  TP.metadata.identity:
+    geometry: bifurcation
+    continuity: bifurcation
+    pressure: high
+    residuals:
+      magnitude: large
+      pattern: two_clusters
+    freeze:
+      state: identity_freeze
+    basin_surface:
+      region: split

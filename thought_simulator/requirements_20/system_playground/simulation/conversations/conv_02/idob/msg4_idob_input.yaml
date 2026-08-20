@@ -1,0 +1,27 @@
+source:
+  conversation: conv_02
+  message: 4
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_input:
+  utterance: But maybe it's really a research framework, not an operating system.
+  TP.metadata:
+    identity:
+      geometry: drift
+      continuity: drift
+      pressure: medium
+      residuals:
+        magnitude: medium
+        pattern: medium
+      freeze:
+        state: none
+      basin_surface:
+        region: unstable
+    stance:
+      category: uncertain
+    direction:
+      flow: next
+    routing:
+      mode: branch
+    importance:
+      level: medium

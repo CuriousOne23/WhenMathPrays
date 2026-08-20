@@ -1,0 +1,27 @@
+source:
+  conversation: conv_02
+  message: 6
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_input:
+  utterance: "Maybe it's both \u2014 a semantic OS and a research framework."
+  TP.metadata:
+    identity:
+      geometry: bifurcation
+      continuity: bifurcation
+      pressure: high
+      residuals:
+        magnitude: large
+        pattern: two_clusters
+      freeze:
+        state: identity_freeze
+      basin_surface:
+        region: split
+    stance:
+      category: clarify
+    direction:
+      flow: next
+    routing:
+      mode: branch
+    importance:
+      level: high

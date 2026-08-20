@@ -1,0 +1,27 @@
+source:
+  conversation: conv_02
+  message: 7
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_input:
+  utterance: Okay, but the OS part feels more central.
+  TP.metadata:
+    identity:
+      geometry: stabilization
+      continuity: stabilization
+      pressure: medium
+      residuals:
+        magnitude: medium
+        pattern: collapsing
+      freeze:
+        state: none
+      basin_surface:
+        region: basin
+    stance:
+      category: emphasize
+    direction:
+      flow: next
+    routing:
+      mode: merge
+    importance:
+      level: medium

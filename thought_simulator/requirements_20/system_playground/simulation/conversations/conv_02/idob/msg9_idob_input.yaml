@@ -1,0 +1,28 @@
+source:
+  conversation: conv_02
+  message: 9
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_input:
+  utterance: So the project's purpose is to define a deterministic semantic OS that
+    also supports research.
+  TP.metadata:
+    identity:
+      geometry: alignment
+      continuity: continuation
+      pressure: low
+      residuals:
+        magnitude: medium
+        pattern: collapsed
+      freeze:
+        state: none
+      basin_surface:
+        region: basin
+    stance:
+      category: confirm
+    direction:
+      flow: next
+    routing:
+      mode: forward
+    importance:
+      level: high

@@ -1,0 +1,27 @@
+source:
+  conversation: conv_02
+  message: 10
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_input:
+  utterance: Yes, that's exactly what I meant.
+  TP.metadata:
+    identity:
+      geometry: closure
+      continuity: continuation
+      pressure: low
+      residuals:
+        magnitude: medium
+        pattern: collapsed
+      freeze:
+        state: none
+      basin_surface:
+        region: basin
+    stance:
+      category: confirm
+    direction:
+      flow: stable
+    routing:
+      mode: hold
+    importance:
+      level: high

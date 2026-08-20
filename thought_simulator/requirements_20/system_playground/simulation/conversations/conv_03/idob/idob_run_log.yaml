@@ -1,0 +1,35 @@
+conversation: conv_03
+source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_03/idob/idob_conv_3.md
+messages_processed: 10
+files_generated: 20
+entries:
+- message: 1
+  input_file: msg1_idob_input.yaml
+  output_file: msg1_idob_output.yaml
+- message: 2
+  input_file: msg2_idob_input.yaml
+  output_file: msg2_idob_output.yaml
+- message: 3
+  input_file: msg3_idob_input.yaml
+  output_file: msg3_idob_output.yaml
+- message: 4
+  input_file: msg4_idob_input.yaml
+  output_file: msg4_idob_output.yaml
+- message: 5
+  input_file: msg5_idob_input.yaml
+  output_file: msg5_idob_output.yaml
+- message: 6
+  input_file: msg6_idob_input.yaml
+  output_file: msg6_idob_output.yaml
+- message: 7
+  input_file: msg7_idob_input.yaml
+  output_file: msg7_idob_output.yaml
+- message: 8
+  input_file: msg8_idob_input.yaml
+  output_file: msg8_idob_output.yaml
+- message: 9
+  input_file: msg9_idob_input.yaml
+  output_file: msg9_idob_output.yaml
+- message: 10
+  input_file: msg10_idob_input.yaml
+  output_file: msg10_idob_output.yaml

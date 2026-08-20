@@ -1,0 +1,27 @@
+source:
+  conversation: conv_02
+  message: 1
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_input:
+  utterance: Is the project mainly about defining a new semantic engine?
+  TP.metadata:
+    identity:
+      geometry: formation
+      continuity: continuation
+      pressure: low
+      residuals:
+        magnitude: small
+        pattern: small
+      freeze:
+        state: none
+      basin_surface:
+        region: none
+    stance:
+      category: clarify
+    direction:
+      flow: next
+    routing:
+      mode: forward
+    importance:
+      level: medium

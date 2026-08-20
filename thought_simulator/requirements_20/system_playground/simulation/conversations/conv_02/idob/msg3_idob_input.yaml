@@ -1,0 +1,28 @@
+source:
+  conversation: conv_02
+  message: 3
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_input:
+  utterance: "Actually, it's more than an engine \u2014 it's a whole semantic operating\
+    \ system."
+  TP.metadata:
+    identity:
+      geometry: correction
+      continuity: drift
+      pressure: medium
+      residuals:
+        magnitude: medium
+        pattern: medium
+      freeze:
+        state: none
+      basin_surface:
+        region: unstable
+    stance:
+      category: clarify
+    direction:
+      flow: next
+    routing:
+      mode: branch
+    importance:
+      level: medium

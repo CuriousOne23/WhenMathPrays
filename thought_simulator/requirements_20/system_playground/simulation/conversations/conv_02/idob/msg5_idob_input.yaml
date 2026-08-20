@@ -1,0 +1,28 @@
+source:
+  conversation: conv_02
+  message: 5
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_input:
+  utterance: "No, that doesn't sound right \u2014 it's definitely not just a research\
+    \ framework."
+  TP.metadata:
+    identity:
+      geometry: conflict
+      continuity: drift
+      pressure: high
+      residuals:
+        magnitude: large
+        pattern: explosion
+      freeze:
+        state: identity_freeze
+      basin_surface:
+        region: transition_surface
+    stance:
+      category: reject
+    direction:
+      flow: next
+    routing:
+      mode: branch
+    importance:
+      level: high

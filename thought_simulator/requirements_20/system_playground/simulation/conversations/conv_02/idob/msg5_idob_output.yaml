@@ -1,0 +1,17 @@
+source:
+  conversation: conv_02
+  message: 5
+  stage: idob_output
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_02/idob/idob_input_output_examples.md
+idob_output:
+  TP.metadata.identity:
+    geometry: conflict
+    continuity: correction
+    pressure: high
+    residuals:
+      magnitude: large
+      pattern: explosion
+    freeze:
+      state: identity_freeze
+    basin_surface:
+      region: transition_surface

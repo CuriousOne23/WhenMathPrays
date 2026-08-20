@@ -1,0 +1,30 @@
+source:
+  conversation: conv_03
+  message: 5
+  stage: idob_input
+  source_markdown: thought_simulator/requirements_20/system_playground/simulation/conversations/conv_03/idob/idob_conv_3.md
+idob_input:
+  tp:
+    metadata:
+      identity_layer: conviction_identity
+      identity_residue:
+      - anti_balance
+      continuity_surface: conviction_escalation
+      delta_h: 0.41
+      lineage:
+      - decision_quality
+      - prudence
+      semantic_role: conviction_assertion
+      routing_fields:
+        stance: pro_conviction
+        affect: firm
+        epistemic_shading: principled
+        commitment: very_high
+        reservation: none
+      adjacency_class: principle_challenge
+      displacement_scale: 0.52
+      regime_hint: high_tension
+      stability_metrics:
+        coherence: 0.72
+        tension: 0.55
+        drift: 0.41
