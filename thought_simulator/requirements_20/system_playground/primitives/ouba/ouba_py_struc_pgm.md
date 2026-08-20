@@ -86,6 +86,7 @@ The hash policy must never vary by machine, locale, or runtime process state.
 
 OuBA consumes a final Path-A TP snapshot containing commit-relevant fields, including:
 
+- TP.semantic.semantic_core
 - proposition_set[]
 - truth_evidence[]
 - completion_state
@@ -115,10 +116,23 @@ OuBA emits exactly one commit object per accepted input, containing:
 - commit_timestamp
 - commit_hash
 - routing_epoch_id
+- semantic_core (frozen commit snapshot)
 - semantic_envelope fields (verbatim fidelity)
 - context_envelope fields (verbatim fidelity)
 - provenance and lineage fields (verbatim fidelity)
 - metadata and trace fields required for replay/audit
+
+Required committed metadata fields include:
+
+- contextual_alignment_record
+- identity_shift_record
+- topic_anchor_record
+- continuity_record
+- intent_record
+- policy_markers[]
+- ob_trace[]
+- tb_trace[]
+- cob_state_snapshot
 
 Naming of the top-level envelope (TPSnS vs CTP) may follow current pipeline adapter conventions, but field fidelity requirements are unchanged.
 
@@ -214,6 +228,7 @@ tpsns_id and routing_epoch_id must be deterministically derived from stable comm
 
 OuBA preserves these fields exactly from TP into committed output:
 
+- TP.semantic.semantic_core
 - proposition_set[]
 - truth_evidence[]
 - completion_state
@@ -278,12 +293,44 @@ Per progressive lineup framework:
 | testbench | ouba_testbench.yaml     | exact expected equality |
 | general   | ouba_input.yaml         | rulechecker only |
 
-Category placement:
+Mandatory category placement for OuBA in this repository:
 
-- testbenches/path_a/identity/ (if project keeps OuBA in identity lane)
-- or testbenches/path_a/routing/ (if project classifies OuBA as final routing-stage commit)
+- testbenches/path_a/routing/
 
-One category must be selected and kept stable for discovery.
+Required OuBA testbench file set:
+
+- ouba_testbench.py
+- ouba_testbench.yaml
+- ouba_input.yaml
+- ouba_rules.yaml
+- ouba_rulechecker.py
+- ouba_tests_to_run.yaml
+
+Runner-injected config contract (set_testbench_config):
+
+- mode: "testbench" | "general"
+- use_ouba: bool
+- tests_to_run: selector interpreted via ouba_tests_to_run.yaml
+
+Operational flow in testbench mode:
+
+1. Load ouba_tests_to_run.yaml.
+2. For each enabled test case, load input and expected from ouba_testbench.yaml.
+3. If use_ouba is true, execute OuBA once and compare output to expected by exact equality.
+4. If use_ouba is false, bypass OuBA, pass through input unchanged, and skip expected comparison for OuBA.
+5. Rulechecker may run for diagnostics only and must not affect PASS/FAIL.
+
+Operational flow in general mode:
+
+1. Load ouba_input.yaml.
+2. Execute OuBA if use_ouba is true; otherwise passthrough input unchanged.
+3. Validate with ouba_rules.yaml via ouba_rulechecker.py.
+4. PASS/FAIL is determined solely by rule compliance.
+
+Deterministic commit-time policy for testbench mode:
+
+- commit_timestamp, tpsns_id, routing_epoch_id, and commit_hash must be deterministic for fixture replay.
+- Runtime wall-clock timestamps are prohibited in testbench mode.
 
 Rulechecker in testbench mode may run for diagnostics only and must not override exact expected comparison.
 
@@ -322,12 +369,11 @@ Defer for later versions:
 
 ## 10. Research Questions / Open Items for CP Review
 
-1. Stable category placement for OuBA testbench discovery: identity vs routing.
-2. Canonical source for deterministic commit_timestamp in testbench fixtures.
-3. Canonical derivation formula for routing_epoch_id in v0.1.
-4. Whether tpsns_id should be hash-derived or independently deterministic.
-5. Exact failure-code taxonomy for commit invariant violations.
-6. Minimum required vs optional metadata set for first production cut.
+1. Canonical source for deterministic commit_timestamp in testbench fixtures.
+2. Canonical derivation formula for routing_epoch_id in v0.1.
+3. Whether tpsns_id should be hash-derived or independently deterministic.
+4. Exact failure-code taxonomy for commit invariant violations.
+5. Minimum required vs optional metadata set for first production cut.
 
 ---
 
