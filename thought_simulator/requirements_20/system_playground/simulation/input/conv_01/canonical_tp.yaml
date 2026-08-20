@@ -1,0 +1,83 @@
+# Canonical TP Snapshot — Conversation 01 (IdOB Case #1: Formation)
+# Based on 20.40.060.700 — OuBA Field Reference
+# Populated using idob_10_conversations_ex.md (Case #1)
+
+semantic_envelope:
+  proposition_set:
+    - "The project is a deterministic semantic engine."
+    - "The project also functions as a research framework."
+  truth_evidence:
+    - type: "support"
+      detail: "User explicitly states semantic engine."
+    - type: "support"
+      detail: "User suggests research framework role."
+  semantic_tags:
+    - "semantic_engine"
+    - "research_framework"
+    - "identity_formation"
+  messy_input_record:
+    - "Ambiguous referent: 'it'"
+
+epistemic_envelope:
+  delta_h_percent: 0.41
+  entropy_history:
+    - 0.41
+
+identity_envelope:
+  lane_local_identity:
+    mode: "technical_user"
+    context: "TS_identity_discussion"
+  identity_geometry: "formation"
+  identity_continuity: "initialization"
+  identity_pressure: "low"
+  identity_residuals:
+    magnitude: "low"
+    pattern: "none"
+  identity_freeze:
+    state: "none"
+  identity_basin_surface:
+    region: "basin"
+
+context_envelope:
+  next_context:
+    topic: "TS_identity"
+    stance: "inform"
+    intent: "expository"
+    register: "technical"
+    continuity: "establish"
+    importance: 0.62
+
+provenance_envelope:
+  lineage_log:
+    - "turn_01.identity_formation"
+  sob_id: "sob_01"
+  srob_id: "srob_01"
+  cnob_id: "cnob_01"
+  smob_id: "smob_01"
+  idob_id: "idob_01"
+  routing_path:
+    - "sob"
+    - "srob"
+    - "cnob"
+    - "smob"
+    - "idob"
+  ruleset_ids:
+    - "policy_v3"
+    - "safety_ruleset_12"
+
+metadata_envelope:
+  policy_markers:
+    - "policy.safe_completion_required"
+  signature_history:
+    - "sig_001"
+  routing_epoch_id: "epoch_2026_08_20_09_17_00"
+  tpsns_id: "tpsns_9001"
+  commit_timestamp: "2026-08-20T09:17:00Z"
+  commit_hash: "c01_fmtn_001"
+
+trace_envelope:
+  ob_trace:
+    - "OB.lexical_parse"
+    - "OB.semantic_role_assignment"
+  tb_trace:
+    - "TB.contextual_alignment"
