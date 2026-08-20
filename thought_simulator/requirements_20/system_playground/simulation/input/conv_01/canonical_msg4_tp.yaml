@@ -1,0 +1,93 @@
+# Canonical TP Snapshot — conv_01 / msg4
+# Pipeline Position: IdOB Output (TP after IdOB processes message 4)
+# Field Schema: 20.40.060.700 — OuBA Field Reference
+# Source: idob_10_conversations_ex.md (Case #4: Drift)
+
+semantic_envelope:
+  proposition_set:
+    - "TS might actually behave differently depending on semantic load."
+    - "Prior correction may not fully capture system behavior."
+  truth_evidence:
+    - type: "uncertainty"
+      detail: "User introduces ambiguity about system behavior."
+    - type: "revision"
+      detail: "User destabilizes prior correction."
+  semantic_tags:
+    - "semantic_engine"
+    - "identity_drift"
+    - "semantic_load_variability"
+  messy_input_record:
+    - "Ambiguous shift in system characterization."
+
+epistemic_envelope:
+  delta_h_percent: 0.58
+  entropy_history:
+    - 0.41
+    - 0.47
+    - 0.52
+    - 0.58
+
+identity_envelope:
+  lane_local_identity:
+    mode: "technical_user"
+    context: "TS_identity_discussion"
+  identity_geometry: "drift"
+  identity_continuity: "wobble"
+  identity_pressure: "high"
+  identity_residuals:
+    magnitude: "high"
+    pattern: "oscillatory"
+  identity_freeze:
+    state: "none"
+  identity_basin_surface:
+    region: "slope"
+
+context_envelope:
+  next_context:
+    topic: "TS_identity"
+    stance: "explore"
+    intent: "uncertainty_resolution"
+    register: "technical"
+    continuity: "wobble"
+    importance: 0.74
+
+provenance_envelope:
+  lineage_log:
+    - "turn_01.identity_formation"
+    - "turn_02.identity_refinement"
+    - "turn_03.identity_correction"
+    - "turn_04.identity_drift"
+  sob_id: "sob_04"
+  srob_id: "srob_04"
+  cnob_id: "cnob_04"
+  smob_id: "smob_04"
+  idob_id: "idob_04"
+  routing_path:
+    - "sob"
+    - "srob"
+    - "cnob"
+    - "smob"
+    - "idob"
+  ruleset_ids:
+    - "policy_v3"
+    - "safety_ruleset_12"
+
+metadata_envelope:
+  policy_markers:
+    - "policy.safe_completion_required"
+  signature_history:
+    - "sig_001"
+    - "sig_002"
+    - "sig_003"
+    - "sig_004"
+  routing_epoch_id: "epoch_2026_08_20_09_48_00"
+  tpsns_id: "tpsns_9004"
+  commit_timestamp: "2026-08-20T09:48:00Z"
+  commit_hash: "conv01_msg4_001"
+
+trace_envelope:
+  ob_trace:
+    - "OB.lexical_parse"
+    - "OB.semantic_role_assignment"
+  tb_trace:
+    - "TB.contextual_alignment"
