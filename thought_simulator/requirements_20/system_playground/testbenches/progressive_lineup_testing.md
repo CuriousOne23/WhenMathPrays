@@ -1,27 +1,14 @@
-# **progressive_lineup_testing.md — Path‑A Progressive Lineup Testing Framework (Version 4.2)**
+# **progressive_lineup_testing.md — Path‑A Progressive Lineup Testing Framework (Version 4.0)**  
 **Status:** Active  
 **Scope:** All Path‑A primitives  
-**Applies To:** IIInB, IE, CEx, CE, WrdNm, ISc, TPU, SOB, SROB, CnOB, SmOB, SSG, STPX, RBU, DCB, IdOB, TR, CTP, RTU, RB, OuBA, SSRGn, MCB  
+**Applies To:** IIInB, IE, CEx, CE, WrdNm, ISc, TPU, SOB, SROB, CnOB, SmOB, IdOB, TR, CTP, RTU, RB, OuBA, SSRGn  
 **Exception:** InB (partially tested; no upstream primitive)
-
-**Theory guides (informative):**
-
-- `design/papers/ts_theory/ts_rb_idob_foundations/` — first‑order RB/IdOB theory  
-  - `ts_invariant_relational_model.md` — $\mathbf{F}$, shared regimes, TP bridge  
-  - `ts_invariant_to_idob_theory.md` — IdOB operator $\mathcal{I}$  
-  - `ts_routing_entropy_dynamics.md` — RED and RB operator $\mathcal{R}$  
-  - `ts_identity_geometry.md` — IGM, $\kappa_{\text{id}}$  
-  - `ts_semantic_residue_topology.md` — residue topology  
-- `20.50_rb_requirements.md` (v3.0+) — normative RB primitive  
-
-This framework is **not a requirements document**.  
-It describes **how primitives are tested**, not **what they must do** (HLRs live in 20.xx).
 
 ---
 
 # **1. Purpose**
 
-The **Progressive Lineup Testing Framework** defines how **every Path‑A primitive** is tested in a deterministic, layered, replay‑safe manner.
+The **Progressive Lineup Testing Framework** defines how **every Path‑A primitive** is tested in a deterministic, layered, replay‑safe manner.  
 It ensures:
 
 - stable intake behavior  
@@ -32,8 +19,10 @@ It ensures:
 - correct pipeline integration  
 - Python/C++ parity  
 - rule‑driven validation  
-- strict primitive boundary discipline  
-- first‑order observability of routing / identity foundation quantities when those layers are under test  
+- strict primitive boundary discipline
+
+This framework is **not a requirements document**.  
+It describes **how primitives are tested**, not **what they must do**.
 
 ---
 
@@ -47,8 +36,7 @@ Path‑A primitives are tested using a **progressive lineup**, meaning:
 4. **Each primitive is tested with rule‑driven validation**  
 5. **Each primitive is tested with upstream variation**  
 6. **Each primitive is tested with replay determinism**  
-7. **Each primitive is tested for Python/C++ parity**  
-8. **Foundation‑aligned primitives (RB, IdOB, and contributors to $\mathbf{F}$) are tested for layer separation and write‑boundary discipline**  
+7. **Each primitive is tested for Python/C++ parity**
 
 The lineup is **progressive** because:
 
@@ -58,8 +46,7 @@ The lineup is **progressive** because:
 
 ---
 
-# **3. Testing Modes (Authoritative Operational Definition)**
-
+## **3. Testing Modes (Authoritative Operational Definition)**  
 Testing behavior is controlled exclusively by the `mode` field injected by `run.py` into each primitive’s testbench module:
 
 ```
@@ -71,22 +58,21 @@ Every Path‑A primitive **must** implement both modes exactly as defined below.
 
 ---
 
-## **3.1 Mode A — “testbench” (Strict Deterministic Testing)**
-
-**Input Source:**
+## **3.1 Mode A — “testbench” (Strict Deterministic Testing)**  
+**Input Source:**  
 ```
 <primitive>_testbench.yaml
 ```
 
-**Operational Rule (must be followed by all testbenches):**
+**Operational Rule (must be followed by all testbenches):**  
 - When `mode == "testbench"`, the testbench **must load the full testbench YAML**, which contains:
   - `input:` — the complete TP input envelope  
-  - `expected:` — the complete expected TP output envelope **or** a structural foundation expected block (see §3.11)  
+  - `expected:` — the complete expected TP output envelope  
 - The primitive is executed once using the `input:` envelope.
-- The primitive’s output is compared against `expected:` (exact equality **or** declared structural foundation comparison).
-- PASS/FAIL is determined **solely** by that comparison in testbench mode.
+- The primitive’s output is compared **field‑by‑field** against `expected:`.  
+- PASS/FAIL is determined **solely** by exact equality with the expected output.
 
-**Rulechecker Behavior:**
+**Rulechecker Behavior:**  
 - The rulechecker **may run**, but only for diagnostics.  
 - Rulechecker results **do not affect PASS/FAIL** in testbench mode.
 
@@ -105,14 +91,13 @@ If `use_<primitive> = false` in `run.py`:
 
 ---
 
-## **3.2 Mode B — “general” (Rule‑Driven Testing)**
-
-**Input Source:**
+## **3.2 Mode B — “general” (Rule‑Driven Testing)**  
+**Input Source:**  
 ```
 <primitive>_input.yaml
 ```
 
-**Operational Rule (must be followed by all testbenches):**
+**Operational Rule (must be followed by all testbenches):**  
 - When `mode == "general"`, the testbench **must load only the primitive’s general‑mode input file**:
   - `<primitive>_input.yaml`
 - The primitive is executed normally.
@@ -131,27 +116,24 @@ Rulecheckers MUST validate only the fields declared in `<primitive>_rules.yaml`.
 - Rule‑driven correctness  
 - Pipeline safety validation  
 - Rapid scenario construction  
-- Foundation observation (regime / adjacency / $\mathbf{F}$ proxies) without brittle full‑envelope goldens  
 
 ---
 
-## **3.3 Mandatory Input‑Source Rule**
-
+## ⭐ **3.3 Mandatory Input‑Source Rule (New Explicit Requirement)**  
 To prevent ambiguity and ensure deterministic behavior across all Path‑A primitives:
 
 ### **All primitive testbenches MUST implement the following rule:**
 
 | `mode` value in run.py | Input file loaded by `<primitive>_testbench.py` | Output validation method |
 |------------------------|--------------------------------------------------|---------------------------|
-| `"testbench"`          | `<primitive>_testbench.yaml` (input + expected) | Exact equality **or** structural foundation comparison (§3.11) |
+| `"testbench"`          | `<primitive>_testbench.yaml` (input + expected) | Exact equality comparison |
 | `"general"`            | `<primitive>_input.yaml` (input only)           | Rulechecking only         |
 
 This rule is **mandatory**, applies to **all Path‑A primitives**, and must be implemented exactly as written.
 
 ---
 
-## **3.4 Why This Rule Exists (Clarification for Developers)**
-
+## ⭐ **3.4 Why This Rule Exists (Clarification for Developers)**  
 This explicit rule ensures:
 
 - deterministic replay in testbench mode  
@@ -167,9 +149,9 @@ It also prevents the exact mistake that occurred in the original `cex_pck_testbe
 
 ---
 
-## **3.5 Unified Flow Summary**
+## ⭐ **3.5 Unified Flow Summary (Updated)**
 
-### **Mode A — Testbench (Deterministic)**
+### **Mode A — Testbench (Deterministic)**  
 Files used:
 - `<primitive>_testbench.yaml`  
 - `<primitive>_tests_to_run.yaml`  
@@ -179,11 +161,13 @@ Flow:
 2. For each enabled test:
    - Load full input + expected output from `<primitive>_testbench.yaml`.  
    - Execute primitive.  
-   - Compare actual vs expected (exact or structural foundation).  
-   - PASS/FAIL by that comparison.  
+   - Compare actual vs expected.  
+   - PASS/FAIL by exact equality.  
 3. Rulechecker optional (diagnostics only).
 
-### **Mode B — General (Rule‑Driven)**
+---
+
+### **Mode B — General (Rule‑Driven)**  
 Files used:
 - `<primitive>_input.yaml`  
 - `<primitive>_rules.yaml`  
@@ -198,8 +182,7 @@ Flow:
 
 ---
 
-### **3.6 Primitive Discovery & Directory Schema (Mandatory for All Path‑A Primitives)**
-
+### **3.6 Primitive Discovery & Directory Schema (Mandatory for All Path‑A Primitives)**  
 To eliminate repeated manual edits to `primitive_testbench.py` and ensure that **every primitive is automatically discoverable**, the following directory schema is **mandatory** for all Path‑A primitives.
 
 This schema guarantees that:
@@ -212,8 +195,7 @@ This schema guarantees that:
 
 ---
 
-## **3.6.1 Primitive Code Location (Executable Module)**
-
+## **3.6.1 Primitive Code Location (Executable Module)**  
 Every primitive’s Python implementation **must** be located at:
 
 ```
@@ -230,22 +212,14 @@ Examples:
 ```
 primitives/ce/ce.py
 primitives/cex_pck/cex_pck.py
-primitives/dcb/dcb.py
-primitives/rb/rb.py
+primitives/ccr/ccr.py
 ```
 
 This path is **authoritative** and is used by the dynamic primitive loader.
 
-Optional structural program (recommended):
-
-```
-primitives/<primitive_name>/<primitive_name>_py_struc_pgm.md
-```
-
 ---
 
-## **3.6.2 Primitive Testbench Location (YAML + Rulechecker + Runner)**
-
+## **3.6.2 Primitive Testbench Location (YAML + Rulechecker + Runner)**  
 All testbench files for a primitive **must** be located under:
 
 ```
@@ -257,10 +231,8 @@ thought_simulator/
           <category>/
             <primitive_name>_testbench.py
             <primitive_name>_testbench.yaml
-            <primitive_name>_input.yaml
             <primitive_name>_rules.yaml
             <primitive_name>_tests_to_run.yaml
-            <primitive_name>_rulechecker.py
 ```
 
 Where `<category>` ∈:
@@ -275,7 +247,6 @@ Where `<category>` ∈:
  structure
  transform
  encoder
- output
 ```
 
 Example (CE):
@@ -287,23 +258,15 @@ testbenches/path_a/semantic/ce_rules.yaml
 testbenches/path_a/semantic/ce_tests_to_run.yaml
 ```
 
-Example (RB):
-
-```
-testbenches/path_a/routing/rb_testbench.py
-testbenches/path_a/routing/rb_testbench.yaml
-... 
-```
-
 This ensures that **every primitive testbench is discoverable by pattern**, not by hardcoded paths.
 
 ---
 
-## **3.6.3 Primitive Dictionary / Lookup‑Table Location (If Required)**
+## **3.6.3 Primitive Dictionary / Lookup‑Table Location (If Required)**  
 
 Dictionaries and scalar tables may live in **one of two places**, chosen by size and ownership:
 
-### **A. Small, exclusive tables (preferred for most Path‑A primitives)**
+### **A. Small, exclusive tables (preferred for most Path‑A primitives)**  
 When the tables are small, numerous, and owned exclusively by a single primitive (the common case for WrdNm, SOB, SROB, CnOB, SmOB, etc.), they **may** live inside the primitive directory itself:
 
 ```
@@ -317,7 +280,7 @@ thought_simulator/
 
 This keeps the primitive self‑contained and avoids unnecessary path complexity.
 
-### **B. Large or shared dictionaries**
+### **B. Large or shared dictionaries**  
 When a dictionary is large, requires formal versioning / ownership notes, or is intended for use by multiple primitives, it **must** live under the centralized design tree:
 
 ```
@@ -341,16 +304,15 @@ structure_dictionary
 encoder_dictionary
 ```
 
-### **Lookup rule**
-Loaders and primitives look first in the primitive’s own directory, then (if not found) in the corresponding `design/dictionaries/path_a/<category>/` location.  
+### **Lookup rule**  
+Loaders and primitives SHALL look first in the primitive’s own directory, then (if not found) in the corresponding `design/dictionaries/path_a/<category>/` location.  
 Because there are only two legitimate places, discovery friction remains low.
 
 This dual‑location rule preserves simplicity for the many small tables while still providing a formal home for the few large or shared ones.
 
 ---
 
-## **3.6.4 Dynamic Primitive Loader (Mandatory Behavior)**
-
+## **3.6.4 Dynamic Primitive Loader (Mandatory Behavior)**  
 `primitive_testbench.py` **must** locate primitive modules and testbench files dynamically using the directory schema above.
 
 ### **Primitive module discovery rule:**
@@ -381,19 +343,18 @@ This eliminates all hardcoded paths and ensures that **every primitive is automa
 
 ---
 
-## **3.6.5 Optional (Recommended): Primitive Self‑Identification**
-
+## **3.6.5 Optional (Recommended): Primitive Self‑Identification**  
 Each primitive may declare its name inside its module:
 
 ```python
 PRIMITIVE_NAME = "ce"
 ```
 
-This allows loaders to read the primitive name directly from the module, further reducing configuration overhead.
+This allows loaders to read the primitive name directly from the module, further reducing configuration overhead..
 
 ---
 
-## **3.6.6 Nested TP Field Path Convention (Mandatory for Schema‑Driven Primitives)**
+## ⭐ **3.6.6 Nested TP Field Path Convention (Mandatory for Schema‑Driven Primitives)**  
 
 When a primitive resolves nested fields on the Thought Packet (TP) envelope — whether via a schema file (`tp_field:`), hard‑coded paths, or testbench expected blocks — the following rule is **mandatory**:
 
@@ -408,7 +369,6 @@ Field paths **must not** be prefixed with `TP.`.
 | `IE.normalized_surface` | `TP.IE.normalized_surface` |
 | `CE.temporal.marker` | `TP.CE.temporal.marker` |
 | `SmOB.adjacency.flag` | `TP.SmOB.adjacency.flag` |
-| `metadata.geometric_state.curvature` | `TP.metadata.geometric_state.curvature` |
 
 ### **Why this rule exists**
 
@@ -419,14 +379,13 @@ Field paths **must not** be prefixed with `TP.`.
 
 ### **Scope**
 
-Applies to **all** Path‑A primitives that read or declare nested TP paths, including (but not limited to) schema‑driven encoders such as WrdNm, geometric indexers such as DCB, routing primitives such as RB, and any future ISc / scoring field maps.
+Applies to **all** Path‑A primitives that read or declare nested TP paths, including (but not limited to) schema‑driven encoders such as WrdNm and any future ISc / scoring field maps.
 
 This rule travels with every primitive test via this document and eliminates a recurring class of silent path‑resolution bugs.
 
 ---
 
-### **3.7 Python Import Path Initialization (Mandatory for All Testbenches)**
-
+### **3.7 Python Import Path Initialization (Mandatory for All Testbenches)**  
 To ensure that **all primitives, testbenches, rulecheckers, and dictionaries are importable without manual path edits**, every primitive testbench **must** initialize Python’s import path using the canonical project root.
 
 This rule eliminates the recurring issue where `primitive_testbench.py` cannot locate:
@@ -437,8 +396,7 @@ This rule eliminates the recurring issue where `primitive_testbench.py` cannot l
 - dictionaries  
 - shared utilities  
 
-### **3.7.1 Canonical Project Root Definition**
-
+### **3.7.1 Canonical Project Root Definition**  
 The project root is defined as:
 
 ```
@@ -447,8 +405,7 @@ thought_simulator/requirements_20/system_playground/
 
 This directory **must** be added to `sys.path` by every primitive testbench.
 
-### **3.7.2 Mandatory Import Path Initialization Block**
-
+### **3.7.2 Mandatory Import Path Initialization Block**  
 Every `<primitive_name>_testbench.py` **must** include the following block at the top of the file:
 
 ```python
@@ -472,8 +429,7 @@ This guarantees:
 - shared utilities are importable  
 - no testbench ever needs manual path edits again  
 
-### **3.7.3 Why This Rule Is Mandatory**
-
+### **3.7.3 Why This Rule Is Mandatory**  
 Without this rule:
 
 - Python resolves imports relative to the current working directory  
@@ -492,8 +448,7 @@ With this rule:
 - `run.py` works from any directory  
 - no manual path edits are ever required again  
 
-### **3.7.4 Interaction with Section 3.6 (Directory Schema)**
-
+### **3.7.4 Interaction with Section 3.6 (Directory Schema)**  
 Section 3.6 defines **where** primitives and testbenches must live.  
 Section 3.7 defines **how Python finds them**.
 
@@ -507,16 +462,14 @@ Together, they provide:
 
 ---
 
-### **3.8 Primitive Naming & Registration Discipline (Mandatory for All Path‑A Primitives)**
-
+### **3.8 Primitive Naming & Registration Discipline (Mandatory for All Path‑A Primitives)**  
 To ensure that all primitives are discoverable, loadable, and testable without manual edits to `primitive_testbench.py`, `run.py`, or any loader, every primitive must follow strict naming and registration rules.
 
 These rules eliminate the last category of setup issues.
 
 ---
 
-## **3.8.1 Primitive Directory Name Must Match Primitive Name**
-
+## **3.8.1 Primitive Directory Name Must Match Primitive Name**  
 Every primitive must be located in:
 
 ```
@@ -534,25 +487,21 @@ Examples:
 ```
 primitives/ce/ce.py
 primitives/cex_pck/cex_pck.py
-primitives/dcb/dcb.py
-primitives/rb/rb.py
+primitives/ccr/ccr.py
 ```
 
 This ensures dynamic loaders can locate the primitive deterministically.
 
 ---
 
-## **3.8.2 Primitive Testbench Files Must Use the Same Name**
-
+## **3.8.2 Primitive Testbench Files Must Use the Same Name**  
 All testbench files must use the exact primitive name:
 
 ```
 <primitive_name>_testbench.py
 <primitive_name>_testbench.yaml
-<primitive_name>_input.yaml
 <primitive_name>_rules.yaml
 <primitive_name>_tests_to_run.yaml
-<primitive_name>_rulechecker.py
 ```
 
 Example:
@@ -568,8 +517,7 @@ This ensures testbench discovery works without hardcoded paths.
 
 ---
 
-## **3.8.3 Primitive Must Declare Its Name Internally**
-
+## **3.8.3 Primitive Must Declare Its Name Internally**  
 Every primitive must declare:
 
 ```python
@@ -588,8 +536,7 @@ This eliminates the need for manual configuration.
 
 ---
 
-## **3.8.4 Primitive Must Provide a Minimal Registration Block**
-
+## **3.8.4 Primitive Must Provide a Minimal Registration Block**  
 Every primitive must include:
 
 ```python
@@ -605,8 +552,7 @@ This allows:
 
 ---
 
-## **3.8.5 Testbench Must Validate Naming Consistency**
-
+## **3.8.5 Testbench Must Validate Naming Consistency**  
 Every `<primitive_name>_testbench.py` must include:
 
 ```python
@@ -627,8 +573,7 @@ This prevents:
 
 ---
 
-## **3.8.6 Loader Must Validate Directory Schema Compliance**
-
+## **3.8.6 Loader Must Validate Directory Schema Compliance**  
 Dynamic loaders must verify:
 
 - primitive directory exists  
@@ -648,8 +593,7 @@ This ensures developers catch setup errors immediately.
 
 ---
 
-## **3.8.7 Why This Section Is Mandatory**
-
+## **3.8.7 Why This Section Is Mandatory**  
 Without naming discipline:
 
 - dynamic loaders fail  
@@ -673,8 +617,7 @@ This is the final structural requirement needed to eliminate all primitive setup
 
 ---
 
-# **3.9 — Mandatory Testbench Output Format (Pass/Fail Reporting)**
-
+# ⭐ **New Section 3.9 — Mandatory Testbench Output Format (Pass/Fail Reporting)**  
 To ensure consistent, readable, and diagnostic output across all Path‑A primitives, every primitive testbench **must** implement the following standardized output format.
 
 This format guarantees:
@@ -785,34 +728,6 @@ Context Summary:
 
 This ensures developers can see the envelope state without opening YAML files.
 
-### **8. Foundation / Domain Extras (When Applicable)**
-
-Primitives under foundation or geometric/routing test may **additionally** print domain summaries after the context summary, for example:
-
-**DCB (execution‑flow indexer):**
-```
-- position / direction / curvature (kappa_exec) / step_index / lane_id
-- event_type
-- history_len
-```
-
-**RB (when RED fields enabled):**
-```
-- adjacency_class
-- displacement_scale
-- regime_hint
-- selected_ob_ids (count or preview)
-```
-
-**IdOB (when foundation logging enabled):**
-```
-- stability / residue indicators
-- regime (shared table)
-- role inherit vs reset marker
-```
-
-These extras do not replace the mandatory context summary.
-
 ---
 
 ## **3.9.2 Required Final Summary Block**
@@ -867,146 +782,6 @@ With this section:
 
 ---
 
-# **3.10 New Primitive Implementation Scaffold (Mandatory Checklist)**
-
-This section is **general** — it applies to every new Path‑A primitive.
-It exists so an implementer (human or AI) can create a complete testbench suite
-without reverse‑engineering a prior primitive.
-
-It does **not** define what the primitive computes. That stays in the
-primitive’s HLR (20.xx) and structural program (`*_py_struc_pgm.md`).
-
-## **3.10.1 Required File Set**
-- `primitives/<prim>/<prim>.py`
-- `testbenches/path_a/<category>/`:
-  - `<prim>_testbench.py`
-  - `<prim>_testbench.yaml`
-  - `<prim>_input.yaml`
-  - `<prim>_rules.yaml`
-  - `<prim>_rules_to_check.yaml` (optional)
-  - `<prim>_rulechecker.py`
-  - `<prim>_tests_to_run.yaml`
-
-## **3.10.2 Gold‑Standard Reference**
-**ISc** is the control-flow reference for dual‑mode runners.  
-**DCB / STPX / RBU** are references for structural foundation comparison and boundary tests.  
-Copy control flow from ISc; replace domain logic only.
-
-## **3.10.3–3.10.5 Entry points**
-- `<prim>.py`: `PRIMITIVE_NAME`, `get_primitive_name()`, class with `process()` (or `run(tp)`)
-- `<prim>_testbench.py`: `set_testbench_config`, `run_testbench`, §3.7 import path, both modes
-- `<prim>_rulechecker.py`: class with `run()`; methods named by `check:` in rules YAML
-
-## **3.10.6 run.py activation**
-Comment previous active block; insert new module path; `"use_<prim>": True`; all other `use_*` False.
-
-## **3.10.7 YAML shapes**
-Standard `tests:` / `input` / `expected` / `rules` shapes as used by ISc (or structural expected blocks per §3.11).
-
-## **3.10.8 Implementation order**
-HLR → structural program → primitive → rules/rulechecker → fixtures → testbench → run.py → green → then refine internals.
-
-For RB / IdOB: also align fixtures with foundation must‑prove lists and shared regime vocabulary.
-
-## **3.10.9 Not**
-Not a substitute for HLR; not a place for domain formulas; not a license for new test architectures.
-
----
-
-# **3.11 Structural Foundation Comparison (Allowed in Testbench Mode)**
-
-Some Path‑A primitives (notably DCB, STPX, RBU, and future RB/IdOB foundation builds) produce large TP envelopes where full deep equality is brittle while **foundation fields** are what must be locked.
-
-In **testbench mode**, a primitive **may** declare structural foundation comparison instead of full TP deep equality when:
-
-1. The structural program or HLR states that foundation shape is the v1 lock target.  
-2. The `expected:` block enumerates the foundation fields explicitly.  
-3. Write‑boundary checks ensure non‑owned fields are unchanged when required by the case.  
-
-Examples of foundation fields:
-
-- **DCB:** `geometric_state` (five scalars), history length delta, `event_type`, `provenance.dcb_last_update`  
-- **STPX:** cue_envelope four families, provenance  
-- **RBU:** meaning‑side commit fields, lineage markers, provenance  
-- **RB (when RED enabled):** routing_filter canonical core + `adjacency_class` / `displacement_scale` / `regime_hint`  
-- **IdOB:** envelope shape + regime‑conditioned inherit/reset markers  
-
-PASS/FAIL remains driven only by the declared comparison in testbench mode; rulecheckers stay diagnostic in that mode.
-
----
-
-# **3.12 Foundation Observability (RB / IdOB / $\mathbf{F}$)**
-
-This section aligns progressive testing with `20.50` (v3.0+) and the five `ts_rb_idob_foundations` papers. It is **testing guidance**, not new HLRs.
-
-## **3.12.1 Shared regime vocabulary**
-
-When logging or asserting regime‑related fields, use only:
-
-```
-Stable | Refinement | Drift | Transition | Collapse
-```
-
-from the shared regime table in `ts_invariant_relational_model.md`. Do not invent alternate regime names in fixtures or rulecheckers.
-
-## **3.12.2 Curvature layer separation in tests**
-
-| Symbol | Layer | Typical TP / log field |
-|--------|-------|-------------------------|
-| $\kappa_{\text{exec}}$ | DCB execution‑flow | `metadata.geometric_state.curvature` |
-| $\kappa_{\text{id}}$ | Identity geometry | IdOB / $\mathbf{F}$ trajectory diagnostics |
-| $\kappa_{\text{route}}$ | Routing trajectory | RB / RED diagnostics |
-
-Testbenches and rulecheckers **must not** treat DCB curvature as RB adjacency proof or IdOB identity curvature.
-
-## **3.12.3 RB test focus (aligned with 20.50)**
-
-RB tests should cover, as applicable to the build:
-
-- deterministic routing filter export (canonical order)  
-- TR gating (`tr_needs_update` only)  
-- multi‑core isolation  
-- messy‑input determinism  
-- write boundary: no IdOB mutation, no TR write, no DCB ownership writes  
-- when RED fields enabled: `adjacency_class`, `displacement_scale`, `regime_hint` determinism  
-- missing foundation inputs → deterministic omission/null, not invention  
-
-**Suggested observation questions (general mode / diagnostics):**
-
-1. When $I_{\text{stab}}$ is high, does RB keep `adjacency_class = local`?  
-2. When $\|\Delta H\|$ is critical, does RB emit non‑local without masking?  
-3. Does RB over‑stabilize under Drift?  
-4. Behavior with IdOB view missing vs present?  
-5. Do $Rt_{\text{adj}}$ logs conflict with DCB execution order only by layer confusion?  
-
-## **3.12.4 IdOB test focus (aligned with foundation theory)**
-
-IdOB tests should cover, as applicable:
-
-- deterministic $\mathcal{I}$‑compatible envelope updates  
-- regime‑conditioned role inherit vs reset  
-- residue inherit vs reset tracking $R_{\text{res}}$ directionally  
-- provenance extend vs truncate tracking $P_{\text{cont}}$  
-- write boundary: no RB routing ownership, no DCB geometric ownership, no Path‑B fields  
-
-## **3.12.5 Optional $\mathbf{F}$ logging**
-
-When examining RB/IdOB space, test runs **may** log per‑cycle approximations of:
-
-$$
-\mathbf{F} = (I_{\text{stab}}, R_{\text{res}}, P_{\text{cont}}, L_{\text{depth}}, Rt_{\text{adj}}, \Delta H, E_{\text{dens}}, C_{\text{coh}})
-$$
-
-plus the shared regime label. Logging is for observation and IR‑1…IR‑5 falsification; it is not required for every primitive’s green path.
-
-## **3.12.6 Theory document location**
-
-```
-thought_simulator/requirements_20/system_playground/design/papers/ts_theory/ts_rb_idob_foundations/
-```
-
----
-
 # **4. Progressive Upstream Selection**
 
 In **general mode**, the user may choose any upstream primitive as the starting point.
@@ -1028,7 +803,7 @@ The **furthest upstream primitive marked true** determines the simulation input:
 - If `use_iiinb = true`, the simulation input is `iiinb_input.yaml`.  
 - If only `use_cex = true`, the simulation input is `cex_input.yaml`.
 
-### **Progressive Execution Rule:**
+### **Progressive Execution Rule:**  
 All primitives **between** the upstream primitive and the primitive under test:
 
 - are executed normally  
@@ -1057,28 +832,24 @@ The lineup verifies:
 - primitives do not modify downstream envelopes  
 - primitives do not violate bounded‑semantic constraints  
 - primitives do not violate determinism  
-- primitives do not violate provenance rules  
-- foundation layer separation is respected (RB does not own IdOB/DCB fields; IdOB does not own RB routing filter; DCB does not own identity/routing curvature semantics)  
+- primitives do not violate provenance rules
 
 This is essential for:
 
 - replay determinism  
 - pipeline safety  
 - TP envelope stability  
-- Python/C++ parity  
-- first‑order RB/IdOB examination  
+- Python/C++ parity
 
 ---
 
 # **6. Pipeline Integration Testing**
 
-Every primitive is tested in full pipeline context. A representative Path‑A order (informative; category placement in §11):
+Every primitive is tested in full pipeline context:
 
 ```
-InB → IIInB → IE → CEx → CE → WrdNm → ISc → TPU → SOB → SROB → CnOB → SmOB → SSG → STPX → RBU → DCB → IdOB → TR → CTP → RTU → RB → OuBA → SSRGn → MCB
+InB → IIInB → IE → CEx → CE → WrdNm → ISc → TPU → SOB → SROB → CnOB → SmOB → IdOB → TR → CTP → RTU → RB → OuBA → SSRGn
 ```
-
-Exact interleaving of structure/routing/identity may evolve with HLR sets; progressive tests isolate the primitive under test while preserving continuity between selected upstream and target.
 
 The lineup verifies:
 
@@ -1090,9 +861,8 @@ The lineup verifies:
 - correct identity propagation  
 - correct routing propagation  
 - correct structural propagation  
-- correct execution‑flow geometric accounting (DCB) when in path  
 - correct freeze propagation  
-- correct replay metadata propagation  
+- correct replay metadata propagation
 
 ---
 
@@ -1106,8 +876,7 @@ Replay determinism requires:
 - identical context → identical CE  
 - identical identity selection → identical continuity  
 - identical metadata → identical propagation  
-- identical pipeline → identical TP(N+1)  
-- identical foundation optional inputs → identical RB_out / IdOB envelope fields when those layers are enabled  
+- identical pipeline → identical TP(N+1)
 
 The lineup verifies:
 
@@ -1115,7 +884,7 @@ The lineup verifies:
 - deterministic envelope reconstruction  
 - deterministic primitive behavior  
 - deterministic pipeline behavior  
-- deterministic Python/C++ parity  
+- deterministic Python/C++ parity
 
 ---
 
@@ -1135,11 +904,10 @@ The lineup verifies:
 - identical committed intake  
 - identical context extraction  
 - identical structural geometry  
-- identical routing vectors / filters  
+- identical routing vectors  
 - identical identity refinement  
 - identical freeze metadata  
-- identical TP(N+1)  
-- identical enabled foundation RB/IdOB fields  
+- identical TP(N+1)
 
 Parity failures are treated as critical.
 
@@ -1161,15 +929,15 @@ All content from the previous version (v3.2) describing:
 
 is preserved exactly, with minor corrections for clarity and alignment.
 
-*(Full content preserved exactly as in the attached historical document — omitted here only to avoid duplication in chat. When merging historically expanded IIInB/IE annexes, keep them under this section without dropping cases.)*
+*(Full content preserved exactly as in your attached document — omitted here only to avoid duplication in chat. When you paste this into GitHub, you will merge the preserved IIInB/IE sections directly.)*
 
 ---
 
-# **10. Downstream Primitive Testing**
+# **10. Downstream Primitive Testing (New Section)**
 
-The progressive lineup explicitly covers downstream primitives:
+The progressive lineup now explicitly covers all downstream primitives:
 
-### **CEx**
+### **CEx**  
 - identity selection  
 - bounded semantic extraction  
 - next‑turn context reflection  
@@ -1179,134 +947,58 @@ The progressive lineup explicitly covers downstream primitives:
 - skip conditions  
 - fallback  
 - new‑conversation detection  
-- metadata boundaries  
+- metadata boundaries
 
-### **CE**
+### **CE**  
 - context envelope construction  
 - context coherence  
 - context direction  
 - context importance  
 - context continuity  
 - provenance  
-- audit  
+- audit
 
-### **ISc**
+### **ISc**  
 - scoring metadata  
 - entropy updates  
 - conflict detection  
-- provenance  
+- provenance
 
-### **TPU**
+### **TPU**  
 - commit boundaries  
 - envelope immutability  
 - provenance  
-- replay metadata  
+- replay metadata
 
-### **OB‑Set (SOB, SROB, CnOB, SmOB)**
+### **OB‑Set (SOB, SROB, CnOB, SmOB)**  
 - structural geometry  
 - semantic geometry  
 - residue metadata  
-- provenance  
+- provenance
 
-### **STPX**
-- four‑family cue envelope  
-- structural cue boundaries  
-- provenance  
-
-### **RBU**
-- meaning‑side commit (identity/stance/register/tone/tags)  
-- lineage markers  
-- write boundary  
-- provenance  
-
-### **DCB**
-- geometric_state five‑field overwrite  
-- geometric_history append‑only  
-- cycle_start / delta events  
-- $\kappa_{\text{exec}}$ sequential rule  
-- layer separation from $\kappa_{\text{id}}$ / $\kappa_{\text{route}}$  
-- provenance `dcb_last_update`  
-
-### **IdOB**
-- identity refinement / envelope  
+### **IdOB**  
+- identity refinement  
 - qualifier clustering  
 - subculture assignment  
-- regime‑conditioned inherit vs reset (foundation)  
-- provenance  
+- provenance
 
-### **TR / CTP / RTU**
-- routing vectors / arbitration support  
+### **TR / CTP / RTU / RB**  
+- routing vectors  
+- arbitration  
 - routing metadata  
-- provenance  
+- provenance
 
-### **RB**
-- deterministic routing filter  
-- TR gating  
-- multi‑core isolation  
-- split/merge arbitration  
-- messy‑input determinism  
-- when RED enabled: adjacency_class, displacement_scale, regime_hint  
-- IdOB non‑mutation; $\kappa$ layer separation  
-- provenance / inspectability  
-
-### **OuBA / SSRGn / MCB**
+### **OuBA / SSRGn**  
 - freeze metadata  
-- SSR‑A / SSR‑B  
-- meaning continuity basin behavior as applicable  
-- provenance  
+- SSR‑A  
+- SSR‑B  
+- provenance
 
 All primitives follow the same two‑mode testing system.
 
 ---
 
-# **11. Location of Testbench Primitive Files**
-
-**testbenches/path_a/**
-
-intake:
-- inb
-- iinb / iiinb
-- ie
-
-encoder:
-- cex_ie
-- cex_ccr
-- cex_pck
-- ce
-
-transform:
-- tpu
-
-semantic:
-- sob
-- srob
-- cnob
-- smob
-
-structure:
-- wrdnm
-- isc
-- ssg
-- stpx
-- rbu
-
-routing:
-- dcb
-- rb
-- tr
-- ctp
-- rtu
-
-identity:
-- idob
-- mcb
-
-output:
-- ouba
-
----
-
-# **12. Summary**
+# **11. Summary**
 
 The **Progressive Lineup Testing Framework** is the authoritative testing strategy for **all Path‑A primitives**.
 
@@ -1321,29 +1013,24 @@ It provides:
 - pipeline integration testing  
 - deterministic replay testing  
 - Python/C++ parity testing  
-- structural foundation comparison where declared  
-- foundation observability for RB / IdOB / $\mathbf{F}$  
 - complete IIInB + IE intake testing  
-- complete downstream primitive testing including STPX, RBU, DCB, RB  
+- complete downstream primitive testing
 
-This document is aligned with:
+This document is now fully aligned with:
 
 - 20.101 (IIInB)  
 - 20.109 (IE)  
 - 20.107 (CEx)  
 - 20.108 (CE)  
 - 20.105 (TP requirements + metadata + provenance + usage)  
-- 20.50 (RB v3.0+)  
-- 20.106 (DCB) and related structure primitives  
 - Path‑A scaffold (20.15)  
-- `ts_rb_idob_foundations` first‑order theory set  
 - run.py  
 - all structural programs  
 - all testbench YAMLs  
-- all rule‑checking systems  
+- all rule‑checking systems
 
 ---
 
-# **End of Document — progressive_lineup_testing.md (Version 4.2)**
+# **End of Document — progressive_lineup_testing.md (Version 4.0)**
 
 ---
