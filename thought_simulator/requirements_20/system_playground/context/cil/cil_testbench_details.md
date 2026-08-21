@@ -17,7 +17,7 @@ Its purpose is to confirm that CIL correctly integrates:
 - referent certainty/ambiguity fields  
 
 into a single, deterministic **CIL Intake Packet**.  
-This packet is consumed directly by **CEx**, as described in *20.107 CEx Extract*   [Current page](citation-section://1146975448/5).
+This packet is consumed directly by **CEx**, as described in *20.107 CEx Extract*.
 
 CIL also contributes historical information to the **TP (Thought Packet)**, allowing OuBA to reconstruct:
 
