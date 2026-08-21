@@ -1,1 +1,105 @@
+mode: general
+primitive: cst_mux
+version: "0.1"
+notes: General-mode input for CST-Mux progressive testbench
 
+turn_index: 3
+
+identity:
+  cob_state_snapshot:
+    layers:
+      - layer_id: L1
+
+cst:
+  core:
+    status:
+      turn_index: 3
+      layer_count: 1
+      frozen_layers: []
+    signals:
+      freeze:
+        frozen_objects: []
+        reason: ""
+      thaw:
+        thawed_objects: []
+        reason: ""
+      continuity_restoration:
+        restored_objects: []
+        reason: ""
+      drift:
+        affected_objects: [L1]
+        magnitude: 0.1
+      oscillation:
+        affected_objects: []
+        frequency: 0.0
+        amplitude: 0.0
+      ambiguity:
+        affected_objects: []
+        increased: []
+        decreased: []
+      collapse:
+        collapsed_objects: []
+        severity: 0.0
+    metrics:
+      per_layer:
+        L1:
+          drift: 0.1
+          oscillation: 0.0
+          ambiguity: 0.0
+          stability: 0.9
+          collapse: 0.0
+          continuity: 0.95
+          combined_instability: 0.1
+
+  ms:
+    status:
+      turn_index: 3
+      layer_count: 1
+    stability:
+      aggregate:
+        value: 0.85
+      per_layer:
+        L1:
+          value: 0.85
+    instability:
+      aggregate:
+        value: 0.15
+    collapse_risk:
+      aggregate:
+        value: 0.05
+    freeze_risk:
+      aggregate:
+        value: 0.1
+    thaw_readiness:
+      aggregate:
+        value: 0.8
+    ambiguity_summary:
+      count: 0
+    drift_summary:
+      magnitude: 0.1
+    oscillation_summary:
+      frequency: 0.0
+      amplitude: 0.0
+    commands:
+      freeze:
+        layers: []
+        reason: ""
+      thaw:
+        layers: []
+        reason: ""
+      collapse_recovery:
+        layers: []
+        reason: ""
+      create_identity_layer:
+        requests: []
+      split:
+        layers: []
+        reason: ""
+      merge:
+        pairs: []
+        reason: ""
+    diagnostics:
+      sync_mismatch: false
+      sync_mismatch_detail: null
+    metadata:
+      new_context_required: false
