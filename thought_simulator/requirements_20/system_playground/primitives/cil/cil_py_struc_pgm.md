@@ -232,6 +232,9 @@ All read-only; deterministic replay required.
 
 Assemble `CILIntakePacket` containing the blocks listed in §2.1 and §5 of 20.33. Output is consumed exclusively by CEx. Identical inputs → identical packets.
 
+CIL SHALL write its envelope to the canonical path `TP.cil.intake_packet`.
+Audit SHALL be emitted under `TP.cil.intake_packet.audit` for v0.1.
+
 ---
 
 ## 4. Intake Packet Schema (Realization View)
