@@ -1,1 +1,42 @@
+# CST-Core general-mode input (rule-driven)
+mode: general
+primitive: cst_core
+version: "0.1"
+notes: "Minimal TP with COB snapshot layers for CST-Core general-mode rule checking."
 
+turn_index: 1
+
+identity:
+  cob_state_snapshot:
+    objects:
+      - id: L1
+        referent_map: {r1: v1}
+        anchors: [a1]
+        lineage: {stability: stable}
+        ambiguity: {certainty: high, ambiguity: low}
+        stability_metrics:
+          drift: 0.1
+          oscillation: 0.0
+          collapse: false
+          frozen: false
+        ordering_metrics:
+          recency: 1
+          frequency: 1
+          density: 1
+      - id: L2
+        referent_map: {r2: v2}
+        anchors: [a2]
+        lineage: {stability: unstable}
+        ambiguity: {certainty: low, ambiguity: high}
+        stability_metrics:
+          drift: 0.6
+          oscillation: 0.5
+          collapse: false
+          frozen: false
+        ordering_metrics:
+          recency: 0
+          frequency: 1
+          density: 1
+
+lineage_log: []
+routing_path: []
