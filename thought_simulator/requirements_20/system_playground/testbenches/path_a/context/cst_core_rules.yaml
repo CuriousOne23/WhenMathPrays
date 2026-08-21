@@ -1,1 +1,32 @@
+# CST-Core Rules (general-mode rulechecker)
+version: "0.1"
+primitive: cst_core
 
+rules:
+  - id: cst_core_envelope_exists
+    description: "CST-Core SHALL produce TP.cst.core"
+    check: "cst_core_envelope_exists"
+
+  - id: cst_core_signals_required_keys
+    description: "signals SHALL include freeze, thaw, continuity_restoration, drift, oscillation, ambiguity, collapse"
+    check: "signals_required_keys"
+
+  - id: cst_core_history_window
+    description: "history.window_len SHALL be 10 and turns length ≤ 10"
+    check: "history_window_le_10"
+
+  - id: cst_core_provisional_audit
+    description: "audit.provisional_metrics SHALL be true in v0.1"
+    check: "provisional_metrics_true"
+
+  - id: cst_core_no_forbidden_writes
+    description: "CST-Core SHALL NOT write routing_filter, geometric_state, or semantic_core"
+    check: "no_forbidden_fields"
+
+  - id: cst_core_no_cob_mutation
+    description: "CST-Core SHALL NOT mutate identity.cob_state_snapshot"
+    check: "no_cob_snapshot_mutation"
+
+  - id: cst_core_routing_path
+    description: "routing_path SHALL contain cst_core after process"
+    check: "routing_path_contains_cst_core"
