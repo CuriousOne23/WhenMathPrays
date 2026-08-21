@@ -33,7 +33,7 @@ ACTIVE_TEST_MODULES = [
     # **************************** InB / IIInB / IE / CEx / CE / ... (commented) **************
     # **************************** IdOB / MCB / OuBA (commented) ******************************
 
-    # **************************** COB Test bench (previously active) *************************
+    # **************************** COB Test bench (commented) *********************************
     # Category: path_a/context/
     # Dual-mode: testbench (cob_testbench.yaml) | general (cob_input.yaml + rules)
     # Normative: 20.32, cob_requirements.md, cob_py_struc_pgm.md, patha_field_names.md
@@ -46,17 +46,30 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
 
-    # **************************** CIL Test bench (ACTIVE) ************************************
+    # **************************** CIL Test bench (commented) *********************************
     # Category: path_a/context/
     # Dual-mode: testbench (cil_testbench.yaml) | general (cil_input.yaml + rules)
     # Slice: identity_selection (cil_testbench_schema.md v0.1)
     # Normative: 20.33, cil_requirements.md, cil_py_struc_pgm.md, patha_field_names.md
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cil_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_cil": True,
+    #         "tests_to_run": "see cil_tests_to_run.yaml",
+    #     }
+    # ),
+
+    # **************************** CST-Core Test bench (ACTIVE) *******************************
+    # Category: path_a/context/
+    # Dual-mode: testbench (cst_core_testbench.yaml) | general (cst_core_input.yaml + rules)
+    # Normative: 20.32.010.010, cst_core_py_struc_pgm.md, patha_field_names.md (TP.cst.core)
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cil_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cst_core_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
-            "use_cil": True,          # Primitive under test
-            "tests_to_run": "see cil_tests_to_run.yaml",
+            "use_cst_core": True,
+            "tests_to_run": "see cst_core_tests_to_run.yaml",
         }
     ),
 ]
