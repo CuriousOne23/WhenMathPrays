@@ -1,1 +1,193 @@
+# CIL Testbench (testbench mode — input + expected)
+# Slice: identity_selection (cil_testbench_schema.md v0.1)
+version: "0.1"
+primitive: cil
 
+tests:
+  - id: cil_identity_selection_basic
+    description: "Reflect primary/secondary by COB ordering_score; metrics from primary"
+    input:
+      turn_index: 1
+      identity:
+        cob_state_snapshot:
+          conversation_access_count: 3
+          conversation_access_order: [0, 1, 2]
+          conversation_frequency_last_10: {"0": 1, "1": 1, "2": 1}
+          objects:
+            - id: "L1"
+              ordering_score: 10.0
+              ordering_metrics: {recency: 5, frequency: 3, density: 2.0}
+            - id: "L2"
+              ordering_score: 7.0
+              ordering_metrics: {recency: 4, frequency: 2, density: 1.0}
+            - id: "L3"
+              ordering_score: 2.0
+              ordering_metrics: {recency: 1, frequency: 1, density: 0.5}
+      routing_path: []
+    expected:
+      cil:
+        intake_packet:
+          identity_selection:
+            primary_identity: "L1"
+            secondary_identity: "L2"
+            ordering_score: 10.0
+            ordering_metrics:
+              recency: 5
+              frequency: 3
+              density: 2.0
+              conversation_count: 3
+              chronological_ordering_vector: [0, 1, 2]
+              sliding_window_frequency: [1, 1, 1]
+
+  - id: cil_identity_selection_tie_break
+    description: "Equal ordering_score ties broken deterministically by stable id"
+    input:
+      turn_index: 2
+      identity:
+        cob_state_snapshot:
+          conversation_access_count: 1
+          conversation_access_order: [2]
+          conversation_frequency_last_10: {"2": 1}
+          objects:
+            - id: "B"
+              ordering_score: 5.0
+              ordering_metrics: {recency: 5, frequency: 5, density: 5.0}
+            - id: "A"
+              ordering_score: 5.0
+              ordering_metrics: {recency: 5, frequency: 5, density: 5.0}
+            - id: "C"
+              ordering_score: 1.0
+              ordering_metrics: {recency: 1, frequency: 1, density: 1.0}
+      routing_path: []
+    expected:
+      cil:
+        intake_packet:
+          identity_selection:
+            primary_identity: "A"
+            secondary_identity: "B"
+            ordering_score: 5.0
+            ordering_metrics:
+              recency: 5
+              frequency: 5
+              density: 5.0
+              conversation_count: 1
+              chronological_ordering_vector: [2]
+              sliding_window_frequency: [1]
+
+  - id: cil_identity_selection_single
+    description: "Single layer → primary set, secondary null"
+    input:
+      turn_index: 0
+      identity:
+        cob_state_snapshot:
+          conversation_access_count: 0
+          conversation_access_order: []
+          conversation_frequency_last_10: {}
+          objects:
+            - id: "ONLY"
+              ordering_score: 9.5
+              ordering_metrics: {recency: 9, frequency: 1, density: 1.0}
+      routing_path: []
+    expected:
+      cil:
+        intake_packet:
+          identity_selection:
+            primary_identity: "ONLY"
+            secondary_identity: null
+            ordering_score: 9.5
+            ordering_metrics:
+              recency: 9
+              frequency: 1
+              density: 1.0
+              conversation_count: 0
+              chronological_ordering_vector: []
+              sliding_window_frequency: []
+
+  - id: cil_identity_selection_empty
+    description: "Empty COB snapshot → null identities, zero metrics"
+    input:
+      turn_index: 0
+      identity:
+        cob_state_snapshot:
+          objects: []
+      routing_path: []
+    expected:
+      cil:
+        intake_packet:
+          identity_selection:
+            primary_identity: null
+            secondary_identity: null
+            ordering_score: 0.0
+            ordering_metrics:
+              recency: 0
+              frequency: 0
+              density: 0.0
+              conversation_count: 0
+              chronological_ordering_vector: []
+              sliding_window_frequency: []
+
+  - id: cil_identity_selection_no_local_score
+    description: "Packet ordering_score equals COB primary ordering_score (no local formula)"
+    input:
+      turn_index: 4
+      identity:
+        cob_state_snapshot:
+          conversation_access_count: 4
+          conversation_access_order: [1, 2, 3, 4]
+          conversation_frequency_last_10: {"1": 1, "2": 1, "3": 1, "4": 1}
+          objects:
+            - id: "HI"
+              ordering_score: 42.0
+              ordering_metrics: {recency: 1, frequency: 1, density: 1.0}
+            - id: "LO"
+              ordering_score: 0.5
+              ordering_metrics: {recency: 99, frequency: 99, density: 99.0}
+      routing_path: []
+    expected:
+      cil:
+        intake_packet:
+          identity_selection:
+            primary_identity: "HI"
+            secondary_identity: "LO"
+            ordering_score: 42.0
+            ordering_metrics:
+              recency: 1
+              frequency: 1
+              density: 1.0
+              conversation_count: 4
+              chronological_ordering_vector: [1, 2, 3, 4]
+              sliding_window_frequency: [1, 1, 1, 1]
+
+  - id: cil_write_boundary_snapshot_intact
+    description: "COB snapshot unchanged after CIL process; envelope at TP.cil.intake_packet"
+    input:
+      turn_index: 1
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: "X"
+              ordering_score: 3.0
+              ordering_metrics: {recency: 3, frequency: 3, density: 3.0}
+      routing_path: []
+      semantic_core: {present: true}
+    expected:
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: "X"
+              ordering_score: 3.0
+              ordering_metrics: {recency: 3, frequency: 3, density: 3.0}
+      cil:
+        intake_packet:
+          identity_selection:
+            primary_identity: "X"
+            secondary_identity: null
+            ordering_score: 3.0
+            ordering_metrics:
+              recency: 3
+              frequency: 3
+              density: 3.0
+              conversation_count: 0
+              chronological_ordering_vector: []
+              sliding_window_frequency: []
+      semantic_core: {present: true}
