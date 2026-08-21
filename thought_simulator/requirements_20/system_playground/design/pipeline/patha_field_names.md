@@ -1,7 +1,7 @@
 # patha_field_names.md — Canonical Field-Name Dictionary for Path-A
 
 **Document ID:** patha_field_names  
-**Version:** 0.1 (First Crystallization)  
+**Version:** 0.2 (CST-Core envelope lock)  
 **Status:** Draft — derived exclusively from the listed normative and playground documents  
 **Scope:** Entire Path-A pipeline field surface for structural programs, testbenches, and dual-mode validation  
 **Location:** `thought_simulator/requirements_20/system_playground/design/pipeline/`  
@@ -19,6 +19,9 @@
 10. 20.105.010_tp_meta_fields.md  
 11. 20.105.020_tp_meta_provenance.md  
 12. 20.105.030_tp_meta_usage.md  
+13. 20.32.010.010_cst-core.md  
+14. system_playground/primitives/cst_core/cst_core_py_struc_pgm.md (v0.1 CP-approved path map)  
+15. system_playground/primitives/cil/cil_py_struc_pgm.md / 20.33 (CIL intake path)  
 
 **Rules applied:**  
 - No invented field names.  
@@ -32,11 +35,11 @@
 
 ## 1. Introduction
 
-This document is the canonical field-name dictionary for the entire Path-A pipeline. It unifies every named structure, TP path, snapshot field, signal, metadata field, provenance field, usage field, transfer-surface field, identity-layer field, referent-map field, ordering-metric field, next-turn context field, lineage field, continuity field, importance field, and register field that appears in the twelve source documents.
+This document is the canonical field-name dictionary for the entire Path-A pipeline. It unifies every named structure, TP path, snapshot field, signal, metadata field, provenance field, usage field, transfer-surface field, identity-layer field, referent-map field, ordering-metric field, next-turn context field, lineage field, continuity field, importance field, and register field that appears in the source documents.
 
 It is intended for:
 
-- structural programs (especially `cob_py_struc_pgm.md` and peer programs),  
+- structural programs (especially `cob_py_struc_pgm.md`, `cil_py_struc_pgm.md`, `cst_core_py_struc_pgm.md` and peer programs),  
 - progressive dual-mode testbenches,  
 - rulecheckers,  
 - envelope-boundary guards,  
@@ -232,15 +235,95 @@ All primitives, testbenches, and dictionaries SHALL resolve field paths against 
 
 (Also appears under `TP.metadata.next_context_metadata`.)
 
-### 2.4 TP.cst.core.* / CST-Core signals
+### 2.4 TP.cst.core.* / CST-Core (LOCKED v0.1)
 
-- Freeze  
-- Thaw  
-- Continuity-restoration  
-- stability-correction signals  
-- stability signals  
-- raw metrics  
-- metric histories  
+**Top-level envelope (non-negotiable):**
+
+- `TP.cst.core`
+
+This path is owned exclusively by the CST-Core primitive.  
+It is written during `cst_core.process()` and SHALL NOT be written by any other component.
+
+**Canonical nested map (from `cst_core_py_struc_pgm.md` §2, CP-approved):**
+
+```
+TP.cst.core.status
+  turn_index
+  layer_count
+  frozen_layers[]
+
+TP.cst.core.signals.freeze
+  frozen_objects[]
+  reason
+
+TP.cst.core.signals.thaw
+  thawed_objects[]
+  reason
+
+TP.cst.core.signals.continuity_restoration
+  restored_objects[]
+  reason
+
+TP.cst.core.signals.drift
+  affected_objects[]
+  magnitude
+
+TP.cst.core.signals.oscillation
+  affected_objects[]
+  frequency
+  amplitude
+
+TP.cst.core.signals.ambiguity
+  affected_objects[]
+  increased[]
+  decreased[]
+
+TP.cst.core.signals.collapse
+  collapsed_objects[]
+  severity
+
+TP.cst.core.metrics.per_layer
+  <StableID>.drift
+  <StableID>.oscillation
+  <StableID>.ambiguity
+  <StableID>.stability
+  <StableID>.collapse
+  <StableID>.continuity
+  <StableID>.combined_instability
+
+TP.cst.core.metrics.integrated
+  (10-turn aggregates as available in v0.1)
+
+TP.cst.core.history
+  window_len          # fixed 10
+  turns[]             # capped at 10
+    turn_index
+    per_layer_snapshot_ref_or_digest
+    metric_summary
+
+TP.cst.core.lineage_stability
+  stable_lineage[]
+  unstable_lineage[]
+
+TP.cst.core.audit
+  slice
+  provisional_metrics
+  notes[]
+```
+
+**Signal routing (logical consumers; all fields still live under `TP.cst.core`):**
+
+| Fields | Logical consumers |
+|--------|-------------------|
+| `signals.freeze`, `signals.thaw`, `signals.continuity_restoration` | COB and CST-Mux |
+| `signals.drift`, `signals.oscillation`, `signals.ambiguity`, `signals.collapse` + metrics/histories | CST-MS and CST-Mux only (NOT COB structural commands) |
+
+**Notes:**
+
+- Runtime resolvers use paths relative to TP root (`cst.core...`), not a leading `TP.` key.  
+- Progressive lineup dual-mode testbenches SHALL assert against this map.  
+- Structural programs SHALL NOT invent a second CST-Core envelope outside `TP.cst.core`.  
+- See Section 9 for the dedicated CST-Core lock summary.
 
 ### 2.5 TP.cst.ms.* / CST-MS signals
 
@@ -414,7 +497,7 @@ All primitives, testbenches, and dictionaries SHALL resolve field paths against 
 - (transfer-table framing) `canonical_output_record`, `canonical_output_tags`  
 
 **Reads:**  
-- CST-Core signals (Freeze, Thaw, Continuity-restoration, stability-correction)  
+- CST-Core signals under `TP.cst.core.signals.freeze|thaw|continuity_restoration`  
 - CST-MS structural commands (freeze, thaw, collapse-recovery, create-identity-layer, split, merge, strengthen_register, weaken_register)  
 - OuBA meaning packets, strength updates, ambiguity/confidence, lineage continuity, register updates  
 - IdOB identity-importance (indirect via TP → OuBA)  
@@ -430,6 +513,7 @@ All primitives, testbenches, and dictionaries SHALL resolve field paths against 
 - Modification of semantic-importance scores or roles  
 - Any signals from CST-Mux  
 - Direct signals from IdOB / SmOB / MCB  
+- Treating CST-Core raw metrics (drift/oscillation/ambiguity/collapse) as structural commands  
 
 **Snapshot fields:**  
 - `cob_state_snapshot`  
@@ -452,33 +536,37 @@ All primitives, testbenches, and dictionaries SHALL resolve field paths against 
 ### 3.4 CIL
 
 **Owned / writes:**  
-- linkage_record  
-- linkage_tags  
-- (possible) basin/continuity_surface adjustments  
+- `TP.cil.intake_packet` (and `TP.cil.intake_packet.audit`) — see Section 7.1  
 
 **Reads:**  
 - COB stabilized identity-layer snapshot  
-- canonical_output_record (transfer framing)  
-- identity geometry  
+- USP from CST-Mux  
+- structural cues / intake metadata / next_context  
 
 **Forbidden:**  
 - Writing semantic_core  
-- Changing freeze state  
+- Changing freeze state / COB topology  
+- Writing `TP.cst.core`  
 
-### 3.5 CST-Core
+### 3.5 CST-Core (LOCKED)
 
 **Owned / writes:**  
-- stability signals  
-- raw metrics  
-- metric histories  
-- Freeze / Thaw / Continuity-restoration signals  
+- Entire `TP.cst.core` envelope (Section 2.4 / Section 9)  
+  - `status`, `signals`, `metrics`, `history`, `lineage_stability`, `audit`  
+- Optional append of module id `cst_core` to `routing_path`  
 
-**Reads:**  
-- identity geometry  
-- canonical_output_record / linkage_record  
+**Reads (read-only):**  
+- `identity.cob_state_snapshot` / COB identity layers  
+- Optional OuBA committed identity reference  
+- `lineage_log` MERGE/SPLIT markers (hygiene only)  
+- Prior `TP.cst.core.history` / freeze status for replay  
 
 **Forbidden:**  
-- Modification of identity topology  
+- Modification of identity topology / `cob_state_snapshot`  
+- Create / Split / Merge / Collapse-recovery commands  
+- Writing `routing_filter`, RED, geometric_state, semantic_core  
+- Writing `TP.cil.intake_packet`  
+- Accepting control commands from CST-MS  
 
 ### 3.6 CST-MS
 
@@ -488,13 +576,16 @@ All primitives, testbenches, and dictionaries SHALL resolve field paths against 
 - synthesized stability summaries  
 
 **Reads:**  
-- raw metrics + thresholds + histories from CST-Core  
+- raw metrics + histories from `TP.cst.core` (signals.drift|oscillation|ambiguity|collapse, metrics, history)  
 
 ### 3.7 CST-Mux
 
 **Owned / writes:**  
 - unified_stability_packet  
 - usp_tags  
+
+**Reads:**  
+- CST-Core signals and metrics under `TP.cst.core` for USP packaging / TP replay  
 
 **Forbidden:**  
 - Identity or semantic modifications  
@@ -651,6 +742,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 (All unique names extracted; casing and spelling preserved.)
 
 - abbreviation_patterns  
+- affected_objects  
 - alignment.clarifying  
 - alignment.context  
 - alignment.continuity  
@@ -660,9 +752,11 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - alignment_scores  
 - ambiguity  
 - ambiguity_score  
+- amplitude  
 - anomaly_flags  
 - arbitration_trace  
 - attributes  
+- audit  
 - basin_surface.region  
 - candidate_id  
 - candidate_set  
@@ -681,6 +775,8 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - clarifying_topology  
 - collapse  
 - collapse_risk  
+- collapsed_objects  
+- combined_instability  
 - coherence  
 - coherence_hint  
 - commit_id  
@@ -696,12 +792,14 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - continuity_hint  
 - continuity_lineage  
 - continuity_metadata  
+- continuity_restoration  
 - conversation_count  
 - copy_forward_flags  
 - cycle_id  
 - decay_state  
 - decision  
 - defect_list  
+- decreased  
 - delta_h  
 - delta_h_percent  
 - direction  
@@ -718,8 +816,12 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - freeze  
 - freeze.state  
 - freeze_signature  
+- frequency  
+- frozen_layers  
+- frozen_objects  
 - geometric_history  
 - geometric_state  
+- history  
 - identity  
 - identity_anchors  
 - identity_basin  
@@ -730,12 +832,16 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - importance  
 - importance_continuity  
 - importance_hint  
+- increased  
 - initial_state_complete  
+- intake_packet  
+- intake_status  
+- integrated  
 - intent  
 - intent_hint  
-- intake_status  
 - k_id  
 - lane_id  
+- layer_count  
 - layer_id  
 - length_flags  
 - lineage  
@@ -743,7 +849,11 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - lineage_log  
 - lineage_pointer  
 - lineage_seq  
+- lineage_stability  
+- magnitude  
 - merge_contribution_ref  
+- metric_summary  
+- metrics  
 - mismatch_tags  
 - module_id  
 - neighborhood  
@@ -751,12 +861,16 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - next_context_provenance  
 - normalized_text  
 - normalized_tokens  
+- notes  
 - omission_patterns  
+- oscillation  
 - packed_record  
 - packed_tags  
 - parent_ref  
 - parent_tp_id  
 - partition_rationale_ref  
+- per_layer  
+- per_layer_snapshot_ref_or_digest  
 - policy_markers  
 - policy_signature  
 - politeness_hint  
@@ -767,12 +881,14 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - projection_provenance  
 - proposition_set  
 - provenance  
+- provisional_metrics  
 - qualifier_cluster  
 - qualifiers  
 - rb_adjacency_class  
 - rb_displacement_scale  
 - rb_regime_hint  
 - rb_route_proposal  
+- reason  
 - reference_hint  
 - referent_adjacent_signals  
 - referent_id  
@@ -792,6 +908,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - repair_type  
 - reset_flags  
 - residue_provenance  
+- restored_objects  
 - routing_confidence  
 - routing_features  
 - routing_filter  
@@ -817,14 +934,19 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - semantic_layer_hash  
 - semantic_layer_provenance  
 - semantic_residue  
+- severity  
 - shading  
 - signature_history  
+- signals  
+- slice  
 - smoothing_actions  
 - ssr_projection_map  
 - stability  
 - stability_flags  
 - stability_score  
+- stable_lineage  
 - stance  
+- status  
 - strength  
 - structural_features  
 - structural_residue  
@@ -836,6 +958,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - surface_forms  
 - tb_trace  
 - thaw  
+- thawed_objects  
 - timestamp  
 - timestamps.created  
 - timestamps.updated  
@@ -850,12 +973,47 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - tpu_audit_record  
 - tpu_error  
 - tr_needs_update  
+- turn_index  
+- turns  
 - unicode_flags  
 - unified_stability_packet  
+- unstable_lineage  
 - usp_tags  
 - value  
 - volatility_score  
+- window_len  
 - wire_map_version  
+
+---
+
+## 9. Canonical TP Path for CST-Core Envelope (LOCKED v0.1)
+
+**Top-level envelope path (non-negotiable):**
+
+- `TP.cst.core`
+
+This path is owned exclusively by the CST-Core primitive.  
+It is written during `cst_core.process()` and SHALL NOT be written by any other component.
+
+**Required top-level children under `TP.cst.core`:**
+
+| Child | Purpose |
+|-------|---------|
+| `status` | turn_index, layer_count, frozen_layers |
+| `signals` | freeze, thaw, continuity_restoration, drift, oscillation, ambiguity, collapse |
+| `metrics` | per_layer, integrated |
+| `history` | window_len (10), turns[] (capped at 10) |
+| `lineage_stability` | stable_lineage, unstable_lineage |
+| `audit` | slice, provisional_metrics, notes |
+
+**Authority:**  
+- `20.32.010.010_cst-core.md` (HLRs)  
+- `cst_core_py_struc_pgm.md` §2 (CP-approved nested map)  
+
+**Notes:**  
+- Progressive dual-mode testbenches SHALL resolve CST-Core expected fields against this section.  
+- No second envelope outside `TP.cst.core` is permitted for CST-Core outputs.  
+- Final metric formulas and thresholds remain Defer; field **names and paths** are locked.
 
 ---
 
