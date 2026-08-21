@@ -1,1 +1,345 @@
+version: "0.1"
+primitive: cst_mux
 
+tests:
+  - id: cst_mux_envelope_present
+    description: TP.cst.mux envelope and USP present
+    input:
+      turn_index: 1
+      identity:
+        cob_state_snapshot:
+          layers: [{layer_id: L1}]
+      cst:
+        core:
+          status: {turn_index: 1, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [L1], magnitude: 0.2}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0.0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0.0}
+          metrics:
+            per_layer:
+              L1: {drift: 0.2, oscillation: 0.0, ambiguity: 0.0, stability: 0.8, collapse: 0.0, continuity: 0.9, combined_instability: 0.2}
+        ms:
+          status: {turn_index: 1, layer_count: 1}
+          stability: {aggregate: {value: 0.7}, per_layer: {L1: {value: 0.7}}}
+          instability: {aggregate: {value: 0.3}}
+          collapse_risk: {aggregate: {value: 0.1}}
+          freeze_risk: {aggregate: {value: 0.2}}
+          thaw_readiness: {aggregate: {value: 0.6}}
+          ambiguity_summary: {count: 0}
+          drift_summary: {magnitude: 0.2}
+          oscillation_summary: {frequency: 0.0, amplitude: 0.0}
+          commands:
+            freeze: {layers: [], reason: ""}
+            thaw: {layers: [], reason: ""}
+            collapse_recovery: {layers: [], reason: ""}
+            create_identity_layer: {requests: []}
+            split: {layers: [], reason: ""}
+            merge: {pairs: [], reason: ""}
+          diagnostics: {sync_mismatch: false, sync_mismatch_detail: null}
+          metadata: {new_context_required: false}
+    expected:
+      envelope_present: true
+      usp_present: true
+      routing_has_cst_mux: true
+
+  - id: cst_mux_layer_index_deterministic
+    description: layer_index is sorted StableID order 0..n-1
+    input:
+      turn_index: 2
+      cst:
+        core:
+          status: {turn_index: 2, layer_count: 2, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [L2, L1], magnitude: 0.1}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0.0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0.0}
+          metrics:
+            per_layer:
+              L2: {drift: 0.1, oscillation: 0.0, ambiguity: 0.0, stability: 0.9, collapse: 0.0, continuity: 1.0, combined_instability: 0.1}
+              L1: {drift: 0.05, oscillation: 0.0, ambiguity: 0.0, stability: 0.95, collapse: 0.0, continuity: 1.0, combined_instability: 0.05}
+        ms:
+          status: {turn_index: 2, layer_count: 2}
+          stability: {aggregate: {value: 0.9}, per_layer: {L1: {value: 0.95}, L2: {value: 0.9}}}
+          instability: {aggregate: {value: 0.1}}
+          collapse_risk: {aggregate: {value: 0.0}}
+          freeze_risk: {aggregate: {value: 0.0}}
+          thaw_readiness: {aggregate: {value: 1.0}}
+          ambiguity_summary: {count: 0}
+          drift_summary: {magnitude: 0.1}
+          oscillation_summary: {frequency: 0.0, amplitude: 0.0}
+          commands:
+            freeze: {layers: [], reason: ""}
+            thaw: {layers: [], reason: ""}
+            collapse_recovery: {layers: [], reason: ""}
+            create_identity_layer: {requests: []}
+            split: {layers: [], reason: ""}
+            merge: {pairs: [], reason: ""}
+          diagnostics: {sync_mismatch: false, sync_mismatch_detail: null}
+          metadata: {new_context_required: false}
+    expected:
+      layer_index:
+        L1: 0
+        L2: 1
+
+  - id: cst_mux_core_pack
+    description: Core freeze list packaged without alteration
+    input:
+      turn_index: 3
+      cst:
+        core:
+          status: {turn_index: 3, layer_count: 1, frozen_layers: [L1]}
+          signals:
+            freeze: {frozen_objects: [L1], reason: freeze_cmd}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [], magnitude: 0.0}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0.0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0.0}
+          metrics:
+            per_layer:
+              L1: {drift: 0.0, oscillation: 0.0, ambiguity: 0.5, stability: 0.5, collapse: 0.0, continuity: 0.5, combined_instability: 0.5}
+        ms:
+          status: {turn_index: 3, layer_count: 1}
+          stability: {aggregate: {value: 0.5}}
+          instability: {aggregate: {value: 0.5}}
+          collapse_risk: {aggregate: {value: 0.0}}
+          freeze_risk: {aggregate: {value: 0.6}}
+          thaw_readiness: {aggregate: {value: 0.2}}
+          ambiguity_summary: {count: 0}
+          drift_summary: {magnitude: 0.0}
+          oscillation_summary: {frequency: 0.0, amplitude: 0.0}
+          commands:
+            freeze: {layers: [L1], reason: freeze_risk_threshold}
+            thaw: {layers: [], reason: ""}
+            collapse_recovery: {layers: [], reason: ""}
+            create_identity_layer: {requests: []}
+            split: {layers: [], reason: ""}
+            merge: {pairs: [], reason: ""}
+          diagnostics: {sync_mismatch: false, sync_mismatch_detail: null}
+          metadata: {new_context_required: false}
+    expected:
+      core_freeze_contains: [L1]
+      flag_freeze_L1: true
+
+  - id: cst_mux_ms_pack
+    description: MS stability aggregate packaged without alteration
+    input:
+      turn_index: 4
+      cst:
+        core:
+          status: {turn_index: 4, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [L1], magnitude: 0.15}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0.0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0.0}
+          metrics:
+            per_layer:
+              L1: {drift: 0.15, oscillation: 0.0, ambiguity: 0.0, stability: 0.85, collapse: 0.0, continuity: 0.9, combined_instability: 0.15}
+        ms:
+          status: {turn_index: 4, layer_count: 1}
+          stability: {aggregate: {value: 0.72}}
+          instability: {aggregate: {value: 0.28}}
+          collapse_risk: {aggregate: {value: 0.05}}
+          freeze_risk: {aggregate: {value: 0.1}}
+          thaw_readiness: {aggregate: {value: 0.75}}
+          ambiguity_summary: {count: 1}
+          drift_summary: {magnitude: 0.15}
+          oscillation_summary: {frequency: 0.0, amplitude: 0.0}
+          commands:
+            freeze: {layers: [], reason: ""}
+            thaw: {layers: [], reason: ""}
+            collapse_recovery: {layers: [], reason: ""}
+            create_identity_layer: {requests: []}
+            split: {layers: [], reason: ""}
+            merge: {pairs: [], reason: ""}
+          diagnostics: {sync_mismatch: false, sync_mismatch_detail: null}
+          metadata: {new_context_required: false}
+    expected:
+      ms_stability_aggregate: 0.72
+      ms_ambiguity_count: 1
+
+  - id: cst_mux_new_context_passthrough
+    description: new_context_required from MS appears on USP
+    input:
+      turn_index: 5
+      cst:
+        core:
+          status: {turn_index: 5, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [], magnitude: 0.0}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0.0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [L1], severity: 0.9}
+          metrics:
+            per_layer:
+              L1: {drift: 0.0, oscillation: 0.0, ambiguity: 0.0, stability: 0.1, collapse: 0.9, continuity: 0.1, combined_instability: 0.9}
+        ms:
+          status: {turn_index: 5, layer_count: 1}
+          stability: {aggregate: {value: 0.1}}
+          instability: {aggregate: {value: 0.9}}
+          collapse_risk: {aggregate: {value: 0.9}}
+          freeze_risk: {aggregate: {value: 0.8}}
+          thaw_readiness: {aggregate: {value: 0.1}}
+          ambiguity_summary: {count: 0}
+          drift_summary: {magnitude: 0.0}
+          oscillation_summary: {frequency: 0.0, amplitude: 0.0}
+          commands:
+            freeze: {layers: [], reason: ""}
+            thaw: {layers: [], reason: ""}
+            collapse_recovery: {layers: [L1], reason: collapse_risk_threshold}
+            create_identity_layer: {requests: [{reason: new_context_required}]}
+            split: {layers: [], reason: ""}
+            merge: {pairs: [], reason: ""}
+          diagnostics: {sync_mismatch: false, sync_mismatch_detail: null}
+          metadata: {new_context_required: true}
+    expected:
+      new_context_required: true
+
+  - id: cst_mux_no_core_ms_cob_mutation
+    description: Mux does not mutate Core, MS, or COB snapshot
+    input:
+      turn_index: 6
+      identity:
+        cob_state_snapshot:
+          layers: [{layer_id: L1, strength: 1.0}]
+      cst:
+        core:
+          status: {turn_index: 6, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [L1], magnitude: 0.05}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0.0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0.0}
+          metrics:
+            per_layer:
+              L1: {drift: 0.05, oscillation: 0.0, ambiguity: 0.0, stability: 0.95, collapse: 0.0, continuity: 1.0, combined_instability: 0.05}
+        ms:
+          status: {turn_index: 6, layer_count: 1}
+          stability: {aggregate: {value: 0.95}}
+          instability: {aggregate: {value: 0.05}}
+          collapse_risk: {aggregate: {value: 0.0}}
+          freeze_risk: {aggregate: {value: 0.0}}
+          thaw_readiness: {aggregate: {value: 1.0}}
+          ambiguity_summary: {count: 0}
+          drift_summary: {magnitude: 0.05}
+          oscillation_summary: {frequency: 0.0, amplitude: 0.0}
+          commands:
+            freeze: {layers: [], reason: ""}
+            thaw: {layers: [], reason: ""}
+            collapse_recovery: {layers: [], reason: ""}
+            create_identity_layer: {requests: []}
+            split: {layers: [], reason: ""}
+            merge: {pairs: [], reason: ""}
+          diagnostics: {sync_mismatch: false, sync_mismatch_detail: null}
+          metadata: {new_context_required: false}
+    expected:
+      cob_snapshot_unchanged: true
+      core_unchanged: true
+      ms_unchanged: true
+
+  - id: cst_mux_deterministic_replay
+    description: Identical inputs yield identical USP
+    input:
+      turn_index: 7
+      cst:
+        core:
+          status: {turn_index: 7, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [L1], magnitude: 0.25}
+            oscillation: {affected_objects: [L1], frequency: 0.1, amplitude: 0.2}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0.0}
+          metrics:
+            per_layer:
+              L1: {drift: 0.25, oscillation: 0.1, ambiguity: 0.0, stability: 0.7, collapse: 0.0, continuity: 0.8, combined_instability: 0.3}
+        ms:
+          status: {turn_index: 7, layer_count: 1}
+          stability: {aggregate: {value: 0.65}}
+          instability: {aggregate: {value: 0.35}}
+          collapse_risk: {aggregate: {value: 0.05}}
+          freeze_risk: {aggregate: {value: 0.15}}
+          thaw_readiness: {aggregate: {value: 0.7}}
+          ambiguity_summary: {count: 0}
+          drift_summary: {magnitude: 0.25}
+          oscillation_summary: {frequency: 0.1, amplitude: 0.2}
+          commands:
+            freeze: {layers: [], reason: ""}
+            thaw: {layers: [], reason: ""}
+            collapse_recovery: {layers: [], reason: ""}
+            create_identity_layer: {requests: []}
+            split: {layers: [], reason: ""}
+            merge: {pairs: [], reason: ""}
+          diagnostics: {sync_mismatch: false, sync_mismatch_detail: null}
+          metadata: {new_context_required: false}
+    expected:
+      deterministic: true
+
+  - id: cst_mux_merge_neutrality
+    description: MERGE lineage marker alone does not invent instability in USP
+    input:
+      turn_index: 8
+      lineage_log:
+        - lineage_seq: 1
+          module_id: cob
+          event_type: MERGE
+          parent_ref: L1
+          child_refs: [L2]
+      cst:
+        core:
+          status: {turn_index: 8, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [], magnitude: 0.0}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0.0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0.0}
+          metrics:
+            per_layer:
+              L1: {drift: 0.0, oscillation: 0.0, ambiguity: 0.0, stability: 1.0, collapse: 0.0, continuity: 1.0, combined_instability: 0.0}
+        ms:
+          status: {turn_index: 8, layer_count: 1}
+          stability: {aggregate: {value: 0.95}}
+          instability: {aggregate: {value: 0.05}}
+          collapse_risk: {aggregate: {value: 0.0}}
+          freeze_risk: {aggregate: {value: 0.0}}
+          thaw_readiness: {aggregate: {value: 1.0}}
+          ambiguity_summary: {count: 0}
+          drift_summary: {magnitude: 0.0}
+          oscillation_summary: {frequency: 0.0, amplitude: 0.0}
+          commands:
+            freeze: {layers: [], reason: ""}
+            thaw: {layers: [], reason: ""}
+            collapse_recovery: {layers: [], reason: ""}
+            create_identity_layer: {requests: []}
+            split: {layers: [], reason: ""}
+            merge: {pairs: [], reason: ""}
+          diagnostics: {sync_mismatch: false, sync_mismatch_detail: null}
+          metadata: {new_context_required: false}
+    expected:
+      ms_instability_lt: 0.5
+      no_invented_instability: true
