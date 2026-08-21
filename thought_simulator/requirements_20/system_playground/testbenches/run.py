@@ -30,101 +30,33 @@ sys.path.insert(0, repo_root)
 # ============================================================
 ACTIVE_TEST_MODULES = [
 
-    # **************************** InB Test bench ****************************************************
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
-    #     {
-    #         "mode": "general",
-    #         "use_inb": True,
-    #         "tests_to_run": "see inb_tests_to_run.yaml"
-    #     }
-    # ),
-    # **************************** IIInB / IE / CEx / CE / TPU / SOB / ... (commented) **************
-    # **************************** STPX / RBU ******************************************************
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.rbu_testbench",
-    #     {"mode": "testbench", "use_rbu": True, "tests_to_run": "see rbu_tests_to_run.yaml"}
-    # ),
-    # **************************** DCB Test bench ******************************************************
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.dcb_testbench",
-    #     {
-    #         "mode": "testbench",
-    #         "use_dcb": True,
-    #         "tests_to_run": "see dcb_tests_to_run.yaml",
-    #     }
-    # ),
-    # **************************** RB Test bench ******************************************************
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.rb_testbench",
-    #     {
-    #         "mode": "testbench",
-    #         "use_rb": True,
-    #         "tests_to_run": "see rb_tests_to_run.yaml",
-    #     }
-    # ),
-    # **************************** TR Test bench ******************************************************
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.tr_testbench",
-    #     {
-    #         "mode": "testbench",
-    #         "use_tr": True,
-    #         "tests_to_run": "see tr_tests_to_run.yaml",
-    #     }
-    # ),
-    # **************************** CTP Test bench (previously active) *********************************
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.ctp_testbench",
-    #     {
-    #         "mode": "testbench",
-    #         "use_ctp": True,
-    #         "tests_to_run": "see ctp_tests_to_run.yaml",
-    #     }
-    # ),
-    # **************************** IdOB Test bench (previously active) ********************************
-    # Category: path_a/identity/
-    # Dual-mode: testbench (idob_testbench.yaml) | general (idob_input.yaml + rules)
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.identity.idob_testbench",
-    #     {
-    #         "mode": "testbench",     # "general" or "testbench"
-    #         "use_idob": True,        # Primitive under test
-    #         "tests_to_run": "see idob_tests_to_run.yaml",
-    #     }
-    # ),
-    # **************************** MCB Test bench (previously active) *********************************
-    # Category: path_a/identity/
-    # Dual-mode: testbench (mcb_testbench.yaml) | general (mcb_input.yaml + rules)
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.identity.mcb_testbench",
-    #     {
-    #         "mode": "testbench",     # "general" or "testbench"
-    #         "use_mcb": True,         # Primitive under test
-    #         "tests_to_run": "see mcb_tests_to_run.yaml",
-    #     }
-    # ),
-    # **************************** OuBA Test bench (previously active) ********************************
-    # Category: path_a/output/
-    # Dual-mode: testbench (ouba_testbench.yaml) | general (ouba_input.yaml + rules)
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.output.ouba_testbench",
-    #     {
-    #         "mode": "testbench",     # "general" or "testbench"
-    #         "use_ouba": True,         # Primitive under test
-    #         "tests_to_run": "see ouba_tests_to_run.yaml",
-    #     }
-    # ),
+    # **************************** InB / IIInB / IE / CEx / CE / ... (commented) **************
+    # **************************** IdOB / MCB / OuBA (commented) ******************************
 
-    # **************************** COB Test bench (ACTIVE) ********************************************
+    # **************************** COB Test bench (previously active) *************************
     # Category: path_a/context/
     # Dual-mode: testbench (cob_testbench.yaml) | general (cob_input.yaml + rules)
     # Normative: 20.32, cob_requirements.md, cob_py_struc_pgm.md, patha_field_names.md
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cob_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_cob": True,
+    #         "tests_to_run": "see cob_tests_to_run.yaml",
+    #     }
+    # ),
+
+    # **************************** CIL Test bench (ACTIVE) ************************************
+    # Category: path_a/context/
+    # Dual-mode: testbench (cil_testbench.yaml) | general (cil_input.yaml + rules)
+    # Slice: identity_selection (cil_testbench_schema.md v0.1)
+    # Normative: 20.33, cil_requirements.md, cil_py_struc_pgm.md, patha_field_names.md
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cob_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cil_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
-            "use_cob": True,          # Primitive under test
-            "tests_to_run": "see cob_tests_to_run.yaml",
+            "use_cil": True,          # Primitive under test
+            "tests_to_run": "see cil_tests_to_run.yaml",
         }
     ),
 ]
