@@ -292,6 +292,53 @@ CEx relies on next‑turn context for continuity across turns.
 
 ---
 
+## **5.7 Path‑A Extensions to CIL Intake Packet (Informative)**
+
+The CIL Intake Packet now includes additional fields required by the updated Path‑A context substrate. These fields originate in COB, are reflected by CIL, and are consumed by CEx‑CCR, CEx‑Pck, CE, and MCB. The testbench evaluates these fields to ensure that the system_playground CIL implementation remains aligned with the full Path‑A specification.
+
+### **Lineage Fields**
+CIL includes:
+- `identity_lineage`  
+- `continuity_lineage`  
+
+These fields describe long‑horizon identity and continuity relationships used by downstream primitives for alignment and continuity reasoning.
+
+### **Topology**
+CIL includes:
+- `topology`  
+
+This field represents the identity‑layer graph structure produced by COB and preserved through CIL.
+
+### **Scalar Metrics**
+CIL includes the bounded‑semantic metrics produced by COB:
+- `ambiguity_score`  
+- `collapse_risk`  
+- `drift_score`  
+- `stability_score`  
+- `lineage_confidence`
+
+These metrics are used by CEx‑CCR for deterministic alignment and decision logic.
+
+### **Continuity Signals**
+CIL includes:
+- `register_continuity`  
+- `importance_continuity`
+
+These continuity signals are used by CEx and MCB for continuity reasoning and next‑turn context generation.
+
+### **Testbench Role**
+The testbench inspects these fields to verify:
+
+- correct reflection of COB lineage and topology  
+- correct propagation of continuity signals  
+- correct inclusion of scalar metrics  
+- deterministic packet structure  
+- stable behavior across repeated runs  
+
+These extensions ensure that the CIL Intake Packet fully supports the updated Path‑A pipeline.
+
+---
+
 # **6. What Good Results Look Like**  
 *(Informative)*
 
@@ -329,4 +376,3 @@ The CIL testbench ensures that CIL:
 This guarantees that CEx receives a stable, interpretable identity‑layer context for correction expansion, and that OuBA can reconstruct the full historical chain of identity‑layer processing.
 
 ---
-Just tell me what you want next.
