@@ -1,5 +1,3 @@
-"""
-CST-MS package.
-"""
+from .cst_ms import CST_MS, process, get_primitive_name, PRIMITIVE_NAME
 
-from .cst_ms import CST_MS
+__all__ = ["CST_MS", "process", "get_primitive_name", "PRIMITIVE_NAME"]
