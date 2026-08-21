@@ -1,238 +1,296 @@
 """
-CIL Testbench — System Playground Version
-
-This testbench performs block-level validation of the CIL subsystem.
-It tests:
-- identity selection
-- certainty aggregation
-- stability aggregation
-- lineage aggregation
-- ordering aggregation
-- CST signal integration
-- intake packet construction
-
-This is NOT a full system simulation. It is a shaping testbench used
-inside system_playground before system_simulation.
+CIL Testbench (Version 0.1 — identity-selection slice)
+  • mode == "testbench" → cil_testbench.yaml structural match
+  • mode == "general"   → cil_input.yaml + cil_rules.yaml
+Aligned with progressive_lineup_testing.md v4.2,
+20.33, cil_requirements.md, cil_py_struc_pgm.md, cil_testbench_schema.md.
 """
 
-from cil.cil import CIL, IdentityObject
+from __future__ import annotations
+
+import copy
+import os
+import sys
+
+import yaml
+
+# Mandatory import-path initialization
+TB_DIR = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.abspath(os.path.join(TB_DIR, "..", "..", ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+from thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cil_rulechecker import (  # noqa: E402
+    CILRuleChecker,
+)
+from thought_simulator.requirements_20.system_playground.primitives.cil.cil import (  # noqa: E402
+    get_primitive_name,
+    process as cil_process,
+)
+
+assert get_primitive_name() == "cil", (
+    f"Primitive name mismatch: expected cil, got {get_primitive_name()}"
+)
+
+TESTBENCH_CONFIG: dict = {}
+BASE_DIR = os.path.dirname(__file__)
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-def make_identity_object(
-    id: str,
-    recency: int,
-    frequency: int,
-    density: int,
-    drift=None,
-    oscillation=None,
-    collapse=False,
-    certainty=None,
-    ambiguity=None,
-    lineage_stability=None,
-):
-    """Helper to create IdentityObject instances for testing."""
-
-    return IdentityObject(
-        id=id,
-        referent_map={"r1": "value"},
-        anchors=["a1", "a2"],
-        lineage={"stability": lineage_stability},
-        ambiguity={"certainty": certainty, "ambiguity": ambiguity},
-        stability_metrics={
-            "drift": drift,
-            "oscillation": oscillation,
-            "collapse": collapse,
-            "merge_split": None,
-            "freeze_thaw": None,
-        },
-        ordering_metrics={
-            "recency": recency,
-            "frequency": frequency,
-            "density": density,
-        },
-    )
+def set_testbench_config(config):
+    global TESTBENCH_CONFIG
+    TESTBENCH_CONFIG = config or {}
 
 
-def make_cst_signals(turn_index: int = None):
-    """Synthetic CST signals for testing."""
+def load_yaml(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def _get_path(d: dict, path: list):
+    cur = d
+    for key in path:
+        if not isinstance(cur, dict):
+            return None
+        cur = cur.get(key)
+    return cur
+
+
+def _compare_identity_selection(actual: dict, expected: dict) -> list:
+    """Strict comparison of identity_selection block fields."""
+    diffs = []
+    if not isinstance(actual, dict):
+        return [f"identity_selection missing or not a dict: {actual!r}"]
+    if not isinstance(expected, dict):
+        return ["expected identity_selection is not a dict"]
+
+    for key in ("primary_identity", "secondary_identity", "ordering_score"):
+        if key not in expected:
+            continue
+        exp = expected[key]
+        act = actual.get(key)
+        if key == "ordering_score":
+            try:
+                if float(act) != float(exp):
+                    diffs.append(f"{key}: expected {exp}, got {act}")
+            except (TypeError, ValueError):
+                if act != exp:
+                    diffs.append(f"{key}: expected {exp}, got {act}")
+        else:
+            if act != exp:
+                diffs.append(f"{key}: expected {exp}, got {act}")
+
+    exp_om = expected.get("ordering_metrics") or {}
+    act_om = actual.get("ordering_metrics") or {}
+    for key, exp in exp_om.items():
+        act = act_om.get(key)
+        if key in ("density",):
+            try:
+                if float(act) != float(exp):
+                    diffs.append(f"ordering_metrics.{key}: expected {exp}, got {act}")
+            except (TypeError, ValueError):
+                if act != exp:
+                    diffs.append(f"ordering_metrics.{key}: expected {exp}, got {act}")
+        else:
+            if act != exp:
+                diffs.append(f"ordering_metrics.{key}: expected {exp}, got {act}")
+
+    return diffs
+
+
+def run_single_test(test_entry):
+    test_id = test_entry["id"]
+    enabled = test_entry.get("enabled", False)
+
+    print("\n------------------------------------------------------------")
+    print(f"Running Test: {test_id}")
+    print("------------------------------------------------------------")
+
+    if not enabled:
+        print(f"- Test {test_id} is DISABLED. Skipping.")
+        return {"id": test_id, "enabled": False, "passed": None, "errors": []}
+
+    rules_file = os.path.join(BASE_DIR, "cil_rules.yaml")
+    rules = load_yaml(rules_file).get("rules", [])
+
+    testbench_file = os.path.join(BASE_DIR, "cil_testbench.yaml")
+    tb = load_yaml(testbench_file)
+    tb_test = next((t for t in tb.get("tests", []) if t.get("id") == test_id), None)
+    if tb_test is None:
+        raise KeyError(f"Test ID {test_id} not found in cil_testbench.yaml")
+
+    tp_input = copy.deepcopy(tb_test["input"])
+    expected = tb_test.get("expected") or {}
+
+    print("- Input Source: cil_testbench.yaml (testbench mode)")
+    print("- Expected Output Source: cil_testbench.yaml (expected block)")
+
+    tp_before = copy.deepcopy(tp_input)
+    tp_output = cil_process(copy.deepcopy(tp_input), mode="testbench")
+
+    diffs = []
+
+    # Compare identity_selection under canonical path
+    exp_sel = _get_path(expected, ["cil", "intake_packet", "identity_selection"])
+    act_sel = _get_path(tp_output, ["cil", "intake_packet", "identity_selection"])
+    if exp_sel is not None:
+        diffs.extend(_compare_identity_selection(act_sel or {}, exp_sel))
+
+    # Compare cob snapshot intact when expected
+    exp_snap = _get_path(expected, ["identity", "cob_state_snapshot"])
+    if exp_snap is not None:
+        act_snap = _get_path(tp_output, ["identity", "cob_state_snapshot"])
+        if act_snap != exp_snap:
+            diffs.append("identity.cob_state_snapshot diverged from expected")
+
+    # semantic_core must remain if present in expected
+    if "semantic_core" in expected:
+        if tp_output.get("semantic_core") != expected.get("semantic_core"):
+            diffs.append("semantic_core mutated or missing")
+
+    # Packet must exist at canonical path
+    packet = _get_path(tp_output, ["cil", "intake_packet"])
+    if not isinstance(packet, dict):
+        diffs.append("TP.cil.intake_packet missing")
+
+    # routing_path should include cil
+    rp = tp_output.get("routing_path") or []
+    if "cil" not in rp:
+        diffs.append("routing_path missing 'cil'")
+
+    checker = CILRuleChecker(tp_before, tp_output, rules)
+    rule_errors = checker.run()
+
+    passed = len(diffs) == 0
+
+    print("\n----- Test Result -----")
+    print(f"- {'PASS' if passed else 'FAIL'}: {test_id}")
+    print(f"- Structural Match: {'PASS' if passed else 'FAIL'}")
+    if diffs:
+        print("- Diffs:")
+        for m in diffs:
+            print(f"  * {m}")
+    if rule_errors:
+        print("- Rule Violations (diagnostic):")
+        for rid, msg in rule_errors:
+            print(f"  * [{rid}] {msg}")
+    else:
+        print("- Rule Violations: None")
+
+    print("\nContext Summary:")
+    sel = act_sel or {}
+    print(f"- primary_identity: {sel.get('primary_identity')}")
+    print(f"- secondary_identity: {sel.get('secondary_identity')}")
+    print(f"- ordering_score: {sel.get('ordering_score')}")
+    om = sel.get("ordering_metrics") or {}
+    print(f"- ordering_metrics.recency: {om.get('recency')}")
+    print(f"- ordering_metrics.frequency: {om.get('frequency')}")
+    print(f"- ordering_metrics.density: {om.get('density')}")
+
     return {
-        "drift": {"affected_objects": [], "magnitude": 0},
-        "oscillation": {"affected_objects": [], "frequency": 0, "amplitude": 0},
-        "collapse": {"collapsed_objects": [], "severity": 0},
-        "merge": {"merge_pairs": [], "confidence": 0},
-        "split": {"split_objects": [], "confidence": 0},
-        "freeze": {"frozen_objects": [], "reason": None},
-        "thaw": {"thawed_objects": [], "reason": None},
-        "certainty_adjustment": {"increased_certainty": [], "decreased_certainty": []},
-        "ambiguity_adjustment": {"increased_ambiguity": [], "decreased_ambiguity": []},
-        "lineage_stability": {"stable_lineage": [], "unstable_lineage": []},
-        "metadata": {"turn_index": turn_index},
+        "id": test_id,
+        "enabled": True,
+        "passed": passed,
+        "errors": rule_errors,
     }
 
 
-# ---------------------------------------------------------------------------
-# Tests
-# ---------------------------------------------------------------------------
+def run_general_mode():
+    print("\n------------------------------------------------------------")
+    print("Running General Mode: cil_input.yaml")
+    print("------------------------------------------------------------")
+    print("- Input Source: cil_input.yaml (general mode)")
+    print("- Checked By: cil_rules.yaml (rule-driven validation)")
 
-def run_basic_test():
-    """Run a basic CIL test with three identity objects."""
+    rules_file = os.path.join(BASE_DIR, "cil_rules.yaml")
+    rules = load_yaml(rules_file).get("rules", [])
 
-    print("\n=== CIL Testbench: Basic Test ===")
+    input_file = os.path.join(BASE_DIR, "cil_input.yaml")
+    tp_input = load_yaml(input_file) or {}
+    for k in ("mode", "primitive", "version", "notes"):
+        tp_input.pop(k, None)
 
-    obj1 = make_identity_object(
-        id="obj1",
-        recency=10,
-        frequency=5,
-        density=3,
-        drift=0.1,
-        oscillation=0.0,
-        collapse=False,
-        certainty="high",
-        ambiguity="low",
-        lineage_stability="stable",
-    )
+    tp_before = copy.deepcopy(tp_input)
+    tp_output = cil_process(copy.deepcopy(tp_input), mode="general")
 
-    obj2 = make_identity_object(
-        id="obj2",
-        recency=7,
-        frequency=9,
-        density=2,
-        drift=0.3,
-        oscillation=0.2,
-        collapse=False,
-        certainty="low",
-        ambiguity="high",
-        lineage_stability="unstable",
-    )
+    checker = CILRuleChecker(tp_before, tp_output, rules)
+    rule_errors = checker.run()
+    passed = len(rule_errors) == 0
 
-    obj3 = make_identity_object(
-        id="obj3",
-        recency=1,
-        frequency=1,
-        density=1,
-        drift=None,
-        oscillation=None,
-        collapse=True,
-        certainty=None,
-        ambiguity=None,
-        lineage_stability="stable",
-    )
+    print("\n----- Test Result -----")
+    print(f"- {'PASS' if passed else 'FAIL'}: general_cil_input")
+    if rule_errors:
+        print("- Rule Violations:")
+        for rid, msg in rule_errors:
+            print(f"  * [{rid}] {msg}")
+    else:
+        print("- Rule Violations: None")
 
-    cob_objects = [obj1, obj2, obj3]
-    cst_signals = make_cst_signals(turn_index=1)
+    sel = _get_path(tp_output, ["cil", "intake_packet", "identity_selection"]) or {}
+    print("\nContext Summary:")
+    print(f"- primary_identity: {sel.get('primary_identity')}")
+    print(f"- secondary_identity: {sel.get('secondary_identity')}")
+    print(f"- ordering_score: {sel.get('ordering_score')}")
+    print(f"- routing_path: {tp_output.get('routing_path')}")
 
-    cil = CIL()
-    packet = cil.run(cob_objects, cst_signals, {}, 1)
-
-    print("\n--- Identity Selection Block ---")
-    for entry in packet.identity_selection_block:
-        print(entry["id"], entry["ordering_metrics"])
-
-    print("\n--- Certainty Block ---")
-    print(packet.referent_certainty_block)
-
-    print("\n--- Stability Block (COB-derived) ---")
-    print(packet.stability_block)
-
-    print("\n--- Lineage Block ---")
-    print(packet.lineage_block)
-
-    print("\n--- Ordering Block ---")
-    print(packet.ordering_block)
-
-    print("\n--- CST Block (CST-derived) ---")
-    print(packet.cst_block)
-
-    print("\n--- Packet Metadata ---")
-    print(packet.packet_metadata)
+    return {
+        "id": "general_cil_input",
+        "enabled": True,
+        "passed": passed,
+        "errors": rule_errors,
+    }
 
 
-def run_selection_priority_test():
-    """Test deterministic selection ordering based on recency/frequency/density."""
+def run_testbench():
+    print("\n============================================================")
+    print(" CIL Testbench Runner - Starting Execution")
+    print("============================================================")
 
-    print("\n=== CIL Testbench: Selection Priority Test ===")
+    mode = (TESTBENCH_CONFIG or {}).get("mode", "testbench")
+    print(f"- Mode: {mode}")
 
-    objs = [
-        make_identity_object("A", recency=1, frequency=1, density=1),
-        make_identity_object("B", recency=5, frequency=1, density=1),
-        make_identity_object("C", recency=5, frequency=3, density=1),
-        make_identity_object("D", recency=5, frequency=3, density=4),
-        make_identity_object("E", recency=2, frequency=9, density=9),
-    ]
+    results = []
+    total = passed = failed = 0
 
-    cil = CIL()
-    packet = cil.run(objs, make_cst_signals(turn_index=2), {}, 2)
+    if mode == "general":
+        result = run_general_mode()
+        results.append(result)
+        total = 1
+        if result["passed"]:
+            passed = 1
+        else:
+            failed = 1
+    else:
+        tests_to_run_file = os.path.join(BASE_DIR, "cil_tests_to_run.yaml")
+        tests_to_run = load_yaml(tests_to_run_file)
+        tests = tests_to_run.get("tests", [])
 
-    print("\n--- Selection Order (Top 5) ---")
-    for entry in packet.identity_selection_block:
-        print(entry["id"], entry["ordering_metrics"])
+        for test in tests:
+            result = run_single_test(test)
+            if not test.get("enabled", False):
+                continue
+            total += 1
+            if result["passed"]:
+                passed += 1
+            else:
+                failed += 1
+            results.append(result)
 
+    print("\n============================================================")
+    print(" CIL Testbench Summary")
+    print("============================================================")
+    print(f"- Total Tests Enabled: {total}")
+    print(f"- Passed: {passed}")
+    print(f"- Failed: {failed}")
+    print("\nDetailed Results:")
+    for r in results:
+        status = "PASS" if r["passed"] else "FAIL"
+        print(f"- {r['id']}: {status}")
 
-def run_stability_aggregation_test():
-    """Test aggregation of drift, oscillation, collapse, merge/split, freeze/thaw."""
+    print("\n============================================================")
+    print(" CIL Testbench Runner - Complete")
+    print("============================================================")
 
-    print("\n=== CIL Testbench: Stability Aggregation Test ===")
-
-    objs = [
-        make_identity_object("X", recency=9, frequency=1, density=1, drift=0.5),
-        make_identity_object("Y", recency=8, frequency=2, density=1, oscillation=0.3),
-        make_identity_object("Z", recency=7, frequency=3, density=1, collapse=True),
-    ]
-
-    cil = CIL()
-    packet = cil.run(objs, make_cst_signals(turn_index=3), {}, 3)
-
-    print("\n--- Stability Block (COB-derived) ---")
-    print(packet.stability_block)
-
-
-def run_lineage_aggregation_test():
-    """Test aggregation of lineage stability indicators."""
-
-    print("\n=== CIL Testbench: Lineage Aggregation Test ===")
-
-    objs = [
-        make_identity_object("L1", recency=5, frequency=2, density=1, lineage_stability="stable"),
-        make_identity_object("L2", recency=4, frequency=3, density=2, lineage_stability="unstable"),
-        make_identity_object("L3", recency=3, frequency=1, density=1, lineage_stability="stable"),
-    ]
-
-    cil = CIL()
-    packet = cil.run(objs, make_cst_signals(turn_index=4), {}, 4)
-
-    print("\n--- Lineage Block ---")
-    print(packet.lineage_block)
-
-
-def run_ordering_aggregation_test():
-    """Test aggregation of recency, frequency, and density metrics."""
-
-    print("\n=== CIL Testbench: Ordering Aggregation Test ===")
-
-    objs = [
-        make_identity_object("O1", recency=10, frequency=1, density=5),
-        make_identity_object("O2", recency=7, frequency=4, density=2),
-        make_identity_object("O3", recency=3, frequency=9, density=1),
-    ]
-
-    cil = CIL()
-    packet = cil.run(objs, make_cst_signals(turn_index=5), {}, 5)
-
-    print("\n--- Ordering Block ---")
-    print(packet.ordering_block)
-
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    run_basic_test()
-    run_selection_priority_test()
-    run_stability_aggregation_test()
-    run_lineage_aggregation_test()
-    run_ordering_aggregation_test()
+    set_testbench_config({"mode": "testbench"})
+    run_testbench()
