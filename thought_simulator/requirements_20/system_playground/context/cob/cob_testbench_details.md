@@ -591,7 +591,43 @@ This ensures compliance with HLR‑COB‑025 and preserves deterministic replay.
 **Bad result:**  
 - semantic reconstruction  
 - nondeterministic compression  
-- incorrect embedding or duplication  
+- incorrect embedding or duplication
+
+## **5.11 Path‑A Lineage, Topology, Metrics, and Continuity Tests (Informative)**
+
+The COB testbench now includes additional validation steps required by the updated Path‑A context substrate. These tests ensure that COB exposes all lineage, topology, metrics, and continuity fields needed by CIL, CEx‑CCR, CEx‑Pck, CE, and MCB.
+
+### **Identity Lineage Tests**
+The testbench verifies that each identity‑layer object includes a deterministic `identity_lineage` structure.  
+This lineage is preserved across updates, merges, splits, and compression, and is exposed to CIL without semantic reconstruction.
+
+### **Continuity Lineage Tests**
+The testbench validates `continuity_lineage`, ensuring that turn‑to‑turn continuity, fallback continuity, and lineage‑based stability are preserved and deterministic across replay.
+
+### **Topology Tests**
+The testbench verifies that COB produces a deterministic identity‑layer `topology` describing structural relationships among identity‑layer objects.  
+Topology must remain stable across merges, splits, and compression.
+
+### **Scalar Metrics Tests**
+The testbench validates the bounded‑semantic metrics produced by COB:
+
+- `ambiguity_score`  
+- `collapse_risk`  
+- `drift_score`  
+- `stability_score`  
+- `lineage_confidence`
+
+These metrics must be computed deterministically and preserved across replay.
+
+### **Register Continuity Tests**
+The testbench verifies that COB exposes `register_continuity` describing long‑horizon register stability and transitions.  
+This continuity signal is used by CEx and MCB for next‑turn register and politeness generation.
+
+### **Importance Continuity Tests**
+The testbench validates `importance_continuity`, ensuring that importance propagation across identity‑layer objects is deterministic and preserved across replay.
+
+### **Integration with CIL**
+The testbench confirms that all lineage, topology, metrics, and continuity fields appear in the COB → CIL transfer block exactly as expected by the updated CIL Intake Packet schema.
 
 ---
 
