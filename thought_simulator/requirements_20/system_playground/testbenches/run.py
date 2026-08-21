@@ -405,16 +405,29 @@ ACTIVE_TEST_MODULES = [
     #     }
     # ),
 
-    # **************************** CST-MS Test bench (ACTIVE) ******************************************
+    # **************************** CST-MS Test bench (previously active) *******************************
     # Category: path_a/context/
     # Dual-mode: testbench (cst_ms_testbench.yaml) | general (cst_ms_input.yaml + rules)
     # Normative: 20.32.010.020, cst_ms_py_struc_pgm.md, patha_field_names.md (TP.cst.ms)
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cst_ms_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_cst_ms": True,       # Primitive under test
+    #         "tests_to_run": "see cst_ms_tests_to_run.yaml",
+    #     }
+    # ),
+
+    # **************************** CST-Mux Test bench (ACTIVE) ******************************************
+    # Category: path_a/context/
+    # Dual-mode: testbench (cst_mux_testbench.yaml) | general (cst_mux_input.yaml + rules)
+    # Normative: 20.32.010.030, cst_mux_py_struc_pgm.md, patha_field_names.md (TP.cst.mux)
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cst_ms_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cst_mux_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
-            "use_cst_ms": True,       # Primitive under test
-            "tests_to_run": "see cst_ms_tests_to_run.yaml",
+            "use_cst_mux": True,      # Primitive under test
+            "tests_to_run": "see cst_mux_tests_to_run.yaml",
         }
     ),
 ]
