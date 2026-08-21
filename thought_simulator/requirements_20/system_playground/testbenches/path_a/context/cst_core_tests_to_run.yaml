@@ -1,1 +1,37 @@
+# CST-Core Tests To Run
+# progressive_lineup_testing.md dual-mode selector
+version: "0.1"
+primitive: cst_core
 
+tests:
+  - id: cst_core_envelope_present
+    enabled: true
+    description: "TP.cst.core envelope with status/signals/metrics/history/audit present"
+
+  - id: cst_core_freeze_emission
+    enabled: true
+    description: "High combined instability emits freeze signal"
+
+  - id: cst_core_thaw_emission
+    enabled: true
+    description: "Frozen layer with low instability emits thaw"
+
+  - id: cst_core_continuity_key_present
+    enabled: true
+    description: "signals.continuity_restoration always present"
+
+  - id: cst_core_history_window_cap
+    enabled: true
+    description: "history.turns length never exceeds 10"
+
+  - id: cst_core_merge_parent_hygiene
+    enabled: true
+    description: "MERGE parents excluded from collapse false-positives"
+
+  - id: cst_core_no_cob_mutation
+    enabled: true
+    description: "cob_state_snapshot not mutated by CST-Core"
+
+  - id: cst_core_deterministic_replay
+    enabled: true
+    description: "Identical inputs → identical cst.core signals/metrics"
