@@ -1,1 +1,223 @@
+# CST-Core Testbench Cases (v0.1)
+# progressive dual-mode — expected blocks assert TP.cst.core paths
+version: "0.1"
+primitive: cst_core
 
+tests:
+  - id: cst_core_envelope_present
+    description: "Envelope keys present at TP.cst.core"
+    input:
+      turn_index: 1
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: A
+              referent_map: {r: 1}
+              anchors: []
+              lineage: {stability: stable}
+              ambiguity: {certainty: high, ambiguity: low}
+              stability_metrics: {drift: 0.0, oscillation: 0.0, collapse: false, frozen: false}
+      lineage_log: []
+      routing_path: []
+    expected:
+      cst:
+        core:
+          status:
+            turn_index: 1
+            layer_count: 1
+          audit:
+            provisional_metrics: true
+          signals:
+            freeze: {}
+            thaw: {}
+            continuity_restoration: {}
+            drift: {}
+            oscillation: {}
+            ambiguity: {}
+            collapse: {}
+
+  - id: cst_core_freeze_emission
+    description: "High drift/collapse → freeze emission"
+    input:
+      turn_index: 2
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: unstable1
+              referent_map: {r: x}
+              anchors: [a]
+              lineage: {}
+              ambiguity: {certainty: low, ambiguity: high}
+              stability_metrics:
+                drift: 1.2
+                oscillation: 0.8
+                collapse: true
+                frozen: false
+      lineage_log: []
+      routing_path: []
+    expected:
+      cst:
+        core:
+          signals:
+            freeze:
+              frozen_objects: [unstable1]
+            collapse:
+              collapsed_objects: [unstable1]
+            drift:
+              affected_objects: [unstable1]
+
+  - id: cst_core_thaw_emission
+    description: "Prior frozen + low instability → thaw"
+    input:
+      turn_index: 3
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: was_frozen
+              referent_map: {r: y}
+              anchors: []
+              lineage: {}
+              ambiguity: {certainty: high, ambiguity: low}
+              stability_metrics:
+                drift: 0.0
+                oscillation: 0.0
+                collapse: false
+                frozen: true
+      cst:
+        core:
+          status:
+            frozen_layers: [was_frozen]
+          history:
+            window_len: 10
+            turns: []
+          metrics:
+            per_layer: {}
+      lineage_log: []
+      routing_path: []
+    expected:
+      cst:
+        core:
+          signals:
+            thaw:
+              thawed_objects: [was_frozen]
+
+  - id: cst_core_continuity_key_present
+    description: "continuity_restoration key always present"
+    input:
+      turn_index: 4
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: C
+              referent_map: {}
+              stability_metrics: {drift: 0.0, oscillation: 0.0, collapse: false}
+              ambiguity: {}
+              lineage: {}
+              anchors: []
+      lineage_log: []
+      routing_path: []
+    expected:
+      cst:
+        core:
+          signals:
+            continuity_restoration:
+              restored_objects: []
+
+  - id: cst_core_history_window_cap
+    description: "Multi-turn history capped at 10"
+    input:
+      turn_index: 0
+      multi_turn: 15
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: H
+              referent_map: {r: 1}
+              anchors: []
+              lineage: {}
+              ambiguity: {}
+              stability_metrics: {drift: 0.1, oscillation: 0.0, collapse: false}
+      lineage_log: []
+      routing_path: []
+    expected:
+      history_len_le: 10
+      last_turn_index: 15
+
+  - id: cst_core_merge_parent_hygiene
+    description: "MERGE parents not in collapse.collapsed_objects"
+    input:
+      turn_index: 5
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: P1
+              referent_map: {}
+              anchors: []
+              lineage: {}
+              ambiguity: {}
+              stability_metrics: {drift: 0.9, oscillation: 0.0, collapse: true, frozen: false}
+            - id: P2
+              referent_map: {}
+              anchors: []
+              lineage: {}
+              ambiguity: {}
+              stability_metrics: {drift: 0.8, oscillation: 0.0, collapse: true, frozen: false}
+            - id: C
+              referent_map: {}
+              anchors: []
+              lineage: {parents: [P1, P2]}
+              ambiguity: {}
+              stability_metrics: {drift: 0.0, oscillation: 0.0, collapse: false, frozen: false}
+      lineage_log:
+        - event_type: MERGE
+          parent_ref: [P1, P2]
+          child_refs: [C]
+      routing_path: []
+    expected:
+      cst:
+        core:
+          signals:
+            collapse:
+              not_in_collapsed: [P1, P2]
+
+  - id: cst_core_no_cob_mutation
+    description: "Snapshot identity objects unchanged after process"
+    input:
+      turn_index: 6
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: keep
+              referent_map: {r: 1}
+              anchors: [a1]
+              lineage: {stability: stable}
+              ambiguity: {certainty: high}
+              stability_metrics: {drift: 0.3, oscillation: 0.0, collapse: false}
+      lineage_log: []
+      routing_path: []
+    expected:
+      cob_snapshot_unchanged: true
+
+  - id: cst_core_deterministic_replay
+    description: "Two independent process calls yield identical signals"
+    input:
+      turn_index: 10
+      identity:
+        cob_state_snapshot:
+          objects:
+            - id: A
+              referent_map: {r: 1}
+              anchors: []
+              lineage: {}
+              ambiguity: {certainty: low, ambiguity: high}
+              stability_metrics: {drift: 0.7, oscillation: 0.2, collapse: false}
+            - id: B
+              referent_map: {r: 2}
+              anchors: []
+              lineage: {}
+              ambiguity: {}
+              stability_metrics: {drift: 0.0, oscillation: 0.0, collapse: true}
+      lineage_log: []
+      routing_path: []
+    expected:
+      deterministic: true
