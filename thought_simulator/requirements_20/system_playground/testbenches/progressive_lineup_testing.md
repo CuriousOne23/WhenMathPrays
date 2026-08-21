@@ -998,6 +998,147 @@ All primitives follow the same two‑mode testing system.
 
 ---
 
+## **10.1 Context Pipeline Primitive Testing (COB, CIL, CST‑Core, CST‑MS, CST‑MUX)**
+
+The Path‑A Progressive Lineup Testing Framework now formally includes the **context pipeline**, consisting of:
+
+- **COB** — Context Object Builder  
+- **CIL** — Context Integration Layer  
+- **CST‑Core** — Core Context State Tracker  
+- **CST‑MS** — Multi‑Signal Context State Tracker  
+- **CST‑MUX** — Context Multiplexer  
+
+These primitives follow *exactly the same* two‑mode testing system defined in Sections **3.1–3.3**, including:
+
+- deterministic **testbench mode** (input + expected)  
+- rule‑driven **general mode** (input only + rulechecker)  
+- mandatory directory schema for primitive discovery
+- mandatory import‑path initialization  
+- mandatory naming discipline and registration    
+- mandatory standardized PASS/FAIL output format  
+
+---
+
+## **10.2 Directory Schema for Context Pipeline Primitives**
+
+A new directory is added under **testbenches/path_a**:
+
+```
+testbenches/path_a/context/
+```
+
+This directory contains the testbenches for:
+
+```
+cob_testbench.py
+cob_testbench.yaml
+cob_rules.yaml
+cob_tests_to_run.yaml
+
+cil_testbench.py
+cil_testbench.yaml
+cil_rules.yaml
+cil_tests_to_run.yaml
+
+cst_core_testbench.py
+cst_core_testbench.yaml
+cst_core_rules.yaml
+cst_core_tests_to_run.yaml
+
+cst_ms_testbench.py
+cst_ms_testbench.yaml
+cst_ms_rules.yaml
+cst_ms_tests_to_run.yaml
+
+cst_mux_testbench.py
+cst_mux_testbench.yaml
+cst_mux_rules.yaml
+cst_mux_tests_to_run.yaml
+```
+
+Primitive implementations live under the new **primitives** subdirectories:
+
+```
+primitives/cob/cob.py
+primitives/cil/cil.py
+primitives/cst_core/cst_core.py
+primitives/cst_ms/cst_ms.py
+primitives/cst_mux/cst_mux.py
+```
+
+This follows the mandatory schema in Section **3.6.1** and **3.6.2**.
+
+---
+
+## **10.3 Context Pipeline Progressive Lineup Behavior**
+
+Context primitives participate in progressive lineup testing exactly like Path‑A primitives:
+
+### **Upstream selection**
+If the user enables:
+
+```
+use_cob = true
+use_cil = true
+use_cst_core = true
+use_cst_ms = true
+use_cst_mux = true
+```
+
+then:
+
+- the furthest upstream enabled primitive determines the simulation input  
+- all downstream context primitives execute normally (even if use_<primitive> = false), preserving pipeline continuity  
+- deterministic replay is enforced across all five primitives  
+
+This mirrors the progressive upstream rule in Section **4**.
+
+---
+
+## **10.4 Context Pipeline Boundary Discipline**
+
+Each context primitive has strict envelope boundaries, consistent with Section **5**:
+
+- **COB** may construct context objects but must not modify upstream TP fields  
+- **CIL** may merge context signals but must not alter COB outputs except through defined integration rules  
+- **CST‑Core** may update core context state only within its declared envelope  
+- **CST‑MS** may update multi‑signal state only within its declared envelope  
+- **CST‑MUX** may select or merge context branches but must not mutate upstream envelopes  
+
+All forbidden‑field, read‑only, and write‑only rules apply identically.
+
+---
+
+## **10.5 Deterministic Replay & Python/C++ Parity**
+
+All context primitives must satisfy deterministic replay rules in Section **7** and parity rules in Section **8**:
+
+- identical inputs → identical outputs  
+- identical upstream envelopes → identical downstream envelopes  
+- identical context signals → identical CST‑Core/CST‑MS/CST‑MUX outputs  
+- identical COB/CIL behavior across Python and C++  
+
+Parity failures are critical.
+
+---
+
+## **10.6 Mandatory Testbench Output Format**
+
+All context pipeline testbenches must use the standardized PASS/FAIL format defined in Section **3.9**, including:
+
+- test header  
+- input source  
+- expected output source or rulechecker  
+- PASS/FAIL  
+- structural match (testbench mode)  
+- rule violations (general mode)  
+- context summary  
+- final summary block  
+
+This ensures uniformity across Path‑A and context primitives.
+
+---
+
 # **11. Summary**
 
 The **Progressive Lineup Testing Framework** is the authoritative testing strategy for **all Path‑A primitives**.
