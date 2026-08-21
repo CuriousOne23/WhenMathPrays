@@ -34,12 +34,262 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
     #     {
-    #         "mode": "general",
+    #         "mode": "general",     # "general" or "testbench"
     #         "use_inb": True,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
     #         "tests_to_run": "see inb_tests_to_run.yaml"
     #     }
     # ),
-    # **************************** IIInB / IE / CEx / CE / TPU / SOB / ... (commented) **************
+    # **************************** IIInB Test bench ****************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": True,
+    #         "use_ie": False,
+    #         "tests_to_run": "see iiinb_tests_to_run.yaml"
+    #     }
+    # ),
+    # **************************** IE Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": True,
+    #         "tests_to_run": "see ie_tests_to_run.yaml"
+    #     }
+    # ),
+    # **************************** CEx-IE Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_ie_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": True,
+    #         "tests_to_run": "see cex_ie_tests_to_run.yaml"
+    #     }
+    # ),
+    # **************************** CEx-CCR Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_ccr_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": True,
+    #         "tests_to_run": "see cex_ccr_tests_to_run.yaml",
+    #         "cil_source": "cil_input.yaml"
+    #     }
+    # ),
+    # **************************** CEx‑Pck Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_pck_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": True,
+    #         "tests_to_run": "see cex_pck_tests_to_run.yaml",
+    #         "cil_source": "cil_input.yaml"
+    #     }
+    # ),
+    # **************************** CE Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": True,
+    #         "tests_to_run": "see ce_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** TPU Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.transform.tpu_testbench",
+    #     {
+    #         "mode": "general",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": True,
+    #         "tests_to_run": "see tpu_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** SOB Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.sob_testbench",
+    #     {
+    #         "mode": "general",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": True,
+    #         "tests_to_run": "see sob_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** SROB Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.srob_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": True,
+    #         "tests_to_run": "see srob_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** CnOB Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cnob_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": True,
+    #         "tests_to_run": "see cnob_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** SmOB Test bench ******************************************************
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.smob_testbench",
+    #     {
+    #         "mode": "general",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": True,
+    #         "tests_to_run": "see smob_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** WrdNm Test bench ******************************************************
+    # Highest upstream True = WrdNm (primitive under test)
+    # Pipeline: WrdNm only (structured TP fields → numeric vector), input from:
+    #   • wrdnm_testbench.yaml (mode = "testbench")
+    #   • wrdnm_input.yaml (mode = "general")
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.encoder.wrdnm_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": False,
+    #         "use_wrdnm": True,       # Primitive under test
+    #         "tests_to_run": "see wrdnm_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** ISc Test bench ******************************************************
+    # Highest upstream True = ISc (primitive under test)
+    # Pipeline position: after WrdNm (CE candidate_set + optional wrdnm vectors → scores)
+    # Input from:
+    #   • isc_testbench.yaml (mode = "testbench")
+    #   • isc_input.yaml (mode = "general")
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.routing.isc_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": False,
+    #         "use_wrdnm": False,      # Set True later for progressive WrdNm → ISc
+    #         "use_isc": True,         # Primitive under test
+    #         "tests_to_run": "see isc_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** SSG Test bench ******************************************************
+    # Highest upstream True = SSG (primitive under test)
+    # Pipeline position: after SmOB (structural graph → fixed-length structural signature)
+    # Input from:
+    #   • ssg_testbench.yaml (mode = "testbench")
+    #   • ssg_input.yaml (mode = "general")
+    # Location: path_a/structure/
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.ssg_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,
+    #         "use_smob": False,
+    #         "use_wrdnm": False,
+    #         "use_isc": False,
+    #         "use_ssg": True,         # Primitive under test
+    #         "tests_to_run": "see ssg_tests_to_run.yaml",
+    #     }
+    # ),
     # **************************** STPX / RBU ******************************************************
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.rbu_testbench",
