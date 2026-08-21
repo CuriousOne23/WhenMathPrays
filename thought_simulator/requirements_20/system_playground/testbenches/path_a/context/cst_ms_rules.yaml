@@ -1,0 +1,36 @@
+# CST-MS Rules (general-mode rulechecker)
+version: "0.1"
+primitive: cst_ms
+
+rules:
+  - id: cst_ms_envelope_exists
+    description: "CST-MS SHALL produce TP.cst.ms"
+    check: "cst_ms_envelope_exists"
+
+  - id: cst_ms_commands_six_keys
+    description: "commands SHALL include freeze, thaw, collapse_recovery, create_identity_layer, split, merge"
+    check: "commands_six_keys"
+
+  - id: cst_ms_window_le_10
+    description: "stability_window length ≤ 10 and history.window_len == 10"
+    check: "window_le_10"
+
+  - id: cst_ms_provisional_audit
+    description: "audit.provisional_metrics SHALL be true in v0.1"
+    check: "provisional_metrics_true"
+
+  - id: cst_ms_no_forbidden_writes
+    description: "CST-MS SHALL NOT write routing_filter, geometric_state, or semantic_core"
+    check: "no_forbidden_fields"
+
+  - id: cst_ms_no_cob_mutation
+    description: "CST-MS SHALL NOT mutate identity.cob_state_snapshot"
+    check: "no_cob_snapshot_mutation"
+
+  - id: cst_ms_no_core_mutation
+    description: "CST-MS SHALL NOT mutate TP.cst.core"
+    check: "no_core_mutation"
+
+  - id: cst_ms_routing_path
+    description: "routing_path SHALL contain cst_ms after process"
+    check: "routing_path_contains_cst_ms"
