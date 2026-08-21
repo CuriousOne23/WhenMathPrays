@@ -304,6 +304,39 @@ COB SHALL treat next‑turn context fields strictly as structural metadata witho
 
 ---
 
+## **Path‑A COB → CIL Lineage & Metrics Support (New HLRs)**
+
+**HLR‑COB‑026**  
+COB SHALL expose `identity_lineage` for each stabilized identity‑layer object to CIL for deterministic lineage propagation.
+
+**HLR‑COB‑027**  
+COB SHALL expose `continuity_lineage` describing turn‑to‑turn continuity, fallback continuity, and lineage‑based stability for each identity‑layer object.
+
+**HLR‑COB‑028**  
+COB SHALL expose identity‑layer `topology` describing structural relationships among identity‑layer objects, including parent/child lineage and referent‑map graph structure.
+
+**HLR‑COB‑029**  
+COB SHALL compute and expose bounded‑semantic scalar metrics for each identity‑layer object:  
+- `ambiguity_score`  
+- `collapse_risk`  
+- `drift_score`  
+- `stability_score`  
+- `lineage_confidence`
+
+**HLR‑COB‑030**  
+COB SHALL expose `register_continuity` describing long‑horizon register stability and transitions for each identity‑layer object.
+
+**HLR‑COB‑031**  
+COB SHALL expose `importance_continuity` describing long‑horizon importance propagation across identity‑layer objects.
+
+**HLR‑COB‑032**  
+COB SHALL guarantee deterministic replay of lineage, topology, metrics, register continuity, and importance continuity fields across identical CST signals and identical identity‑layer snapshots.
+
+**HLR‑COB‑033**  
+COB SHALL provide all lineage, topology, metrics, and continuity fields to CIL without modification, semantic interpretation, or reconstruction.
+
+---
+
 ## **7. Lifecycle Rules**  
 *(Informative — no SHALL statements)*
 
