@@ -361,7 +361,7 @@ def run_testbench():
                 continue
             total += 1
             if result["passed"]:
-                passed = 1 if passed is None else passed + 1
+                passed += 1
             else:
                 failed += 1
             results.append(result)
