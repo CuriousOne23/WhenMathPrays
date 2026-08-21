@@ -5,6 +5,11 @@ This version preserves **every requirement, invariant, prohibition, and transfer
 1. **Master Summary Table** — one‑screen overview of each primitive  
 2. **Compressed Sections** — deterministic, lossless, readable blocks for each primitive
 
+**Canonical Field Names:** All field names in this document are governed by  
+`thought_simulator/requirements_20/system_playground/design/pipeline/patha_field_names.md`.  
+That dictionary is the single authoritative source for structural programs and testbenches.  
+Where this transfer table uses compressed transfer-surface names (e.g. `packed_record`, `canonical_output_record`), they remain valid transfer names; deeper identity-layer, metadata, and CST fields follow the dictionary.
+
 ## Path A – Bounded Semantics Requirement
 
 Path A primitives are semantic, but only within bounded scope. Each primitive must
@@ -71,18 +76,18 @@ replay‑safe TP ready for stability (COB/CST) and meaning‑layer progression.
 
 | Primitive | Spec | Pipeline Position | Core Purpose | Key Outputs | No‑Change Guarantees |
 |----------|------|------------------|--------------|-------------|-----------------------|
-| **MCB** | 20.40.055 | After IdOB | Clarify meaning; normalize messy input; generate next_context | proposition_set, next_context, entropy update, provenance+trace | Identity geometry, continuity, basin, freeze unchanged   [Current page](citation-section://1147000847/3) |
-| **RBU** | 20.51 | After MCB | Commit routing deltas for TR | routing_path, lineage_log, committed routing deltas | Meaning, identity, context unchanged   [Current page](citation-section://1147000847/11) |
-| **TR** | 20.37 | After RBU | Deterministic routing decision | routing decision, tr_needs_update=false | Semantic, identity, context unchanged   [Current page](citation-section://1147000847/18) |
-| **CTP** | 20.145 | After TR | Promote next_context → current_context; regenerate next_context | updated current_context, continuity update | Semantic, identity unchanged   [Current page](citation-section://1147000847/25) |
-| **CEx‑IE** | 20.107.010 | After CTP | Build interpretive_record from clarified meaning + context | interpretive_record, extraction_tags | Semantic_core, identity unchanged   [Current page](citation-section://1147000847/34) |
-| **CEx‑CCR** | 20.107.020 | After CEx‑IE | Canonicalize interpretive_record | canonical_record, canonical_tags | interpretive_record unchanged; identity unchanged   [Current page](citation-section://1147000847/43) |
-| **CEx‑PCK** | 20.107.030 | After CCR | Pack canonical_record into bounded packed_record | packed_record, packed_tags | canonical_record unchanged; identity unchanged   [Current page](citation-section://1147000847/52) |
-| **COB** | 20.32 | After PCK | Produce canonical_output_record | canonical_output_record, canonical_output_tags | packed_record unchanged; identity unchanged   [Current page](citation-section://1147000847/61) |
-| **CIL** | 20.33 | After COB | Bind canonical output to identity geometry | linkage_record, linkage_tags | semantic_core not written; freeze unchanged   [Current page](citation-section://1147000847/70) |
-| **CST‑Core** | 20.32.010.010 | After CIL | Compute stability metrics; emit Freeze/Thaw/Continuity signals | stability signals, metric histories | Does not modify identity topology   [Current page](citation-section://1147000847/79) |
-| **CST‑MS** | 20.32.010.020 | After CST‑Core | Synthesize metrics; issue structural commands | stability/instability summaries; structural commands | Deterministic; replay‑safe   [Current page](citation-section://1147000847/84) |
-| **CST‑Mux** | 20.32.010.030 | After CST‑Core/MS | Pack all CST signals into USP | unified_stability_packet, usp_tags | No identity/semantic modifications   [Current page](citation-section://1147000847/95) |
+| **MCB** | 20.40.055 | After IdOB | Clarify meaning; normalize messy input; generate next_context | proposition_set, next_context, entropy update, provenance+trace | Identity geometry, continuity, basin, freeze unchanged |
+| **RBU** | 20.51 | After MCB | Commit routing deltas for TR | routing_path, lineage_log, committed routing deltas | Meaning, identity, context unchanged |
+| **TR** | 20.37 | After RBU | Deterministic routing decision | routing decision, tr_needs_update=false | Semantic, identity, context unchanged |
+| **CTP** | 20.145 | After TR | Promote next_context → current_context; regenerate next_context | updated current_context, continuity update | Semantic, identity unchanged |
+| **CEx‑IE** | 20.107.010 | After CTP | Build interpretive_record from clarified meaning + context | interpretive_record, extraction_tags | Semantic_core, identity unchanged |
+| **CEx‑CCR** | 20.107.020 | After CEx‑IE | Canonicalize interpretive_record | canonical_record, canonical_tags | interpretive_record unchanged; identity unchanged |
+| **CEx‑PCK** | 20.107.030 | After CCR | Pack canonical_record into bounded packed_record | packed_record, packed_tags | canonical_record unchanged; identity unchanged |
+| **COB** | 20.32 | After PCK (transfer surface); long-horizon identity substrate per 20.32 | Conversation Object Basin — maintain identity layers, apply CST signals, produce stabilized identity-layer snapshot for CIL; also emits transfer-surface canonical_output_record | cob_state_snapshot, stabilized identity-layer snapshot, ordering metrics, lineage/topology/metrics, canonical_output_record, canonical_output_tags | packed_record unchanged; no semantic reconstruction |
+| **CIL** | 20.33 | After COB | Bind canonical output / COB snapshot to identity geometry | linkage_record, linkage_tags | semantic_core not written; freeze unchanged |
+| **CST‑Core** | 20.32.010.010 | After CIL | Compute stability metrics; emit Freeze/Thaw/Continuity signals | stability signals, metric histories | Does not modify identity topology |
+| **CST‑MS** | 20.32.010.020 | After CST‑Core | Synthesize metrics; issue structural commands | stability/instability summaries; structural commands | Deterministic; replay‑safe |
+| **CST‑Mux** | 20.32.010.030 | After CST‑Core/MS | Pack all CST signals into USP | unified_stability_packet, usp_tags | No identity/semantic modifications |
 
 ---
 
@@ -111,7 +116,6 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Append entropy_history  
 - No identity/continuity/basin/freeze changes  
 **Determinism:** Same input → same output.  
-  [Current page](citation-section://1147000847/3)
 
 ---
 
@@ -129,7 +133,6 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Stabilize routing state  
 - Adjust entropy if stabilization reduces uncertainty  
 - No semantic/identity/context changes  
-  [Current page](citation-section://1147000847/11)
 
 ---
 
@@ -147,7 +150,6 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Evaluate geometric, cultural, relational signals  
 - Produce deterministic routing decision  
 - No semantic/identity/context changes  
-  [Current page](citation-section://1147000847/18)
 
 ---
 
@@ -167,7 +169,6 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Generate new next_context from meaning + routing + continuity  
 - Adjust entropy  
 - No semantic/identity changes  
-  [Current page](citation-section://1147000847/25)
 
 ---
 
@@ -186,7 +187,6 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Normalize interpretive_record  
 - Reduce entropy  
 - No semantic_core/identity changes  
-  [Current page](citation-section://1147000847/34)
 
 ---
 
@@ -206,7 +206,6 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Validate against context + identity  
 - Reduce entropy  
 - No identity/semantic_core changes  
-  [Current page](citation-section://1147000847/43)
 
 ---
 
@@ -225,34 +224,49 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Validate invariants  
 - Reduce entropy  
 - No identity/semantic_core changes  
-  [Current page](citation-section://1147000847/52)
 
 ---
 
-## **COB — Canonical Output Block**  
+## **COB — Conversation Object Basin (20.32)**  
 **Spec:** 20.32  
-**Position:** After PCK  
-**Purpose:** Produce canonical_output_record.  
-**Inputs:** packed_record + packed_tags.  
+**Position:** After PCK on the transfer surface; long-horizon identity substrate per normative 20.32 and playground cob_requirements.  
+**Purpose:** Maintain up to 20 identity layers, apply CST-Core / CST-MS signals, produce the stabilized identity-layer snapshot consumed by CIL. On the transfer surface it also emits the packed-to-canonical conversion artifacts.  
+**Inputs:**  
+- packed_record + packed_tags (transfer surface)  
+- CST-Core signals (Freeze, Thaw, Continuity-restoration)  
+- CST-MS structural commands (freeze/thaw/collapse-recovery/create/split/merge/strengthen_register/weaken_register)  
+- OuBA meaning packets, strength, ambiguity/confidence, lineage continuity, register updates  
+- next-turn context from MCB (`TP.next_context` / `TP.metadata.next_context_metadata`)  
+- `TP.semantic.importance` and `TP.cex.ccr.selected_conversation` / `TP.metadata.cil_metadata`  
 **Outputs:**  
-- canonical_output_record  
-- canonical_output_tags  
+- `cob_state_snapshot`  
+- stabilized identity-layer snapshot (identity layers, referent maps, clarifying fields, ordering metrics, lineage/topology/metrics, register_continuity, importance_continuity)  
+- structural event markers (MERGE / SPLIT) to CST  
+- contributions to `lineage_log[]`  
+- transfer-surface: `canonical_output_record`, `canonical_output_tags`  
 - routing_path + lineage_log append `cob`  
 - tb_trace append `TB.cob_output`  
 **Transfer Function:**  
-- Convert packed_record → canonical_output_record  
-- Normalize for identity linkage  
-- Reduce entropy  
-- No identity/semantic_core changes  
-  [Current page](citation-section://1147000847/61)
+- Apply CST signals deterministically to identity-layer store (structural only; no semantic reconstruction)  
+- Perform structural compression of referent maps after updates/merges/splits  
+- Maintain ordering metrics and bounded clarifying fields  
+- Project importance residues into selected conversation (linear copy-forward)  
+- Emit stabilized snapshot for CIL  
+- On transfer surface: convert packed_record → canonical_output_record and normalize for identity linkage  
+**Prohibitions:**  
+- No semantic interpretation or reconstruction  
+- No interaction with OB / IB / RB / TB / InB / OuB  
+- No modification of semantic-importance scores or roles  
+- No signals from CST-Mux  
+**Determinism:** Identical CST signals + identical prior COB state → identical snapshot and lineage_log.  
 
 ---
 
 ## **CIL — Canonical Identity Linkage**  
 **Spec:** 20.33  
 **Position:** After COB  
-**Purpose:** Bind canonical output to identity geometry.  
-**Inputs:** canonical_output_record + identity geometry.  
+**Purpose:** Bind canonical output / COB snapshot to identity geometry.  
+**Inputs:** canonical_output_record (or COB stabilized snapshot) + identity geometry.  
 **Outputs:**  
 - linkage_record  
 - linkage_tags  
@@ -260,11 +274,10 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - routing_path + lineage_log append `cil`  
 - tb_trace append `TB.cil_linkage`  
 **Transfer Function:**  
-- Bind semantic output to identity  
+- Bind semantic output / identity-layer snapshot to identity  
 - Adjust basin/continuity if needed  
 - Reduce entropy  
 - No semantic_core; no freeze changes  
-  [Current page](citation-section://1147000847/70)
 
 ---
 
@@ -272,7 +285,7 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 **Spec:** 20.32.010.010  
 **Position:** After CIL  
 **Purpose:** Compute stability metrics; emit Freeze/Thaw/Continuity signals.  
-**Inputs:** identity geometry + canonical_output_record + linkage_record.  
+**Inputs:** identity geometry + canonical_output_record / COB snapshot + linkage_record.  
 **Outputs:**  
 - stability signals  
 - raw metrics  
@@ -284,7 +297,6 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Compute drift/oscillation/ambiguity/collapse  
 - Emit Freeze/Thaw/Continuity  
 - No identity topology changes  
-  [Current page](citation-section://1147000847/79)
 
 ---
 
@@ -303,7 +315,6 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Normalize + weight metrics  
 - Compute stability/instability  
 - Issue deterministic structural commands  
-  [Current page](citation-section://1147000847/84)
 
 ---
 
@@ -322,6 +333,5 @@ Each section is compressed but **lossless**, preserving all normative requiremen
 - Normalize formats  
 - Pack USP  
 - No identity/semantic changes  
-  [Current page](citation-section://1147000847/95)
 
 ---
