@@ -1,1 +1,41 @@
+# CST-MS Tests To Run
+# progressive_lineup_testing.md dual-mode selector
+version: "0.1"
+primitive: cst_ms
 
+tests:
+  - id: cst_ms_envelope_present
+    enabled: true
+    description: "TP.cst.ms envelope with required children present"
+
+  - id: cst_ms_stability_instability
+    enabled: true
+    description: "stability and instability in [0,1]; instability = 1 - stability"
+
+  - id: cst_ms_freeze_command
+    enabled: true
+    description: "High freeze_risk emits freeze command + command_log entry"
+
+  - id: cst_ms_commands_keys_present
+    enabled: true
+    description: "All six command keys always present"
+
+  - id: cst_ms_merge_neutrality
+    enabled: true
+    description: "MERGE lineage alone does not force instability=1"
+
+  - id: cst_ms_window_cap
+    enabled: true
+    description: "stability_window length never exceeds 10"
+
+  - id: cst_ms_new_context_required
+    enabled: true
+    description: "continuity break sets metadata.new_context_required"
+
+  - id: cst_ms_no_cob_or_core_mutation
+    enabled: true
+    description: "cob_state_snapshot and TP.cst.core unchanged"
+
+  - id: cst_ms_deterministic_replay
+    enabled: true
+    description: "Identical inputs → identical cst.ms outputs"
