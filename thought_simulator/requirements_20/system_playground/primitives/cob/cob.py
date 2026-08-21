@@ -2,67 +2,73 @@
 COB — Conversation Object Basin
 System Playground Version
 
-Lightweight block-level COB implementation for system_playground.
-Mirrors:
-- cob_requirements.md
-- cob_structures.yaml
-- cob_state.yaml
+Aligned with:
+- 20.32_cob_requirements.md
+- system_playground/primitives/cob/cob_requirements.md
+- cob_py_struc_pgm.md
+- patha_field_names.md
+- progressive_lineup_testing.md
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import List, Dict, Any
+from typing import Any, Dict, List, Optional
+import copy
+
+
+PRIMITIVE_NAME = "cob"
+
+
+def get_primitive_name() -> str:
+    return PRIMITIVE_NAME
 
 
 # ---------------------------------------------------------------------------
-# Data Classes (mirroring YAML schemas)
+# Data Classes
 # ---------------------------------------------------------------------------
 
 @dataclass
 class IdentityObject:
-    """Structure of a single identity-layer object."""
+    """Structure of a single identity-layer object (IdentityLayer schema subset)."""
     id: str
-    referent_map: Dict[str, Any]
-    anchors: List[Any]
-    lineage: Dict[str, Any]
-    ambiguity: Dict[str, Any]
-    stability_metrics: Dict[str, Any]
-    ordering_metrics: Dict[str, Any]
+    referent_map: Any
+    anchors: List[Any] = field(default_factory=list)
+    lineage: Dict[str, Any] = field(default_factory=dict)
+    ambiguity: Dict[str, Any] = field(default_factory=dict)
+    stability_metrics: Dict[str, Any] = field(default_factory=dict)
+    ordering_metrics: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class COBState:
-    """Internal COB basin state (mirrors cob_state.yaml)."""
+    """Internal COB basin state."""
     objects: List[IdentityObject] = field(default_factory=list)
     object_count: int = 0
 
-    # conversation-level ordering metrics
     conversation_access_count: int = 0
     conversation_access_order: List[int] = field(default_factory=list)
     conversation_frequency_last_10: Dict[str, int] = field(default_factory=dict)
 
-    # summaries
     ordering_summary: Dict[str, Any] = field(default_factory=dict)
     stability_summary: List[Dict[str, Any]] = field(default_factory=list)
     ambiguity_summary: List[Dict[str, Any]] = field(default_factory=list)
     lineage_summary: List[Dict[str, Any]] = field(default_factory=list)
 
     metadata: Dict[str, Any] = field(default_factory=dict)
-
-    # TP-facing fields (for CST via TP)
     lineage_log: List[Dict[str, Any]] = field(default_factory=list)
     cob_state_snapshot: Dict[str, Any] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
-# COB Implementation (system_playground)
+# COB Implementation
 # ---------------------------------------------------------------------------
 
 class COB:
     MAX_OBJECTS = 20
 
-    def __init__(self):
-        self.state = COBState()
-        # deterministic sequence for lineage_log entries
+    def __init__(self, initial_state: Optional[COBState] = None):
+        self.state = initial_state if initial_state is not None else COBState()
         self._lineage_seq = 0
 
     def _next_lineage_seq(self) -> int:
@@ -70,41 +76,27 @@ class COB:
         return self._lineage_seq
 
     # -----------------------------------------------------------------------
-    # Structural Compression Helpers (HLR-COB-024)
+    # Structural Compression (HLR-COB-024 / 025)
     # -----------------------------------------------------------------------
 
     @staticmethod
     def _tokenize_surface_form(value: str) -> List[str]:
-        """
-        Structural tokenization: split on whitespace.
-        No semantic interpretation, purely structural.
-        """
         if not isinstance(value, str):
             return []
         return value.split()
 
     @classmethod
     def _compress_surface_forms(cls, forms: List[str]) -> List[str]:
-        """
-        Structural compression over a list of surface forms:
-        - remove exact duplicates
-        - remove forms whose token sets are strict subsets of other forms
-        """
         if not isinstance(forms, list):
             return forms
-
-        # remove exact duplicates (preserve order deterministically)
         seen = set()
         unique = []
         for f in forms:
             if f not in seen:
                 seen.add(f)
                 unique.append(f)
-
-        # remove subset forms
         keep = []
         token_sets = [set(cls._tokenize_surface_form(f)) for f in unique]
-
         for i, f_i in enumerate(unique):
             tokens_i = token_sets[i]
             drop = False
@@ -112,51 +104,32 @@ class COB:
                 if i == j:
                     continue
                 tokens_j = token_sets[j]
-                # strict subset: tokens_i ⊂ tokens_j
                 if tokens_i and tokens_i.issubset(tokens_j) and tokens_i != tokens_j:
                     drop = True
                     break
             if not drop:
                 keep.append(f_i)
-
         return keep
 
     @classmethod
     def _compress_referent_map(cls, referent_map: Any) -> Any:
-        """
-        Structural compression applied to referent_map.
-
-        Rules:
-        - If referent_map is a list of strings, compress that list.
-        - If referent_map is a dict with 'surface_forms', compress that list.
-        - If referent_map is a dict with 'parents', recurse into each parent map.
-        - Otherwise, leave referent_map unchanged (non-semantic, structural-only).
-        """
-        # list-of-strings case
         if isinstance(referent_map, list):
             return cls._compress_surface_forms(referent_map)
-
-        # dict cases
         if isinstance(referent_map, dict):
-            # compress surface_forms if present
             if "surface_forms" in referent_map and isinstance(referent_map["surface_forms"], list):
+                referent_map = dict(referent_map)
                 referent_map["surface_forms"] = cls._compress_surface_forms(
                     referent_map["surface_forms"]
                 )
-
-            # recurse into parents sub-structure if present
             if "parents" in referent_map and isinstance(referent_map["parents"], dict):
+                referent_map = dict(referent_map)
+                parents = {}
                 for pid, pmap in referent_map["parents"].items():
-                    referent_map["parents"][pid] = cls._compress_referent_map(pmap)
-
+                    parents[pid] = cls._compress_referent_map(pmap)
+                referent_map["parents"] = parents
         return referent_map
 
     def _compress_all_referent_maps(self):
-        """
-        Apply structural compression to all identity-layer referent maps
-        after updates, merges, and splits (HLR-COB-024, HLR-COB-025).
-        Compression is global and structural-only.
-        """
         for obj in self.state.objects:
             obj.referent_map = self._compress_referent_map(obj.referent_map)
 
@@ -167,14 +140,9 @@ class COB:
     def add_identity_object(self, obj: IdentityObject):
         self.state.objects.append(obj)
         self.state.object_count = len(self.state.objects)
-        # compression is applied globally in run(), not on add
         self._evict_if_needed()
 
     def update_identity_object(self, obj_id: str, updates: Dict[str, Any]):
-        """
-        Deterministic identity-object update.
-        Structural compression is applied if referent_map changes.
-        """
         for obj in self.state.objects:
             if obj.id == obj_id:
                 for key, value in updates.items():
@@ -187,28 +155,18 @@ class COB:
     # -----------------------------------------------------------------------
 
     def apply_cst_signals(self, signals: Dict[str, Any]):
-        """Apply CST signals deterministically."""
-
         apply_only = signals.get("apply_to_only", None)
 
-        # Freeze/thaw
         frozen_ids = signals.get("freeze", {}).get("frozen_objects", [])
         thawed_ids = signals.get("thaw", {}).get("thawed_objects", [])
-
-        # Drift, oscillation, collapse, merge, split
         drift = signals.get("drift", {})
         oscillation = signals.get("oscillation", {})
         collapse = signals.get("collapse", {})
         merge = signals.get("merge", {})
         split = signals.get("split", {})
-
-        # Certainty/ambiguity adjustments
         certainty_adj = signals.get("certainty_adjustment", {})
         ambiguity_adj = signals.get("ambiguity_adjustment", {})
 
-        # -------------------------
-        # Freeze / Thaw
-        # -------------------------
         for obj in self.state.objects:
             if apply_only and obj.id != apply_only:
                 continue
@@ -217,9 +175,6 @@ class COB:
             if obj.id in thawed_ids:
                 obj.stability_metrics["frozen"] = False
 
-        # -------------------------
-        # Drift
-        # -------------------------
         for obj in self.state.objects:
             if apply_only and obj.id != apply_only:
                 continue
@@ -228,9 +183,6 @@ class COB:
                     continue
                 obj.stability_metrics["drift"] = drift.get("magnitude")
 
-        # -------------------------
-        # Oscillation
-        # -------------------------
         for obj in self.state.objects:
             if apply_only and obj.id != apply_only:
                 continue
@@ -239,9 +191,6 @@ class COB:
                     continue
                 obj.stability_metrics["oscillation"] = oscillation.get("frequency")
 
-        # -------------------------
-        # Collapse
-        # -------------------------
         for obj in self.state.objects:
             if apply_only and obj.id != apply_only:
                 continue
@@ -250,9 +199,6 @@ class COB:
                     continue
                 obj.stability_metrics["collapse"] = True
 
-        # -------------------------
-        # Certainty / Ambiguity
-        # -------------------------
         for obj in self.state.objects:
             if apply_only and obj.id != apply_only:
                 continue
@@ -273,11 +219,7 @@ class COB:
             if obj.id in ambiguity_adj.get("decreased_ambiguity", []):
                 obj.ambiguity["ambiguity"] = "low"
 
-        # -------------------------------------------------------------------
-        # Merge and Split (system_playground implementation)
-        # -------------------------------------------------------------------
-
-        # MERGE: {"merge": {"pairs": [(idA, idB), ...]}}
+        # MERGE (structural only)
         if merge:
             for (idA, idB) in merge.get("pairs", []):
                 objA = next((o for o in self.state.objects if o.id == idA), None)
@@ -285,29 +227,11 @@ class COB:
                 if not objA or not objB:
                     continue
 
-                # capture before-state for lineage_log
-                before_referent = {
-                    idA: objA.referent_map,
-                    idB: objB.referent_map,
-                }
-                before_ordering = {
-                    idA: objA.ordering_metrics,
-                    idB: objB.ordering_metrics,
-                }
+                before_referent = {idA: objA.referent_map, idB: objB.referent_map}
+                before_ordering = {idA: objA.ordering_metrics, idB: objB.ordering_metrics}
 
-                # structural merge: preserve both parents' semantics without reinterpretation
-                merged_referents = {
-                    "parents": {
-                        idA: objA.referent_map,
-                        idB: objB.referent_map,
-                    }
-                }
-
-                merged_anchors = [
-                    (idA, objA.anchors),
-                    (idB, objB.anchors),
-                ]
-
+                merged_referents = {"parents": {idA: objA.referent_map, idB: objB.referent_map}}
+                merged_anchors = [(idA, objA.anchors), (idB, objB.anchors)]
                 merged_lineage = {
                     "parents": [idA, idB],
                     "stability": {
@@ -315,21 +239,10 @@ class COB:
                         idB: objB.lineage.get("stability"),
                     },
                 }
-
-                merged_ambiguity = {
-                    "parents": {
-                        idA: objA.ambiguity,
-                        idB: objB.ambiguity,
-                    }
-                }
-
+                merged_ambiguity = {"parents": {idA: objA.ambiguity, idB: objB.ambiguity}}
                 merged_stability = {
-                    "parents": {
-                        idA: objA.stability_metrics,
-                        idB: objB.stability_metrics,
-                    }
+                    "parents": {idA: objA.stability_metrics, idB: objB.stability_metrics}
                 }
-
                 merged_ordering = {
                     "recency": max(
                         objA.ordering_metrics.get("recency", 0),
@@ -355,7 +268,6 @@ class COB:
                     ordering_metrics=merged_ordering,
                 )
 
-                # append MERGE event to lineage_log (TP.lineage_log[])
                 self.state.lineage_log.append({
                     "event_type": "MERGE",
                     "parent_ref": [idA, idB],
@@ -365,54 +277,42 @@ class COB:
                     "ordering_before": before_ordering,
                     "ordering_after": {merged_obj.id: merged_ordering},
                     "lineage_seq": self._next_lineage_seq(),
+                    "module_id": "cob",
                 })
 
                 self.state.objects.remove(objA)
                 self.state.objects.remove(objB)
                 self.state.objects.append(merged_obj)
 
-        # SPLIT: {"split": {"objects": [idX, ...]}}
+        # SPLIT (structural only — full copy)
         if split:
             for idX in split.get("objects", []):
                 objX = next((o for o in self.state.objects if o.id == idX), None)
                 if not objX:
                     continue
 
-                # capture before-state for lineage_log
                 before_referent = {idX: objX.referent_map}
                 before_ordering = {idX: objX.ordering_metrics}
 
-                # TS-correct split: copy all semantics to both children
-                child1_lineage = {
-                    "parent": objX.id,
-                    "stability": objX.lineage.get("stability"),
-                }
-                child2_lineage = {
-                    "parent": objX.id,
-                    "stability": objX.lineage.get("stability"),
-                }
-
                 child1 = IdentityObject(
                     id=f"{idX}_1",
-                    referent_map=objX.referent_map,
+                    referent_map=copy.deepcopy(objX.referent_map),
                     anchors=list(objX.anchors),
-                    lineage=child1_lineage,
+                    lineage={"parent": objX.id, "stability": objX.lineage.get("stability")},
                     ambiguity=dict(objX.ambiguity),
                     stability_metrics=dict(objX.stability_metrics),
                     ordering_metrics=dict(objX.ordering_metrics),
                 )
-
                 child2 = IdentityObject(
                     id=f"{idX}_2",
-                    referent_map=objX.referent_map,
+                    referent_map=copy.deepcopy(objX.referent_map),
                     anchors=list(objX.anchors),
-                    lineage=child2_lineage,
+                    lineage={"parent": objX.id, "stability": objX.lineage.get("stability")},
                     ambiguity=dict(objX.ambiguity),
                     stability_metrics=dict(objX.stability_metrics),
                     ordering_metrics=dict(objX.ordering_metrics),
                 )
 
-                # append SPLIT event to lineage_log (TP.lineage_log[])
                 self.state.lineage_log.append({
                     "event_type": "SPLIT",
                     "parent_ref": [idX],
@@ -428,6 +328,7 @@ class COB:
                         child2.id: child2.ordering_metrics,
                     },
                     "lineage_seq": self._next_lineage_seq(),
+                    "module_id": "cob",
                 })
 
                 self.state.objects.remove(objX)
@@ -435,119 +336,54 @@ class COB:
                 self.state.objects.append(child2)
 
     # -----------------------------------------------------------------------
-    # Eviction Logic
+    # Eviction
     # -----------------------------------------------------------------------
 
     def _evict_if_needed(self):
         if len(self.state.objects) <= self.MAX_OBJECTS:
             return
-
         sorted_objs = sorted(
             self.state.objects,
             key=lambda obj: (
                 obj.ordering_metrics.get("recency", 0),
                 obj.ordering_metrics.get("frequency", 0),
                 obj.ordering_metrics.get("density", 0),
-            )
+            ),
         )
-
         evicted = sorted_objs[0]
         self.state.objects.remove(evicted)
         self.state.object_count = len(self.state.objects)
 
     # -----------------------------------------------------------------------
-    # Summary Aggregation
+    # Summaries
     # -----------------------------------------------------------------------
 
     def aggregate_summaries(self):
-        recency = []
-        frequency = []
-        density = []
-
-        ambiguity_levels = []
-        stability_levels = []
-        lineage_levels = []
-
+        recency, frequency, density = [], [], []
+        ambiguity_levels, stability_levels, lineage_levels = [], [], []
         for obj in self.state.objects:
             om = obj.ordering_metrics
             recency.append(om.get("recency"))
             frequency.append(om.get("frequency"))
             density.append(om.get("density"))
-
             ambiguity_levels.append(obj.ambiguity)
             stability_levels.append(obj.stability_metrics)
             lineage_levels.append(obj.lineage)
-
         self.state.ordering_summary = {
             "recency_distribution": recency,
             "frequency_distribution": frequency,
             "density_distribution": density,
         }
-
         self.state.ambiguity_summary = ambiguity_levels
         self.state.stability_summary = stability_levels
         self.state.lineage_summary = lineage_levels
 
     # -----------------------------------------------------------------------
-    # Main Entry Point
+    # Snapshot builder
     # -----------------------------------------------------------------------
 
-    def run(self, core_signals: Dict[str, Any], ms_signals: Dict[str, Any], turn_index: int):
-        """Deterministic COB execution sequence."""
-
-        # Merge signals
-        signals = {**core_signals, **ms_signals}
-    
-        # Conversation-level metrics
-        self.state.conversation_access_count += 1
-        self.state.conversation_access_order.append(turn_index)
-
-        window = self.state.conversation_access_order[-10:]
-        self.state.conversation_frequency_last_10 = {
-            str(idx): window.count(idx) for idx in window
-        }
-
-        self.state.metadata = {
-            "turn_index": turn_index,
-            "object_count": len(self.state.objects),
-        }
-
-        # -------------------------------------------------------------------
-        # NEW_CONTEXT_REQUIRED — create a new identity object immediately
-        # -------------------------------------------------------------------
-        if signals.get("metadata", {}).get("new_context_required", False):
-            new_id = f"ctx_{turn_index}"
-
-            new_obj = IdentityObject(
-                id=new_id,
-                referent_map=signals.get("next_context", {}).get("referent_map", {}),
-                anchors=signals.get("next_context", {}).get("anchors", []),
-                lineage={"created_at": turn_index},
-                ambiguity={"certainty": "unknown", "ambiguity": "unknown"},
-                stability_metrics={"frozen": False},
-                ordering_metrics={"recency": turn_index, "frequency": 1, "density": 1},
-            )
-
-            # Add new identity object immediately
-            self.add_identity_object(new_obj)
-
-            # COB must NOT evolve previous objects when a new context is required
-            # So we skip CST signal application for existing objects
-            # and only evolve the new object using CST signals
-            signals["apply_to_only"] = new_id
-
-        # CST signals (including merge/split)
-        self.apply_cst_signals(signals)
-
-        # Structural compression after updates, merges, and splits
-        self._compress_all_referent_maps()
-
-        # Eviction and summaries
-        self._evict_if_needed()
-        self.aggregate_summaries()
-
-        # TP.cob_state_snapshot: stabilized identity-layer snapshot
-        self.state.cob_state_snapshot = {
+    def _build_snapshot(self) -> Dict[str, Any]:
+        return {
             "objects": [
                 {
                     "id": obj.id,
@@ -565,6 +401,120 @@ class COB:
             "ambiguity_summary": self.state.ambiguity_summary,
             "lineage_summary": self.state.lineage_summary,
             "metadata": self.state.metadata,
+            "conversation_access_count": self.state.conversation_access_count,
+            "conversation_access_order": list(self.state.conversation_access_order),
+            "conversation_frequency_last_10": dict(self.state.conversation_frequency_last_10),
+            "object_count": self.state.object_count,
         }
 
+    # -----------------------------------------------------------------------
+    # Core run (legacy signal-driven path)
+    # -----------------------------------------------------------------------
+
+    def run(self, core_signals: Dict[str, Any], ms_signals: Dict[str, Any], turn_index: int):
+        signals = {**core_signals, **ms_signals}
+
+        self.state.conversation_access_count += 1
+        self.state.conversation_access_order.append(turn_index)
+        window = self.state.conversation_access_order[-10:]
+        self.state.conversation_frequency_last_10 = {
+            str(idx): window.count(idx) for idx in window
+        }
+        self.state.metadata = {
+            "turn_index": turn_index,
+            "object_count": len(self.state.objects),
+        }
+
+        if signals.get("metadata", {}).get("new_context_required", False):
+            new_id = f"ctx_{turn_index}"
+            new_obj = IdentityObject(
+                id=new_id,
+                referent_map=signals.get("next_context", {}).get("referent_map", {}),
+                anchors=signals.get("next_context", {}).get("anchors", []),
+                lineage={"created_at": turn_index},
+                ambiguity={"certainty": "unknown", "ambiguity": "unknown"},
+                stability_metrics={"frozen": False},
+                ordering_metrics={"recency": turn_index, "frequency": 1, "density": 1},
+            )
+            self.add_identity_object(new_obj)
+            signals["apply_to_only"] = new_id
+
+        self.apply_cst_signals(signals)
+        self._compress_all_referent_maps()
+        self._evict_if_needed()
+        self.aggregate_summaries()
+        self.state.cob_state_snapshot = self._build_snapshot()
         return self.state
+
+    # -----------------------------------------------------------------------
+    # Structural-program surface: process(tp, mode=...)
+    # -----------------------------------------------------------------------
+
+    def process(self, tp: Dict[str, Any], mode: str = "general", **kwargs) -> Dict[str, Any]:
+        """
+        Main entry required by cob_py_struc_pgm.md and progressive dual-mode contract.
+        Reads CST signals and next_context from the TP envelope, updates internal state,
+        and writes cob_state_snapshot + lineage_log contributions back into the TP.
+        """
+        tp = copy.deepcopy(tp) if tp is not None else {}
+        turn_index = (
+            tp.get("turn_index")
+            or tp.get("metadata", {}).get("turn_index")
+            or kwargs.get("turn_index")
+            or 0
+        )
+
+        # Prefer signals carried under TP metadata / cst envelopes when present.
+        core_signals = (
+            tp.get("cst", {}).get("core", {})
+            or tp.get("metadata", {}).get("cst_core", {})
+            or tp.get("core_signals", {})
+            or {}
+        )
+        ms_signals = (
+            tp.get("cst", {}).get("ms", {})
+            or tp.get("metadata", {}).get("cst_ms", {})
+            or tp.get("ms_signals", {})
+            or {}
+        )
+
+        # Allow direct signal injection for testbench convenience
+        if "signals" in tp:
+            core_signals = {**core_signals, **tp.get("signals", {})}
+
+        # next_context support
+        next_ctx = (
+            tp.get("next_context")
+            or tp.get("metadata", {}).get("next_context")
+            or tp.get("metadata", {}).get("next_context_metadata")
+            or {}
+        )
+        if next_ctx and "next_context" not in core_signals:
+            core_signals = dict(core_signals)
+            core_signals["next_context"] = next_ctx
+
+        self.run(core_signals, ms_signals, turn_index)
+
+        # Write owned fields back into TP
+        identity = tp.setdefault("identity", {})
+        identity["cob_state_snapshot"] = self.state.cob_state_snapshot
+
+        # Append lineage events
+        lineage_log = tp.setdefault("lineage_log", [])
+        if not isinstance(lineage_log, list):
+            lineage_log = []
+            tp["lineage_log"] = lineage_log
+        lineage_log.extend(self.state.lineage_log)
+
+        # Routing / provenance markers
+        routing_path = tp.setdefault("routing_path", [])
+        if isinstance(routing_path, list) and "cob" not in routing_path:
+            routing_path.append("cob")
+
+        return tp
+
+
+def process(tp: dict, mode: str = "general", **kwargs) -> dict:
+    """Module-level entry matching progressive / structural-program contract."""
+    cob = COB()
+    return cob.process(tp, mode=mode, **kwargs)
