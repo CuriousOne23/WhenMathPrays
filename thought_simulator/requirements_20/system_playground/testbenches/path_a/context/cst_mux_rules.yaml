@@ -1,1 +1,32 @@
+rules:
+  - id: mux_envelope_present
+    description: TP.cst.mux must exist after process
+    severity: error
 
+  - id: usp_present
+    description: unified_stability_packet must exist under TP.cst.mux
+    severity: error
+
+  - id: layer_index_present
+    description: layer_index must exist under TP.cst.mux
+    severity: error
+
+  - id: routing_path_marker
+    description: routing_path must include cst_mux
+    severity: error
+
+  - id: no_cob_mutation
+    description: cob_state_snapshot must not change
+    severity: error
+
+  - id: no_core_mutation
+    description: TP.cst.core must not change
+    severity: error
+
+  - id: no_ms_mutation
+    description: TP.cst.ms must not change
+    severity: error
+
+  - id: new_context_passthrough
+    description: USP new_context_required must match MS metadata
+    severity: error
