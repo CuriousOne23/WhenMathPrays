@@ -1,1 +1,30 @@
+# CIL Tests To Run
+# progressive_lineup_testing.md dual-mode selector
+# Slice: identity_selection (cil_testbench_schema.md v0.1)
+version: "0.1"
+primitive: cil
 
+tests:
+  - id: cil_identity_selection_basic
+    enabled: true
+    description: "HLR-20.33-020/036 — primary/secondary from COB ordering_score"
+
+  - id: cil_identity_selection_tie_break
+    enabled: true
+    description: "Deterministic tie-break by stable id when ordering_score equal"
+
+  - id: cil_identity_selection_single
+    enabled: true
+    description: "Single layer → primary set, secondary null"
+
+  - id: cil_identity_selection_empty
+    enabled: true
+    description: "Empty COB snapshot → null identities"
+
+  - id: cil_identity_selection_no_local_score
+    enabled: true
+    description: "HLR-20.33-038/084 — no local scoring; COB score reflected"
+
+  - id: cil_write_boundary_snapshot_intact
+    enabled: true
+    description: "Write-boundary: cob_state_snapshot and forbidden fields intact"
