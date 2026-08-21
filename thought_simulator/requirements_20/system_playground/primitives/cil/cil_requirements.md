@@ -21,7 +21,6 @@ $$
 \text{CST} \rightarrow \text{COB} \rightarrow \text{CIL} \rightarrow \text{CEx}
 $$
 
-(Sections   [Current page](citation-section://1146975448/3),   [Current page](citation-section://1146975448/4))
 
 ---
 
@@ -31,7 +30,6 @@ $$
 This document defines the **system_playground implementation** of CIL.  
 It describes intake processing, packet structure, ordering rules, ambiguity handling, and compatibility requirements with CEx.  
 Global architecture defined in **20.33** remains authoritative.  
-(Section   [Current page](citation-section://1146975448/7))
 
 ---
 
@@ -42,11 +40,9 @@ CIL operates over two coordinated inputs:
 
 ### **3.1 COB Identity‑Layer Objects**  
 CIL receives up to 20 stabilized identity‑layer objects from COB, including referent maps, anchors, lineage, ambiguity indicators, stability metrics, and ordering metrics.  
-(Section   [Current page](citation-section://1146975448/12))
 
 ### **3.2 CST Stability Signals**  
 CIL receives stability‑related signals from CST indirectly through COB and directly when required by global rules.  
-(Section   [Current page](citation-section://1146975448/15))
 
 ---
 
@@ -64,7 +60,19 @@ CIL produces a structured packet containing:
 - referent certainty/ambiguity fields  
 
 This packet is consumed by CEx.  
-(Section   [Current page](citation-section://1146975448/16))
+
+### 4.1.1 Canonical Output Path (v0.1)
+
+CIL SHALL write its intake packet to the canonical envelope path:
+
+- `TP.cil.intake_packet`
+
+CIL SHALL emit its audit record under:
+
+- `TP.cil.intake_packet.audit`
+
+No other component MAY write to this envelope or its audit subfield.
+This path is authoritative for progressive lineup testbenches and deterministic replay.
 
 ---
 
@@ -85,8 +93,6 @@ Ordering scores are computed using a deterministic scoring function:
 $$
 \text{Score}(o) = w_r r + w_f f + w_d d
 $$
-
-(Section   [Current page](citation-section://1146975448/17))
 
 ### **Certainty Aggregation**  
 CIL aggregates certainty and ambiguity indicators into unified blocks.
@@ -117,8 +123,6 @@ System_playground does not test:
 - pipeline integration with CEx  
 - multi‑turn replay determinism  
 - identity‑layer evolution across turns  
-
-(Sections   [Current page](citation-section://1146975448/17)–  [Current page](citation-section://1146975448/20))
 
 ---
 
