@@ -1,1 +1,17 @@
-
+tests:
+  - id: cst_mux_envelope_present
+    enabled: true
+  - id: cst_mux_layer_index_deterministic
+    enabled: true
+  - id: cst_mux_core_pack
+    enabled: true
+  - id: cst_mux_ms_pack
+    enabled: true
+  - id: cst_mux_new_context_passthrough
+    enabled: true
+  - id: cst_mux_no_core_ms_cob_mutation
+    enabled: true
+  - id: cst_mux_deterministic_replay
+    enabled: true
+  - id: cst_mux_merge_neutrality
+    enabled: true
