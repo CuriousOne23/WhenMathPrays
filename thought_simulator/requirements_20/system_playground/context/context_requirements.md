@@ -96,9 +96,45 @@ CST SHALL produce stability signals derived from:
 
 ---
 
-# **4. Outputs (Normative)**
+# **4. Path‑A Context Substrate Extensions (Informative)**
 
-### **4.1 COB Identity‑Layer Objects**  
+The Path‑A context substrate now includes several additional fields produced and propagated through the COB → CIL → CEx → CE → MCB pipeline. These fields extend the unified context model and allow downstream primitives to maintain long‑horizon continuity, lineage stability, and deterministic context evolution.
+
+### **Identity Lineage**
+The context substrate includes identity‑lineage structures originating in COB and reflected through CIL, CEx‑Pck, and CE. These lineage structures describe the long‑term identity‑layer relationships used for continuity, fallback selection, and context reconstruction.
+
+### **Continuity Lineage**
+The context substrate includes continuity‑lineage information representing turn‑to‑turn continuity, context shifts, fallback continuity, and lineage‑based stability. This continuity lineage is preserved across TPU commit and freeze/thaw cycles.
+
+### **Topology**
+The context substrate includes identity‑layer topology describing the graph structure of identity layers and referent relationships. This topology is produced by COB, reflected by CIL, projected by CEx‑Pck, and consumed by CE and MCB for context‑coherence and shift‑detection.
+
+### **Scalar Metrics**
+The context substrate includes bounded‑semantic scalar metrics originating in COB and propagated through CIL and CEx‑Pck. These metrics include ambiguity, collapse risk, drift, stability, and lineage confidence. Downstream primitives use these metrics for continuity reasoning, fallback logic, and context‑coherence evaluation.
+
+### **Register Continuity**
+The context substrate includes register‑continuity signals describing long‑horizon register stability and transitions. These signals are produced by COB, reflected by CIL, projected by CEx‑Pck, and consumed by CE and MCB for next‑turn register and politeness generation.
+
+### **Importance Continuity**
+The context substrate includes importance‑continuity signals representing long‑horizon importance propagation across identity layers. These signals are used by CEx and MCB to maintain importance‑weighted continuity and next‑turn importance fields.
+
+### **Next‑Turn Context Fields**
+The context substrate includes next‑turn context fields generated exclusively by MCB and consumed by COB in the next cycle. These fields include topic, stance, intent, register, politeness, epistemic shading, continuity, direction, coherence, shift‑required, and importance. They form the bridge between meaning‑layer interpretation and long‑horizon identity‑layer continuity.
+
+### **Propagation Loop**
+All lineage, topology, metrics, continuity, and next‑turn context fields propagate deterministically through:
+
+```
+COB → CIL → CEx‑IE → CEx‑CCR → CEx‑Pck → CE → MCB → COB(next turn)
+```
+
+This propagation ensures that the unified context subsystem maintains a stable, deterministic, replay‑safe representation of conversational identity, continuity, and next‑turn context across all Path‑A cycles.
+
+---
+
+# **5. Outputs (Normative)**
+
+### **5.1 COB Identity‑Layer Objects**  
 COB SHALL produce stabilized identity‑layer objects containing:
 
 - referent maps  
@@ -110,7 +146,7 @@ COB SHALL produce stabilized identity‑layer objects containing:
 - freeze/thaw continuity  
 - next‑turn context integration  
 
-### **4.2 CST Stability Signals**  
+### **5.2 CST Stability Signals**  
 CST SHALL produce:
 
 - drift  
@@ -121,7 +157,7 @@ CST SHALL produce:
 - certainty/ambiguity adjustments  
 - lineage stability  
 
-### **4.3 CIL Intake Packet**  
+### **5.3 CIL Intake Packet**  
 CIL SHALL produce a structured packet containing:
 
 - stabilized identity‑layer objects  
@@ -132,7 +168,7 @@ CIL SHALL produce a structured packet containing:
 - next‑turn context fields  
 - packet metadata  
 
-### **4.4 TP Historical Datastream**  
+### **5.4 TP Historical Datastream**  
 TP SHALL record:
 
 - CST actions  
@@ -145,7 +181,7 @@ TP SHALL record:
 
 ---
 
-# **5. Unified Context Pipeline (Normative)**
+# **6. Unified Context Pipeline (Normative)**
 
 The pipeline SHALL execute in the deterministic sequence:
 
@@ -157,7 +193,7 @@ This replaces the older “OuBA‑like input” model.
 
 ---
 
-# **6. Unified Testing (Normative + Informative)**
+# **7. Unified Testing (Normative + Informative)**
 
 The unified context testbench SHALL validate:
 
@@ -177,9 +213,9 @@ The unified context testbench SHALL validate:
 
 ---
 
-# **7. Tested Behaviors (Expanded)**
+# **8. Tested Behaviors (Expanded)**
 
-### **7.1 CST Behavior**  
+### **8.1 CST Behavior**  
 CST SHALL detect:
 
 - drift  
@@ -192,7 +228,7 @@ CST SHALL detect:
 - merge/split continuity  
 - next‑turn context continuity  
 
-### **7.2 COB Behavior**  
+### **8.2 COB Behavior**  
 COB SHALL propagate:
 
 - referent maps  
@@ -204,7 +240,7 @@ COB SHALL propagate:
 - freeze/thaw continuity  
 - next‑turn context fields  
 
-### **7.3 CIL Behavior**  
+### **8.3 CIL Behavior**  
 CIL SHALL construct packets containing:
 
 - identity‑layer objects  
@@ -214,7 +250,7 @@ CIL SHALL construct packets containing:
 - lineage hints  
 - ordering metrics  
 
-### **7.4 CEx Behavior**  
+### **8.4 CEx Behavior**  
 CEx SHALL extract:
 
 - next‑turn context fields  
@@ -222,21 +258,21 @@ CEx SHALL extract:
 - identity‑layer continuity  
 - metadata continuity  
 
-### **7.5 CE Behavior**  
+### **8.5 CE Behavior**  
 CE SHALL represent:
 
 - next‑turn context fields  
 - continuity_status  
 - stability_status  
 
-### **7.6 ISc Behavior**  
+### **8.6 ISc Behavior**  
 ISc SHALL consume:
 
 - next‑turn context fields  
 - structural metadata  
 - stability metadata  
 
-### **7.7 TP Historical Continuity**  
+### **8.7 TP Historical Continuity**  
 TP SHALL record:
 
 - CST signals  
@@ -248,9 +284,9 @@ TP SHALL record:
 
 ---
 
-# **8. Additional Tests (New)**
+# **9. Additional Tests (New)**
 
-### **8.1 Metadata Continuity Tests**  
+### **9.1 Metadata Continuity Tests**  
 Verify propagation of:
 
 - alignment  
@@ -259,14 +295,14 @@ Verify propagation of:
 - continuity record  
 - intent record  
 
-### **8.2 Provenance Continuity Tests**  
+### **9.2 Provenance Continuity Tests**  
 Verify propagation of:
 
 - lineage_log[]  
 - signature_history[]  
 - entropy_history[]  
 
-### **8.3 Next‑Turn Context Tests**  
+### **9.3 Next‑Turn Context Tests**  
 Verify propagation of:
 
 - topic  
@@ -278,24 +314,24 @@ Verify propagation of:
 - importance  
 - clarifying_fields[]  
 
-### **8.4 Freeze/Thaw Continuity Tests**  
+### **9.4 Freeze/Thaw Continuity Tests**  
 Verify:
 
 - no instability on freeze/thaw  
 - continuity preserved  
 - metadata preserved  
 
-### **8.5 Merge/Split Continuity Tests**  
+### **9.5 Merge/Split Continuity Tests**  
 Verify:
 
 - no instability caused by merge/split  
 - valid instability passes immediately  
 - lineage continuity preserved  
 
-### 8.6 Unified Merge/Split Pipeline Test (New)
+### 9.6 Unified Merge/Split Pipeline Test (New)
 The unified context testbench SHALL validate that CST‑Core detects MERGE/SPLIT events, CST‑MS preserves structural neutrality, CST‑Mux produces stable USP flags, COB evolves identity‑layer objects correctly under structural transitions, and CIL constructs an intake packet that reflects the correct post‑merge/post‑split identity‑layer topology. The test SHALL confirm that structural transitions do not produce false instability and that valid instability on unrelated objects is preserved.
 
-### 8.7 - New Identity Context Boundary Tests
+### 9.7 - New Identity Context Boundary Tests
 The unified context testbench SHALL validate that CST‑MS detects identity‑layer
 context boundary breaks and emits the control signal `new_context_required=True`.
 The testbench SHALL verify that CST‑Mux propagates this signal into the USP,
@@ -308,7 +344,7 @@ validation.
 
 ---
 
-# **9. High‑Level Requirements (HLRs)**  
+# **10. High‑Level Requirements (HLRs)**  
 *(All SHALL statements appear only here)*
 
 ### **HLR‑CnTxt‑001**  
@@ -376,12 +412,12 @@ Next‑turn context fields SHALL remain stable across freeze/thaw cycles.
 
 ---
 
-# **10. Determinism Notes (Informative)**  
+# **11. Determinism Notes (Informative)**  
 Deterministic replay ensures identical TPSnS inputs produce identical CST, COB, CIL, CEx, CE, and ISc outputs.
 
 ---
 
-# **11. Interface Contracts (Informative)**
+# **12. Interface Contracts (Informative)**
 
 - CST → COB  
 - CST → CIL  
@@ -393,12 +429,12 @@ Deterministic replay ensures identical TPSnS inputs produce identical CST, COB, 
 
 ---
 
-# **12. Error Handling (Informative)**  
+# **13. Error Handling (Informative)**  
 Malformed identity‑layer objects, CST signals, or packet structures are rejected.
 
 ---
 
-# **13. Simulation Notes (Informative)**  
+# **14. Simulation Notes (Informative)**  
 This document defines the system_playground version of the unified context subsystem.
 
 ---
