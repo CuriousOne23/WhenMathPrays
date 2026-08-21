@@ -620,7 +620,29 @@ ReferentEntry {
 - identity_lineage  
 - continuity_lineage  
 - topology  
-- metrics (ambiguity_score, collapse_risk, drift_score, stability_score, lineage_confidence)  
+- metrics (ambiguity_score, collapse_risk, drift_score, stability_score, lineage_confidence)
+
+### 7.1 Canonical TP Path for CIL Intake Packet
+
+**Top-level envelope path (non-negotiable):**
+
+- `TP.cil.intake_packet`
+
+This path is owned exclusively by the CIL primitive.  
+It is created during `cil.process()` and SHALL NOT be written by any other component.
+
+**Audit location (v0.1 decision):**
+
+- `TP.cil.intake_packet.audit`
+
+The audit records truncation events, clarifying-field drops, and packet-assembly provenance.  
+Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat the audit as part of the CIL packet.
+
+**Notes:**
+
+- This path is required for progressive lineup dual-mode testbenches.  
+- Structural programs SHALL resolve all CIL envelope references against this canonical path.  
+- Subfield names listed in Section 7 remain authoritative and SHALL appear under `TP.cil.intake_packet`.
 
 ---
 
