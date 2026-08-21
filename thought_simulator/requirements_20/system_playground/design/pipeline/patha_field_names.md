@@ -1,7 +1,7 @@
 # patha_field_names.md — Canonical Field-Name Dictionary for Path-A
 
 **Document ID:** patha_field_names  
-**Version:** 0.3 (CST-MS envelope lock)  
+**Version:** 0.4 (CST-Mux envelope lock)  
 **Status:** Draft — derived exclusively from the listed normative and playground documents  
 **Scope:** Entire Path-A pipeline field surface for structural programs, testbenches, and dual-mode validation  
 **Location:** `thought_simulator/requirements_20/system_playground/design/pipeline/`  
@@ -24,6 +24,8 @@
 15. system_playground/primitives/cil/cil_py_struc_pgm.md / 20.33 (CIL intake path)  
 16. 20.32.010.020_cst-ms.md  
 17. system_playground/primitives/cst_ms/cst_ms_py_struc_pgm.md (v0.1 CP-approved path map)  
+18. 20.32.010.030_cst-mux.md  
+19. system_playground/primitives/cst_mux/cst_mux_py_struc_pgm.md (v0.1 CP-approved path map)  
 
 **Rules applied:**  
 - No invented field names.  
@@ -41,7 +43,7 @@ This document is the canonical field-name dictionary for the entire Path-A pipel
 
 It is intended for:
 
-- structural programs (especially `cob_py_struc_pgm.md`, `cil_py_struc_pgm.md`, `cst_core_py_struc_pgm.md`, `cst_ms_py_struc_pgm.md` and peer programs),  
+- structural programs (especially `cob_py_struc_pgm.md`, `cil_py_struc_pgm.md`, `cst_core_py_struc_pgm.md`, `cst_ms_py_struc_pgm.md`, `cst_mux_py_struc_pgm.md` and peer programs),  
 - progressive dual-mode testbenches,  
 - rulecheckers,  
 - envelope-boundary guards,  
@@ -459,16 +461,93 @@ These names remain in the coarse inventory (architecture / transfer tables). The
 | `command_log` | replay / audit |
 | synthesis summaries / risks / window | CST-Mux, downstream summary consumers |
 | `diagnostics.sync_mismatch` | CST-Mux only (no extra structural commands from mismatch) |
-| `metadata.new_context_required` | COB / context downstream |
+| `metadata.new_context_required` | COB / context downstream; also packaged into USP by CST-Mux |
 
 **Notes:**  
 - Runtime resolvers use paths relative to TP root (`cst.ms...`).  
 - See Section 10 for the dedicated CST-MS lock summary.
 
-### 2.6 TP.cst.mux.* / CST-Mux outputs
+### 2.6 TP.cst.mux.* / CST-Mux (LOCKED v0.1)
 
+**Prior coarse inventory (retained):**  
 - unified_stability_packet  
 - usp_tags  
+
+**Top-level envelope (non-negotiable):**
+
+- `TP.cst.mux`
+
+This path is owned exclusively by the CST-Mux primitive.  
+It is written during `cst_mux.process()` and SHALL NOT be written by any other component.
+
+**Canonical nested map (from `cst_mux_py_struc_pgm.md` §2, CP-approved):**
+
+```
+TP.cst.mux.status
+  turn_index
+  layer_count
+
+TP.cst.mux.layer_index
+  <StableID>: int    # deterministic 0..n-1 by sorted StableID
+
+TP.cst.mux.unified_stability_packet
+  turn_index
+  layer_index
+
+  core:
+    signals:
+      freeze / thaw / continuity_restoration / drift / oscillation / ambiguity / collapse
+    metrics:
+      per_layer / integrated
+    status:
+      frozen_layers[]   # when present on Core
+
+  ms:
+    normalized_metrics / weighted_metrics   # optional pack-through
+    stability / instability
+    collapse_risk / freeze_risk / thaw_readiness
+    ambiguity_summary / drift_summary / oscillation_summary
+    commands
+    command_log
+    diagnostics:
+      sync_mismatch
+      sync_mismatch_detail
+    metadata:
+      new_context_required
+
+  flags:
+    activation
+    freeze
+    thaw
+    continuity
+
+  new_context_required    # top-level convenience; same value as ms.metadata
+
+TP.cst.mux.usp_tags[]
+
+TP.cst.mux.history
+  window_len          # optional; 10 when usp_window used
+  usp_window[]        # optional progressive multi-turn history
+
+TP.cst.mux.audit
+  slice
+  provisional_flags
+  notes[]
+```
+
+**Routing (logical consumers; fields live under `TP.cst.mux`):**
+
+| Fields | Logical consumers |
+|--------|-------------------|
+| `unified_stability_packet` | **CIL only** (for replay reconstruction) |
+| `usp_tags` | debug / progressive |
+| `layer_index` | USP alignment |
+
+**Notes:**  
+- USP is **never** sent to COB (20.32.010.030 HLR-011, 012). COB receives Core/MS signals and commands on their own envelopes.  
+- Mux SHALL NOT modify, reinterpret, threshold, or synthesize upstream signals (HLR-018).  
+- Runtime resolvers use paths relative to TP root (`cst.mux...`).  
+- See Section 11 for the dedicated CST-Mux lock summary.
 
 ### 2.7 TP.routing.*
 
@@ -638,7 +717,7 @@ These names remain in the coarse inventory (architecture / transfer tables). The
 - Semantic interpretation or canonical semantics derivation  
 - Placeholder promotion, replay/export, compaction, redaction  
 - Modification of semantic-importance scores or roles  
-- Any signals from CST-Mux  
+- Any signals from CST-Mux / USP (COB does not consume USP)  
 - Direct signals from IdOB / SmOB / MCB  
 - Treating CST-Core raw metrics (drift/oscillation/ambiguity/collapse) as structural commands  
 
@@ -667,7 +746,7 @@ These names remain in the coarse inventory (architecture / transfer tables). The
 
 **Reads:**  
 - COB stabilized identity-layer snapshot  
-- USP from CST-Mux  
+- USP from CST-Mux under `TP.cst.mux.unified_stability_packet`  
 - structural cues / intake metadata / next_context  
 
 **Forbidden:**  
@@ -675,6 +754,7 @@ These names remain in the coarse inventory (architecture / transfer tables). The
 - Changing freeze state / COB topology  
 - Writing `TP.cst.core`  
 - Writing `TP.cst.ms`  
+- Writing `TP.cst.mux`  
 
 ### 3.5 CST-Core (LOCKED)
 
@@ -695,6 +775,7 @@ These names remain in the coarse inventory (architecture / transfer tables). The
 - Writing `routing_filter`, RED, geometric_state, semantic_core  
 - Writing `TP.cil.intake_packet`  
 - Writing `TP.cst.ms`  
+- Writing `TP.cst.mux`  
 - Accepting control commands from CST-MS  
 
 ### 3.6 CST-MS (LOCKED)
@@ -719,20 +800,29 @@ These names remain in the coarse inventory (architecture / transfer tables). The
 - Modification of identity topology / `cob_state_snapshot` (commands are emitted fields; COB applies them)  
 - Writing `TP.cst.core`  
 - Writing `TP.cil.intake_packet`  
+- Writing `TP.cst.mux`  
 - Deriving structural commands from COB internal state (HLR-046)  
 - Issuing additional structural commands in response to sync mismatch (HLR-048)  
 
-### 3.7 CST-Mux
+### 3.7 CST-Mux (LOCKED)
 
 **Owned / writes:**  
-- unified_stability_packet  
-- usp_tags  
+- Entire `TP.cst.mux` envelope (Section 2.6 / Section 11)  
+  - `status`, `layer_index`, `unified_stability_packet`, `usp_tags`, `history`, `audit`  
+- Optional append of module id `cst_mux` to `routing_path`  
+- Coarse inventory names retained: `unified_stability_packet`, `usp_tags`  
 
-**Reads:**  
+**Reads (read-only):**  
 - CST-Core signals and metrics under `TP.cst.core` for USP packaging / TP replay  
-- CST-MS synthesis summaries, risks, diagnostics under `TP.cst.ms` for USP packaging / TP replay  
+- CST-MS synthesis summaries, risks, commands, diagnostics, metadata under `TP.cst.ms` for USP packaging / TP replay  
+- Prior optional `TP.cst.mux.history.usp_window` when multi-turn fixtures seed it  
 
 **Forbidden:**  
+- Accepting data, snapshots, or signals from COB (HLR-006)  
+- Sending USP (or any derivative) to COB (HLR-011, 012)  
+- Issuing any commands to COB, CIL, or other modules (HLR-022)  
+- Modifying, reinterpreting, thresholding, or synthesizing received signals (HLR-018)  
+- Writing `TP.cst.core`, `TP.cst.ms`, `TP.cil.intake_packet`, or `identity.cob_state_snapshot`  
 - Identity or semantic modifications  
 
 ---
@@ -887,6 +977,9 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 (All unique names extracted; casing and spelling preserved.)
 
 - abbreviation_patterns  
+- activated  
+- activation  
+- activation_flags  
 - affected_objects  
 - aggregate  
 - alignment.clarifying  
@@ -944,6 +1037,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - continuity_lineage  
 - continuity_metadata  
 - continuity_restoration  
+- continuous  
 - conversation_count  
 - copy_forward_flags  
 - create_identity_layer  
@@ -967,11 +1061,14 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - entropy_trace  
 - event_type  
 - facts  
+- flags  
 - freeze  
 - freeze.state  
+- freeze_flags  
 - freeze_risk  
 - freeze_signature  
 - frequency  
+- frozen  
 - frozen_layers  
 - frozen_objects  
 - geometric_history  
@@ -999,6 +1096,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - lane_id  
 - layer_count  
 - layer_id  
+- layer_index  
 - layers  
 - length_flags  
 - lineage  
@@ -1044,6 +1142,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - projection_provenance  
 - proposition_set  
 - provenance  
+- provisional_flags  
 - provisional_metrics  
 - qualifier_cluster  
 - qualifiers  
@@ -1128,7 +1227,9 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - targets  
 - tb_trace  
 - thaw  
+- thaw_flags  
 - thaw_readiness  
+- thawed  
 - thawed_objects  
 - timestamp  
 - timestamps.created  
@@ -1150,6 +1251,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - unified_stability_packet  
 - unstable_lineage  
 - usp_tags  
+- usp_window  
 - value  
 - volatility_score  
 - weaken_register  
@@ -1226,6 +1328,39 @@ It is written during `cst_ms.process()` and SHALL NOT be written by any other co
 - No second envelope outside `TP.cst.ms` is permitted for CST-MS outputs.  
 - Final weights, thresholds, and create/split/merge predicates remain Defer; field **names and paths** are locked.  
 - Coarse inventory names from earlier dictionary revisions (strengthen_register, weaken_register, synthesized stability summaries, structural commands) are retained in §2.5 and §3.6.
+
+---
+
+## 11. Canonical TP Path for CST-Mux Envelope (LOCKED v0.1)
+
+**Top-level envelope path (non-negotiable):**
+
+- `TP.cst.mux`
+
+This path is owned exclusively by the CST-Mux primitive.  
+It is written during `cst_mux.process()` and SHALL NOT be written by any other component.
+
+**Required top-level children under `TP.cst.mux`:**
+
+| Child | Purpose |
+|-------|---------|
+| `status` | turn_index, layer_count |
+| `layer_index` | deterministic StableID → int map |
+| `unified_stability_packet` | USP: core + ms packs, flags, new_context_required |
+| `usp_tags` | optional short tags |
+| `history` | optional window_len / usp_window |
+| `audit` | slice, provisional_flags, notes |
+
+**Authority:**  
+- `20.32.010.030_cst-mux.md` (HLRs)  
+- `cst_mux_py_struc_pgm.md` §2 (CP-approved nested map)  
+
+**Notes:**  
+- Progressive dual-mode testbenches SHALL resolve CST-Mux expected fields against this section.  
+- No second envelope outside `TP.cst.mux` is permitted for CST-Mux outputs.  
+- USP is delivered **only to CIL** (logical consumer). USP is **never** sent to COB.  
+- Mux packages without modifying Core/MS signals; field **names and paths** are locked.  
+- Coarse inventory names `unified_stability_packet` and `usp_tags` are retained from earlier dictionary revisions.
 
 ---
 
