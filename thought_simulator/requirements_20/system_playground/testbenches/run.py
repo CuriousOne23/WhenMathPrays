@@ -103,15 +103,28 @@ ACTIVE_TEST_MODULES = [
     #         "tests_to_run": "see mcb_tests_to_run.yaml",
     #     }
     # ),
-    # **************************** OuBA Test bench (ACTIVE) ********************************************
+    # **************************** OuBA Test bench (previously active) ********************************
     # Category: path_a/output/
     # Dual-mode: testbench (ouba_testbench.yaml) | general (ouba_input.yaml + rules)
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.output.ouba_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_ouba": True,         # Primitive under test
+    #         "tests_to_run": "see ouba_tests_to_run.yaml",
+    #     }
+    # ),
+
+    # **************************** COB Test bench (ACTIVE) ********************************************
+    # Category: path_a/context/
+    # Dual-mode: testbench (cob_testbench.yaml) | general (cob_input.yaml + rules)
+    # Normative: 20.32, cob_requirements.md, cob_py_struc_pgm.md, patha_field_names.md
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.output.ouba_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cob_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
-            "use_ouba": True,         # Primitive under test
-            "tests_to_run": "see ouba_tests_to_run.yaml",
+            "use_cob": True,          # Primitive under test
+            "tests_to_run": "see cob_tests_to_run.yaml",
         }
     ),
 ]
