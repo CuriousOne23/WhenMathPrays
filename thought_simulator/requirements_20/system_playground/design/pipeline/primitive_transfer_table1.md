@@ -1,6 +1,10 @@
 # 📘 **Primitive Transfer Table (Compressed Hybrid Edition)**  
 **Path‑A Pipeline: InB → IIInB → IE → CE → TPU → SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → DCB → RB**
 
+**Canonical Field Names:** All field names in this document are governed by  
+`thought_simulator/requirements_20/system_playground/design/pipeline/patha_field_names.md`.  
+That dictionary is the single authoritative source for structural programs and testbenches.
+
 ## Path A – Bounded Semantics Requirement
 
 Path A primitives are semantic, but only within bounded scope. Each primitive must
