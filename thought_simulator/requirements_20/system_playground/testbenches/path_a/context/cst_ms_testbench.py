@@ -59,12 +59,20 @@ def _ms(tp: dict) -> dict:
     return ((tp or {}).get("cst") or {}).get("ms") or {}
 
 
+def _normalize_mode(raw) -> str:
+    mode = str(raw or "testbench").strip().lower()
+    if mode not in ("testbench", "general"):
+        print(f"WARNING: unrecognized mode '{raw}' — defaulting to testbench")
+        return "testbench"
+    return mode
+
+
 def run_single_test(test_entry):
     test_id = test_entry["id"]
     enabled = test_entry.get("enabled", False)
 
     print("\n------------------------------------------------------------")
-    print(f"Running Test: {test_id}")
+    print(f"[MODE=testbench] Running Test: {test_id}")
     print("------------------------------------------------------------")
 
     if not enabled:
@@ -83,8 +91,10 @@ def run_single_test(test_entry):
     tp_input = copy.deepcopy(tb_test["input"])
     expected = tb_test.get("expected") or {}
 
-    print("- Input Source: cst_ms_testbench.yaml (testbench mode)")
-    print("- Expected Output Source: cst_ms_testbench.yaml (expected block)")
+    print("- Active MODE: testbench")
+    print("- Input Source: cst_ms_testbench.yaml")
+    print("- Expected Source: cst_ms_testbench.yaml (expected block)")
+    print("- Rulechecker: diagnostic only (PASS/FAIL driven by expected block)")
 
     diffs = []
 
@@ -212,7 +222,6 @@ def run_single_test(test_entry):
             if act_hist.get(k) != v:
                 diffs.append(f"history.{k}: expected {v}, got {act_hist.get(k)}")
 
-        # Always require six command keys
         commands = ms.get("commands") or {}
         for k in REQUIRED_COMMAND_KEYS:
             if k not in commands:
@@ -228,6 +237,7 @@ def run_single_test(test_entry):
     passed = len(diffs) == 0
 
     print("\n----- Test Result -----")
+    print(f"- MODE: testbench")
     print(f"- {'PASS' if passed else 'FAIL'}: {test_id}")
     print(f"- Structural Match: {'PASS' if passed else 'FAIL'}")
     if diffs:
@@ -259,11 +269,12 @@ def run_single_test(test_entry):
 
 
 def run_general_mode():
-    print("\n------------------------------------------------------------")
-    print("Running General Mode: cst_ms_input.yaml")
-    print("------------------------------------------------------------")
-    print("- Input Source: cst_ms_input.yaml (general mode)")
-    print("- Checked By: cst_ms_rules.yaml (rule-driven validation)")
+    print("\n============================================================")
+    print("  ACTIVE MODE: general")
+    print("  Input:        cst_ms_input.yaml")
+    print("  Validation:   cst_ms_rules.yaml (rulechecker is authoritative)")
+    print("  Expected YAML: NOT used in general mode")
+    print("============================================================")
 
     rules_file = os.path.join(BASE_DIR, "cst_ms_rules.yaml")
     rules = load_yaml(rules_file).get("rules", [])
@@ -281,7 +292,9 @@ def run_general_mode():
     passed = len(rule_errors) == 0
 
     print("\n----- Test Result -----")
+    print("- MODE: general")
     print(f"- {'PASS' if passed else 'FAIL'}: general_cst_ms_input")
+    print(f"- Rule-driven validation: {'PASS' if passed else 'FAIL'}")
     if rule_errors:
         print("- Rule Violations:")
         for rid, msg in rule_errors:
@@ -290,9 +303,16 @@ def run_general_mode():
         print("- Rule Violations: None")
 
     ms = _ms(tp_output)
-    print("\nCST-MS Summary:")
+    print("\nCST-MS Summary (general mode):")
+    print(f"- turn_index: {(ms.get('status') or {}).get('turn_index')}")
     print(f"- stability: {((ms.get('stability') or {}).get('aggregate') or {}).get('value')}")
+    print(f"- instability: {((ms.get('instability') or {}).get('aggregate') or {}).get('value')}")
+    print(f"- freeze layers: {((ms.get('commands') or {}).get('freeze') or {}).get('layers')}")
+    print(f"- new_context_required: {((ms.get('metadata') or {}).get('new_context_required'))}")
+    print(f"- window len: {len(ms.get('stability_window') or [])}")
+    print(f"- command_log entries: {len(ms.get('command_log') or [])}")
     print(f"- routing_path: {tp_output.get('routing_path')}")
+    print(f"- provisional_metrics: {((ms.get('audit') or {}).get('provisional_metrics'))}")
 
     return {
         "id": "general_cst_ms_input",
@@ -307,8 +327,16 @@ def run_testbench():
     print(" CST-MS Testbench Runner - Starting Execution")
     print("============================================================")
 
-    mode = (TESTBENCH_CONFIG or {}).get("mode", "testbench")
-    print(f"- Mode: {mode}")
+    raw_mode = (TESTBENCH_CONFIG or {}).get("mode", "testbench")
+    mode = _normalize_mode(raw_mode)
+
+    print(f"- Config received from run.py: {TESTBENCH_CONFIG}")
+    print(f"- MODE (raw):  {raw_mode!r}")
+    print(f"- MODE (active): {mode}")
+    if mode == "testbench":
+        print("- Path: cst_ms_tests_to_run.yaml → cst_ms_testbench.yaml expected blocks")
+    else:
+        print("- Path: cst_ms_input.yaml → cst_ms_rules.yaml rulechecker")
 
     results = []
     total = passed = failed = 0
@@ -322,6 +350,7 @@ def run_testbench():
         else:
             failed = 1
     else:
+        print("\n[MODE=testbench] Loading enabled tests from cst_ms_tests_to_run.yaml")
         tests_to_run_file = os.path.join(BASE_DIR, "cst_ms_tests_to_run.yaml")
         tests_to_run = load_yaml(tests_to_run_file)
         tests = tests_to_run.get("tests", [])
@@ -332,7 +361,7 @@ def run_testbench():
                 continue
             total += 1
             if result["passed"]:
-                passed += 1
+                passed = 1 if passed is None else passed + 1
             else:
                 failed += 1
             results.append(result)
@@ -340,6 +369,7 @@ def run_testbench():
     print("\n============================================================")
     print(" CST-MS Testbench Summary")
     print("============================================================")
+    print(f"- MODE: {mode}")
     print(f"- Total Tests Enabled: {total}")
     print(f"- Passed: {passed}")
     print(f"- Failed: {failed}")
@@ -349,7 +379,7 @@ def run_testbench():
         print(f"- {r['id']}: {status}")
 
     print("\n============================================================")
-    print(" CST-MS Testbench Runner - Complete")
+    print(f" CST-MS Testbench Runner - Complete (MODE={mode})")
     print("============================================================")
 
 
