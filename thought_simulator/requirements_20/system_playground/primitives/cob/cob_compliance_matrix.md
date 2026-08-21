@@ -4,7 +4,7 @@
 - **I** = Implemented  
 - **P** = Partial  
 - **N** = Not Implemented  
-- **D** = Divergent  
+- **D** = Divergent (implementation doesn't match the requirements)
 - **F** = Deferred (allowed by structural program)
 
 ---
