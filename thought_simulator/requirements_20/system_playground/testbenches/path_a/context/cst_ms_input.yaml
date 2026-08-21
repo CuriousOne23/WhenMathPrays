@@ -1,0 +1,53 @@
+# CST-MS general-mode input (rule-driven)
+mode: general
+primitive: cst_ms
+version: "0.1"
+notes: "Minimal TP with locked CST-Core envelope for CST-MS general-mode rule checking."
+
+turn_index: 1
+
+identity:
+  cob_state_snapshot:
+    objects:
+      - id: L1
+        referent_map: {r: 1}
+        stability_metrics: {drift: 0.2, oscillation: 0.1, collapse: false}
+
+cst:
+  core:
+    status:
+      turn_index: 1
+      layer_count: 1
+      frozen_layers: []
+    signals:
+      freeze: {frozen_objects: [], reason: ""}
+      thaw: {thawed_objects: [], reason: ""}
+      continuity_restoration: {restored_objects: [], reason: ""}
+      drift: {affected_objects: [L1], magnitude: 0.2}
+      oscillation: {affected_objects: [L1], frequency: 0.1, amplitude: 1}
+      ambiguity: {affected_objects: [], increased: [], decreased: []}
+      collapse: {collapsed_objects: [], severity: 0}
+    metrics:
+      per_layer:
+        L1:
+          drift: 0.2
+          oscillation: 0.1
+          ambiguity: 0.0
+          stability: 0.8
+          collapse: 0.0
+          continuity: 0.9
+          combined_instability: 0.2
+      integrated: {}
+    history:
+      window_len: 10
+      turns: []
+    lineage_stability:
+      stable_lineage: [L1]
+      unstable_lineage: []
+    audit:
+      slice: "fixture"
+      provisional_metrics: true
+      notes: []
+
+lineage_log: []
+routing_path: []
