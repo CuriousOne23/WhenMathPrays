@@ -1,331 +1,359 @@
 """
-CST-Mux Testbench — System Playground Version
-
-Validates CST-Mux against:
-- cst-mux.md (architecture)
-- cst-mux_requirements.md (HLR-CST-MUX-nnn)
-- cst-ms.py (upstream synthesis module)
-
-Tests cover:
-- activation flags
-- freeze flags
-- thaw flags
-- continuity flags
-- USP construction
-- merge/split neutrality
-- 10-turn USP window
-- determinism & replay
+CST-Mux Testbench (Version 0.1)
+  • mode == "testbench" → cst_mux_testbench.yaml structural / behavioral match
+  • mode == "general"   → cst_mux_input.yaml + cst_mux_rules.yaml
+Aligned with progressive_lineup_testing.md,
+cst_mux_py_struc_pgm.md, patha_field_names.md (TP.cst.mux lock).
 """
 
-from cst_mux import CST_MUX
-from cst_ms.cst_ms import CST_MS
-from cst_core.cst_core import CST
-from cil.cil import IdentityObject
+from __future__ import annotations
+
+import copy
+import os
+import sys
+
+import yaml
+
+TB_DIR = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.abspath(os.path.join(TB_DIR, "..", "..", ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+from thought_simulator.requirements_20.system_playground.testbenches.path_a.context.cst_mux_rulechecker import (  # noqa: E402
+    CSTMUXRuleChecker,
+)
+from thought_simulator.requirements_20.system_playground.primitives.cst_mux.cst_mux import (  # noqa: E402
+    get_primitive_name,
+    process as cst_mux_process,
+)
+
+assert get_primitive_name() == "cst_mux", (
+    f"Primitive name mismatch: expected cst_mux, got {get_primitive_name()}"
+)
+
+TESTBENCH_CONFIG: dict = {}
+BASE_DIR = os.path.dirname(__file__)
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-def make_identity_object(
-    id: str,
-    drift=None,
-    oscillation=None,
-    collapse=False,
-    certainty=None,
-    ambiguity=None,
-):
-    """OuBA-like identity object for CST-Core → CST-MS → CST-Mux testing."""
-    return IdentityObject(
-        id=id,
-        referent_map={"r": "v"},
-        anchors=["a1"],
-        lineage={"stability": "stable"},
-        ambiguity={"certainty": certainty, "ambiguity": ambiguity},
-        stability_metrics={
-            "drift": drift,
-            "oscillation": oscillation,
-            "collapse": collapse,
-        },
-        ordering_metrics={"recency": 0, "frequency": 0, "density": 0},
-    )
+def set_testbench_config(config):
+    global TESTBENCH_CONFIG
+    TESTBENCH_CONFIG = config or {}
 
 
-def make_tp_placeholders():
-    return [], {"turn_index": None, "objects": []}
+def load_yaml(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
 
-def run_pipeline(objs, turn_index):
-    """
-    Runs CST → CST-MS → CST-Mux pipeline for test convenience.
-    """
-    tp_lineage_log, tp_snapshot = make_tp_placeholders()
-
-    cst = CST()
-    ms = CST_MS()
-    mux = CST_MUX()
-
-    cst_signals = cst.run(objs, tp_lineage_log, tp_snapshot, turn_index).__dict__
-    ms_signals = ms.run(cst_signals, turn_index).__dict__
-    usp = mux.run(ms_signals, turn_index)
-
-    return usp, mux
+def _mux(tp: dict) -> dict:
+    return ((tp or {}).get("cst") or {}).get("mux") or {}
 
 
-# ---------------------------------------------------------------------------
-# 1. Activation Flag Tests
-# ---------------------------------------------------------------------------
-
-def test_activation_flags():
-    """
-    Tests:
-    - HLR-CST-MUX-001..005
-    """
-
-    obj = make_identity_object("A", drift=1.0)
-    usp, mux = run_pipeline([obj], turn_index=1)
-
-    assert "activated" in usp.activation_flags
-    assert usp.activation_flags["activated"] in (True, False)
-    assert usp.activation_flags["stability_value"] == usp.stability["value"]
+def _usp(tp: dict) -> dict:
+    return _mux(tp).get("unified_stability_packet") or {}
 
 
-# ---------------------------------------------------------------------------
-# 2. Freeze Flag Tests
-# ---------------------------------------------------------------------------
-
-def test_freeze_flags():
-    """
-    Tests:
-    - HLR-CST-MUX-006..010
-    """
-
-    obj = make_identity_object("A", collapse=True)
-    usp, mux = run_pipeline([obj], turn_index=2)
-
-    assert "frozen" in usp.freeze_flags
-    assert usp.freeze_flags["freeze_risk"] == usp.freeze_risk["value"]
+def _normalize_mode(raw) -> str:
+    mode = str(raw or "testbench").strip().lower()
+    if mode not in ("testbench", "general"):
+        print(f"WARNING: unrecognized mode '{raw}' — defaulting to testbench")
+        return "testbench"
+    return mode
 
 
-# ---------------------------------------------------------------------------
-# 3. Thaw Flag Tests
-# ---------------------------------------------------------------------------
+def run_single_test(test_entry):
+    test_id = test_entry["id"]
+    enabled = test_entry.get("enabled", False)
 
-def test_thaw_flags():
-    """
-    Tests:
-    - HLR-CST-MUX-011..013
-    """
+    print("\n------------------------------------------------------------")
+    print(f"[MODE=testbench] Running Test: {test_id}")
+    print("------------------------------------------------------------")
 
-    obj = make_identity_object("A", drift=0.0, oscillation=0.0, collapse=False)
-    usp, mux = run_pipeline([obj], turn_index=3)
+    if not enabled:
+        print(f"- Test {test_id} is DISABLED. Skipping.")
+        return {"id": test_id, "enabled": False, "passed": None, "errors": []}
 
-    assert "thawed" in usp.thaw_flags
-    assert usp.thaw_flags["thaw_readiness"] == usp.thaw_readiness["value"]
+    rules_file = os.path.join(BASE_DIR, "cst_mux_rules.yaml")
+    rules = load_yaml(rules_file).get("rules", [])
 
+    testbench_file = os.path.join(BASE_DIR, "cst_mux_testbench.yaml")
+    tb = load_yaml(testbench_file)
+    tb_test = next((t for t in tb.get("tests", []) if t.get("id") == test_id), None)
+    if tb_test is None:
+        raise KeyError(f"Test ID {test_id} not found in cst_mux_testbench.yaml")
 
-# ---------------------------------------------------------------------------
-# 4. Continuity Flag Tests
-# ---------------------------------------------------------------------------
+    tp_input = copy.deepcopy(tb_test["input"])
+    expected = tb_test.get("expected") or {}
 
-def test_continuity_flags():
-    """
-    Tests:
-    - HLR-CST-MUX-014..015
-    """
+    print("- Active MODE: testbench")
+    print("- Input Source: cst_mux_testbench.yaml")
+    print("- Expected Source: cst_mux_testbench.yaml (expected block)")
+    print("- Rulechecker: diagnostic only (PASS/FAIL driven by expected block)")
 
-    obj = make_identity_object("A", drift=0.1)
-    usp, mux = run_pipeline([obj], turn_index=4)
+    diffs = []
+    tp_before = copy.deepcopy(tp_input)
 
-    assert "continuous" in usp.continuity_flags
-    assert usp.continuity_flags["stability_value"] == usp.stability["value"]
+    if test_id == "cst_mux_deterministic_replay":
+        out1 = cst_mux_process(copy.deepcopy(tp_input), mode="testbench")
+        out2 = cst_mux_process(copy.deepcopy(tp_input), mode="testbench")
+        u1 = _usp(out1)
+        u2 = _usp(out2)
+        for key in ("turn_index", "layer_index", "core", "ms", "flags", "new_context_required"):
+            if u1.get(key) != u2.get(key):
+                diffs.append(f"USP.{key} diverges between independent process calls")
+        tp_output = out1
+    else:
+        tp_output = cst_mux_process(copy.deepcopy(tp_input), mode="testbench")
+        mux = _mux(tp_output)
+        usp = _usp(tp_output)
 
+        if expected.get("envelope_present") and not mux:
+            diffs.append("TP.cst.mux missing")
 
-# ---------------------------------------------------------------------------
-# 5. USP Construction Tests
-# ---------------------------------------------------------------------------
+        if expected.get("usp_present") and not usp:
+            diffs.append("unified_stability_packet missing")
 
-def test_usp_construction():
-    """
-    Tests:
-    - HLR-CST-MUX-016..018
-    """
+        if expected.get("routing_has_cst_mux"):
+            rp = tp_output.get("routing_path") or []
+            if "cst_mux" not in rp:
+                diffs.append("routing_path missing 'cst_mux'")
 
-    obj = make_identity_object("A", drift=0.3, oscillation=0.2)
-    usp, mux = run_pipeline([obj], turn_index=5)
+        if "layer_index" in expected:
+            act = mux.get("layer_index") or {}
+            for lid, idx in expected["layer_index"].items():
+                if act.get(lid) != idx:
+                    diffs.append(f"layer_index[{lid}] expected {idx}, got {act.get(lid)}")
 
-    assert usp.stability["value"] >= 0.0
-    assert usp.instability["value"] == 1.0 - usp.stability["value"]
-    assert usp.drift_summary["magnitude"] >= 0.0
-    assert usp.oscillation_summary["frequency"] >= 0.0
+        if "core_freeze_contains" in expected:
+            frozen = (((usp.get("core") or {}).get("signals") or {}).get("freeze") or {}).get(
+                "frozen_objects"
+            ) or []
+            for lid in expected["core_freeze_contains"]:
+                if lid not in frozen:
+                    diffs.append(f"USP.core freeze missing {lid}")
 
+        if "flag_freeze_L1" in expected:
+            flags = usp.get("flags") or {}
+            freeze = flags.get("freeze") or {}
+            act = freeze.get("L1") if isinstance(freeze, dict) else flags.get("frozen")
+            if bool(act) != bool(expected["flag_freeze_L1"]):
+                diffs.append(f"flag freeze L1 expected {expected['flag_freeze_L1']}, got {act}")
 
-# ---------------------------------------------------------------------------
-# 6. Merge/Split Neutrality Tests
-# ---------------------------------------------------------------------------
+        if "ms_stability_aggregate" in expected:
+            act = (((usp.get("ms") or {}).get("stability") or {}).get("aggregate") or {}).get(
+                "value"
+            )
+            try:
+                if abs(float(act) - float(expected["ms_stability_aggregate"])) > 1e-9:
+                    diffs.append(
+                        f"ms stability aggregate expected {expected['ms_stability_aggregate']}, got {act}"
+                    )
+            except (TypeError, ValueError):
+                diffs.append("ms stability aggregate not numeric")
 
-def test_merge_split_neutrality():
-    """
-    Tests:
-    - HLR-CST-MUX-019..022
-    """
+        if "ms_ambiguity_count" in expected:
+            act = (((usp.get("ms") or {}).get("ambiguity_summary") or {}).get("count"))
+            if act != expected["ms_ambiguity_count"]:
+                diffs.append(
+                    f"ms ambiguity count expected {expected['ms_ambiguity_count']}, got {act}"
+                )
 
-    # Fake merge event from CST-Core
-    cst_signals = {
-        "drift": {"magnitude": 0.5},
-        "oscillation": {"frequency": 0.2, "amplitude": 1},
-        "collapse": {"severity": 0},
-        "merge": {"merge_pairs": ["A", "B"], "confidence": 1},
-        "split": {"split_objects": [], "confidence": 0},
-        "freeze": {"frozen_objects": [], "reason": "none"},
-        "thaw": {"thawed_objects": [], "reason": "none"},
-        "certainty_adjustment": {"increased_certainty": [], "decreased_certainty": []},
-        "ambiguity_adjustment": {"increased_ambiguity": [], "decreased_ambiguity": []},
-        "lineage_stability": {"stable_lineage": [], "unstable_lineage": []},
-        "metadata": {"turn_index": 6},
+        if "new_context_required" in expected:
+            act = usp.get("new_context_required")
+            if bool(act) != bool(expected["new_context_required"]):
+                diffs.append(
+                    f"new_context_required expected {expected['new_context_required']}, got {act}"
+                )
+
+        if expected.get("cob_snapshot_unchanged"):
+            before = ((tp_before.get("identity") or {}).get("cob_state_snapshot"))
+            after = ((tp_output.get("identity") or {}).get("cob_state_snapshot"))
+            if before != after:
+                diffs.append("cob_state_snapshot mutated")
+
+        if expected.get("core_unchanged"):
+            before = ((tp_before.get("cst") or {}).get("core"))
+            after = ((tp_output.get("cst") or {}).get("core"))
+            if before != after:
+                diffs.append("TP.cst.core mutated")
+
+        if expected.get("ms_unchanged"):
+            before = ((tp_before.get("cst") or {}).get("ms"))
+            after = ((tp_output.get("cst") or {}).get("ms"))
+            if before != after:
+                diffs.append("TP.cst.ms mutated")
+
+        if "ms_instability_lt" in expected:
+            act = (((usp.get("ms") or {}).get("instability") or {}).get("aggregate") or {}).get(
+                "value"
+            )
+            try:
+                if not (float(act) < float(expected["ms_instability_lt"])):
+                    diffs.append(f"ms instability {act} not < {expected['ms_instability_lt']}")
+            except (TypeError, ValueError):
+                diffs.append("ms instability not comparable")
+
+        if expected.get("no_invented_instability"):
+            # Mux must not invent a higher instability than MS provided
+            ms_in = (((tp_before.get("cst") or {}).get("ms") or {}).get("instability") or {}).get(
+                "aggregate"
+            ) or {}
+            ms_out = (((usp.get("ms") or {}).get("instability") or {}).get("aggregate") or {})
+            try:
+                if abs(float(ms_out.get("value")) - float(ms_in.get("value"))) > 1e-9:
+                    diffs.append("Mux altered MS instability (invented instability)")
+            except (TypeError, ValueError):
+                diffs.append("instability comparison failed")
+
+    checker = CSTMUXRuleChecker(tp_before, tp_output, rules)
+    rule_errors = checker.run()
+
+    passed = len(diffs) == 0
+
+    print("\n----- Test Result -----")
+    print("- MODE: testbench")
+    print(f"- {'PASS' if passed else 'FAIL'}: {test_id}")
+    print(f"- Structural Match: {'PASS' if passed else 'FAIL'}")
+    if diffs:
+        print("- Diffs:")
+        for m in diffs:
+            print(f"  * {m}")
+    if rule_errors:
+        print("- Rule Violations (diagnostic):")
+        for rid, msg in rule_errors:
+            print(f"  * [{rid}] {msg}")
+    else:
+        print("- Rule Violations: None")
+
+    mux = _mux(tp_output)
+    usp = _usp(tp_output)
+    print("\nCST-Mux Summary:")
+    print(f"- turn_index: {(mux.get('status') or {}).get('turn_index')}")
+    print(f"- layer_count: {(mux.get('status') or {}).get('layer_count')}")
+    print(f"- layer_index: {mux.get('layer_index')}")
+    print(f"- new_context_required: {usp.get('new_context_required')}")
+    print(f"- routing_path: {tp_output.get('routing_path')}")
+
+    return {
+        "id": test_id,
+        "enabled": True,
+        "passed": passed,
+        "errors": rule_errors,
     }
 
-    ms = CST_MS()
-    mux = CST_MUX()
 
-    ms_signals = ms.run(cst_signals, turn_index=6).__dict__
-    usp = mux.run(ms_signals, turn_index=6)
+def run_general_mode():
+    print("\n============================================================")
+    print("  ACTIVE MODE: general")
+    print("  Input:        cst_mux_input.yaml")
+    print("  Validation:   cst_mux_rules.yaml (rulechecker is authoritative)")
+    print("  Expected YAML: NOT used in general mode")
+    print("============================================================")
 
-    # Merge must NOT produce instability by itself
-    assert usp.instability["value"] < 1.0
-    assert usp.freeze_risk["value"] <= 1.0
+    rules_file = os.path.join(BASE_DIR, "cst_mux_rules.yaml")
+    rules = load_yaml(rules_file).get("rules", [])
 
+    input_file = os.path.join(BASE_DIR, "cst_mux_input.yaml")
+    tp_input = load_yaml(input_file) or {}
+    for k in ("mode", "primitive", "version", "notes"):
+        tp_input.pop(k, None)
 
-# ---------------------------------------------------------------------------
-# 7. USP Window Tests
-# ---------------------------------------------------------------------------
+    tp_before = copy.deepcopy(tp_input)
+    tp_output = cst_mux_process(copy.deepcopy(tp_input), mode="general")
 
-def test_usp_window_length():
-    """
-    Tests:
-    - HLR-CST-MUX-023..029
-    """
+    checker = CSTMUXRuleChecker(tp_before, tp_output, rules)
+    rule_errors = checker.run()
+    passed = len(rule_errors) == 0
 
-    cst = CST()
-    ms = CST_MS()
-    mux = CST_MUX()
+    print("\n----- Test Result -----")
+    print("- MODE: general")
+    print(f"- {'PASS' if passed else 'FAIL'}: general_cst_mux_input")
+    print(f"- Rule-driven validation: {'PASS' if passed else 'FAIL'}")
+    if rule_errors:
+        print("- Rule Violations:")
+        for rid, msg in rule_errors:
+            print(f"  * [{rid}] {msg}")
+    else:
+        print("- Rule Violations: None")
 
-    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+    mux = _mux(tp_output)
+    usp = _usp(tp_output)
+    print("\nCST-Mux Summary (general mode):")
+    print(f"- turn_index: {(mux.get('status') or {}).get('turn_index')}")
+    print(f"- layer_index: {mux.get('layer_index')}")
+    print(f"- new_context_required: {usp.get('new_context_required')}")
+    print(f"- routing_path: {tp_output.get('routing_path')}")
+    print(f"- provisional_flags: {((mux.get('audit') or {}).get('provisional_flags'))}")
 
-    obj = make_identity_object("A", drift=0.1)
-
-    for turn in range(1, 15):
-        cst_signals = cst.run([obj], tp_lineage_log, tp_snapshot, turn).__dict__
-        ms_signals = ms.run(cst_signals, turn).__dict__
-        mux.run(ms_signals, turn)
-
-    assert len(mux.state.usp_window) == 10
-    assert mux.state.usp_window[-1]["stability"]["value"] >= 0.0
-
-
-# ---------------------------------------------------------------------------
-# 8. Determinism / Replay Tests
-# ---------------------------------------------------------------------------
-
-def test_determinism_replay():
-    """
-    Tests:
-    - HLR-CST-MUX-030..033
-    """
-
-    cst = CST()
-    ms1 = CST_MS()
-    ms2 = CST_MS()
-    mux1 = CST_MUX()
-    mux2 = CST_MUX()
-
-    tp_lineage_log, tp_snapshot = make_tp_placeholders()
-
-    objs = [
-        make_identity_object("A", drift=0.2, oscillation=0.1),
-        make_identity_object("B", drift=0.3, oscillation=0.0, collapse=True),
-    ]
-
-    cst_signals = cst.run(objs, tp_lineage_log, tp_snapshot, turn_index=10).__dict__
-
-    ms_out1 = ms1.run(cst_signals, turn_index=10).__dict__
-    ms_out2 = ms2.run(cst_signals, turn_index=10).__dict__
-
-    usp1 = mux1.run(ms_out1, turn_index=10)
-    usp2 = mux2.run(ms_out2, turn_index=10)
-
-    assert usp1.activation_flags == usp2.activation_flags
-    assert usp1.freeze_flags == usp2.freeze_flags
-    assert usp1.thaw_flags == usp2.thaw_flags
-    assert usp1.continuity_flags == usp2.continuity_flags
-    assert usp1.stability == usp2.stability
-    assert usp1.instability == usp2.instability
-    assert usp1.collapse_risk == usp2.collapse_risk
-    assert usp1.freeze_risk == usp2.freeze_risk
-    assert usp1.thaw_readiness == usp2.thaw_readiness
-    assert usp1.ambiguity_summary == usp2.ambiguity_summary
-    assert usp1.drift_summary == usp2.drift_summary
-    assert usp1.oscillation_summary == usp2.oscillation_summary
-    assert usp1.metadata == usp2.metadata
+    return {
+        "id": "general_cst_mux_input",
+        "enabled": True,
+        "passed": passed,
+        "errors": rule_errors,
+    }
 
 
-# ---------------------------------------------------------------------------
-# 9. NEW_CONTEXT_REQUIRED Tests
-# ---------------------------------------------------------------------------
+def run_testbench():
+    print("\n============================================================")
+    print(" CST-Mux Testbench Runner - Starting Execution")
+    print("============================================================")
 
-def test_new_context_required_flag():
-    """
-    Tests:
-    - CST‑MS emits new_context_required=True
-    - CST‑Mux propagates new_context_required into USP
-    - Replay determinism
-    """
+    raw_mode = (TESTBENCH_CONFIG or {}).get("mode", "testbench")
+    mode = _normalize_mode(raw_mode)
 
-    obj = make_identity_object("A", collapse=True)
+    print(f"- Config received from run.py: {TESTBENCH_CONFIG}")
+    print(f"- MODE (raw):  {raw_mode!r}")
+    print(f"- MODE (active): {mode}")
+    if mode == "testbench":
+        print("- Path: cst_mux_tests_to_run.yaml → cst_mux_testbench.yaml expected blocks")
+    else:
+        print("- Path: cst_mux_input.yaml → cst_mux_rules.yaml rulechecker")
 
-    usp, mux = run_pipeline([obj], turn_index=50)
+    results = []
+    total = passed = failed = 0
 
-    print("\n--- NEW_CONTEXT_REQUIRED Flag ---")
-    print("USP new_context_required:", usp.new_context_required)
+    if mode == "general":
+        result = run_general_mode()
+        results.append(result)
+        total = 1
+        if result["passed"]:
+            passed = 1
+        else:
+            failed = 1
+    else:
+        print("\n[MODE=testbench] Loading enabled tests from cst_mux_tests_to_run.yaml")
+        tests_to_run_file = os.path.join(BASE_DIR, "cst_mux_tests_to_run.yaml")
+        tests_to_run = load_yaml(tests_to_run_file)
+        tests = tests_to_run.get("tests", [])
 
-    assert usp.new_context_required is True
+        for test in tests:
+            result = run_single_test(test)
+            if not test.get("enabled", False):
+                continue
+            total += 1
+            if result["passed"]:
+                passed += 1
+            else:
+                failed += 1
+            results.append(result)
 
-    usp2, mux2 = run_pipeline([obj], turn_index=50)
-    assert usp2.new_context_required is True
+    print("\n============================================================")
+    print(" CST-Mux Testbench Summary")
+    print("============================================================")
+    print(f"- MODE: {mode}")
+    print(f"- Total Tests Enabled: {total}")
+    print(f"- Passed: {passed}")
+    print(f"- Failed: {failed}")
+    print("\nDetailed Results:")
+    for r in results:
+        status = "PASS" if r["passed"] else "FAIL"
+        print(f"- {r['id']}: {status}")
 
+    print("\n============================================================")
+    print(f" CST-Mux Testbench Runner - Complete (MODE={mode})")
+    print("============================================================")
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    print("\n=== CST-Mux Testbench: Running All Tests ===")
-
-    test_activation_flags()
-    print("[PASS] Activation flag test passed")
-
-    test_freeze_flags()
-    print("[PASS] Freeze flag test passed")
-
-    test_thaw_flags()
-    print("[PASS] Thaw flag test passed")
-
-    test_continuity_flags()
-    print("[PASS] Continuity flag test passed")
-
-    test_usp_construction()
-    print("[PASS] USP construction test passed")
-
-    test_new_context_required_flag()
-    print("[PASS] NEW_CONTEXT_REQUIRED flag test passed")
-
-    test_merge_split_neutrality()
-    print("[PASS] Merge/split neutrality test passed")
-
-    test_usp_window_length()
-    print("[PASS] USP window test passed")
-
-    test_determinism_replay()
-    print("[PASS] Determinism/replay test passed")
-
-    print("\n=== CST-Mux Testbench: All Tests Completed ===")
+    set_testbench_config({"mode": "testbench"})
+    run_testbench()
