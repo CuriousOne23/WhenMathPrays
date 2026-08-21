@@ -1,1 +1,29 @@
+# CIL Rules (general-mode rulechecker)
+# Slice: identity_selection
+version: "0.1"
+primitive: cil
 
+rules:
+  - id: cil_intake_packet_present
+    description: "CIL SHALL write TP.cil.intake_packet"
+    check: "intake_packet_exists"
+
+  - id: cil_identity_selection_present
+    description: "intake_packet SHALL contain identity_selection block"
+    check: "identity_selection_exists"
+
+  - id: cil_identity_selection_fields
+    description: "identity_selection SHALL expose primary_identity, secondary_identity, ordering_score, ordering_metrics"
+    check: "identity_selection_required_fields"
+
+  - id: cil_no_forbidden_writes
+    description: "CIL SHALL NOT write routing_filter, geometric_state, or semantic_core"
+    check: "no_forbidden_fields"
+
+  - id: cil_cob_snapshot_intact
+    description: "CIL SHALL NOT mutate identity.cob_state_snapshot"
+    check: "cob_snapshot_unchanged"
+
+  - id: cil_routing_path_append
+    description: "routing_path SHALL contain cil after process"
+    check: "routing_path_contains_cil"
