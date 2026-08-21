@@ -190,6 +190,32 @@ CIL SHALL treat next‑turn context fields strictly as structural metadata.
 
 ---
 
+### **HLR‑CIL‑020**  
+CIL SHALL ingest `identity_lineage` from COB and include it in the CIL Intake Packet for consumption by CEx.
+
+### **HLR‑CIL‑021**  
+CIL SHALL ingest `continuity_lineage` from COB and include it in the CIL Intake Packet for continuity alignment.
+
+### **HLR‑CIL‑022**  
+CIL SHALL ingest identity‑layer `topology` from COB and include it in the CIL Intake Packet.
+
+### **HLR‑CIL‑023**  
+CIL SHALL ingest all scalar metrics provided by COB, including `ambiguity_score`, `collapse_risk`, `drift_score`, `stability_score`, and `lineage_confidence`.
+
+### **HLR‑CIL‑024**  
+CIL SHALL treat all lineage, topology, and metric fields as read‑only and SHALL NOT compute, modify, or reinterpret them.
+
+### **HLR‑CIL‑025**  
+CIL SHALL ingest `register_continuity` and include it in the CIL Intake Packet for clarifying‑alignment and continuity reasoning.
+
+### **HLR‑CIL‑026**  
+CIL SHALL ingest `importance_continuity` and include it in the CIL Intake Packet for importance‑weighted identity selection.
+
+### **HLR‑CIL‑027**  
+CIL SHALL guarantee deterministic replay of lineage, topology, metrics, register continuity, and importance continuity fields.
+
+---
+
 # **7. Intake Packet Structure**  
 *(Informative — no SHALL statements)*
 
