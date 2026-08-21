@@ -1,1 +1,24 @@
+# COB Rules (general-mode rulechecker)
+version: "0.1"
+primitive: cob
 
+rules:
+  - id: cob_object_count_bound
+    description: "COB SHALL maintain no more than 20 identity-layer objects (HLR-COB-001)"
+    check: "object_count_le_20"
+
+  - id: cob_snapshot_present
+    description: "COB SHALL produce cob_state_snapshot"
+    check: "cob_state_snapshot_exists"
+
+  - id: cob_lineage_log_module
+    description: "Lineage events SHALL carry module_id cob when present"
+    check: "lineage_module_id_cob"
+
+  - id: cob_no_forbidden_writes
+    description: "COB SHALL NOT write routing_filter, geometric_state, or semantic_core"
+    check: "no_forbidden_fields"
+
+  - id: cob_routing_path_append
+    description: "routing_path SHALL contain cob after process"
+    check: "routing_path_contains_cob"

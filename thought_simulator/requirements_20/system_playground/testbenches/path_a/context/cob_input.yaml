@@ -1,1 +1,29 @@
+# COB general-mode input (rule-driven)
+mode: general
+primitive: cob
+version: "0.1"
+notes: "Minimal TP carrying CST signals and next_context for general-mode rule checking."
 
+turn_index: 1
+
+signals:
+  freeze:
+    frozen_objects: []
+  thaw:
+    thawed_objects: []
+  drift:
+    affected_objects: []
+    magnitude: 0.0
+
+metadata:
+  turn_index: 1
+
+next_context:
+  referent_map: {}
+  anchors: []
+
+identity:
+  cob_state_snapshot: {}
+
+lineage_log: []
+routing_path: []

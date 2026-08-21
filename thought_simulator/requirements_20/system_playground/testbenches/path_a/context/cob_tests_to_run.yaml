@@ -1,1 +1,33 @@
+# COB Tests To Run
+# progressive_lineup_testing.md dual-mode selector
+version: "0.1"
+primitive: cob
 
+tests:
+  - id: cob_bounded_store_and_eviction
+    enabled: true
+    description: "HLR-COB-001 / 009 — never exceed 20 layers; eviction by lowest priority"
+
+  - id: cob_freeze_thaw_compliance
+    enabled: true
+    description: "HLR-COB-010 — frozen objects remain unchanged until thawed"
+
+  - id: cob_merge_split_structural
+    enabled: true
+    description: "HLR-COB-014 / 025 — MERGE embeds parents; SPLIT full-copies; compression after"
+
+  - id: cob_referent_map_compression
+    enabled: true
+    description: "HLR-COB-024 — exact-duplicate and strict-subset removal"
+
+  - id: cob_new_context_required
+    enabled: true
+    description: "HLR-COB-010A — new_context_required creates new layer; prior object not evolved"
+
+  - id: cob_conversation_ordering_metrics
+    enabled: true
+    description: "HLR-COB-011 / 012 / 013 — access count, chronological vector, sliding-window frequency"
+
+  - id: cob_deterministic_replay
+    enabled: true
+    description: "HLR-COB-007 — identical signals + prior state → identical snapshot"

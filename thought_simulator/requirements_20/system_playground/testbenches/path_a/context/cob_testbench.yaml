@@ -1,1 +1,127 @@
+# COB Testbench (testbench mode — input + expected)
+version: "0.1"
+primitive: cob
 
+tests:
+  - id: cob_bounded_store_and_eviction
+    description: "Never exceed 20 layers; eviction selects lowest priority"
+    input:
+      turn_index: 0
+      signals: {}
+      seed_objects:
+        - {id: "o0", ordering_metrics: {recency: 0, frequency: 0, density: 0}}
+        - {id: "o1", ordering_metrics: {recency: 1, frequency: 1, density: 1}}
+        - {id: "o2", ordering_metrics: {recency: 2, frequency: 2, density: 2}}
+        # Note: full 25-object seed is constructed programmatically in testbench.py for eviction
+    expected:
+      object_count_le: 20
+
+  - id: cob_freeze_thaw_compliance
+    description: "Frozen object drift remains unchanged; thawed object accepts update"
+    input:
+      turn_index: 2
+      seed_objects:
+        - id: "F"
+          ordering_metrics: {recency: 5, frequency: 5, density: 5}
+          stability_metrics: {frozen: true, drift: 0.1}
+        - id: "T"
+          ordering_metrics: {recency: 5, frequency: 5, density: 5}
+          stability_metrics: {frozen: false, drift: 0.1}
+      signals:
+        drift:
+          affected_objects: ["F", "T"]
+          magnitude: 0.9
+        freeze:
+          frozen_objects: ["F"]
+        thaw:
+          thawed_objects: ["T"]
+    expected:
+      objects:
+        F:
+          stability_metrics:
+            drift: 0.1
+            frozen: true
+        T:
+          stability_metrics:
+            drift: 0.9
+
+  - id: cob_merge_split_structural
+    description: "MERGE embeds parents; SPLIT full-copies; compression after"
+    input:
+      turn_index: 1
+      seed_objects:
+        - id: "A"
+          referent_map: ["dog", "australian shepherd dog"]
+          ordering_metrics: {recency: 5, frequency: 3, density: 2}
+        - id: "B"
+          referent_map: ["dog", "border collie dog"]
+          ordering_metrics: {recency: 4, frequency: 2, density: 1}
+      signals:
+        merge:
+          pairs: [["A", "B"]]
+    expected:
+      has_merged_child: true
+      lineage_event_type: "MERGE"
+
+  - id: cob_referent_map_compression
+    description: "Exact duplicates and strict subsets removed"
+    input:
+      turn_index: 0
+      seed_objects:
+        - id: "C"
+          referent_map: ["dog", "australian shepherd dog", "dog", "shepherd dog"]
+          ordering_metrics: {recency: 5, frequency: 5, density: 5}
+      signals: {}
+    expected:
+      compressed: true
+
+  - id: cob_new_context_required
+    description: "new_context_required creates new layer; prior object not evolved by drift"
+    input:
+      turn_index: 99
+      seed_objects:
+        - id: "old1"
+          ordering_metrics: {recency: 5, frequency: 5, density: 5}
+          stability_metrics: {drift: 0.1, frozen: false}
+      signals:
+        metadata:
+          new_context_required: true
+        next_context:
+          referent_map: {surface_forms: ["new topic", "fresh start"]}
+          anchors: ["anchor_new"]
+        drift:
+          affected_objects: ["old1"]
+          magnitude: 0.9
+    expected:
+      has_new_context_object: true
+      old1_drift_unchanged: 0.1
+
+  - id: cob_conversation_ordering_metrics
+    description: "Access count, chronological vector, sliding-window frequency"
+    input:
+      turn_index: 0
+      signals: {}
+      turns: 12
+    expected:
+      conversation_access_count: 12
+
+  - id: cob_deterministic_replay
+    description: "Identical signals + prior state produce identical snapshot"
+    input:
+      turn_index: 3
+      seed_objects:
+        - id: "A"
+          ordering_metrics: {recency: 5, frequency: 5, density: 5}
+          stability_metrics: {drift: 0.1}
+        - id: "B"
+          ordering_metrics: {recency: 4, frequency: 4, density: 4}
+          stability_metrics: {oscillation: 0.2}
+      signals:
+        drift:
+          affected_objects: ["A"]
+          magnitude: 0.9
+        oscillation:
+          affected_objects: ["B"]
+          frequency: 0.7
+    expected:
+      deterministic: true
