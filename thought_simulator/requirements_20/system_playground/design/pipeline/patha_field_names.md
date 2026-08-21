@@ -1,7 +1,7 @@
 # patha_field_names.md — Canonical Field-Name Dictionary for Path-A
 
 **Document ID:** patha_field_names  
-**Version:** 0.2 (CST-Core envelope lock)  
+**Version:** 0.3 (CST-MS envelope lock)  
 **Status:** Draft — derived exclusively from the listed normative and playground documents  
 **Scope:** Entire Path-A pipeline field surface for structural programs, testbenches, and dual-mode validation  
 **Location:** `thought_simulator/requirements_20/system_playground/design/pipeline/`  
@@ -22,6 +22,8 @@
 13. 20.32.010.010_cst-core.md  
 14. system_playground/primitives/cst_core/cst_core_py_struc_pgm.md (v0.1 CP-approved path map)  
 15. system_playground/primitives/cil/cil_py_struc_pgm.md / 20.33 (CIL intake path)  
+16. 20.32.010.020_cst-ms.md  
+17. system_playground/primitives/cst_ms/cst_ms_py_struc_pgm.md (v0.1 CP-approved path map)  
 
 **Rules applied:**  
 - No invented field names.  
@@ -39,7 +41,7 @@ This document is the canonical field-name dictionary for the entire Path-A pipel
 
 It is intended for:
 
-- structural programs (especially `cob_py_struc_pgm.md`, `cil_py_struc_pgm.md`, `cst_core_py_struc_pgm.md` and peer programs),  
+- structural programs (especially `cob_py_struc_pgm.md`, `cil_py_struc_pgm.md`, `cst_core_py_struc_pgm.md`, `cst_ms_py_struc_pgm.md` and peer programs),  
 - progressive dual-mode testbenches,  
 - rulecheckers,  
 - envelope-boundary guards,  
@@ -325,8 +327,9 @@ TP.cst.core.audit
 - Structural programs SHALL NOT invent a second CST-Core envelope outside `TP.cst.core`.  
 - See Section 9 for the dedicated CST-Core lock summary.
 
-### 2.5 TP.cst.ms.* / CST-MS signals
+### 2.5 TP.cst.ms.* / CST-MS (LOCKED v0.1)
 
+**Prior coarse inventory (retained):**  
 - freeze command  
 - thaw command  
 - collapse-recovery  
@@ -338,6 +341,129 @@ TP.cst.core.audit
 - synthesized stability summaries  
 - stability/instability summaries  
 - structural commands  
+
+**Top-level envelope (non-negotiable):**
+
+- `TP.cst.ms`
+
+This path is owned exclusively by the CST-MS primitive.  
+It is written during `cst_ms.process()` and SHALL NOT be written by any other component.
+
+**Canonical nested map (from `cst_ms_py_struc_pgm.md` §2, CP-approved):**
+
+```
+TP.cst.ms.status
+  turn_index
+  layer_count
+
+TP.cst.ms.normalized_metrics
+  per_layer.<StableID>.{drift, oscillation, ambiguity, collapse, continuity}
+  aggregate.{drift, oscillation, ambiguity, collapse, continuity}   # optional
+
+TP.cst.ms.weighted_metrics
+  per_layer.<StableID>.{...}
+  aggregate.{...}   # optional
+
+TP.cst.ms.stability
+  per_layer.<StableID>.value
+  aggregate.value   # optional
+
+TP.cst.ms.instability
+  per_layer.<StableID>.value
+  aggregate.value
+
+TP.cst.ms.collapse_risk
+  per_layer.<StableID>.value
+  aggregate.value
+
+TP.cst.ms.freeze_risk
+  per_layer.<StableID>.value
+  aggregate.value
+
+TP.cst.ms.thaw_readiness
+  per_layer.<StableID>.value
+  aggregate.value
+
+TP.cst.ms.ambiguity_summary
+  count
+
+TP.cst.ms.drift_summary
+  magnitude
+
+TP.cst.ms.oscillation_summary
+  frequency
+  amplitude
+
+TP.cst.ms.commands.freeze
+  layers[]
+  reason
+
+TP.cst.ms.commands.thaw
+  layers[]
+  reason
+
+TP.cst.ms.commands.collapse_recovery
+  layers[]
+  reason
+
+TP.cst.ms.commands.create_identity_layer
+  requests[]
+
+TP.cst.ms.commands.split
+  layers[]
+  reason
+
+TP.cst.ms.commands.merge
+  pairs[]
+  reason
+
+TP.cst.ms.command_log[]
+  turn_index
+  command_type    # freeze|thaw|collapse_recovery|create_identity_layer|split|merge
+  targets
+  reason
+  metrics_snapshot_ref
+
+TP.cst.ms.diagnostics
+  sync_mismatch
+  sync_mismatch_detail
+
+TP.cst.ms.metadata
+  new_context_required
+
+TP.cst.ms.stability_window[]
+  turn_index
+  stability.value
+  instability.value
+  collapse_risk.value
+  freeze_risk.value
+  thaw_readiness.value
+
+TP.cst.ms.history
+  window_len          # fixed 10
+
+TP.cst.ms.audit
+  slice
+  provisional_metrics
+  notes[]
+```
+
+**Note on strengthen_register / weaken_register:**  
+These names remain in the coarse inventory (architecture / transfer tables). They are **not** part of the six sole structural commands in 20.32.010.020 HLR-035. Realization may place them under a future extension; v0.1 progressive lock does not require them under `commands`.
+
+**Routing (logical consumers; fields live under `TP.cst.ms`):**
+
+| Fields | Logical consumers |
+|--------|-------------------|
+| `commands.*` | COB |
+| `command_log` | replay / audit |
+| synthesis summaries / risks / window | CST-Mux, downstream summary consumers |
+| `diagnostics.sync_mismatch` | CST-Mux only (no extra structural commands from mismatch) |
+| `metadata.new_context_required` | COB / context downstream |
+
+**Notes:**  
+- Runtime resolvers use paths relative to TP root (`cst.ms...`).  
+- See Section 10 for the dedicated CST-MS lock summary.
 
 ### 2.6 TP.cst.mux.* / CST-Mux outputs
 
@@ -498,7 +624,8 @@ TP.cst.core.audit
 
 **Reads:**  
 - CST-Core signals under `TP.cst.core.signals.freeze|thaw|continuity_restoration`  
-- CST-MS structural commands (freeze, thaw, collapse-recovery, create-identity-layer, split, merge, strengthen_register, weaken_register)  
+- CST-MS structural commands under `TP.cst.ms.commands.*` (freeze, thaw, collapse_recovery, create_identity_layer, split, merge; coarse inventory also lists strengthen_register, weaken_register)  
+- CST-MS metadata such as `TP.cst.ms.metadata.new_context_required` when present  
 - OuBA meaning packets, strength updates, ambiguity/confidence, lineage continuity, register updates  
 - IdOB identity-importance (indirect via TP → OuBA)  
 - SmOB semantic-adjacent importance (indirect)  
@@ -547,6 +674,7 @@ TP.cst.core.audit
 - Writing semantic_core  
 - Changing freeze state / COB topology  
 - Writing `TP.cst.core`  
+- Writing `TP.cst.ms`  
 
 ### 3.5 CST-Core (LOCKED)
 
@@ -566,17 +694,33 @@ TP.cst.core.audit
 - Create / Split / Merge / Collapse-recovery commands  
 - Writing `routing_filter`, RED, geometric_state, semantic_core  
 - Writing `TP.cil.intake_packet`  
+- Writing `TP.cst.ms`  
 - Accepting control commands from CST-MS  
 
-### 3.6 CST-MS
+### 3.6 CST-MS (LOCKED)
 
 **Owned / writes:**  
-- stability/instability summaries  
-- structural commands (freeze/thaw/split/merge/create/etc.)  
-- synthesized stability summaries  
+- Entire `TP.cst.ms` envelope (Section 2.5 / Section 10)  
+  - `status`, `normalized_metrics`, `weighted_metrics`, `stability`, `instability`  
+  - `collapse_risk`, `freeze_risk`, `thaw_readiness`  
+  - `ambiguity_summary`, `drift_summary`, `oscillation_summary`  
+  - `commands`, `command_log`, `diagnostics`, `metadata`, `stability_window`, `history`, `audit`  
+- Optional append of module id `cst_ms` to `routing_path`  
+- Coarse inventory names retained: synthesized stability summaries, stability/instability summaries, structural commands, freeze/thaw/collapse-recovery/create-identity-layer/split/merge commands; strengthen_register / weaken_register remain listed for architecture continuity  
 
-**Reads:**  
-- raw metrics + histories from `TP.cst.core` (signals.drift|oscillation|ambiguity|collapse, metrics, history)  
+**Reads (read-only):**  
+- raw metrics + histories from `TP.cst.core` (signals.drift|oscillation|ambiguity|collapse, metrics, history, status, freeze/thaw/continuity_restoration signals)  
+- Optional OuBA committed identity-layer snapshots (HLR-044)  
+- Optional restricted COB diagnostic view for sync mismatch only (HLR-045–046)  
+- `lineage_log` MERGE/SPLIT markers  
+- Prior `TP.cst.ms.stability_window` / `command_log` for replay  
+
+**Forbidden:**  
+- Modification of identity topology / `cob_state_snapshot` (commands are emitted fields; COB applies them)  
+- Writing `TP.cst.core`  
+- Writing `TP.cil.intake_packet`  
+- Deriving structural commands from COB internal state (HLR-046)  
+- Issuing additional structural commands in response to sync mismatch (HLR-048)  
 
 ### 3.7 CST-Mux
 
@@ -586,6 +730,7 @@ TP.cst.core.audit
 
 **Reads:**  
 - CST-Core signals and metrics under `TP.cst.core` for USP packaging / TP replay  
+- CST-MS synthesis summaries, risks, diagnostics under `TP.cst.ms` for USP packaging / TP replay  
 
 **Forbidden:**  
 - Identity or semantic modifications  
@@ -743,6 +888,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 
 - abbreviation_patterns  
 - affected_objects  
+- aggregate  
 - alignment.clarifying  
 - alignment.context  
 - alignment.continuity  
@@ -752,6 +898,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - alignment_scores  
 - ambiguity  
 - ambiguity_score  
+- ambiguity_summary  
 - amplitude  
 - anomaly_flags  
 - arbitration_trace  
@@ -774,9 +921,13 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - clarifying_subsubsubsubfields  
 - clarifying_topology  
 - collapse  
+- collapse_recovery  
 - collapse_risk  
 - collapsed_objects  
 - combined_instability  
+- command_log  
+- command_type  
+- commands  
 - coherence  
 - coherence_hint  
 - commit_id  
@@ -795,6 +946,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - continuity_restoration  
 - conversation_count  
 - copy_forward_flags  
+- create_identity_layer  
 - cycle_id  
 - decay_state  
 - decision  
@@ -802,10 +954,12 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - decreased  
 - delta_h  
 - delta_h_percent  
+- diagnostics  
 - direction  
 - direction_hint  
 - drift  
 - drift_score  
+- drift_summary  
 - elongation_patterns  
 - entities  
 - entropy_commit_map  
@@ -815,6 +969,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - facts  
 - freeze  
 - freeze.state  
+- freeze_risk  
 - freeze_signature  
 - frequency  
 - frozen_layers  
@@ -834,6 +989,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - importance_hint  
 - increased  
 - initial_state_complete  
+- instability  
 - intake_packet  
 - intake_status  
 - integrated  
@@ -843,6 +999,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - lane_id  
 - layer_count  
 - layer_id  
+- layers  
 - length_flags  
 - lineage  
 - lineage_confidence  
@@ -851,21 +1008,27 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - lineage_seq  
 - lineage_stability  
 - magnitude  
+- merge  
 - merge_contribution_ref  
 - metric_summary  
 - metrics  
+- metrics_snapshot_ref  
 - mismatch_tags  
 - module_id  
 - neighborhood  
+- new_context_required  
 - next_context  
 - next_context_provenance  
+- normalized_metrics  
 - normalized_text  
 - normalized_tokens  
 - notes  
 - omission_patterns  
 - oscillation  
+- oscillation_summary  
 - packed_record  
 - packed_tags  
+- pairs  
 - parent_ref  
 - parent_tp_id  
 - partition_rationale_ref  
@@ -906,6 +1069,7 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - repair_origin  
 - repair_provenance  
 - repair_type  
+- requests  
 - reset_flags  
 - residue_provenance  
 - restored_objects  
@@ -940,14 +1104,17 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - signals  
 - slice  
 - smoothing_actions  
+- split  
 - ssr_projection_map  
 - stability  
 - stability_flags  
 - stability_score  
+- stability_window  
 - stable_lineage  
 - stance  
 - status  
 - strength  
+- strengthen_register  
 - structural_features  
 - structural_residue  
 - structural_roles  
@@ -956,8 +1123,12 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - subculture  
 - subculture_assignment  
 - surface_forms  
+- sync_mismatch  
+- sync_mismatch_detail  
+- targets  
 - tb_trace  
 - thaw  
+- thaw_readiness  
 - thawed_objects  
 - timestamp  
 - timestamps.created  
@@ -981,6 +1152,8 @@ Future versions MAY relocate audit ownership to CEx-CCR, but v0.1 SHALL treat th
 - usp_tags  
 - value  
 - volatility_score  
+- weaken_register  
+- weighted_metrics  
 - window_len  
 - wire_map_version  
 
@@ -1014,6 +1187,45 @@ It is written during `cst_core.process()` and SHALL NOT be written by any other 
 - Progressive dual-mode testbenches SHALL resolve CST-Core expected fields against this section.  
 - No second envelope outside `TP.cst.core` is permitted for CST-Core outputs.  
 - Final metric formulas and thresholds remain Defer; field **names and paths** are locked.
+
+---
+
+## 10. Canonical TP Path for CST-MS Envelope (LOCKED v0.1)
+
+**Top-level envelope path (non-negotiable):**
+
+- `TP.cst.ms`
+
+This path is owned exclusively by the CST-MS primitive.  
+It is written during `cst_ms.process()` and SHALL NOT be written by any other component.
+
+**Required top-level children under `TP.cst.ms`:**
+
+| Child | Purpose |
+|-------|---------|
+| `status` | turn_index, layer_count |
+| `normalized_metrics` | per_layer / optional aggregate |
+| `weighted_metrics` | per_layer / optional aggregate |
+| `stability` / `instability` | synthesized scores |
+| `collapse_risk` / `freeze_risk` / `thaw_readiness` | risk scores |
+| `ambiguity_summary` / `drift_summary` / `oscillation_summary` | summaries |
+| `commands` | freeze, thaw, collapse_recovery, create_identity_layer, split, merge |
+| `command_log` | replay-safe command history |
+| `diagnostics` | sync_mismatch, sync_mismatch_detail |
+| `metadata` | new_context_required |
+| `stability_window` | ≤10 turn synthesis window |
+| `history` | window_len (10) |
+| `audit` | slice, provisional_metrics, notes |
+
+**Authority:**  
+- `20.32.010.020_cst-ms.md` (HLRs)  
+- `cst_ms_py_struc_pgm.md` §2 (CP-approved nested map)  
+
+**Notes:**  
+- Progressive dual-mode testbenches SHALL resolve CST-MS expected fields against this section.  
+- No second envelope outside `TP.cst.ms` is permitted for CST-MS outputs.  
+- Final weights, thresholds, and create/split/merge predicates remain Defer; field **names and paths** are locked.  
+- Coarse inventory names from earlier dictionary revisions (strengthen_register, weaken_register, synthesized stability summaries, structural commands) are retained in §2.5 and §3.6.
 
 ---
 
