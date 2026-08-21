@@ -1,1 +1,263 @@
+# CST-MS Testbench Cases (v0.1)
+version: "0.1"
+primitive: cst_ms
 
+tests:
+  - id: cst_ms_envelope_present
+    description: "Envelope keys present at TP.cst.ms"
+    input:
+      turn_index: 1
+      identity:
+        cob_state_snapshot:
+          objects: [{id: A, referent_map: {}}]
+      cst:
+        core:
+          status: {turn_index: 1, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [A], magnitude: 0.1}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0}
+          metrics:
+            per_layer:
+              A: {drift: 0.1, oscillation: 0.0, ambiguity: 0.0, stability: 0.9, collapse: 0.0, continuity: 0.95, combined_instability: 0.1}
+            integrated: {}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [A], unstable_lineage: []}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log: []
+      routing_path: []
+    expected:
+      cst:
+        ms:
+          audit:
+            provisional_metrics: true
+          history:
+            window_len: 10
+
+  - id: cst_ms_stability_instability
+    description: "Instability complement of stability"
+    input:
+      turn_index: 2
+      cst:
+        core:
+          status: {turn_index: 2, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [A], magnitude: 0.4}
+            oscillation: {affected_objects: [A], frequency: 0.4, amplitude: 1}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0}
+          metrics:
+            per_layer:
+              A: {drift: 0.4, oscillation: 0.4, ambiguity: 0.0, stability: 0.5, collapse: 0.0, continuity: 0.8, combined_instability: 0.4}
+            integrated: {}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [], unstable_lineage: []}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log: []
+      routing_path: []
+    expected:
+      instability_is_complement: true
+
+  - id: cst_ms_freeze_command
+    description: "High ambiguity+collapse → freeze command"
+    input:
+      turn_index: 3
+      cst:
+        core:
+          status: {turn_index: 3, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [U], magnitude: 0.9}
+            oscillation: {affected_objects: [U], frequency: 0.9, amplitude: 2}
+            ambiguity: {affected_objects: [U], increased: [U], decreased: []}
+            collapse: {collapsed_objects: [U], severity: 1}
+          metrics:
+            per_layer:
+              U: {drift: 0.9, oscillation: 0.9, ambiguity: 1.0, stability: 0.0, collapse: 1.0, continuity: 0.0, combined_instability: 1.0}
+            integrated: {}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [], unstable_lineage: [U]}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log: []
+      routing_path: []
+    expected:
+      freeze_contains: [U]
+      command_log_has: freeze
+
+  - id: cst_ms_commands_keys_present
+    description: "Six command keys always present"
+    input:
+      turn_index: 4
+      cst:
+        core:
+          status: {turn_index: 4, layer_count: 0, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [], magnitude: 0.0}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0}
+          metrics: {per_layer: {}, integrated: {}}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [], unstable_lineage: []}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log: []
+      routing_path: []
+    expected:
+      command_keys: [freeze, thaw, collapse_recovery, create_identity_layer, split, merge]
+
+  - id: cst_ms_merge_neutrality
+    description: "MERGE event with mild metrics does not force instability 1.0"
+    input:
+      turn_index: 5
+      cst:
+        core:
+          status: {turn_index: 5, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [], magnitude: 0.0}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0}
+          metrics:
+            per_layer:
+              C: {drift: 0.0, oscillation: 0.0, ambiguity: 0.0, stability: 1.0, collapse: 0.0, continuity: 1.0, combined_instability: 0.0}
+            integrated: {}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [C], unstable_lineage: []}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log:
+        - event_type: MERGE
+          parent_ref: [P1, P2]
+          child_refs: [C]
+      routing_path: []
+    expected:
+      instability_lt: 1.0
+
+  - id: cst_ms_window_cap
+    description: "Multi-turn window capped at 10"
+    input:
+      turn_index: 0
+      multi_turn: 15
+      cst:
+        core:
+          status: {turn_index: 0, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [H], magnitude: 0.1}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0}
+          metrics:
+            per_layer:
+              H: {drift: 0.1, oscillation: 0.0, ambiguity: 0.0, stability: 0.9, collapse: 0.0, continuity: 0.9, combined_instability: 0.1}
+            integrated: {}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [], unstable_lineage: []}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log: []
+      routing_path: []
+    expected:
+      window_len_le: 10
+      last_turn_index: 15
+
+  - id: cst_ms_new_context_required
+    description: "Low continuity → new_context_required"
+    input:
+      turn_index: 6
+      cst:
+        core:
+          status: {turn_index: 6, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [X], magnitude: 0.2}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [X], severity: 1}
+          metrics:
+            per_layer:
+              X: {drift: 0.2, oscillation: 0.0, ambiguity: 0.0, stability: 0.2, collapse: 1.0, continuity: 0.0, combined_instability: 1.0}
+            integrated: {}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [], unstable_lineage: [X]}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log: []
+      routing_path: []
+    expected:
+      new_context_required: true
+
+  - id: cst_ms_no_cob_or_core_mutation
+    description: "Core and COB snapshot unchanged"
+    input:
+      turn_index: 7
+      identity:
+        cob_state_snapshot:
+          objects: [{id: keep, referent_map: {r: 1}}]
+      cst:
+        core:
+          status: {turn_index: 7, layer_count: 1, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [keep], magnitude: 0.3}
+            oscillation: {affected_objects: [], frequency: 0.0, amplitude: 0}
+            ambiguity: {affected_objects: [], increased: [], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0}
+          metrics:
+            per_layer:
+              keep: {drift: 0.3, oscillation: 0.0, ambiguity: 0.0, stability: 0.7, collapse: 0.0, continuity: 0.8, combined_instability: 0.3}
+            integrated: {}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [keep], unstable_lineage: []}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log: []
+      routing_path: []
+    expected:
+      cob_snapshot_unchanged: true
+      core_unchanged: true
+
+  - id: cst_ms_deterministic_replay
+    description: "Two process calls yield identical synthesis"
+    input:
+      turn_index: 8
+      cst:
+        core:
+          status: {turn_index: 8, layer_count: 2, frozen_layers: []}
+          signals:
+            freeze: {frozen_objects: [], reason: ""}
+            thaw: {thawed_objects: [], reason: ""}
+            continuity_restoration: {restored_objects: [], reason: ""}
+            drift: {affected_objects: [A, B], magnitude: 0.5}
+            oscillation: {affected_objects: [A], frequency: 0.2, amplitude: 1}
+            ambiguity: {affected_objects: [B], increased: [B], decreased: []}
+            collapse: {collapsed_objects: [], severity: 0}
+          metrics:
+            per_layer:
+              A: {drift: 0.5, oscillation: 0.2, ambiguity: 0.0, stability: 0.5, collapse: 0.0, continuity: 0.8, combined_instability: 0.5}
+              B: {drift: 0.5, oscillation: 0.0, ambiguity: 1.0, stability: 0.3, collapse: 0.0, continuity: 0.7, combined_instability: 0.5}
+            integrated: {}
+          history: {window_len: 10, turns: []}
+          lineage_stability: {stable_lineage: [], unstable_lineage: []}
+          audit: {slice: fixture, provisional_metrics: true, notes: []}
+      lineage_log: []
+      routing_path: []
+    expected:
+      deterministic: true
