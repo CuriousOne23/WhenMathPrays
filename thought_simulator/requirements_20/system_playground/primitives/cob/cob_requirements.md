@@ -21,6 +21,14 @@ This document defines the system_playground version of COB.
 It describes identity‑layer object lifecycle, ordering metrics, stability integration, and the interface between COB, CST, and CIL.  
 This document does not redefine the global COB architecture in 20.32; global requirements remain authoritative.
 
+## 2A. Alignment with 20.32
+
+This document defines the system_playground subset of the global COB
+architecture described in 20.32_cob_requirements.md. All SHALL statements in
+this document are consistent with 20.32. Where 20.32 defines broader or more
+complex behavior, the system_playground version adopts the simplified,
+deterministic subset required for simulation and testing.
+
 ---
 
 ## **3. Inputs**  
@@ -54,11 +62,36 @@ These include:
 
 ---
 
-## **5. Testing (system_playground)**  
-*(Tests preserved, corrected, expanded)*
+## 5. Testing Compatibility
 
-The system_playground version of COB is validated using a block‑level Python testbench (`cob_testbench.py`).  
-This testbench verifies deterministic identity‑layer basin behavior and correct CST signal integration.
+COB in the system_playground SHALL use the standard primitive testing framework
+defined in progressive_lineup_testing.md. COB SHALL support:
+
+- deterministic testbench mode (input + expected)
+- general rule-driven mode (input only + rulechecker)
+- mandatory directory schema for primitive discovery
+- mandatory import-path initialization
+- mandatory naming discipline and registration
+- mandatory standardized PASS/FAIL output format
+- progressive upstream selection rules
+- envelope-boundary discipline
+
+All COB behaviors defined in this document SHALL be testable using the standard
+framework. No COB-specific testing structure is defined here.
+
+## 5A. Alignment with progressive_lineup_testing.md
+
+COB participates in the Path-A progressive lineup exactly like all other
+primitives. COB SHALL:
+
+- accept upstream selection rules
+- produce deterministic envelopes
+- maintain stable identity-layer outputs across replay
+- expose all fields required by CIL
+- operate within its declared envelope boundaries
+
+COB SHALL NOT define its own testing structure; all testing is performed using
+the standard framework.
 
 ### **5.1 Tested Behaviors**
 
