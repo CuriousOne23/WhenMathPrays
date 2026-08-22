@@ -1,5 +1,5 @@
 # 📘 **Primitive Transfer Table (Compressed Hybrid Edition)**  
-**Path‑A Pipeline: InB → IIInB → IE → CE → TPU → SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → DCB → RB**
+**Path‑A Pipeline: InB → IIInB → IE → CE → TPU → SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → DCB → RB → IdOB**
 
 **Canonical Field Names:** All field names in this document are governed by  
 `thought_simulator/requirements_20/system_playground/design/pipeline/patha_field_names.md`.  
@@ -86,6 +86,7 @@ replay‑safe TP ready for stability (COB/CST) and meaning‑layer progression.
 | **STPX** | Structured token & pattern extraction | structural geometry, SSG output, canonical tokens, metadata | stpx_cues, semantic_layer_provenance | Extract lexical/structural/constraint/repair cues; encode discourse cues | No semantic interpretation; no routing metadata |
 | **DCB** | Execution‑flow geometry | previous geometric_state, primitive_id, cycle_id, timestamp | geometric_state, geometric_history, dcb_events | Compute position/direction/curvature/step_index/lane; cycle_start/delta events | No semantic/structural/identity/routing reads |
 | **RB** | Deterministic routing + TR gating | input_fields, TR, tr_needs_update, ΔH, lineage, routing_metadata, IdOB view, structural metadata, STPX cues, continuity metadata | routing_filter, RB_out fields | TR gating; canonical routing filter; adjacency/displacement/regime; split/merge arbitration | No semantic interpretation; no TR mutation |
+| **IdOB** | Identity‑layer update after RB; compute identity geometry/continuity/pressure/residuals/freeze/basin_surface; compute identity‑importance; produce meaning_delta_h + IdOB semantics | TP.identity.*, TP.semantic.*, identity_metadata, continuity_metadata, expressive/normalization/semantic_layer/residue/next_context metadata, RB view (ro), DCB geometric_state (ro), prior IdOB envelope (ro) | identity.geometry, identity.continuity, identity.pressure, identity.residuals.{magnitude,pattern}, identity.freeze.state, identity.basin_surface.region, idob_roles[], idob_candidates[], provenance, lineage_markers[], stability_marker, alignment_marker, regime_label, meaning_delta_h, idob_semantics[], meaning_semantics[], idob_complete, path_b_eligible, idob_next_ob_candidates[] | Deterministic operator‑I transition rules; regime‑conditioned inherit/reset; compute identity‑importance; compute meaning_delta_h; generate IdOB + meaning semantics; produce next‑OB candidates; mark idob_complete; expose identity envelope for MCB/RBU/DCB loop; replay‑safe; strict write‑boundary guard | No semantic interpretation beyond IdOB semantics; no routing; no structural geometry changes; no upstream TP mutation; no OB/IB/RB/TB/InB/OuB interaction; no placeholder promotion/compaction/redaction; no modification of semantic‑importance outside IdOB domain |
 
 ---
 
@@ -257,6 +258,54 @@ All normative requirements preserved.
 **Transfer Function:**  
 - TR gating; canonical routing filter; adjacency/displacement/regime; deterministic arbitration.  
 **Prohibitions:** No semantic interpretation; no TR mutation; no cross‑core merges.
+
+---
+
+## **IdOB — Identity‑Layer Object Builder (post‑RB identity operator)**
+
+**Purpose:**  
+Update identity envelope after RB; compute identity geometry/continuity/pressure/residuals/freeze/basin_surface; compute identity‑importance; produce meaning_delta_h + IdOB semantics for downstream MCB/RBU/DCB loop.
+
+**Inputs (read‑only unless noted):**  
+Current TP.identity.* (from prior IdOB or initial identity),  
+TP.semantic.* (from RB/WrdNm/ISc/RTU/TR/CTP/RB loop),  
+TP.metadata.identity_metadata,  
+TP.metadata.continuity_metadata,  
+TP.metadata.expressive_metadata,  
+TP.metadata.normalization_metadata,  
+TP.metadata.semantic_layer_metadata,  
+TP.metadata.residue_metadata,  
+TP.metadata.next_context_metadata,  
+RB view (read‑only),  
+DCB geometric_state (read‑only),  
+prior IdOB envelope (read‑only).
+
+**Writes:**  
+identity.geometry, identity.continuity, identity.pressure,  
+identity.residuals.{magnitude, pattern},  
+identity.freeze.state, identity.basin_surface.region,  
+idob_roles[], idob_candidates[], provenance updates, lineage_markers[],  
+stability_marker, alignment_marker, regime_label,  
+TP.semantic.meaning_delta_h,  
+TP.semantic.idob_semantics[],  
+TP.semantic.meaning_semantics[],  
+idob_complete, path_b_eligible, idob_next_ob_candidates[].
+
+**Transfer Function (compressed):**  
+Apply deterministic operator‑I transition rules to identity geometry/continuity/pressure/residuals/freeze/basin_surface using RB/semantic context.  
+Apply regime‑conditioned inherit/reset for roles, candidates, provenance, lineage markers, residuals, freeze tendency.  
+Compute identity‑importance (monotonic, deterministic).  
+Compute meaning_delta_h; generate IdOB semantics + meaning semantics.  
+Produce next‑OB candidates; mark idob_complete; expose updated identity envelope for MCB/RBU/DCB loop.  
+Replay‑safe; no randomness; strict write‑boundary guard.
+
+**Prohibitions:**  
+No semantic interpretation beyond IdOB semantics tagging;  
+no routing or structural geometry changes;  
+no modification of upstream TP fields;  
+no interaction with OB/IB/RB/TB/InB/OuB domains;  
+no placeholder promotion, compaction, or redaction;  
+no modification of semantic‑importance scores or roles outside IdOB domain.
 
 ---
 
