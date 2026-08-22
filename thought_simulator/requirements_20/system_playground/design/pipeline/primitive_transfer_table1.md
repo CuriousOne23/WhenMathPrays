@@ -314,7 +314,7 @@ no modification of semantic‑importance scores or roles outside IdOB domain.
 ## **OuBA — Output Basin Primitive (Path‑A Final Meaning Commit Operator)**
 
 **Purpose:**  
-Freeze and commit the fully stabilized semantic, context, identity, provenance, and lineage state produced by IdOB; emit a **CMTP (Committed Meaning Packet)** — the immutable meaning snapshot used by COB, CST, Path‑B truth/safety engines, governance, replay, and audit.
+Freeze and commit the fully stabilized semantic, context, identity, provenance, and lineage state produced by IdOB; emit a **CMTP (Committed Meaning Thought Packet)** — the immutable meaning snapshot used by COB, CST, Path‑B truth/safety engines, governance, replay, and audit.
 
 **Inputs (read‑only unless noted):**  
 IdOB output (semantic_core, semantic_envelope, identity envelope, lineage markers, provenance markers),  
