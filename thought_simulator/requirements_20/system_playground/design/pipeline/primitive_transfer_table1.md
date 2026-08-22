@@ -87,6 +87,7 @@ replay‑safe TP ready for stability (COB/CST) and meaning‑layer progression.
 | **DCB** | Execution‑flow geometry | previous geometric_state, primitive_id, cycle_id, timestamp | geometric_state, geometric_history, dcb_events | Compute position/direction/curvature/step_index/lane; cycle_start/delta events | No semantic/structural/identity/routing reads |
 | **RB** | Deterministic routing + TR gating | input_fields, TR, tr_needs_update, ΔH, lineage, routing_metadata, IdOB view, structural metadata, STPX cues, continuity metadata | routing_filter, RB_out fields | TR gating; canonical routing filter; adjacency/displacement/regime; split/merge arbitration | No semantic interpretation; no TR mutation |
 | **IdOB** | Identity‑layer update after RB; compute identity geometry/continuity/pressure/residuals/freeze/basin_surface; compute identity‑importance; produce meaning_delta_h + IdOB semantics | TP.identity.*, TP.semantic.*, identity_metadata, continuity_metadata, expressive/normalization/semantic_layer/residue/next_context metadata, RB view (ro), DCB geometric_state (ro), prior IdOB envelope (ro) | identity.geometry, identity.continuity, identity.pressure, identity.residuals.{magnitude,pattern}, identity.freeze.state, identity.basin_surface.region, idob_roles[], idob_candidates[], provenance, lineage_markers[], stability_marker, alignment_marker, regime_label, meaning_delta_h, idob_semantics[], meaning_semantics[], idob_complete, path_b_eligible, idob_next_ob_candidates[] | Deterministic operator‑I transition rules; regime‑conditioned inherit/reset; compute identity‑importance; compute meaning_delta_h; generate IdOB + meaning semantics; produce next‑OB candidates; mark idob_complete; expose identity envelope for MCB/RBU/DCB loop; replay‑safe; strict write‑boundary guard | No semantic interpretation beyond IdOB semantics; no routing; no structural geometry changes; no upstream TP mutation; no OB/IB/RB/TB/InB/OuB interaction; no placeholder promotion/compaction/redaction; no modification of semantic‑importance outside IdOB domain |
+| **OuBA** | Final Path‑A commit; freeze semantic_core; produce immutable CTP | IdOB output, TP.semantic.*, TP.metadata.*, TP.lineage_log[], next_context_metadata, identity_metadata, continuity_metadata, clarifying_metadata, residue_metadata | CTP (semantic_core, semantic_envelope, context_envelope, provenance, lineage, metadata, commit_timestamp, commit_hash) | Freeze semantic_core; preserve all referents/bindings/constraints; attach provenance/lineage; serialize deterministic CTP; enforce commit boundary | No semantic inference; no new semantic content; no routing; no OB/SSG/TR/RB/IdOB invocation; no TP mutation outside commit fields |
 
 ---
 
@@ -306,6 +307,130 @@ no modification of upstream TP fields;
 no interaction with OB/IB/RB/TB/InB/OuB domains;  
 no placeholder promotion, compaction, or redaction;  
 no modification of semantic‑importance scores or roles outside IdOB domain.
+
+---
+
+Here you go, Jeff — the **full OuBA writeup** in the *exact same style, density, structure, and formatting* as your IdOB block.  
+This is ready to paste **directly under IdOB** in `primitive_transfer_table1.md`.
+
+No table formatting, no compression — this is the **full primitive writeup**, matching IdOB’s style line‑for‑line.
+
+---
+
+Absolutely, Jeff — and thank you for attaching **20.145 CTP‑prm**.  
+You are **100% correct**: if we keep calling OuBA’s output a **CTP**, it *will* collide with **CTP‑prm (Collect Thought Point)**, because both would produce something named “CTP.”
+
+That’s not acceptable in your architecture.
+
+Let’s fix it cleanly.
+
+---
+
+# ⭐ Why the name “CTP” cannot be reused
+From the attached document:
+
+> “CTP‑prm is the **Collect Thought Point** primitive…  
+> It freezes the current TP…  
+> It appends one cognitive‑history entry…” 
+
+This is a **Path‑A structural bookkeeping primitive**, not a meaning commit primitive.
+
+Its output is **not** the final meaning object.
+
+If OuBA also produced a “CTP,” you would have:
+
+- **CTP‑prm → CTP** (policy freeze snapshot)  
+- **OuBA → CTP** (final meaning commit)
+
+Two different objects with the same name.  
+Impossible to maintain determinism, lineage, or clarity.
+
+So we must rename OuBA’s output.
+
+---
+
+# ⭐ What OuBA actually produces (from 20.40.060)
+OuBA produces:
+
+- **the final meaning snapshot**  
+- **the immutable semantic_core**  
+- **the authoritative semantic envelope**  
+- **the committed context envelope**  
+- **the provenance + lineage block**  
+- **the commit timestamp + commit hash**
+
+But **nowhere** in 20.40.060 does it *require* the name “CTP.”
+
+The term “CTP” was inherited from older diagrams, but the spec itself does not bind OuBA to that name.
+
+So we are free to rename it.
+
+---
+
+# ⭐ Recommended new name: **CMP — Committed Meaning Packet**
+This name:
+
+- avoids collision with **CTP‑prm**  
+- matches OuBA’s purpose exactly  
+- is short, mnemonic, and consistent with your naming style  
+- preserves the “packet” metaphor  
+- distinguishes meaning‑commit from thought‑freeze
+
+### CMP = **Committed Meaning Packet**
+
+This is the final meaning object produced by OuBA.
+
+---
+
+## **OuBA — Output Basin Primitive (Path‑A Final Meaning Commit Operator)**
+
+**Purpose:**  
+Freeze and commit the fully stabilized semantic, context, identity, provenance, and lineage state produced by IdOB; emit a **CMP (Committed Meaning Packet)** — the immutable meaning snapshot used by COB, CST, Path‑B truth/safety engines, governance, replay, and audit.
+
+**Inputs (read‑only unless noted):**  
+IdOB output (semantic_core, semantic_envelope, identity envelope, lineage markers, provenance markers),  
+TP.metadata.context_metadata,  
+TP.metadata.clarifying_metadata,  
+TP.metadata.identity_metadata,  
+TP.metadata.continuity_metadata,  
+TP.metadata.expressive_metadata,  
+TP.metadata.normalization_metadata,  
+TP.metadata.semantic_layer_metadata,  
+TP.metadata.residue_metadata,  
+TP.metadata.next_context_metadata,  
+TP.metadata.entropy_history[],  
+TP.metadata.signature_history[],  
+TP.lineage_log[],  
+TP.provenance_metadata,  
+TP.semantic.* (read‑only),  
+TP.context.* (read‑only),  
+TP.identity.* (read‑only).
+
+**Writes:**  
+CMP.semantic_core (frozen),  
+CMP.semantic_envelope {proposition_set[], truth_evidence[], semantic_tags[], messy_input_record, lane_local_identity},  
+CMP.context_envelope {TP.next_context.*},  
+CMP.provenance {provenance_metadata, commit_timestamp, commit_hash},  
+CMP.lineage {sob_id, srob_id, cnob_id, smob_id, idob_id, routing_path, lineage_log[], ruleset_ids[]},  
+CMP.metadata {entropy_history[], signature_history[], contextual_alignment_record, identity_shift_record, topic_anchor_record, continuity_record, intent_record, policy_markers[], ob_trace[], tb_trace[], cob_state_snapshot}.
+
+**Transfer Function (compressed):**  
+Freeze semantic_core deterministically; preserve all referents, bindings, and constraints from IdOB without addition, removal, or reinterpretation.  
+Commit semantic_envelope, context_envelope, provenance, lineage, and metadata required for COB/CST continuity, truth‑alignment, and replay determinism.  
+Attach commit_timestamp and commit_hash; serialize CMP in governance‑ready form.  
+Integrate TP‑stream metadata only when relevant to commit, provenance, lineage, or semantic freezing; ignore metadata not applicable.  
+Represent any remaining uncertainty or residue explicitly in the CMP.  
+Enforce commit boundary: no Path‑A primitive may modify TP after CMP emission; all downstream components treat CMP as read‑only.  
+Deterministic: identical IdOB inputs yield identical CMP outputs; no nondeterministic sources.
+
+**Prohibitions:**  
+No semantic inference, scoring, routing, or candidate generation;  
+no introduction of new semantic content;  
+no invocation of OB‑family primitives (SOB, SROB, CnOB, SmOB), SSG, TR, RB, or IdOB;  
+no modification of TP fields outside commit‑layer fields;  
+no consumption of routing_metadata, structural ΔH%, truth/done fields, Path‑B lineage fields, or any Pipeline‑B envelopes;  
+no nondeterministic behavior;  
+no dropping, reordering, or duplicating semantic units.
 
 ---
 
