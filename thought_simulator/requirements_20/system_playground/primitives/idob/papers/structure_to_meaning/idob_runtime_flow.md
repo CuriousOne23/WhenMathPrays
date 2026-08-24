@@ -1,5 +1,5 @@
 # **idob_runtime_flow.md**  
-### *Cycle‑by‑Cycle Runtime Execution Flow for IdOB*
+### *Cycle‑by‑Cycle Runtime Execution Flow for IdOB (CvThP‑Supervised)*
 
 ---
 
@@ -9,15 +9,17 @@ This document defines the **runtime execution flow** of IdOB — the exact seque
 
 > **structural geometry → meaning groups → meaning semantics → stabilized meaning → OuBA handoff**
 
-It is the operational companion to:
+It integrates:
 
-- `idob_struc_to_meaning.md` (architecture)  
-- `idob_meaning_dictionary.yaml`  
-- `meaning_groups.yaml`  
-- `struct_to_meaning_map.yaml`  
-- `idob_object.yaml`  
+- CvThP (Conversational Thread Processor)  
+- conversational identity envelope (CIE)  
+- meaning dimensions  
+- meaning groups  
+- struct_to_meaning_map  
+- unified search schema (4–6 cycles)  
+- stabilization rules  
 
-This paper describes **how IdOB runs**, cycle by cycle, under the unified search schema (4–6 cycles).
+This is the authoritative runtime description.
 
 ---
 
@@ -30,23 +32,20 @@ IdOB runtime consists of **four phases**:
 3. **Meaning Refinement & Stabilization**  
 4. **Finalization & OuBA Handoff**
 
-Each phase consumes part of the **IdOB search budget**, which is unified across depth and parallelism:
+CvThP supervises:
 
-> **IdOB_search_budget_max = 6**  
-> **IdOB_search_budget_min = 4**
-
-IdOB stops when:
-
-- meaning_delta_h stabilizes, or  
-- identity envelope stabilizes, or  
-- search budget is exhausted, or  
-- CTP signals time exhaustion.
+- cycle scheduling  
+- parallel branch management  
+- stabilization detection  
+- budget enforcement  
+- time‑pressure handling  
 
 ---
 
 ## **3. Phase 1 — Initialization**
 
 ### **3.1 Input from PT1**
+
 PT1 provides:
 
 - structural_hash  
@@ -61,7 +60,6 @@ PT1 provides:
 - identity metadata  
 
 ### **3.2 Create IdOB Object**
-IdOB creates a new `idob_object`:
 
 ```yaml
 idob_object:
@@ -75,14 +73,15 @@ idob_object:
 ```
 
 ### **3.3 Initialize Search Control**
+
 ```yaml
-idob_search_budget_max: 6
 idob_search_budget_min: 4
+idob_search_budget_max: 6
 idob_search_budget_used: 0
-idob_search_mode: single
 ```
 
-### **3.4 Initialize Identity Envelope**
+### **3.4 Initialize Conversational Identity Envelope (CIE)**
+
 Identity envelope begins with:
 
 - identity_tags  
@@ -94,27 +93,21 @@ Identity envelope begins with:
 
 ## **4. Phase 2 — Meaning Group Search**
 
-Meaning group search has **three tiers**:
-
-1. **Coarse Tier**  
-2. **Medium Tier**  
-3. **Fine Tier**
-
-Each tier consumes **one unit** of search budget.
+Meaning group search has **three tiers**, each consuming **one unit** of search budget.
 
 ### **4.1 Coarse Tier**
 
-IdOB performs:
+Steps:
 
 1. Lookup structural_hash in `struct_to_meaning_map.yaml`  
 2. Retrieve meaning_group_candidates  
-3. Rank candidates using:
-   - identity envelope  
+3. Rank candidates using:  
+   - conversational identity envelope  
    - cue envelopes  
    - invariants  
    - routing signatures  
 
-IdOB selects **2–3 coarse candidates**.
+Output: **2–3 coarse candidates**
 
 Budget used: **+1**
 
@@ -122,14 +115,14 @@ Budget used: **+1**
 
 ### **4.2 Medium Tier**
 
-IdOB narrows candidates by:
+Narrow candidates using:
 
-- comparing meaning dimensions  
-- comparing invariants  
-- comparing identity anchors  
-- comparing cue envelopes  
+- meaning dimensions  
+- invariants  
+- identity anchors  
+- cue envelopes  
 
-IdOB selects **1–2 medium candidates**.
+Output: **1–2 medium candidates**
 
 Budget used: **+1**
 
@@ -137,18 +130,17 @@ Budget used: **+1**
 
 ### **4.3 Fine Tier**
 
-IdOB selects the **final meaning_group_id**.
+Select **final meaning_group_id**.
 
 Budget used: **+1**
 
 At this point:
 
-- meaning group is chosen  
-- meaning is NOT yet stabilized  
-- identity envelope is NOT yet stabilized  
-- meaning_semantics[] is NOT yet final  
+- meaning group chosen  
+- meaning not yet stabilized  
+- identity envelope not yet stabilized  
 
-IdOB must continue to **refinement**.
+IdOB proceeds to refinement.
 
 ---
 
@@ -158,8 +150,8 @@ This phase consumes **1–3 cycles**, depending on:
 
 - meaning_delta_h  
 - identity_delta  
-- CTP time pressure  
-- search budget remaining  
+- CvThP time pressure  
+- remaining budget  
 
 ### **5.1 Compute Meaning Semantics**
 
@@ -168,8 +160,8 @@ IdOB computes meaning_semantics[] using:
 - meaning dimensions  
 - meaning invariants  
 - meaning cues  
-- meaning triggers/suppressors  
-- identity envelope modulation  
+- triggers/suppressors  
+- conversational identity modulation  
 
 ### **5.2 Compute meaning_delta_h**
 
@@ -185,19 +177,21 @@ $$
 
 → meaning stabilized.
 
-### **5.3 Update Identity Envelope**
+### **5.3 Update Conversational Identity Envelope**
 
-Identity envelope is updated using:
+Identity envelope updated using:
 
 - identity tags  
 - identity cues  
 - identity anchors  
 - meaning dimensions  
-- meaning group invariants  
+- meaning invariants  
 
-Identity envelope may shift meaning_semantics[].
+### **5.4 Compute identity_delta**
 
-### **5.4 Check Identity Stabilization**
+$$
+\Delta h_{\text{identity}} = \| I_{i} - I_{i-1} \|
+$$
 
 If:
 
@@ -215,35 +209,30 @@ Budget used: **+1 per refinement cycle**
 
 IdOB continues refinement until:
 
-- meaning stabilized, or  
-- identity stabilized, or  
-- budget exhausted, or  
-- CTP signals time exhaustion  
-
-Typical refinement cycles: **1–2**
-
-Total cycles: **4–6**
+- meaning stabilized  
+- identity stabilized  
+- budget exhausted  
+- **CvThP signals time exhaustion**  
 
 ---
 
 ## **6. Phase 4 — Finalization & OuBA Handoff**
 
-### **6.1 Finalize Meaning**
+### **6.1 Freeze Meaning**
 
 IdOB freezes:
 
 - meaning_semantics[]  
 - idob_semantics[]  
-- identity envelope  
-- meaning_resolution_status  
+- conversational identity envelope  
 
 ### **6.2 Set Finalization Status**
 
 Possible statuses:
 
 - `stable`  
-- `budget_exhausted`  
 - `identity_stable`  
+- `budget_exhausted`  
 - `time_exhausted`  
 
 ### **6.3 Mark Ready for OuBA**
@@ -265,7 +254,7 @@ OuBA performs:
 
 - truth evaluation  
 - belief evaluation  
-- output generation  
+- semantic consistency evaluation  
 
 IdOB does **not** perform truth or belief.
 
@@ -276,7 +265,7 @@ IdOB does **not** perform truth or belief.
 ### **Cycle 0 — Initialization**
 - Create IdOB object  
 - Load structural geometry  
-- Initialize identity envelope  
+- Initialize CIE  
 - Initialize search control  
 
 ### **Cycle 1 — Coarse Tier**
@@ -294,7 +283,7 @@ IdOB does **not** perform truth or belief.
 ### **Cycle 4 — Refinement**
 - Compute meaning_semantics[]  
 - Compute meaning_delta_h  
-- Update identity envelope  
+- Update CIE  
 
 ### **Cycle 5 — Stabilization**
 - Check meaning_delta_h  
@@ -309,7 +298,28 @@ IdOB does **not** perform truth or belief.
 
 ---
 
-## **8. Determinism & Replay‑Safety**
+## **8. CvThP Coordination (Updated)**
+
+CvThP supervises:
+
+- parallel meaning candidates  
+- parallel refinement branches  
+- stabilization detection  
+- pruning unstable branches  
+- enforcing search budget  
+- enforcing time pressure  
+- guaranteeing deterministic convergence  
+
+CvThP ensures IdOB remains:
+
+- bounded  
+- deterministic  
+- replay‑safe  
+- conversationally responsive  
+
+---
+
+## **9. Determinism & Replay‑Safety**
 
 IdOB runtime is deterministic because:
 
@@ -318,36 +328,16 @@ IdOB runtime is deterministic because:
 - meaning dimensions are stable  
 - identity envelope is stable  
 - search budget is bounded  
-- refinement cycles converge  
 - stabilization thresholds are fixed  
+- CvThP scheduling is deterministic  
 
 Replay‑safety is guaranteed.
 
 ---
 
-## **9. CTP Coordination**
-
-CTP coordinates:
-
-- parallel meaning candidates  
-- parallel refinement branches  
-- time pressure  
-- global TS budget  
-
-CTP may:
-
-- prune candidates  
-- reduce refinement cycles  
-- force early stabilization  
-- force early OuBA handoff  
-
-CTP ensures TS responsiveness.
-
----
-
 ## **10. Conclusion**
 
-This paper defines the **complete runtime flow** of IdOB:
+This paper defines the **complete CvThP‑supervised runtime flow** of IdOB:
 
 - initialization  
 - meaning group search  
