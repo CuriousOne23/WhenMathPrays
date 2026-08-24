@@ -159,5 +159,230 @@
       "anchor_vector": [1,4827,9707,9856,482,6629,377,620],
       "checksum": 998969
     }
+  },
+
+    {
+    "lemma": "stride",
+    "gloss": "to walk with long, decisive steps",
+    "primitive": "ACTION",
+    "invariant": {
+      "primitive": "ACTION",
+      "core_features": ["walk","long","decisive","steps"],
+      "tags": ["dynamic","physical"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "ACTION",
+      "feature_cues": ["walk","long","steps"],
+      "tag_cues": ["dynamic","physical"]
+    },
+    "routing_signature": {
+      "primitive_code": 2,
+      "feature_codes": [3102,884,5521],
+      "tag_codes": [327,441]
+    },
+    "identity_anchor": {
+      "anchor_vector": [2,3102,884,5521,327,441],
+      "checksum": 912004
+    }
+  },
+
+  {
+    "lemma": "artifact",
+    "gloss": "an object made or shaped by human workmanship",
+    "primitive": "ENTITY",
+    "invariant": {
+      "primitive": "ENTITY",
+      "core_features": ["object","made","shaped","human","workmanship"],
+      "tags": ["object-like","constructed"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "ENTITY",
+      "feature_cues": ["object","made","human"],
+      "tag_cues": ["object-like","constructed"]
+    },
+    "routing_signature": {
+      "primitive_code": 1,
+      "feature_codes": [482,7711,6603],
+      "tag_codes": [377,812]
+    },
+    "identity_anchor": {
+      "anchor_vector": [1,482,7711,6603,377,812],
+      "checksum": 551102
+    }
+  },
+
+  {
+    "lemma": "eruption",
+    "gloss": "a sudden event in which something bursts outward",
+    "primitive": "EVENT",
+    "invariant": {
+      "primitive": "EVENT",
+      "core_features": ["sudden","burst","outward","release"],
+      "tags": ["temporal","dynamic"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "EVENT",
+      "feature_cues": ["sudden","burst","outward"],
+      "tag_cues": ["temporal","dynamic"]
+    },
+    "routing_signature": {
+      "primitive_code": 6,
+      "feature_codes": [912,7744,6601],
+      "tag_codes": [273,327]
+    },
+    "identity_anchor": {
+      "anchor_vector": [6,912,7744,6601,273,327],
+      "checksum": 331004
+    }
+  },
+
+  {
+    "lemma": "drowsy",
+    "gloss": "feeling sleepy or lethargic",
+    "primitive": "STATE",
+    "invariant": {
+      "primitive": "STATE",
+      "core_features": ["sleepy","lethargic","low-energy"],
+      "tags": ["internal","biological"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "STATE",
+      "feature_cues": ["sleepy","lethargic"],
+      "tag_cues": ["internal","biological"]
+    },
+    "routing_signature": {
+      "primitive_code": 4,
+      "feature_codes": [5511,774,992],
+      "tag_codes": [511,902]
+    },
+    "identity_anchor": {
+      "anchor_vector": [4,5511,774,992,511,902],
+      "checksum": 771004
+    }
+  },
+
+  {
+    "lemma": "fragile",
+    "gloss": "easily broken or damaged",
+    "primitive": "QUALITY",
+    "invariant": {
+      "primitive": "QUALITY",
+      "core_features": ["easily","broken","damaged"],
+      "tags": ["object-like","sensitive"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "QUALITY",
+      "feature_cues": ["broken","damaged"],
+      "tag_cues": ["sensitive"]
+    },
+    "routing_signature": {
+      "primitive_code": 5,
+      "feature_codes": [7744,6603],
+      "tag_codes": [812]
+    },
+    "identity_anchor": {
+      "anchor_vector": [5,7744,6603,812],
+      "checksum": 441002
+    }
+  },
+
+  {
+    "lemma": "oxidize",
+    "gloss": "to undergo a chemical reaction with oxygen",
+    "primitive": "PROCESS",
+    "invariant": {
+      "primitive": "PROCESS",
+      "core_features": ["chemical","reaction","oxygen","change"],
+      "tags": ["transformative","material"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "PROCESS",
+      "feature_cues": ["chemical","oxygen","reaction"],
+      "tag_cues": ["transformative","material"]
+    },
+    "routing_signature": {
+      "primitive_code": 7,
+      "feature_codes": [5511,7744,6601],
+      "tag_codes": [812,441]
+    },
+    "identity_anchor": {
+      "anchor_vector": [7,5511,7744,6601,812,441],
+      "checksum": 661004
+    }
+  },
+
+  {
+    "lemma": "adjacent",
+    "gloss": "next to or adjoining something else",
+    "primitive": "RELATION",
+    "invariant": {
+      "primitive": "RELATION",
+      "core_features": ["next","adjoining","near"],
+      "tags": ["spatial"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "RELATION",
+      "feature_cues": ["next","near"],
+      "tag_cues": ["spatial"]
+    },
+    "routing_signature": {
+      "primitive_code": 8,
+      "feature_codes": [3102,482],
+      "tag_codes": [441]
+    },
+    "identity_anchor": {
+      "anchor_vector": [8,3102,482,441],
+      "checksum": 551004
+    }
+  },
+
+  {
+    "lemma": "yesterday",
+    "gloss": "the day immediately before today",
+    "primitive": "TEMPORAL",
+    "invariant": {
+      "primitive": "TEMPORAL",
+      "core_features": ["day","before","today"],
+      "tags": ["time"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "TEMPORAL",
+      "feature_cues": ["day","before"],
+      "tag_cues": ["time"]
+    },
+    "routing_signature": {
+      "primitive_code": 9,
+      "feature_codes": [9663,1083],
+      "tag_codes": [273]
+    },
+    "identity_anchor": {
+      "anchor_vector": [9,9663,1083,273],
+      "checksum": 331002
+    }
+  },
+
+  {
+    "lemma": "underfoot",
+    "gloss": "directly beneath one's feet",
+    "primitive": "SPATIAL",
+    "invariant": {
+      "primitive": "SPATIAL",
+      "core_features": ["beneath","feet","ground"],
+      "tags": ["location"]
+    },
+    "cue_envelope": {
+      "primitive_cue": "SPATIAL",
+      "feature_cues": ["beneath","feet"],
+      "tag_cues": ["location"]
+    },
+    "routing_signature": {
+      "primitive_code": 10,
+      "feature_codes": [482,3102],
+      "tag_codes": [441]
+    },
+    "identity_anchor": {
+      "anchor_vector": [10,482,3102,441],
+      "checksum": 771002
+    }
   }
 ]
