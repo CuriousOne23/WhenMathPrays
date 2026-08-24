@@ -133,7 +133,7 @@ Conversational identity is stable.
 ### **Condition 3 — Budget Exhausted**
 
 $$
-idob\_search\_budget\_used \geq idob\_search\_budget\_max
+idob\\_search\\_budget\\_used \geq idob\_search\\_budget\\_max
 $$
 
 Default:
