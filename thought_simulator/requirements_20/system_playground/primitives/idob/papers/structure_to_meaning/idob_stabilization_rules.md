@@ -39,7 +39,7 @@ $$
 Stabilization of the conversational identity envelope:
 
 $$
-I = identity\_vector
+I = identity\\_vector
 $$
 
 IdOB stops when **either** stabilizes.
