@@ -1,0 +1,116 @@
+# =====================================================================
+# idob_object.yaml
+# ---------------------------------------------------------------------
+# Purpose:
+#   Defines the complete IdOB object structure used during the
+#   structure→meaning mapping process. This object is created and
+#   refined by IdOB and consumed by OuBA.
+#
+# Relationship to Other Files:
+#   - idob_struc_to_meaning.md: architecture definition
+#   - idob_meaning_dictionary.yaml: meaning-layer schema
+#   - meaning_groups.yaml: meaning group definitions
+#   - struct_to_meaning_map.yaml: structure→meaning mapping
+#   - primitive_transfer_table1.md: structural inputs
+#   - primitive_transfer_table2.md: meaning outputs
+#
+# Notes:
+#   - This object is created once per TP segment entering IdOB.
+#   - It is refined across multiple IdOB cycles (4–6).
+#   - It is replay-safe and deterministic.
+# =====================================================================
+
+idob_object:
+
+  # -------------------------------------------------------------------
+  # 1. Structural Geometry (from PT1)
+  # -------------------------------------------------------------------
+  structural:
+    structural_hash: <hex_or_int>
+    semantic_field_id: <int>
+    semantic_role_id: <int>
+    semantic_object_id: <int>
+    gradient_id: <int>
+    universe_id: <int>
+    subfield_id: <int>
+
+    residue_hash: <hex_or_int>
+
+    routing_signature:
+      struct_hash: <hex_or_int>
+      feature_hashes: [<hex_or_int>, ...]
+
+    identity_metadata:
+      # Identity metadata passed from upstream TP
+      identity_tags: [<string>, ...]
+      identity_vector: [<int>, ...]
+
+  # -------------------------------------------------------------------
+  # 2. Meaning Group Selection
+  # -------------------------------------------------------------------
+  meaning_group:
+    selected_group_id: <int>             # Final chosen meaning group
+    candidate_group_ids: [<int>, ...]    # Candidates from struct_to_meaning_map.yaml
+
+    ranking_details:
+      # Optional diagnostic information
+      identity_score: <float>
+      cue_score: <float>
+      invariant_score: <float>
+      final_rank_order: [<int>, ...]
+
+  # -------------------------------------------------------------------
+  # 3. Meaning Semantics (IdOB Output)
+  # -------------------------------------------------------------------
+  meaning_semantics:
+    # Meaning-layer feature vector (aligned with meaning_feature_layout)
+    physicality: <float>
+    sociality: <float>
+    temporality: <float>
+    intentionality: <float>
+    materiality: <float>
+    spatiality: <float>
+
+  idob_semantics:
+    # IdOB-specific meaning features (internal)
+    meaning_delta_h: <float>
+    stabilization_state: <stable|unstable|exhausted>
+    refinement_cycles: <int>
+
+  # -------------------------------------------------------------------
+  # 4. Identity Envelope (IdOB Refinement)
+  # -------------------------------------------------------------------
+  identity_envelope:
+    identity_importance: <float>
+    identity_tags: [<string>, ...]
+    identity_vector: [<int>, ...]
+    identity_delta: <float>
+
+    stabilization:
+      identity_stable: <true|false>
+      cycles: <int>
+
+  # -------------------------------------------------------------------
+  # 5. Search Control (Unified Depth/Parallel Budget)
+  # -------------------------------------------------------------------
+  search_control:
+    idob_search_budget_max: <int>        # Default: 6
+    idob_search_budget_min: <int>        # Default: 4
+    idob_search_budget_used: <int>
+
+    idob_search_mode: <single|parallel_candidates|parallel_segments>
+
+    search_history:
+      - cycle: <int>
+        selected_group_id: <int>
+        meaning_delta_h: <float>
+        identity_delta: <float>
+        stabilization_state: <string>
+
+  # -------------------------------------------------------------------
+  # 6. Finalization (Handoff to OuBA)
+  # -------------------------------------------------------------------
+  finalization:
+    meaning_resolution_status: <stable|budget_exhausted|identity_stable|time_exhausted>
+    ready_for_ouba: <true|false>
+
