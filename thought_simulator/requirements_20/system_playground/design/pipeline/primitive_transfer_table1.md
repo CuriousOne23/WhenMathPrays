@@ -1,5 +1,5 @@
 # 📘 **Primitive Transfer Table (Compressed Hybrid Edition)**  
-**Path‑A Pipeline: InB → IIInB → IE → CE → TPU → SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → DCB → RB**
+**Path‑A Pipeline: InB → IIInB → IE → CE → TPU → SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → DCB → RB → IdOB**
 
 **Canonical Field Names:** All field names in this document are governed by  
 `thought_simulator/requirements_20/system_playground/design/pipeline/patha_field_names.md`.  
@@ -86,6 +86,8 @@ replay‑safe TP ready for stability (COB/CST) and meaning‑layer progression.
 | **STPX** | Structured token & pattern extraction | structural geometry, SSG output, canonical tokens, metadata | stpx_cues, semantic_layer_provenance | Extract lexical/structural/constraint/repair cues; encode discourse cues | No semantic interpretation; no routing metadata |
 | **DCB** | Execution‑flow geometry | previous geometric_state, primitive_id, cycle_id, timestamp | geometric_state, geometric_history, dcb_events | Compute position/direction/curvature/step_index/lane; cycle_start/delta events | No semantic/structural/identity/routing reads |
 | **RB** | Deterministic routing + TR gating | input_fields, TR, tr_needs_update, ΔH, lineage, routing_metadata, IdOB view, structural metadata, STPX cues, continuity metadata | routing_filter, RB_out fields | TR gating; canonical routing filter; adjacency/displacement/regime; split/merge arbitration | No semantic interpretation; no TR mutation |
+| **IdOB** | Identity‑layer update after RB; compute identity geometry/continuity/pressure/residuals/freeze/basin_surface; compute identity‑importance; produce meaning_delta_h + IdOB semantics | TP.identity.*, TP.semantic.*, identity_metadata, continuity_metadata, expressive/normalization/semantic_layer/residue/next_context metadata, RB view (ro), DCB geometric_state (ro), prior IdOB envelope (ro) | identity.geometry, identity.continuity, identity.pressure, identity.residuals.{magnitude,pattern}, identity.freeze.state, identity.basin_surface.region, idob_roles[], idob_candidates[], provenance, lineage_markers[], stability_marker, alignment_marker, regime_label, meaning_delta_h, idob_semantics[], meaning_semantics[], idob_complete, path_b_eligible, idob_next_ob_candidates[] | Deterministic operator‑I transition rules; regime‑conditioned inherit/reset; compute identity‑importance; compute meaning_delta_h; generate IdOB + meaning semantics; produce next‑OB candidates; mark idob_complete; expose identity envelope for MCB/RBU/DCB loop; replay‑safe; strict write‑boundary guard | No semantic interpretation beyond IdOB semantics; no routing; no structural geometry changes; no upstream TP mutation; no OB/IB/RB/TB/InB/OuB interaction; no placeholder promotion/compaction/redaction; no modification of semantic‑importance outside IdOB domain |
+| **OuBA** | Final Path‑A commit; freeze semantic_core; produce immutable CMTP | IdOB output, TP.semantic.*, TP.metadata.*, TP.lineage_log[], next_context_metadata, identity_metadata, continuity_metadata, clarifying_metadata, residue_metadata | CMTP (semantic_core, semantic_envelope, context_envelope, provenance, lineage, metadata, commit_timestamp, commit_hash) | Freeze semantic_core; preserve all referents/bindings/constraints; attach provenance/lineage; serialize deterministic CMTP; enforce commit boundary | No semantic inference; no new semantic content; no routing; no OB/SSG/TR/RB/IdOB invocation; no TP mutation outside commit fields |
 
 ---
 
@@ -257,6 +259,107 @@ All normative requirements preserved.
 **Transfer Function:**  
 - TR gating; canonical routing filter; adjacency/displacement/regime; deterministic arbitration.  
 **Prohibitions:** No semantic interpretation; no TR mutation; no cross‑core merges.
+
+---
+
+## **IdOB — Identity‑Layer Object Builder (post‑RB identity operator)**
+
+**Purpose:**  
+Update identity envelope after RB; compute identity geometry/continuity/pressure/residuals/freeze/basin_surface; compute identity‑importance; produce meaning_delta_h + IdOB semantics for downstream MCB/RBU/DCB loop.
+
+**Inputs (read‑only unless noted):**  
+Current TP.identity.* (from prior IdOB or initial identity),  
+TP.semantic.* (from RB/WrdNm/ISc/RTU/TR/CTP/RB loop),  
+TP.metadata.identity_metadata,  
+TP.metadata.continuity_metadata,  
+TP.metadata.expressive_metadata,  
+TP.metadata.normalization_metadata,  
+TP.metadata.semantic_layer_metadata,  
+TP.metadata.residue_metadata,  
+TP.metadata.next_context_metadata,  
+RB view (read‑only),  
+DCB geometric_state (read‑only),  
+prior IdOB envelope (read‑only).
+
+**Writes:**  
+identity.geometry, identity.continuity, identity.pressure,  
+identity.residuals.{magnitude, pattern},  
+identity.freeze.state, identity.basin_surface.region,  
+idob_roles[], idob_candidates[], provenance updates, lineage_markers[],  
+stability_marker, alignment_marker, regime_label,  
+TP.semantic.meaning_delta_h,  
+TP.semantic.idob_semantics[],  
+TP.semantic.meaning_semantics[],  
+idob_complete, path_b_eligible, idob_next_ob_candidates[].
+
+**Transfer Function (compressed):**  
+Apply deterministic operator‑I transition rules to identity geometry/continuity/pressure/residuals/freeze/basin_surface using RB/semantic context.  
+Apply regime‑conditioned inherit/reset for roles, candidates, provenance, lineage markers, residuals, freeze tendency.  
+Compute identity‑importance (monotonic, deterministic).  
+Compute meaning_delta_h; generate IdOB semantics + meaning semantics.  
+Produce next‑OB candidates; mark idob_complete; expose updated identity envelope for MCB/RBU/DCB loop.  
+Replay‑safe; no randomness; strict write‑boundary guard.
+
+**Prohibitions:**  
+No semantic interpretation beyond IdOB semantics tagging;  
+no routing or structural geometry changes;  
+no modification of upstream TP fields;  
+no interaction with OB/IB/RB/TB/InB/OuB domains;  
+no placeholder promotion, compaction, or redaction;  
+no modification of semantic‑importance scores or roles outside IdOB domain.
+
+---
+
+
+## **OuBA — Output Basin Primitive (Path‑A Final Meaning Commit Operator)**
+
+**Purpose:**  
+Freeze and commit the fully stabilized semantic, context, identity, provenance, and lineage state produced by IdOB; emit a **CMTP (Committed Meaning Thought Packet)** — the immutable meaning snapshot used by COB, CST, Path‑B truth/safety engines, governance, replay, and audit.
+
+**Inputs (read‑only unless noted):**  
+IdOB output (semantic_core, semantic_envelope, identity envelope, lineage markers, provenance markers),  
+TP.metadata.context_metadata,  
+TP.metadata.clarifying_metadata,  
+TP.metadata.identity_metadata,  
+TP.metadata.continuity_metadata,  
+TP.metadata.expressive_metadata,  
+TP.metadata.normalization_metadata,  
+TP.metadata.semantic_layer_metadata,  
+TP.metadata.residue_metadata,  
+TP.metadata.next_context_metadata,  
+TP.metadata.entropy_history[],  
+TP.metadata.signature_history[],  
+TP.lineage_log[],  
+TP.provenance_metadata,  
+TP.semantic.* (read‑only),  
+TP.context.* (read‑only),  
+TP.identity.* (read‑only).
+
+**Writes:**  
+CMTP.semantic_core (frozen),  
+CMTP.semantic_envelope {proposition_set[], truth_evidence[], semantic_tags[], messy_input_record, lane_local_identity},  
+CMTP.context_envelope {TP.next_context.*},  
+CMTP.provenance {provenance_metadata, commit_timestamp, commit_hash},  
+CMTP.lineage {sob_id, srob_id, cnob_id, smob_id, idob_id, routing_path, lineage_log[], ruleset_ids[]},  
+CMTP.metadata {entropy_history[], signature_history[], contextual_alignment_record, identity_shift_record, topic_anchor_record, continuity_record, intent_record, policy_markers[], ob_trace[], tb_trace[], cob_state_snapshot}.
+
+**Transfer Function (compressed):**  
+Freeze semantic_core deterministically; preserve all referents, bindings, and constraints from IdOB without addition, removal, or reinterpretation.  
+Commit semantic_envelope, context_envelope, provenance, lineage, and metadata required for COB/CST continuity, truth‑alignment, and replay determinism.  
+Attach commit_timestamp and commit_hash; serialize CMTP in governance‑ready form.  
+Integrate TP‑stream metadata only when relevant to commit, provenance, lineage, or semantic freezing; ignore metadata not applicable.  
+Represent any remaining uncertainty or residue explicitly in the CMTP.  
+Enforce commit boundary: no Path‑A primitive may modify TP after CMTP emission; all downstream components treat CMTP as read‑only.  
+Deterministic: identical IdOB inputs yield identical CMTP outputs; no nondeterministic sources.
+
+**Prohibitions:**  
+No semantic inference, scoring, routing, or candidate generation;  
+no introduction of new semantic content;  
+no invocation of OB‑family primitives (SOB, SROB, CnOB, SmOB), SSG, TR, RB, or IdOB;  
+no modification of TP fields outside commit‑layer fields;  
+no consumption of routing_metadata, structural ΔH%, truth/done fields, Path‑B lineage fields, or any Pipeline‑B envelopes;  
+no nondeterministic behavior;  
+no dropping, reordering, or duplicating semantic units.
 
 ---
 
