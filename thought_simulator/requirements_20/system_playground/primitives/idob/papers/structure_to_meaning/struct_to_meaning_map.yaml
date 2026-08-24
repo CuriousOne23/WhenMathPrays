@@ -1,0 +1,131 @@
+# =====================================================================
+# struct_to_meaning_map.yaml
+# ---------------------------------------------------------------------
+# Purpose:
+#   Defines the mapping from structural geometry (represented by
+#   structural_hash and decomposed structural fields) to IdOB meaning
+#   groups. This is the core bridge used by IdOB to convert structure
+#   into meaning candidates.
+#
+# Relationship to Other Files:
+#   - Consumed by IdOB during meaning-group selection.
+#   - Uses meaning_group_id values defined in meaning_groups.yaml.
+#   - Structural hashes originate from SOB/SROB/CnOB/SmOB/SSG/STPX/RB.
+#   - Required by idob_struc_to_meaning.md (architecture paper).
+#
+# Notes:
+#   - This file does NOT contain meaning units or lexical entries.
+#   - It contains ONLY the mapping from structural_hash → meaning_group_id.
+#   - Multiple meaning groups may map to the same structural_hash.
+#   - IdOB ranks candidates using identity envelope + cue envelopes.
+# =====================================================================
+
+struct_to_meaning_map:
+
+  # -------------------------------------------------------------------
+  # Template Entry (copy this structure for real mappings)
+  # -------------------------------------------------------------------
+  - structural_hash: <hex_or_int>
+    semantic_field_id: <int>
+    semantic_role_id: <int>
+    semantic_object_id: <int>
+    gradient_id: <int>
+    universe_id: <int>
+    subfield_id: <int>
+
+    meaning_group_candidates:
+      - <group_id_1>
+      - <group_id_2>
+      - <group_id_3>
+
+    # Optional ranking hints (IdOB still computes final ranking)
+    ranking_hints:
+      identity_weight: <float>
+      cue_weight: <float>
+      invariant_weight: <float>
+
+  # -------------------------------------------------------------------
+  # Example Mappings (aligned with meaning_groups.yaml examples)
+  # -------------------------------------------------------------------
+
+  - structural_hash: 0xA44F9912
+    semantic_field_id: 101
+    semantic_role_id: 12
+    semantic_object_id: 3
+    gradient_id: 2
+    universe_id: 1
+    subfield_id: 0
+
+    meaning_group_candidates:
+      - 1001    # ACTION.physical.motion
+      - 3001    # EVENT.temporal.change
+
+    ranking_hints:
+      identity_weight: 0.6
+      cue_weight: 0.8
+      invariant_weight: 0.4
+
+  - structural_hash: 0xB22C7710
+    semantic_field_id: 201
+    semantic_role_id: 5
+    semantic_object_id: 10
+    gradient_id: 1
+    universe_id: 1
+    subfield_id: 2
+
+    meaning_group_candidates:
+      - 2001    # ENTITY.physical.object
+      - 5001    # QUALITY.object.sensitivity
+
+    ranking_hints:
+      identity_weight: 0.4
+      cue_weight: 0.5
+      invariant_weight: 0.7
+
+  - structural_hash: 0xC9910044
+    semantic_field_id: 301
+    semantic_role_id: 22
+    semantic_object_id: 20
+    gradient_id: 3
+    universe_id: 2
+    subfield_id: 1
+
+    meaning_group_candidates:
+      - 3001    # EVENT.temporal.change
+
+    ranking_hints:
+      identity_weight: 0.3
+      cue_weight: 0.9
+      invariant_weight: 0.5
+
+  - structural_hash: 0xD5511022
+    semantic_field_id: 401
+    semantic_role_id: 7
+    semantic_object_id: 30
+    gradient_id: 1
+    universe_id: 1
+    subfield_id: 0
+
+    meaning_group_candidates:
+      - 4001    # STATE.biological.condition
+
+    ranking_hints:
+      identity_weight: 0.5
+      cue_weight: 0.6
+      invariant_weight: 0.4
+
+  - structural_hash: 0xE4410028
+    semantic_field_id: 501
+    semantic_role_id: 9
+    semantic_object_id: 40
+    gradient_id: 2
+    universe_id: 1
+    subfield_id: 3
+
+    meaning_group_candidates:
+      - 5001    # QUALITY.object.sensitivity
+
+    ranking_hints:
+      identity_weight: 0.2
+      cue_weight: 0.7
+      invariant_weight: 0.8
