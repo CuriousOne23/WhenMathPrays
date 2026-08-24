@@ -1,0 +1,190 @@
+# =====================================================================
+# idob_meaning_dictionary.yaml
+# ---------------------------------------------------------------------
+# Purpose:
+#   Defines the meaning-layer structures IdOB uses to map structural
+#   geometry (from SOB/SROB/CnOB/SmOB/SSG/STPX/RB) into meaning groups,
+#   meaning units, meaning dimensions, and meaning semantics.
+#
+# Relationship to Other Files:
+#   - Consumed by: IdOB (structure→meaning mapping)
+#   - Supports: struct_to_meaning_map.yaml
+#   - Supports: meaning_groups.yaml
+#   - Supports: lexical meaning dictionary (external)
+#   - Required by: idob_struc_to_meaning.md (architecture paper)
+#
+# Notes:
+#   - This dictionary is NOT the lexical meaning dictionary itself.
+#     It is the IdOB-specific meaning-layer schema that organizes
+#     lexical entries into meaning units, meaning groups, and
+#     meaning dimensions.
+#   - IdOB uses this schema to compute meaning_semantics[],
+#     meaning_delta_h, identity envelope refinement, and meaning
+#     stabilization.
+# =====================================================================
+
+idob_meaning_dictionary:
+
+  # -------------------------------------------------------------------
+  # 1. Meaning Units
+  # -------------------------------------------------------------------
+  # Atomic meaning elements derived from lexical entries.
+  # Each meaning unit corresponds to one lexical entry but is normalized
+  # into IdOB's meaning-layer format.
+  #
+  # Meaning units are grouped into meaning groups.
+  # -------------------------------------------------------------------
+  meaning_units:
+    - unit_id: <int>
+      lemma: <string>
+      primitive: <ENTITY|ACTION|EVENT|STATE|QUALITY|PROCESS|RELATION|TEMPORAL|SPATIAL>
+      invariant:
+        core_features: [<string>, ...]
+        tags: [<string>, ...]
+      cue_envelope:
+        feature_cues: [<string>, ...]
+        tag_cues: [<string>, ...]
+      routing_signature:
+        primitive_code: <int>
+        feature_codes: [<int>, ...]
+        tag_codes: [<int>, ...]
+      identity_anchor:
+        anchor_vector: [<int>, ...]
+        checksum: <int>
+
+  # -------------------------------------------------------------------
+  # 2. Meaning Groups
+  # -------------------------------------------------------------------
+  # Meaning groups cluster meaning units that share:
+  #   - primitive
+  #   - cue envelopes
+  #   - invariant tags
+  #   - meaning dimensions
+  #   - identity anchors
+  #
+  # IdOB selects meaning groups based on structural_hash and identity.
+  # -------------------------------------------------------------------
+  meaning_groups:
+    - group_id: <int>
+      group_name: <string>
+      primitive: <ENTITY|ACTION|EVENT|STATE|QUALITY|PROCESS|RELATION|TEMPORAL|SPATIAL>
+      members: [<unit_id>, ...]
+      group_invariants:
+        tags: [<string>, ...]
+        core_features: [<string>, ...]
+      group_dimensions:
+        # Example dimensions:
+        physicality: <float>
+        sociality: <float>
+        temporality: <float>
+        intentionality: <float>
+        materiality: <float>
+        spatiality: <float>
+      group_identity_anchor:
+        anchor_vector: [<int>, ...]
+        checksum: <int>
+      group_routing_signature:
+        primitive_code: <int>
+        feature_codes: [<int>, ...]
+        tag_codes: [<int>, ...]
+
+  # -------------------------------------------------------------------
+  # 3. Meaning Dimensions
+  # -------------------------------------------------------------------
+  # Meaning dimensions define the axes IdOB uses to compute:
+  #   - meaning_semantics[]
+  #   - meaning_delta_h
+  #
+  # These dimensions are stable across all meaning groups.
+  # -------------------------------------------------------------------
+  meaning_dimensions:
+    physicality:
+      description: "Degree to which meaning relates to physical objects or actions."
+    sociality:
+      description: "Degree to which meaning relates to social interaction or groups."
+    temporality:
+      description: "Degree to which meaning relates to time, events, or change."
+    intentionality:
+      description: "Degree to which meaning involves intention, agency, or purpose."
+    materiality:
+      description: "Degree to which meaning involves material transformation or processes."
+    spatiality:
+      description: "Degree to which meaning involves spatial relations or locations."
+
+  # -------------------------------------------------------------------
+  # 4. Meaning Cues
+  # -------------------------------------------------------------------
+  # Meaning cues are identity-conditioned signals that influence
+  # meaning group ranking and meaning refinement.
+  # -------------------------------------------------------------------
+  meaning_cues:
+    feature_cues: [<string>, ...]
+    tag_cues: [<string>, ...]
+
+  # -------------------------------------------------------------------
+  # 5. Meaning Invariants
+  # -------------------------------------------------------------------
+  # Meaning invariants are stable meaning features that persist across
+  # IdOB cycles and influence meaning_delta_h.
+  # -------------------------------------------------------------------
+  meaning_invariants:
+    - invariant_id: <int>
+      tags: [<string>, ...]
+      core_features: [<string>, ...]
+
+  # -------------------------------------------------------------------
+  # 6. Meaning Triggers and Suppressors
+  # -------------------------------------------------------------------
+  # These influence meaning_delta_h and meaning stabilization.
+  # -------------------------------------------------------------------
+  meaning_triggers:
+    - trigger_id: <int>
+      description: <string>
+      dimensions_affected: [<string>, ...]
+      delta: <float>
+
+  meaning_suppressors:
+    - suppressor_id: <int>
+      description: <string>
+      dimensions_affected: [<string>, ...]
+      delta: <float>
+
+  # -------------------------------------------------------------------
+  # 7. Meaning-Layer Feature Layout
+  # -------------------------------------------------------------------
+  # Defines the vector layout IdOB uses for meaning_semantics[].
+  # -------------------------------------------------------------------
+  meaning_feature_layout:
+    order:
+      - physicality
+      - sociality
+      - temporality
+      - intentionality
+      - materiality
+      - spatiality
+
+  # -------------------------------------------------------------------
+  # 8. Identity Envelope Integration
+  # -------------------------------------------------------------------
+  # Defines how identity cues influence meaning group ranking and
+  # meaning refinement.
+  # -------------------------------------------------------------------
+  identity_integration:
+    identity_importance_threshold: <float>
+    identity_dimension_weights:
+      physicality: <float>
+      sociality: <float>
+      temporality: <float>
+      intentionality: <float>
+      materiality: <float>
+      spatiality: <float>
+
+  # -------------------------------------------------------------------
+  # 9. Meaning Stabilization Parameters
+  # -------------------------------------------------------------------
+  # Defines thresholds for meaning_delta_h convergence.
+  # -------------------------------------------------------------------
+  stabilization:
+    delta_h_threshold: <float>
+    max_stabilization_cycles: <int>
+
