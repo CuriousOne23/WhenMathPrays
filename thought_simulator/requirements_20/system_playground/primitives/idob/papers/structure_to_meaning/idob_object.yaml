@@ -1,23 +1,5 @@
 # =====================================================================
-# idob_object.yaml
-# ---------------------------------------------------------------------
-# Purpose:
-#   Defines the complete IdOB object structure used during the
-#   structure→meaning mapping process. This object is created and
-#   refined by IdOB and consumed by OuBA.
-#
-# Relationship to Other Files:
-#   - idob_struc_to_meaning.md: architecture definition
-#   - idob_meaning_dictionary.yaml: meaning-layer schema
-#   - meaning_groups.yaml: meaning group definitions
-#   - struct_to_meaning_map.yaml: structure→meaning mapping
-#   - primitive_transfer_table1.md: structural inputs
-#   - primitive_transfer_table2.md: meaning outputs
-#
-# Notes:
-#   - This object is created once per TP segment entering IdOB.
-#   - It is refined across multiple IdOB cycles (4–6).
-#   - It is replay-safe and deterministic.
+# idob_object.yaml (CvThP‑updated)
 # =====================================================================
 
 idob_object:
@@ -41,7 +23,6 @@ idob_object:
       feature_hashes: [<hex_or_int>, ...]
 
     identity_metadata:
-      # Identity metadata passed from upstream TP
       identity_tags: [<string>, ...]
       identity_vector: [<int>, ...]
 
@@ -49,11 +30,10 @@ idob_object:
   # 2. Meaning Group Selection
   # -------------------------------------------------------------------
   meaning_group:
-    selected_group_id: <int>             # Final chosen meaning group
-    candidate_group_ids: [<int>, ...]    # Candidates from struct_to_meaning_map.yaml
+    selected_group_id: <int>
+    candidate_group_ids: [<int>, ...]
 
     ranking_details:
-      # Optional diagnostic information
       identity_score: <float>
       cue_score: <float>
       invariant_score: <float>
@@ -63,7 +43,6 @@ idob_object:
   # 3. Meaning Semantics (IdOB Output)
   # -------------------------------------------------------------------
   meaning_semantics:
-    # Meaning-layer feature vector (aligned with meaning_feature_layout)
     physicality: <float>
     sociality: <float>
     temporality: <float>
@@ -72,8 +51,8 @@ idob_object:
     spatiality: <float>
 
   idob_semantics:
-    # IdOB-specific meaning features (internal)
     meaning_delta_h: <float>
+    meaning_stable: <true|false>        # NEW — required for stabilization rules
     stabilization_state: <stable|unstable|exhausted>
     refinement_cycles: <int>
 
@@ -90,12 +69,17 @@ idob_object:
       identity_stable: <true|false>
       cycles: <int>
 
+  # Optional symmetry block (recommended)
+  meaning_stabilization:
+    meaning_stable: <true|false>
+    cycles: <int>
+
   # -------------------------------------------------------------------
   # 5. Search Control (Unified Depth/Parallel Budget)
   # -------------------------------------------------------------------
   search_control:
-    idob_search_budget_max: <int>        # Default: 6
-    idob_search_budget_min: <int>        # Default: 4
+    idob_search_budget_max: <int>
+    idob_search_budget_min: <int>
     idob_search_budget_used: <int>
 
     idob_search_mode: <single|parallel_candidates|parallel_segments>
@@ -105,12 +89,13 @@ idob_object:
         selected_group_id: <int>
         meaning_delta_h: <float>
         identity_delta: <float>
+        meaning_stable: <true|false>     # NEW — required
+        identity_stable: <true|false>    # NEW — required
         stabilization_state: <string>
 
   # -------------------------------------------------------------------
   # 6. Finalization (Handoff to OuBA)
   # -------------------------------------------------------------------
   finalization:
-    meaning_resolution_status: <stable|budget_exhausted|identity_stable|time_exhausted>
+    resolution_status: <stable|identity_stable|budget_exhausted|time_exhausted>  # UPDATED
     ready_for_ouba: <true|false>
-
