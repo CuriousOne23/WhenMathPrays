@@ -15,7 +15,9 @@ This paper defines:
 - the **meaning‑layer architecture** IdOB must use,  
 - the **mapping layer** that connects structure to meaning,  
 - the **IdOB object definition**,  
-- the **search depth/parallelism model**,  
+- the **unified depth/parallel search schema**,  
+- the **meaning stabilization rules**,  
+- the **identity envelope refinement**,  
 - the **stopping conditions** for meaning resolution,  
 - the **handoff rules** to OuBA.
 
@@ -35,7 +37,7 @@ This document is normative for IdOB implementation.
 - Produces meaning.  
 - Maintains identity envelope.  
 - Performs meaning refinement.  
-- Stops when meaning is stable or budget exhausted.
+- Stops when meaning is stable or search budget exhausted.
 
 ### **Downstream OBs (OuBA, TR)**  
 - Consume meaning.  
@@ -188,9 +190,10 @@ An IdOB object contains:
 - identity metadata (from TP)
 
 ### **Meaning Fields**
+- meaning_group_id  
+- meaning_group_candidates[]  
 - meaning_semantics[]  
 - idob_semantics[]  
-- meaning_group_candidates[]  
 - meaning_delta_h  
 - meaning_resolution_status
 
@@ -208,7 +211,7 @@ These fields allow CTP to coordinate parallel IdOB work.
 
 ---
 
-## **8. Search Depth = Parallel Budget**
+## **8. Unified Search Schema (Depth = Parallel Budget)**
 
 IdOB depth and parallelism are unified:
 
@@ -219,9 +222,27 @@ Each pass may be:
 - a recursive refinement cycle, or  
 - a parallel meaning candidate evaluation.
 
+### **Why the budget is 4–6 (not 3–5)**
+
+IdOB meaning resolution has **five phases**:
+
+1. **Coarse meaning group selection**  
+2. **Medium meaning group narrowing**  
+3. **Fine meaning group selection**  
+4. **Identity‑conditioned meaning refinement**  
+5. **Meaning_delta_h stabilization**
+
+Parallel candidates consume additional budget.
+
+Thus the correct operational range is:
+
+> **4–6 cycles**  
+> (bounded, deterministic, replay‑safe)
+
 ### **Budget fields**
 
-- `idob_search_budget_max` (e.g., 3–5)  
+- `idob_search_budget_max` (default: 6)  
+- `idob_search_budget_min` (default: 4)  
 - `idob_search_budget_used` (incremented each pass)
 
 ### **CTP coordination**
@@ -241,14 +262,33 @@ CTP:
 1. Read structural geometry + hashes.  
 2. Retrieve meaning_group candidates from struct_to_meaning_map.  
 3. Rank candidates using identity envelope + cue_envelope.  
-4. Compute meaning_delta_h.  
-5. Update identity envelope.  
-6. Increment search budget.  
-7. Check stopping conditions.
+4. Select meaning_group_id.  
+5. Compute meaning_semantics[].  
+6. Compute meaning_delta_h.  
+7. Update identity envelope.  
+8. Increment search budget.  
+9. Check stopping conditions.
 
 ---
 
-## **10. Stopping Conditions**
+## **10. Meaning Stabilization**
+
+Meaning is considered stable when:
+
+$$
+|\Delta h_{\text{meaning}}| < \varepsilon_{\text{meaning}}
+$$
+
+Identity envelope must also stabilize:
+
+- no new high‑importance cues,  
+- identity_importance converged.
+
+If meaning is not stable, IdOB performs another refinement cycle (budget permitting).
+
+---
+
+## **11. Stopping Conditions**
 
 IdOB stops meaning refinement when **any** of the following are true:
 
@@ -278,7 +318,7 @@ When stopped:
 
 ---
 
-## **11. Handoff to OuBA**
+## **12. Handoff to OuBA**
 
 IdOB writes:
 
@@ -297,7 +337,7 @@ IdOB never performs truth or belief.
 
 ---
 
-## **12. Summary**
+## **13. Summary**
 
 This document defines:
 
@@ -305,7 +345,9 @@ This document defines:
 - the meaning‑layer architecture,  
 - the structure→meaning mapping layer,  
 - the IdOB object definition,  
-- the unified depth/parallel search model,  
+- the unified depth/parallel search schema,  
+- the meaning stabilization rules,  
+- the identity envelope refinement,  
 - the stopping conditions,  
 - the OuBA handoff rules.
 
