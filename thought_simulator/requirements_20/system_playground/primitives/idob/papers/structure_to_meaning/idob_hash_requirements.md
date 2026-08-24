@@ -385,3 +385,250 @@ With this spec, the hash contract for TS is:
 - **aligned with IdOB’s structure→meaning architecture**
 
 ---
+
+# **Appendix A — Worked Example: SOB → SROB → CnOB → SmOB → RB → IdOB Hash Lineage**
+
+This appendix provides a **concrete, end‑to‑end example** showing how structural geometry flows through the TS OB pipeline, how each OB contributes to hashing, and how IdOB consumes the final hash constructs for meaning resolution.
+
+It demonstrates:
+
+- structural geometry normalization  
+- structural_hash formation  
+- constraint residue hashing  
+- feature hashing  
+- routing_signature assembly  
+- IdOB consumption of all hash components  
+
+This example is illustrative and uses simplified numeric IDs for clarity.
+
+---
+
+## **A.1 Input Utterance**
+
+> **“The rock burst open.”**
+
+This utterance contains structural ambiguity:
+
+- *rock* → object (physical) or metaphorical (music, person, etc.)  
+- *burst* → physical rupture or metaphorical event  
+
+The hash pipeline must preserve structure while remaining meaning‑agnostic.
+
+---
+
+## **A.2 SOB — Structural Object Builder**
+
+SOB extracts **pure structural geometry**:
+
+```
+semantic_field_id:     12      # physical-action field
+semantic_role_id:      3       # agentless-action role
+semantic_object_id:    44      # object: rock
+gradient_id:           2       # dynamic-action gradient
+universe_id:           1       # physical universe
+subfield_id:           7       # rupture subfield
+```
+
+SOB does **not** compute the hash.
+
+---
+
+## **A.3 SROB — Structural Refinement OB**
+
+SROB normalizes geometry:
+
+- ensures IDs are canonical  
+- resolves minor structural inconsistencies  
+- enforces ordering: field → role → object → gradient → universe → subfield  
+
+Output is identical to SOB in this example (no conflicts).
+
+---
+
+## **A.4 CnOB — Constraint OB**
+
+CnOB evaluates structural constraints:
+
+- “burst” requires a dynamic object  
+- “rock” is static → constraint tension  
+- “burst open” implies internal pressure → object mismatch  
+
+CnOB produces **constraint residue**:
+
+```
+constraint_residue = {
+  tension_code: 301,       # static-object vs dynamic-action
+  anomaly_code: 12         # missing agent for rupture
+}
+```
+
+CnOB computes:
+
+```
+residue_hash = H(301, 12)
+```
+
+Example (64‑bit):
+
+```
+residue_hash = 0x8f22c1ab44e9d012
+```
+
+---
+
+## **A.5 SmOB — Semantic‑Adjacent OB**
+
+SmOB computes **feature hashes** for routing:
+
+```
+feature_hash_1 = H(semantic_object_id=44)
+feature_hash_2 = H(gradient_id=2)
+feature_hash_3 = H(residue_hash)
+```
+
+Example:
+
+```
+feature_hashes = [
+  0x00ab44ff112200aa,
+  0x00cd2200bb33cc11,
+  0x8f22c1ab44e9d012
+]
+```
+
+SmOB does **not** compute structural_hash.
+
+---
+
+## **A.6 RB — Routing Bridge**
+
+RB assembles the **routing_signature**.
+
+### Step 1 — Compute structural_hash
+
+Inputs:
+
+```
+12 | 3 | 44 | 2 | 1 | 7
+```
+
+Example (128‑bit):
+
+```
+structural_hash = H(12,3,44,2,1,7)
+structural_hash = 0x9a22ff0044bb11cc88dd33ee77aa55ff
+```
+
+### Step 2 — Assemble routing_signature
+
+```yaml
+routing_signature:
+  struct_hash: 0x9a22ff0044bb11cc88dd33ee77aa55ff
+  feature_hashes:
+    - 0x00ab44ff112200aa
+    - 0x00cd2200bb33cc11
+    - 0x8f22c1ab44e9d012
+```
+
+RB forwards:
+
+- structural_hash  
+- residue_hash  
+- routing_signature  
+
+to IdOB.
+
+---
+
+## **A.7 IdOB — Identity‑Conditioned Object Bridge**
+
+IdOB consumes all hash constructs.
+
+### Step 1 — Meaning group lookup
+
+IdOB queries:
+
+```
+struct_to_meaning_map[structural_hash]
+```
+
+Example mapping:
+
+```
+0x9a22ff0044bb11cc88dd33ee77aa55ff:
+  - 1001   # physical rupture
+  - 3001   # metaphorical event
+  - 5001   # geological phenomenon
+```
+
+### Step 2 — Ranking using routing_signature + residue_hash
+
+- residue_hash indicates tension → boosts metaphorical interpretations  
+- feature_hashes indicate physical object → boosts physical interpretations  
+- identity envelope modulates ranking  
+
+Example ranking:
+
+```
+final_rank_order: [1001, 5001, 3001]
+selected_group_id: 1001
+```
+
+### Step 3 — Meaning refinement
+
+IdOB computes meaning_semantics[]:
+
+```
+physicality:     0.92
+sociality:       0.05
+temporality:     0.33
+intentionality:  0.02
+materiality:     0.88
+spatiality:      0.41
+```
+
+### Step 4 — Stabilization
+
+IdOB checks:
+
+- meaning_delta_h  
+- identity_delta  
+- CvThP time pressure  
+- search budget  
+
+Meaning stabilizes after 5 cycles.
+
+### Step 5 — Finalization
+
+IdOB writes:
+
+```
+resolution_status: stable
+ready_for_ouba: true
+```
+
+OuBA receives meaning_semantics[] and identity envelope.
+
+---
+
+## **A.8 Summary of Hash Lineage**
+
+| OB | Output | Purpose |
+|----|--------|---------|
+| **SOB** | structural geometry | raw structure |
+| **SROB** | normalized geometry | canonical structure |
+| **CnOB** | residue_hash | constraint fingerprint |
+| **SmOB** | feature_hashes | routing features |
+| **RB** | structural_hash + routing_signature | routing + IdOB lookup |
+| **IdOB** | meaning_semantics | structure→meaning |
+
+This example demonstrates:
+
+- deterministic structural hashing  
+- residue hashing for constraint tension  
+- feature hashing for routing  
+- composite routing_signature  
+- IdOB consumption of all hash constructs  
+- stable, replay‑safe meaning resolution  
+
+---
