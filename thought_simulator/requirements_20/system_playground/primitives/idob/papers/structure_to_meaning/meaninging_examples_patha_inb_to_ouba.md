@@ -1,39 +1,39 @@
-# Meaning Examples — Path A: InB → OuBA
-**Paper:** `meaning_examples_patha_inb_to_ouba.md`
-**Series:** IdOB Meaning Output — Six Full Worked Examples
-**Author:** Copilot Tasks / Path A Derivation Series
-**Date:** 2026-08-24
-**Revision:** 1.0
+# Meaning Examples — Path A: InB → OuBA  
+**Paper:** `meaning_examples_patha_inb_to_ouba.md`  
+**Series:** IdOB Meaning Output — Six Full Worked Examples  
+**Author:** Thought Simulator / Path A Derivation Series  
+**Date:** 2026‑08‑24  
+**Revision:** 1.0  
 
 ---
 
 ## Preface
 
-This paper presents six complete worked examples that trace the full meaning-production pipeline from raw user input through IdOB (Identity of Being) processing and into OuBA (Output Being Architecture) handoff. Each example is self-contained and demonstrates a distinct input class, chosen to stress-test different branches of the pipeline.
+This paper presents six complete worked examples tracing the full meaning‑production pipeline from raw user input through IdOB (Identity of Being) processing and into OuBA (Output Being Architecture) handoff. Each example is self‑contained and demonstrates a distinct input class chosen to stress‑test different branches of the Path A pipeline.
 
-For each example the following pipeline stages are shown in sequence:
+Each example follows the canonical eight‑stage Path A sequence:
 
 | Stage | Label | Description |
 |---|---|---|
-| 1 | **InB Reception** | Raw user input arrives at the Input Being boundary |
-| 2 | **Structure-to-Meaning Flow** | Syntactic and semantic parsing; structure graph construction |
-| 3 | **Hash Lineage** | Identity hashes computed across token, clause, and session layers |
-| 4 | **Meaning Group Selection** | Candidate meaning groups scored and selected |
-| 5 | **meaning_semantics Vector** | High-dimensional semantic embedding assembled |
-| 6 | **Identity Envelope Modulation** | IdOB modulates the vector against the active identity envelope |
-| 7 | **Stabilization** | Conflict resolution, coherence locking, ambiguity dampening |
-| 8 | **OuBA Handoff** | Finalized meaning packet dispatched to OuBA consumer |
+| 1 | **InB Reception** | Raw user input arrives at the Input‑Being boundary; no interpretation occurs |
+| 2 | **Structure‑to‑Meaning Flow** | Structure graph construction using TS dependency rules; mapping into meaning primitives |
+| 3 | **Hash Lineage** | Token, structure, and session hashes computed per TS hash requirements |
+| 4 | **Meaning Group Selection** | Candidate meaning groups scored using meaning_group_generation_rules |
+| 5 | **meaning_semantics Vector** | Meaning vector assembled from lexical, structural, contextual, temporal, affective, and epistemic dimensions |
+| 6 | **Identity Envelope Modulation** | Vector modulated using the active identity envelope (tone, mode, urgency bias, formality) |
+| 7 | **Stabilization** | λ‑decay, conflict resolution, ambiguity handling, and safety clamping applied |
+| 8 | **OuBA Handoff** | Finalized meaning packet dispatched to OuBA, which routes based on MG tags, intent, flags, and resolved references |
 
 Notation conventions used throughout:
 
-- `H(x)` — hash function applied to token sequence x
-- `MG[n]` — Meaning Group index n
-- `σ` — identity envelope scalar modulation factor
-- `Δ` — delta/difference notation between states
-- `⊕` — meaning vector composition operator
-- `‖v‖` — vector norm (coherence magnitude)
-- `λ` — stabilization decay constant
-- `Ω` — OuBA receive register
+- `H(x)` — hash function applied to canonical sequence *x*  
+- `MG[n]` — Meaning Group index *n* from `meaning_groups.yaml`  
+- `σ` — identity envelope scalar modulation factor  
+- `Δ` — XOR‑difference between lineage states  
+- `⊕` — meaning vector composition operator  
+- `‖v‖` — meaning vector norm  
+- `λ` — stabilization decay constant (default 0.95)  
+- `Ω` — OuBA receive register  
 
 ---
 
