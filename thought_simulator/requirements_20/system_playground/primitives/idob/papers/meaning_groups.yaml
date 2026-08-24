@@ -1,0 +1,188 @@
+# =====================================================================
+# meaning_groups.yaml
+# ---------------------------------------------------------------------
+# Purpose:
+#   Defines the meaning groups used by IdOB. Meaning groups are the
+#   intermediate layer between lexical meaning units and IdOB's
+#   meaning_semantics[] vector. They cluster meaning units that share:
+#
+#     - primitive
+#     - invariant tags
+#     - cue envelopes
+#     - meaning dimensions
+#     - identity anchors
+#     - routing signatures
+#
+#   IdOB selects meaning groups based on structural_hash and identity
+#   envelope, then refines meaning within the group using meaning_delta_h.
+#
+# Relationship to Other Files:
+#   - idob_meaning_dictionary.yaml: defines meaning units and dimensions
+#   - struct_to_meaning_map.yaml: maps structural_hash → meaning_group_id
+#   - idob_struc_to_meaning.md: architecture paper defining how groups
+#     are used in structure→meaning mapping
+#
+# Notes:
+#   - This file does NOT contain lexical entries.
+#   - It contains IdOB-specific meaning groups derived from lexical units.
+#   - Meaning groups are stable across TS runs and replay-safe.
+# =====================================================================
+
+meaning_groups:
+
+  # -------------------------------------------------------------------
+  # Example Meaning Group (template)
+  # -------------------------------------------------------------------
+  # This is a template for how each meaning group should be structured.
+  # Replace <...> with actual values when populating the dictionary.
+  # -------------------------------------------------------------------
+  - group_id: <int>                # Unique ID for the meaning group
+    group_name: <string>           # Human-readable name (e.g., "ACTION.physical.motion")
+    primitive: <ENTITY|ACTION|EVENT|STATE|QUALITY|PROCESS|RELATION|TEMPORAL|SPATIAL>
+
+    # Meaning units belonging to this group
+    members:
+      - <unit_id_1>
+      - <unit_id_2>
+      - <unit_id_3>
+
+    # Shared invariants across all members
+    group_invariants:
+      tags: [<string>, ...]        # e.g., ["dynamic", "physical"]
+      core_features: [<string>, ...]  # e.g., ["walk", "move", "step"]
+
+    # Meaning dimensions (normalized floats 0.0–1.0)
+    group_dimensions:
+      physicality: <float>
+      sociality: <float>
+      temporality: <float>
+      intentionality: <float>
+      materiality: <float>
+      spatiality: <float>
+
+    # Identity anchor for the group (derived from member anchors)
+    group_identity_anchor:
+      anchor_vector: [<int>, ...]
+      checksum: <int>
+
+    # Routing signature for the group (derived from member signatures)
+    group_routing_signature:
+      primitive_code: <int>
+      feature_codes: [<int>, ...]
+      tag_codes: [<int>, ...]
+
+  # -------------------------------------------------------------------
+  # Below are example groups you can expand later.
+  # These are aligned with your lexical meaning dictionary examples.
+  # -------------------------------------------------------------------
+
+  - group_id: 1001
+    group_name: "ACTION.physical.motion"
+    primitive: ACTION
+    members: [1, 2, 3]             # Example unit IDs
+    group_invariants:
+      tags: ["dynamic", "physical"]
+      core_features: ["walk", "stride", "step"]
+    group_dimensions:
+      physicality: 0.95
+      sociality: 0.10
+      temporality: 0.30
+      intentionality: 0.60
+      materiality: 0.20
+      spatiality: 0.70
+    group_identity_anchor:
+      anchor_vector: [2, 3102, 884, 5521]
+      checksum: 912004
+    group_routing_signature:
+      primitive_code: 2
+      feature_codes: [3102, 884, 5521]
+      tag_codes: [327, 441]
+
+  - group_id: 2001
+    group_name: "ENTITY.physical.object"
+    primitive: ENTITY
+    members: [10, 11]
+    group_invariants:
+      tags: ["object-like", "constructed"]
+      core_features: ["object", "made", "shaped"]
+    group_dimensions:
+      physicality: 0.90
+      sociality: 0.05
+      temporality: 0.10
+      intentionality: 0.20
+      materiality: 0.80
+      spatiality: 0.40
+    group_identity_anchor:
+      anchor_vector: [1, 482, 7711, 6603]
+      checksum: 551102
+    group_routing_signature:
+      primitive_code: 1
+      feature_codes: [482, 7711, 6603]
+      tag_codes: [377, 812]
+
+  - group_id: 3001
+    group_name: "EVENT.temporal.change"
+    primitive: EVENT
+    members: [20]
+    group_invariants:
+      tags: ["temporal", "dynamic"]
+      core_features: ["sudden", "burst", "outward"]
+    group_dimensions:
+      physicality: 0.40
+      sociality: 0.05
+      temporality: 0.95
+      intentionality: 0.10
+      materiality: 0.30
+      spatiality: 0.20
+    group_identity_anchor:
+      anchor_vector: [6, 912, 7744, 6601]
+      checksum: 331004
+    group_routing_signature:
+      primitive_code: 6
+      feature_codes: [912, 7744, 6601]
+      tag_codes: [273, 327]
+
+  - group_id: 4001
+    group_name: "STATE.biological.condition"
+    primitive: STATE
+    members: [30]
+    group_invariants:
+      tags: ["internal", "biological"]
+      core_features: ["sleepy", "lethargic", "low-energy"]
+    group_dimensions:
+      physicality: 0.20
+      sociality: 0.05
+      temporality: 0.30
+      intentionality: 0.10
+      materiality: 0.10
+      spatiality: 0.05
+    group_identity_anchor:
+      anchor_vector: [4, 5511, 774, 992]
+      checksum: 771004
+    group_routing_signature:
+      primitive_code: 4
+      feature_codes: [5511, 774, 992]
+      tag_codes: [511, 902]
+
+  - group_id: 5001
+    group_name: "QUALITY.object.sensitivity"
+    primitive: QUALITY
+    members: [40]
+    group_invariants:
+      tags: ["sensitive", "object-like"]
+      core_features: ["broken", "damaged"]
+    group_dimensions:
+      physicality: 0.60
+      sociality: 0.05
+      temporality: 0.20
+      intentionality: 0.05
+      materiality: 0.40
+      spatiality: 0.10
+    group_identity_anchor:
+      anchor_vector: [5, 7744, 6603]
+      checksum: 441002
+    group_routing_signature:
+      primitive_code: 5
+      feature_codes: [7744, 6603]
+      tag_codes: [812]
+
