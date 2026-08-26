@@ -12,22 +12,33 @@ It is not the Path A PASS/FAIL harness in `testbenches/run.py`.
 It does not claim that IdOB is cognition.
 It asks the duck that can be answered: does this machine make the structure-to-meaning crossing visible?
 
-Walk the numbered slides in order. Each slide teaches one named part of the present IdOB packet. Python and YAML here start as stubs; the markdown is the curriculum.
+Walk the numbered slides in order. Each slide teaches one named part of the present IdOB packet. Python and YAML are filled for this learning revision.
 
-## What you should be able to witness by slide 08
+## How to run
 
-- What structure is, and what is forbidden inside it
-- What a meaning group is, and what the six fields are
-- How structure bounds meaning space (candidates, not scores)
-- What CIE changes, and what it must not change
-- What meaning_delta_h and the four stop reasons are
-- IdOB objective: structure -> admissible groups -> identity-conditioned six-vector -> named freeze
+`run_ts_struc2mn.py` is the driver for every lesson script in this folder.
+
+From this directory:
+
+    python run_ts_struc2mn.py
+
+Inside `run_ts_struc2mn.py`:
+
+- `RUN_01_STRUCTURE` … `RUN_07_CROSSING` turn each lesson on or off.
+  Set a flag to `False`, or comment that `if RUN_…` block, to skip a lesson.
+- Variables passed into a lesson (`card_id`, `group_id`, `cie_id`, `clip_to_unit`)
+  are defined and commented at the top of `run_ts_struc2mn.py`.
+  Change them there. Each lesson prints what that slide is for.
+
+You can still run a single slide file directly, e.g.
+
+    python 01_structure/run_01_inspect_structure.py
 
 ## How to walk
 
 1. Read the slide README.md first.
-2. Open the YAML (schema / examples). Field names matter more than values.
-3. Run the run_0N_*.py stub when you are ready to implement that slide only.
+2. Open the YAML. Field names matter more than values.
+3. Run via run_ts_struc2mn.py, enabling one lesson if you want to go slowly.
 4. Do not skip ahead to 07 until 01-06 each print one thing and refuse to print another.
 
 ## Design rules
@@ -37,21 +48,4 @@ Walk the numbered slides in order. Each slide teaches one named part of the pres
 3. Hand-set tables are legal in this revision.
 4. Same inputs -> same printed packet (replay).
 5. No OuBA / truth / belief. Stop at IdOB handoff fields.
-6. Changing epsilon or the six-axis layout is a new instrument revision, not a silent tweak.
-
-## Slide map
-
-- 00_contract: names and the contract wall
-- 01_structure: structure as geometry; no meaning floats
-- 02_meaning_groups: meaning as six named numbers on a group
-- 03_map_lookup: structure -> which groups may compete
-- 04_ranking: order among candidates only
-- 05_cie: identity moves M; structure stays fixed
-- 06_cycle_and_delta: delta, budget, named freeze
-- 07_idob_slide: full crossing on official field names
-- 08_witness: can you name every field and its job?
-
-## Relation to papers
-
-Source names live in primitives/idob/papers/structure_to_meaning/.
-This bench does not replace those papers. It makes their field names inspectable.
+6. Changing epsilon or the six-axis layout is a new instrument revision.
