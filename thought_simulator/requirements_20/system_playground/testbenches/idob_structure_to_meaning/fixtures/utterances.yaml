@@ -1,0 +1,12 @@
+# STUB — optional notes only. This bench does not parse text into structure.
+utterances:
+  - id: U01
+    text: "The rock burst open."
+    structure_card_id: S_rock_burst
+  - id: U02
+    text: "The project deadline is Friday."
+    structure_card_id: S_deadline_friday
+  - id: U03
+    text: "I can't keep doing this."
+    structure_card_id: null
+    note: "No structure card yet. Do not invent geometry here."

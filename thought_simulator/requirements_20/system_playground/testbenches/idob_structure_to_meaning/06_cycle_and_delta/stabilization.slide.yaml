@@ -1,0 +1,6 @@
+# STUB — this instrument revision
+stabilization:
+  epsilon_meaning: 0.05
+  epsilon_identity: 0.05
+  idob_search_budget_min: 4
+  idob_search_budget_max: 6

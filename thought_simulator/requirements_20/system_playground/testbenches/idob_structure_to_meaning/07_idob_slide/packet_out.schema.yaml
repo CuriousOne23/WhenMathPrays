@@ -1,0 +1,19 @@
+# STUB — fields the slide-07 log must emit
+packet_out:
+  structural_hash: string
+  card_id: string
+  candidate_group_ids: [int]
+  final_rank_order: [int]
+  selected_group_id: int_or_null
+  meaning_semantics:
+    physicality: float
+    sociality: float
+    temporality: float
+    intentionality: float
+    materiality: float
+    spatiality: float
+  meaning_delta_h: float
+  identity_delta: float
+  refinement_cycles: int
+  resolution_status: string
+  ready_for_ouba: bool

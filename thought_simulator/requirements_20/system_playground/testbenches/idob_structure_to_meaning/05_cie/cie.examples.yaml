@@ -1,0 +1,32 @@
+# STUB — local utterance envelopes (not user persona)
+envelopes:
+  - cie_id: physical_stance
+    identity_tags: [physical]
+    identity_importance: 0.20
+    identity_vector:
+      physicality: 0.30
+      sociality: 0.00
+      temporality: 0.00
+      intentionality: 0.00
+      materiality: 0.20
+      spatiality: 0.10
+  - cie_id: scientific_stance
+    identity_tags: [scientific]
+    identity_importance: 0.15
+    identity_vector:
+      physicality: 0.10
+      sociality: -0.10
+      temporality: 0.00
+      intentionality: 0.05
+      materiality: 0.25
+      spatiality: 0.00
+  - cie_id: neutral
+    identity_tags: []
+    identity_importance: 0.00
+    identity_vector:
+      physicality: 0.0
+      sociality: 0.0
+      temporality: 0.0
+      intentionality: 0.0
+      materiality: 0.0
+      spatiality: 0.0
