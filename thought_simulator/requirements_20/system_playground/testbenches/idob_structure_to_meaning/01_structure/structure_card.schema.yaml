@@ -1,0 +1,12 @@
+# STUB — structure card schema
+structure_card:
+  card_id: string
+  note: string
+  semantic_field_id: int
+  semantic_role_id: int
+  semantic_object_id: int
+  gradient_id: int
+  universe_id: int
+  subfield_id: int
+  residue_code: string_or_null
+  feature_tags: [string]

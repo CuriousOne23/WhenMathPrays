@@ -1,0 +1,34 @@
+# STUB — hand-authored structure cards (no meaning floats)
+cards:
+  - card_id: S_rock_burst
+    note: "The rock burst open. Geometry only."
+    semantic_field_id: 12
+    semantic_role_id: 3
+    semantic_object_id: 44
+    gradient_id: 2
+    universe_id: 1
+    subfield_id: 7
+    residue_code: static_object_vs_dynamic_action
+    feature_tags: [object_rock, gradient_dynamic]
+
+  - card_id: S_deadline_friday
+    note: "The project deadline is Friday."
+    semantic_field_id: 101
+    semantic_role_id: 12
+    semantic_object_id: 3
+    gradient_id: 2
+    universe_id: 1
+    subfield_id: 0
+    residue_code: null
+    feature_tags: [copula, weekday]
+
+  - card_id: S_sleepy
+    note: "Biological-condition shaped geometry (toy)."
+    semantic_field_id: 401
+    semantic_role_id: 7
+    semantic_object_id: 30
+    gradient_id: 1
+    universe_id: 1
+    subfield_id: 0
+    residue_code: null
+    feature_tags: [internal, biological]

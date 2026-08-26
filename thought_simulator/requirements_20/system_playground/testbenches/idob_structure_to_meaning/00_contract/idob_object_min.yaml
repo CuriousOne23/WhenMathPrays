@@ -1,0 +1,57 @@
+# STUB — minimal IdOB packet field names (Slide-01)
+# Not a full idob_object.yaml. Learning shape only.
+
+idob_object_min:
+  structural:
+    structural_hash: null
+    semantic_field_id: null
+    semantic_role_id: null
+    semantic_object_id: null
+    gradient_id: null
+    universe_id: null
+    subfield_id: null
+    residue_hash: null
+    routing_signature:
+      struct_hash: null
+      feature_hashes: []
+    identity_metadata:
+      identity_tags: []
+      identity_vector: []
+
+  meaning_group:
+    selected_group_id: null
+    candidate_group_ids: []
+    ranking_details:
+      final_rank_order: []
+
+  meaning_semantics:
+    physicality: null
+    sociality: null
+    temporality: null
+    intentionality: null
+    materiality: null
+    spatiality: null
+
+  idob_semantics:
+    meaning_delta_h: null
+    meaning_stable: false
+    stabilization_state: null
+    refinement_cycles: 0
+
+  identity_envelope:
+    identity_importance: null
+    identity_tags: []
+    identity_vector: []
+    identity_delta: null
+    stabilization:
+      identity_stable: false
+      cycles: 0
+
+  search_control:
+    idob_search_budget_min: 4
+    idob_search_budget_max: 6
+    idob_search_budget_used: 0
+
+  finalization:
+    resolution_status: null
+    ready_for_ouba: false
