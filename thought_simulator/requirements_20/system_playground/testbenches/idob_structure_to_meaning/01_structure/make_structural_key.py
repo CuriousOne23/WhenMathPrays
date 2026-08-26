@@ -1,5 +1,11 @@
-# STUB — IDs -> deterministic structural_key (toy hash is legal)
-"""Slide 01 helper. Do not import meaning floats."""
+"""Slide 01 helper: six geometry IDs -> structural_key. No meaning floats."""
+
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from lib.hash_toy import toy_structural_key
+
 
 def make_structural_key(field, role, obj, gradient, universe, subfield) -> str:
-    raise NotImplementedError("Slide 01: implement toy key from the six IDs only")
+    return toy_structural_key((field, role, obj, gradient, universe, subfield))
