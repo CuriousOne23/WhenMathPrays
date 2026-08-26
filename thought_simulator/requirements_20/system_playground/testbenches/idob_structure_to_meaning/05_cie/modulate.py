@@ -1,5 +1,8 @@
-# STUB — M' = M + alpha * I
-"""CIE modulation only. Do not look up structure here."""
+"""CIE modulation: M' = M + alpha * I."""
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from lib.vector6 import add_scaled, from_mapping
 
-def modulate(M: dict, alpha: float, I: dict) -> dict:
-    raise NotImplementedError("Slide 05: implement M' = M + alpha * I on the six names")
+def modulate(M, alpha, I, clip=True):
+    return add_scaled(from_mapping(M), from_mapping(I), float(alpha), clip=clip)
