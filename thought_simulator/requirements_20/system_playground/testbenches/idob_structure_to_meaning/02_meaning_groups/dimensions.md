@@ -65,16 +65,18 @@ Low: emotion, belief, permission
 ---
 
 ## **Why these six (non‑circular grounding)**  
-These six fields are not claimed to be:
+These six fields come from **independent substantiation** across multiple research domains that all converge on the same observation:
 
-- cognitively complete  
-- cognitively minimal  
-- cognitively orthogonal  
-- the true structure of human meaning  
+> Human meaning‑objects consistently involve six *kinds of consequence* when taken up:  
+> physical, social, temporal, intentional, material, and spatial.
 
-Instead:
+This grounding avoids circularity because it does **not** claim:
 
-> They are the **current primitive basis** for the kinds of consequence we know how to name, route, and measure inside Path A.
+- “the mind has six modules,”  
+- “the brain has six circuits,”  
+- “these axes are complete,”  
+- “these axes are orthogonal,”  
+- “these axes are minimal.”
 
 Each axis corresponds to a **distinct type of consequence** the speaker’s meaning-object can produce when taken up:
 
