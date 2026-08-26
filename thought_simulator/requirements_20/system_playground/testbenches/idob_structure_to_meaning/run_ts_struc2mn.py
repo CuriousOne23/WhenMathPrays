@@ -18,12 +18,12 @@ sys.path.insert(0, str(BENCH_ROOT))
 
 # Which lessons to run
 RUN_01_STRUCTURE = True   # six geometry IDs + structural_key; no meaning floats
-# RUN_02_GROUPS = True      # meaning groups and the six-field prototype
-# RUN_03_LOOKUP = True      # structure -> candidate group ids
-# RUN_04_RANK = True        # rank only inside the candidate set
-# RUN_05_CIE = True         # M' = M + alpha * I
-# RUN_06_CYCLE = True       # deltas, epsilon, named freeze
-# RUN_07_CROSSING = True    # full structure-to-meaning slide
+RUN_02_GROUPS = False      # meaning groups and the six-field prototype
+RUN_03_LOOKUP = False      # structure -> candidate group ids
+RUN_04_RANK = False        # rank only inside the candidate set
+RUN_05_CIE = False         # M' = M + alpha * I
+RUN_06_CYCLE = False       # deltas, epsilon, named freeze
+RUN_07_CROSSING = False    # full structure-to-meaning slide
 
 # card_id examples: S_rock_burst, S_deadline_friday, S_sleepy, S_unmapped
 # group_id examples: 1001, 2001, 3001, 4001, 5001
