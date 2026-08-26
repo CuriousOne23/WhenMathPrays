@@ -17,8 +17,8 @@ BENCH_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(BENCH_ROOT))
 
 # Which lessons to run
-RUN_01_STRUCTURE = True   # six geometry IDs + structural_key; no meaning floats
-RUN_02_GROUPS = False      # meaning groups and the six-field prototype
+RUN_01_STRUCTURE = False   # six geometry IDs + structural_key; no meaning floats
+RUN_02_GROUPS = True      # meaning groups and the six-field prototype
 RUN_03_LOOKUP = False      # structure -> candidate group ids
 RUN_04_RANK = False        # rank only inside the candidate set
 RUN_05_CIE = False         # M' = M + alpha * I
