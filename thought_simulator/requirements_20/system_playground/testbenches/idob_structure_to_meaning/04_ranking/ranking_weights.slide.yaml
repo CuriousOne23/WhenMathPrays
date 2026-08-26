@@ -1,0 +1,12 @@
+# STUB — hand weights for this instrument revision
+ranking_weights:
+  cue_weight: 0.4
+  invariant_weight: 0.3
+  identity_weight: 0.3
+
+# Bench-only toy extras (not official IdOB fields)
+group_toy_scores:
+  1001: {cue: 0.8, invariant: 0.7, identity: 0.4}
+  3001: {cue: 0.6, invariant: 0.5, identity: 0.5}
+  4001: {cue: 0.5, invariant: 0.6, identity: 0.3}
+  5001: {cue: 0.4, invariant: 0.8, identity: 0.2}

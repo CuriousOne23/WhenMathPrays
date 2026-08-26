@@ -1,0 +1,10 @@
+# STUB — map by card_id so slide 03 can run before hashing exists
+struct_to_meaning_map:
+  - card_id: S_rock_burst
+    meaning_group_candidates: [1001, 3001, 5001]
+  - card_id: S_deadline_friday
+    meaning_group_candidates: [3001]
+  - card_id: S_sleepy
+    meaning_group_candidates: [4001]
+  - card_id: S_unmapped
+    meaning_group_candidates: []
