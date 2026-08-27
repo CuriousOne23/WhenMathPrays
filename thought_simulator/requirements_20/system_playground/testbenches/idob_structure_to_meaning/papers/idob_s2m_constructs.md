@@ -16,7 +16,7 @@ IdOB is the last card. Everything before it exists so that card is thinkable.
         -> struct_to_meaning_map   (legality; a SET of group_ids)
         -> ranking                 (order among legal groups only; winner first)
         -> meaning group prototype M
-        -> CIE modulation          M' = M + alpha I
+        -> CIE modulation          M' = M + alpha I   (IdOB calls this step)
         -> cycle / meaning_delta_h / identity_delta
         -> resolution_status
         -> ready_for_ouba          (handoff; this bench stops)
@@ -129,15 +129,21 @@ Theory: structure admits; map is the door; rank chooses first birth; IdOB instan
 
 ### C9. CIE (Conversational Identity Envelope)
 
-**Identity.** Local identity pressure on the stand-in speaker-object. M' = M + alpha * I.
+**Identity.** Local stance pressure on the intended-projection stand-in. Formula this revision: M' = M + alpha * I. Clip to [0, 1] if implemented.
 
-**Why IdOB needs it.** Stance can move meaning without a new structural key.
+Stance = conversational **hold** of the utterance as put forward (register / kind-of-talk). Not biography. Not listener mood. Not optical place.
 
-**Boundary.** Not listener uptake. Not life-story. Not baked into the key. Intent != motive/deception/force.
+**Why IdOB needs it.** Same road can carry a differently held object. Without CIE, first M freezes as if hold never touched it. Also the test that identity did not leak into the key.
 
-**Example.** Same group 1001, envelopes physical_stance vs scientific_stance vs neutral.
+**Boundary.** Not listener uptake. Not life-story. Not baked into the key. Intent != motive/deception/force. Must not invent map candidates. Must not become a feeling-wheel in place of identity.
 
-**Field / slide.** Slide 05.
+Two vocabularies: (1) official this slide — physical_stance, scientific_stance, neutral; (2) affect-as-pressure later — inquisitive, exasperated, wonder, urgency — only as named envelopes.
+
+**Architecture.** IdOB orchestrates and calls a named CIE step (`modulate.py` / apply_cie). Not inside key builder, map, or as a silent rank line. Formula change = named revision.
+
+**Example.** Same group 1001, envelopes physical_stance vs scientific_stance vs neutral. Same key printed twice. Alpha = 0 → M' = M.
+
+**Field / slide.** Slide 05. README: 05_cie/README.md. Theory §2.7.
 
 ### C10. meaning_delta_h and identity_delta
 
@@ -185,6 +191,7 @@ Theory: structure admits; map is the door; rank chooses first birth; IdOB instan
 - 02_meaning_groups/dimensions.md
 - 03_map_lookup/README.md
 - 04_ranking/README.md
+- 05_cie/README.md
 - 00_contract/vocabulary.md (short table; official long definitions are this paper + Appendix A)
 - papers/ts_sob2srob_req4idob.md
 
@@ -211,8 +218,8 @@ Theory: structure admits; map is the door; rank chooses first birth; IdOB instan
 | meaning_semantics (M) | Current six-vector stand-in (not a literal name string). |
 | Ranking / final_rank_order | Order among map candidates only; winner first. |
 | selected_group_id | Rank-1 group used as first M. |
-| CIE / identity_envelope | Local pressure on M; not listener uptake. |
-| identity_tags | Coarse stance tags. |
+| CIE / identity_envelope | Local stance pressure on M; conversational hold, not biography. |
+| identity_tags | Coarse stance tags (register this revision). |
 | identity_vector (I) | Numeric pressure in M' = M + alpha I. |
 | identity_importance (alpha) | How hard CIE pushes. |
 | identity_delta | Change of I across cycles. |
