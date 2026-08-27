@@ -1,4 +1,10 @@
-# STUB — local utterance envelopes (not user persona)
+# Local utterance envelopes (not user persona, not listener mood).
+# Official this revision: register / kind-of-talk holds.
+# Affect-as-pressure (inquisitive, exasperated, ...) is a later named list, not these rows.
+# Formula: M' = M + identity_importance * identity_vector
+# Swapping envelopes must NOT change structural_key.
+# identity_vector slots align to the six meaning axes (this slide).
+
 envelopes:
   - cie_id: physical_stance
     identity_tags: [physical]
