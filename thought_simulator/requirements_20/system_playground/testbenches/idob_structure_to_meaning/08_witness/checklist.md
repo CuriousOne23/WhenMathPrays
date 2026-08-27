@@ -33,3 +33,10 @@ Answer from the bench, not from memory of the papers.
 ## IdOB one-liner
 
 - [ ] structure -> admissible groups -> identity-conditioned six-vector -> named freeze
+
+## Residue / expand (Slide 10)
+
+- [ ] I can tell leftover from empty map from unassigned.
+- [ ] I know rank leftovers are not RB next.
+- [ ] From a hop print I can name which file I would expand (09 / 03 / 02 / 04 / 05 / residue_next.yaml / stop).
+- [ ] I know next_key is hand-written or null, never invented by code.

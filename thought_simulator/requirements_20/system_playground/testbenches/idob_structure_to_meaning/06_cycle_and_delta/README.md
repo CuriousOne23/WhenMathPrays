@@ -31,6 +31,10 @@ Defaults in this revision: epsilon = 0.05, min 4 / max 6 cycles.
 - Full map+rank pipeline (slide 07).
 - Label stable when the halt was budget.
 
+## Note — freeze vs leftover (Slide 10)
+
+A named freeze can still leave `residue_code` on the card. Freeze means **this hop's M search stopped**, not "tension digested." What CTP would copy for the next search, and which file a human expands: [../10_residue_expand/residue_expand.md](../10_residue_expand/residue_expand.md). This slide does not implement CTP.
+
 ## Run (when implemented)
 
     python run_06_cycle.py

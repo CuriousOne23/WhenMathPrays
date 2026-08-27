@@ -24,7 +24,8 @@ RUN_04_RANK = False        # rank only inside the candidate set
 RUN_05_CIE = False         # M' = M + alpha * I
 RUN_06_CYCLE = False       # deltas, epsilon, named freeze
 RUN_07_CROSSING = False    # full structure-to-meaning slide
-RUN_09_ASSIGN = True       # utterance + packs -> card or miss
+RUN_09_ASSIGN = False      # utterance + packs -> card or miss
+RUN_10_RESIDUE_EXPAND = True  # leftover -> which file to expand
 
 # card_id examples: S_rock_burst, S_deadline_friday, S_sleepy, S_unmapped
 # group_id examples: 1001, 2001, 3001, 4001, 5001
@@ -47,6 +48,7 @@ VAR_07_CIE_ID = "physical_stance"
 VAR_07_CLIP_TO_UNIT = True
 VAR_09_UTTERANCE = None        # None = default demo lines
 VAR_09_PACKS = None            # None = each demo line carries its own pack list
+VAR_10_CARD_ID = None          # None = all structure cards
 
 
 def _load_slide(module_name: str, relative_path: str):
@@ -93,6 +95,10 @@ def main():
     if RUN_09_ASSIGN:
         slide = _load_slide("run_09_assign", "09_structure_assignment/run_09_assign.py")
         slide.run(utterance=VAR_09_UTTERANCE, packs_loaded=VAR_09_PACKS)
+
+    if RUN_10_RESIDUE_EXPAND:
+        slide = _load_slide("run_10_residue_expand", "10_residue_expand/run_10_residue_expand.py")
+        slide.run(card_id=VAR_10_CARD_ID)
 
     print("Driver finished. Next: 08_witness/checklist.md if you want to name what you saw.")
 

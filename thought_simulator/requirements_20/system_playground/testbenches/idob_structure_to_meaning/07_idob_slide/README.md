@@ -22,6 +22,10 @@ See scenarios.md. Run at least:
 - same structure, two CIEs
 - two structures, one CIE
 
+## Note — packet should still show leftover (Slide 10)
+
+The crossing packet should keep `residue_code` visible when present. Next-hop / expand recipe is not this slide: [../10_residue_expand/residue_expand.md](../10_residue_expand/residue_expand.md).
+
 ## Run (when implemented)
 
     python run_07_idob_slide.py
