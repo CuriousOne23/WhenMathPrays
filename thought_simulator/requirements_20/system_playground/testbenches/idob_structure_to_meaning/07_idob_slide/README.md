@@ -26,6 +26,10 @@ See scenarios.md. Run at least:
 
 The crossing packet should keep `residue_code` visible when present. Next-hop / expand recipe is not this slide: [../10_residue_expand/residue_expand.md](../10_residue_expand/residue_expand.md).
 
+## Risk vs Slide 11
+
+Slide 07 is the **teaching wire** of 01–06. Slide 11 `11_idob_core/` is the **realization kernel** (`idob.py`). Do not grow 07 into product IdOB. Do not grow 11 into full Path A (TR / CTP / RB). If 11 starts swallowing 07's lesson job, or 07 starts becoming the kernel, the bench has mixed teaching with realization.
+
 ## Run (when implemented)
 
     python run_07_idob_slide.py

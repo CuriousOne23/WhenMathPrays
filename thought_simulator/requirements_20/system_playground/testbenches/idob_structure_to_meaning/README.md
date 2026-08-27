@@ -2,7 +2,7 @@
 
 **Revision:** Slide-01 (learning instrument, not Path A product harness)
 **Location:** `testbenches/idob_structure_to_meaning/`
-**Date:** 2026-08-26; spine papers 2026-08-27; Slide 09 assignment 2026-08-27; Slide 10 residue expand 2026-08-27
+**Date:** 2026-08-26; spine papers 2026-08-27; Slides 09–11 2026-08-27
 
 ## Purpose
 
@@ -23,11 +23,11 @@ The machine was being built by feel. These two papers state the unproven theory 
 2. **Constructs + glossary** — [papers/idob_s2m_constructs.md](papers/idob_s2m_constructs.md)
    Identity, boundary, example, field, and slide for each named part. Glossary is Appendix A of that file.
 
-Supporting notes (not a second spine): `01_structure/structure.md`, `02_meaning_groups/dimensions.md`, `03_map_lookup/README.md`, `04_ranking/README.md`, `05_cie/README.md`, `09_structure_assignment/assignment.md`, `10_residue_expand/residue_expand.md`, `papers/ts_patha_theory.md`, `papers/ts_sob2srob_req4idob.md`.
+Supporting notes (not a second spine): `01_structure/structure.md`, `02_meaning_groups/dimensions.md`, `03_map_lookup/README.md`, `04_ranking/README.md`, `05_cie/README.md`, `09_structure_assignment/assignment.md`, `10_residue_expand/residue_expand.md`, `11_idob_core/idob_core.md`, `papers/ts_patha_theory.md`, `papers/ts_sob2srob_req4idob.md`.
 
 Short field list for Slide 00: [00_contract/vocabulary.md](00_contract/vocabulary.md).
 
-Then: slides 00-10, then `run_ts_struc2mn.py`.
+Then: slides 00-11, then `run_ts_struc2mn.py`.
 
 ## How to run
 
@@ -39,7 +39,7 @@ From this directory:
 
 Inside `run_ts_struc2mn.py`:
 
-- `RUN_01_STRUCTURE` … `RUN_07_CROSSING`, `RUN_09_ASSIGN`, and `RUN_10_RESIDUE_EXPAND` turn each lesson on or off.
+- `RUN_01_STRUCTURE` … `RUN_07_CROSSING`, `RUN_09_ASSIGN`, `RUN_10_RESIDUE_EXPAND`, `RUN_11_IDOB_CORE` turn each lesson on or off.
   Set a flag to `False`, or comment that `if RUN_…` block, to skip a lesson.
 - Variables passed into a lesson (`card_id`, `group_id`, `cie_id`, `clip_to_unit`, `utterance`, `packs_loaded`)
   are defined and commented at the top of `run_ts_struc2mn.py`.
@@ -50,6 +50,8 @@ You can still run a single slide file directly, e.g.
     python 01_structure/run_01_inspect_structure.py
     python 09_structure_assignment/run_09_assign.py
     python 10_residue_expand/run_10_residue_expand.py
+    python 11_idob_core/run_11_idob_core.py
+    python 11_idob_core/tests_walls.py
 
 ## How to walk
 
@@ -60,6 +62,7 @@ You can still run a single slide file directly, e.g.
 5. Do not skip ahead to 07 until 01-06 each print one thing and refuse to print another.
 6. Slide 09 is the assigner (utterance → card). It does not replace Slide 01.
 7. Slide 10 is leftover → which file to expand. It does not replace RB or 03.
+8. Slide 11 is the one-hop kernel (`idob.py`). It does not replace Slide 07's teaching wire.
 
 ## Design rules
 
@@ -81,10 +84,15 @@ You can still run a single slide file directly, e.g.
 | 04 | `04_ranking/` | Order among candidates only |
 | 05 | `05_cie/` | Identity moves M; structure stays fixed |
 | 06 | `06_cycle_and_delta/` | delta_h, budget, named freeze |
-| 07 | `07_idob_slide/` | Full crossing on official field names |
+| 07 | `07_idob_slide/` | Teaching wire of 01–06 on official field names |
 | 08 | `08_witness/` | Can you name every field and its job? |
 | 09 | `09_structure_assignment/` | Utterance + packs → six IDs or miss |
 | 10 | `10_residue_expand/` | Leftover → which file a human expands |
+| 11 | `11_idob_core/` | One-hop `idob.py` kernel + wall tests |
+
+## 07 vs 11
+
+07 teaches the crossing by walking prior slides. 11 realizes the same hop as a callable packet builder. Neither is Path A routing. Growing 11 into TR/CTP/RB, or growing 07 into the product kernel, mixes jobs.
 
 ## Relation to papers (IdOB primitive suite)
 
