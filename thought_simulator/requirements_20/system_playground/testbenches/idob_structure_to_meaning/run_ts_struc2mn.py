@@ -19,15 +19,18 @@ sys.path.insert(0, str(BENCH_ROOT))
 # Which lessons to run
 RUN_01_STRUCTURE = False   # six geometry IDs + structural_key; no meaning floats
 RUN_02_GROUPS = False      # meaning groups and the six-field prototype
-RUN_03_LOOKUP = True      # structure -> candidate group ids
+RUN_03_LOOKUP = False      # structure -> candidate group ids
 RUN_04_RANK = False        # rank only inside the candidate set
 RUN_05_CIE = False         # M' = M + alpha * I
 RUN_06_CYCLE = False       # deltas, epsilon, named freeze
 RUN_07_CROSSING = False    # full structure-to-meaning slide
+RUN_09_ASSIGN = True       # utterance + packs -> card or miss
 
 # card_id examples: S_rock_burst, S_deadline_friday, S_sleepy, S_unmapped
 # group_id examples: 1001, 2001, 3001, 4001, 5001
 # cie_id examples: physical_stance, scientific_stance, neutral
+# utterance examples: "The rock burst open.", "zzzzq no cue"
+# packs examples: ["base_en"], ["base_en", "pack_geology"]
 
 VAR_01_CARD_ID = None          # None = all cards
 VAR_02_GROUP_ID = None         # None = all groups
@@ -42,6 +45,8 @@ VAR_06_CLIP_TO_UNIT = True
 VAR_07_CARD_ID = "S_rock_burst"
 VAR_07_CIE_ID = "physical_stance"
 VAR_07_CLIP_TO_UNIT = True
+VAR_09_UTTERANCE = None        # None = default demo lines
+VAR_09_PACKS = None            # None = each demo line carries its own pack list
 
 
 def _load_slide(module_name: str, relative_path: str):
@@ -84,6 +89,10 @@ def main():
     if RUN_07_CROSSING:
         slide = _load_slide("run_07_idob_slide", "07_idob_slide/run_07_idob_slide.py")
         slide.run(card_id=VAR_07_CARD_ID, cie_id=VAR_07_CIE_ID, clip_to_unit=VAR_07_CLIP_TO_UNIT)
+
+    if RUN_09_ASSIGN:
+        slide = _load_slide("run_09_assign", "09_structure_assignment/run_09_assign.py")
+        slide.run(utterance=VAR_09_UTTERANCE, packs_loaded=VAR_09_PACKS)
 
     print("Driver finished. Next: 08_witness/checklist.md if you want to name what you saw.")
 
