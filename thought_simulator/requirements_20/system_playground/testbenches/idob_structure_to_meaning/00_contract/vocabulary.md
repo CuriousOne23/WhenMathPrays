@@ -1,6 +1,17 @@
 # IdOB vocabulary (this bench revision)
 
-One-line definitions. Official names preferred.
+One-line definitions for Slide 00. Official names preferred.
+
+**Official long definitions and glossary** live in:
+
+- Theory: [../papers/idob_s2m_theory.md](../papers/idob_s2m_theory.md)
+- Constructs + Appendix A glossary: [../papers/idob_s2m_constructs.md](../papers/idob_s2m_constructs.md)
+
+This file stays the short table plus the Slide 00 Q&A. If a line here fights the constructs paper, the constructs paper wins until a revision is declared.
+
+**Type note:** official `meaning_semantics` is the six-float vector M, not a literal string such as "Henry". Appendix A uses some literals as teaching examples of what the talk is about. Treat those as notes, not as the packet type.
+
+---
 
 ## Structure (meaning-blind)
 
@@ -31,18 +42,18 @@ One-line definitions. Official names preferred.
 | `intentionality` | Agency / purpose weight |
 | `materiality` | Matter / transformation weight |
 | `spatiality` | Place / path / geometry weight |
-| `meaning_semantics` | IdOB current six-vector M |
+| `meaning_semantics` | IdOB current six-vector M (not a literal name string) |
 
 ## Identity and search
 
 | Name | Job |
 |------|-----|
-| `identity_envelope` / CIE | Local conversational identity of this utterance |
+| `identity_envelope` / CIE | Local pressure on the speaker-object stand-in (this utterance) |
 | `identity_importance` / `alpha` | How hard CIE pushes M |
 | `identity_tags` | Coarse stance tags (e.g. physical, scientific) |
 | `identity_vector` | Numeric identity pressure used in M' = M + alpha I |
 | `identity_delta` | Change in identity vector across cycles |
-| `meaning_delta_h` | ||M_i - M_{i-1}|| |
+| `meaning_delta_h` | ||M_i - M_{i-1}|| (machine motion, not a person's change) |
 | `idob_search_budget_min` / `max` | Cycle bounds (4-6 in the papers) |
 | `resolution_status` | Why the run froze |
 | `ready_for_ouba` | Handoff flag; this bench stops here |
@@ -58,208 +69,56 @@ A packet that says `stable` when the halt was budget is an instrument error.
 
 ---
 
-# 📘 **Appendix A — Clarifying Questions for Slide 00_contract (Q&A with Examples + 2D Tables)**
+# Appendix A — Clarifying Questions for Slide 00_contract
 
-This appendix collects foundational questions asked during the 00_contract learning walk and provides precise, field‑name‑level answers aligned with the IdOB vocabulary definitions in this bench revision.  
-Examples and 2D tables are included to make the concepts concrete.
+Foundational Q&A from the 00_contract walk. Official `meaning_semantics` is the six-vector M. Literals in examples are teaching notes.
 
----
+## Q1 — Three major categories of an IdOB packet?
 
-## **Q1 — What are the three major categories of an IdOB packet?**
+1. Structure (meaning-blind): six IDs, structural_hash, residue_hash, routing_signature, identity_metadata.
+2. Meaning groups and six fields: group_id, group_name, primitive, group_dimensions, six axes, meaning_semantics (vector M).
+3. Identity and search: CIE, alpha, tags, identity_vector, deltas, budget, resolution_status, ready_for_ouba.
 
-**A:** IdOB packets contain three distinct categories:
+Example utterance for teaching: "Henry fixed the Craftsman table in New York." Structure might be ACTION.repair shaped; meaning uses PERSON/OBJECT/LOCATION prototypes; identity may tag repair/task.
 
-### **1. Structure (meaning‑blind)**  
-Fields:  
-`semantic_field_id`, `semantic_role_id`, `semantic_object_id`,  
-`gradient_id`, `universe_id`, `subfield_id`,  
-`structural_hash`, `residue_hash`, `routing_signature`, `identity_metadata`
+## Q2 — What are the six meaning fields?
 
-**Example:**  
-For **“Henry fixed the Craftsman table in New York.”**  
-- `semantic_field_id = ACTION.repair`  
-- `semantic_role_id = agent/patient/location`  
-- `semantic_object_id = object.table`  
-- `gradient_id = physical_action`  
-- `universe_id = everyday_tasks`  
+physicality, sociality, temporality, intentionality, materiality, spatiality.
 
----
+## Q3 — Where do literal names like Henry / New York go?
 
-### **2. Meaning groups and six fields**  
-Fields:  
-`group_id`, `group_name`, `primitive`, `group_dimensions`,  
-`physicality`, `sociality`, `temporality`, `intentionality`, `materiality`, `spatiality`,  
-`meaning_semantics`
+Not in official meaning_semantics (that field is M). Not in the structural key. Not in CIE tags. In this bench they are notes (utterance text, card note, teaching tables). A future revision may add an explicit lexical field.
 
-**Example:**  
-Meaning groups:  
-- PERSON → “Henry”  
-- OBJECT → “Craftsman table”  
-- LOCATION → “New York”
+## Q4 — Do names appear in Structure?
 
----
+No. Structure is meaning-blind. Role = agent, not "Henry".
 
-### **3. Identity and search**  
-Fields:  
-`identity_envelope`, `identity_importance`, `identity_tags`,  
-`identity_vector`, `identity_delta`, `meaning_delta_h`,  
-`idob_search_budget_min/max`, `resolution_status`, `ready_for_ouba`
+## Q5 — Do names appear in Identity?
 
-**Example:**  
-Identity may apply tags like:  
-- `identity_tags = ["repair","task"]`
+No. Tags such as repair, not "Henry".
 
----
+## Q6 — Does Path A fill all three categories?
 
-## **Q2 — What exactly are the six meaning fields?**
+Full Path A aims to. This learning bench often starts from a hand structure card and only prints what the current slide allows.
 
-**A:**  
-`physicality`, `sociality`, `temporality`, `intentionality`, `materiality`, `spatiality`
+## Q7 — Are Meaning-table columns about the same object?
 
-**Example:**  
-For “Craftsman table”:  
-- `physicality = high`  
-- `materiality = high`  
+Each row is one meaning group. Six-axis columns describe that group's stand-in vector.
 
-For “Henry”:  
-- `sociality = high`  
-- `intentionality = high`
+## Q8 — Do Structure and Identity have 2D tables?
 
----
+Structure: 1 row. Identity: 1 row. Meaning: multiple group rows possible; slide-07 packet still carries one selected M.
 
-## **Q3 — Where do literal names like “Henry”, “Ann”, “New York”, “Craftsman” go?**
+## Q9 — What is universe_id?
 
-**A:**  
-Literal names appear **only** in:
+Universe of discourse for the structure. No meaning scores. Example: everyday_tasks.
 
-- `meaning_semantics`
+## Teaching tables
 
-They do **not** appear in:
+Structure (1 row): field / role / object / gradient / universe / subfield / hashes.
 
-- `group_id`, `group_name`, `primitive`, `group_dimensions`
+Meaning (multi-row teaching view): group columns plus a note column for literals. That note column is not packet meaning_semantics.
 
-**Example:**  
-`meaning_semantics = "Henry"`  
-`meaning_semantics = "New York"`
+Identity (1 row): envelope / alpha / tags / vector / deltas / resolution_status / ready_for_ouba.
 
----
-
-## **Q4 — Do names ever appear in Structure?**
-
-**A:** No.  
-Structure is meaning‑blind.
-
-**Example:**  
-Structure records:  
-- `semantic_role_id = agent`  
-not `"Henry"`.
-
----
-
-## **Q5 — Do names ever appear in Identity?**
-
-**A:** No.  
-Identity modifies meaning but does not contain names.
-
-**Example:**  
-Identity may contain:  
-- `identity_tags = ["repair"]`  
-but never `"Henry"`.
-
----
-
-## **Q6 — When Path A receives a user message, is it trying to fill all fields in all three categories?**
-
-**A:** Yes.  
-Path A populates:
-
-- Structure fields  
-- Meaning fields  
-- Identity fields  
-
-**Example:**  
-For “Henry fixed the Craftsman table in New York,” Path A fills:
-
-- Structure → ACTION.repair  
-- Meaning → PERSON, OBJECT, LOCATION rows  
-- Identity → stance tags like “repair”, “task”
-
----
-
-## **Q7 — In the Meaning table, are all columns describing observations about the same object?**
-
-**A:** Yes.  
-Each row = one meaning group.  
-Each column = one observation about that group.
-
-**Example:**  
-Row for “New York”:  
-- `group_id = LOCATION`  
-- `spatiality = very high`  
-- `meaning_semantics = "New York"`
-
----
-
-## **Q8 — Do Structure and Identity also have 2D tables?**
-
-**A:** Yes, but with different shapes:
-
-- **Structure:** 1 row  
-- **Identity:** 1 row  
-- **Meaning:** multiple rows  
-
----
-
-## **Q9 — What is `universe_id`?**
-
-**A:**  
-`universe_id` identifies the **universe of discourse** for the structure.  
-It contains no meaning.
-
-**Example:**  
-`universe_id = everyday_tasks`
-
----
-
-# 🟦 **Structure Table (1 row)**
-
-```
-+------------------------+---------------------------+------------------------+--------------+--------------+--------------+------------------+----------------+
-| semantic_field_id      | semantic_role_id          | semantic_object_id     | gradient_id  | universe_id  | subfield_id  | structural_hash  | residue_hash   |
-+------------------------+---------------------------+------------------------+--------------+--------------+--------------+------------------+----------------+
-| ACTION.repair          | agent/patient/location    | object.table           | physical_act | everyday     | tasks        | <hash>           | <hash>         |
-+------------------------+---------------------------+------------------------+--------------+--------------+--------------+------------------+----------------+
-```
-
----
-
-# 🟩 **Meaning Table (multi‑row)**
-
-```
-+----------------+---------------------------+-----------+--------------------+-------------+-----------+-------------+----------------+-------------+-----------+----------------------+
-| group_id       | group_name                | primitive | group_dimensions   | physicality | sociality | temporality | intentionality | materiality | spatiality | meaning_semantics     |
-+----------------+---------------------------+-----------+--------------------+-------------+-----------+-------------+----------------+-------------+-----------+----------------------+
-| PERSON         | ENTITY.person.human       | ENTITY    | <proto six-vector> | high        | high      | present     | high           | low         | medium    | "Henry"              |
-+----------------+---------------------------+-----------+--------------------+-------------+-----------+-------------+----------------+-------------+-----------+----------------------+
-| OBJECT         | OBJECT.furniture.table    | OBJECT    | <proto six-vector> | high        | low       | neutral     | none           | high        | medium    | "Craftsman table"    |
-+----------------+---------------------------+-----------+--------------------+-------------+-----------+-------------+----------------+-------------+-----------+----------------------+
-| LOCATION       | LOCATION.city             | LOCATION  | <proto six-vector> | high        | medium    | present     | low            | low         | very high | "New York"           |
-+----------------+---------------------------+-----------+--------------------+-------------+-----------+-------------+----------------+-------------+-----------+----------------------+
-```
-
----
-
-# 🟥 **Identity Table (1 row)**
-
-```
-+----------------------+------------------------+------------------+----------------+------------------+-------------------+---------------------+----------------------+
-| identity_envelope    | identity_importance    | identity_tags    | identity_vector | identity_delta   | meaning_delta_h   | resolution_status   | ready_for_ouba       |
-+----------------------+------------------------+------------------+----------------+------------------+-------------------+---------------------+----------------------+
-| <envelope>           | <alpha>                | ["repair","task"]| <vector>        | <delta>          | <delta_h>         | stable              | true                 |
-+----------------------+------------------------+------------------+----------------+------------------+-------------------+---------------------+----------------------+
-```
-
----
-
-# 📘 **Appendix A Complete**
-
+Appendix A complete.
