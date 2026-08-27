@@ -1,0 +1,19 @@
+# Structure assignment schema (Slide 09). Meaning-blind.
+assignment:
+  required_slots:
+    - semantic_field_id
+    - semantic_role_id
+    - semantic_object_id
+    - gradient_id
+    - universe_id
+    - subfield_id
+  statuses: [assigned, partial, unassigned]
+  key_when: all_six_present
+  miss_policy: no_silent_id
+  pack_source: packs_loaded_only
+  collision_policy: higher_precedence_wins_then_log
+  hasher: 01_structure/make_structural_key.py
+  later_not_this_revision:
+    - cob_or_trigger_autoload
+    - recursive_residue_search
+    - meaning_floats

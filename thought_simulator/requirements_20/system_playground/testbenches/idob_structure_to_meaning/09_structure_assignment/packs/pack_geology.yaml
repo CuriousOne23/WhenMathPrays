@@ -1,0 +1,16 @@
+# On disk. Not loaded unless packs_loaded includes pack_geology.
+pack_id: pack_geology
+precedence: 80
+
+templates:
+  - phrases:
+      - "the ore melted"
+      - "ore melted"
+    semantic_field_id: 12
+    semantic_role_id: 3
+    semantic_object_id: 80
+    gradient_id: 2
+    universe_id: 1
+    subfield_id: 7
+    residue_code: null
+    feature_tags: [object_ore, gradient_dynamic]

@@ -1,0 +1,53 @@
+# Seed cues from Slide 01 toy cards. Not English.
+pack_id: base_en
+precedence: 100
+
+templates:
+  - phrases:
+      - "the rock burst open"
+      - "rock burst open"
+      - "rock burst"
+    semantic_field_id: 12
+    semantic_role_id: 3
+    semantic_object_id: 44
+    gradient_id: 2
+    universe_id: 1
+    subfield_id: 7
+    residue_code: static_object_vs_dynamic_action
+    feature_tags: [object_rock, gradient_dynamic]
+  - phrases:
+      - "the project deadline is friday"
+      - "project deadline is friday"
+      - "deadline is friday"
+    semantic_field_id: 101
+    semantic_role_id: 12
+    semantic_object_id: 3
+    gradient_id: 2
+    universe_id: 1
+    subfield_id: 0
+    residue_code: null
+    feature_tags: [copula, weekday]
+  - phrases:
+      - "sleepy"
+    semantic_field_id: 401
+    semantic_role_id: 7
+    semantic_object_id: 30
+    gradient_id: 1
+    universe_id: 1
+    subfield_id: 0
+    residue_code: null
+    feature_tags: [internal, biological]
+
+# Slot cues used when a template did not fill everything.
+slot_cues:
+  semantic_field_id:
+    - {phrase: "deadline", id: 101}
+    - {phrase: "burst", id: 12}
+  semantic_object_id:
+    - {phrase: "rock", id: 44}
+    - {phrase: "deadline", id: 3}
+  gradient_id:
+    - {phrase: "burst", id: 2}
+    - {phrase: "is", id: 2}
+  universe_id:
+    - {phrase: "the", id: 1}

@@ -1,0 +1,7 @@
+# Teaching collision: same phrase, different object_id. Load with base_en to see the log.
+pack_id: pack_conflict
+precedence: 50
+
+slot_cues:
+  semantic_object_id:
+    - {phrase: "rock", id: 99}
