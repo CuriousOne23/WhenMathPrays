@@ -3,7 +3,7 @@
 **Status:** Unproven stake. Architects the machine; the machine does not prove the theory.
 **Companion:** [idob_s2m_constructs.md](idob_s2m_constructs.md) (construct cards + glossary).
 **Bench:** testbenches/idob_structure_to_meaning/
-**Date:** 2026-08-27 (clarified intended projection same day)
+**Date:** 2026-08-27 (intended projection; machine-realization geometry)
 
 ## 1. What this paper is
 
@@ -35,6 +35,19 @@ Path A is architected to state a stand-in for the **meaning-image the speaker pr
 
 Wherever this paper or the constructs paper says "speaker's meaning-object" or "speaker-object," read it as **intended projection** unless a sentence is explicitly about the private layer (which Path A refuses).
 
+## 2.2 "Best understood" — scope of the geometric claim
+
+TS proposes that communication's meaning-side — the intended projection carried by an utterance — is **best understood geometrically for the purpose of machine realization**. In the least, it can be **represented geometrically** so a machine can admit it, pressure it, log its motion, and freeze it under a named reason.
+
+Meat on that term:
+
+- **Purpose.** Machine realization of Path A / IdOB, not a verdict on all of linguistics, grammar, or dictionary semantics.
+- **Best understood, here.** Treat the projection as a structured object in a space: structure admits it, axes name it, CIE pressures it, delta_h logs motion. That is more usable for a deterministic instrument than a gloss, a parse tree alone, or a private psyche.
+- **Minimum claim.** Even if "best" is later withdrawn, the projection must still be *representable* geometrically or this machine has no object to run.
+- **Not claimed.** That every linguistic fact is geometric, or that geometry is the only honest science of language.
+
+Geometry remains a modeling convenience until traces earn more. "Best understood" is a stake about *how to build and see the crossing*, not a completed theory of language.
+
 ## 3. What the theory asserts
 
 1. An utterance is a carrier, not the meaning-object.
@@ -45,11 +58,13 @@ Wherever this paper or the constructs paper says "speaker's meaning-object" or "
 6. Identity is local pressure on the stand-in of that projection (CIE), not a life-story and not listener uptake.
 7. Progressive crossing: structure -> admissible groups -> chosen prototype M -> identity pressure -> logged delta_h -> named freeze.
 8. Observability: keys, candidates, M, delta_h, stop reason. That is the duck for this vehicle.
+9. For machine realization, that crossing is best understood (or at least representable) geometrically.
 
 ## 4. What the theory refuses
 
 - Equating the packet with a mind.
 - Treating Path A as psycho-analysis of the speaker or recovery of a private inner object.
+- Treating "best understood geometrically" as a claim that all linguistics is geometry.
 - Putting meaning scores inside the structural key.
 - Letting CIE change the structural key.
 - Calling a budget halt stable.
