@@ -1,141 +1,229 @@
-# **dimensions.md (rewritten, Grok‑tight, complete)**
+# Meaning dimensions (this instrument revision)
 
-## **Meaning (reference definition)**  
-Meaning, for this theory, is a **structured internal object a speaker puts forward** with an utterance.  
-It is significant because, when taken up by a person, such an object *can* change later cognitive state — expectation, prediction, stance, memory, identity pressure, or action.
+**Status:** Gloss and examples for the six axes of `meaning_semantics` (M). Instrument layout, not a theorem about mind.
+**Theory:** [../papers/idob_s2m_theory.md](../papers/idob_s2m_theory.md)
+**Constructs:** [../papers/idob_s2m_constructs.md](../papers/idob_s2m_constructs.md) (C7)
+**Slide:** 02_meaning_groups
+**Date:** 2026-08-27
 
-The listener appears here **only as the reference for consequence**.  
-Path A does **not** model listener uptake and does **not** claim to be a person’s meaning‑object.
+These six names are **meaning** axes. They are not structure IDs.
 
-This section explains **why consequence matters**; it does not define the machine.
-
----
-
-## **Path A meaning-object (machine target)**  
-Path A represents the **speaker’s meaning-object** — the structured object the speaker is advancing — inside a machine-defined space.
-
-The representation consists of:
-
-- **`meaning_semantics`** — the stand‑in meaning-object  
-- **`Δh`** — the logged change of `meaning_semantics` between cycles/packets  
-- **CIE** — identity pressure applied to the stand‑in speaker-object (not listener uptake, not structural rewrite)
-
-Path A does **not** infer motive, deception, or speech‑act force unless `token_intent` is explicitly reopened.
+Structure IDs (do not mix): `semantic_field_id`, `semantic_role_id`, `semantic_object_id`, `gradient_id`, `universe_id`, `subfield_id`.
 
 ---
 
-## **Six fields (instrument layout)**  
-These six fields are the **current hypothesized primitive basis** of the stand‑in meaning-object’s internal structure.  
-They are **axes of one vector**, not six dictionaries.  
-They are **instrument choices**, not cognitive theorems.  
-They are **revisable** if traces show collapse, dead axes, or distinctions the layout cannot carry.
+## What M is
 
-### **physicality**  
-Physical objects, bodily action, tangible events.  
-High: walk, push, rock, burst   
-Low: idea, permission, belief   
+Path A represents the speaker's **intended projection** — the meaning-image put forward with the utterance — as one vector `meaning_semantics` with six named weights in [0, 1] in this revision.
 
-### **sociality**  
-Social interaction, groups, interpersonal roles.  
-High: negotiate, crowd, family  
-Low: rock, sleep, temperature   
+It is not:
+- the private object in the speaker's head
+- the listener's uptake
+- a literal string ("Henry")
+- six dictionaries
+- where the packet "sits in TS" as a meta-coordinate (that position *is* M as a whole)
 
-### **temporality**  
-Time, events, change, duration, sequence.  
-High: burst, transform, schedule   
-Low: object, shape, color   
+CIE may pressure M. CIE must not rewrite the structural key. `meaning_delta_h` is ||M_i - M_{i-1}||: machine motion, not a person's change.
 
-### **intentionality**  
-Intention, agency, purpose, volition.  
-High: decide, plan, aim  
-Low: fall, break, melt  
-
-### **materiality**  
-Substance, composition, material transformation.  
-High: melt, freeze, carve, build  
-Low: think, believe, negotiate  
-
-### **spatiality**  
-Location, path, spatial relation.  
-High: beside, across, near 
-Low: emotion, belief, permission 
-
-**This list is this instrument layout. Changing membership of the list is a new machine revision.**  
+Changing membership of this list is a **new instrument revision**.
 
 ---
 
-## **Why these six (non‑circular grounding)**  
-These six fields come from **independent substantiation** across multiple research domains that all converge on the same observation:
+## Master table
 
-> Human meaning‑objects consistently involve six *kinds of consequence* when taken up:  
-> physical, social, temporal, intentional, material, and spatial.
-
-This grounding avoids circularity because it does **not** claim:
-
-- “the mind has six modules,”  
-- “the brain has six circuits,”  
-- “these axes are complete,”  
-- “these axes are orthogonal,”  
-- “these axes are minimal.”
-
-Each axis corresponds to a **distinct type of consequence** the speaker’s meaning-object can produce when taken up:
-
-- physical consequences  
-- social consequences  
-- temporal/event consequences  
-- agency/intent consequences  
-- material/substance consequences  
-- spatial/location consequences  
-
-This grounding avoids circularity:  
-the axes are justified by **kinds of consequence**, not by claims about human cognition.
-
-They remain **convictable** by traces.
+| Axis | Weight on the intended projection | Not this |
+|------|-----------------------------------|----------|
+| physicality | bodily / material-world thing or doing | object vs action (structure); importance |
+| sociality | relation among living (or treated-as-living) parties; second party may be implied | "a living body appears"; speaker-hearer of every utterance |
+| temporality | when / how long / before-after / tense-as-point | "it happened in time"; event automatically high |
+| intentionality | agency / purpose / aiming | wording precision; CIE; hidden motive |
+| materiality | stuff and change-of-stuff | stakes / how much it matters |
+| spatiality | place / path / layout in the spoken-of world | where M sits in TS; `universe_id` |
 
 ---
 
-## **Δh (machine motion)**  
-`Δh` is defined as:
+## physicality
 
-$$
-\Delta h = \| M_i - M_{i-1} \|
-$$
+**Gloss.** How much the intended projection is about the bodily / material world — a physical thing or a physical doing.
 
-where $M$ is `meaning_semantics` in the six-axis space.
+**Contrast.** More physical vs less physical. Not object vs action. Object-vs-action, when it matters for legality, belongs on the structure card.
 
-`Δh` is a **machine-side analogue** of consequence — instrument motion inside the meaning-space.  
-It is **not** a measurement of a person’s cognitive change.
+| Utterance | physicality | Why |
+|-----------|-------------|-----|
+| The rock burst open. | high | bodily/world event |
+| Henry tightened the bolt. | high | physical doing |
+| The deadline is Friday. | low | schedule, not bodily world |
+| Don't talk to me like that. | low | relation, not physical doing |
+| I postponed Friday. | low | a doing that is barely physical |
+| The ore melted. | high | world-stuff changing (also materiality) |
 
----
-
-## **CIE (identity pressure)**  
-CIE applies **identity pressure** to the stand‑in speaker-object.
-
-It is:
-
-- not listener uptake  
-- not a rewrite of structure  
-- not a claim about human identity  
-- modulation of the machine representation only
-
-This keeps “speaker-side” consistent with “identity modulation exists.”
+Action can be high or low on this axis. "The rock burst" is a physical doing. "I postponed Friday" is a doing that is not mainly physical.
 
 ---
 
-## **Revision rule (convictability of the six axes)**  
-The six axes remain only if traces support them.  
-Revision triggers include:
+## sociality
 
-- **Two speaker-objects judged distinct land on the same $M$** → layout too coarse  
-- **An axis never moves across intended contrasts** → axis idle  
-- **Two axes always move together** → suspected non‑orthogonality  
-- **`Δh` spikes only because of budget/CIE leak** → instrument error  
+**Gloss.** How much the intended projection is about relation among living (or treated-as-living) parties. The second party may be implied. Identification of a roster is not required.
 
-This rule prevents dogma and keeps the layout falsifiable.
+**Contrast.** More social vs less social. Not "a living body appears." Not "someone spoke" (every utterance has a speaker).
+
+| Utterance | sociality | Why |
+|-----------|-----------|-----|
+| Why did you throw the rock at me? | high | two parties; address/blame |
+| Don't talk to me like that. | high | implied second party |
+| We don't do that here. | high | group norm; parties implied |
+| The board will be embarrassed. | high | treated-as-living collective / face |
+| A rock hit me. | low | one living body as patient of a physical event |
+| The rock burst open. | low | no living relation |
+| Henry tightened the bolt. | low-mid | person present; projection is the doing, not the relation |
+| Henry showed you up. | high | standing between parties |
+
+Working lock: at least two living (or treated-as-living) parties in the projection; one may be implied. Thin edge: "I embarrassed myself" is one body, two roles (actor and face) — count as social only if the projection is standing/face.
 
 ---
 
-## **Contract summary**  
-> **Meaning, for this theory, is a structured internal object a speaker puts forward with an utterance; it is significant insofar as such an object *can* change later cognitive state in a person who takes it up. Path A does not model the listener’s uptake and does not claim to be a person’s meaning-object. It represents the speaker’s meaning-object with named axes and a measurable change $\Delta h$ inside a machine-defined space. The six axes are the current hypothesized primitive basis of that stand-in object—the kinds of consequence we know how to name and route—and are revisable if traces show collapse, dead axes, or distinctions the layout cannot carry.**
+## temporality
+
+**Gloss.** How much the intended projection is about time — when, duration, order, past / present / future.
+
+**Contrast.** More about time vs less. Not "the utterance occurred in time." Event does not automatically mean high temporality.
+
+| Utterance | temporality | Why |
+|-----------|-------------|-----|
+| The project deadline is Friday. | high | when |
+| It used to be steel. | high | past vs now |
+| Wait three hours. | high | duration |
+| After you sit, open it. | high | order |
+| The rock burst open. | mid-low | an event, but time is not the point |
+| The rock is granite. | low | present-tense fact; not about time |
+| Don't talk to me like that. | low | relation, not when |
 
 ---
+
+## intentionality
+
+**Gloss.** How much the intended projection is about agency / purpose — aiming, trying, deciding, refusing, planning.
+
+**Contrast.** More about purpose-in-play vs less. Not how precise the wording is. Not CIE. Not hidden motive (Path A does not psycho-analyze).
+
+| Utterance | intentionality | Why |
+|-----------|----------------|-----|
+| Open the rock. | high | aimed doing |
+| She is trying to finish by Friday. | high | trying + aim |
+| Don't let it slip. | high | aimed prevention |
+| I meant to open it. | high | stated aim |
+| The rock burst open. | low | event; little aim unless someone *made* it burst |
+| The rock is granite. | low | no agentive purpose |
+| We should do something. | mid-high | vague wording, still purpose |
+| The sample is 12.7 mm. | low | specific wording, little purpose |
+
+Precision of wording is not this axis.
+
+---
+
+## materiality
+
+**Gloss.** How much the intended projection is about matter / substance / stuff changing — composition, wear, break, build, consume, transform.
+
+**Contrast.** More about stuff vs less. Not how important the utterance is. Stakes belong to the consequence test, not to this coordinate.
+
+| Utterance | materiality | Why |
+|-----------|-------------|-----|
+| The Craftsman table split. | high | stuff breaking |
+| The ore melted. | high | substance transform |
+| It rusted. | high | stuff changing |
+| Poured the water. | high | stuff in play |
+| The deadline is Friday. | low | no stuff |
+| Don't talk to me like that. | low | relation |
+| A dance across the floor. | low-mid | physicality/spatiality up; little stuff |
+| This deadline will make or break the company. | low-mid | huge stakes, still little stuff |
+
+Physicality vs materiality: a dance can be high physicality and low materiality. "The ore melted" is high on both.
+
+---
+
+## spatiality
+
+**Gloss.** How much the intended projection is about place / path / layout **in the world the utterance is about**.
+
+**Contrast.** More about where/route/arrangement vs less. Not the packet's position in six-space (that is M as a whole). Not `universe_id` (structure, meaning-blind).
+
+| Utterance | spatiality | Why |
+|-----------|------------|-----|
+| Henry fixed the table in New York. | high | place |
+| Through the door, then left. | high | path |
+| The path along the ridge. | high | layout in the world |
+| The deadline is Friday. | low | time, not place |
+| Don't talk to me like that. | low | relation |
+| The rock burst open. | low-mid | implicit scene; place is not the point unless *where* it burst is the projection |
+| It rusted. | low | stuff changing; nowhere-in-particular |
+
+---
+
+## Shared examples (same utterances, different axes)
+
+Use this to feel independence. Scores are teaching ranks, not measured output.
+
+| Utterance | phys | soc | temp | inten | mat | spat |
+|-----------|------|-----|------|-------|-----|------|
+| The rock burst open. | H | L | L-M | L | M-H | L-M |
+| Why did you throw the rock at me? | M-H | H | L | M-H | L-M | L |
+| The project deadline is Friday. | L | L | H | M | L | L |
+| Henry fixed the table in New York. | H | L-M | L | H | M-H | H |
+| Don't talk to me like that. | L | H | L | M | L | L |
+| The ore melted. | H | L | L-M | L | H | L |
+| She is trying to finish by Friday. | L | L-M | H | H | L | L |
+
+If two columns always move together on a pile of intended contrasts, suspected non-orthogonality (revision rule).
+
+---
+
+## What qualifies as a legitimate new dimension
+
+Adding an axis is a **named instrument revision**, not a silent extra float.
+
+A candidate name is legitimate only if all of the following hold:
+
+1. **It is a weight on the intended projection**, not a structure ID, not CIE, not delta_h, not "importance of the utterance."
+2. **It names a kind of contrast** you can show with paired utterances: high on A / low on A, while other axes are not forced to follow.
+3. **It is not already an existing axis** under a new word (precision is not intentionality; stakes are not materiality; TS-position is not spatiality).
+4. **It is not a structure cut** (object vs action, role, universe of discourse).
+5. **Traces can convict it:** you can say in advance what idle, collapse, or lockstep with another axis would look like.
+6. **IdOB needs it** — without it, two intended projections you judge distinct keep landing on the same M after the six have done their work.
+
+How you know one is *missing* (not merely wanted):
+
+- Repeated near-neighbor utterances differ in a way none of the six can carry.
+- An axis you thought you had is doing two jobs (the fog that happened when physicality was asked to mean object-vs-action).
+- The map/rank keeps collapsing distinct projections onto one group for lack of a named contrast in M.
+
+How you know a proposed name is *not* legitimate yet:
+
+- You cannot write a high/low table of real utterances.
+- The definition mentions listener feelings, hidden motive, or "where the packet sits."
+- It duplicates consequence-as-significance (the reason meaning matters) instead of a coordinate of M.
+
+Until those checks pass, keep six. Geometry here is for machine realization; extra axes are earned by traces, not by taste.
+
+---
+
+## Revision rule (same as theory / constructs)
+
+- Two intended projections judged distinct land on the same M → layout too coarse (maybe a missing axis).
+- An axis never moves across intended contrasts → axis idle (maybe drop or redefine).
+- Two axes always move together → suspected non-orthogonality (maybe merge or recut).
+- delta_h spikes only from CIE/budget leak → instrument error, not a new axis.
+
+---
+
+## CIE and delta_h (keep layers)
+
+CIE pressures the stand-in of the intended projection. It does not rewrite structure and is not listener uptake.
+
+delta_h = ||M_i - M_{i-1}|| on these six names. Machine analogue of consequence. Not a measurement of a person. Not an seventh meaning axis.
+
+---
+
+## Contract line
+
+Meaning, for this theory, is a structured object a speaker puts forward (intended projection). Path A represents that projection as `meaning_semantics` on the six axes below and logs delta_h. The six are the current hypothesized primitive basis — kinds of contrast we know how to name and route for machine realization — and are revisable if traces show collapse, dead axes, or distinctions the layout cannot carry.
