@@ -12,43 +12,27 @@ from lib.schema_load import load_yaml
 TABLE = Path(__file__).parent / "residue_next.examples.yaml"
 CARDS = ROOT / "01_structure" / "structure_card.examples.yaml"
 MAP = ROOT / "03_map_lookup" / "struct_to_meaning_map.slide.yaml"
+KNOWN_CODES = {"static_object_vs_dynamic_action"}
 
 
 def _map_index(data):
+    rows = data.get("struct_to_meaning_map") or data.get("rows") or []
     out = {}
-    rows = data.get("rows") or data.get("map") or data.get("entries") or []
-    if isinstance(data, dict) and not rows:
-        # common slide shape: list under various keys
-        for key in ("cards", "lookups", "items"):
-            if key in data:
-                rows = data[key]
-                break
-    if isinstance(data, list):
-        rows = data
     for row in rows:
-        cid = row.get("card_id") or row.get("id")
-        cands = row.get("meaning_group_candidates")
-        if cands is None:
-            cands = row.get("candidate_group_ids") or row.get("groups") or []
+        cid = row.get("card_id")
+        cands = row.get("meaning_group_candidates") or []
         if cid is not None:
-            out[cid] = list(cands or [])
+            out[cid] = list(cands)
     return out
 
 
 def classify(card, candidates):
     code = card.get("residue_code")
-    cands = list(candidates or [])
     if card.get("assignment_status") == "unassigned":
         return "unassigned", code
-    if code and code not in (
-        "static_object_vs_dynamic_action",
-        None,
-    ):
-        # unknown unless listed as that exact teaching code
-        known = {"static_object_vs_dynamic_action"}
-        if code not in known:
-            return "unknown_residue", code
-    if not cands:
+    if code and code not in KNOWN_CODES:
+        return "unknown_residue", code
+    if not list(candidates or []):
         return "empty_map", code
     if code:
         return "leftover_after_map", code
@@ -76,10 +60,9 @@ def _lookup_row(table_rows, residue_code, after_status):
 def expand_card(card, candidates, table_rows):
     after_status, code = classify(card, candidates)
     row = _lookup_row(table_rows, code, after_status)
-    key = toy_structural_key(card)
     return {
         "card_id": card.get("card_id"),
-        "structural_key": key,
+        "structural_key": toy_structural_key(card),
         "residue_code": code,
         "map_empty": not bool(candidates),
         "after_status": after_status,
