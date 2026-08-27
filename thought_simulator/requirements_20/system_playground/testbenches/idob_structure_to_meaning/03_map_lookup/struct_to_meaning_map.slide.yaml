@@ -1,4 +1,8 @@
-# STUB — map by card_id so slide 03 can run before hashing exists
+# Map: card_id -> legal group_ids (a SET written as a list).
+# List order is NOT rank. Group_id digits are names, not coordinates.
+# Empty list is legal (no birth from this road).
+# This revision keys by card_id so Slide 03 can run before live hashing.
+# Theory key: structural_key -> group_ids.
 struct_to_meaning_map:
   - card_id: S_rock_burst
     meaning_group_candidates: [1001, 3001, 5001]

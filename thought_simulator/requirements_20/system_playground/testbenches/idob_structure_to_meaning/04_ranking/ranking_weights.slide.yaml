@@ -1,4 +1,7 @@
 # STUB — hand weights for this instrument revision
+# Rank ONLY ids that appear on the map for that card.
+# Scores are teaching toys, not a manifold metric.
+# Changing weights is a named revision if the machine is to stay honest.
 ranking_weights:
   cue_weight: 0.4
   invariant_weight: 0.3
