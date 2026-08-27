@@ -1,7 +1,7 @@
 # Meaning dimensions (this instrument revision)
 
 **Status:** Gloss and examples for the six axes of `meaning_semantics` (M). Instrument layout, not a theorem about mind.
-**Theory:** [../papers/idob_s2m_theory.md](../papers/idob_s2m_theory.md)
+**Theory:** [../papers/idob_s2m_theory.md](../papers/idob_s2m_theory.md) (two geometries: §2.3–2.5)
 **Constructs:** [../papers/idob_s2m_constructs.md](../papers/idob_s2m_constructs.md) (C7)
 **Slide:** 02_meaning_groups
 **Date:** 2026-08-27
@@ -12,12 +12,25 @@ Structure IDs (do not mix): `semantic_field_id`, `semantic_role_id`, `semantic_o
 
 ---
 
+## Feel (then the tables)
+
+Meaning geometry is the space of the **intended projection** — the thought-object the utterance proposes to bring forth. The marks on the page do not contain that object. The speaker understands the intent of what they speak. Path A does not model that understanding. It holds a stand-in M, proposed to be born at the IdOB crossing.
+
+"Does not exist" means: not in the carrier, not in the packet before IdOB. It does not mean the speaker has no object until M appears.
+
+This is **not** the structure landscape. Structure is the roads (six IDs, key, legality). Meaning is not "only relations among the living" — that is sociality, one axis. Meaning is all six weights on the projection.
+
+Names must not trade places: physicality does not sit in `semantic_field_id`. Spatiality is place in the spoken-of world, not where M sits in TS.
+
+---
+
 ## What M is
 
 Path A represents the speaker's **intended projection** — the meaning-image put forward with the utterance — as one vector `meaning_semantics` with six named weights in [0, 1] in this revision.
 
 It is not:
 - the private object in the speaker's head
+- the speaker's act of understanding (assumed source, not modeled)
 - the listener's uptake
 - a literal string ("Henry")
 - six dictionaries
@@ -220,7 +233,7 @@ Until those checks pass, keep six. Geometry here is for machine realization; ext
 
 CIE pressures the stand-in of the intended projection. It does not rewrite structure and is not listener uptake.
 
-delta_h = ||M_i - M_{i-1}|| on these six names. Machine analogue of consequence. Not a measurement of a person. Not an seventh meaning axis.
+delta_h = ||M_i - M_{i-1}|| on these six names. Machine analogue of consequence. Not a measurement of a person. Not a seventh meaning axis.
 
 ---
 
