@@ -114,6 +114,10 @@ Utterance: "The deadline is Friday."
 
 Only the first three rows of the rock table are implemented in `cie.examples.yaml` this revision. The others are teaching holds for a later named envelope list.
 
+## Note — CIE is hold, not routing (Slide 10)
+
+CIE does not choose the next IdOB and does not clear `residue_code`. Leftover after this shove: [../10_residue_expand/residue_expand.md](../10_residue_expand/residue_expand.md).
+
 ## Run
 
     python run_05_modulate.py

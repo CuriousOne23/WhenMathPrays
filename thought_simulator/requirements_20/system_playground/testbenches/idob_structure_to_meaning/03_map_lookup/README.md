@@ -97,6 +97,10 @@ Hand assignment: stipulated legality. **Arbitrary with respect to smoothness.** 
 
 "Geometry" here is working language for two representation spaces. It is not charts, curvature, or Newton. A manifold description of groups may be **investigated later** if traces show associations (co-legal nearby keys, near prototypes, smooth rank under small talk-shape change). Declaring one now is wearing that coat early.
 
+## Note — next IdOB vs this door (Slide 10)
+
+This map is legality **for this key only**. An empty map or a leftover `residue_code` does **not** fill the next six-tuple. That recipe is [../10_residue_expand/residue_expand.md](../10_residue_expand/residue_expand.md): a human expands 03 (or 02/09/10), Path A RB is not this slide.
+
 ## Run
 
     python run_03_lookup.py

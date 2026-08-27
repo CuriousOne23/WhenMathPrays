@@ -76,6 +76,10 @@ If ranking can pull in a group the map did not allow, the wall is broken.
 If empty map yields a ranked winner, the door is fake.
 If map order and rank order are always identical with no scores, rank is a copy of YAML spelling — not competition.
 
+## Note — rank leftovers are not RB next (Slide 10)
+
+Ids after rank-1 are still **this card's** legal set. They are not Path A `firing_order`. Next IdOB / leftover expansion is [../10_residue_expand/residue_expand.md](../10_residue_expand/residue_expand.md).
+
 ## Run
 
     python run_04_rank.py
