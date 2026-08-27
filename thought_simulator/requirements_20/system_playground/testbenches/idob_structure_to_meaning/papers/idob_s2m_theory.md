@@ -3,7 +3,7 @@
 **Status:** Unproven stake. Architects the machine; the machine does not prove the theory.
 **Companion:** [idob_s2m_constructs.md](idob_s2m_constructs.md) (construct cards + glossary).
 **Bench:** testbenches/idob_structure_to_meaning/
-**Date:** 2026-08-27 (two geometries; map and rank)
+**Date:** 2026-08-27 (two geometries; map, rank, CIE)
 
 ## 1. What this paper is
 
@@ -116,6 +116,24 @@ This revision's map and rank are **hand assignments**. No manifold constraint (n
 
 Slides: [../03_map_lookup/README.md](../03_map_lookup/README.md), [../04_ranking/README.md](../04_ranking/README.md).
 
+## 2.7 CIE (stance as hold, not a person)
+
+After first M exists, **CIE** is local stance pressure: how the projection is being advanced in this envelope.
+
+Feel: stance = from which conversational hold was this projection advanced? Not: who is this person? Not listener mood. Not optical place (spatiality).
+
+Formula (this revision): M' = M + alpha * I. Clip to [0, 1] if implemented; say so. Neutral envelope: alpha = 0, M' = M.
+
+Two vocabularies:
+- Register / kind-of-talk (official this slide): physical_stance, scientific_stance, neutral.
+- Affect-as-pressure (later named envelopes): inquisitive, exasperated, wonder, urgency. Same family of holds; not "the speaker is afraid."
+
+Architecture: IdOB orchestrates and **calls** a named CIE step (`modulate.py` / apply_cie). CIE must not live in the key builder, the map, or as a silent line inside rank. Changing the formula is a named revision.
+
+Same card + different CIE → different M', same candidates, same key. If the key moves, identity leaked into structure.
+
+Slide: [../05_cie/README.md](../05_cie/README.md).
+
 ## 3. What the theory asserts
 
 1. An utterance is a carrier, not the meaning-object.
@@ -123,17 +141,19 @@ Slides: [../03_map_lookup/README.md](../03_map_lookup/README.md), [../04_ranking
 3. Meaning, for Path A, is the speaker's **intended projection**, not the listener's formed uptake and not the speaker's private inner object. The listener is only the reference that makes consequence a real kind of significance in human life.
 4. Consequence is the significance test, not a Path A measurement of a person.
 5. Path A does not infer hidden motive, deception, speech-act force, or truth. Intent here means the structured object the speaker is advancing as projection. The speaker understands that intent. Path A does not psycho-analyze the speaker.
-6. Identity is local pressure on the stand-in of that projection (CIE), not a life-story and not listener uptake.
+6. Identity is local pressure on the stand-in of that projection (CIE), not a life-story and not listener uptake. Stance is the hold of the utterance as put forward.
 7. Progressive crossing: structure -> admissible groups -> chosen prototype M -> identity pressure -> logged delta_h -> named freeze.
 8. Observability: keys, candidates, M, delta_h, stop reason. That is the duck for this vehicle.
 9. For machine realization, that crossing is best understood (or at least representable) geometrically — as descriptive working language, not as a finished manifold theorem.
 10. Structure geometry and meaning geometry are two spaces. IdOB is the crossing, not two views of one space.
 11. The map is the visible door: key/card -> legal group_ids (a set). Rank is order inside that set only.
+12. CIE is a named IdOB step: M' = M + alpha I. It must not change the key.
 
 ## 4. What the theory refuses
 
 - Equating the packet with a mind.
 - Treating Path A as psycho-analysis of the speaker or recovery of a private inner object.
+- Treating CIE as biography, listener mood, or a feeling-wheel in place of identity.
 - Treating "best understood geometrically" as a claim that all linguistics is geometry, or that the two spaces are already manifolds.
 - Treating structure and meaning as one geometry with two views.
 - Putting meaning scores inside the structural key.
@@ -176,6 +196,7 @@ Failed check: new named machine revision, not a silent retune.
 |-------|----------------|
 | Two geometries | this paper 2.3–2.5 |
 | Map and rank | this paper 2.6; Slides 03–04 READMEs |
+| CIE / stance | this paper 2.7; Slide 05 README |
 | Structure != meaning | Slide 01; structure.md |
 | Intended projection as six-vector stand-in | Slides 02, 05; dimensions.md; constructs paper |
 | Structure bounds candidates | Slide 03 |
@@ -193,6 +214,7 @@ Read this paper first. Then [idob_s2m_constructs.md](idob_s2m_constructs.md). Th
 - 02_meaning_groups/dimensions.md — axis notes and utterance tables (supporting).
 - 03_map_lookup/README.md — map as door (supporting).
 - 04_ranking/README.md — rank among legal groups (supporting).
+- 05_cie/README.md — stance as hold; M' = M + alpha I (supporting).
 - papers/ts_patha_theory.md, papers/ts_sob2srob_req4idob.md — broader Path A / upstream notes.
 
 If those notes and this paper disagree, treat this paper plus the constructs paper as the spine for the learning bench until a revision is declared.
