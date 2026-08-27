@@ -3,7 +3,7 @@
 **Status:** Unproven stake. Architects the machine; the machine does not prove the theory.
 **Companion:** [idob_s2m_constructs.md](idob_s2m_constructs.md) (construct cards + glossary).
 **Bench:** testbenches/idob_structure_to_meaning/
-**Date:** 2026-08-27 (two geometries; feel definitions)
+**Date:** 2026-08-27 (two geometries; map and rank)
 
 ## 1. What this paper is
 
@@ -51,7 +51,7 @@ Meat on that term:
 - **Minimum claim.** Even if "best" is later withdrawn, the projection must still be *representable* geometrically or this machine has no object to run.
 - **Not claimed.** That every linguistic fact is geometric, or that geometry is the only honest science of language.
 
-Geometry remains a modeling convenience until traces earn more. "Best understood" is a stake about *how to build and see the crossing*, not a completed theory of language.
+Geometry remains a modeling convenience until traces earn more. "Best understood" is a stake about *how to build and see the crossing*, not a completed theory of language. "Geometry" in this paper is **descriptive working language** for two representation spaces. It is not charts, curvature, geodesics, or Newton's coat. A manifold description may be investigated later if traces show associations among groups and keys. It is not declared now.
 
 ## 2.3 Two geometries (not one space, two views)
 
@@ -72,6 +72,7 @@ Crossing:
         -> structure card   (point in ID-tuple space)
         -> structural_key
         -> map              (legal region of meaning-space)
+        -> rank             (which legal prototype is first M)
         -> group prototype  (starting point M0)
         -> CIE              (move M; key stays put)
         -> delta_h          (length of that move)
@@ -103,6 +104,18 @@ Trades (forbidden): calling the six IDs physicality…spatiality; putting "high 
 Worked meaning tables: [../02_meaning_groups/dimensions.md](../02_meaning_groups/dimensions.md).
 Worked structure attributes: [../01_structure/structure.md](../01_structure/structure.md).
 
+## 2.6 Map and rank (the door, then the first birth)
+
+Because the two geometries are distinct, a **map** is required. It is not a third geometry.
+
+**Map (feel).** From this place on the road, which exits may lead to a thought-object? Membership only. `meaning_group_candidates` is a **set** written as a list. YAML order is not rank. Group_id digits are names, not coordinates. Empty list is legal (road without a birth).
+
+**Rank (feel).** Among those legal exits, which birth is instantiated first? `final_rank_order` — winner first. Rank must not add an id the map did not name. Empty map → empty rank.
+
+This revision's map and rank are **hand assignments**. No manifold constraint (no implied smoothness, no placement of group_ids). If later traces show associations among groups and keys, a manifold or graph-plus-metric may be investigated as a named revision.
+
+Slides: [../03_map_lookup/README.md](../03_map_lookup/README.md), [../04_ranking/README.md](../04_ranking/README.md).
+
 ## 3. What the theory asserts
 
 1. An utterance is a carrier, not the meaning-object.
@@ -113,17 +126,20 @@ Worked structure attributes: [../01_structure/structure.md](../01_structure/stru
 6. Identity is local pressure on the stand-in of that projection (CIE), not a life-story and not listener uptake.
 7. Progressive crossing: structure -> admissible groups -> chosen prototype M -> identity pressure -> logged delta_h -> named freeze.
 8. Observability: keys, candidates, M, delta_h, stop reason. That is the duck for this vehicle.
-9. For machine realization, that crossing is best understood (or at least representable) geometrically.
+9. For machine realization, that crossing is best understood (or at least representable) geometrically — as descriptive working language, not as a finished manifold theorem.
 10. Structure geometry and meaning geometry are two spaces. IdOB is the crossing, not two views of one space.
+11. The map is the visible door: key/card -> legal group_ids (a set). Rank is order inside that set only.
 
 ## 4. What the theory refuses
 
 - Equating the packet with a mind.
 - Treating Path A as psycho-analysis of the speaker or recovery of a private inner object.
-- Treating "best understood geometrically" as a claim that all linguistics is geometry.
+- Treating "best understood geometrically" as a claim that all linguistics is geometry, or that the two spaces are already manifolds.
 - Treating structure and meaning as one geometry with two views.
 - Putting meaning scores inside the structural key.
 - Letting CIE change the structural key.
+- Treating map list order as rank, or group_id digits as coordinates.
+- Letting rank invent a group the map forbade, or invent a winner from an empty map.
 - Calling a budget halt stable.
 - Claiming the six axes are proven orthogonal, minimal, or complete.
 - Claiming word-to-score is already a formula (group prototypes are assigned in this revision).
@@ -136,6 +152,7 @@ If meaning had no structure, every group would be legal.
 If identity rewrote geometry, replay would die.
 If freeze had no name, instrument limits would pose as meaning.
 If there were only one geometry, CIE moving M would have to move the key, and an empty map after a valid key would be impossible.
+If there were no map, the two geometries would have no visible door.
 
 IdOB is the first machine site where the speaker's **intended projection** is allowed to appear as a stand-in, given only structure.
 
@@ -149,6 +166,7 @@ IdOB is the first machine site where the speaker's **intended projection** is al
 - Near-neighbors that should differ collapse to one key -> discrimination failure.
 - CIE changes the structural key -> the two geometries have collapsed.
 - A valid key always invents an M -> empty birth is forbidden and the door is fake.
+- Rank adds an id the map did not name -> wall broken.
 
 Failed check: new named machine revision, not a silent retune.
 
@@ -157,9 +175,11 @@ Failed check: new named machine revision, not a silent retune.
 | Claim | Where you look |
 |-------|----------------|
 | Two geometries | this paper 2.3–2.5 |
+| Map and rank | this paper 2.6; Slides 03–04 READMEs |
 | Structure != meaning | Slide 01; structure.md |
 | Intended projection as six-vector stand-in | Slides 02, 05; dimensions.md; constructs paper |
 | Structure bounds candidates | Slide 03 |
+| Rank among legal groups only | Slide 04 |
 | Identity pressures M, not the key | Slide 05 |
 | delta_h is machine motion | Slide 06 |
 | Named freeze | Slides 06-07 |
@@ -171,6 +191,8 @@ Read this paper first. Then [idob_s2m_constructs.md](idob_s2m_constructs.md). Th
 
 - 01_structure/structure.md — structure as functional requirement (supporting).
 - 02_meaning_groups/dimensions.md — axis notes and utterance tables (supporting).
+- 03_map_lookup/README.md — map as door (supporting).
+- 04_ranking/README.md — rank among legal groups (supporting).
 - papers/ts_patha_theory.md, papers/ts_sob2srob_req4idob.md — broader Path A / upstream notes.
 
 If those notes and this paper disagree, treat this paper plus the constructs paper as the spine for the learning bench until a revision is declared.
