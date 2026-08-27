@@ -23,9 +23,10 @@ RUN_03_LOOKUP = False      # structure -> candidate group ids
 RUN_04_RANK = False        # rank only inside the candidate set
 RUN_05_CIE = False         # M' = M + alpha * I
 RUN_06_CYCLE = False       # deltas, epsilon, named freeze
-RUN_07_CROSSING = False    # full structure-to-meaning slide
+RUN_07_CROSSING = False    # teaching wire of 01-06
 RUN_09_ASSIGN = False      # utterance + packs -> card or miss
-RUN_10_RESIDUE_EXPAND = True  # leftover -> which file to expand
+RUN_10_RESIDUE_EXPAND = False  # leftover -> which file to expand
+RUN_11_IDOB_CORE = True    # one-hop idob.py kernel
 
 # card_id examples: S_rock_burst, S_deadline_friday, S_sleepy, S_unmapped
 # group_id examples: 1001, 2001, 3001, 4001, 5001
@@ -49,6 +50,11 @@ VAR_07_CLIP_TO_UNIT = True
 VAR_09_UTTERANCE = None        # None = default demo lines
 VAR_09_PACKS = None            # None = each demo line carries its own pack list
 VAR_10_CARD_ID = None          # None = all structure cards
+VAR_11_CARD_ID = "S_rock_burst"  # None = four teaching cards
+VAR_11_UTTERANCE = None         # if set, 09 assign path instead of card_id
+VAR_11_PACKS = None
+VAR_11_CIE_ID = "physical_stance"
+VAR_11_CLIP_TO_UNIT = True
 
 
 def _load_slide(module_name: str, relative_path: str):
@@ -99,6 +105,16 @@ def main():
     if RUN_10_RESIDUE_EXPAND:
         slide = _load_slide("run_10_residue_expand", "10_residue_expand/run_10_residue_expand.py")
         slide.run(card_id=VAR_10_CARD_ID)
+
+    if RUN_11_IDOB_CORE:
+        slide = _load_slide("run_11_idob_core", "11_idob_core/run_11_idob_core.py")
+        slide.run(
+            card_id=VAR_11_CARD_ID,
+            utterance=VAR_11_UTTERANCE,
+            packs_loaded=VAR_11_PACKS,
+            cie_id=VAR_11_CIE_ID,
+            clip_to_unit=VAR_11_CLIP_TO_UNIT,
+        )
 
     print("Driver finished. Next: 08_witness/checklist.md if you want to name what you saw.")
 
