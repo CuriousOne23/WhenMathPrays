@@ -1,0 +1,33 @@
+# Hand table. next_key is a suggestion only. null is legal.
+# This is not RB. This is not automatic assignment.
+rows:
+  - residue_code: static_object_vs_dynamic_action
+    after_status: leftover_after_map
+    digested: false
+    expand_target: 10_residue_expand/residue_next.examples.yaml
+    next_key: null
+    note: "Rock card has a legal map but leftover object-vs-action tension. Next hop is a human row, not a silent key."
+  - residue_code: null
+    after_status: empty_map
+    digested: false
+    expand_target: 03_map_lookup
+    next_key: null
+    note: "Road exists, no legal birth. Expand the map (and maybe a 02 group), not residue poetry."
+  - residue_code: null
+    after_status: unassigned
+    digested: false
+    expand_target: 09_structure_assignment
+    next_key: null
+    note: "No six IDs. Expand assigner packs."
+  - residue_code: null
+    after_status: digested_stop
+    digested: true
+    expand_target: stop
+    next_key: null
+    note: "Map non-empty and no leftover code this hop."
+  - residue_code: unknown_code
+    after_status: unknown_residue
+    digested: false
+    expand_target: 10_residue_expand/residue_next.examples.yaml
+    next_key: null
+    note: "Name the leftover here before inventing a next key."
