@@ -1,8 +1,10 @@
-# **progressive_lineup_testing.md — Path‑A Progressive Lineup Testing Framework (Version 4.0)**  
+# **progressive_lineup_testing.md — Path‑A Progressive Lineup Testing Framework (Version 4.1)**  
 **Status:** Active  
 **Scope:** All Path‑A primitives  
 **Applies To:** IIInB, IE, CEx, CE, WrdNm, ISc, TPU, SOB, SROB, CnOB, SmOB, IdOB, TR, CTP, RTU, RB, OuBA, SSRGn  
 **Exception:** InB (partially tested; no upstream primitive)
+
+**v4.1 (informative addenda, no prior section removed):** IdOB isolation suite, declared-key expected blocks, utterance on the log, lineup order vs primitive HLR schedule. Requirements for IdOB remain in `20.40.050`.
 
 ---
 
@@ -89,6 +91,12 @@ If `use_<primitive> = false` in `run.py`:
 - Python/C++ parity  
 - Stable envelope evolution  
 
+### **3.1.1 Declared-key expected blocks (packet primitives)** *(v4.1, does not repeal §3.1)*
+
+When a primitive’s owned write is a **named packet** rather than a full TP clone (IdOB: `tp.idob`), the `expected:` block MAY list **only the declared keys** for that packet. Comparison is exact equality on those keys. Fields not listed are not part of PASS/FAIL.
+
+A primitive MAY also gate testbench PASS on its rulechecker when the structural program says the walls are part of the hop (IdOB write-boundary, rank ⊆ map, utterance present). That is an addition to §3.1 for packet primitives, not a silent change to CE/IE full-envelope tests.
+
 ---
 
 ## **3.2 Mode B — “general” (Rule‑Driven Testing)**  
@@ -102,7 +110,7 @@ If `use_<primitive> = false` in `run.py`:
   - `<primitive>_input.yaml`
 - The primitive is executed normally.
 - The output is validated **only by rulechecking**, using:
-  - `<primitive>_rules.yaml`
+  - `<primitive>_rules.yaml`  
   - `<primitive>_rulechecker.py`
 - PASS/FAIL is determined **solely** by rule compliance.
 
@@ -130,6 +138,8 @@ To prevent ambiguity and ensure deterministic behavior across all Path‑A primi
 | `"general"`            | `<primitive>_input.yaml` (input only)           | Rulechecking only         |
 
 This rule is **mandatory**, applies to **all Path‑A primitives**, and must be implemented exactly as written.
+
+Packet primitives (§3.1.1) still load those same files; only the *shape* of `expected:` may be a key subset.
 
 ---
 
@@ -164,6 +174,8 @@ Flow:
    - Compare actual vs expected.  
    - PASS/FAIL by exact equality.  
 3. Rulechecker optional (diagnostics only).
+
+Packet primitives: step 3 may be required by the structural program (§3.1.1).
 
 ---
 
@@ -213,6 +225,7 @@ Examples:
 primitives/ce/ce.py
 primitives/cex_pck/cex_pck.py
 primitives/ccr/ccr.py
+primitives/idob/idob.py
 ```
 
 This path is **authoritative** and is used by the dynamic primitive loader.
@@ -247,6 +260,7 @@ Where `<category>` ∈:
  structure
  transform
  encoder
+ context
 ```
 
 Example (CE):
@@ -258,6 +272,17 @@ testbenches/path_a/semantic/ce_rules.yaml
 testbenches/path_a/semantic/ce_tests_to_run.yaml
 ```
 
+IdOB:
+
+```
+testbenches/path_a/identity/idob_testbench.py
+testbenches/path_a/identity/idob_testbench.yaml
+testbenches/path_a/identity/idob_rules.yaml
+testbenches/path_a/identity/idob_tests_to_run.yaml
+testbenches/path_a/identity/idob_input.yaml
+testbenches/path_a/identity/idob_rulechecker.py
+```
+
 This ensures that **every primitive testbench is discoverable by pattern**, not by hardcoded paths.
 
 ---
@@ -267,7 +292,7 @@ This ensures that **every primitive testbench is discoverable by pattern**, not 
 Dictionaries and scalar tables may live in **one of two places**, chosen by size and ownership:
 
 ### **A. Small, exclusive tables (preferred for most Path‑A primitives)**  
-When the tables are small, numerous, and owned exclusively by a single primitive (the common case for WrdNm, SOB, SROB, CnOB, SmOB, etc.), they **may** live inside the primitive directory itself:
+When the tables are small, numerous, and owned exclusively by a single primitive (the common case for WrdNm, SOB, SROB, CnOB, SmOB, IdOB crossing tables, etc.), they **may** live inside the primitive directory itself:
 
 ```
 thought_simulator/
@@ -279,6 +304,8 @@ thought_simulator/
 ```
 
 This keeps the primitive self‑contained and avoids unnecessary path complexity.
+
+IdOB hop tables (`structure_card.examples.yaml`, `meaning_groups.yaml`, `struct_to_meaning_map.yaml`, `ranking_weights.yaml`, `cie.examples.yaml`, `pack_base_en.yaml`, `semantic_*.yaml`, `idob_s2m_packet.yaml`, `residue_next.examples.yaml`) live here.
 
 ### **B. Large or shared dictionaries**  
 When a dictionary is large, requires formal versioning / ownership notes, or is intended for use by multiple primitives, it **must** live under the centralized design tree:
@@ -369,6 +396,7 @@ Field paths **must not** be prefixed with `TP.`.
 | `IE.normalized_surface` | `TP.IE.normalized_surface` |
 | `CE.temporal.marker` | `TP.CE.temporal.marker` |
 | `SmOB.adjacency.flag` | `TP.SmOB.adjacency.flag` |
+| `idob.meaning_delta_h` | `TP.idob.meaning_delta_h` |
 
 ### **Why this rule exists**
 
@@ -488,6 +516,7 @@ Examples:
 primitives/ce/ce.py
 primitives/cex_pck/cex_pck.py
 primitives/ccr/ccr.py
+primitives/idob/idob.py
 ```
 
 This ensures dynamic loaders can locate the primitive deterministically.
@@ -728,6 +757,14 @@ Context Summary:
 
 This ensures developers can see the envelope state without opening YAML files.
 
+### **7a. Owned-envelope summary (packet primitives)** *(v4.1)*
+
+When the object under test is not the CE context envelope, the testbench MAY print that owned object instead of (or in addition to) the seven CE fields. IdOB SHALL print at least:
+
+- utterance (carrier)  
+- input card_id / cie_id / packs_loaded  
+- slim `tp.idob` (status, key, residue, selected group, Δh, flags)  
+
 ---
 
 ## **3.9.2 Required Final Summary Block**
@@ -850,6 +887,8 @@ Every primitive is tested in full pipeline context:
 ```
 InB → IIInB → IE → CEx → CE → WrdNm → ISc → TPU → SOB → SROB → CnOB → SmOB → IdOB → TR → CTP → RTU → RB → OuBA → SSRGn
 ```
+
+**v4.1 note:** This line is the **lineup discovery / default walk order**. It is **not** the scheduling law for IdOB. `20.40.050` places full-pipeline IdOB after committed `RB → RTU`, and allows isolation fixtures (utterance and/or card) without a live RB. Do not treat a disagreement between this list and an HLR as a test failure; the HLR wins on *when IdOB may run*. The list wins on *how run.py discovers neighbors* until run.py is revised to match the HLR.
 
 The lineup verifies:
 
@@ -980,7 +1019,11 @@ The progressive lineup now explicitly covers all downstream primitives:
 - identity refinement  
 - qualifier clustering  
 - subculture assignment  
-- provenance
+- provenance  
+- **v4.1 crossing (enabled isolation suite):** utterance carrier; six-ID structure / key; map door; rank ⊆ map; six-axis $M$; CIE ($M'=\mathrm{clip}(M+\alpha I)$); $\Delta h$; split flags; write-boundary on `routing_filter`  
+- lifecycle formation…closure envelopes remain archived (`idob_lifecycle_archive.yaml`) and are **not** the enabled expected block  
+
+CIE = Conversational Identity Envelope (stance / hold for the hop). Defined normatively in `20.40.050` §0.6.
 
 ### **TR / CTP / RTU / RB**  
 - routing vectors  
@@ -1139,6 +1182,18 @@ This ensures uniformity across Path‑A and context primitives.
 
 ---
 
+## **10.7 IdOB isolation suite (v4.1)**
+
+Enabled cases: `idob_s2m_01` … `idob_s2m_06` in `idob_testbench.yaml` / `idob_tests_to_run.yaml`.
+
+Each enabled case records the **utterance**. Expected keys are packet fields (`resolution_status`, `selected_group_id`, flags, residue, …), not formation…closure geometry.
+
+Kernel: `primitives/idob/idob.py` loading YAML only from `primitives/idob/`.
+
+Do not point the lineup at a classroom slide directory as a test oracle.
+
+---
+
 # **11. Summary**
 
 The **Progressive Lineup Testing Framework** is the authoritative testing strategy for **all Path‑A primitives**.
@@ -1155,7 +1210,8 @@ It provides:
 - deterministic replay testing  
 - Python/C++ parity testing  
 - complete IIInB + IE intake testing  
-- complete downstream primitive testing
+- complete downstream primitive testing  
+- packet-primitive declared-key expected blocks (§3.1.1)  
 
 This document is now fully aligned with:
 
@@ -1164,6 +1220,7 @@ This document is now fully aligned with:
 - 20.107 (CEx)  
 - 20.108 (CE)  
 - 20.105 (TP requirements + metadata + provenance + usage)  
+- 20.40.050 (IdOB, v3.1 crossing + CIE)  
 - Path‑A scaffold (20.15)  
 - run.py  
 - all structural programs  
@@ -1172,6 +1229,6 @@ This document is now fully aligned with:
 
 ---
 
-# **End of Document — progressive_lineup_testing.md (Version 4.0)**
+# **End of Document — progressive_lineup_testing.md (Version 4.1)**
 
 ---
