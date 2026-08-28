@@ -882,13 +882,24 @@ This is essential for:
 
 # **6. Pipeline Integration Testing**
 
-Every primitive is tested in full pipeline context:
+Official Path A flow (`20.15` v4.1). Lineup diagrams in this framework use this schedule:
+
+```
+InB (Beginning of Path A) → IIInB → IE → CEx → CE → TPU → SOB → SROB → CnOB → SmOB
+  → WrdNm → ISc → SSG → STPX → RBU → DCB → TR → CTP → RB
+  → WrdNm → ISc → RTU → TR → CTP → RB → IdOB → MCB → RBU → DCB
+  → TR → CTP → RB → WrdNm → ISc → RTU → TR → CTP → RB → IdOB → MCB → RBU → . . .
+OR
+DCB → TR → CTP → RB → WrdNm → ISc → RTU → TR → CTP → RB → OuBA (End of Path A)
+```
+
+IdOB runs after a committed RB. Isolation fixtures may start at IdOB without the live RB to its left.
+
+Historical compact walk (neighbor discovery only; does not override the official flow):
 
 ```
 InB → IIInB → IE → CEx → CE → WrdNm → ISc → TPU → SOB → SROB → CnOB → SmOB → IdOB → TR → CTP → RTU → RB → OuBA → SSRGn
 ```
-
-**v4.1 note:** This line is the **lineup discovery / default walk order**. It is **not** the scheduling law for IdOB. `20.40.050` places full-pipeline IdOB after committed `RB → RTU`, and allows isolation fixtures (utterance and/or card) without a live RB. Do not treat a disagreement between this list and an HLR as a test failure; the HLR wins on *when IdOB may run*. The list wins on *how run.py discovers neighbors* until run.py is revised to match the HLR.
 
 The lineup verifies:
 
@@ -902,6 +913,7 @@ The lineup verifies:
 - correct structural propagation  
 - correct freeze propagation  
 - correct replay metadata propagation
+```
 
 ---
 
