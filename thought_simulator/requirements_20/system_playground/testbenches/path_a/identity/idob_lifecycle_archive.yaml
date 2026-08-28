@@ -1,0 +1,30 @@
+# ARCHIVED — 10-geometry identity-envelope suite (not S2M expected output).
+# Previous idob_testbench.yaml v0.1 cases. Do not run against 11_idob_core.
+# Conversation topic: primitives/idob/idob_10_conversation_cases.md
+# Full input/expected identity envelopes remain in git history of idob_testbench.yaml
+# prior to the s2m-11 revision.
+
+suite: identity_lifecycle
+active_s2m_suite: idob_testbench.yaml
+
+cases:
+  - id: idob_01_formation
+    utterance: "Is the Thought Simulator mainly about defining a deterministic semantic engine?"
+  - id: idob_02_refinement
+    utterance: "So it is not just an engine — it is a deterministic fixed-time-step state machine for meaning, right?"
+  - id: idob_03_correction
+    utterance: "Actually it feels bigger than a state machine — more like a whole semantic operating system."
+  - id: idob_04_drift
+    utterance: "Or maybe the Relational Manifold itself is the real identity claim, not just a convenience."
+  - id: idob_05_conflict
+    utterance: "No — that does not sound right. The manifold is only a modeling convenience until evidence proves otherwise."
+  - id: idob_06_bifurcation
+    utterance: "Maybe both can coexist for a while — state machine primary, manifold as optional layer."
+  - id: idob_07_stabilization
+    utterance: "Okay — the deterministic fixed-time-step state machine feels more central."
+  - id: idob_08_convergence
+    utterance: "And the Relational Manifold stays secondary — an optional visualization and modeling layer."
+  - id: idob_09_alignment
+    utterance: "That matches the project's stated stance — manifold as modeling convenience until evidence proves otherwise."
+  - id: idob_10_closure
+    utterance: "For now the identity of TS as deterministic meaning state machine (with optional manifold layer) is closed."
