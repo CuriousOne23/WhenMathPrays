@@ -1,0 +1,21 @@
+# Crossing packet produced by primitives/idob/idob.py (wraps 11_idob_core).
+# Full field list: testbenches/idob_structure_to_meaning/11_idob_core/packet.schema.yaml
+# Lifecycle geometry enums remain in idob_schema.yaml for the archived 10-case suite.
+# idob.py writes the packet under TP.idob and copies flags to the TP root.
+
+idob_s2m_packet:
+  source: 11_idob_core/packet.schema.yaml
+  utterance: string_or_null
+  card_id: string_or_null
+  structural_key: string_or_null
+  residue_code: string_or_null
+  identity_residual:
+    magnitude: none | small | medium | large
+    pattern: none | collapsed | leftover | empty_map | unassigned
+  meaning_semantics: six_axis_or_null
+  meaning_semantics_prime: six_axis_or_null
+  meaning_delta_h: float_or_null
+  ready_for_ouba: bool
+  path_b_eligible: bool
+  idob_complete: bool
+  routing_filter_mutated: bool
