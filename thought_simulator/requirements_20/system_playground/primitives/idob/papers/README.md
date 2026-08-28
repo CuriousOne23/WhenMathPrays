@@ -17,6 +17,14 @@ This folder is feel + YAML law for that hop. Alphabet purpose essays were delete
 | [idob_stability_contract.md](idob_stability_contract.md) | Δh, first-pass, flags |
 | [idob_upstream_relationships.md](idob_upstream_relationships.md) | SOB…SmOB + 09 packs + CIE |
 | [idob_downstream_relationships.md](idob_downstream_relationships.md) | TP/TR/RB/Path B |
+| [idob_determinism_and_replay.md](idob_determinism_and_replay.md) | Same inputs → same packet |
 | [structure_to_meaning/](structure_to_meaning/) | Crossing tables and runtime |
 
-Sibling (not this hop): [lifecycle/](lifecycle/), [intake/](intake/), [archive/](archive/).
+## Siblings (not this hop)
+
+| Folder | What it is |
+|--------|------------|
+| [lifecycle/](lifecycle/) | formation…closure envelope |
+| [intake/](intake/) | World → carrier; encoder |
+| [archive/](archive/) | Deleted essay index |
+| `structure_to_meaning/cvthp_runtime.md` | Optional scheduler **outside** `idob.py` |
