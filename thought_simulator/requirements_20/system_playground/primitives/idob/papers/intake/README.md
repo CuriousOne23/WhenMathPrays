@@ -1,4 +1,9 @@
 # Intake (not IdOB)
 
-Utterance arrives here before 09 assignment. Encoder notes may live under `encoder/`.  
-IdOB reads the carrier string and/or a card; it does not own world-to-TS intake.
+Utterance arrives here before 09 assignment.
+
+| File | Role |
+|------|------|
+| [encoder/world_to_ts_process.md](encoder/world_to_ts_process.md) | World → carrier string. Not the hop. |
+
+IdOB reads the carrier and/or a card. It does not own intake.

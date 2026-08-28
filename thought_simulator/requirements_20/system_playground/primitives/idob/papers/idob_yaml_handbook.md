@@ -3,10 +3,9 @@
 How to read, change, and extend the tables IdOB depends on.  
 If a change is not listed as OK, treat it as a **new machine revision** (requirements + code), not a silent edit.
 
-Live copies of structure dictionaries: **`primitives/idob/semantic_*.yaml`**.  
-`papers/semantic_*.yaml` are snapshots. Edit the primitives copies.
+Live structure dictionaries: **`primitives/idob/semantic_*.yaml`** (the `papers/semantic_*.yaml` copies were deleted).
 
-11 currently loads **slide** YAML under `testbenches/idob_structure_to_meaning/` (01–05, 09–10). Promoting production tables means pointing those loaders at the files in this handbook without renaming fields.
+11 currently loads **slide** YAML under `testbenches/idob_structure_to_meaning/` (01–05, 09–10). Promoting production tables means pointing those loaders at the files below without renaming fields.
 
 ---
 
@@ -14,7 +13,7 @@ Live copies of structure dictionaries: **`primitives/idob/semantic_*.yaml`**.
 
 These assign **integers that become the structural key**. They do not hold meaning scores.
 
-| File | Field on the card | Why it exists |
+| File (beside `idob.py`) | Field on the card | Why it exists |
 |------|-------------------|---------------|
 | `semantic_field_definitions.yaml` | `semantic_field_id` | Coarse topic basin |
 | `semantic_roles_dictionary.yaml` | `semantic_role_id` | Role in the talk-shape |
