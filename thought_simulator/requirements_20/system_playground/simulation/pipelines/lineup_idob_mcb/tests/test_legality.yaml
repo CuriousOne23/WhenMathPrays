@@ -1,0 +1,15 @@
+test: legality
+stage: lineup_idob_mcb
+assert:
+  names_resolve:
+    - idob
+    - mcb
+  refuse:
+    - unknown_name
+    - cex
+    - RB_reader
+    - IdOB
+  order_is_yaml: true
+  no_meaning_assertions: true
+run:
+  command: python thought_simulator/requirements_20/system_playground/simulation/run_pipeline.py lineup_idob_mcb --legality

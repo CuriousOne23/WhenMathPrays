@@ -1,0 +1,8 @@
+test: replay
+stage: lineup_idob_mcb
+fixture: fx_idob_mcb_01.yaml
+assert:
+  identical_freeze: true
+  no_meaning_assertions: true
+run:
+  command: python thought_simulator/requirements_20/system_playground/simulation/run_pipeline.py lineup_idob_mcb --fixture fx_idob_mcb_01.yaml --replay

@@ -1,81 +1,105 @@
-# 03_simulation — Path A primitive simulation
+# simulation — machine-level lineup execution
 
-`03_simulation` contains the primitive‑level simulation flow for Path A.  
-It is the execution workspace that runs, inspects, and validates each primitive in sequence, using the definitions in `02_primitives` and the context machinery in `01_context`.
+This directory is the machine-level simulation layer for Path A (and later Path B).
+It sits above primitive-level testbenches.
 
-## Path A flow
+It does **not** replace `testbenches/run.py`. It does **not** replace conversation traces.
+It extends what already lives here into a kernel that can walk more than one primitive
+on one Thought Packet (TP).
 
-The Path A primitive sequence is:
+## Layers
 
-InB → IIInB → IE → CEx → CE → TPU → SOB → SROB → CnOB → SmOB → ISc →  
-SSG → STPX → RBU → DCB → RB → TR → CTP → ISc → RTU → RB → IdOB → MCB →  
-RBU → DCB → RB → TR → CTP → ISc → RTU → RB → IdOB → MCB → RBU → …  
-OR  
-DCB → RB → TR → CTP → ISc → RTU → RB → OuBA
+| Layer | Entry | Owns |
+| --- | --- | --- |
+| Primitive | `testbenches/run.py` | One primitive, grouped primitive benches |
+| Machine | `simulation/run_pipeline.py` | Lineup yaml, TP across primitives, walls, replay |
+| Trace | `simulation/conversations/` | Human/AI conversation artifacts and convert programs |
+| Context bench | `simulation/context/` | Existing context testbench (untouched by the kernel) |
 
-Each primitive has its own subdirectory under `path_a/`:
+Primitives are the same implementations used by `run.py`:
 
-- `01_InB/`
-- `02_IIInB/`
-- `03_IE/`
-- `04_CEx/`
-- `05_CE/`
-- `06_TPU/`
-- `07_SOB/`
-- `08_SROB/`
-- `09_CnOB/`
-- `10_SmOB/`
-- `11_ISc/`
-- `12_SSG/`
-- `13_STPX/`
-- `14_RBU/`
-- `15_DCB/`
-- `16_RB/`
-- `17_TR/`
-- `18_CTP/`
-- `19_ISc/`
-- `20_RTU/`
-- `21_RB/`
-- `22_IdOB/`
-- `23_MCB/`
-- `24_RBU/`
-- `25_DCB/`
-- `26_RB/`
-- `27_TR/`
-- `28_CTP/`
-- `29_ISc/`
-- `30_RTU/`
-- `31_RB/`
-- `32_IdOB/`
-- `33_MCB/`
-- `34_RBU/`
-- `35_OuBA/`
+```
+system_playground/primitives/<name>/<name>.py
+```
 
-An `exploration/` directory is available for ad‑hoc experiments and non‑normative runs.
+Import root:
 
-## Incremental simulation plan
+```
+thought_simulator.requirements_20.system_playground.primitives.<name>
+```
 
-Recommended development and validation sequence:
+## Directory layout (going forward)
 
-1. **Context + CEx**  
-   - Run context pipeline in `01_context/context/`.  
-   - Simulate `04_CEx/` to produce CE from IE output.
+```
+simulation/
+    README.md                 this file
+    run_pipeline.py           machine-level entry (fills the former stub)
+    pipeline_testing.md       doctrine for pipeline tests
+    ts_kernel/
+        README.md
+        registry.py           load(name) — the one new object
+        kernel.py             tick + call order
+        pipeline_runner.py    yaml + fixture → kernel
+        legality.py           names must load; refuse stubs/unknowns
+        replay.py             freeze(tp); two runs must match
+    pipelines/
+        lineup_idob_mcb/      first real stage (not "full Path A")
+            pipeline.yaml
+            fixtures/
+            tests/
+            README.md
+    conversations/            existing traces — stay artifacts, not the machine
+    context/                  existing context bench — stays where it is
+```
 
-2. **InB → IIInB → IE → CEx → CE → TPU**  
-3. **TPU → SOB → SROB → CnOB → SmOB → ISc**  
-4. **ISc → SSG → STPX → RBU → DCB**  
-5. **DCB → RB → TR → CTP → ISc**  
-6. **ISc → RTU → RB → IdOB → MCB**  
-7. **MCB → RBU → DCB → RB → TR → CTP**  
-8. **CTP → ISc → RTU → RB → OuBA**  
-9. **OuBA with context processing** (final envelope checked against context requirements)
+There is no `path_a_full/` directory. Stages are named after the primitives they
+actually contain. A new name is added only after the previous stage freezes.
 
-## Relationship to other directories
+## First machine: `lineup_idob_mcb`
 
-- **01_context/** — context pipeline (CIL, COB, CST‑Core, CST‑MS, CST‑Mux).  
-- **02_primitives/** — primitive definitions (YAML) and reference objects.  
-- **04_testbenches/** — testbenches for context, primitives, and Path A.  
-- **05_design/** — design models, dictionaries, and papers.
+Schedule:
 
-For canonical names, roles, and constraints of each primitive, see `20.190_glossary.md`.  
-This README intentionally uses only the primitive acronyms to avoid introducing any acronym drift.
+```yaml
+pipeline:
+  - idob
+  - mcb
+```
+
+Prove:
+
+- registry resolves `idob` and `mcb`
+- kernel order is the yaml
+- same fixture, two runs, identical freeze
+
+Observe (do not assert on the first landing):
+
+- IdOB packet vs MCB read-set
+- write-wall canaries (`process.routing_filter`, `metadata.clarifying`, `metadata.geometric_state`)
+
+## How to run
+
+From repo root, with the repo on `PYTHONPATH` (or via the path bootstrap in `run_pipeline.py`):
+
+```
+python thought_simulator/requirements_20/system_playground/simulation/run_pipeline.py lineup_idob_mcb
+python thought_simulator/requirements_20/system_playground/simulation/run_pipeline.py lineup_idob_mcb --replay
+python thought_simulator/requirements_20/system_playground/simulation/run_pipeline.py lineup_idob_mcb --legality
+```
+
+## What this directory is not
+
+- Not a second copy of primitives.
+- Not a replacement for `testbenches/run.py`.
+- Not an eight-name (or thirty-five-name) Path A list.
+- Not a place that absorbs `conversations/convert_pgms` as the orchestrator.
+
+Those convert programs remain convert programs. The kernel may later read their YAML
+as fixtures. It does not become them.
+
+## Historical note
+
+An earlier version of this README described `03_simulation` as a per-primitive
+`path_a/01_InB/` … `35_OuBA/` tree and listed a long Path A sequence. That tree
+was never present under this directory. The sequence remains aspirational doctrine
+elsewhere (`progressive_lineup_testing.md`, glossary). Realization here is
+stage-named lineups that grow from convicted primitives.

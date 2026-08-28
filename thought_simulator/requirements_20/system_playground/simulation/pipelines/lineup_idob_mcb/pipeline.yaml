@@ -1,0 +1,4 @@
+stage: lineup_idob_mcb
+pipeline:
+  - idob
+  - mcb

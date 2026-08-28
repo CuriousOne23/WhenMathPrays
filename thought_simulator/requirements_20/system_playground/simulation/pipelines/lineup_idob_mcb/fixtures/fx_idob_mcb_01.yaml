@@ -1,0 +1,61 @@
+fixture_id: fx_idob_mcb_01
+purpose: IdOB hop on a real utterance; MCB read-set pre-seeded so empty-view is not a fixture bug
+pipeline:
+  - idob
+  - mcb
+tp:
+  utterance: the rock is on the table
+  card_id: null
+  semantic:
+    meaning_delta_h: null
+    identity:
+      geometry: formation
+      continuity: continuation
+      pressure: low
+  metadata:
+    identity:
+      geometry: formation
+      continuity: continuation
+      pressure: low
+    stance:
+      category: clarify
+    direction:
+      flow: next
+    importance:
+      level: medium
+    context:
+      topic: physical_placement
+      stance: clarify
+      intent: continue
+      register: neutral
+      politeness: neutral
+      continuity: continuation
+      direction: next
+      importance: medium
+    clarifying:
+      topic: physical_placement
+      stance: clarify
+      intent: continue
+      register: neutral
+      politeness: neutral
+      continuity: continuation
+      direction: next
+      importance: medium
+    geometric_state:
+      locked: true
+      note: wall-canary — MCB must not mutate
+  process:
+    routing_filter:
+      locked: true
+      note: wall-canary — IdOB and MCB must not mutate
+expect_machine:
+  names:
+    - idob
+    - mcb
+  replay: identical_freeze
+expect_contract_observe_not_assert:
+  - semantic.meaning_delta_h after idob
+  - whether mcb used tp.idob or only metadata/semantic
+  - routing_filter unchanged
+  - metadata.clarifying unchanged
+  - metadata.geometric_state unchanged
