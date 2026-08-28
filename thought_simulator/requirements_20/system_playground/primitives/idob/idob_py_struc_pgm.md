@@ -1,346 +1,170 @@
-# idob_py_struc_pgm.md — IdOB Structural Program (Python Realization)
+# idob_py_struc_pgm.md — IdOB structural program (S2M / 11)
 
 **Document ID:** idob_py_struc_pgm  
-**Version:** 0.1 (First Crystallization)  
-**Status:** Draft — for CP review  
-**Scope:** Path-A Identity Object Basin Primitive (IdOB-prm)  
-**Location:** `thought_simulator/requirements_20/system_playground/primitives/idob/`  
-**Companion code:** `idob.py` (to be realized from this program)  
+**Version:** 1.0 (structure-to-meaning)  
+**Scope:** Path A IdOB hop as realized by `primitives/idob/idob.py`  
+**Kernel:** `testbenches/idob_structure_to_meaning/11_idob_core/`  
+**v0.1** (formation…closure transition table) is lifecycle history — git of this file; not how `idob.py` runs.
 
-**Normative parents:**  
-- `20.40.050_idob_prim.md` (v3.0)  
-- `progressive_lineup_testing.md` (v4.2+)  
-
-**Behavioral contracts:**  
-- `papers/idob_realization_input_output_examples.md` (10 strict examples)  
-- `papers/world_to_ts_process.md`  
-
-**Local dictionaries (this directory, for now):**  
-- `idob_schema.yaml`  
-- `semantic_universe_dictionary.yaml`  
-- `semantic_roles_dictionary.yaml`  
-- `semantic_field_definitions.yaml`  
-- `semantic_gradients.yaml`  
-- `semantic_objects.yaml`  
-- `semantic_subfields.yaml`  
-
-*(Dictionaries currently live under `papers/`; they are to be treated as local to `primitives/idob/` for this structural program and may be moved later. Loaders look first in the primitive directory.)*
+An implementer or another AI should be able to wire, test, and extend IdOB from this document plus `11_idob_core/idob_core.md`.
 
 ---
 
-## 0. Purpose of This Structural Program
+## 0. Intent
 
-This document converts the normative HLRs, the ten identity-behavior examples, the schema, and the progressive dual-mode contract into an explicit, deterministic Python realization plan for IdOB.
+IdOB is a **research hop**: utterance/card → six-ID structure → map → rank → six-axis stand-in \(M\) → CIE → Δh + flags.  
+It is not a cognition verdict and not listener uptake. Meaning = speaker **intended projection**.
 
-It resolves three previously open items:
-
-1. **Transition function** — explicit first-order mapping from (geometry, pressure, residuals, stance, regime-adjacent signals) → next geometry / continuity / freeze / basin_surface.  
-2. **Envelope ownership** — which fields IdOB may write under the foundation-export path vs the mandatory TPU payload.  
-3. **Regime-conditioned inherit/reset** — first-order policy for roles, candidates, provenance, and lineage markers.
-
-It also defines the module shape, write-boundary guards, serial-pass handling, and identity-importance computation that `idob.py` must implement.
-
-This is a structural program, not a requirements document. HLRs remain authoritative; this program must stay inside them.
+Feel / theory: `papers/idob_s2m_overview.md`, bench `idob_s2m_theory.md`.  
+YAML law: `papers/idob_yaml_handbook.md`.
 
 ---
 
-## 1. Python Module Shape (`idob.py`)
-
-### 1.1 Required surface
-
-```python
-PRIMITIVE_NAME = "idob"
-
-def process(tp: dict, mode: str = "general", **kwargs) -> dict:
-    """
-    Main entry. Returns updated TP (or a TPU request structure per pipeline convention).
-    mode is injected by run.py / testbench ("testbench" | "general").
-    """
-```
-
-### 1.2 Internal structure (recommended)
+## 1. Module shape (`idob.py`)
 
 ```
-idob.py
-├── load_schema_and_dicts()          # local YAML under primitives/idob/
-├── extract_identity_view(tp)        # read-only view of identity-adjacent fields
-├── determine_regime_hint(tp)        # optional F / RB / prior IdOB signals → shared regime label
-├── apply_transition_rules(...)      # core deterministic operator I
-├── apply_regime_inherit_reset(...)  # roles / candidates / provenance / lineage
-├── compute_identity_importance(...) # deterministic, monotonic
-├── build_envelope(...)              # foundation export shape
-├── issue_tpu_request(...)           # HLR-024 payload only
-├── write_boundary_guard(tp_before, tp_after)  # assert no RB / DCB / structural ownership
-└── process(...)                     # orchestration
+primitives/idob/idob.py
+  get_primitive_name() -> "idob"
+  process(tp, mode="general", **kwargs) -> tp
+  class IdOB(tp).process(mode, **kwargs) -> tp
 ```
 
-All functions must be pure with respect to identical TP snapshots (HLR-042).
+`process` loads `11_idob_core/idob.py` and calls its `process`. It copies `idob_complete`, `path_b_eligible`, `ready_for_ouba` onto the TP root and `meaning_delta_h` under `tp["semantic"]`.
 
-### 1.3 Dictionary lookup rule
+kwargs (also accepted on the TP):
 
-Per progressive §3.6.3 (small exclusive tables):
+| Name | Role |
+|------|------|
+| `utterance` | Carrier string (always store when present) |
+| `card_id` | Skip 09; load 01 card |
+| `packs_loaded` | 09 pack list |
+| `cie_id` | Stance table row (default `neutral` or `physical_stance`) |
+| `prior_M` | Previous \(M'\); absent → first-pass zeros |
 
-1. Look first in `primitives/idob/`.  
-2. Fall back only if explicitly directed later.  
+`mode` is `testbench` | `general` (runner convention). The kernel does not change algorithm by mode.
 
-Do **not** hard-code paths into `papers/`.
-
----
-
-## 2. Owned Fields and Write Boundaries
-
-### 2.1 Mandatory TPU payload (HLR-024)
-
-IdOB SHALL issue `TPU.idob_update` containing **only**:
-
-| Field | Type / Notes |
-|-------|--------------|
-| `meaning_delta_h` | scalar / structured delta |
-| `idob_semantics[]` | list of identity-conditioned meaning units |
-| `meaning_semantics[]` | broader meaning units when produced |
-| `idob_complete` | bool |
-| `path_b_eligible` | bool |
-| `idob_next_ob_candidates[]` | list (serial-pass support) |
-| foundation envelope fields (when export enabled) | see §2.2 |
-
-No routing updates, no structural updates, no TR updates.
-
-### 2.2 Foundation envelope fields (IdOB-owned when export enabled)
-
-First-order set required by this structural program:
-
-```
-identity.geometry
-identity.continuity
-identity.pressure
-identity.residuals.{magnitude, pattern}
-identity.freeze.state
-identity.basin_surface.region
-
-# optional but recommended for foundation observability
-roles[]                    # from semantic_roles_dictionary
-candidates[]               # provisional identity candidates
-provenance.extend_or_truncate
-lineage_markers[]          # identity-adjacent continuity only
-stability_marker           # derived
-alignment_marker           # derived
-regime_label               # shared vocabulary only
-```
-
-These are written only under the foundation-export path declared by the structural program. They remain readable by RB as a view (20.50) and by subsequent IdOB passes.
-
-### 2.3 Strict non-ownership (write-boundary guard)
-
-IdOB MUST NOT write or mutate:
-
-- any `process.routing_filter` or RED fields (RB-owned)
-- `geometric_state`, `geometric_history`, `dcb_events` (DCB-owned)
-- structural residue / structural ΔH% / SSG fields
-- Path-B truth/done envelopes
-- TP text surface
-
-The guard runs after every process call in both modes. Violation → hard fail in testbench mode; diagnostic in general mode.
-
-### 2.4 Read-only identity-adjacent inputs
-
-Allowed (informative list from 20.40.050 §1.1):
-
-- prior IdOB envelope
-- continuity_metadata (COB / CIL / CST)
-- expressive / normalization metadata (IIInB, IE)
-- semantic-layer commits (SSG, STPX, RBU) as adjacent signals
-- residue_metadata (SOB family) as identity-adjacent only
-- optional F approximations / regime hints
-- optional read-only RB routing filter / RED view
-- optional read-only DCB geometric_state (execution-flow context only; never treated as κ_id)
+Do not re-implement `_apply_transition` geometry tables in this module.
 
 ---
 
-## 3. Shared Regime Vocabulary and First-Order Inherit/Reset Policy
+## 2. Testbench architecture
 
-Shared labels (locked):
+Root: `testbenches/path_a/identity/`
 
-```
-Stable | Refinement | Drift | Transition | Collapse
-```
+| File | Role |
+|------|------|
+| `idob_testbench.py` | Runner. Prints utterance + input + `tp.idob` every test. |
+| `idob_tests_to_run.yaml` | Enable list (`idob_s2m_*`) |
+| `idob_testbench.yaml` | Cases: `utterance`, `input`, `expected` packet fields |
+| `idob_input.yaml` | General-mode single TP |
+| `idob_rules.yaml` + `idob_rulechecker.py` | Write-boundary, packet keys, rank ⊆ map, utterance present |
+| `idob_lifecycle_archive.yaml` | Ten formation…closure utterances — **not** run against 11 |
 
-### 3.1 First-order policy (v0.1)
+Import: `from ...primitives.idob.idob import IdOB, get_primitive_name`.
 
-| Regime     | Roles / Candidates          | Provenance          | Lineage markers     | Residuals direction          | Freeze tendency          |
-|------------|-----------------------------|---------------------|---------------------|------------------------------|--------------------------|
-| Stable     | inherit                     | extend              | inherit             | dissipate / collapse toward small | none                  |
-| Refinement | inherit + refine            | extend              | inherit             | reduce                       | none                     |
-| Drift      | inherit with caution        | extend (flag drift) | inherit             | accumulate / medium          | identity_freeze possible |
-| Transition | selective inherit / reset   | truncate or bridge  | bridge if needed    | large / explosion possible   | identity_freeze common   |
-| Collapse   | reset                       | truncate            | reset               | clear or explosion then clear| release after reset      |
+Learning bench (same kernel): `testbenches/idob_structure_to_meaning/` slides 01–11 + `run_ts_struc2mn.py`.
 
-This is a **directional** policy. Exact thresholds remain provisional (Must-Prove vs Defer). Implementation must make the chosen action deterministic and observable for foundation logging.
+### Dual mode
 
-### 3.2 Regime hint sources (priority order)
+| mode | Input | Pass criterion |
+|------|--------|----------------|
+| `testbench` | `idob_testbench.yaml` row | expected fields match **and** rulechecker clean |
+| `general` | `idob_input.yaml` | rulechecker only |
 
-1. Explicit prior IdOB `regime_label` if present and fresh.  
-2. Optional F-block components when supplied by progressive fixture or upstream.  
-3. Derived from current geometry + pressure + residuals (fallback heuristic, still deterministic).  
-4. Default to `Refinement` when insufficient signal (safe neutral for meaning refinement).
-
----
-
-## 4. Transition Rules (Core of Operator I)
-
-Seeded directly from the ten strict examples in `idob_realization_input_output_examples.md` and generalized into a deterministic first-order table.
-
-Geometry vocabulary (schema):
-
-```
-formation | refinement | correction | drift | conflict | bifurcation |
-stabilization | convergence | alignment | closure
-```
-
-### 4.1 Primary transition table (v0.1)
-
-Input signals considered: current `identity.geometry`, `identity.pressure`, `identity.residuals`, `stance.category`, `routing.mode` (read-only), and regime hint.
-
-| Current Geometry   | Dominant Signals                          | Next Geometry     | Continuity (typical) | Freeze (typical)     | Basin/Surface (typical)   | Notes |
-|--------------------|-------------------------------------------|-------------------|----------------------|----------------------|---------------------------|-------|
-| formation          | low pressure, small residuals, clarify/confirm | formation or refinement | continuation        | none                 | basin                     | Example 1→2 |
-| refinement         | low–medium, confirm/emphasize             | refinement or stabilization | continuation     | none                 | basin                     | Example 2 |
-| correction         | medium pressure, clarify/reject           | correction or drift | correction / drift  | none → identity_freeze | unstable                 | Example 3 |
-| drift              | medium–high, uncertain/reject             | drift or conflict | correction / drift  | identity_freeze       | unstable                  | Example 4 |
-| conflict           | high, reject/explosion                    | conflict or bifurcation | correction       | identity_freeze      | transition_surface        | Example 5 |
-| bifurcation        | high, two_clusters, clarify               | bifurcation or stabilization | bifurcation   | identity_freeze      | split                     | Example 6 |
-| stabilization      | medium → low, emphasize/merge             | stabilization or convergence | continuation / stabilization | none          | basin                     | Example 7 |
-| convergence        | low, clarify/merge                        | convergence or alignment | continuation      | none                 | basin                     | Example 8 |
-| alignment          | low, confirm                              | alignment or closure | continuation       | none                 | basin                     | (extension of examples) |
-| closure            | low, resolved residuals                   | closure           | continuation        | none                 | basin                     | terminal for cluster |
-
-### 4.2 Residual and freeze side-effects (deterministic)
-
-- residuals.pattern `explosion` or `two_clusters` → strongly prefer conflict / bifurcation and identity_freeze.  
-- residuals.pattern `collapsed` → favor stabilization / convergence and freeze=none.  
-- pressure `high` + stance `reject` → escalate freeze and move basin_surface toward transition_surface or split.  
-- routing.mode `merge` under stabilization/convergence → favor basin and freeze=none.  
-- routing.mode `branch` under drift/conflict → favor unstable / split.
-
-### 4.3 Implementation note
-
-The transition function must be a pure lookup + small deterministic adjustments. No stochastic choice. When multiple rows could apply, priority is:
-
-1. Explicit high-pressure / explosion signals  
-2. Current geometry continuity (prefer staying in family unless forced)  
-3. Regime hint (Collapse forces reset path)
-
-All decisions must be logged when foundation observability is enabled.
+Every enabled test **must** keep the utterance on the trace (or `utterance_source: card` with a card note).
 
 ---
 
-## 5. Identity-Importance (HLR-032 … 036)
+## 3. Owned writes vs write-boundary
 
-- Deterministic function of identity metadata + semantic-adjacent cues only.  
-- Monotonic and reproducible for identical TP snapshots.  
-- Produces identity-importance cues that reduce meaning entropy for downstream TR / Path-B eligibility.  
-- Never modifies TP text or structural fields.  
-- Exposed as a read-only view to RB and subsequent IdOB passes.
+**IdOB may write**
 
-First-order realization: map importance.level (schema) and residual magnitude / pressure into a small ordered set of cues; no learned weights in v0.1.
+- `tp["idob"]` — full packet (`11_idob_core/packet.schema.yaml`, `idob_s2m_packet.yaml`)
+- root flags `idob_complete`, `path_b_eligible`, `ready_for_ouba`
+- `tp["semantic"]["meaning_delta_h"]`
+- diagnostic `tp["_idob_diagnostics"]["routing_filter_mutated"]` if a leak was detected and rolled back
 
----
+**IdOB must not write**
 
-## 6. Serial Passes and Completion
+- `process.routing_filter` (RB)
+- `metadata.geometric_state` / DCB history
+- SSG / structural_graph / structural residue
+- next six-tuple as if it were RB
 
-- `idob_complete = true` when current geometry is in {stabilization, convergence, alignment, closure} **and** residuals are small/collapsed **and** freeze is none (or explicitly released).  
-- Otherwise `idob_complete = false` and `idob_next_ob_candidates[]` may list further IdOB or related OB-family work.  
-- Multiple serial IdOB passes are legal (HLR-004). Each pass consumes the prior envelope as identity-adjacent input.
-
-`path_b_eligible` follows HLR-021/022: true only when meaning refinement is sufficient for TR / Path-B checks; IdOB never initiates Path-B.
+Guard: snapshot `routing_filter` before `run_hop`; restore if changed.
 
 ---
 
-## 7. Dual-Mode Testbench Alignment
+## 4. Packet (output contract)
 
-Follow progressive_lineup_testing.md exactly:
+Always: `utterance`, `resolution_status`, three flags, `routing_filter_mutated`.
 
-| mode        | Input file                  | Validation                          |
-|-------------|-----------------------------|-------------------------------------|
-| testbench   | idob_testbench.yaml         | exact or structural foundation comparison |
-| general     | idob_input.yaml             | rulechecker only                    |
+On birth: `structural_key`, six IDs, `candidate_group_ids`, `final_rank_order`, `selected_group_id`, `meaning_semantics`, `meaning_semantics_prime`, `meaning_delta_h`, `meaning_cie_delta`, `first_meaning_cycle`, `cie_id`, `hold_geometry`.
 
-Category placement: `testbenches/path_a/identity/`.
+On miss / empty map: meaning fields null; `expand_target` may be set; utterance still present.
 
-Structural foundation comparison (allowed): envelope shape + regime-conditioned inherit/reset markers + the TPU fields listed in §2.1.
+Flags (split on purpose):
 
-Write-boundary assertions are mandatory in both modes (hard fail in testbench).
-
----
-
-## 8. Foundation Observability Hooks
-
-When enabled, log (or attach diagnostic block):
-
-- chosen regime_label  
-- inherit vs reset decision per category (roles, provenance, lineage)  
-- geometry transition taken  
-- κ_id-related markers (never confuse with κ_exec or κ_route)  
-- F-component approximations if supplied  
-
-These support the progressive foundation observation questions without affecting PASS/FAIL in testbench mode.
+- `ready_for_ouba` — a vector was born  
+- `path_b_eligible` — born and no `residue_code`  
+- `idob_complete` — same as eligible in this revision (not `geometry=closure`)
 
 ---
 
-## 9. Must-Prove for v0.1 Implementation
+## 5. Algorithm (one hop)
 
-- Deterministic outputs for fixed inputs (HLR-042).  
-- Correct TPU payload only (HLR-024).  
-- No RB / DCB / structural ownership writes.  
-- Transition table reproduces the ten examples exactly.  
-- Regime inherit/reset follows the directional policy in §3.1.  
-- Dual-mode contracts and progressive discovery paths work.  
-- Identity-importance is deterministic and monotonic.
+1. Resolve card or 09-assign utterance + packs.  
+2. Miss → `unassigned`, stop birth.  
+3. Key from six IDs (`SK|f|r|o|g|u|s`).  
+4. Map → legal `group_id` set. Empty → `empty_map`.  
+5. Rank ⊆ that set → winner.  
+6. Group prototype → \(M\).  
+7. CIE: \(M'=\mathrm{clip}(M+\alpha I)\). Key unchanged.  
+8. Δh vs `prior_M` or zeros.  
+9. Flags + residue/`identity_residual` + expand hint.  
+10. Write packet; enforce write-boundary.
 
-Defer (per 20.40.050 §10): final role taxonomies, continuous geometry beyond markers, learned parameters, permanent regime thresholds.
-
----
-
-## 10. Research Questions / Open Items for CP Review
-
-These questions are intentionally left open so that CP (architectural lead) and the realization can converge without hidden assumptions.
-
-1. **Transition table completeness**  
-   Does the first-order table in §4.1 adequately cover the ten examples and the expected serial-pass cases, or should additional rows (especially alignment → closure and Collapse-driven resets) be made more explicit before coding?
-
-2. **Envelope field list**  
-   Is the §2.2 set the right minimal foundation export, or should `roles[]` / `candidates[]` / `lineage_markers[]` be deferred until a later increment?
-
-3. **Regime derivation fallback**  
-   When no explicit F-block or prior regime_label is present, is “default to Refinement” the preferred safe neutral, or should the heuristic be stronger (e.g., derive directly from geometry + pressure)?
-
-4. **Identity-importance shape**  
-   Should the first realization emit only the schema `importance.level`, or a richer ordered cue list that TR can consume directly?
-
-5. **Serial-pass candidate generation**  
-   What is the minimal useful content of `idob_next_ob_candidates[]` in v0.1 (empty list vs explicit “IdOB again” vs downstream OB names)?
-
-6. **Dictionary location stability**  
-   Confirm that keeping the dictionary YAMLs under `primitives/idob/` (local exclusive tables) is acceptable for the near term; any preferred naming or versioning convention?
-
-7. **Structural foundation comparison details**  
-   For testbench mode, which exact subset of the envelope must be compared when full deep equality is too brittle (geometry + freeze + basin_surface + regime_label + idob_complete)?
-
-8. **Collapse behavior**  
-   Under Collapse, should all identity-owned fields hard-reset, or is a soft residual “scar” marker allowed for continuity diagnostics?
+RB / Slide 10 / CvThP are **outside** this module.
 
 ---
 
-## 11. Implementation Order Recommendation
+## 6. Support files this primitive must see
 
-1. Load local schema + dictionaries.  
-2. Implement write-boundary guard and pure extract view.  
-3. Implement transition table so the ten examples pass exactly.  
-4. Add regime inherit/reset and completion flags.  
-5. Add identity-importance and TPU issuance.  
-6. Wire dual-mode testbench and foundation comparison.  
-7. Expand test cases toward the 40–60 range once the rules are stable.
+| Need | Where |
+|------|--------|
+| Structure IDs | `semantic_*.yaml` (this directory) + 09 packs |
+| Cards | `01_structure/structure_card.examples.yaml` |
+| Groups / map / rank / CIE | slides 02–05 (or `papers/structure_to_meaning/*.yaml` when promoted) |
+| Residue expand | Slide 10 |
+| Packet schema | `11_idob_core/packet.schema.yaml` |
+| Lifecycle enums | `idob_schema.yaml` (hold_geometry / archive only) |
+
+Loaders look **here first**, then the slide tree. Do not hard-code `papers/semantic_*` (deleted).
 
 ---
 
-**End of idob_py_struc_pgm.md (v0.1)**  
-Ready for CP review. Realization of `idob.py` should not begin until the research questions above have been resolved or explicitly deferred.
+## 7. Requirements the testbench must keep proving
+
+1. Deterministic: same utterance/card + packs + CIE + prior_M + YAML revision → same packet.  
+2. Utterance visible on every case.  
+3. Rank never invents a `group_id` off the map.  
+4. CIE does not change `structural_key`.  
+5. First hop uses zero before-vector (`first_meaning_cycle`).  
+6. `routing_filter` unchanged when present.  
+7. Miss stores the string and births no \(M\).  
+8. `get_primitive_name() == "idob"`.
+
+---
+
+## 8. Implementation order (if touching code)
+
+1. Keep wrapper + `process(tp)` surface.  
+2. Point map lookup at `structural_key` as well as `card_id` when promoting tables.  
+3. Load `semantic_*.yaml` numeric ids from 09 packs.  
+4. Do not port v0.1 `GEOMETRY_MAP` into meaning.
+
+---
+
+## 9. Lifecycle sibling (not this program)
+
+Ten conversation cases and the formation…closure table live in `papers/lifecycle/` and `idob_lifecycle_archive.yaml`. `idob_schema.yaml` remains their enum file. Do not compare `metadata.identity.geometry` to `tp.idob.meaning_semantics`.
