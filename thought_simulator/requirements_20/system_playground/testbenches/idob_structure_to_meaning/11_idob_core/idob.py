@@ -1,8 +1,10 @@
 """IdOB one-hop orchestrator. See idob_core.md.
 Does not parse English except via Slide 09. Does not invent keys or groups.
+Does not write routing_filter. Crossing is run_hop; process(tp) is an adapter.
 """
 from __future__ import annotations
 
+import copy
 from pathlib import Path
 import sys
 
@@ -45,13 +47,21 @@ def _empty_packet():
         "final_rank_order": [],
         "selected_group_id": None,
         "cie_id": None,
+        "first_meaning_cycle": True,
+        "meaning_semantics_before": None,
         "meaning_semantics": None,
         "meaning_semantics_prime": None,
         "meaning_delta_h": None,
+        "meaning_cie_delta": None,
         "identity_delta": None,
+        "identity_residual": {"magnitude": "none", "pattern": "none"},
+        "hold_geometry": None,
         "refinement_cycles": 0,
         "resolution_status": None,
         "ready_for_ouba": False,
+        "idob_complete": False,
+        "path_b_eligible": False,
+        "routing_filter_mutated": False,
         "expand_target": None,
         "next_key": None,
     }
@@ -145,6 +155,35 @@ def _expand_hint(pkt, card):
         pkt["next_key"] = None
 
 
+def _set_identity_residual(pkt):
+    status = pkt.get("resolution_status")
+    code = pkt.get("residue_code")
+    born = pkt.get("selected_group_id") is not None
+    if status in ("unassigned", "partial"):
+        pkt["identity_residual"] = {"magnitude": "small", "pattern": "unassigned"}
+    elif status == "empty_map" or (not born and status == "empty_map"):
+        pkt["identity_residual"] = {"magnitude": "medium", "pattern": "empty_map"}
+    elif born and code:
+        pkt["identity_residual"] = {"magnitude": "medium", "pattern": "leftover"}
+    elif born:
+        pkt["identity_residual"] = {"magnitude": "small", "pattern": "collapsed"}
+    else:
+        pkt["identity_residual"] = {"magnitude": "none", "pattern": "none"}
+
+
+def _set_flags(pkt):
+    born = pkt.get("selected_group_id") is not None
+    pkt["ready_for_ouba"] = bool(born)
+    pkt["path_b_eligible"] = bool(born and not pkt.get("residue_code"))
+    pkt["idob_complete"] = bool(
+        pkt["path_b_eligible"] and pkt.get("resolution_status") == "meaning_stable"
+    )
+    pkt["routing_filter_mutated"] = False
+    if born and not pkt.get("hold_geometry"):
+        pkt["hold_geometry"] = "formation"
+    _set_identity_residual(pkt)
+
+
 def run_hop(
     card_id=None,
     utterance=None,
@@ -152,11 +191,13 @@ def run_hop(
     cie_id="physical_stance",
     clip_to_unit=True,
     epsilon=DEFAULT_EPS,
+    prior_M=None,
 ):
     pkt = _empty_packet()
     pkt["utterance"] = utterance
     pkt["packs_loaded"] = list(packs_loaded or [])
     pkt["cie_id"] = cie_id
+    pkt["first_meaning_cycle"] = prior_M is None
 
     card = None
     if card_id:
@@ -164,6 +205,7 @@ def run_hop(
         if card is None:
             pkt["resolution_status"] = "unassigned"
             pkt["assignment_status"] = "unassigned"
+            _set_flags(pkt)
             return pkt
         pkt["assignment_status"] = "card_given"
         _fill_card_fields(pkt, card)
@@ -183,22 +225,25 @@ def run_hop(
         status = assigned.get("assignment_status")
         if status != "assigned":
             pkt["resolution_status"] = status
+            _set_flags(pkt)
             return pkt
         card = {"card_id": None, **{s: assigned.get(s) for s in SLOTS}}
         card["residue_code"] = assigned.get("residue_code")
         card["feature_tags"] = assigned.get("feature_tags") or []
-        # map is keyed by card_id in this revision; utterance-only hops have no map row
         pkt["candidate_group_ids"] = []
         pkt["resolution_status"] = "empty_map"
         pkt["refinement_cycles"] = 0
+        _set_flags(pkt)
         return pkt
     else:
         pkt["resolution_status"] = "unassigned"
         pkt["assignment_status"] = "unassigned"
+        _set_flags(pkt)
         return pkt
 
     if pkt["structural_key"] is None:
         pkt["resolution_status"] = pkt.get("assignment_status") or "unassigned"
+        _set_flags(pkt)
         return pkt
 
     candidates = _map_candidates(pkt["card_id"])
@@ -206,16 +251,17 @@ def run_hop(
     if not candidates:
         pkt["resolution_status"] = "empty_map"
         _expand_hint(pkt, card)
+        _set_flags(pkt)
         return pkt
 
     order = _rank(candidates)
-    # wall: drop anything not in the map (should be a no-op)
     allowed = {int(x) for x in candidates}
     order = [g for g in order if g in allowed]
     pkt["final_rank_order"] = order
     if not order:
         pkt["resolution_status"] = "empty_map"
         _expand_hint(pkt, card)
+        _set_flags(pkt)
         return pkt
 
     selected = order[0]
@@ -224,6 +270,7 @@ def run_hop(
     proto = groups.get(int(selected))
     if proto is None:
         pkt["resolution_status"] = "empty_map"
+        _set_flags(pkt)
         return pkt
 
     M = from_mapping(proto.get("group_dimensions"))
@@ -231,16 +278,68 @@ def run_hop(
     alpha = float(env.get("identity_importance") or 0.0)
     I = from_mapping(env.get("identity_vector"))
     Mp = modulate(M, alpha, I, clip=clip_to_unit)
+    before = from_mapping(prior_M) if prior_M is not None else zeros()
+    pkt["meaning_semantics_before"] = dict(before)
     pkt["meaning_semantics"] = dict(M)
     pkt["meaning_semantics_prime"] = dict(Mp)
-    pkt["meaning_delta_h"] = delta_l2(Mp, M)
+    pkt["meaning_delta_h"] = delta_l2(Mp, before)
+    pkt["meaning_cie_delta"] = delta_l2(Mp, M)
     shove = {n: alpha * float(I.get(n, 0.0)) for n in NAMES}
     pkt["identity_delta"] = delta_l2(shove, zeros())
     pkt["refinement_cycles"] = 1
-    pkt["ready_for_ouba"] = True
+    pkt["hold_geometry"] = "formation"
     if pkt["meaning_delta_h"] < float(epsilon):
         pkt["resolution_status"] = "meaning_stable"
     else:
         pkt["resolution_status"] = "one_pass_complete"
     _expand_hint(pkt, card)
+    _set_flags(pkt)
     return pkt
+
+
+def _routing_filter(tp):
+    if not isinstance(tp, dict):
+        return None
+    proc = tp.get("process")
+    if not isinstance(proc, dict):
+        return None
+    return proc.get("routing_filter")
+
+
+def process(tp=None, mode="general", **kwargs):
+    """Path A-shaped adapter. Crossing stays in run_hop. Must not write routing."""
+    before = copy.deepcopy(tp) if isinstance(tp, dict) else {}
+    rf_before = _routing_filter(before)
+    card_id = kwargs.get("card_id") or (tp or {}).get("card_id")
+    if not card_id and isinstance((tp or {}).get("idob"), dict):
+        card_id = tp["idob"].get("card_id")
+    utterance = kwargs.get("utterance") or (tp or {}).get("utterance")
+    packs = kwargs.get("packs_loaded")
+    cie_id = kwargs.get("cie_id", "physical_stance")
+    clip = kwargs.get("clip_to_unit", True)
+    epsilon = kwargs.get("epsilon", DEFAULT_EPS)
+    prior_M = kwargs.get("prior_M")
+    pkt = run_hop(
+        card_id=card_id,
+        utterance=utterance,
+        packs_loaded=packs,
+        cie_id=cie_id,
+        clip_to_unit=clip,
+        epsilon=epsilon,
+        prior_M=prior_M,
+    )
+    out = before if before else {}
+    out.setdefault("idob", {}).update(pkt)
+    out.setdefault("semantic", {})["meaning_delta_h"] = pkt.get("meaning_delta_h")
+    if rf_before is not None:
+        out.setdefault("process", {})["routing_filter"] = copy.deepcopy(rf_before)
+    mutated = _routing_filter(out) != rf_before and rf_before is not None
+    if mutated:
+        out.setdefault("_idob_diagnostics", {})["routing_filter_mutated"] = True
+        out.setdefault("process", {})["routing_filter"] = copy.deepcopy(rf_before)
+        pkt["routing_filter_mutated"] = True
+        out["idob"]["routing_filter_mutated"] = True
+    else:
+        pkt["routing_filter_mutated"] = False
+        out.setdefault("idob", {})["routing_filter_mutated"] = False
+    return out
