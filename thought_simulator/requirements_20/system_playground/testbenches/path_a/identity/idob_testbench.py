@@ -1,6 +1,7 @@
 """
-IdOB Testbench — structure-to-meaning (11_idob_core via primitives/idob/idob.py).
+IdOB Testbench — structure-to-meaning via primitives/idob/idob.py.
 Every enabled test prints utterance + input + output packet.
+Does not import 11_idob_core.
 """
 from __future__ import annotations
 
@@ -15,7 +16,6 @@ TB_DIR = os.path.dirname(__file__)
 PROJECT_ROOT = os.path.abspath(os.path.join(TB_DIR, "..", "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
-# Repo root so thought_simulator.* still works if present
 REPO_ROOT = os.path.abspath(os.path.join(TB_DIR, "..", "..", "..", "..", ".."))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
@@ -73,7 +73,6 @@ def _compare_idob(actual_tp, expected):
     if expected.get("routing_filter_unchanged"):
         before = ((actual_tp.get("_trace_input") or {}).get("process") or {}).get("routing_filter")
         after = (actual_tp.get("process") or {}).get("routing_filter")
-        # runner attaches _trace_input; if missing, compare is done in rulechecker
         if before is not None and before != after:
             return False, "routing_filter changed"
     return True, None
@@ -141,7 +140,7 @@ def run_single_test(test_entry):
 
     print(f"- Utterance: {utterance!r}")
     print("- Input Source: idob_testbench.yaml")
-    print("- Kernel: primitives/idob/idob.py → 11_idob_core")
+    print("- Kernel: primitives/idob/idob.py")
 
     idob = IdOB(copy.deepcopy(tp_input))
     tp_output = idob.process(
@@ -205,7 +204,7 @@ def run_general_mode():
 
 def run_testbench():
     print("\n============================================================")
-    print(" IdOB Testbench Runner (S2M / 11_idob_core)")
+    print(" IdOB Testbench Runner (primitives/idob)")
     print("============================================================")
     mode = (TESTBENCH_CONFIG or {}).get("mode", "testbench")
     print(f"- Mode: {mode}")

@@ -1,6 +1,6 @@
-# IdOB Testbench — structure-to-meaning (11_idob_core).
-# Every case records utterance (carrier) with input and expected packet fields.
-# Lifecycle formation..closure cases: idob_lifecycle_archive.yaml (do not enable here).
+# IdOB Testbench — structure-to-meaning (primitives/idob/idob.py).
+# Every case records utterance with input and expected packet fields.
+# Lifecycle formation..closure: idob_lifecycle_archive.yaml (do not enable here).
 
 tests:
   - id: idob_s2m_01_rock
