@@ -1,4 +1,4 @@
-"""IdOB Rulechecker — S2M packet walls (11_idob_core)."""
+"""IdOB Rulechecker — S2M packet walls for primitives/idob/idob.py."""
 from __future__ import annotations
 
 from typing import List, Tuple

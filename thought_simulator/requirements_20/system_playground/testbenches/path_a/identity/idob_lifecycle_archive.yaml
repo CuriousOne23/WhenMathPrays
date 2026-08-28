@@ -1,8 +1,7 @@
 # ARCHIVED — 10-geometry identity-envelope suite (not S2M expected output).
-# Previous idob_testbench.yaml v0.1 cases. Do not run against 11_idob_core.
-# Conversation topic: primitives/idob/idob_10_conversation_cases.md
-# Full input/expected identity envelopes remain in git history of idob_testbench.yaml
-# prior to the s2m-11 revision.
+# Do not enable these ids on idob_testbench.py.
+# Topic write-up: primitives/idob/papers/lifecycle/idob_10_conversation_cases.md
+# Full old expected envelopes remain in git history of idob_testbench.yaml.
 
 suite: identity_lifecycle
 active_s2m_suite: idob_testbench.yaml

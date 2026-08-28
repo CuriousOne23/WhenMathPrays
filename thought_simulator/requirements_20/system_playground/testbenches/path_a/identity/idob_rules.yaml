@@ -1,9 +1,9 @@
-# IdOB Rules (S2M revision)
-# Crossing template: 11_idob_core. Lifecycle geometry rules archived in
-# idob_lifecycle_archive.yaml — do not apply those expected blocks here.
+# IdOB Rules — structure-to-meaning hop (primitives/idob).
+# Derivation: Path A structure-to-meaning architecture (two geometries, door, rank, CIE, Δh).
+# Lifecycle envelope cases: idob_lifecycle_archive.yaml — do not enable on this runner.
 
 primitive: IdOB
-version: "s2m-11"
+version: "s2m"
 
 rules:
   - id: idob_output_001
