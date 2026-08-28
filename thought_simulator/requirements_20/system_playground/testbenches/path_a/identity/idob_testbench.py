@@ -1,7 +1,6 @@
 """
 IdOB Testbench — structure-to-meaning via primitives/idob/idob.py.
 Every enabled test prints utterance + input + output packet.
-Does not import 11_idob_core.
 """
 from __future__ import annotations
 
