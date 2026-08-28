@@ -1,0 +1,21 @@
+rows:
+  - residue_code: static_object_vs_dynamic_action
+    after_status: leftover_after_map
+    digested: false
+    expand_target: residue_next.examples.yaml
+    next_key: null
+  - residue_code: null
+    after_status: empty_map
+    digested: false
+    expand_target: struct_to_meaning_map.yaml
+    next_key: null
+  - residue_code: null
+    after_status: unassigned
+    digested: false
+    expand_target: pack_base_en.yaml
+    next_key: null
+  - residue_code: null
+    after_status: digested_stop
+    digested: true
+    expand_target: stop
+    next_key: null

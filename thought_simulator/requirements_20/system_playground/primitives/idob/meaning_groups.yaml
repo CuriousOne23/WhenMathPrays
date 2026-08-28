@@ -1,0 +1,51 @@
+meaning_groups:
+  - group_id: 1001
+    group_name: ACTION.physical.motion
+    primitive: ACTION
+    group_dimensions:
+      physicality: 0.95
+      sociality: 0.10
+      temporality: 0.30
+      intentionality: 0.60
+      materiality: 0.20
+      spatiality: 0.70
+  - group_id: 2001
+    group_name: ENTITY.physical.object
+    primitive: ENTITY
+    group_dimensions:
+      physicality: 0.90
+      sociality: 0.05
+      temporality: 0.10
+      intentionality: 0.20
+      materiality: 0.80
+      spatiality: 0.40
+  - group_id: 3001
+    group_name: EVENT.temporal.change
+    primitive: EVENT
+    group_dimensions:
+      physicality: 0.40
+      sociality: 0.05
+      temporality: 0.95
+      intentionality: 0.10
+      materiality: 0.30
+      spatiality: 0.20
+  - group_id: 4001
+    group_name: STATE.biological.condition
+    primitive: STATE
+    group_dimensions:
+      physicality: 0.20
+      sociality: 0.05
+      temporality: 0.30
+      intentionality: 0.10
+      materiality: 0.10
+      spatiality: 0.05
+  - group_id: 5001
+    group_name: QUALITY.object.sensitivity
+    primitive: QUALITY
+    group_dimensions:
+      physicality: 0.60
+      sociality: 0.05
+      temporality: 0.20
+      intentionality: 0.05
+      materiality: 0.40
+      spatiality: 0.10

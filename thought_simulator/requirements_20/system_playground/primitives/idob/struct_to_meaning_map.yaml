@@ -1,0 +1,14 @@
+# Door: card_id or structural_key -> legal group_ids. List order is not rank.
+struct_to_meaning_map:
+  - card_id: S_rock_burst
+    structural_key: SK|12|3|44|2|1|7
+    meaning_group_candidates: [1001, 3001, 5001]
+  - card_id: S_deadline_friday
+    structural_key: SK|101|12|3|2|1|0
+    meaning_group_candidates: [3001]
+  - card_id: S_sleepy
+    structural_key: SK|401|7|30|1|1|0
+    meaning_group_candidates: [4001]
+  - card_id: S_unmapped
+    structural_key: SK|999|0|0|0|1|0
+    meaning_group_candidates: []
