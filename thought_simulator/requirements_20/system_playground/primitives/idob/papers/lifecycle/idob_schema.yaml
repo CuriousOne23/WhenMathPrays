@@ -1,0 +1,27 @@
+# LIFECYCLE enums — not loaded by primitives/idob/idob.py
+# Hop packet: primitives/idob/idob_s2m_packet.yaml
+
+idob_schema:
+  identity:
+    geometry:
+      type: enum
+      allowed_values: [formation, refinement, correction, drift, conflict, bifurcation, stabilization, convergence, alignment, closure]
+    continuity:
+      type: enum
+      allowed_values: [continuation, correction, oscillation, drift, bifurcation, stabilization]
+    pressure:
+      type: enum
+      allowed_values: [low, medium, high, escalate, de-escalate, insist, withdraw]
+    residuals:
+      type: enum
+      allowed_values: [small, medium, large, explosion, two_clusters, collapsed]
+    freeze:
+      type: enum
+      allowed_values: [none, identity_freeze, propagation_active]
+    basin_surface:
+      type: enum
+      allowed_values: [basin, split, unstable, transition_surface, none]
+  stance:
+    category:
+      type: enum
+      allowed_values: [agree, disagree, clarify, confirm, reject, redirect, uncertain, emphasize, de-emphasize]
