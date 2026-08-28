@@ -1,83 +1,21 @@
-# semantic_field_definitions.yaml
-# Location: primitives/idob/ (local exclusive table)
-# Relocated 2026-08-19 from papers/
+# semantic_field_id inventory for 09 / structure cards.
+# No meaning floats. New id = unused int + gloss + examples.
+# Lifecycle envelope names are NOT field ids (see idob_schema.yaml).
 
 semantic_field_definitions:
-
-  identity:
-    description: >
-      The core meaning dimension describing what the user is talking
-      about and how that meaning evolves. Identity fields capture
-      formation, refinement, correction, drift, conflict, bifurcation,
-      convergence, alignment, and closure.
-    required: true
-
-  stance:
-    description: >
-      Describes the user's attitude or position toward the identity:
-      agreement, disagreement, clarification, rejection, uncertainty,
-      emphasis, or de-emphasis.
-    required: true
-
-  direction:
-    description: >
-      Describes the directional flow of meaning: next, previous,
-      stable, or unknown. Used by Path A routing and continuity logic.
-    required: true
-
-  pressure:
-    description: >
-      Describes the intensity of meaning change: low, medium, high,
-      escalation, de-escalation, insistence, withdrawal.
-    required: true
-
-  continuity:
-    description: >
-      Describes how meaning persists or changes across turns:
-      continuation, correction, oscillation, drift, bifurcation,
-      stabilization.
-    required: true
-
-  geometry:
-    description: >
-      Describes the structural behavior of identity meaning:
-      formation, refinement, correction, drift, conflict, bifurcation,
-      stabilization, convergence, alignment, closure.
-    required: true
-
-  residuals:
-    description: >
-      Describes leftover meaning differences between the current
-      identity and previous identities: small, medium, large,
-      explosion, two_clusters, collapsed.
-    required: true
-
-  freeze:
-    description: >
-      Describes whether identity meaning is frozen or propagating:
-      none, identity_freeze, propagation_active.
-    required: true
-
-  basin_surface:
-    description: >
-      Describes the stability region of identity meaning: basin,
-      split, unstable, transition_surface, none.
-    required: true
-
-  routing:
-    description: >
-      Describes how meaning should move through Path A: forward,
-      backward, branch, merge, hold.
-    required: true
-
-  importance:
-    description: >
-      Describes the significance of the identity: low, medium, high,
-      critical. Used by TS prioritization logic.
-    required: false
-
-  domain:
-    description: >
-      Domain-neutral placeholders for world concepts (object, event,
-      process, system, structure, behavior, state, transition).
-    required: false
+  entries:
+    - id: 0
+      gloss: unspecified field
+      examples: []
+    - id: 12
+      gloss: physical-event basin (toy rock / burst)
+      examples: ["The rock burst open."]
+    - id: 101
+      gloss: scheduling / deadline basin
+      examples: ["The project deadline is Friday."]
+    - id: 401
+      gloss: biological-condition basin
+      examples: ["I am sleepy."]
+    - id: 999
+      gloss: unmapped / no group candidates (coverage hole)
+      examples: ["zzzz unmapped geometry"]
