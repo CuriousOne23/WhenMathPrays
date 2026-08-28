@@ -1,34 +1,39 @@
-# ============================================================
-# IdOB Rules (Version 0.1)
-# Aligned with 20.40.050 v3.0, idob_py_struc_pgm.md v0.1,
-# progressive_lineup_testing.md v4.2
-# ============================================================
+# IdOB Rules (S2M revision)
+# Crossing template: 11_idob_core. Lifecycle geometry rules archived in
+# idob_lifecycle_archive.yaml — do not apply those expected blocks here.
 
 primitive: IdOB
-version: "0.1"
+version: "s2m-11"
 
 rules:
-
   - id: idob_output_001
     description: IdOB must produce an output TP for the given input.
     check: deterministic_output_present
 
-  - id: idob_identity_shape_001
-    description: metadata.identity must contain geometry, continuity, pressure, residuals, freeze, basin_surface after process.
-    check: identity_envelope_present
+  - id: idob_utterance_001
+    description: Test reference must keep the utterance (or explicit card-only source).
+    check: utterance_reference_present
+
+  - id: idob_packet_001
+    description: Output must contain tp.idob packet with official keys.
+    check: packet_present
 
   - id: idob_write_boundary_001
-    description: IdOB must not mutate RB routing_filter or DCB geometric_state.
+    description: IdOB must not mutate process.routing_filter or DCB geometric_state.
     check: no_routing_or_dcb_writes
 
   - id: idob_no_structural_001
     description: IdOB must not produce structural residue or modify SSG fields.
     check: no_structural_writes
 
-  - id: idob_completion_001
-    description: idob_complete and path_b_eligible must be boolean and consistent with geometry.
-    check: completion_flags_consistent
+  - id: idob_rank_map_001
+    description: Rank order must be a subset of map candidates.
+    check: rank_subset_of_map
 
-  - id: idob_progressive_001
-    description: IdOB must operate under progressive lineup execution.
-    check: progressive_lineup_compatibility
+  - id: idob_key_stable_001
+    description: Packet structural_key must match input key when both exist.
+    check: key_not_invented_from_cie
+
+  - id: idob_flags_001
+    description: ready_for_ouba, path_b_eligible, idob_complete must be bool.
+    check: completion_flags_bool

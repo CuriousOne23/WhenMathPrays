@@ -1,44 +1,26 @@
-# ============================================================
-# IdOB Tests To Run (v0.1)
-# ============================================================
+# S2M IdOB tests. Lifecycle formation..closure ids live in idob_lifecycle_archive.yaml.
 
 tests:
-  - id: idob_01_formation
+  - id: idob_s2m_01_rock
     enabled: true
-    description: Initial proposal — TS as deterministic semantic engine
+    description: Rock burst card — birth with leftover residue_code
 
-  - id: idob_02_refinement
+  - id: idob_s2m_02_deadline
     enabled: true
-    description: Sharpen to fixed-time-step state machine
+    description: Deadline card — single candidate, no card residue
 
-  - id: idob_03_correction
+  - id: idob_s2m_03_sleepy
     enabled: true
-    description: Shift toward semantic operating system framing
+    description: Sleepy card — birth, path_b_eligible
 
-  - id: idob_04_drift
+  - id: idob_s2m_04_unmapped
     enabled: true
-    description: Drift toward ontological claim for the manifold
+    description: Unmapped card — empty map, no M
 
-  - id: idob_05_conflict
+  - id: idob_s2m_05_miss
     enabled: true
-    description: Explicit rejection of ontological reading
+    description: Utterance with no pack cues — unassigned, utterance still recorded
 
-  - id: idob_06_bifurcation
+  - id: idob_s2m_06_write_boundary
     enabled: true
-    description: Temporary coexistence of two identity basins
-
-  - id: idob_07_stabilization
-    enabled: true
-    description: Primary identity settles on deterministic state machine
-
-  - id: idob_08_convergence
-    enabled: true
-    description: Manifold kept as secondary / optional viz
-
-  - id: idob_09_alignment
-    enabled: true
-    description: Alignment with stated epistemic stance
-
-  - id: idob_10_closure
-    enabled: true
-    description: Identity work on this topic cluster complete
+    description: routing_filter on input must survive process

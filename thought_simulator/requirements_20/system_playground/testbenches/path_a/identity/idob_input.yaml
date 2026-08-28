@@ -1,29 +1,9 @@
-# ============================================================
-# IdOB general-mode input (v0.1)
-# Used when mode == "general"
-# ============================================================
+# General-mode input (S2M). Utterance is the carrier; card_id selects the 01 card.
 
-utterance: "Is the Thought Simulator primarily a deterministic state machine for meaning?"
+utterance: "The rock burst open."
+card_id: S_rock_burst
+cie_id: physical_stance
 
-metadata:
-  identity:
-    geometry: formation
-    continuity: continuation
-    pressure: low
-    residuals:
-      magnitude: small
-      pattern: small
-    freeze:
-      state: none
-    basin_surface:
-      region: none
-  stance:
-    category: clarify
-  direction:
-    flow: next
-  routing:
-    mode: forward
-  importance:
-    level: medium
-  process:
-    routing_committed: true
+process:
+  routing_filter:
+    keep: true
