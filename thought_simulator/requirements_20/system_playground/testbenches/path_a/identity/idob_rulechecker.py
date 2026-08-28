@@ -1,75 +1,63 @@
-"""
-IdOB Rulechecker (Version 0.1)
-Aligned with idob_rules.yaml, 20.40.050 v3.0, idob_py_struc_pgm.md v0.1,
-progressive_lineup_testing.md v4.2
-"""
-
+"""IdOB Rulechecker — S2M packet walls (11_idob_core)."""
 from __future__ import annotations
 
-from typing import Any, List, Tuple
+from typing import List, Tuple
 
 
 class IdOBRuleChecker:
-    def __init__(self, tp_input, tp_output, rules):
+    def __init__(self, tp_input, tp_output, rules, utterance=None):
         self.tp_in = tp_input or {}
         self.tp_out = tp_output or {}
         self.rules = rules or []
+        self.utterance = utterance
         self.errors: List[Tuple[str, str]] = []
 
     def _assert(self, condition: bool, rule_id: str, message: str) -> None:
         if not condition:
             self.errors.append((rule_id, message))
 
-    def _meta(self, tp: dict) -> dict:
-        return (tp or {}).get("metadata") or {}
+    def _pkt(self):
+        return (self.tp_out or {}).get("idob") or {}
 
-    def _identity(self, tp: dict) -> dict:
-        return self._meta(tp).get("identity") or {}
+    def _get(self, d, *keys):
+        cur = d
+        for k in keys:
+            if not isinstance(cur, dict):
+                return None
+            cur = cur.get(k)
+        return cur
 
     def deterministic_output_present(self, rule):
         self._assert(self.tp_out is not None, rule["id"], "IdOB output TP is missing.")
 
-    def identity_envelope_present(self, rule):
-        ident = self._identity(self.tp_out)
-        for key in ("geometry", "continuity", "pressure", "residuals", "freeze", "basin_surface"):
-            self._assert(
-                key in ident,
-                rule["id"],
-                f"metadata.identity.{key} must be present after IdOB",
-            )
-        residuals = ident.get("residuals") or {}
+    def utterance_reference_present(self, rule):
+        u = self.utterance
+        if u is None:
+            u = self.tp_in.get("utterance") or self._pkt().get("utterance")
+        src = self.tp_in.get("utterance_source") or "input"
         self._assert(
-            "magnitude" in residuals and "pattern" in residuals,
+            u is not None or src == "card",
             rule["id"],
-            "metadata.identity.residuals must have magnitude and pattern",
+            "utterance missing on test reference (set utterance or utterance_source=card)",
         )
-        freeze = ident.get("freeze") or {}
-        self._assert("state" in freeze, rule["id"], "metadata.identity.freeze.state must be present")
-        basin = ident.get("basin_surface") or {}
-        self._assert("region" in basin, rule["id"], "metadata.identity.basin_surface.region must be present")
+
+    def packet_present(self, rule):
+        pkt = self._pkt()
+        self._assert(isinstance(pkt, dict) and pkt, rule["id"], "tp.idob packet missing")
+        for key in ("resolution_status", "ready_for_ouba", "path_b_eligible", "idob_complete"):
+            self._assert(key in pkt, rule["id"], f"tp.idob.{key} missing")
 
     def no_routing_or_dcb_writes(self, rule):
-        def _get(d, *keys):
-            cur = d
-            for k in keys:
-                if not isinstance(cur, dict):
-                    return None
-                cur = cur.get(k)
-            return cur
-
-        # routing_filter unchanged if present
-        before_rf = _get(self.tp_in, "process", "routing_filter")
-        after_rf = _get(self.tp_out, "process", "routing_filter")
+        before_rf = self._get(self.tp_in, "process", "routing_filter")
+        after_rf = self._get(self.tp_out, "process", "routing_filter")
         if before_rf is not None:
             self._assert(
                 before_rf == after_rf,
                 rule["id"],
                 "IdOB must not mutate process.routing_filter",
             )
-
-        # geometric_state unchanged if present
-        before_gs = _get(self.tp_in, "metadata", "geometric_state")
-        after_gs = _get(self.tp_out, "metadata", "geometric_state")
+        before_gs = self._get(self.tp_in, "metadata", "geometric_state")
+        after_gs = self._get(self.tp_out, "metadata", "geometric_state")
         if before_gs is not None:
             self._assert(
                 before_gs == after_gs,
@@ -78,8 +66,8 @@ class IdOBRuleChecker:
             )
 
     def no_structural_writes(self, rule):
-        in_meta = self._meta(self.tp_in)
-        out_meta = self._meta(self.tp_out)
+        in_meta = (self.tp_in or {}).get("metadata") or {}
+        out_meta = (self.tp_out or {}).get("metadata") or {}
         for key in ("residue", "residue_metadata", "structural_metadata", "structural_graph"):
             if key in in_meta and in_meta.get(key) is not None:
                 self._assert(
@@ -95,31 +83,27 @@ class IdOBRuleChecker:
                     f"{key} was modified by IdOB",
                 )
 
-    def completion_flags_consistent(self, rule):
-        complete = self.tp_out.get("idob_complete")
-        eligible = self.tp_out.get("path_b_eligible")
-        self._assert(isinstance(complete, bool), rule["id"], "idob_complete must be bool")
-        self._assert(isinstance(eligible, bool), rule["id"], "path_b_eligible must be bool")
-        geom = self._identity(self.tp_out).get("geometry")
-        if complete:
+    def rank_subset_of_map(self, rule):
+        pkt = self._pkt()
+        cands = set(pkt.get("candidate_group_ids") or [])
+        order = pkt.get("final_rank_order") or []
+        self._assert(set(order) <= cands, rule["id"], "rank invented a group_id not on the map")
+
+    def key_not_invented_from_cie(self, rule):
+        pkt = self._pkt()
+        if pkt.get("structural_key") and self.tp_in.get("structural_key"):
             self._assert(
-                geom == "closure",
+                pkt.get("structural_key") == self.tp_in.get("structural_key"),
                 rule["id"],
-                f"idob_complete=True requires geometry=closure, got {geom!r}",
-            )
-        if geom in ("alignment", "closure"):
-            self._assert(
-                eligible is True,
-                rule["id"],
-                f"geometry {geom!r} should set path_b_eligible=True",
+                "structural_key changed across IdOB",
             )
 
-    def progressive_lineup_compatibility(self, rule):
-        self._assert(
-            self.tp_out is not None,
-            rule["id"],
-            "IdOB output missing; cannot validate progressive lineup.",
-        )
+    def completion_flags_bool(self, rule):
+        pkt = self._pkt()
+        for key in ("ready_for_ouba", "path_b_eligible", "idob_complete"):
+            self._assert(isinstance(pkt.get(key), bool), rule["id"], f"{key} must be bool")
+        if self.tp_out.get("idob_complete") is not None:
+            self._assert(isinstance(self.tp_out.get("idob_complete"), bool), rule["id"], "root idob_complete must be bool")
 
     def run(self):
         for rule in self.rules:
