@@ -16,19 +16,28 @@ def _print(pkt):
     print(f"assignment_status:       {pkt.get('assignment_status')}")
     print(f"structural_key:          {pkt.get('structural_key')}")
     print(f"residue_code:            {pkt.get('residue_code')}")
+    print(f"identity_residual:       {pkt.get('identity_residual')}")
+    print(f"hold_geometry:           {pkt.get('hold_geometry')}")
     print(f"candidate_group_ids:     {pkt.get('candidate_group_ids')}")
     print(f"final_rank_order:        {pkt.get('final_rank_order')}")
     print(f"selected_group_id:       {pkt.get('selected_group_id')}")
     print(f"cie_id:                  {pkt.get('cie_id')}")
+    print(f"first_meaning_cycle:     {pkt.get('first_meaning_cycle')}")
+    Mb = pkt.get("meaning_semantics_before")
     M = pkt.get("meaning_semantics")
     Mp = pkt.get("meaning_semantics_prime")
+    print(f"meaning_semantics before:{fmt(Mb) if Mb else None}")
     print(f"meaning_semantics M0:    {fmt(M) if M else None}")
     print(f"meaning_semantics M':    {fmt(Mp) if Mp else None}")
     print(f"meaning_delta_h:         {pkt.get('meaning_delta_h')}")
+    print(f"meaning_cie_delta:       {pkt.get('meaning_cie_delta')}")
     print(f"identity_delta:          {pkt.get('identity_delta')}")
     print(f"refinement_cycles:       {pkt.get('refinement_cycles')}")
     print(f"resolution_status:       {pkt.get('resolution_status')}")
     print(f"ready_for_ouba:          {pkt.get('ready_for_ouba')}")
+    print(f"path_b_eligible:         {pkt.get('path_b_eligible')}")
+    print(f"idob_complete:           {pkt.get('idob_complete')}")
+    print(f"routing_filter_mutated:  {pkt.get('routing_filter_mutated')}")
     print(f"expand_target:           {pkt.get('expand_target')}")
     print(f"next_key:                {pkt.get('next_key')}")
     print("key rewritten by CIE:    NO")
@@ -38,18 +47,18 @@ def run(card_id="S_rock_burst", utterance=None, packs_loaded=None, cie_id="physi
     print("=" * 64)
     print("LESSON 11 — IDOB CORE")
     print("One hop orchestrator. Not RB. Not Path A product IdOB.")
+    print("First-pass Δh uses zeros when prior_M is omitted.")
     print("=" * 64)
     if utterance is not None:
         pkt = run_hop(utterance=utterance, packs_loaded=packs_loaded, cie_id=cie_id, clip_to_unit=clip_to_unit)
-    else:
-        ids = [card_id] if card_id else ["S_rock_burst", "S_deadline_friday", "S_sleepy", "S_unmapped"]
-        if card_id:
-            ids = [card_id]
-        for cid in ids:
-            _print(run_hop(card_id=cid, cie_id=cie_id, clip_to_unit=clip_to_unit))
+        _print(pkt)
         print("\nEnd lesson 11.\n")
         return
-    _print(pkt)
+    ids = [card_id] if card_id else ["S_rock_burst", "S_deadline_friday", "S_sleepy", "S_unmapped"]
+    if card_id:
+        ids = [card_id]
+    for cid in ids:
+        _print(run_hop(card_id=cid, cie_id=cie_id, clip_to_unit=clip_to_unit))
     print("\nEnd lesson 11.\n")
 
 
