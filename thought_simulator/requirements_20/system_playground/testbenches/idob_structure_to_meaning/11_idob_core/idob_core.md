@@ -2,180 +2,184 @@
 
 **Slide:** `11_idob_core/`  
 **Module:** `idob.py`  
-**Status:** First realization revision. Laptop tables. Not Path A product IdOB.  
-**Read this file** to implement, review, or extend `idob.py` in a new conversation. You do not need the 20.xx routing stack.
+**Status:** Realization revision + keepers from `primitives/idob/idob.py` (first-pass Δh, write-boundary, complete vs eligible, identity residual, `process(tp)` adapter). Still not Path A product IdOB.  
+**Read this file** to implement, review, or extend `idob.py` in a new conversation. You do not need the 20.xx routing stack or the 7-feature identity table.
 
 ---
 
-## 1. Why this file exists
+## 1. Purpose
 
-Path A / IdOB is an unproven theory of structure → speaker intended-projection. The bench slides (00–10) name the parts. This slide is the **thin kernel that runs one hop** so the theory can be expanded by YAML, not by rewriting architecture.
+Path A / IdOB is an unproven theory of structure → speaker **intended-projection** stand-in. This module runs **one hop** so that theory is visible and expandable by YAML.
 
-`idob.py` is an **orchestrator**. It does not tokenize English (Slide 09 does). It does not invent groups. It does not route the next IdOB (RB / Slide 10).
+`idob.py` is an **orchestrator**. It does not tokenize English (Slide 09). It does not invent groups. It does not route the next IdOB (RB / Slide 10). It does not walk the primitive's formation…closure table as meaning.
 
 Duck test: does one run make the crossing **visible and replayable**?
 
----
+Two entries:
 
-## 2. Risk vs Slide 07 (do not merge jobs)
-
-| Slide 07 `07_idob_slide/` | Slide 11 `11_idob_core/` |
-|---------------------------|--------------------------|
-| Teaching wire of lessons 01–06 | Realization kernel |
-| Feel the full print | Same hop as a callable `run_hop` |
-| Stay a slide | Stay small; consumers (TR/CTP/RB) sit **outside** |
-
-**Risk:** 11 grows into “full Path A.” Then 07 is redundant and the kernel is no longer supportable.  
-**Rule:** 07 teaches. 11 realizes one hop. Neither implements RTU / TR / CTP / RB / OuBA.
+| Function | Use |
+|----------|-----|
+| `run_hop(...)` | Bench / learning. Returns `idob_packet`. |
+| `process(tp, ...)` | Path A-shaped adapter. Calls `run_hop`, writes packet under `tp["idob"]`, **must not** mutate `process.routing_filter`. |
 
 ---
 
-## 3. What `idob.py` does (algorithm)
+## 2. Risk vs Slide 07 and vs primitive `idob.py`
 
-One function: `run_hop(...)` → `idob_packet` dict.
+| Slide 07 | Slide 11 | `primitives/idob/idob.py` |
+|----------|----------|---------------------------|
+| Teaching wire of 01–06 | Realization kernel of the **crossing** | Identity-basin operator on a TP |
+| Feel the print | `run_hop` + `process` | 7 categorical features, L1/Κ |
 
-1. **Obtain a structure card**  
-   - `card_id` given → load Slide 01 card. `assignment_status = card_given`.  
-   - else `utterance` given → Slide 09 `assign(utterance, packs_loaded)`.  
-   - If not six IDs (`unassigned` / `partial`) → packet with null key, null M, `resolution_status` = that miss. Stop. No invented IDs.
-
-2. **Key** — `toy_structural_key` on the six IDs. Meaning-blind. CIE must not change it later.
-
-3. **Map** — Slide 03: `card_id` → `candidate_group_ids` (set). Empty list is legal.  
-   If empty → packet with key, empty candidates, no winner, no M. `resolution_status = empty_map`. Stop.
-
-4. **Rank** — Slide 04 toys: score **only** mapped ids. `final_rank_order` winner first. `selected_group_id` = first. Must not add an id.
-
-5. **Birth M0** — Slide 02 `group_dimensions` of `selected_group_id`.
-
-6. **CIE** — `05_cie/modulate.py`:  
-   \(M' = M + \alpha I\)  
-   `clip_to_unit` default True. Key unchanged. Neutral envelope → \(M'=M\).
-
-7. **Deltas (this revision: one CIE step, `refinement_cycles = 1`)**  
-   `meaning_delta_h = ||M' − M||` (L2 on six axes)  
-   `identity_delta = ||α I||` (L2 of the shove; 0 if α=0)  
-   Full 06 cycle loop is **not** required in this kernel. Adding it is a named revision.
-
-8. **Freeze label**  
-   - `meaning_stable` if `meaning_delta_h < epsilon` (default 0.05)  
-   - else `one_pass_complete`  
-   Budget/time statuses are reserved for a cycle revision.
-
-9. **Residue stays visible** — copy `residue_code` from the card. Do not clear it because M was born.
-
-10. **Expand hint (optional, read-only)** — Slide 10 classifier may fill `expand_target`. `next_key` stays null unless already in the 10 table (never generated here).
-
-11. **Return the packet.** Same inputs → same packet (replay).
+**Risk:** 11 grows into full Path A, or copies the 7-axis table over physicality…spatiality.  
+**Rule:** six consequence axes stay meaning. Primitive keepers are **flags and boundaries**, not a second meaning geometry. 07 teaches. Neither folder implements TR / CTP / RB / OuBA.
 
 ---
 
-## 4. What `idob.py` must not do
+## 3. What was absorbed from the primitive (and what was not)
 
-- Parse English except by calling Slide 09.  
+| Keeper | How 11 uses it |
+|--------|----------------|
+| First-pass Δh | `first_meaning_cycle`; `meaning_semantics_before` = zeros if no `prior_M` |
+| Write-boundary | `routing_filter_mutated` must stay false; `process` restores routing_filter if touched |
+| Two flags | `ready_for_ouba` = birth; `path_b_eligible` = birth and no card residue; `idob_complete` = eligible and meaning_stable |
+| Identity residual | `identity_residual.{magnitude,pattern}` — hold messiness, **not** `residue_code` |
+| Hold lifecycle | `hold_geometry` default `formation` on birth. Not a meaning axis. No 10-state machine this revision. |
+| `process(tp)` | Adapter only. Crossing stays in `run_hop`. |
+
+**Not absorbed:** GEOMETRY_MAP … BASIN_MAP as meaning; L1/Κ=27; hardcoded `_apply_transition`; `idob_next_ob_candidates: ["idob"]` as routing.
+
+---
+
+## 4. Algorithm (`run_hop`)
+
+1. **Card or utterance** — as before (01 card or 09 assign). Miss → null M, status unassigned/partial. No invented IDs.
+2. **Key** — six IDs, meaning-blind. CIE must not change it.
+3. **Map** — 03 set. Empty → `empty_map`, no M.
+4. **Rank** — only mapped ids.
+5. **Birth M0** — 02 `group_dimensions`.
+6. **CIE** — \(M' = M + \alpha I\). Clip default True.
+7. **Before-vector (primitive keeper)**  
+   - If caller passed `prior_M`: `first_meaning_cycle=False`, before = that vector.  
+   - Else: `first_meaning_cycle=True`, before = zeros (six axes).  
+   `meaning_delta_h = ||M' − before||_2`  
+   `meaning_cie_delta = ||M' − M0||_2`  
+   `identity_delta = ||α I||_2`
+8. **Freeze label** — `meaning_stable` if Δh < ε else `one_pass_complete`.
+9. **Card residue** stays. **Identity residual** filled from miss/leftover (see §6). `hold_geometry='formation'` on birth.
+10. **Flags** — see §7.
+11. **Slide 10 hint** — `expand_target`; `next_key` never invented.
+12. Return packet. Replay: same inputs → same packet.
+
+Utterance-only path this revision: 09 can assign IDs; map is still keyed by `card_id`, so status is `empty_map` until a map row exists. That is a miss, not a silent birth.
+
+---
+
+## 5. What `idob.py` must not do
+
+- Parse English except via 09.  
 - Write physicality from the utterance.  
 - Add a group the map forbade.  
 - Change `structural_key` when CIE changes.  
-- Invent `next_key` or call RB.  
-- Commit OuBA / truth / belief. `ready_for_ouba` is a **flag** that a birth happened, not a truth claim.  
-- Load Path A TR / CTP / RTU.
+- Invent `next_key` or write RB / `routing_filter`.  
+- Treat `ready_for_ouba` as truth/OuBA work.  
+- Replace six axes with the primitive 7-feature layout.  
+- Load TR / CTP / RTU.
 
 ---
 
-## 5. Fields it reads
+## 6. `identity_residual` vs `residue_code`
+
+| Field | What |
+|-------|------|
+| `residue_code` | Talk-shape leftover on the **card** (Slide 10 / next key). |
+| `identity_residual` | How messy the **hold** still is after this hop. |
+
+This revision (hand, named):
+
+| Situation | magnitude | pattern |
+|-----------|-----------|---------|
+| unassigned / partial | small | unassigned |
+| empty_map | medium | empty_map |
+| `residue_code` set after birth | medium | leftover |
+| birth and no `residue_code` | small | collapsed |
+| no birth other | none | none |
+
+Do not derive next six IDs from these strings.
+
+---
+
+## 7. Flags
+
+| Flag | True when |
+|------|-----------|
+| `ready_for_ouba` | `selected_group_id` is set (birth). |
+| `path_b_eligible` | birth **and** `residue_code` is null. |
+| `idob_complete` | `path_b_eligible` **and** `resolution_status == meaning_stable`. |
+| `routing_filter_mutated` | must stay false. |
+
+`ready_for_ouba` is **not** complete. Complete is not RB.
+
+---
+
+## 8. Fields read
 
 | Source | Fields |
 |--------|--------|
-| Caller | `card_id` xor `utterance`; `packs_loaded`; `cie_id`; `clip_to_unit`; `epsilon` |
-| `01_structure/structure_card.examples.yaml` | six IDs, `residue_code`, `feature_tags`, `card_id` |
-| `09_structure_assignment/assign.py` | same six + `assignment_status`, `packs_loaded`, `residue_code` |
-| `03_map_lookup/struct_to_meaning_map.slide.yaml` | `meaning_group_candidates` by `card_id` |
-| `02_meaning_groups/meaning_groups.slide.yaml` | `group_id`, `group_dimensions` |
-| `04_ranking/ranking_weights.slide.yaml` | `ranking_weights`, `group_toy_scores` |
-| `05_cie/cie.examples.yaml` | `cie_id`, `identity_importance` (α), `identity_vector` |
-| `05_cie/modulate.py` | `modulate(M, alpha, I, clip)` |
-| `lib/hash_toy.py` | `toy_structural_key` |
-| `lib/vector6.py` | `from_mapping`, `delta_l2`, `add_scaled` |
-| `10_residue_expand/expand.py` | optional hint only |
-
-Working-set note: this revision **points at those YAML files**. A later pack tree under `11_idob_core/packs/` may copy them; architecture stays the same.
+| Caller `run_hop` | `card_id` xor `utterance`; `packs_loaded`; `cie_id`; `clip_to_unit`; `epsilon`; optional `prior_M` |
+| Caller `process` | a TP dict; optional same kwargs; must not require routing writes |
+| `01_structure/structure_card.examples.yaml` | six IDs, `residue_code`, tags, `card_id` |
+| `09_structure_assignment/assign.py` | six IDs, assignment_status, packs, residue |
+| `03_map_lookup/struct_to_meaning_map.slide.yaml` | candidates by `card_id` |
+| `02_meaning_groups/meaning_groups.slide.yaml` | `group_dimensions` |
+| `04_ranking/ranking_weights.slide.yaml` | toy scores |
+| `05_cie/cie.examples.yaml` + `modulate.py` | α, I, \(M'=M+α I\) |
+| `lib/hash_toy.py`, `lib/vector6.py` | key, L2 |
+| `10_residue_expand/expand.py` | hint only |
 
 ---
 
-## 6. Fields it outputs (`idob_packet`)
+## 9. Fields written (`idob_packet`)
 
-See `packet.schema.yaml`. Always emit every key. Use null / `[]` / false rather than omitting.
+See `packet.schema.yaml`. Always emit every key.
 
-Meaning of the important ones:
+Six-axis order: physicality, sociality, temporality, intentionality, materiality, spatiality.
 
-| Field | Role |
-|-------|------|
-| six IDs + `structural_key` | Structure geometry fingerprint |
-| `candidate_group_ids` | Map door (set) |
-| `final_rank_order` / `selected_group_id` | First birth |
-| `meaning_semantics` | M0 |
-| `meaning_semantics_prime` | M' after CIE |
-| `meaning_delta_h` | \(\|M'-M\|\) instrument motion |
-| `resolution_status` | Why this hop stopped |
-| `residue_code` | Leftover tension still on the card |
-| `packs_loaded` | Replay of 09 |
-| `expand_target` | Human file hint (Slide 10) |
-| `next_key` | Always null unless 10 table already had a hand suggestion |
-| `ready_for_ouba` | True iff a group was selected (handoff *possible*, not OuBA work) |
+`meaning_delta_h` is instrument motion from **before** (zeros on first cycle, or `prior_M`) to **M'**. That is the primitive first-pass rule on the bench geometry. `meaning_cie_delta` is CIE-only motion so the shove stays visible when first-pass Δh is large.
 
-Axis order of both M vectors: physicality, sociality, temporality, intentionality, materiality, spatiality. Each in [0,1] when clipped.
+`process(tp)` additionally writes:
+
+- `tp["idob"]` ← packet  
+- `tp["semantic"]["meaning_delta_h"]` ← packet delta  
+- never a new `process.routing_filter`
 
 ---
 
-## 7. `resolution_status` this revision
+## 10. How it is structured / supportable / extensible
 
-| Value | When |
-|-------|------|
-| `unassigned` | 09 produced no six IDs |
-| `partial` | 09 filled some slots only |
-| `empty_map` | Key exists, candidates `[]` |
-| `meaning_stable` | Birth happened and Δh < ε |
-| `one_pass_complete` | Birth happened and Δh ≥ ε (one CIE step, no cycle budget) |
-
-Reserved later: `identity_stable`, `budget_exhausted`, `time_exhausted` (Slide 06).
+- Crossing logic lives in `run_hop`.  
+- Tables live in slides 01–05 / 09 / 10. Do not fork `idob.py` to add English or groups.  
+- New first-pass / flag / residual rule = named revision + this md + `packet.schema.yaml` + `tests_walls.py`.  
+- Laptop: dict lookup. Working set = loaded YAML.  
+- Hold-geometry state machine, if added later, is a CIE-adjacent table — not new meaning axes.
 
 ---
 
-## 8. How to expand (do not fork `idob.py`)
+## 11. Tests (`tests_walls.py`)
 
-| Need | Touch |
-|------|--------|
-| More English → IDs | 09 packs |
-| New prototype | 02 YAML |
-| New legal door | 03 map row |
-| Different first winner | 04 weights |
-| New hold | 05 envelope |
-| Leftover named / next suggestion | 10 table |
-| Different ε or CIE formula | **named machine revision** + this md |
+Previous walls, plus:
 
-Collision / miss stay visible. Unloaded packs do not fire.
+- First pass: `first_meaning_cycle` True, `meaning_semantics_before` is zeros.  
+- With `prior_M`: first_meaning_cycle False.  
+- Birth + residue_code → `path_b_eligible` False.  
+- Birth + no residue + small Δh → may be complete (neutral CIE vs zeros is **not** small; complete may be false on first pass — that is correct).  
+- `process` does not change an existing `process.routing_filter`.  
+- `routing_filter_mutated` is False.  
+- `identity_residual` present; not equal to `residue_code`.
 
 ---
 
-## 9. Path A around this packet (not in this folder)
-
-TR writes `TP.TR` only. CTP freezes a TP copy + history. RB reads this view + residue addresses and proposes next OBs. RTU masks lanes.  
-Those modules **consume** `idob_packet`. They do not live in `idob.py`.
-
----
-
-## 10. Tests (`tests_walls.py`)
-
-- Empty map → no `selected_group_id`, no M.  
-- Rank order ⊆ map set.  
-- CIE swap does not change `structural_key`.  
-- 09 miss utterance → `unassigned`, no key.  
-- `next_key` is null unless table provided it.  
-- Replay: two `run_hop` on same card+cie equal.
-
----
-
-## 11. Run
+## 12. Run
 
     python run_11_idob_core.py
     python tests_walls.py
