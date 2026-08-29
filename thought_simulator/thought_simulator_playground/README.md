@@ -30,7 +30,7 @@ Required capsule files per module:
 
 Shared playground vocabulary:
 
-- [../30_verification/30.30_verification_glossary.md](../30_verification/30.30_verification_glossary.md)
+- [../verification/30.30_verification_glossary.md](../verification/30.30_verification_glossary.md)
 
 ## Workflow
 
@@ -58,14 +58,14 @@ Promotion sequence:
 
 Playground artifacts are revision-controlled project assets.
 
-When a design specification in `50_thought_simulator_design/` cites playground files (for example, `software_description.md`, `verification_capsule.md`, `requirements_delta.md`, or artifact outputs), those cited files become part of the released design evidence for that design version.
+When a design specification in `thought_simulator_design/` cites playground files (for example, `software_description.md`, `verification_capsule.md`, `requirements_delta.md`, or artifact outputs), those cited files become part of the released design evidence for that design version.
 
 Coupling rules:
 
-- requirement intent is authored primarily in `20_requirements/`
-- realization-ready requirement anchors are formalized in `10_thought_simulator_req/` based on selected flow direction
-- design documents in `50_thought_simulator_design/` remain subsystem architectural contracts
-- cited playground evidence in `40_thought_simulator_playground/` remains the auditable verification trail tied to the released design version
+- requirement intent is authored primarily in `requirements_20/`
+- realization-ready requirement anchors are formalized in `thought_simulator_req/` based on selected flow direction
+- design documents in `thought_simulator_design/` remain subsystem architectural contracts
+- cited playground evidence in `thought_simulator_playground/` remains the auditable verification trail tied to the released design version
 
 Direction control:
 
@@ -81,7 +81,7 @@ If cited playground evidence changes materially after promotion:
 
 ## Module Format Coherence and Exception Policy
 
-To keep the playground coherent and scalable, all numbered module folders under `40_thought_simulator_playground/` should follow a common verification-capsule structure and naming pattern.
+To keep the playground coherent and scalable, all numbered module folders under `thought_simulator_playground/` should follow a common verification-capsule structure and naming pattern.
 
 Coherence baseline for module folders:
 
@@ -150,7 +150,6 @@ Why the exception exists:
 ### Governance & diagnostics (B6)
 
 - [40.130_gb_prototypes/](40.130_gb_prototypes/) — Governing Basin supervisory
-- [40.350_mb_prototypes/](40.350_mb_prototypes/) — Monitoring Basin diagnostics
 
 ### Pipeline B & expression (B4)
 
@@ -172,8 +171,8 @@ Why the exception exists:
 
 ### External vocabulary
 
-- [../30_verification/30.30_verification_glossary.md](../30_verification/30.30_verification_glossary.md) — verification terms
-- [../20_requirements/20.190_glossary.md](../20_requirements/20.190_glossary.md) — primitive intent catalog
+- [../verification/30.30_verification_glossary.md](../verification/30.30_verification_glossary.md) — verification terms
+- [../requirements_20/20.190_glossary.md](../requirements_20/20.190_glossary.md) — primitive intent catalog
 
 ## Directory index (coverage-aligned)
 

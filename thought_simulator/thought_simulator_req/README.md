@@ -4,7 +4,7 @@ This directory is the formal requirement-anchor layer used to realize architectu
 
 ## Internal Series Directories
 
-All numbered series directories in this layer are subdirectories under `10_thought_simulator_req/`:
+All numbered series directories in this layer are subdirectories under `thought_simulator_req/`:
 
 - `10_system_architecture/` = system architecture
 - `20_requirements/` = requirements
@@ -41,9 +41,9 @@ The `10.50.xx` files are stored in `50_design/`.
 
 ## Boundary Note
 
-- Primary requirement collaboration remains in [../20_requirements/](../20_requirements/).
+- Primary requirement collaboration remains in [../requirements_20/](../requirements_20/).
 - This 10-layer stores formalized realization anchors used by canonical design and verification flow.
-- Terminology alignment baseline is [../20_requirements/archive/20.02_design_constraints.md](../20_requirements/archive/20.02_design_constraints.md), including the current use of Routing Basin (RB) naming.
+- Terminology alignment baseline is [../requirements_20/archive/20.02_design_constraints.md](../requirements_20/archive/20.02_design_constraints.md), including the current use of Routing Basin (RB) naming.
 
 Direction control (from USER_GUIDE policy):
 
@@ -54,12 +54,12 @@ Direction control (from USER_GUIDE policy):
 
 To prevent namespace confusion between 10-layer directories:
 
-- `10_thought_simulator_req/` = canonical requirement anchors and promotion/backward-flow control source.
+- `thought_simulator_req/` = canonical requirement anchors and promotion/backward-flow control source.
 - `00_program_governance/` = program/foundation/architecture guidance references.
 
 Flow-control rule:
 
-- When a process step says "update 10" for promotion or backward-flow propagation, it means `10_thought_simulator_req/` unless explicitly stated otherwise.
+- When a process step says "update 10" for promotion or backward-flow propagation, it means `thought_simulator_req/` unless explicitly stated otherwise.
 
 ## Directory index (coverage-aligned)
 

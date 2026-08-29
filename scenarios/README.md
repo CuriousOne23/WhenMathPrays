@@ -2,7 +2,7 @@
 
 ## Overview
 
-Scenarios are structured experiments that explore relationship dynamics using the Gamma Revenge Protocol (GRP) framework. Each scenario defines primitive event sequences (v, r, f, a, S) that model specific relational contexts—from romantic love to battlefield hate, from parent-child bonds to spiritual practices.
+Scenarios are structured experiments that explore relationship dynamics using the General Relational Physics (GRP) framework. Each scenario defines primitive event sequences (v, r, f, a, S) that model specific relational contexts—from romantic love to battlefield hate, from parent-child bonds to spiritual practices.
 
 **⚠️ CRITICAL:** Before creating scenarios, read the [Primitive Modeling Guide](../docs/scenarios/primitive_modeling_guide.md). Understanding the M1/M2 perspective framework is essential - this is the #1 source of modeling errors.
 
@@ -11,18 +11,17 @@ Scenarios are structured experiments that explore relationship dynamics using th
 ### Running a Scenario
 
 ```bash
-# Run a specific scenario
-python scenarios/library/love/romeo_juliet.py
-
-# Run from project root
-python -m scenarios.library.love.romeo_juliet
+# Copy the on-disk template, point SUBJECTS at CSVs in data/library/, then:
+python scenarios/my_scenario.py
 ```
+
+Scenarios are Python files next to `_TEMPLATE.py`. There is no `scenarios/library/` directory. CSV primitive sequences live in `data/library/`.
 
 ### Creating a New Scenario
 
-1. Copy the template:
+1. Copy the template (on disk at `scenarios/_TEMPLATE.py`):
    ```bash
-   cp scenarios/_TEMPLATE.py scenarios/library/love/my_scenario.py
+   cp scenarios/_TEMPLATE.py scenarios/my_scenario.py
    ```
 
 2. Edit the configuration section:
@@ -37,9 +36,9 @@ python -m scenarios.library.love.romeo_juliet
    - Hypothesis (what do you expect?)
    - Validation criteria (how to verify?)
 
-4. Run it:
+4. Run it (`_TEMPLATE.py` ends with `validate_and_run(globals())`):
    ```bash
-   python scenarios/library/love/my_scenario.py
+   python scenarios/my_scenario.py
    ```
 
 ## Directory Structure
@@ -49,35 +48,33 @@ scenarios/
 ├── README.md              ← You are here
 ├── _TEMPLATE.py           ← Copy this to create new scenarios
 ├── config_schema.py       ← Configuration validation schema
-├── validator.py           ← Validates scenario config before run
-├── runner.py              ← Execution engine
-└── library/               ← Curated scenario collection
-    ├── love/              ← Romantic love scenarios
-    ├── hate/              ← Conflict and hate dynamics
-    ├── relational/        ← Non-romantic bonds (parent/child, breakup)
-    └── spiritual/         ← Spiritual practices (Buddha, meditation)
+├── validator.py           ← Validates scenario config before run (`validate_and_run(globals())`)
+└── runner.py              ← Execution engine
 ```
 
-## Available Scenarios
+CSV libraries (not under `scenarios/`):
 
-### Love Scenarios (`library/love/`)
-- **Singles Dating** - Two strangers navigate early dating dynamics
-- **Romeo & Juliet** - Intense forbidden love (coming soon)
-- **The Notebook** - Classic love story arc (coming soon)
-- **Ego Love (Saturday Night Fever)** - Self-focused love (coming soon)
-- **Mature Love** - Q1 quadrant mature bond (coming soon)
-- **Dog Faithfulness (Hachiko)** - Unconditional loyalty (coming soon)
+```
+data/library/
+├── love/
+├── hate/
+├── relational/
+└── spiritual/
+```
 
-### Hate Scenarios (`library/hate/`)
-- **Battlefield (Rambo)** - Combat hate dynamics (coming soon)
-- **Group Company Hate** - Communal/organizational hate (coming soon)
+## Available Scenario CSVs
 
-### Relational Scenarios (`library/relational/`)
-- **Parent/Child** - Q1 quadrant bond (coming soon)
-- **Breakup** - Relationship dissolution (coming soon)
+Python scenario scripts are not stored under `scenarios/library/` (that directory does not exist). Primitive CSVs currently on disk:
 
-### Spiritual Scenarios (`library/spiritual/`)
-- **Buddha** - Spiritual practice dynamics (coming soon)
+### Love (`data/library/love/`)
+- `single_dating_to_love_M1.csv` / `_M2.csv`
+- `romeo_juliet_M1.csv` / `_M2.csv`
+- `the_notebook_M1.csv` / `_M2.csv` (and `_mod` variants)
+- `mature_love_M1.csv`
+- `dog_hachiko_M1.csv`
+
+### Other categories
+CSV folders also exist at `data/library/hate/`, `data/library/relational/`, and `data/library/spiritual/`.
 
 ## Data Files
 
@@ -108,7 +105,7 @@ Scenarios generate:
 
 Key metrics:
 - **Final |γ_self|** - Love magnitude at end of scenario
-- **Quadrant location** - Q1 (safety/ego), Q2 (ego/love), Q3 (love/sorrow), Q4 (sorrow/safety)
+- **Quadrant location** — Q1 (Together + Connection), Q2 (Alone + Connection), Q3 (Alone + Disconnection), Q4 (Together + Disconnection); see [`docs/PRIMITIVES_AND_RELATIONAL_SPACE.md`](../docs/PRIMITIVES_AND_RELATIONAL_SPACE.md)
 - **Trajectory shape** - Linear climb, oscillation, saturation, etc.
 
 ## Documentation
@@ -136,4 +133,4 @@ For deeper understanding of scenario design philosophy, validation criteria, and
 
 ## Questions?
 
-See [docs/scenarios/README.md](../docs/scenarios/README.md) for detailed design guidance, or check existing scenarios in `library/` for working examples.
+See [docs/scenarios/README.md](../docs/scenarios/README.md) for detailed design guidance, or start from `_TEMPLATE.py` and CSVs in `data/library/`.
