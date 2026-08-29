@@ -131,19 +131,21 @@ You can run any scenario CSV through the Python cockpit.
 Here is a real example using one of the library scenarios:
 
 ```bash
-python tools/interactive_editor.py --scenario scenarios/<scenario_name>.csv
+python tools/interactive_editor.py <csv_file>
+# example:
+python tools/interactive_editor.py data/library/love/single_dating_to_love_M1.csv
 ```
 
 This opens the interactive editor, loads the scenario, and lets you explore or modify the emotional arc.
 
-After running it, look in the `results/` folder for a PNG plot of the γ‑trajectory.
+PNG export is currently disabled. Edited scenarios save as CSV.
 
 ## Option B — Explore the Model Visually (Excel Cockpit)
 
 If you prefer a **hands‑on, visual interface**, open the Excel cockpit:
 
 ```
-assets/GRP_SpreadSheet.xlsm
+tools/GRP_SpreadSheet.xlsm
 ```
 
 Inside the workbook:
@@ -161,9 +163,7 @@ This interface is perfect for:
 
 The Excel cockpit and Python cockpit produce the **same dynamics** — just through different lenses.
 
-### Step 4 — Open the generated plot (Python path)
-
-Look in the `results/` folder for a PNG file.
+### Step 4 — Watch the trajectory
 
 You'll see a curve — a path — a motion through γ‑space.
 
@@ -190,13 +190,13 @@ You've just learned the GRP by doing.
 Now that you've seen the system move, choose your path:
 
 ### A. Use the Python cockpit (recommended)
-👉 [`interactive_editor_user_guide.md`](interactive_editor_user_guide.md)
+👉 [`docs/interactive_editor_user_guide.md`](docs/interactive_editor_user_guide.md)
 
 ### B. Explore the model visually (Excel)
-Open: `assets/GRP_SpreadSheet.xlsm` or `assets/GRP_AI.xlsm`
+Open: `tools/GRP_SpreadSheet.xlsm` or `tools/GRP_AI.xlsm`
 
 ### C. Build your own scenario (intermediate)
-👉 [`SCENARIO_CONFIGURATION_GUIDE.md`](SCENARIO_CONFIGURATION_GUIDE.md)
+👉 [`docs/SCENARIO_CONFIGURATION_GUIDE.md`](docs/SCENARIO_CONFIGURATION_GUIDE.md)
 
 ### D. Use the scenario builder (advanced)
 👉 `tools/scenario_generator.py`
@@ -205,7 +205,7 @@ This tool is powerful but not beginner‑friendly.
 Use it once you understand scenario structure and primitive arcs.
 
 ### E. Understand the math
-👉 [`GRP_rev3.md`](GRP_rev3.md)
+👉 [`docs/GRP_rev3.5.md`](docs/GRP_rev3.5.md)
 
 ### F. Explore the philosophy
 👉 [`WHY_THIS_MATTERS.md`](WHY_THIS_MATTERS.md)
@@ -215,9 +215,6 @@ Use it once you understand scenario structure and primitive arcs.
 
 ### H. Return to the map of the territory
 👉 [`README.md`](README.md)
-
-### I. Contribute to the project
-👉 [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ---
 
@@ -233,12 +230,11 @@ You can explore at your own pace.
 | [`CONTENTS.md`](CONTENTS.md) | Complete index of every document |
 | [`WHY_THIS_MATTERS.md`](WHY_THIS_MATTERS.md) | The philosophical and scientific motivation |
 | [`docs/Verb Mind Epistemology for Relational Physics.md`](docs/Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md) | The epistemic foundation for seeing GRP correctly |
-| [`GRP_rev3.md`](GRP_rev3.md) | The full mathematics |
-| [`PRIMITIVES_AND_RELATIONAL_SPACE.md`](PRIMITIVES_AND_RELATIONAL_SPACE.md) | Deep treatment of the five primitives |
+| [`docs/GRP_rev3.5.md`](docs/GRP_rev3.5.md) | The full mathematics |
+| [`docs/PRIMITIVES_AND_RELATIONAL_SPACE.md`](docs/PRIMITIVES_AND_RELATIONAL_SPACE.md) | Deep treatment of the five primitives |
 | [`CONSTANTS.md`](CONSTANTS.md) | All parameters, weights, and entropy coefficients |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Technical architecture of the simulation system |
-| [`SCENARIO_CONFIGURATION_GUIDE.md`](SCENARIO_CONFIGURATION_GUIDE.md) | How to build and configure scenarios |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to contribute |
+| [`docs/SCENARIO_CONFIGURATION_GUIDE.md`](docs/SCENARIO_CONFIGURATION_GUIDE.md) | How to build and configure scenarios |
 
 ---
 
@@ -255,6 +251,3 @@ Watch the knot move.
 Let the system teach you.
 
 Welcome to **WhenMathPrays**.
-```
-
----

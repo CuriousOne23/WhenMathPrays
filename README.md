@@ -221,7 +221,7 @@ pip install -r requirements.txt
 ```bash
 python tools/interactive_editor.py <csv_file>
 # example:
-python tools/interactive_editor.py data/single_dating_to_love_M1.csv
+python tools/interactive_editor.py data/library/love/single_dating_to_love_M1.csv
 ```
 PNG export is currently disabled. Edited scenarios save as CSV.
 
@@ -249,7 +249,7 @@ Open `tools/GRP_SpreadSheet.xlsm`, enter your values, and press **Run GRP**.
 | The software architecture | [`ARCHITECTURE.md`](ARCHITECTURE.md) + [`docs/architecture/SOFTWARE_MODULES.md`](docs/architecture/SOFTWARE_MODULES.md) |
 | AI collaboration and extension | [`docs/AI_Architecture_WhichWill_Scale.md`](docs/AI_Architecture_WhichWill_Scale.md) |
 | The human story of the project | [`THE_STORY_OF_GRP.md`](docs/THE_STORY_OF_GRP.md) |
-| Conversations that shaped the system | [`docs/Reality in Motion: Conversations with Grok & Copilot.md`](docs/) |
+| Conversations that shaped the system | [`docs/Reality in Motion, Conversations.md`](docs/Reality%20in%20Motion,%20Conversations.md) |
 | Everything, indexed | [`CONTENTS.md`](CONTENTS.md) |
 
 ---
@@ -279,4 +279,3 @@ This repository is an attempt to draw the first reliable map of that territory.
 ---
 
 *Tagged: `relational-model` · `mathematical-expression` · `synthetic-life` · `identity-modeling` · `emotional-modeling` · `whenmathprays` · `gamma-self`*
-```

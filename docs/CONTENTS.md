@@ -7,8 +7,8 @@ This document provides a comprehensive index of all documentation in the WhenMat
 # **Table of Contents**
 
 
-- **[CONSTANTS.md](CONSTANTS.md)** — Mathematical and system constants  
-- **[TUNING.md](TUNING.md)** — Performance tuning parameters and optimization settings
+- **[CONSTANTS.md](../CONSTANTS.md)** — Mathematical and system constants  
+- **[TUNING.md](../TUNING.md)** — Performance tuning parameters and optimization settings
 
 ---
 
@@ -17,10 +17,10 @@ This document provides a comprehensive index of all documentation in the WhenMat
 ### **System Architecture**
 - **[Verb Mind Epistemology for Relational Physics](Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md)** — Foundational epistemology explaining noun‑mind vs verb‑mind cognition and why relational physics requires a verb‑based perceptual stance
 stance  
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** — Overall system architecture, design principles, and high‑level organization  
-- **[SOFTWARE_MODULES.md](SOFTWARE_MODULES.md)** — Detailed reference for all software modules, their purposes, and I/O variables  
+- **[ARCHITECTURE.md](../ARCHITECTURE.md)** — Overall system architecture, design principles, and high‑level organization  
+- **[SOFTWARE_MODULES.md](architecture/SOFTWARE_MODULES.md)** — Detailed reference for all software modules, their purposes, and I/O variables  
 - **[STATE_MANAGEMENT_REFACTORING.md](STATE_MANAGEMENT_REFACTORING.md)** — Phase 3.4 state management implementation details
-- **[Reality in Motion: Conversations with Grok & Copilot.md](Reality in Motion: Conversations with Grok & Copilot.md)** - 
+- **[Reality in Motion, Conversations.md](Reality%20in%20Motion,%20Conversations.md)** - 
 
 ### **Architecture Guidelines**
 - **[architecture/README.md](architecture/README.md)** — Architecture documentation overview  
@@ -121,7 +121,7 @@ Captures speculative discussion and future research directions.
 
 # 📑 **Project Management**
 
-- **[FUNDING.md](FUNDING.md)** — Funding and sponsorship information  
+- **[FUNDING.md](../FUNDING.md)** — Funding and sponsorship information  
 - **[LICENSE.md](../LICENSE.md)** — Project license file  
 - **[file_list.md](file_list.md)** — Complete file inventory
 
@@ -149,10 +149,10 @@ Located in `docs/archive/`:
 
 Quick Start:
 - **[README.md](../README.md)** — Start here for project overview  
-- **[START HERE.md](../START%20HERE.md)** — Newcomer onboarding and first steps  
+- **[STARTHERE.md](../STARTHERE.md)** — Newcomer onboarding and first steps  
 - **[interactive_editor_user_guide.md](interactive_editor_user_guide.md)** — Learn to use the interactive editor  
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** — Understand system design  
-- **[SOFTWARE_MODULES.md](SOFTWARE_MODULES.md)** — Find specific module details
+- **[ARCHITECTURE.md](../ARCHITECTURE.md)** — Understand system design  
+- **[SOFTWARE_MODULES.md](architecture/SOFTWARE_MODULES.md)** — Find specific module details
 
 Development Workflow:
 - **[interactive_edit_roadmap.md](interactive_edit_roadmap.md)** — Development priorities  
@@ -162,7 +162,7 @@ Development Workflow:
 
 Research & Theory:
 - **[grp_principles.md](grp_principles.md)** — Understand core concepts  
-- **[WHY_THIS_MATTERS.md](WHY_THIS_MATTERS.md)** — See practical applications  
+- **[WHY_THIS_MATTERS.md](../WHY_THIS_MATTERS.md)** — See practical applications  
 - **[REV4_IMPLEMENTATION_SUMMARY.md](REV4_IMPLEMENTATION_SUMMARY.md)** — Review latest GRP implementation
 
 ---
@@ -183,5 +183,5 @@ An account of the collaboration between **CuriousOne** and four synthetic minds 
 
 ---
 
-### • [Reality in Motion: Conversations with Grok & Copilot.md](Reality%20in%20Motion%3A%20Conversations%20with%20Grok%20%26%20Copilot.md)
+### • [Reality in Motion, Conversations.md](Reality%20in%20Motion,%20Conversations.md)
 A philosophical dialogue between CuriousOne, Grok, and Copilot that unfolded alongside the development of Relational Physics.

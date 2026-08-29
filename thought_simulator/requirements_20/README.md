@@ -22,7 +22,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 
 - [20.10_ts_architectural_principles.md](20.10_ts_architectural_principles.md) — architectural essence, dual-pipeline rationale
 - [20.12_ts_invariants.md](20.12_ts_invariants.md) — canonical invariants (authoritative)
-- [20.20_ts_primitives.md](20.20_ts_primitives.md) — meaning-layer and realization-layer primitives
+- [20.20_ts_prim_proc_ref_gov.md](20.20_ts_prim_proc_ref_gov.md) — meaning-layer and realization-layer primitives
 - [20.30_ts_functional_model.md](20.30_ts_functional_model.md) — Pipeline A/B functional partition and basin pipeline
 
 ## Authoritative Requirement Files
