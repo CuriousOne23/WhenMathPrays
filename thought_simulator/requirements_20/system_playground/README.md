@@ -26,93 +26,32 @@ It is intentionally modular so each layer of the simulation can be understood in
 ```
 system_playground/
 │
-├── context/
-│   └── context/
-│       ├── cil/
-│       ├── cob/
-│       ├── cst_core/
-│       ├── cst_ms/
-│       ├── cst_mux/
-│       ├── context_requirements.md
-│       └── context_testbench.py
-│
-├── primitives/
-│   ├── definitions/
-│   │   └── path_a/
-│   │       ├── inb.yaml
-│   │       ├── iiinb.yaml
-│   │       ├── ie.yaml
-│   │       ├── cex.yaml
-│   │       ├── ce.yaml
-│   │       ├── sob.yaml
-│   │       ├── srob.yaml
-│   │       ├── cnob.yaml
-│   │       ├── smob.yaml
-│   │       ├── isc.yaml
-│   │       ├── ssg.yaml
-│   │       ├── stpx.yaml
-│   │       ├── rbu.yaml
-│       ... (full primitive set)
-│   ├── reference_objects/
-│   ├── manifold/
-│   ├── rg/
-│   ├── rsg/
-│   └── ssr/
-│
-├── simulation/
-│   ├── path_a/
-│   │   ├── InB/
-│   │   ├── IIInB/
-│   │   ├── IE/
-│   │   ├── CEx/
-│   │   ├── CE/
-│   │   ├── TPU/
-│   │   ├── SOB/
-│   │   ├── SROB/
-│   │   ├── CnOB/
-│   │   ├── SmOB/
-│   │   ├── ISc/
-│   │   ├── SSG/
-│   │   ├── STPX/
-│   │   ├── RBU/
-│   │   ├── DCB/
-│   │   ├── RB/
-│   │   ├── TR/
-│   │   ├── CTP/
-│   │   ├── ISc/
-│   │   ├── RTU/
-│   │   ├── RB/
-│   │   ├── IdOB/
-│   │   ├── MCB/
-│   │   ├── RBU/
-│   │   ├── DCB/
-│   │   ├── RB/
-│   │   ├── TR/
-│   │   ├── CTP/
-│   │   ├── ISc/
-│   │   ├── RTU/
-│   │   ├── RB/
-│   │   ├── IdOB/
-│   │   ├── MCB/
-│   │   ├── RBU/
-│   │   └── OuBA/
-│   └── exploration/
-│
-├── testbenches/
-│   ├── path_a/
-│   ├── context/
-│   ├── primitives/
-│   ├── shared/
-│   └── helpers/
-│
 ├── design/
 │   ├── design_models/
 │   ├── dictionaries/
-│   └── papers/
+│   ├── papers/
+│   └── pipeline/
 │
-└── archive/
-    ├── logs/
-    └── scratch/
+├── primitives/
+│   ├── <name>/            ← one folder per primitive (inb, ie, idob, mcb, …)
+│   ├── definitions/
+│   ├── dictionary/
+│   └── reference_objects/
+│
+├── simulation/
+│   ├── ts_kernel/         ← Path A kernel (landed 2026-08-28)
+│   ├── run_pipeline.py
+│   ├── pipelines/
+│   │   └── lineup_idob_mcb/
+│   ├── context/
+│   └── conversations/
+│
+└── testbenches/
+    ├── run.py
+    ├── path_a/
+    ├── idob_structure_to_meaning/
+    ├── review/
+    └── helpers/
 ```
 
 ---
@@ -139,34 +78,24 @@ This structure is designed to support future expansion, including:
 
 # 🚀 How to Use system_playground
 
-### **Context Processing**
-Start in `01_context` to validate CIL, COB, CST, and MUX.
+### **Primitive definitions**
+Each primitive lives under `primitives/<name>/`. Shared catalogs are in `primitives/definitions/` and `primitives/dictionary/`.
 
-### **Primitive Definitions**
-All primitive YAMLs live in `02_primitives/definitions/path_a`.
-
-### **Simulation Execution**
-Follow the numbered folders in `03_simulation/path_a` to run or inspect each primitive step.
+### **Simulation execution**
+Run from `simulation/`: `run_pipeline.py` plus `ts_kernel/` and `pipelines/lineup_idob_mcb`.
 
 ### **Testing**
-Use `04_testbenches` for validation of context, primitives, and Path A.
+Use `testbenches/run.py` for Path A benches under `testbenches/path_a/`. Additional benches: `testbenches/idob_structure_to_meaning/` and notes in `testbenches/review/`.
 
-### **Design Reference**
-Conceptual models and dictionaries are stored under `05_design`.
-
-### **Archival**
-Logs and scratch work go into `99_archive`.
+### **Design reference**
+Conceptual models, dictionaries, and papers are stored under `design/`.
 
 ---
 
 # 📌 Notes
 
 - This directory is intentionally modular.
-- Each primitive folder under `03_simulation/path_a` may contain:
-  - `simulation_notes.md`
-  - `input_examples.yaml`
-  - `output_examples.yaml`
-  - `test_vectors.yaml`
-- The structure mirrors the Path A flow exactly.
+- Primitive implementations live under `primitives/<name>/`.
+- The Path A machine lives under `simulation/` (`ts_kernel/`, `run_pipeline.py`, `pipelines/lineup_idob_mcb`).
 
 ---

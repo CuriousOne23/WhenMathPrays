@@ -22,7 +22,7 @@ Three documents serve as your entry points, each at a different level of depth:
 1. This README (conceptual framing)
 2. [`WHY_THIS_MATTERS.md`](WHY_THIS_MATTERS.md) (philosophical motivation)
 3. [`docs/Verb Mind Epistemology for Relational Physics.md`](docs/Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md) (epistemic foundation)
-4. [`GRP_rev3.md`](GRP_rev3.md) (the mathematics)
+4. [`docs/GRP_rev3.5.md`](docs/GRP_rev3.5.md) (the mathematics)
 5. [`STARTHERE.md`](STARTHERE.md) (hands-on engagement with the system)
 
 ---
@@ -111,10 +111,10 @@ The foundational documents describe the mathematics, primitives, constants, and 
 
 | Document | Contents |
 |---|---|
-| [`GRP_rev3.md`](GRP_rev3.md) | The full mathematical specification of the GRP recurrence system |
-| [`PRIMITIVES_AND_RELATIONAL_SPACE.md`](PRIMITIVES_AND_RELATIONAL_SPACE.md) | Deep treatment of each primitive and the structure of γ-space |
+| [`docs/GRP_rev3.5.md`](docs/GRP_rev3.5.md) | The full mathematical specification of the GRP recurrence system |
+| [`docs/PRIMITIVES_AND_RELATIONAL_SPACE.md`](docs/PRIMITIVES_AND_RELATIONAL_SPACE.md) | Deep treatment of each primitive and the structure of γ-space |
 | [`CONSTANTS.md`](CONSTANTS.md) | All tunable parameters, weights, and entropy coefficients |
-| [`GRP_GLOSSARY.md`](GRP_GLOSSARY.md) | Canonical definitions for all terms used across the project |
+| [`docs/GRP_GLOSSARY.md`](docs/GRP_GLOSSARY.md) | Canonical definitions for all terms used across the project |
 | [`WHY_THIS_MATTERS.md`](WHY_THIS_MATTERS.md) | The philosophical and scientific motivation for the framework |
 | [`THE_STORY_OF_GRP.md`](docs/THE_STORY_OF_GRP.md) | The human narrative of how this system came to be |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Technical architecture of the interactive editor and simulation system |
@@ -129,9 +129,9 @@ A full interactive editor built in PyQt with:
 - **Trajectory Panel** — live visualization of the `γ_self` trajectory as primitives are modified
 - **Dual-Perspective Mode** — edit M1 (Person 1's view) and M2 (Person 2's view) independently, with overlay visualization
 - **Full Undo/Redo** — Command pattern with per-perspective undo stacks
-- **CSV I/O** — scenarios load from and save to structured CSV files; results export as PNG trajectory plots
+- **CSV I/O** — scenarios load from and save to structured CSV files. PNG export is currently disabled (PyQtGraph migration)
 
-#### Excel Cockpit (`assets/GRP_SpreadSheet.xlsm`, `assets/GRP_AI.xlsm`)
+#### Excel Cockpit (`tools/GRP_SpreadSheet.xlsm`, `tools/GRP_AI.xlsm`)
 A hands-on spreadsheet interface for visual exploration:
 1. Enter your initial `γ_self` in cell `C4`
 2. Enter primitive values row-by-row starting at row 9
@@ -164,11 +164,12 @@ All code contributions must meet the **MVT standard**:
 
 | Directory | Contents |
 |---|---|
-| `thought_simulator/05_system_architecture/` | System architecture specifications and design governance |
-| `thought_simulator/10_thought_simulator_req/` | Requirements, design specs, and flow-down protocols |
-| `thought_simulator/30_verification/` | Verification methodology and test capsules |
-| `thought_simulator/40_thought_simulator_playground/` | Prototype implementations (TR Router, IB, TB, Basin prototypes) |
-| `thought_simulator/50_design/` | Design documentation and formal specifications |
+| `thought_simulator/system_architecture/` | System architecture specifications and design governance |
+| `thought_simulator/thought_simulator_req/` | Requirements, design specs, and flow-down protocols |
+| `thought_simulator/verification/` | Verification methodology and test capsules |
+| `thought_simulator/thought_simulator_playground/` | Prototype implementations (TR Router, IB, TB, Basin prototypes) |
+| `thought_simulator/thought_simulator_design/` | Design documentation and formal specifications |
+| `thought_simulator/requirements_20/system_playground/simulation/` | Path A machine (landed 2026-08-28): `ts_kernel/` plus `pipelines/lineup_idob_mcb` |
 
 ---
 
@@ -188,13 +189,13 @@ WhenMathPrays/
 ├── 📁 core/                   ← GRP math engine (the recurrence computation)
 ├── 📁 tools/                  ← Interactive editor, scenario generator, utilities
 │   └── editor/                ← PyQtGraph-based cockpit (MVC + Command)
-├── 📁 scenarios/              ← Library of scenario CSV files
-├── 📁 data/                   ← Supporting datasets
+├── 📁 scenarios/              ← Python scenario runners (_TEMPLATE.py, validator, runner)
+├── 📁 data/                   ← Scenario CSV libraries (`data/library/`) and templates
 ├── 📁 results/                ← Generated trajectory plots (PNG)
-├── 📁 simulations/            ← Batch simulation outputs
+├── 📁 simulations/            ← Python scenario runners (not batch output dumps)
 ├── 📁 docs/                   ← Research papers, guides, and narrative documents
 │   └── architecture/          ← Architecture decision records and refactoring plans
-├── 📁 assets/                 ← Excel cockpits (GRP_SpreadSheet.xlsm, GRP_AI.xlsm)
+├── 📁 assets/                 ← Icons and miscellaneous assets (Excel cockpits are in tools/)
 ├── 📁 testbenches/            ← Formal test benches
 ├── 📁 tests/                  ← Automated test suite
 ├── 📁 verification/           ← Verification capsules and test procedures
@@ -218,18 +219,20 @@ pip install -r requirements.txt
 
 ### Run a Scenario (Python)
 ```bash
-python tools/interactive_editor.py --scenario scenarios/<scenario_name>.csv
+python tools/interactive_editor.py <csv_file>
+# example:
+python tools/interactive_editor.py data/library/love/single_dating_to_love_M1.csv
 ```
-Results appear as PNG plots in the `results/` folder.
+PNG export is currently disabled. Edited scenarios save as CSV.
 
 ### Build Your Own Scenario
-See [`SCENARIO_CONFIGURATION_GUIDE.md`](SCENARIO_CONFIGURATION_GUIDE.md) for the CSV format specification, or use the automated builder:
+See [`docs/SCENARIO_CONFIGURATION_GUIDE.md`](docs/SCENARIO_CONFIGURATION_GUIDE.md) for the CSV format specification, or use the automated builder:
 ```bash
 python tools/scenario_generator.py
 ```
 
 ### Explore Visually (Excel)
-Open `assets/GRP_SpreadSheet.xlsm`, enter your values, and press **Run GRP**.
+Open `tools/GRP_SpreadSheet.xlsm`, enter your values, and press **Run GRP**.
 
 ---
 
@@ -239,14 +242,14 @@ Open `assets/GRP_SpreadSheet.xlsm`, enter your values, and press **Run GRP**.
 |---|---|
 | The philosophical "why" | [`WHY_THIS_MATTERS.md`](WHY_THIS_MATTERS.md) |
 | The perceptual stance required | [`docs/Verb Mind Epistemology for Relational Physics.md`](docs/Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md) |
-| The full mathematics | [`GRP_rev3.md`](GRP_rev3.md) |
-| The five primitives in depth | [`PRIMITIVES_AND_RELATIONAL_SPACE.md`](PRIMITIVES_AND_RELATIONAL_SPACE.md) |
+| The full mathematics | [`docs/GRP_rev3.5.md`](docs/GRP_rev3.5.md) |
+| The five primitives in depth | [`docs/PRIMITIVES_AND_RELATIONAL_SPACE.md`](docs/PRIMITIVES_AND_RELATIONAL_SPACE.md) |
 | The constants and calibration | [`CONSTANTS.md`](CONSTANTS.md) + [`TUNING.md`](TUNING.md) |
-| How γ-trajectories are interpreted | [`gamma_self_trajectory_reference.md`](gamma_self_trajectory_reference.md) |
-| The software architecture | [`ARCHITECTURE.md`](ARCHITECTURE.md) + [`SOFTWARE_MODULES.md`](SOFTWARE_MODULES.md) |
-| AI collaboration and extension | [`AI_Architecture_WhichWill_Scale.md`](AI_Architecture_WhichWill_Scale.md) |
+| How γ-trajectories are interpreted | [`docs/gamma_self_trajectory_reference.md`](docs/gamma_self_trajectory_reference.md) |
+| The software architecture | [`ARCHITECTURE.md`](ARCHITECTURE.md) + [`docs/architecture/SOFTWARE_MODULES.md`](docs/architecture/SOFTWARE_MODULES.md) |
+| AI collaboration and extension | [`docs/AI_Architecture_WhichWill_Scale.md`](docs/AI_Architecture_WhichWill_Scale.md) |
 | The human story of the project | [`THE_STORY_OF_GRP.md`](docs/THE_STORY_OF_GRP.md) |
-| Conversations that shaped the system | [`docs/Reality in Motion: Conversations with Grok & Copilot.md`](docs/) |
+| Conversations that shaped the system | [`docs/Reality in Motion, Conversations.md`](docs/Reality%20in%20Motion,%20Conversations.md) |
 | Everything, indexed | [`CONTENTS.md`](CONTENTS.md) |
 
 ---
@@ -254,9 +257,8 @@ Open `assets/GRP_SpreadSheet.xlsm`, enter your values, and press **Run GRP**.
 ## 🤝 Contributing
 
 All contributions must meet the MVT standard (Modeled, Verifiable, Testable). See:
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — Contribution workflow and expectations
 - [`docs/architecture/05_CODING_GUIDELINES.md`](docs/architecture/05_CODING_GUIDELINES.md) — Naming, state management, and coding standards
-- [`INTERACTIVE_EDITOR_TESTING.md`](INTERACTIVE_EDITOR_TESTING.md) — Testing methodology
+- [`docs/INTERACTIVE_EDITOR_TESTING.md`](docs/INTERACTIVE_EDITOR_TESTING.md) — Testing methodology
 
 ---
 
@@ -277,4 +279,3 @@ This repository is an attempt to draw the first reliable map of that territory.
 ---
 
 *Tagged: `relational-model` · `mathematical-expression` · `synthetic-life` · `identity-modeling` · `emotional-modeling` · `whenmathprays` · `gamma-self`*
-```

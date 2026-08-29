@@ -15,12 +15,16 @@ You never edit the testbench modules themselves.
 
 The design supports:
 
-- Standalone primitive testing  
-- Progressive pipeline testing (InB → IIInB → IE → …)  
-- Per‑test selection (`Yes` / `No`)  
+- Mode `general` or `testbench` (set per tuple in `run.py`)  
+- Per‑test selection via YAML paths in `tests_to_run` (not Yes/No dicts)  
 - YAML‑driven deterministic test cases  
 - Full development‑mode execution (no early exit)  
 - Absolute PASS/FAIL evaluation (no “expected failure” mode)
+
+Related:
+
+- [`idob_structure_to_meaning/`](idob_structure_to_meaning/) — IdOB structure-to-meaning benches  
+- [`../simulation/run_pipeline.py`](../simulation/run_pipeline.py) — Path A pipeline runner
 
 ---
 
@@ -51,23 +55,19 @@ ACTIVE_TEST_MODULES = [
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
         {
-            "mode": "standalone",
+            "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
             "use_iiinb": False,
             "use_ie": True,
-
-            # tests_to_run: User inputs "Yes" or "No"
-            "tests_to_run": {
-                "clean.simple": "Yes",
-                "normalize.whitespace": "Yes",
-                "normalize.punctuation": "Yes"
-            }
+            "tests_to_run": "see ie_tests_to_run.yaml"
         }
     ),
 
     # Add more testbenches here later
 ]
 ```
+
+`tests_to_run` is a **YAML path** (typically `see <primitive>_tests_to_run.yaml` in the primitive's folder). That YAML lists test ids with `enabled: true|false`.
 
 ### ✔ To enable a testbench  
 Ensure the tuple is **not commented out**.
@@ -79,10 +79,11 @@ Place **one `#`** at the start of the tuple:
 # (
     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
     {
-        "mode": "standalone",
+        "mode": "general",     # "general" or "testbench"
         "use_inb": True,
         "use_iiinb": False,
-        "use_ie": False
+        "use_ie": False,
+        "tests_to_run": "see inb_tests_to_run.yaml"
     }
 ),
 ```
@@ -91,52 +92,50 @@ Only the first `#` is needed — Python ignores the entire tuple.
 
 ---
 
-## **Standalone vs Progressive Pipeline**
+## **Mode: `general` vs `testbench`**
 
-Pipeline behavior is configured **inside the tuple**, not inside the testbench.
+Mode is configured **inside the tuple**, not inside the testbench. Values are `"general"` or `"testbench"` (not `standalone` / `progressive`).
 
-### **Standalone IE Example**
+### **`testbench` IE example**
 ```python
-"mode": "standalone",
+"mode": "testbench",     # "general" or "testbench"
 "use_inb": False,
 "use_iiinb": False,
-"use_ie": True
+"use_ie": True,
+"tests_to_run": "see ie_tests_to_run.yaml"
 ```
 
-### **Full Progressive Example (InB → IIInB → IE)**
+### **`general` InB example**
 ```python
-"mode": "progressive",
+"mode": "general",     # "general" or "testbench"
 "use_inb": True,
-"use_iiinb": True,
-"use_ie": True
+"use_iiinb": False,
+"use_ie": False,
+"tests_to_run": "see inb_tests_to_run.yaml"
 ```
 
-### **Partial Progressive Example (IIInB → IE only)**
-```python
-"mode": "progressive",
-"use_inb": False,
-"use_iiinb": True,
-"use_ie": True
-```
-
-The testbench automatically receives this configuration from `run.py`.
+Upstream `use_*` flags still select which primitives participate. The testbench receives this configuration from `run.py`.
 
 ---
 
-## **Per‑Test Selection (Yes / No)**
+## **Per‑Test Selection (YAML paths)**
 
-Inside each testbench configuration:
+`tests_to_run` points at a YAML file (for example `ie_tests_to_run.yaml` next to the primitive testbench):
 
-```python
-"tests_to_run": {
-    "clean.simple": "Yes",
-    "normalize.whitespace": "No",
-    "normalize.punctuation": "Yes"
-}
+```yaml
+tests_to_run:
+
+  - id: ie_basic_repair
+    enabled: true
+    reason: "Whitespace normalization repair; IE enabled."
+
+  - id: ie_multiple_repairs
+    enabled: false
+    reason: "Skipped this run."
 ```
 
-- `"Yes"` → test runs  
-- `"No"` → test is skipped  
+- `enabled: true` → test runs  
+- `enabled: false` → test is skipped  
 - All test IDs remain visible (no accidental deletion)
 
 ---
@@ -219,15 +218,11 @@ Example:
 (
     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
     {
-        "mode": "progressive",
+        "mode": "general",     # "general" or "testbench"
         "use_inb": True,
         "use_iiinb": False,
         "use_ie": False,
-
-        "tests_to_run": {
-            "inb.clean.simple": "Yes",
-            "inb.detect.defect": "Yes"
-        }
+        "tests_to_run": "see inb_tests_to_run.yaml"
     }
 ),
 ```
@@ -247,13 +242,12 @@ Every primitive testbench must:
 
 - import its primitive  
 - build a ThoughtPacket  
-- call the primitive in standalone or progressive mode  
+- call the primitive in `general` or `testbench` mode  
 - compare primitive output to YAML expectations  
 
 This ensures:
 
-- progressive chaining  
-- standalone mode  
+- `general` and `testbench` modes  
 - deterministic validation  
 - Path A primitives can be tested in isolation or sequence  
 
@@ -287,8 +281,8 @@ The testbench loads the YAML and runs only the tests selected in run.py.
 - **run.py is the only file you edit**  
 - Each testbench is a **single tuple**  
 - Enable/disable testbenches with **one `#`**  
-- Configure standalone/progressive mode inside the tuple  
-- Select tests using **Yes/No**  
+- Configure `general` / `testbench` mode inside the tuple  
+- Select tests via YAML paths in `tests_to_run`  
 - PASS/FAIL is absolute  
 - Testbenches never need editing  
 - Output is fully logged  

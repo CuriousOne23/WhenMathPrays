@@ -8,7 +8,7 @@ This directory contains deep documentation for designing, validating, and analyz
 
 ## What Are Scenarios?
 
-Scenarios are **structured relational experiments** that explore how primitive events (v, r, f, a, S) combine to produce complex emotional trajectories. Each scenario models a specific relational context—romantic love, battlefield hate, parent-child bonds, spiritual practices—with the goal of validating the Gamma Revenge Protocol (GRP) framework and understanding love/hate dynamics.
+Scenarios are **structured relational experiments** that explore how primitive events (v, r, f, a, S) combine to produce complex emotional trajectories. Each scenario models a specific relational context—romantic love, battlefield hate, parent-child bonds, spiritual practices—with the goal of validating the General Relational Physics (GRP) framework and understanding love/hate dynamics.
 
 ## Design Philosophy
 
@@ -18,8 +18,8 @@ The love equation operates in **event space**, not time space. Primitives repres
 - **v (visibility)** - "I see you / you see me"
 - **r (resonance)** - "We vibe / we're in sync"
 - **f (fidelity)** - "I'm faithful / I follow through"
-- **a (agency)** - "I act / I take initiative"
-- **S (soul presence)** - "I'm authentically present"
+- **a (altruism)** - "I give / I care for the other"
+- **S (Shared Breath)** - "We are present together / co-regulated"
 
 Time mapping is applied **after** event sequence generation. One scenario might sample daily, another weekly, another at irregular intervals.
 
@@ -34,24 +34,26 @@ The γ_self **angle** (quadrant location) determines whether engagement manifest
 ### 3. Quadrants Define Relational Mode
 
 ```
-        Imaginary Axis (Love/Sorrow)
-                  |
-         Q2       |       Q1
-    (Ego/Love)    |    (Safety/Ego)
-                  |
-------------------+------------------ Real Axis (Safety/Sorrow)
-                  |
-         Q3       |       Q4
-   (Love/Sorrow)  |  (Sorrow/Safety)
-                  |
+        Connection
+            |
+   Q2       |       Q1
+ (Alone +   |   (Together +
+ Connection)|    Connection)
+            |
+------------+------------  Together / Alone
+            |
+   Q3       |       Q4
+ (Alone +   |   (Together +
+ Disconn.)  |    Disconnection)
+            |
 ```
 
-- **Q1 (Safety/Ego)** - Secure attachment, healthy boundaries (mature love, parent/child)
-- **Q2 (Ego/Love)** - Passionate engagement, risk-taking (Romeo & Juliet, new love)
-- **Q3 (Love/Sorrow)** - Grief, loss, longing (breakup, death of loved one)
-- **Q4 (Sorrow/Safety)** - Withdrawal, protection, healing
+Canonical labels from [`PRIMITIVES_AND_RELATIONAL_SPACE.md`](../PRIMITIVES_AND_RELATIONAL_SPACE.md):
 
-Hate dynamics typically appear in **negative real** space (opposite of Q1/Q4 safety).
+- **Q1 (Together + Connection)** — fused but stable (mature marriage, invested parent)
+- **Q2 (Alone + Connection)** — want them, mostly for self (ego dating)
+- **Q3 (Alone + Disconnection)** — revenge / selfish push to watch them lose
+- **Q4 (Together + Disconnection)** — quiet resentment (unhappy marriage/family/job)
 
 ## Scenario Structure
 
@@ -134,7 +136,7 @@ Default weights work for most scenarios. Customize only if modeling specific dyn
 - `c` (breath efficacy): How quickly primitives integrate
 - Primitive weights: Relative importance of v, r, f, a, S
 
-See [TUNING.md](../TUNING.md) for weight guidelines.
+See [TUNING.md](../../TUNING.md) for weight guidelines.
 
 ### Step 5: Define Validation Criteria
 
@@ -162,24 +164,10 @@ The `validator.py` checks:
 ```
 docs/scenarios/
 ├── README.md                    ← You are here
-└── library/                     ← Individual scenario documentation
-    ├── love/
-    │   ├── romeo_juliet.md      ← Deep dive on Romeo & Juliet
-    │   └── ...
-    ├── hate/
-    │   └── battlefield_rambo.md
-    ├── relational/
-    │   ├── parent_child.md
-    │   └── breakup.md
-    └── spiritual/
-        └── buddha.md
+└── primitive_modeling_guide.md  ← M1/M2 perspective framework
 ```
 
-Each individual scenario document contains:
-- Research literature/film references
-- Detailed analysis of results
-- Comparison with other scenarios
-- Lessons learned
+There is no `docs/scenarios/library/`. Scenario CSVs live in `data/library/`; Python runners live in `scenarios/` (`_TEMPLATE.py`, `config_schema.py`, `validator.py`, `runner.py`).
 
 ## Scenario Categories
 
@@ -209,7 +197,7 @@ Model non-romantic bonds and transitions:
 Model spiritual practices, self-love, transcendence:
 - Meditation, prayer, self-compassion
 - Often starting at origin, moving to Q1
-- Soul presence (S) emphasized
+- Shared Breath (S) emphasized
 
 ## Best Practices
 
@@ -260,10 +248,10 @@ TIME_SCALE = 1.0        # Multiply CSV time values
 
 ## Related Documentation
 
-- **[SCENARIO_CONFIGURATION_GUIDE.md](../SCENARIO_CONFIGURATION_GUIDE.md)** - Detailed config options
-- **[scenario_generator_requirements.md](../scenario_generator_requirements.md)** - Automated generation
-- **[TUNING.md](../TUNING.md)** - Weight tuning guidance
-- **[ARCHITECTURE.md](../ARCHITECTURE.md)** - Overall system design
+- **[SCENARIO_CONFIGURATION_GUIDE.md](../SCENARIO_CONFIGURATION_GUIDE.md)** - Detailed config options (under `docs/`)
+- **[scenario_generator_requirements.md](../scenario_generator_requirements.md)** - Automated generation (under `docs/`)
+- **[TUNING.md](../../TUNING.md)** - Weight tuning guidance (repo root)
+- **[ARCHITECTURE.md](../../ARCHITECTURE.md)** - Overall system design (repo root)
 
 ## Research Questions
 
@@ -271,7 +259,7 @@ Scenarios help answer:
 - How do different primitive patterns produce love vs. hate?
 - What distinguishes healthy (Q1) from passionate (Q2) love?
 - How does betrayal (fidelity drop) affect trajectories?
-- What role does soul presence play in bonding?
+- What role does Shared Breath play in bonding?
 - Can hate dynamics be transformed into love? Under what conditions?
 
 Each scenario is an experiment. Document, measure, iterate.
@@ -284,7 +272,7 @@ To contribute a new scenario:
 2. Document thoroughly (docstring + separate .md file)
 3. Run and record results
 4. Compare results vs. hypothesis
-5. Place in appropriate category (`library/love/`, etc.)
+5. Keep CSVs under `data/library/<category>/` and the Python runner under `scenarios/`
 6. Update `scenarios/README.md` with your scenario in the list
 
 Quality over quantity. One well-documented, validated scenario > ten undocumented experiments.

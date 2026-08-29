@@ -1,23 +1,25 @@
-# Entropy Verification Log
+# Verification
 
 ## Overview
 
-This directory contains the official entropy verification log for the WhenMathPrays interactive scenario editor. The log file `entropy_verification_state_log_20251217_145008.log` serves as a comprehensive record of entropy functionality testing and validation.
+This directory holds verification scripts and procedures for the WhenMathPrays interactive scenario editor.
 
-## Verification Log Details
+On disk in this folder:
 
-**File**: `entropy_verification_state_log_20251217_145008.log`
-**Original Session**: December 17, 2025, 14:50:08 UTC
-**Session Duration**: 13 seconds (14:49:51 → 14:50:04)
-**Total Operations Recorded**: 1,000
-**Warnings/Errors**: 0 (clean execution)
+- [`verification.py`](verification.py) — automated state-log structure checker
+- [`interactive_editor_performance_baseline.md`](interactive_editor_performance_baseline.md)
+- [`interactive_editor_performance_validation.py`](interactive_editor_performance_validation.py)
 
-## Associated Files
+Canonical scenario CSV format: [`docs/CSV_FORMAT.md`](../docs/CSV_FORMAT.md).
 
+Love scenario CSVs used with the editor:
 
-This verification log was generated using minimal entropy calibration CSV files for M1 and M2. For the canonical scenario CSV format specification (including required columns, primitive scaling, and reference conventions), see [CSV_FORMAT.md](../CSV_FORMAT.md).
+- [`data/library/love/single_dating_to_love_M1.csv`](../data/library/love/single_dating_to_love_M1.csv)
+- [`data/library/love/single_dating_to_love_M2.csv`](../data/library/love/single_dating_to_love_M2.csv)
 
-**Note**: The `verification_data` directory serves as a generic repository for test files used in various verification scenarios. As more verification logs are added, this directory will contain test data for different types of functionality testing.
+Session `.log` files from historical editor runs are **not** stored in this git tree.
+
+**Note**: Supporting test CSVs live under `data/` (including `data/verification_data/` and entropy-calibration files).
 
 ## What Was Verified
 
@@ -89,18 +91,16 @@ This log serves as training/validation data for:
 - **Integration testing**: Ensure entropy features work across different scenarios
 - **User acceptance testing**: Validate that entropy functionality meets requirements
 
-## How to Use This Verification Log
+## How to Use a Verification Log
 
-### Manual Review
+Historical editor session logs are not checked into git. If you have a local state log, `verification.py` (below) is the checker. Example grep patterns for a log you already have:
+
 ```bash
-# View the complete log
-cat verification/entropy_verification_state_log_20251217_145008.log
-
 # Search for specific operations
-grep "trajectory_computed" verification/entropy_verification_state_log_20251217_145008.log
+grep "trajectory_computed" path/to/state_log.log
 
 # Count operation types
-grep "^\[" verification/entropy_verification_state_log_20251217_145008.log | cut -d']' -f2 | sort | uniq -c
+grep "^\[" path/to/state_log.log | cut -d']' -f2 | sort | uniq -c
 ```
 
 ### Automated Analysis
@@ -134,10 +134,7 @@ This directory includes `verification.py`, a comprehensive automated verificatio
 ### Usage
 
 ```bash
-# Validate the entropy baseline log
-python verification/verification.py entropy_verification_state_log_20251217_145008.log
-
-# Validate any state log file
+# Validate a local state log (session .log files are not in git)
 python verification/verification.py path/to/your/state_log.log
 
 # Get help
@@ -180,7 +177,7 @@ The script validates the structure of all operation types found in state logs:
 VERIFICATION RESULTS
 ============================================================
 Status: PASSED
-Log File: verification/entropy_verification_state_log_20251217_145008.log
+Log File: path/to/your/state_log.log
 Session: 2025-12-17T14:50:08.575559
 Total Operations: 1000
 Warnings: 0
@@ -209,21 +206,13 @@ The script returns appropriate exit codes for automation:
 Example CI integration:
 ```yaml
 - name: Run Verification Tests
-  run: python verification/verification.py entropy_verification_state_log_20251217_145008.log
+  run: python verification/verification.py path/to/your/state_log.log
   working-directory: ${{ github.workspace }}
 ```
 
 ## Interactive Editor Functionality Verification
 
-**File**: `interactive_editor_functionality_verification_20251217_193650.log`
-**Session**: December 17, 2025, 19:36:50 UTC
-**Session Duration**: ~2 minutes (19:34:54 → 19:36:50)
-**Total Operations Recorded**: 538
-**Warnings/Errors**: 0 (clean execution)
-
-## Associated Files
-
-This verification log was generated using the standard love scenario files:
+A December 17, 2025 editor-functionality session (538 operations, 0 warnings) is historical; the `.log` is not in git. That session used the standard love scenario files:
 
 - **Primary Test File (M1)**: [`data/library/love/single_dating_to_love_M1.csv`](../data/library/love/single_dating_to_love_M1.csv)
 - **Secondary Test File (M2)**: [`data/library/love/single_dating_to_love_M2.csv`](../data/library/love/single_dating_to_love_M2.csv)
@@ -270,7 +259,7 @@ This verification log serves as the official record that all core interactive ed
 
 ## Maintenance Notes
 
-- **Do not modify** this verification log - it serves as an immutable baseline
+- Session `.log` files are not stored in git; treat any local log as an immutable baseline
 - **Keep associated test files** in their original locations for future reference
 - **Expand verification_data directory** as needed for additional test scenarios
 - **Archive periodically** as part of release verification artifacts

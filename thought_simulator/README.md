@@ -8,7 +8,7 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 
 ---
 
-## Current Status (June 26, 2026)
+## Current Status (August 28, 2026)
 
 - **Architectural specification complete**
 - Full master glossary and invariants defined
@@ -18,14 +18,14 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 - Governance layer (IB → GBIB → GB) fully specified
 - Co-processor architecture defined for hybrid integration
 
+**First Path A machine landed 2026-08-28** under [requirements_20/system_playground/simulation/](requirements_20/system_playground/simulation/) (`ts_kernel/` + `pipelines/lineup_idob_mcb`).
+
 **Architecture Verification and Readiness Paper:**  
 [TS architecture readiness paper/announcement](ts_architecture_validation_and_readiness.md)
 
-**Implementation phase** is next.
-
 **Status Test Runs (Same test ran independently):**  
-[Latest Test Run, Copilot 7/23/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_cp.md)  
-[Latest Test Run, Grok 7/23/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_grok.md)  
+[Latest Test Run, Copilot 7/23/2026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_cp.md)  
+[Latest Test Run, Grok 7/23/2026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_grok.md)  
 
 **Overview papers:**  
 [From LLM To TS](requirements_20/system_playground/design/papers/meta_and_planning/from_llm_to_ts.md)  
@@ -43,7 +43,7 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 [TS Construction of Meaning](requirements_20/system_playground/design/papers/cognition_and_constraints/ts_construction_of_meaning.md)
 
 **Engineering papers**  
-[Manifold Engineering Tuning paper](requirements_20/system_playground/design/papers /manifold/manifold_white_papers/prework_manifold_and_back.md)  
+[Manifold Engineering Tuning paper](requirements_20/system_playground/design/papers/manifold/manifold_white_papers/prework_manifold_and_back.md)  
 
 ---
 
@@ -108,12 +108,13 @@ In practice:
 
 The process flow is direction-controlled:
 - Requirements collaboration and intent shaping in [requirements_20/](requirements_20/)
-- System Development [system_playground/](system_playground/)
-- system Logic Simulation [system_simulation/](system_simulation/)
+- System Development [requirements_20/system_playground/](requirements_20/system_playground/)
+- system Logic Simulation [requirements_20/system_simulation/](requirements_20/system_simulation/)
+- Path A machine [requirements_20/system_playground/simulation/](requirements_20/system_playground/simulation/)
 
 ---
 
-**Last Updated**: Juuly 27th, 2026  
+**Last Updated**: August 28th, 2026  
 **Version**: 0.8 (Flow Catalog Integration + Status Paper)
 
 ---
