@@ -87,8 +87,7 @@ route:
 
 R-001 | 20.37, 20.50, 20.145; drift 20.40.050, 20.15, 20.705 | HLR-20.37-023, HLR-20.37-071, HLR-20.37-072, HLR-20.050-027, HLR-20.050-049, HLR-20.050-069; drift HLR-20.40.050-012, HLR-20.40.050-062 | missing hop | TR `routing_fields{}` has no hop-type keys and RB’s only named destination is TR (`selected_ob_ids[]` untyped); nothing in the routing shalls names a typed structure-to-meaning hop into IdOB after committed RB, so the first S2M crossing cannot be scheduled as a typed route. | owner=human | write=no
 
-R-002 | 20.51, 20.145, 20.705 | HLR-20.051-007 vs 20.705 §2 Path A string as written (`…→TR→CTP→RB→WrdNm…→TR→CTP→RB→IdOB…` and OR `…→TR→CTP→RB→OuBA`) | conflicting hop (CTP before vs after RB) | HLR-20.051-007 writes `TR → RB → CTP` / `TR → RB → IdOB`, placing CTP after RB, while the full §2 string places the 20.145 CTP primitive immediately before every RB. Hop-order on the unshortened chain, not “CTP is dead.” | owner=human | write=no
-R-002 close toward §2 (EVENT doc-change 2026-08-30). write=no on further files.
+R-002 | 20.51_rbu_prim.md, 20.705_patha_pathb_flow.md | HLR-20.051-007 (header Downstream; §1; §2 pipeline) | closed (hop-order now matches §2) | 20.51 now has CTP(20.145) immediately before RB on the full §2 string; IdOB after that RB; OuBA alternate exit. | owner=human | write=no
 
 R-002 remains hop-order (CTP before vs after RB), not “CTP is dead”. 20.145 stays live; do not retire the row.
 
