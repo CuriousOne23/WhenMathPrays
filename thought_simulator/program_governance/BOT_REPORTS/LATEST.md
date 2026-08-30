@@ -53,6 +53,31 @@ M-016 | 20.705_patha_pathb_flow.md, 20.40.050_idob_prim.md | HLR-20.40.050-062 |
 M-017 | 20.700_master_glossary.md, 20.40_ob_requirements.md | HLR-20.40-007 | Support file cites a hop this set does not allow: glossary “No semantic interpretation before SmOB” vs umbrella ban for all OB layers including SmOB. | owner=human | write=no
 
 20.200 and folder README cited no hop this set forbids. No writers. No rewrites.
+
+M-705-001 | 20.32_cob_requirements.md | HLR-20.32-054 | §3.6 hop CIL → CEx: referral counters update only when CEx selects the layer, requiring a CEx → COB write §3.6 does not have | CEx’s listed neighbor is CIL inbound; a same-cycle COB counter write skips OuBA → COB and runs selection backwards into the identity substrate | owner=human | write=no
+
+M-705-002 | 20.32_cob_requirements.md | HLR-20.32-111 | §3.6 hop OuBA → COB: COB ingests semantic-adjacent importance cues emitted by SmOB, requiring SmOB → COB that §3.6 does not have | Authorized meaning ingest is OuBA → COB; SmOB’s §2 neighbor is WrdNm, not COB | owner=human | write=no
+
+M-705-003 | 20.32_cob_requirements.md | HLR-20.32-112 | §3.6 hop OuBA → COB: COB ingests identity-importance cues emitted by IdOB, requiring IdOB → COB that §3.6 does not have | Authorized meaning ingest is OuBA → COB; IdOB’s §2 neighbor is MCB, not COB | owner=human | write=no
+
+M-705-004 | 20.32_cob_requirements.md | HLR-20.32-120 | §3.6 hop COB → CIL: conversation_count snapshot is consumed by CIL and CEx, requiring COB → CEx that §3.6 does not have | COB’s listed consumer is CIL; CEx is after CIL → CEx, not a parallel COB consumer | owner=human | write=no
+
+M-705-005 | 20.32_cob_requirements.md | HLR-20.32-124 | §3.6 hop COB → CIL: initial_state_complete snapshot is consumed by CIL and CEx, requiring COB → CEx that §3.6 does not have | COB’s listed consumer is CIL; CEx is after CIL → CEx, not a parallel COB consumer | owner=human | write=no
+
+M-705-006 | 20.40.040_smob_prim.md | HLR-20.40.040-009 | §2 hop SmOB → WrdNm: SSG SHALL receive SmOB as its sole pre-semantic input, requiring SmOB → SSG and skipping WrdNm | Adjacent Path A consumer after SmOB is WrdNm, then ISc, then SSG | owner=human | write=no
+
+M-705-007 | 20.40.040_smob_prim.md | HLR-20.40.040-038 | §2 hop SmOB → WrdNm: SmOB output SHALL be valid input for SSG and RB, requiring SmOB → SSG/RB and skipping WrdNm | Adjacent Path A consumer after SmOB is WrdNm, then ISc, then SSG | owner=human | write=no
+
+M-705-008 | 20.40.050_idob_prim.md | HLR-20.40.050-011 | §2 hop RTU → TR → CTP → RB → IdOB: IdOB is invocable only after RB-prm → RTU-prm, reversing RTU-before-RB | §2 places RTU before TR/CTP/RB, then RB → IdOB; RB → RTU is not a §2 hop | owner=human | write=no
+
+M-705-009 | 20.105_tp_requirements.md | HLR-20.105-100 (unlabeled; CCR-carry shall before 101) | §3.6 hop CIL → CEx: CCR envelope is for downstream consumption by CEx-Pck, COB, CIL, and CST, reversing CIL → CEx and requiring CEx → COB | CEx-CCR cannot feed COB/CIL/CST on the same cycle as CIL → CEx; §3.6 ingest into COB/CST is OuBA → COB / OuBA → CSTCore | owner=human | write=no
+
+M-705-010 | 20.105_tp_requirements.md | HLR-20.105-104 | §3.6 hop CIL → CEx: COB uses CEx-CCR selected_conversation to project into CIL, reversing CIL → CEx and requiring CEx → COB | Same-cycle CCR → COB → CIL runs after CEx but §3.6 is COB → CIL → CEx | owner=human | write=no
+
+M-705-011 | 20.105_tp_requirements.md | HLR-20.105-106 | §3.6 hop CIL → CEx: COB reads TP.cex.ccr.selected_conversation and projects into CIL, reversing CIL → CEx and requiring CEx → COB | Same-cycle CCR → COB → CIL runs after CEx but §3.6 is COB → CIL → CEx | owner=human | write=no
+
+M-705-012 | 20.105_tp_requirements.md | HLR-20.105-110 | §3.6 hop CIL → CEx: identical CCR output yields identical COB CIL projections, reversing CIL → CEx and requiring CEx → COB | Same-cycle CCR → COB → CIL runs after CEx but §3.6 is COB → CIL → CEx | owner=human | write=no
+
 route:
 
 R-001 | 20.37, 20.50, 20.145; drift 20.40.050, 20.15, 20.705 | HLR-20.37-023, HLR-20.37-071, HLR-20.37-072, HLR-20.050-027, HLR-20.050-049, HLR-20.050-069; drift HLR-20.40.050-012, HLR-20.40.050-062 | missing hop | TR `routing_fields{}` has no hop-type keys and RB’s only named destination is TR (`selected_ob_ids[]` untyped); nothing in the routing shalls names a typed structure-to-meaning hop into IdOB after committed RB, so the first S2M crossing cannot be scheduled as a typed route. | owner=human | write=no
@@ -185,5 +210,5 @@ MX-045 | 20.200, 20.705, 20.32_cob_requirements.md | HLR-20.200-001; `OuBA --> C
 MX-046 | 20.200, 20.705, 20.33_cil_requirements.md | HLR-20.200-001; `COB --> CIL`; `[CIL](20.33_cil_requirements.md)` | TBD design-anchor on a 20.705 hop | The 20.200 row `20.33_cil_requirements.md` has design-anchor `50.033_cil_design.md (TBD)` while §3.6 hop `COB --> CIL` / `[CIL](20.33_cil_requirements.md)` is treated as current. | owner=human | write=no
 
 needs human:
-S1 S2 S3 S4 E1 E2 M-001–M-017 R-001–R-017 MX-001–MX-046 (no stamp; owner=human; write=no)
+S1 S2 S3 S4 E1 E2 M-001–M-017 M-705-001–M-705-012 R-001–R-017 MX-001–MX-046 (no stamp; owner=human; write=no)
 next recommendation: not yet
