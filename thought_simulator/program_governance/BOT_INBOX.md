@@ -174,3 +174,29 @@ expect:
 kind: law
 
 stamp: human
+
+---
+
+EVENT: doc-change
+
+when: 2026-08-30
+
+files: thought_simulator/requirements_20/20.40_ob_requirements.md
+
+what: Human landed 20.40 v1.3. HLR-20.40-017R is gone. Freeze SHALL is HLR-20.40-019 (previous max was 018). HLR-20.40-017 stays NA. HLR-20.40-003 / 007 / 008 now bind SOB, SROB, CnOB, and SmOB only. IdOB-prm may read CE/CIL/discourse as cues and write the 20.116.020 / 20.40.050 envelopes. Informative §3 / §5 / §6 have no SHALL and no HLR numbers. Score the live file, not the pre-correction pass.
+
+why: Cluster 2 remaining umbrella wording is on main. Bots must not keep scoring 017R or family-wide 003/007/008.
+
+expect:
+
+  - Meaning: mark M-001 and M-002 decided against 20.40 v1.3. Cluster 2 “remaining 20.40 wording” is done.
+
+  - Helm: add this EVENT to CHANGE_LOG. In LATEST.md note “20.40 v1.3; freeze = HLR-20.40-019; 003/007/008 = SOB–SmOB only.”
+
+  - write=no on 20.40 unless the human opens another edit.
+
+  - Do not restore 017R. Do not create Bots or writers.
+
+kind: law
+
+stamp: human
