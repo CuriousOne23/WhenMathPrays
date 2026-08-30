@@ -102,3 +102,4 @@
 2026-08-30 | EVENT policy 20.705 distance | M-705-012 | write=no
 2026-08-30 | EVENT decision | CTP = 20.145 primitive only; HLR-20.40-017 NA | stamp=human | M-010 decided
 2026-08-30 | scoring | R-002 M-009 M-011 vs 20.705 §2 as written; no shorter chain | write=no
+2026-08-30 | scoring | R-002 rescored vs 20.705 §2 as written | write=no
