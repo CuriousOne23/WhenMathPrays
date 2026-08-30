@@ -104,3 +104,73 @@ expect:
 kind: law
 
 stamp: human
+
+---
+
+EVENT: decision
+
+when: 2026-08-30
+
+files: 20.40.050_idob_prim.md; 20.40_ob_requirements.md; 20.51_rbu_prim.md; 20.50_rb_requirements.md; 20.145_ctp_prim.md; 20.705 §2
+
+what: Cluster 1 — IdOB invoke and stretch. Winner is HLR-20.40.050-062 and 20.705 §2. Live identity-conditioned Path A stretch is WrdNm → ISc → RTU → TR → CTP → RB → IdOB → MCB → RBU. HLR-20.40.050-011 (invoke only after RB→RTU) is NA. 20.40 umbrella SOB→SROB→CnOB→SmOB is the structural OB chain, not the S2M schedule. IdOB is the post-RB hop when RB selects S2M. RB→OuBA is a legal OR-exit and may skip IdOB. Isolation fixtures stay legal. GB→IdOB is not Path A. IdOB→TR→OuBA is not the successor; successor is IdOB→MCB→RBU. 20.51 TR→RB→CTP and TR→RB→IdOB yield to 20.145 + §2 (TR→CTP→RB then RB→IdOB). Typed RB destinations remain later 20.50 wording.
+
+why: One invoke hop. Stop scoring IdOB as an optional SOB peer and as a post-RB hop at the same time.
+
+expect:
+
+  - Meaning: mark M-009, M-011, M-015, M-016, M-705-008 decided in this direction. write=no until human edits 20.40.050-011 wording.
+
+  - Route: mark R-002, R-005 through R-011 decided as hop-order (20.145 +§2 win). R-009 through R-011, R-016, R-017 remain open only as missing typed RB destinations in 20.50.
+
+  - Helm: note in LATEST.md. Do not edit 20.40, 20.50, 20.51, or 20.705. Do not create writers or Bots.
+
+kind: law
+
+stamp: human
+
+---
+
+EVENT: decision
+
+when: 2026-08-30
+
+files: 20.40_ob_requirements.md; 20.40.050_idob_prim.md; 20.105_tp.md; 20.116.020_ownership_rw.md
+
+what: Cluster 2 — meaning-write law. Winner is 20.116.020-003, HLR-20.105-116, and IdOB-prm. Only IdOB-prm may birth stand-in M, TP.idob, and TP.semantic.meaning_delta_h (plus listed root flags). 20.40 umbrella “no semantic interpretation” on 20.40.010–.060 does not apply to IdOB-prm. It means SOB/SROB/CnOB/SmOB must not produce M. Child MAY-read of CE/CIL/discourse is cues only, not a second meaning writer. TP write wall stands; exceptions remain TPU, OuBA freeze, and listed IdOB paths.
+
+why: Umbrella and IdOB cannot both be the meaning writer. Read is not write.
+
+expect:
+
+  - Meaning: mark M-001 decided. Mark M-002 narrowed (read ≠ write). Remaining work is 20.40 umbrella wording. write=no until human edits.
+
+  - Helm: note in LATEST.md. Do not edit 20.40 or 20.105. Do not create writers or Bots.
+
+kind: law
+
+stamp: human
+
+---
+
+EVENT: decision
+
+when: 2026-08-30
+
+files: 20.15_ts_architecture_scaffold.md; 20.32_cob_requirements.md; 20.105_tp.md; 20.206; 20.705 §2 and §3.6; 20.116.020_ownership_rw.md
+
+what: Cluster 3 — OuBA door and conversation polarity. Winner is 20.15 §2.14 and 20.116: OuBA freeze is the sole COB meaning-ingest door. COB long-horizon meaning and importance arrive only from that freeze (slim TP.idob, flags, pack_ids, utterance), not from mid-lineup SmOB→COB or IdOB→COB. CST-Core/MS → COB are stability command / freeze-thaw paths, not meaning ingest. USP remains CIL-only. Path A CEx after IE and CIL→CEx are two jobs: extract vs conversation-layer on the COB snapshot. CIL→CEx selects conversation. COB does not select. COB projects after freeze, not from live CEx-CCR on the same Path A beat. Path B still starts OuBA → B.
+
+why: One meaning door into COB. Do not score Path A extract and conversation CEx as one reversed hop.
+
+expect:
+
+  - Spine: mark E2 decided (command vs ingest). Leave S1 and S3 open as 20.206 wording, not as a new door.
+
+  - Meaning: mark M-005, M-705-002, M-705-003 decided (no mid-lineup COB meaning write). Mark E1 / M-008 / M-705-001 / M-705-004 / M-705-005 decided as two CEx jobs.
+
+  - Helm: note in LATEST.md. Do not edit 20.15, 20.32, 20.105, 20.206, or 20.705. Do not create writers or Bots.
+
+kind: law
+
+stamp: human
