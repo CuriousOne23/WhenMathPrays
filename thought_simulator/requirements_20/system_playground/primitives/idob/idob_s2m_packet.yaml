@@ -1,5 +1,11 @@
 # Live IdOB packet (11_idob_core). idob.py writes this under tp.idob.
 # Full list: testbenches/idob_structure_to_meaning/11_idob_core/packet.schema.yaml
+#
+# Field catalog authority (20.116): names/paths/owners in
+# requirements_20/20.116_field_catalog.md and 20.116.010 / .020 / .030.
+# 20.116 wins names/paths/owners; this packet wins nested S2M fields.
+# Root writes: tp.idob, tp.semantic.meaning_delta_h,
+# idob_complete / path_b_eligible / ready_for_ouba.
 
 idob_s2m_packet:
   utterance: string_or_null

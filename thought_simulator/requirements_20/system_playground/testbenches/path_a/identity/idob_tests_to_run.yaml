@@ -1,4 +1,5 @@
 # S2M IdOB tests. Lifecycle formation..closure ids live in idob_lifecycle_archive.yaml.
+# Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
 
 tests:
   - id: idob_s2m_01_rock

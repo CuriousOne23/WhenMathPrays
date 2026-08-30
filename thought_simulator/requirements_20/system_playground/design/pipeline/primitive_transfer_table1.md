@@ -1,9 +1,9 @@
 # 📘 **Primitive Transfer Table (Compressed Hybrid Edition)**  
 **Path‑A Pipeline: InB → IIInB → IE → CE → TPU → SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → DCB → RB → IdOB**
 
-**Canonical Field Names:** All field names in this document are governed by  
-`thought_simulator/requirements_20/system_playground/design/pipeline/patha_field_names.md`.  
-That dictionary is the single authoritative source for structural programs and testbenches.
+> **Field catalog authority (20.116).** Canonical paths, envelope owners, and name-separations: [`../../../20.116_field_catalog.md`](../../../20.116_field_catalog.md) · [`../../../20.116.010_tp_envelope_index.md`](../../../20.116.010_tp_envelope_index.md) · [`../../../20.116.020_ownership_rw.md`](../../../20.116.020_ownership_rw.md) · [`../../../20.116.030_name_separations.md`](../../../20.116.030_name_separations.md). Collision: 20.116 wins names/paths/owners; primitive files win behavior (`HLR-20.116-001`–`004`).
+>
+> `patha_field_names.md` in this folder is a **derived working index**. It must match 20.116. It does not override 20.116.
 
 ## Path A – Bounded Semantics Requirement
 

@@ -1,4 +1,9 @@
-"""IdOB Rulechecker — S2M packet walls for primitives/idob/idob.py."""
+"""IdOB Rulechecker — S2M packet walls for primitives/idob/idob.py.
+
+Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
+and 20.116.010 / .020 / .030. 20.116 wins names/paths/owners;
+this checker wins wall tests.
+"""
 from __future__ import annotations
 
 from typing import List, Tuple

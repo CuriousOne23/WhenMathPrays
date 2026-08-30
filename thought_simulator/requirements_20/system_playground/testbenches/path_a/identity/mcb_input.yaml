@@ -1,6 +1,7 @@
 # ============================================================
 # MCB general-mode input (v0.1)
 # Used when mode == "general"
+# Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
 # ============================================================
 
 utterance: "Yes — that framing of the deterministic state machine still holds."

@@ -3,6 +3,10 @@
 Loads YAML only from this directory. Does not import 11_idob_core.
 Architecturally the same hop as the learning-bench kernel: six IDs -> map ->
 rank -> M -> CIE -> delta_h -> flags. Separate file.
+
+Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
+and 20.116.010 / .020 / .030. 20.116 wins names/paths/owners;
+this module wins hop behavior.
 """
 from __future__ import annotations
 
