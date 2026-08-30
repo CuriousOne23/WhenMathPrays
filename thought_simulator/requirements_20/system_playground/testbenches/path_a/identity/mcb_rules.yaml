@@ -2,6 +2,8 @@
 # MCB Rules (Version 0.1)
 # Aligned with 20.40.055 v2.0, mcb_py_struc_pgm.md v0.1,
 # progressive_lineup_testing.md v4.2
+# Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
+# plus 20.116.010 / .020 / .030. 20.116 wins names/paths/owners.
 # ============================================================
 
 primitive: MCB
