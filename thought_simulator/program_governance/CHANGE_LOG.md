@@ -58,3 +58,5 @@
 2026-08-30 | EVENT policy 20.705 distance | R-015 | write=no
 2026-08-30 | EVENT policy 20.705 distance | R-016 | write=no
 2026-08-30 | EVENT policy 20.705 distance | R-017 | write=no
+2026-08-30 | EVENT policy 20.705 distance | E1 | write=no
+2026-08-30 | EVENT policy 20.705 distance | E2 | write=no
