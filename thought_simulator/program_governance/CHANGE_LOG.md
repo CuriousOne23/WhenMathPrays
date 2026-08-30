@@ -104,3 +104,4 @@
 2026-08-30 | scoring | R-002 M-009 M-011 vs 20.705 §2 as written; no shorter chain | write=no
 2026-08-30 | scoring | R-002 rescored vs 20.705 §2 as written | write=no
 2026-08-30 | scoring | M-009 M-011 rescored vs 20.705 §2 as written | write=no
+2026-08-30 | EVENT doc-change | hop-order 20.40+20.51 to 20.705 §2; R-002 M-009 close toward; M-011 open | stamp=human
