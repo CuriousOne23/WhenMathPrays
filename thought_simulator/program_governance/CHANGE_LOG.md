@@ -105,3 +105,5 @@
 2026-08-30 | scoring | R-002 rescored vs 20.705 §2 as written | write=no
 2026-08-30 | scoring | M-009 M-011 rescored vs 20.705 §2 as written | write=no
 2026-08-30 | EVENT doc-change | hop-order 20.40+20.51 to 20.705 §2; R-002 M-009 close toward; M-011 open | stamp=human
+2026-08-30 | EVENT doc-change | M-009 closed toward 20.40-001/016 | write=no
+2026-08-30 | EVENT doc-change | M-011 still open until 20.40.050-011 NA | write=no
