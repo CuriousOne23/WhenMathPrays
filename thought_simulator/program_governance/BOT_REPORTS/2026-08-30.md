@@ -1,6 +1,7 @@
 date: 2026-08-30
-events processed: EVENT policy 2026-08-30 (stamp=human)
+events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human)
 flow-tracker = 20.705 §2 and §3.6
+decision: CTP means only the 20.145 primitive (Path A hop in 20.705 §2). HLR-20.40-017 is NA. OuBA commit is not called CTP.
 spine:
 
 S1 | files=20.31, 20.15, 20.206 | shalls=HLR-20.206-001, HLR-20.206-002, HLR-20.206-003, VR-6 | issue=contradictory shalls / Path A/B leak / scaffold vs 20.31 vs 20.206 mismatch | why it matters=B must consume OuBA and also reject meaning-side content, while Path A law and scaffold put meaning into OuBA | owner=human | write=no
@@ -36,6 +37,8 @@ M-008 | 20.32_cob_requirements.md, 20.105_tp_requirements.md | HLR-20.32-003, HL
 M-009 | 20.40_ob_requirements.md, 20.40.050_idob_prim.md, 20.105_tp_requirements.md | HLR-20.40-001, HLR-20.40-016, HLR-20.40-017, HLR-20.40.050-011, HLR-20.40.050-062 | Hop mismatch: umbrella is SOB→SROB→CnOB→SmOB unless routing selects IdOB or OuBA; IdOB/TP live stretch is RTU → TR → CTP → RB → IdOB → MCB → RBU, with OuBA on an OR exit that skips IdOB. | IdOB is optional peer vs post-RB hop vs skipped on the OuBA exit. | owner=human | write=no
 
 M-010 | 20.40_ob_requirements.md, 20.40.050_idob_prim.md, 20.105_tp_requirements.md | HLR-20.40-017; 20.105 commit sentence; HLR-20.40.050-062 | Term mismatch: 20.40 OuBA freezes meaning into a Committed Thought Packet (CTP); 20.105 commit is TPU → OuBA → semantic_core; 20.40.050/20.105 CTP is a pre-RB hop (CTP-prm). | Same token, two meanings. | owner=human | write=no
+
+M-010 decided 2026-08-30 | CTP = 20.145 primitive only (20.705 §2). HLR-20.40-017 NA. Remaining work is 20.40 wording. write=no until human edits.
 
 M-011 | 20.40.050_idob_prim.md | HLR-20.40.050-011 vs HLR-20.40.050-062 | Contradictory shalls (hop): HLR-011 still shalls invocation only after RB-prm → RTU-prm; HLR-062 shalls RTU → TR → CTP → RB → IdOB and withdraws RB → RTU. | IdOB’s own invoke hop is not one hop. | owner=human | write=no
 
@@ -83,6 +86,8 @@ route:
 R-001 | 20.37, 20.50, 20.145; drift 20.40.050, 20.15, 20.705 | HLR-20.37-023, HLR-20.37-071, HLR-20.37-072, HLR-20.050-027, HLR-20.050-049, HLR-20.050-069; drift HLR-20.40.050-012, HLR-20.40.050-062 | missing hop | TR `routing_fields{}` has no hop-type keys and RB’s only named destination is TR (`selected_ob_ids[]` untyped); nothing in the routing shalls names a typed structure-to-meaning hop into IdOB after committed RB, so the first S2M crossing cannot be scheduled as a typed route. | owner=human | write=no
 
 R-002 | 20.51, 20.145; drift 20.15, 20.40.050 | HLR-20.051-007 vs HLR-20.145-003, HLR-20.145-028, HLR-20.145-029; drift HLR-20.40.050-062 | conflicting hop | 20.51’s only normative sequence is `TR → RB → CTP` then `TR → RB → IdOB` (CTP after RB / omitted on the IdOB stretch) while 20.145 requires CTP immediately before every RB (`TR → CTP → RB`), so the live neighborhood before IdOB cannot be implemented without violating one of the two shall-sets. | owner=human | write=no
+
+R-002 remains hop-order (CTP before vs after RB), not “CTP is dead”. 20.145 stays live; do not retire the row.
 
 R-003 | 20.51; drift 20.15, 20.705, 20.145 | HLR-20.051-007 (vs informative header/§1/§2 sequences); HLR-20.145-028 | invented diagram route | 20.51’s header Downstream invents `TR → CTP → WrdNm` (skips RB); that file also shows three mutually different Path-A strings, none of which match HLR-20.051-007, so a router cannot take a single allowed route into IdOB from this slice. | owner=human | write=no
 
