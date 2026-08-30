@@ -57,6 +57,33 @@ R-002 | 20.51, 20.145; drift 20.15, 20.40.050 | HLR-20.051-007 vs HLR-20.145-003
 R-003 | 20.51; drift 20.15, 20.705, 20.145 | HLR-20.051-007 (vs informative header/§1/§2 sequences); HLR-20.145-028 | invented diagram route | 20.51’s header Downstream invents `TR → CTP → WrdNm` (skips RB); that file also shows three mutually different Path-A strings, none of which match HLR-20.051-007, so a router cannot take a single allowed route into IdOB from this slice. | owner=human | write=no
 
 R-004 | 20.56, 20.37, 20.50 | HLR-20.056-011, HLR-20.056-014, HLR-20.050-032, HLR-20.37-023 | table vs TR vs RB/RBU vs CTP mismatch | The only routing-table schema is Path-B (`opbeh`/`obg`/`xlater`, keyed by `routing_epoch_id`, no TP paths, no TR/RB aliases) while Path-A S2M would have to be typed in unspecified `TP.TR.routing_fields{}` that RB consumes but is forbidden to bind to that table, so there is no lookup row for an efficient typed hop into IdOB. | owner=human | write=no
+
+R-005 | 20.51, 20.145, 20.705 | HLR-20.051-007 vs §2 TR→CTP→RB | conflicting hop (§2 TR→CTP→RB) | The RBU routing-readiness SHALL writes `TR → RB → CTP`, inverting 20.145 HLR-20.145-028/029 and the §2 freeze-then-arbitrate hop that must precede every RB including RB→IdOB. | owner=human | write=no
+
+R-006 | 20.51, 20.705 | HLR-20.051-007 vs §2 TR→CTP→RB→IdOB | conflicting hop (§2 RB→IdOB) | Same SHALL ends `TR → RB → IdOB`, naming IdOB without the §2 CTP hop, so typed routing into IdOB is not the Path A hop TR→CTP→RB→IdOB. | owner=human | write=no
+
+R-007 | 20.51, 20.705 | HLR-20.051-007 vs §2 RB→WrdNm | conflicting hop (§2 RB→WrdNm) | HLR-20.051-007 places `CTP → WrdNm` after `TR → RB → CTP`, so the first-loop §2 successor of RB is not WrdNm and the WrdNm vs IdOB destinations are not typed. | owner=human | write=no
+
+R-008 | 20.51, 20.705 | 20.51 Downstream header vs §2 TR→CTP→RB | invented diagram route (§2 TR→CTP→RB) | Header Downstream invents `TR → CTP → WrdNm` (RB omitted after the first CTP), so the declared downstream skips the §2 hop that later becomes RB→IdOB. | owner=human | write=no
+
+R-009 | 20.50, 20.705 | HLR-20.050-069, HLR-20.050-049 vs §2 RB→IdOB | missing hop (§2 RB→IdOB) | RB SHALLs IdOB only as a read-only view and routes to generic `selected_ob_ids[]`, and never SHALLs IdOB as the typed Path A destination after the second/fourth CTP→RB. | owner=human | write=no
+
+R-010 | 20.37, 20.705 | HLR-20.37-071, HLR-20.37-023, §6 TR→RB vs §2 RB→IdOB | missing hop (§2 RB→IdOB) | TR may read `TP.idob` and must expose `routing_fields{}` to RB, but names no hop into IdOB, so the routing vector does not encode the §2 typed destination RB→IdOB. | owner=human | write=no
+
+R-011 | 20.145, 20.705 | HLR-20.145-029 vs §2 RB→IdOB | missing hop (§2 RB→IdOB) | The only normative spine is `DCB → TR → CTP → RB`; the informative continuation is `RB → WrdNm → … → RB → …` and never names IdOB, so always-before-RB does not lock RB→IdOB. | owner=human | write=no
+
+R-012 | 20.37, 20.50, 20.705 | HLR-20.37-039, HLR-20.37-046, HLR-20.050-027 vs §2 DCB→TR / RTU→TR | conflicting hop (§2 DCB→TR / RTU→TR) | TR-gating SHALLs RB→TR whenever `tr_needs_update`, a hop §2 does not list (RB successors are WrdNm / IdOB / OuBA), so TR re-entry is not sequenced as §2 RTU→TR→CTP→RB→IdOB. | owner=human | write=no
+
+R-013 | 20.50, 20.145, 20.705 | 20.50 (no CTP shall) vs HLR-20.145-028 vs §2 CTP→RB | missing hop (§2 CTP→RB) | RB never names CTP as immediate predecessor, so arbitration is not bound to the freeze hop §2 places immediately before every RB, including the RB that must enter IdOB. | owner=human | write=no
+
+R-014 | 20.37, 20.145, 20.705 | 20.37 §6 / HLR-20.37-004 (RB consumes TP.TR) vs HLR-20.145-029 vs §2 TR→CTP | missing hop (§2 TR→CTP) | TR names only RB as consumer and never CTP, collapsing the mandatory TR→CTP hop that §2 inserts before every RB on the path into IdOB. | owner=human | write=no
+
+R-015 | 20.56, 20.37, 20.50, 20.705 | HLR-20.056-011, HLR-20.056-014, HLR-20.050-032 vs §2 TR→CTP→RB→IdOB | table vs TR vs RB/RBU vs CTP mismatch | 20.56 epoch tables are Pipeline-B-only, SHALL NOT alias TR/RB, SHALL NOT carry TP paths, and Path A RB SHALL NOT read `routing_epoch_id`, so no table row can express the Path A typed hop into IdOB. | owner=human | write=no
+
+R-016 | 20.50, 20.705 | HLR-20.050-021 / `selected_ob_ids[]` vs §2 RB→WrdNm | missing hop (§2 RB→WrdNm) | RB’s filter does not SHALL WrdNm as the typed successor of the first/third RB, so WrdNm vs IdOB cannot be distinguished as §2 requires for efficient typed routing into IdOB. | owner=human | write=no
+
+R-017 | 20.50, 20.705 | HLR-20.050-021 / `route_proposal` vs §2 RB→OuBA | missing hop (§2 RB→OuBA) | The OR-chain end hop RB→OuBA is not a typed RB destination, so Path A exit is not a SHALL’d alternative to RB→IdOB. | owner=human | write=no
+
 readme-bot:
 matrix:
 
@@ -96,5 +123,5 @@ MX-017 | 20.200, README, 20.16_gb_responsibility_matrix.md, 20.18_failure_modes_
 
 MX-018 | 20.200 | HLR-20.200-001 | design-anchor TBD left as if current | 74 of 79 Design Anchor cells publish `50.*.md (TBD)` as the current design-anchor value, so placeholders are treated as live governance targets. | owner=human | write=no
 needs human:
-S1 S2 S3 S4 M-001–M-017 R-001 R-002 R-003 R-004 MX-001–MX-018 (no stamp; owner=human; write=no)
+S1 S2 S3 S4 M-001–M-017 R-001–R-017 MX-001–MX-018 (no stamp; owner=human; write=no)
 next recommendation: not yet
