@@ -1,6 +1,7 @@
 date: 2026-08-30
-events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human)
+events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human)
 flow-tracker = 20.705 §2 and §3.6
+field-name authority = 20.116 series
 decision: CTP means only the 20.145 primitive (Path A hop in 20.705 §2). HLR-20.40-017 is NA. OuBA commit is not called CTP.
 scoring: 20.705 §2 is the Path A string as written. Score R-002 / M-009 / M-011 against §2. Do not replace §2 with a shorter chain. write=no.
 spine:
