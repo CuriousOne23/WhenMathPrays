@@ -62,3 +62,45 @@ expect:
 kind: law
 
 stamp: human
+
+---
+
+EVENT: doc-change
+
+when: 2026-08-30
+
+files:
+
+  thought_simulator/requirements_20/20.116_field_catalog.md
+
+  thought_simulator/requirements_20/20.116.010_tp_envelope_index.md
+
+  thought_simulator/requirements_20/20.116.020_ownership_rw.md
+
+  thought_simulator/requirements_20/20.116.030_name_separations.md
+
+  thought_simulator/requirements_20/system_playground/design/pipeline/00_field_catalog_authority.md
+
+  thought_simulator/requirements_20/20.705_field_catalog_authority.md
+
+  thought_simulator/requirements_20/system_playground/primitives/idob/
+
+  thought_simulator/requirements_20/system_playground/testbenches/path_a/identity/
+
+what: 20.116 series is now the Path A authority for field names, paths, and owners. Primitive files still own behavior. patha_field_names.md and the transfer tables are derived working indexes; sidecars state that. Live IdOB hop/testbench files carry a 20.116 authority note. 20.705 body was not rewritten.
+
+why: Stop name/path drift. Playground dictionaries must not override 20.116.
+
+expect:
+
+  - Helm: add this EVENT to CHANGE_LOG. In LATEST.md note “field-name authority = 20.116 series.”
+
+  - write=no on 20.116 unless the human opens a catalog amendment.
+
+  - Do not treat patha_field_names.md as the winner on a name collision.
+
+  - Do not create Bots. Do not start a rewrite of 20.705 or patha_field_names.md.
+
+kind: law
+
+stamp: human
