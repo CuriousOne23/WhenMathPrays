@@ -1,6 +1,9 @@
 # IdOB Rules — structure-to-meaning hop (primitives/idob).
 # Derivation: Path A structure-to-meaning architecture (two geometries, door, rank, CIE, Δh).
 # Lifecycle envelope cases: idob_lifecycle_archive.yaml — do not enable on this runner.
+#
+# Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
+# plus 20.116.010 / .020 / .030. 20.116 wins names/paths/owners.
 
 primitive: IdOB
 version: "s2m"

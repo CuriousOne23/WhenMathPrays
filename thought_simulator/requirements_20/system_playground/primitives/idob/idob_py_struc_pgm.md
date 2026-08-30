@@ -5,6 +5,8 @@
 **Scope:** Path A IdOB hop as realized by `primitives/idob/idob.py`  
 **Tests:** `testbenches/path_a/identity/`
 
+> **Field catalog authority (20.116).** Canonical paths, envelope owners, and name-separations: [`../../../20.116_field_catalog.md`](../../../20.116_field_catalog.md) · [`../../../20.116.010_tp_envelope_index.md`](../../../20.116.010_tp_envelope_index.md) · [`../../../20.116.020_ownership_rw.md`](../../../20.116.020_ownership_rw.md) · [`../../../20.116.030_name_separations.md`](../../../20.116.030_name_separations.md). Collision: 20.116 wins names/paths/owners; this program wins hop behavior.
+
 An implementer should be able to run, extend, and judge the hop from this file plus the YAML listed in §6.
 
 Derivation is Path A structure-to-meaning (two geometries, door, rank, CIE, Δh). This program does not name another directory as the test oracle.
