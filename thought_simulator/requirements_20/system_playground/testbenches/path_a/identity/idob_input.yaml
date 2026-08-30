@@ -1,4 +1,5 @@
 # General-mode input (S2M). Utterance is the carrier; card_id selects the 01 card.
+# Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
 
 utterance: "The rock burst open."
 card_id: S_rock_burst
