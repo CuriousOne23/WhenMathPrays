@@ -62,3 +62,19 @@ expect:
 kind: law
 
 stamp: human
+
+---
+
+EVENT: doc-change
+
+when: 2026-08-30
+
+files: 20.40_ob_requirements.md, 20.51_rbu_prim.md
+
+what: Hop order aligned to 20.705 §2. CTP (20.145) sits immediately before RB. IdOB after that RB. OuBA is the alternate RB exit.
+
+expect: Route close R-002 toward §2. Meaning close M-009 toward 20.40-001/016. M-011 still open until 20.40.050-011 is NA’d. write=no on further files.
+
+kind: law
+
+stamp: human
