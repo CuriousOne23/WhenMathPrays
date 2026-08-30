@@ -12,6 +12,8 @@ Primary User/Copilot collaborative requirement layer for TS behavior, determinis
 
 This directory is the main authoring workspace for requirement intent, with downstream formalization and realization controlled by user-selected flow direction.
 
+**Path A field catalog:** [20.116_field_catalog.md](20.116_field_catalog.md) is the path/owner/name-separation authority for TP and conversation-layer envelopes. Primitive files keep behavior authority.
+
 ## Start here — architecture map
 
 **New to the 20-series?** Read [20.01_architecture_map.md](20.01_architecture_map.md) first — runtime-pipeline concept blocks (B0–B8), mermaid diagrams, and suggested read paths. Flat file list remains below; normative HLRs stay in individual modules.
@@ -106,6 +108,10 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.112_li_prim.md](20.112_li_prim.md)
 - [20.113_cohi_prim.md](20.113_cohi_prim.md)
 - [20.115_mtp_requirements.md](20.115_mtp_requirements.md)
+- [20.116_field_catalog.md](20.116_field_catalog.md) — Path A field catalog (path/owner authority)
+- [20.116.010_tp_envelope_index.md](20.116.010_tp_envelope_index.md)
+- [20.116.020_ownership_rw.md](20.116.020_ownership_rw.md)
+- [20.116.030_name_separations.md](20.116.030_name_separations.md)
 - [20.120_mtp_schema_requirements.md](20.120_mtp_schema_requirements.md)
 - [20.140_truth_done_requirements.md](20.140_truth_done_requirements.md)
 - [20.145_ctp_prim.md](20.145_ctp_prim.md)
