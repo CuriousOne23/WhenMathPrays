@@ -36,3 +36,29 @@ expect:
 kind: law-tracker
 
 stamp: human
+
+---
+
+EVENT: decision
+
+when: 2026-08-30
+
+files: 20.40_ob_requirements.md (HLR-20.40-017 and any CTP wording); 20.145; 20.705 §2
+
+what: CTP means only the 20.145 primitive (Path A hop in 20.705 §2). HLR-20.40-017 is NA. Strip CTP from 20.40 family text. OuBA commit is not called CTP.
+
+why: Same name, two functions. Tracker and 20.145 keep the hop; umbrella used the acronym for freeze.
+
+expect:
+
+  - Meaning: mark M-010 decided in this direction; remaining work is 20.40 wording, write=no until human edits.
+
+  - Route: R-002 stays a hop-order issue (CTP before vs after RB), not a “CTP is dead” issue.
+
+  - Matrix: 20.145 stays a live module; do not retire the row.
+
+  - Helm: note in LATEST.md. Do not edit 20.40. Do not create writers.
+
+kind: law
+
+stamp: human
