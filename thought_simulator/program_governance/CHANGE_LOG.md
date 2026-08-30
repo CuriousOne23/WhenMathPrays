@@ -88,3 +88,15 @@
 2026-08-30 | EVENT policy 20.705 distance | MX-044 | write=no
 2026-08-30 | EVENT policy 20.705 distance | MX-045 | write=no
 2026-08-30 | EVENT policy 20.705 distance | MX-046 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-001 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-002 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-003 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-004 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-005 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-006 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-007 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-008 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-009 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-010 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-011 | write=no
+2026-08-30 | EVENT policy 20.705 distance | M-705-012 | write=no
