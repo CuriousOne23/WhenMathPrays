@@ -45,3 +45,16 @@
 2026-08-30 | Matrix first pass | MX-017 | write=no
 2026-08-30 | Matrix first pass | MX-018 | write=no
 2026-08-30 | EVENT policy | flow-tracker 20.705 §2 and §3.6 | stamp=human
+2026-08-30 | EVENT policy 20.705 distance | R-005 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-006 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-007 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-008 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-009 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-010 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-011 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-012 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-013 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-014 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-015 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-016 | write=no
+2026-08-30 | EVENT policy 20.705 distance | R-017 | write=no
