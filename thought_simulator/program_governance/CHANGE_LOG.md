@@ -109,3 +109,4 @@
 2026-08-30 | EVENT doc-change | M-011 still open until 20.40.050-011 NA | write=no
 2026-08-30 | EVENT doc-change | R-002 closed toward §2 | scored main 7d84c94 | write=no
 2026-08-30 | decision | M-011 decided toward 20.705 §2 | Row 3 IdOB closed | stamp=human
+2026-08-30 | Meaning | M-011 decided line copied | remaining 20.40.050-011 wording is human | write=no
