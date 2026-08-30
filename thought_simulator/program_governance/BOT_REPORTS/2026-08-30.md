@@ -3,7 +3,7 @@ events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30; EVENT doc-
 flow-tracker = 20.705 §2 and §3.6
 decision: CTP means only the 20.145 primitive (Path A hop in 20.705 §2). HLR-20.40-017 is NA. OuBA commit is not called CTP.
 scoring: 20.705 §2 is the Path A string as written. Score R-002 / M-009 / M-011 against §2. Do not replace §2 with a shorter chain. write=no.
-hop-order: 20.40 and 20.51 aligned to 20.705 §2. CTP (20.145) immediately before RB. IdOB after that RB. OuBA is the alternate RB exit. R-002 close toward §2. M-009 close toward 20.40-001/016. M-011 still open until 20.40.050-011 is NA’d. write=no on further files.
+hop-order: 20.40 and 20.51 aligned to 20.705 §2. CTP (20.145) immediately before RB. IdOB after that RB. OuBA is the alternate RB exit. R-002 close toward §2. M-009 close toward 20.40-001/016. M-011 decided toward 20.705 §2 (Row 3 on IdOB closed). write=no on further files.
 spine:
 
 S1 | files=20.31, 20.15, 20.206 | shalls=HLR-20.206-001, HLR-20.206-002, HLR-20.206-003, VR-6 | issue=contradictory shalls / Path A/B leak / scaffold vs 20.31 vs 20.206 mismatch | why it matters=B must consume OuBA and also reject meaning-side content, while Path A law and scaffold put meaning into OuBA | owner=human | write=no
@@ -42,7 +42,7 @@ M-010 | 20.40_ob_requirements.md, 20.40.050_idob_prim.md, 20.105_tp_requirements
 
 M-010 decided 2026-08-30 | CTP = 20.145 primitive only (20.705 §2). HLR-20.40-017 NA. Remaining work is 20.40 wording. write=no until human edits.
 
-M-011 | 20.40.050_idob_prim.md | HLR-20.40.050-011 | still open until 20.40.050-011 is NA’d: IdOB invocable only after RB-prm → RTU-prm; §2 as written is WrdNm → ISc → RTU → TR → CTP → RB → IdOB | RB → RTU is not a hop in §2 as written | owner=human | write=no
+M-011 | 20.40.050_idob_prim.md | HLR-20.40.050-011 | decided 2026-08-30 stamp=human toward 20.705 §2: Row 3 on IdOB is closed | closed toward 20.705 §2 | owner=human | write=no
 
 M-012 | 20.32_cob_requirements.md | HLR-20.32-009 vs HLR-20.32-120 | Contradictory shalls: outputs exclusively to CIL vs snapshot consumed by CIL and CEx. | CIL vs CEx consumer is not one shall. | owner=human | write=no
 
