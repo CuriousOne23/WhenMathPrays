@@ -1,8 +1,9 @@
 date: 2026-08-30
-events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human)
+events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30; EVENT doc-change hop-order 2026-08-30 (stamp=human)
 flow-tracker = 20.705 §2 and §3.6
 decision: CTP means only the 20.145 primitive (Path A hop in 20.705 §2). HLR-20.40-017 is NA. OuBA commit is not called CTP.
 scoring: 20.705 §2 is the Path A string as written. Score R-002 / M-009 / M-011 against §2. Do not replace §2 with a shorter chain. write=no.
+hop-order: 20.40 and 20.51 aligned to 20.705 §2. CTP (20.145) immediately before RB. IdOB after that RB. OuBA is the alternate RB exit. R-002 close toward §2. M-009 close toward 20.40-001/016. M-011 still open until 20.40.050-011 is NA’d. write=no on further files.
 spine:
 
 S1 | files=20.31, 20.15, 20.206 | shalls=HLR-20.206-001, HLR-20.206-002, HLR-20.206-003, VR-6 | issue=contradictory shalls / Path A/B leak / scaffold vs 20.31 vs 20.206 mismatch | why it matters=B must consume OuBA and also reject meaning-side content, while Path A law and scaffold put meaning into OuBA | owner=human | write=no
@@ -87,6 +88,7 @@ route:
 R-001 | 20.37, 20.50, 20.145; drift 20.40.050, 20.15, 20.705 | HLR-20.37-023, HLR-20.37-071, HLR-20.37-072, HLR-20.050-027, HLR-20.050-049, HLR-20.050-069; drift HLR-20.40.050-012, HLR-20.40.050-062 | missing hop | TR `routing_fields{}` has no hop-type keys and RB’s only named destination is TR (`selected_ob_ids[]` untyped); nothing in the routing shalls names a typed structure-to-meaning hop into IdOB after committed RB, so the first S2M crossing cannot be scheduled as a typed route. | owner=human | write=no
 
 R-002 | 20.51, 20.145, 20.705 | HLR-20.051-007 vs 20.705 §2 Path A string as written (`…→TR→CTP→RB→WrdNm…→TR→CTP→RB→IdOB…` and OR `…→TR→CTP→RB→OuBA`) | conflicting hop (CTP before vs after RB) | HLR-20.051-007 writes `TR → RB → CTP` / `TR → RB → IdOB`, placing CTP after RB, while the full §2 string places the 20.145 CTP primitive immediately before every RB. Hop-order on the unshortened chain, not “CTP is dead.” | owner=human | write=no
+R-002 close toward §2 (EVENT doc-change 2026-08-30). write=no on further files.
 
 R-002 remains hop-order (CTP before vs after RB), not “CTP is dead”. 20.145 stays live; do not retire the row.
 
