@@ -102,4 +102,12 @@
 2026-08-30 | EVENT policy 20.705 distance | M-705-012 | write=no
 2026-08-30 | EVENT decision | CTP = 20.145 primitive only; HLR-20.40-017 NA | stamp=human | M-010 decided
 2026-08-30 | scoring | R-002 M-009 M-011 vs 20.705 §2 as written; no shorter chain | write=no
+2026-08-30 | scoring | R-002 rescored vs 20.705 §2 as written | write=no
+2026-08-30 | scoring | M-009 M-011 rescored vs 20.705 §2 as written | write=no
+2026-08-30 | EVENT doc-change | hop-order 20.40+20.51 to 20.705 §2; R-002 M-009 close toward; M-011 open | stamp=human
+2026-08-30 | EVENT doc-change | M-009 closed toward 20.40-001/016 | write=no
+2026-08-30 | EVENT doc-change | M-011 still open until 20.40.050-011 NA | write=no
+2026-08-30 | EVENT doc-change | R-002 closed toward §2 | scored main 7d84c94 | write=no
+2026-08-30 | decision | M-011 decided toward 20.705 §2 | Row 3 IdOB closed | stamp=human
+2026-08-30 | Meaning | M-011 decided line copied | remaining 20.40.050-011 wording is human | write=no
 2026-08-30 | EVENT doc-change | field-name authority = 20.116 series | stamp=human
