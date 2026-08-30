@@ -100,3 +100,4 @@
 2026-08-30 | EVENT policy 20.705 distance | M-705-010 | write=no
 2026-08-30 | EVENT policy 20.705 distance | M-705-011 | write=no
 2026-08-30 | EVENT policy 20.705 distance | M-705-012 | write=no
+2026-08-30 | EVENT decision | CTP = 20.145 primitive only; HLR-20.40-017 NA | stamp=human | M-010 decided
