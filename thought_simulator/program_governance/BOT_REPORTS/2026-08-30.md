@@ -42,7 +42,7 @@ M-010 | 20.40_ob_requirements.md, 20.40.050_idob_prim.md, 20.105_tp_requirements
 
 M-010 decided 2026-08-30 | CTP = 20.145 primitive only (20.705 §2). HLR-20.40-017 NA. Remaining work is 20.40 wording. write=no until human edits.
 
-M-011 | 20.40.050_idob_prim.md | HLR-20.40.050-011 | decided 2026-08-30 stamp=human toward 20.705 §2: Row 3 on IdOB is closed | closed toward 20.705 §2 | owner=human | write=no
+M-011 | 20.40.050_idob_prim.md | HLR-20.40.050-011 | decided 2026-08-30 stamp=human toward 20.705 §2: IdOB after RB; CTP immediately before that RB. Remaining 20.40.050-011 wording is human. | closed toward §2 | owner=human | write=no
 
 M-012 | 20.32_cob_requirements.md | HLR-20.32-009 vs HLR-20.32-120 | Contradictory shalls: outputs exclusively to CIL vs snapshot consumed by CIL and CEx. | CIL vs CEx consumer is not one shall. | owner=human | write=no
 
