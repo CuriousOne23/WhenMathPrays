@@ -18,6 +18,8 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 - Governance layer (IB → GBIB → GB) fully specified
 - Co-processor architecture defined for hybrid integration
 
+**Path A field catalog (20.116)** is the path/owner authority for TP envelopes: [requirements_20/20.116_field_catalog.md](requirements_20/20.116_field_catalog.md).
+
 **First Path A machine landed 2026-08-28** under [requirements_20/system_playground/simulation/](requirements_20/system_playground/simulation/) (`ts_kernel/` + `pipelines/lineup_idob_mcb`).
 
 **Architecture Verification and Readiness Paper:**  
@@ -114,7 +116,7 @@ The process flow is direction-controlled:
 
 ---
 
-**Last Updated**: August 28th, 2026  
-**Version**: 0.8 (Flow Catalog Integration + Status Paper)
+**Last Updated**: August 30th, 2026  
+**Version**: 0.8 (Flow Catalog Integration + Status Paper + 20.116 pointer)
 
 ---
