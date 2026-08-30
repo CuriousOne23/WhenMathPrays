@@ -86,7 +86,7 @@ route:
 
 R-001 | 20.37, 20.50, 20.145; drift 20.40.050, 20.15, 20.705 | HLR-20.37-023, HLR-20.37-071, HLR-20.37-072, HLR-20.050-027, HLR-20.050-049, HLR-20.050-069; drift HLR-20.40.050-012, HLR-20.40.050-062 | missing hop | TR `routing_fields{}` has no hop-type keys and RB’s only named destination is TR (`selected_ob_ids[]` untyped); nothing in the routing shalls names a typed structure-to-meaning hop into IdOB after committed RB, so the first S2M crossing cannot be scheduled as a typed route. | owner=human | write=no
 
-R-002 | 20.51, 20.145; drift 20.15, 20.40.050 | HLR-20.051-007 vs HLR-20.145-003, HLR-20.145-028, HLR-20.145-029; drift HLR-20.40.050-062 | conflicting hop | 20.51’s only normative sequence is `TR → RB → CTP` then `TR → RB → IdOB` (CTP after RB / omitted on the IdOB stretch) while 20.145 requires CTP immediately before every RB (`TR → CTP → RB`), so the live neighborhood before IdOB cannot be implemented without violating one of the two shall-sets. | owner=human | write=no
+R-002 | 20.51, 20.145, 20.705 | HLR-20.051-007 vs 20.705 §2 Path A string as written (`…→TR→CTP→RB→WrdNm…→TR→CTP→RB→IdOB…` and OR `…→TR→CTP→RB→OuBA`) | conflicting hop (CTP before vs after RB) | HLR-20.051-007 writes `TR → RB → CTP` / `TR → RB → IdOB`, placing CTP after RB, while the full §2 string places the 20.145 CTP primitive immediately before every RB. Hop-order on the unshortened chain, not “CTP is dead.” | owner=human | write=no
 
 R-002 remains hop-order (CTP before vs after RB), not “CTP is dead”. 20.145 stays live; do not retire the row.
 
