@@ -5,10 +5,9 @@ This version preserves **every requirement, invariant, prohibition, and transfer
 1. **Master Summary Table** — one‑screen overview of each primitive  
 2. **Compressed Sections** — deterministic, lossless, readable blocks for each primitive
 
-**Canonical Field Names:** All field names in this document are governed by  
-`thought_simulator/requirements_20/system_playground/design/pipeline/patha_field_names.md`.  
-That dictionary is the single authoritative source for structural programs and testbenches.  
-Where this transfer table uses compressed transfer-surface names (e.g. `packed_record`, `canonical_output_record`), they remain valid transfer names; deeper identity-layer, metadata, and CST fields follow the dictionary.
+> **Field catalog authority (20.116).** Canonical paths, envelope owners, and name-separations: [`../../../20.116_field_catalog.md`](../../../20.116_field_catalog.md) · [`../../../20.116.010_tp_envelope_index.md`](../../../20.116.010_tp_envelope_index.md) · [`../../../20.116.020_ownership_rw.md`](../../../20.116.020_ownership_rw.md) · [`../../../20.116.030_name_separations.md`](../../../20.116.030_name_separations.md). Collision: 20.116 wins names/paths/owners; primitive files win behavior (`HLR-20.116-001`–`004`).
+>
+> `patha_field_names.md` in this folder is a **derived working index**. It must match 20.116. It does not override 20.116. Transfer-surface names in this table (e.g. `packed_record`, `canonical_output_record`) remain valid transfer names; deeper identity-layer, metadata, and CST fields follow 20.116.
 
 ## Path A – Bounded Semantics Requirement
 
