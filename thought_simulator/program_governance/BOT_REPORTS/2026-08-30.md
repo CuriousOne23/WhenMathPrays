@@ -1,7 +1,7 @@
 date: 2026-08-30
-events processed: none (no human EVENT)
+events processed: EVENT policy 2026-08-30 (stamp=human)
+flow-tracker = 20.705 §2 and §3.6
 spine:
-Spine first pass. write=no.
 
 S1 | files=20.31, 20.15, 20.206 | shalls=HLR-20.206-001, HLR-20.206-002, HLR-20.206-003, VR-6 | issue=contradictory shalls / Path A/B leak / scaffold vs 20.31 vs 20.206 mismatch | why it matters=B must consume OuBA and also reject meaning-side content, while Path A law and scaffold put meaning into OuBA | owner=human | write=no
 
@@ -11,8 +11,6 @@ S3 | files=20.206 | shalls=HLR-20.206-005, IMR-B, IMR-C | issue=contradictory sh
 
 S4 | files=20.206, 20.700.050 | shalls=HLR-20.206-003, HLR-20.206-006 | issue=support file citing a hop the spine does not allow | why it matters=20.700.050 (cited by HLR-20.012-033/035) feeds Path B via KnB/SSR and CoHI; 20.206’s exclusive B-start list and A→OuBA→B→OuBB order do not include those hops | owner=human | write=no
 meaning:
-Meaning first pass. write=no. Human owns the set. No Path A/B leak under the stated test (no meaning shall pushes realization or reads committed meaning backwards).
-Distance (Meaning): beat jointly is TP-carried residue chain SOB → SROB → CnOB → SmOB, then routing-gated IdOB, OuBA freeze, COB long-horizon via OuBA only into a CIL snapshot. Splits on meaning-write law, CE invariant vs layer MAY-reads, SOB→SROB importance, SmOB→IdOB, and the TP.cob / next_context field ledger.
 
 M-001 | 20.40_ob_requirements.md, 20.40.050_idob_prim.md, 20.105_tp_requirements.md | HLR-20.40-007, HLR-20.40-008, HLR-20.40.050-001, HLR-20.105-094, HLR-20.105-116 | Contradictory shalls: umbrella bans semantic interpretation and new meaning for 20.40.010–.060; IdOB SHALL perform identity-conditioned meaning interpretation; TP forbids non-TPU/OuBA meaning writes and then excepts IdOB. | COB/OB-set/IdOB/TP do not share one meaning-write law. | owner=human | write=no
 
@@ -51,7 +49,6 @@ M-017 | 20.700_master_glossary.md, 20.40_ob_requirements.md | HLR-20.40-007 | Su
 
 20.200 and folder README cited no hop this set forbids. No writers. No rewrites.
 route:
-Route first pass. write=no.
 
 R-001 | 20.37, 20.50, 20.145; drift 20.40.050, 20.15, 20.705 | HLR-20.37-023, HLR-20.37-071, HLR-20.37-072, HLR-20.050-027, HLR-20.050-049, HLR-20.050-069; drift HLR-20.40.050-012, HLR-20.40.050-062 | missing hop | TR `routing_fields{}` has no hop-type keys and RB’s only named destination is TR (`selected_ob_ids[]` untyped); nothing in the routing shalls names a typed structure-to-meaning hop into IdOB after committed RB, so the first S2M crossing cannot be scheduled as a typed route. | owner=human | write=no
 
@@ -62,7 +59,6 @@ R-003 | 20.51; drift 20.15, 20.705, 20.145 | HLR-20.051-007 (vs informative head
 R-004 | 20.56, 20.37, 20.50 | HLR-20.056-011, HLR-20.056-014, HLR-20.050-032, HLR-20.37-023 | table vs TR vs RB/RBU vs CTP mismatch | The only routing-table schema is Path-B (`opbeh`/`obg`/`xlater`, keyed by `routing_epoch_id`, no TP paths, no TR/RB aliases) while Path-A S2M would have to be typed in unspecified `TP.TR.routing_fields{}` that RB consumes but is forbidden to bind to that table, so there is no lookup row for an efficient typed hop into IdOB. | owner=human | write=no
 readme-bot:
 matrix:
-Matrix first pass. write=no. 20.200 vs README authoritative list and live filenames.
 
 MX-001 | 20.200, README, 20.15_xlate_requirements.md, 20.15_ts_architecture_scaffold.md, 20.43_xlater_requirements.md | HLR-20.200-002 | extra row for a file that moved or was renamed | Matrix still keys 20.15 to a non-live XlateR filename; live 20.15 law is the architecture scaffold and live XlateR law is 20.43. | owner=human | write=no
 
