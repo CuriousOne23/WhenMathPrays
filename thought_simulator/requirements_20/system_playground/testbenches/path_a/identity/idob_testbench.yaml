@@ -2,6 +2,8 @@
 # Derivation: Path A structure-to-meaning architecture.
 # Every case records utterance with input and expected packet fields.
 # Lifecycle formation..closure cases: idob_lifecycle_archive.yaml (do not enable here).
+# Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
+# plus 20.116.010 / .020 / .030. 20.116 wins names/paths/owners.
 
 tests:
   - id: idob_s2m_01_rock
