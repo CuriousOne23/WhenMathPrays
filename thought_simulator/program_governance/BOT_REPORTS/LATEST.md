@@ -10,6 +10,11 @@ S2 | files=20.15, 20.31 | shalls=HLR-20.31-004, HLR-20.31-005, HLR-20.31-006 | i
 S3 | files=20.206 | shalls=HLR-20.206-005, IMR-B, IMR-C | issue=contradictory shalls | why it matters=IMR-B cannot both re-run B on unchanged OuBA and be routed through a new Path A cycle | owner=human | write=no
 
 S4 | files=20.206, 20.700.050 | shalls=HLR-20.206-003, HLR-20.206-006 | issue=support file citing a hop the spine does not allow | why it matters=20.700.050 (cited by HLR-20.012-033/035) feeds Path B via KnB/SSR and CoHI; 20.206’s exclusive B-start list and A→OuBA→B→OuBB order do not include those hops | owner=human | write=no
+
+E1 | files=20.705, 20.15, 20.12, 20.206 | shalls=20.15-§3 (no id), HLR-20.012-005, HLR-20.012-020, HLR-20.206-006 | issue=support file citing a hop the spine does not allow / contradictory shalls: §3.6 hop CIL→CEx re-enters Path A CEx after OuBA, while §2/20.15 place CEx only after IE and treat OuBA as Path A exit | why it matters=§3.6 hop CIL→CEx re-enters Path A CEx after OuBA, while §2/20.15 place CEx only after IE and treat OuBA as Path A exit | owner=human | write=no
+
+E2 | files=20.705, 20.15 | shalls=20.15-§2.14 (no id), 20.15-§4.22 (no id) | issue=support file citing a hop the spine does not allow / scaffold vs named hop: §3.6 hops CSTCore→COB and CSTMS→COB write COB, while 20.15 COB ingest door is OuBA freeze only | why it matters=§3.6 hops CSTCore→COB and CSTMS→COB write COB, while 20.15 COB ingest door is OuBA freeze only | owner=human | write=no
+
 meaning:
 
 M-001 | 20.40_ob_requirements.md, 20.40.050_idob_prim.md, 20.105_tp_requirements.md | HLR-20.40-007, HLR-20.40-008, HLR-20.40.050-001, HLR-20.105-094, HLR-20.105-116 | Contradictory shalls: umbrella bans semantic interpretation and new meaning for 20.40.010–.060; IdOB SHALL perform identity-conditioned meaning interpretation; TP forbids non-TPU/OuBA meaning writes and then excepts IdOB. | COB/OB-set/IdOB/TP do not share one meaning-write law. | owner=human | write=no
@@ -123,5 +128,5 @@ MX-017 | 20.200, README, 20.16_gb_responsibility_matrix.md, 20.18_failure_modes_
 
 MX-018 | 20.200 | HLR-20.200-001 | design-anchor TBD left as if current | 74 of 79 Design Anchor cells publish `50.*.md (TBD)` as the current design-anchor value, so placeholders are treated as live governance targets. | owner=human | write=no
 needs human:
-S1 S2 S3 S4 M-001–M-017 R-001–R-017 MX-001–MX-018 (no stamp; owner=human; write=no)
+S1 S2 S3 S4 E1 E2 M-001–M-017 R-001–R-017 MX-001–MX-018 (no stamp; owner=human; write=no)
 next recommendation: not yet
