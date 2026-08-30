@@ -1,6 +1,10 @@
 """
 IdOB Testbench — structure-to-meaning via primitives/idob/idob.py.
 Every enabled test prints utterance + input + output packet.
+
+Field catalog authority (20.116): requirements_20/20.116_field_catalog.md
+and 20.116.010 / .020 / .030. 20.116 wins names/paths/owners;
+this runner wins test procedure.
 """
 from __future__ import annotations
 
