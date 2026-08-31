@@ -111,7 +111,7 @@ route:
 
 R-001 | 20.37, 20.50, 20.145; drift 20.40.050, 20.15, 20.705 | HLR-20.37-023, HLR-20.37-071, HLR-20.37-072, HLR-20.050-027, HLR-20.050-049, HLR-20.050-069; drift HLR-20.40.050-012, HLR-20.40.050-062 | missing hop | TR `routing_fields{}` has no hop-type keys and RB’s only named destination is TR (`selected_ob_ids[]` untyped); nothing in the routing shalls names a typed structure-to-meaning hop into IdOB after committed RB, so the first S2M crossing cannot be scheduled as a typed route. | owner=human | write=no
 
-R-002 | 20.51, 20.145; drift 20.15, 20.40.050 | HLR-20.051-007 vs HLR-20.145-003, HLR-20.145-028, HLR-20.145-029; drift HLR-20.40.050-062 | conflicting hop | 20.51’s only normative sequence is `TR → RB → CTP` then `TR → RB → IdOB` (CTP after RB / omitted on the IdOB stretch) while 20.145 requires CTP immediately before every RB (`TR → CTP → RB`), so the live neighborhood before IdOB cannot be implemented without violating one of the two shall-sets. | owner=human | write=no
+R-002 | 20.51, 20.705 | HLR-20.051-007 vs 20.705 §2 as written | decided hop-order (20.145 + §2 win) | Hop-order is decided: CTP(20.145) immediately before RB on the full §2 string. | owner=human | write=no
 
 R-002 remains hop-order (CTP before vs after RB), not “CTP is dead”. 20.145 stays live; do not retire the row.
 R-002 decided 2026-08-30 | hop-order (20.145 +§2 win).
@@ -120,25 +120,25 @@ R-003 | 20.51; drift 20.15, 20.705, 20.145 | HLR-20.051-007 (vs informative head
 
 R-004 | 20.56, 20.37, 20.50 | HLR-20.056-011, HLR-20.056-014, HLR-20.050-032, HLR-20.37-023 | table vs TR vs RB/RBU vs CTP mismatch | The only routing-table schema is Path-B (`opbeh`/`obg`/`xlater`, keyed by `routing_epoch_id`, no TP paths, no TR/RB aliases) while Path-A S2M would have to be typed in unspecified `TP.TR.routing_fields{}` that RB consumes but is forbidden to bind to that table, so there is no lookup row for an efficient typed hop into IdOB. | owner=human | write=no
 
-R-005 | 20.51, 20.145, 20.705 | HLR-20.051-007 vs §2 TR→CTP→RB | conflicting hop (§2 TR→CTP→RB) | The RBU routing-readiness SHALL writes `TR → RB → CTP`, inverting 20.145 HLR-20.145-028/029 and the §2 freeze-then-arbitrate hop that must precede every RB including RB→IdOB. | owner=human | write=no
+R-005 | 20.51, 20.145, 20.705 | HLR-20.051-007 vs §2 TR→CTP→RB | decided hop-order (20.145 + §2 win) | Hop-order is decided: CTP(20.145) immediately before RB on the full §2 string. | owner=human | write=no
 R-005 decided 2026-08-30 | hop-order (20.145 +§2 win).
 
-R-006 | 20.51, 20.705 | HLR-20.051-007 vs §2 TR→CTP→RB→IdOB | conflicting hop (§2 RB→IdOB) | Same SHALL ends `TR → RB → IdOB`, naming IdOB without the §2 CTP hop, so typed routing into IdOB is not the Path A hop TR→CTP→RB→IdOB. | owner=human | write=no
+R-006 | 20.51, 20.705 | HLR-20.051-007 vs §2 TR→CTP→RB→IdOB | decided hop-order (20.145 + §2 win) | Hop-order is decided: CTP(20.145) immediately before RB; IdOB after that RB. | owner=human | write=no
 R-006 decided 2026-08-30 | hop-order (20.145 +§2 win).
 
-R-007 | 20.51, 20.705 | HLR-20.051-007 vs §2 RB→WrdNm | conflicting hop (§2 RB→WrdNm) | HLR-20.051-007 places `CTP → WrdNm` after `TR → RB → CTP`, so the first-loop §2 successor of RB is not WrdNm and the WrdNm vs IdOB destinations are not typed. | owner=human | write=no
+R-007 | 20.51, 20.705 | HLR-20.051-007 vs §2 RB→WrdNm | decided hop-order (20.145 + §2 win) | Hop-order is decided: RB→WrdNm vs RB→IdOB as §2 typed successors, not inverted CTP. | owner=human | write=no
 R-007 decided 2026-08-30 | hop-order (20.145 +§2 win).
 
-R-008 | 20.51, 20.705 | 20.51 Downstream header vs §2 TR→CTP→RB | invented diagram route (§2 TR→CTP→RB) | Header Downstream invents `TR → CTP → WrdNm` (RB omitted after the first CTP), so the declared downstream skips the §2 hop that later becomes RB→IdOB. | owner=human | write=no
+R-008 | 20.51, 20.705 | 20.51 Downstream header vs §2 TR→CTP→RB | decided hop-order (20.145 + §2 win) | Hop-order is decided: header no longer invents a skip of RB after CTP. | owner=human | write=no
 R-008 decided 2026-08-30 | hop-order (20.145 +§2 win).
 
-R-009 | 20.50, 20.705 | HLR-20.050-069, HLR-20.050-049 vs §2 RB→IdOB | missing hop (§2 RB→IdOB) | RB SHALLs IdOB only as a read-only view and routes to generic `selected_ob_ids[]`, and never SHALLs IdOB as the typed Path A destination after the second/fourth CTP→RB. | owner=human | write=no
+R-009 | 20.50, 20.705 | HLR-20.050-069, HLR-20.050-049 vs §2 RB→IdOB | decided hop-order (20.145 + §2 win); remains open: missing typed RB destination (20.50) | Hop-order decided; still open only because 20.50 does not SHALL IdOB as a typed RB destination. | owner=human | write=no
 R-009 decided 2026-08-30 | hop-order (20.145 +§2 win). remains open only as missing typed RB destinations in 20.50.
 
-R-010 | 20.37, 20.705 | HLR-20.37-071, HLR-20.37-023, §6 TR→RB vs §2 RB→IdOB | missing hop (§2 RB→IdOB) | TR may read `TP.idob` and must expose `routing_fields{}` to RB, but names no hop into IdOB, so the routing vector does not encode the §2 typed destination RB→IdOB. | owner=human | write=no
+R-010 | 20.50, 20.705 | HLR-20.050-069, HLR-20.050-049 vs §2 RB→IdOB | decided hop-order (20.145 + §2 win); remains open: missing typed RB destination (20.50) | Hop-order decided; remainder is 20.50, not 20.37: RB still lacks a typed hop into IdOB. | owner=human | write=no
 R-010 decided 2026-08-30 | hop-order (20.145 +§2 win). remains open only as missing typed RB destinations in 20.50.
 
-R-011 | 20.145, 20.705 | HLR-20.145-029 vs §2 RB→IdOB | missing hop (§2 RB→IdOB) | The only normative spine is `DCB → TR → CTP → RB`; the informative continuation is `RB → WrdNm → … → RB → …` and never names IdOB, so always-before-RB does not lock RB→IdOB. | owner=human | write=no
+R-011 | 20.50, 20.705 | HLR-20.050-069, HLR-20.050-049 vs §2 RB→IdOB | decided hop-order (20.145 + §2 win); remains open: missing typed RB destination (20.50) | Hop-order decided; remainder is 20.50, not 20.145: RB still lacks a typed hop into IdOB. | owner=human | write=no
 R-011 decided 2026-08-30 | hop-order (20.145 +§2 win). remains open only as missing typed RB destinations in 20.50.
 
 R-012 | 20.37, 20.50, 20.705 | HLR-20.37-039, HLR-20.37-046, HLR-20.050-027 vs §2 DCB→TR / RTU→TR | conflicting hop (§2 DCB→TR / RTU→TR) | TR-gating SHALLs RB→TR whenever `tr_needs_update`, a hop §2 does not list (RB successors are WrdNm / IdOB / OuBA), so TR re-entry is not sequenced as §2 RTU→TR→CTP→RB→IdOB. | owner=human | write=no
@@ -149,10 +149,10 @@ R-014 | 20.37, 20.145, 20.705 | 20.37 §6 / HLR-20.37-004 (RB consumes TP.TR) vs
 
 R-015 | 20.56, 20.37, 20.50, 20.705 | HLR-20.056-011, HLR-20.056-014, HLR-20.050-032 vs §2 TR→CTP→RB→IdOB | table vs TR vs RB/RBU vs CTP mismatch | 20.56 epoch tables are Pipeline-B-only, SHALL NOT alias TR/RB, SHALL NOT carry TP paths, and Path A RB SHALL NOT read `routing_epoch_id`, so no table row can express the Path A typed hop into IdOB. | owner=human | write=no
 
-R-016 | 20.50, 20.705 | HLR-20.050-021 / `selected_ob_ids[]` vs §2 RB→WrdNm | missing hop (§2 RB→WrdNm) | RB’s filter does not SHALL WrdNm as the typed successor of the first/third RB, so WrdNm vs IdOB cannot be distinguished as §2 requires for efficient typed routing into IdOB. | owner=human | write=no
+R-016 | 20.50, 20.705 | HLR-20.050-021 / `selected_ob_ids[]` vs §2 RB→WrdNm | missing typed RB destination (20.50) | Remains open only as missing typed RB destination in 20.50: WrdNm is not a SHALL’d successor of the first/third RB. | owner=human | write=no
 R-016 remains open 2026-08-30 | missing typed RB destinations in 20.50.
 
-R-017 | 20.50, 20.705 | HLR-20.050-021 / `route_proposal` vs §2 RB→OuBA | missing hop (§2 RB→OuBA) | The OR-chain end hop RB→OuBA is not a typed RB destination, so Path A exit is not a SHALL’d alternative to RB→IdOB. | owner=human | write=no
+R-017 | 20.50, 20.705 | HLR-20.050-021 / `route_proposal` vs §2 RB→OuBA | missing typed RB destination (20.50) | Remains open only as missing typed RB destination in 20.50: OuBA is not a SHALL’d alternate RB exit. | owner=human | write=no
 R-017 remains open 2026-08-30 | missing typed RB destinations in 20.50.
 
 readme-bot:
