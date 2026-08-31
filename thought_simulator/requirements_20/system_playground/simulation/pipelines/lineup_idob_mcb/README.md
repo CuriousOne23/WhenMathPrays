@@ -40,3 +40,35 @@ is a contract finding, not a missing-fixture bug.
 - `fixtures/fx_idob_mcb_01.yaml` — utterance + MCB read-set + wall canaries
 - `tests/test_legality.yaml` — resolve + refuse junk
 - `tests/test_replay.yaml` — identical freeze
+
+## Verbose mode
+
+Use verbose runner output to inspect field-level behavior for each primitive:
+
+```bash
+python run_pipeline.py lineup_idob_mcb --verbose
+```
+
+Verbose mode prints:
+
+- fields read by `idob` and `mcb`
+- fields written by `idob` and `mcb`
+- contents of each written field
+- a summary block after each primitive:
+  - number of fields read
+  - number of fields written
+  - written field paths
+  - mutated fields
+- a final pipeline summary:
+  - total fields written
+  - total fields read
+  - write-wall violations (if any)
+  - replay determinism hints
+
+Why this helps:
+
+- confirms write-wall canaries are stable
+- shows exactly which TP paths move at each tick
+- supports faster contract debugging for IdOB -> MCB handoff
+
+Verbose mode is observational only and does not affect legality checks, replay checks, or primitive behavior.
