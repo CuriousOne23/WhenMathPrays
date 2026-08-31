@@ -103,3 +103,12 @@
 2026-08-30 | EVENT decision | CTP = 20.145 primitive only; HLR-20.40-017 NA | stamp=human | M-010 decided
 2026-08-30 | scoring | R-002 M-009 M-011 vs 20.705 §2 as written; no shorter chain | write=no
 2026-08-30 | EVENT doc-change | field-name authority = 20.116 series | stamp=human
+2026-08-30 | EVENT decision | Cluster 1 IdOB invoke; winner HLR-20.40.050-062 and 20.705 §2; HLR-20.40.050-011 NA | stamp=human | M-009 M-011 M-015 M-016 M-705-008 R-002 R-005–R-011 decided hop-order; R-009–R-011 R-016 R-017 remain open as missing typed RB destinations in 20.50
+2026-08-30 | EVENT decision | Cluster 2 meaning-write; winner 20.116.020-003, HLR-20.105-116, IdOB-prm | stamp=human | M-001 decided; M-002 narrowed (read ≠ write)
+2026-08-30 | EVENT decision | Cluster 3 OuBA door; winner 20.15 §2.14 and 20.116 | stamp=human | E2 decided (command vs ingest); S1 S3 remain open as 20.206 wording; M-005 M-705-002 M-705-003 decided (no mid-lineup COB meaning write); E1 M-008 M-705-001 M-705-004 M-705-005 decided as two CEx jobs
+2026-08-30 | EVENT doc-change | 20.40 v1.3; freeze = HLR-20.40-019; 003/007/008 = SOB–SmOB only | stamp=human | M-001 M-002 decided against 20.40 v1.3; Cluster 2 remaining 20.40 wording is done
+2026-08-31 | Cluster 3 | E2 decided command vs ingest | write=no
+2026-08-31 | Cluster 3 | S1 open 20.206 wording | write=no
+2026-08-31 | Cluster 3 | S3 open 20.206 wording | write=no
+2026-08-31 | Cluster 1 | R-002 R-005–R-011 hop-order decided; R-009–R-011 R-016 R-017 open as 20.50 typed destinations | write=no
+2026-08-31 | Meaning 2026-08-31 marks | M-009 M-011 M-015 M-016 M-705-008 closed toward §2; M-001 M-002 closed against 20.40 v1.3; M-005 M-705-002 M-705-003 no mid-lineup COB meaning write; M-008 M-705-001 M-705-004 M-705-005 two CEx jobs | write=no
