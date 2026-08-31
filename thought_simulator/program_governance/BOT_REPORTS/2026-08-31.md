@@ -10,12 +10,12 @@ decision: Cluster 3 — OuBA door and conversation polarity. Winner is 20.15 §2
 scoring: 20.705 §2 is the Path A string as written. Score R-002 / M-009 / M-011 against §2. Do not replace §2 with a shorter chain. write=no.
 spine:
 
-S1 | files=20.31, 20.15, 20.206 | shalls=HLR-20.206-001, HLR-20.206-002, HLR-20.206-003, VR-6 | issue=contradictory shalls / Path A/B leak / scaffold vs 20.31 vs 20.206 mismatch | why it matters=B must consume OuBA and also reject meaning-side content, while Path A law and scaffold put meaning into OuBA | owner=human | write=no
+S1 | files=20.31, 20.15, 20.206 | shalls=HLR-20.206-001, HLR-20.206-002, HLR-20.206-003, VR-6 | issue=open: 20.206 wording, not a new door | why it matters=B consume-OuBA vs reject-meaning still a 20.206 wording conflict | owner=human | write=no
 S1 remains open 2026-08-30 | 20.206 wording, not as a new door.
 
 S2 | files=20.15, 20.31 | shalls=HLR-20.31-004, HLR-20.31-005, HLR-20.31-006 | issue=scaffold vs 20.31 mismatch | why it matters=20.31 forbids standalone Path A meaning fields that 20.15 still lists on the TP datapacket | owner=human | write=no
 
-S3 | files=20.206 | shalls=HLR-20.206-005, IMR-B, IMR-C | issue=contradictory shalls | why it matters=IMR-B cannot both re-run B on unchanged OuBA and be routed through a new Path A cycle | owner=human | write=no
+S3 | files=20.206 | shalls=HLR-20.206-005, IMR-B, IMR-C | issue=open: 20.206 wording, not a new door | why it matters=IMR-B re-run B vs route through Path A is still a 20.206 wording conflict | owner=human | write=no
 S3 remains open 2026-08-30 | 20.206 wording, not as a new door.
 
 S4 | files=20.206, 20.700.050 | shalls=HLR-20.206-003, HLR-20.206-006 | issue=support file citing a hop the spine does not allow | why it matters=20.700.050 (cited by HLR-20.012-033/035) feeds Path B via KnB/SSR and CoHI; 20.206’s exclusive B-start list and A→OuBA→B→OuBB order do not include those hops | owner=human | write=no
@@ -23,7 +23,7 @@ S4 | files=20.206, 20.700.050 | shalls=HLR-20.206-003, HLR-20.206-006 | issue=su
 E1 | files=20.705, 20.15, 20.12, 20.206 | shalls=20.15-§3 (no id), HLR-20.012-005, HLR-20.012-020, HLR-20.206-006 | issue=support file citing a hop the spine does not allow / contradictory shalls: §3.6 hop CIL→CEx re-enters Path A CEx after OuBA, while §2/20.15 place CEx only after IE and treat OuBA as Path A exit | why it matters=§3.6 hop CIL→CEx re-enters Path A CEx after OuBA, while §2/20.15 place CEx only after IE and treat OuBA as Path A exit | owner=human | write=no
 E1 decided 2026-08-30 | two CEx jobs.
 
-E2 | files=20.705, 20.15 | shalls=20.15-§2.14 (no id), 20.15-§4.22 (no id) | issue=support file citing a hop the spine does not allow / scaffold vs named hop: §3.6 hops CSTCore→COB and CSTMS→COB write COB, while 20.15 COB ingest door is OuBA freeze only | why it matters=§3.6 hops CSTCore→COB and CSTMS→COB write COB, while 20.15 COB ingest door is OuBA freeze only | owner=human | write=no
+E2 | files=20.705, 20.15 | shalls=20.15-§2.14 (no id), 20.15-§4.22 (no id) | issue=decided: command vs ingest | why it matters=§3.6 CSTCore→COB and CSTMS→COB are command hops, not COB ingest; 20.15 ingest door remains OuBA freeze only | owner=human | write=no
 E2 decided 2026-08-30 | command vs ingest.
 
 meaning:
