@@ -11,7 +11,7 @@
   - P_rock_cie:W4=PASS
 - cross notes:
   - R_prior:native_first_cycle=False
-- claim: Goal v2 fails for that rival. IdOB shrinks toward naming.
+- claim: Reference hop passed all walls.
 
 ### frame_fill
 - contaminated: false
