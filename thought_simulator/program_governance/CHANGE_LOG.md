@@ -111,3 +111,4 @@
 2026-08-31 | Cluster 3 | S1 open 20.206 wording | write=no
 2026-08-31 | Cluster 3 | S3 open 20.206 wording | write=no
 2026-08-31 | Cluster 1 | R-002 R-005–R-011 hop-order decided; R-009–R-011 R-016 R-017 open as 20.50 typed destinations | write=no
+2026-08-31 | Meaning 2026-08-31 marks | M-009 M-011 M-015 M-016 M-705-008 closed toward §2; M-001 M-002 closed against 20.40 v1.3; M-005 M-705-002 M-705-003 no mid-lineup COB meaning write; M-008 M-705-001 M-705-004 M-705-005 two CEx jobs | write=no
