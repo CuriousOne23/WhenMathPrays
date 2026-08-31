@@ -1,0 +1,53 @@
+singles:
+  - case_id: R_empty
+    card_id: S_unmapped
+    cie_id: neutral
+    scored: [W2, W3, W5]
+
+  - case_id: R_deadline
+    card_id: S_deadline_friday
+    cie_id: neutral
+    scored: [W3, W5]
+
+  - case_id: R_miss
+    utterance: zzzzq no cue at all
+    packs_loaded: [base_en]
+    cie_id: neutral
+    scored: [W5]
+
+  - case_id: R_routing
+    card_id: S_sleepy
+    cie_id: neutral
+    routing_filter: {keep: true}
+    call: process
+    scored: [I2]
+
+pairs:
+  - pair_id: P_rock_cie
+    left:
+      case_id: R_rock_phys
+      card_id: S_rock_burst
+      cie_id: physical_stance
+    right:
+      case_id: R_rock_sci
+      card_id: S_rock_burst
+      cie_id: scientific_stance
+    scored: [W1, W3, W4, W5]
+
+  - pair_id: P_replay
+    left:
+      case_id: R_replay_left
+      card_id: S_rock_burst
+      cie_id: neutral
+    right:
+      case_id: R_replay_right
+      card_id: S_rock_burst
+      cie_id: neutral
+    scored: [I1, W3, W5]
+
+cross:
+  - case_id: R_prior
+    card_id: S_deadline_friday
+    cie_id: neutral
+    prior_from_case_id: R_rock_phys
+    scored: []

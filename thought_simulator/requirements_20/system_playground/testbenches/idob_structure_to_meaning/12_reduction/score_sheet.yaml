@@ -1,0 +1,47 @@
+walls:
+  - W1
+  - W2
+  - W3
+  - W4
+  - W5
+instruments:
+  - I1
+  - I2
+
+packet_subset_keys:
+  - structural_key
+  - candidate_group_ids
+  - final_rank_order
+  - selected_group_id
+  - meaning_semantics
+  - meaning_semantics_prime
+  - meaning_delta_h
+  - residue_code
+  - next_key
+  - routing_filter_mutated
+  - contaminated
+
+replay_scored_fields:
+  - structural_key
+  - candidate_group_ids
+  - final_rank_order
+  - selected_group_id
+  - meaning_semantics
+  - meaning_semantics_prime
+  - meaning_delta_h
+  - residue_code
+  - next_key
+  - routing_filter_mutated
+  - contaminated
+
+verdict_table:
+  - result: IdOB-native fails any wall
+    claim: Bench broken. Stop. Fix idob.py / fixtures first.
+  - result: Rival fails >=1 wall, contaminated false
+    claim: That theory is not a sufficient cheaper operator.
+  - result: Rival passes all walls, contaminated false
+    claim: Goal v2 fails for that rival. IdOB shrinks toward naming.
+  - result: Rival passes only after reading our map
+    claim: Contaminated. Not a pass. Not a fail. Discard.
+  - result: All three cheap rivals fail >=1 wall, uncontaminated
+    claim: Package does work those styles do not. First conviction. Still not a completed necessity theorem.
