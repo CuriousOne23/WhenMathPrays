@@ -78,7 +78,6 @@ def _packet_shape(packet: Dict[str, Any]) -> Dict[str, Any]:
     out["candidate_group_ids"] = list(out.get("candidate_group_ids") or [])
     out["final_rank_order"] = list(out.get("final_rank_order") or [])
     out["routing_filter_mutated"] = bool(out.get("routing_filter_mutated", False))
-    out["next_key"] = None
     out["contaminated"] = bool(out.get("contaminated", False))
     return out
 
