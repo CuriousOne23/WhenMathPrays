@@ -152,6 +152,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.700.040_governance_glossary.md](20.700.040_governance_glossary.md)
 - [20.700.050_ts_level_concepts_glossary.md](20.700.050_ts_level_concepts_glossary.md)
 - [20.705_patha_pathb_flow.md](20.705_patha_pathb_flow.md)
+- [20.705_field_catalog_authority.md](20.705_field_catalog_authority.md)
 - [20.705.020_patha_stability_requirements.md](20.705.020_patha_stability_requirements.md)
 - [20.709_ob_data_strc.md](20.709_ob_data_strc.md)
 - [20.710_primitive_flows.md](20.710_primitive_flows.md)
@@ -183,6 +184,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 
 ## Directory index (coverage-aligned)
 
+- [20.12.010_inv_m0.md](20.12.010_inv_m0.md) — INV-M0
 - [20.16_gb_responsibility_matrix.md](20.16_gb_responsibility_matrix.md)
 - [20.18_failure_modes_and_success_criteria.md](20.18_failure_modes_and_success_criteria.md)
 - [20.205_execution_packet_xp_requirements.md](20.205_execution_packet_xp_requirements.md)

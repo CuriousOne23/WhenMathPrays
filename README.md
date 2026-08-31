@@ -169,6 +169,8 @@ All code contributions must meet the **MVT standard**:
 | `thought_simulator/verification/` | Verification methodology and test capsules |
 | `thought_simulator/thought_simulator_playground/` | Prototype implementations (TR Router, IB, TB, Basin prototypes) |
 | `thought_simulator/thought_simulator_design/` | Design documentation and formal specifications |
+| `thought_simulator/program_governance/` | Bot/EVENT home |
+| `thought_simulator/requirements_20/` | Collaborative 20-series requirement layer |
 | `thought_simulator/requirements_20/system_playground/simulation/` | Path A machine (landed 2026-08-28): `ts_kernel/` plus `pipelines/lineup_idob_mcb` |
 
 ---
