@@ -74,9 +74,9 @@ def _cie_tint(m: Dict[str, float] | None, cie_id: str | None) -> Dict[str, float
     cie = str(cie_id or "neutral")
     out = dict(m)
     # cheap stance tint: nudge one axis
-    if cie == "phys":
+    if cie in ("phys", "physical_stance"):
         out["physicality"] = min(1.0, out["physicality"] + 0.05)
-    elif cie == "sci":
+    elif cie in ("sci", "scientific_stance"):
         out["temporality"] = min(1.0, out["temporality"] + 0.05)
     return out
 
