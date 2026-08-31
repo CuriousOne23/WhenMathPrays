@@ -110,3 +110,4 @@
 2026-08-31 | Cluster 3 | E2 decided command vs ingest | write=no
 2026-08-31 | Cluster 3 | S1 open 20.206 wording | write=no
 2026-08-31 | Cluster 3 | S3 open 20.206 wording | write=no
+2026-08-31 | Cluster 1 | R-002 R-005–R-011 hop-order decided; R-009–R-011 R-016 R-017 open as 20.50 typed destinations | write=no
