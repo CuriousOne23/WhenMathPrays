@@ -200,3 +200,83 @@ expect:
 kind: law
 
 stamp: human
+
+---
+
+EVENT: decision
+
+when: 2026-08-31
+
+files: 20.31_patha_meaning_spec.md; 20.40.010_sob_prim.md; 20.40.020_srob_prim.md; 20.40.030_cnob_prim.md; 20.40.040_smob_prim.md; 20.40.050_idob_prim.md; 20.105_tp.md; 20.116.020_ownership_rw.md
+
+what: IdOB-prm is the sole producer of TP.semantic.importance. SOB / SROB / SmOB / CnOB may compute local envelope importance for their own structural envelopes. They shall not write TP.semantic.importance. Routing uses structure fields only, not global importance. This is new stamped law. It does not invent hops, fields, or primitives. It does not reopen 20.40 v1.3 or HLR-20.40-019. Path B stays active.
+
+why: Global importance and local envelope importance were being scored as if SOB/SROB owned the TP field. One writer. Local envelope math stays local.
+
+expect:
+
+  - Meaning: mark global-importance ownership as IdOB-prm only. Local envelope importance on SOB/SROB/SmOB/CnOB is not a write of TP.semantic.importance.
+
+  - Route: do not route on TP.semantic.importance. Score structure fields only.
+
+  - Matrix: do not add a new hop row for importance. Inventory only when the wording PR lands.
+
+  - Helm: add this EVENT to CHANGE_LOG. In LATEST.md note “TP.semantic.importance writer = IdOB-prm only; routing = structure fields.” Do not edit requirement files. Do not create Bots or writers.
+
+kind: law
+
+stamp: human
+
+---
+
+EVENT: doc-change
+
+when: 2026-08-31
+
+files:
+
+  thought_simulator/requirements_20/20.31_patha_meaning_spec.md
+
+  thought_simulator/requirements_20/20.40.010_sob_prim.md
+
+  thought_simulator/requirements_20/20.40.020_srob_prim.md
+
+  thought_simulator/requirements_20/20.40.030_cnob_prim.md
+
+  thought_simulator/requirements_20/20.40.040_smob_prim.md
+
+  thought_simulator/requirements_20/20.40.050_idob_prim.md
+
+  thought_simulator/requirements_20/20.50_rb_requirements.md
+
+  thought_simulator/requirements_20/20.51_rbu_prim.md
+
+  thought_simulator/requirements_20/20.32_cob_requirements.md
+
+  thought_simulator/requirements_20/20.105_tp.md
+
+  thought_simulator/requirements_20/20.116_field_catalog.md
+
+  thought_simulator/requirements_20/20.145_ctp_prim.md
+
+  thought_simulator/requirements_20/20.200_traceability_matrix.md
+
+  thought_simulator/requirements_20/20.206_pipeline_a_b_synchronization_contract.md
+
+what: Human opened a single wording-only alignment pass. Work is off main, one branch / one PR. Live files must be made to say the same hops, writers, and ingest-door semantics already stated by 20.15, 20.705 §2 (verbatim, not shortened), 08-30 / 08-31 stamped winners, and the 08-31 importance decision. Constraints for that PR: no new hops; no new primitives; no §2 shortening; no reopen of 20.40 v1.3 or HLR-20.40-019; no Path-B deletion or “inactive” declaration; do not rewrite 20.200 hop rows MX-001–046 (inventory / stale filenames / missing modules only). Informative statements receive neither SHALL nor an HLR number. Do not remove information; correct, rearrange, reword, or add. Every new SHALL receives an HLR of the live per-document series, next = max existing + 1.
+
+why: Score live wording against already-stamped law. Keep main untouched until the human accepts the PR.
+
+expect:
+
+  - Helm: add this EVENT to CHANGE_LOG. In LATEST.md note “Path-A wording alignment in one off-main PR; write=no on main requirement files until merge.”
+
+  - write=no on main copies of the files listed above. Do not land edits on main from bots.
+
+  - Score 20.705 §2 verbatim. Do not treat a shortened chain (e.g. CTP→RB→RTU→IdOB→OuBA→COB/CST) as law.
+
+  - Do not create Bots. Do not start a 20.705 cleanup. Do not declare Path B inactive.
+
+kind: view
+
+stamp: human
