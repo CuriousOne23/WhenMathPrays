@@ -107,3 +107,6 @@
 2026-08-30 | EVENT decision | Cluster 2 meaning-write; winner 20.116.020-003, HLR-20.105-116, IdOB-prm | stamp=human | M-001 decided; M-002 narrowed (read ≠ write)
 2026-08-30 | EVENT decision | Cluster 3 OuBA door; winner 20.15 §2.14 and 20.116 | stamp=human | E2 decided (command vs ingest); S1 S3 remain open as 20.206 wording; M-005 M-705-002 M-705-003 decided (no mid-lineup COB meaning write); E1 M-008 M-705-001 M-705-004 M-705-005 decided as two CEx jobs
 2026-08-30 | EVENT doc-change | 20.40 v1.3; freeze = HLR-20.40-019; 003/007/008 = SOB–SmOB only | stamp=human | M-001 M-002 decided against 20.40 v1.3; Cluster 2 remaining 20.40 wording is done
+2026-08-31 | Cluster 3 | E2 decided command vs ingest | write=no
+2026-08-31 | Cluster 3 | S1 open 20.206 wording | write=no
+2026-08-31 | Cluster 3 | S3 open 20.206 wording | write=no
