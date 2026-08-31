@@ -18,6 +18,10 @@ Governance documents use a three-level numeric prefix:
 - [00_foundations/00.00.43_controlled_identity_rename_policy.md](00_foundations/00.00.43_controlled_identity_rename_policy.md) - controlled identity rename process and name-table SSOT
 - [00_identity/](00_identity/) - machine-readable identity name tables (`40`, `10.50`, `30`, `50`)
 - [ALIGNMENT_LOG_2026-05-31_10-to-20.md](ALIGNMENT_LOG_2026-05-31_10-to-20.md) - governance alignment record for 10-to-20 model transition
+- [BOT_INBOX.md](BOT_INBOX.md) - EVENT inbox
+- [BOT_REPORTS/](BOT_REPORTS/) - bot reports
+- [CHANGE_LOG.md](CHANGE_LOG.md) - change log
+- [CP_TS_governance_brief_2026-08-30.md](CP_TS_governance_brief_2026-08-30.md) - CP/TS governance brief (2026-08-30)
 
 ## Role in the 10/20/30/40/50 Model
 
