@@ -17,7 +17,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 RIVAL_ORDER = ["idob_native", "frame_fill", "embed_nn", "dict_lookup", "one_space"]
-CHEAP_RIVALS = {"frame_fill", "embed_nn", "dict_lookup"}
+CHEAP_RIVALS = {"frame_fill", "embed_nn", "dict_lookup", "one_space"}
 
 FORBIDDEN_TOKENS = [
     "struct_to_meaning_map.slide.yaml",
