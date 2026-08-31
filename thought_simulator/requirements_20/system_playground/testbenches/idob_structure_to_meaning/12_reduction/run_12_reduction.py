@@ -16,7 +16,7 @@ REPO_ROOT = HERE.parents[5]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-RIVAL_ORDER = ["idob_native", "frame_fill", "embed_nn", "dict_lookup"]
+RIVAL_ORDER = ["idob_native", "frame_fill", "embed_nn", "dict_lookup", "one_space"]
 CHEAP_RIVALS = {"frame_fill", "embed_nn", "dict_lookup"}
 
 FORBIDDEN_TOKENS = [
