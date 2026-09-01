@@ -18,8 +18,10 @@ crossing_pack/
 	README.md
 	place.py              # place(utterance) -> (placement, holes); no disk write
 	probe_log.py          # probe() wraps place(); appends JSONL; tally()
+	suggest_tags.py       # suggest(utterance) -> candidate about/family; no live writes
 	test_place.py
 	test_probe_log.py
+	test_suggest_tags.py
 	seed/
 		about_index.yaml
 		talk_families.yaml
@@ -29,6 +31,7 @@ crossing_pack/
 	logs/
 		.gitkeep
 		probe.jsonl         # created when you run probe(); local tally
+		suggest.jsonl       # optional; only if you pass log_path
 ```
 
 ## What place.py is
@@ -128,6 +131,20 @@ That is what `place()` looks up.
 Papers name those rows but do not execute placement.
 
 If a sentence is not an `utterance` in `placements.yaml`, it is unseen.
+
+## Stop 2: suggest_tags.py
+
+Function, not a CLI. Proposes `suggested_about_id` and `suggested_family_id` from Seed allow-lists only.
+Does not write live cards, Door Table, `$M$`, or `seed/placements.yaml`.
+Unseen suggestions always have `needs_review: true` and `card_id: null`.
+
+```text
+python -c "from suggest_tags import suggest; print(suggest('Why is the sky dark?'))"
+```
+
+Optional log only if you pass `log_path`. Default is no disk write.
+
+This is not NLP. Rules are the visible keyword list in `suggest_tags.py`.
 
 ## Won't
 
