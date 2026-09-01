@@ -8,7 +8,6 @@ from place import place
 
 DEFAULT_SUGGEST_LOG = Path(__file__).parent / "logs" / "suggest.jsonl"
 
-# Suggestions may only use Seed ids. Never invent a new about/family string.
 ALLOWED_ABOUT = {
     "material_event_anchor",
     "timed_obligation_anchor",
@@ -23,7 +22,6 @@ ALLOWED_FAMILY = {
     "update_talk",
 }
 
-# Visible keyword rules only. This is not NLP and not promotion.
 _RULES: list[tuple[str, str | None, str | None, str]] = [
     ("deadline", "timed_obligation_anchor", "state_talk", "keyword deadline"),
     ("friday", "timed_obligation_anchor", "state_talk", "keyword friday"),
@@ -57,7 +55,7 @@ def _from_rules(utterance: str) -> tuple[str | None, str | None, str]:
 
 
 def suggest(utterance: str, source: str = "suggest", log_path: Path | None = None) -> dict:
-    """Propose about/family from Seed lists only. Never writes live cards or Seed YAML."""
+    """Propose about/family from Seed lists only. Appends JSONL. Never writes live cards."""
     placement, holes = place(utterance=utterance, source=source)
     is_gold = str(placement.get("placement_id", "")).startswith("P_") and not str(
         placement.get("placement_id")
@@ -87,8 +85,8 @@ def suggest(utterance: str, source: str = "suggest", log_path: Path | None = Non
         "n_place_holes": len(holes),
     }
 
-    if log_path is not None:
-        log_path.parent.mkdir(parents=True, exist_ok=True)
-        with log_path.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(row, ensure_ascii=True, sort_keys=True) + "\n")
+    target = DEFAULT_SUGGEST_LOG if log_path is None else log_path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(row, ensure_ascii=True, sort_keys=True) + "\n")
     return row
