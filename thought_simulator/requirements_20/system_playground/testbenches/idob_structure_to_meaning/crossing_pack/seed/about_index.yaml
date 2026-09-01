@@ -1,0 +1,8 @@
+- about_id: material_event_anchor
+  gloss: Anchor for concrete event lines involving material change.
+
+- about_id: timed_obligation_anchor
+  gloss: Anchor for lines asserting timed obligation state.
+
+- about_id: person_load_anchor
+  gloss: Anchor for lines expressing sustained personal burden.

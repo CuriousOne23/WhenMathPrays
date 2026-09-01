@@ -1,0 +1,8 @@
+- hole_id: H_u03_no_card
+  found_in: card
+  utterance: "I can't keep doing this."
+  family_id: null
+  about_id: person_load_anchor
+  card_id: null
+  note: "No live structure card. Do not invent six IDs or a family to close this."
+  status: open

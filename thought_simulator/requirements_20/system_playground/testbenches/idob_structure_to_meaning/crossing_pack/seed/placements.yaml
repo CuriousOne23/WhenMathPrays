@@ -1,0 +1,26 @@
+- placement_id: P_rock_burst
+  utterance: "The rock burst open."
+  about_id: material_event_anchor
+  family_id: event_talk
+  pattern_id: null
+  card_id: S_rock_burst
+  hole_ids: []
+  source: test
+
+- placement_id: P_deadline_friday
+  utterance: "The project deadline is Friday."
+  about_id: timed_obligation_anchor
+  family_id: state_talk
+  pattern_id: null
+  card_id: S_deadline_friday
+  hole_ids: []
+  source: test
+
+- placement_id: P_u03
+  utterance: "I can't keep doing this."
+  about_id: person_load_anchor
+  family_id: null
+  pattern_id: null
+  card_id: null
+  hole_ids: [H_u03_no_card]
+  source: test

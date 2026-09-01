@@ -1,0 +1,17 @@
+- family_id: event_talk
+  gloss: Line describes an event occurrence or event change.
+
+- family_id: state_talk
+  gloss: Line asserts a state or condition at a time.
+
+- family_id: task_talk
+  gloss: Line frames an actionable task or work item.
+
+- family_id: claim_talk
+  gloss: Line makes a claim position for consideration.
+
+- family_id: ask_talk
+  gloss: Line asks for information, action, or clarification.
+
+- family_id: update_talk
+  gloss: Line updates prior context with new information.
