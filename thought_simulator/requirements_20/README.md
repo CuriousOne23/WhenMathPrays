@@ -190,6 +190,8 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.205_execution_packet_xp_requirements.md](20.205_execution_packet_xp_requirements.md)
 - [20.206_pipeline_a_b_synchronization_contract.md](20.206_pipeline_a_b_synchronization_contract.md)
 - [20.207_execution_replay_specification.md](20.207_execution_replay_specification.md)
+- [20.31.700_patha_theory.md](20.31.700_patha_theory.md)
+- [20.31.710_patha_operational_note.md](20.31.710_patha_operational_note.md)
 - [20.38_ts_implementation_guidelines.md](20.38_ts_implementation_guidelines.md)
 - [20.39_ts_core_data_structures.md](20.39_ts_core_data_structures.md)
 - [20.41_opbeh_requirements.md](20.41_opbeh_requirements.md)
