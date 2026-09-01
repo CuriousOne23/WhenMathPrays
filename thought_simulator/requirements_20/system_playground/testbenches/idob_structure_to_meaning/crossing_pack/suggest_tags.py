@@ -6,7 +6,8 @@ from pathlib import Path
 
 from place import place
 
-DEFAULT_SUGGEST_LOG = Path(__file__).parent / "logs" / "suggest.jsonl"
+# .log = local only (gitignore). Do not use .jsonl for the default diary.
+DEFAULT_SUGGEST_LOG = Path(__file__).parent / "logs" / "suggest.log"
 
 ALLOWED_ABOUT = {
     "material_event_anchor",
@@ -55,7 +56,7 @@ def _from_rules(utterance: str) -> tuple[str | None, str | None, str]:
 
 
 def suggest(utterance: str, source: str = "suggest", log_path: Path | None = None) -> dict:
-    """Propose about/family from Seed lists only. Appends JSONL. Never writes live cards."""
+    """Propose about/family from Seed lists only. Appends local .log. Never writes live cards."""
     placement, holes = place(utterance=utterance, source=source)
     is_gold = str(placement.get("placement_id", "")).startswith("P_") and not str(
         placement.get("placement_id")
