@@ -7,7 +7,8 @@ from typing import Any
 
 from place import place
 
-DEFAULT_LOG_PATH = Path(__file__).parent / "logs" / "probe.jsonl"
+# .log = local running diary (gitignore). Seed fixtures stay .yaml.
+DEFAULT_LOG_PATH = Path(__file__).parent / "logs" / "probe.log"
 GOLD_UTTERANCES = {
     "The rock burst open.",
     "The project deadline is Friday.",
@@ -16,7 +17,7 @@ GOLD_UTTERANCES = {
 
 
 def probe(utterance: str, source: str = "probe", log_path: Path | None = None) -> tuple[dict, list[dict]]:
-    """Call place(); append one JSONL row; return the same tuple as place()."""
+    """Call place(); append one JSON line to a local .log; return place() tuple."""
     placement, hole_rows = place(utterance=utterance, source=source)
 
     target = log_path or DEFAULT_LOG_PATH
