@@ -38,7 +38,7 @@ Where gold is defined:
 | Named in prose | `20.31.731_crossing_pack_seed.md` §5 | `requirements_20/` |
 | `kind` in the log | `probe_log.py` | `crossing_pack/` |
 
-### Run command (example Jeff ran)
+### Run command (example CuriousOne23 ran)
 
 ```text
 python -c "from probe_log import probe, tally, DEFAULT_LOG_PATH
@@ -115,7 +115,7 @@ An unseen sentence is still a hole after Stop 1. Stop 2 may **propose** `suggest
 
 Gold sentences: Stop 2 **echoes** stored tags; it does not invent them.
 
-### Run command (example Jeff ran)
+### Run command (example CuriousOne23 ran)
 
 ```text
 python -c "from suggest_tags import suggest; print(suggest('Why is the sky dark?'))"
