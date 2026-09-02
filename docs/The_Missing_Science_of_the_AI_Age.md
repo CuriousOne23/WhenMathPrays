@@ -441,6 +441,5 @@ available open-source at:
 Copilot (Microsoft), and Grok (xAI). It represents the opening of a research
 conversation, not its conclusion. Engagement, critique, and extension are
 the point.*
-```
 
 ---
