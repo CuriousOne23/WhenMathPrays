@@ -1,5 +1,5 @@
 date: 2026-09-02
-events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human)
+events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human); Terms charter 2026-09-02 (stamp=human)
 flow-tracker = 20.705 §2 and §3.6
 field-name authority = 20.116 series
 20.40 v1.3; freeze = HLR-20.40-019; 003/007/008 = SOB–SmOB only.
@@ -256,6 +256,15 @@ H-005 | idob_rules.yaml no_structural / no_routing_or_dcb; 20.116.020 | HLR-20.1
 H-006 | idob_packet_001; primitives/idob/idob_s2m_packet.yaml | packet schema (resolution_status, ready_for_ouba, path_b_eligible, idob_complete + bools) | issue=pass (wall=none) | why it matters=tp.idob packet schema keys present and typed as required by the rulechecker | owner=human | write=no
 H-007 | idob_testbench.yaml; 20.40.050_idob_prim.md | HLR-20.40.050-053 | issue=pass (wall=none) | why it matters=progressive isolation fixtures (utterance/card/packs/cie without live RB/RTU) remain legal and executed | owner=human | write=no
 H-008 | 20.12.010 (coverage note); identity idob_* runner only | INV-M0 §2 attacker lineup (CE→CIL→SmOB→MCB) | issue=pass (wall=none) | why it matters=law already records those four attackers are not on this isolation runner; out of charter scope (idob_* only) — not a fixture miss here; full INV-M0 lineup assert is later Catalog/Harness work | owner=human | write=no
+
+
+terms:
+
+charter 2026-09-02 stamp=human | agent=Terms | label=Glossary / 20.700 | GitHub label=ts-terms
+scope: 20.700.xxx + glossary those files use; compare to 20.116, 20.12.010 INV-M0, CTP=20.145 only
+emit: T-* rows — token collision | missing row | stale freeze/CTP | cue named as birth (suggested glossary edit, not a file patch)
+write=no. Do not edit 20.700, 20.190, 20.116, or playground files. Do not create Catalog or Flow.
+status: stood up; empty block — no T-* yet
 
 
 needs human:
