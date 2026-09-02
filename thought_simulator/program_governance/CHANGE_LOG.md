@@ -112,3 +112,9 @@
 2026-08-31 | Cluster 3 | S3 open 20.206 wording | write=no
 2026-08-31 | Cluster 1 | R-002 R-005–R-011 hop-order decided; R-009–R-011 R-016 R-017 open as 20.50 typed destinations | write=no
 2026-08-31 | Meaning 2026-08-31 marks | M-009 M-011 M-015 M-016 M-705-008 closed toward §2; M-001 M-002 closed against 20.40 v1.3; M-005 M-705-002 M-705-003 no mid-lineup COB meaning write; M-008 M-705-001 M-705-004 M-705-005 two CEx jobs | write=no
+2026-08-31 | EVENT decision | TP.semantic.importance writer = IdOB-prm only; routing = structure fields | stamp=human
+2026-08-31 | EVENT doc-change | Path-A wording alignment in one off-main PR; write=no on main requirement files until merge | stamp=human | kind=view
+2026-09-01 | Helm weekday inbox cycle | recorded EVENT decision importance + EVENT doc-change wording alignment from BOT_INBOX | write=no
+2026-09-02 | Harness charter | Path A IdOB Rulechecker; H-* walls; INV-M0 + 20.116.020; write=no; no Catalog/Flow/Terms | stamp=human
+2026-09-02 | Harness first report | H-001–H-008 pass (wall=none); INV-M0 + 20.116.020 hold on isolation bench | write=no
+2026-09-02 | Terms charter | Glossary / 20.700; T-* suggested edits only; empty terms: block; write=no; no Catalog/Flow | stamp=human
