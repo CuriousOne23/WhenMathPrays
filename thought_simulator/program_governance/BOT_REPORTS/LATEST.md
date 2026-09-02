@@ -1,5 +1,5 @@
-date: 2026-09-01
-events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view)
+date: 2026-09-02
+events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human)
 flow-tracker = 20.705 §2 and §3.6
 field-name authority = 20.116 series
 20.40 v1.3; freeze = HLR-20.40-019; 003/007/008 = SOB–SmOB only.
@@ -239,6 +239,16 @@ MX-045 | 20.200, 20.705, 20.32_cob_requirements.md | HLR-20.200-001; `OuBA --> C
 
 MX-046 | 20.200, 20.705, 20.33_cil_requirements.md | HLR-20.200-001; `COB --> CIL`; `[CIL](20.33_cil_requirements.md)` | TBD design-anchor on a 20.705 hop | The 20.200 row `20.33_cil_requirements.md` has design-anchor `50.033_cil_design.md (TBD)` while §3.6 hop `COB --> CIL` / `[CIL](20.33_cil_requirements.md)` is treated as current. | owner=human | write=no
 MX note 2026-08-30 | 20.145 stays a live module; do not retire the row. write=no
+
+harness:
+
+charter 2026-09-02 stamp=human | agent=Harness | label=Path A IdOB Rulechecker | GitHub label=ts-harness
+scope: primitives/idob/ + testbenches/path_a/identity/ (idob_* only)
+emit: H-* rows — pass, or fail with wall = Φ write | Φ vs E | routing_filter | packet schema | fixture miss
+score: INV-M0 (20.12.010) and 20.116.020 — rich EEE is not birth; only IdOB may fill Φ; isolation fixtures legal (20.40.050-053)
+write=no. Do not edit law, fixtures, 20.705, or 20.50. Do not clean 20.705. Do not create Catalog, Flow, Terms, or any other bot.
+status: stood up; awaiting first H-* report
+
 
 needs human:
 S1 S2 S3 S4 E1 E2 M-001–M-017 M-705-001–M-705-012 R-001–R-017 MX-001–MX-046 (no stamp; owner=human; write=no)
