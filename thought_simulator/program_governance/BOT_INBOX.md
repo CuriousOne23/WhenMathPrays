@@ -332,3 +332,48 @@ kind: law
 
 stamp: human
 
+---
+
+EVENT: policy
+
+when: 2026-09-02
+
+files:
+
+  thought_simulator/program_governance/BOT_REPORTS/LATEST.md
+
+  thought_simulator/program_governance/CHANGE_LOG.md
+
+what: Cadence for the live Terms bot only. Do not create a bot. Do not run Terms from this EVENT. The current Terms scan already in flight is the run for today.
+
+Terms stays: Glossary / 20.700 family only. GitHub label ts-terms. write=no. Suggest-only T-*. Empty terms: block. Jobs remain (1) discrepancy vs the associated requirements home and (2) obsolete terms (stale | NA | superseded | empty; keep-in-place=yes; do not delete headings).
+
+When Helm SHALL run Terms (future only):
+1. A 20.700 / 20.700.xxx file merged.
+2. A home file for a glossary term merged — especially 20.116.*, 20.12.010, 20.145, 20.40 / 20.40.050, 20.105, 20.31, 20.15.
+3. A stamped EVENT changes a name, writer, freeze, or hop (CTP, INV-M0, IdOB invoke, OuBA door).
+4. Human says: “Run Terms once.”
+5. Safety net: one run per calendar week if 1–4 did not fire that week (Monday or after the last merge of that week, whichever comes first).
+
+When Helm SHALL NOT run Terms:
+- Weekday inbox cycle alone.
+- Harness H-* on the isolation bench.
+- 20.705 chat residue / sections other than §2 and §3.6.
+- Open 20.50 typed-destination wording (that is Route).
+- Same day a Terms scan is already running or already posted.
+
+What a future run is:
+- One scan. Append only new distances. Keep prior T-* as history. Do not re-emit the same issue as a new id.
+- If nothing new: write T-000 | none under terms: and stop.
+- write=no. Do not edit 20.700, 20.190, 20.116, 20.705, playground files, fixtures, or any shall.
+- Do not create Catalog, Flow, hop-bots, or writers. Do not start a 20.705 cleanup.
+
+why: Glossary drift is slow. Daily Terms on the Spine/Meaning grind re-lists old T-* and burns tokens. Event-driven plus a weekly empty-check is enough.
+
+expect:
+  - Helm: CHANGE_LOG line as specified; LATEST terms: cadence line; Do not start Terms from this EVENT.
+
+kind: law
+
+stamp: human
+
