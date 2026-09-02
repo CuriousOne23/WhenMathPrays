@@ -115,3 +115,4 @@
 2026-08-31 | EVENT decision | TP.semantic.importance writer = IdOB-prm only; routing = structure fields | stamp=human
 2026-08-31 | EVENT doc-change | Path-A wording alignment in one off-main PR; write=no on main requirement files until merge | stamp=human | kind=view
 2026-09-01 | Helm weekday inbox cycle | recorded EVENT decision importance + EVENT doc-change wording alignment from BOT_INBOX | write=no
+2026-09-02 | Harness charter | Path A IdOB Rulechecker; H-* walls; INV-M0 + 20.116.020; write=no; no Catalog/Flow/Terms | stamp=human
