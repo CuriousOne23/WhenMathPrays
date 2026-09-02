@@ -277,6 +277,8 @@ character is the qualitative outcome over extended interaction:
 | Balanced / healthy | +6 | +7 | +6 | Steady positive; sustainable |
 | Altruistic but invisible | +4 | +6 | +9 | Positive but under-felt |
 
+The balanced / healthy profile is the preferred primitive configuration — the one to engineer, because it produces sustainable γ_self trajectories for relational AI.
+
 An engagement-optimized AI maximizes Resonance at the expense of Fidelity —
 a relational pathology. It feels good in the short term and is corrosive over
 time because resonance without trust is manipulation in the relational physics
