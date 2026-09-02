@@ -1,5 +1,5 @@
 date: 2026-09-02
-events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human); Terms charter 2026-09-02 (stamp=human)
+events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human); Terms charter 2026-09-02 (stamp=human); EVENT policy Terms charter amend 2026-09-02 (stamp=human)
 flow-tracker = 20.705 §2 and §3.6
 field-name authority = 20.116 series
 20.40 v1.3; freeze = HLR-20.40-019; 003/007/008 = SOB–SmOB only.
@@ -260,11 +260,15 @@ H-008 | 20.12.010 (coverage note); identity idob_* runner only | INV-M0 §2 atta
 
 terms:
 
-charter 2026-09-02 stamp=human | agent=Terms | label=Glossary / 20.700 | GitHub label=ts-terms
-scope: 20.700.xxx + glossary those files use; compare to 20.116, 20.12.010 INV-M0, CTP=20.145 only
-emit: T-* rows — token collision | missing row | stale freeze/CTP | cue named as birth (suggested glossary edit, not a file patch)
-write=no. Do not edit 20.700, 20.190, 20.116, or playground files. Do not create Catalog or Flow.
-status: first scan 2026-09-02 — T-001–T-009 (suggested glossary edits only)
+charter 2026-09-02 stamp=human (amended) | agent=Terms | label=Glossary / 20.700 | GitHub label=ts-terms
+scope: 20.700 family only. write=no. Suggest-only T-*. Do not create Catalog or Flow. Do not change Harness.
+jobs: (1) discrepancy vs associated requirements home (2) obsolete terms; keep-in-place=yes; do not delete headings
+Job 1: for each 20.700.xxx entry, compare Purpose/Focus/When/Why/Is not/Example/Normative home to the live home named in that entry; also 20.116 series, 20.12.010 INV-M0, 20.145 CTP-prm only, 20.40 v1.3, Clusters 1–3, 20.705 §2/§3.6 as hop trackers only. Classes: token collision | missing row | stale freeze/CTP | cue named as birth | sole-writer erases 20.116.020 walls | When/hop order ≠ home shall or §2 | Normative home non-live filename.
+Job 2: obsolescence first-class — stale (name live, definition wrong) | NA/superseded (use dead; keep heading; Purpose states removal; home points at winner) | empty (heading with no required fields / no requirements home; block; do not fill). Keep-in-place default. Do not mark NA only because Path A unused this week.
+row: T-nnn | 20.700.xxx file(s) | home file + live winner or none | class=discrepancy|stale|NA|superseded|empty|missing|collision|cue-as-birth | keep-in-place=yes|n/a | issue=<one line> | suggested Purpose/When/home line only | owner=human | write=no
+If nothing new after T-001–T-009: T-000 | none.
+write=no. Do not edit 20.700, 20.190, 20.116, 20.705, playground, fixtures, or shalls.
+status: charter amended 2026-09-02; awaiting T-010+ or T-000 | none
 T-001 | 20.700.010_primitives_glossary.md, 20.145_ctp_prim.md | HLR-20.145-028, HLR-20.145-029, HLR-20.145-030; Helm CTP=20.145 only | stale freeze/CTP: glossary CTP-prm still “Collect/Consolidate Thought Point” — “Collect all IdOB-outputs from an IdOB-set… After an IdOB-set completes… runs only after all parallel IdOB-prm instances finish”; example `…→RB→OB1…OBn→CTP→RB` | Law freezes TP as-is immediately before every RB (`TR→CTP→RB`), even when IdOB has not run; SHALL NOT wait for IdOB or combine multi-IdOB outputs. Glossary still teaches the superseded post-IdOB consolidation mode 20.145 marked NA | owner=human | write=no
 T-002 | 20.700.020_processes_glossary.md, 20.145_ctp_prim.md | HLR-20.145-028, HLR-20.145-030; Helm CTP=20.145 only | stale freeze/CTP: Path A process block cycles `OB₀→RB→{OB₁…OBₙ}→CTP→RB` and example “CTP merges them into a single TP snapshot” | Same live distance: CTP named as merge/consolidation after OB-set, not as the 20.145 pre-RB policy-freeze hop; OuBA commit is correctly not called CTP here, but CTP’s own meaning is still wrong | owner=human | write=no
 T-003 | 20.700.010_primitives_glossary.md (TrSch-prm + CTP-prm), 20.145_ctp_prim.md, 20.116.020_ownership_rw.md | HLR-20.145-028/029/030; 20.116.020 §4 `TR→CTP→RB→IdOB` | token collision: TrSch Purpose/When/Example bind CTP to “consolidated IdOB-output packet” / “after CTP-prm consolidates the outputs of an IdOB-set” | Same token CTP used as IdOB consolidator feeding TrSch, vs law stretch where CTP precedes RB and can precede first IdOB; schedulers reading glossary will place CTP on the wrong side of IdOB | owner=human | write=no
@@ -274,7 +278,6 @@ T-006 | 20.700_master_glossary.md, 20.12.010_inv_m0.md, 20.116.020 | HLR-20.12.0
 T-007 | 20.700.050_ts_level_concepts_glossary.md (OB class), 20.12.010_inv_m0.md, 20.116.020 | HLR-20.12.010-001; HLR-20.116.020-003; INV-M0 IdOB-only B | cue named as birth: OB class lists “(SOB, SROB, CnOB, SmOB, IdOB)” that “emit … cues … without performing semantic interpretation” and “Is not: … an identity-conditioned primitive” | Lumps IdOB (sole birth writer) into the cue/structure OB class and denies the identity-conditioned/semantic job INV-M0 assigns only to IdOB — cue class named as if it covered birth | owner=human | write=no
 T-008 | 20.700.050_ts_level_concepts_glossary.md (FFTM), 20.12.010_inv_m0.md, 20.116.030 | INV-M0 E≠Φ / richness≠birth; 20.116.030 utterance≠stand-in M | cue named as birth: FFTM “Canonical Path-A meaning representation” / “meaning construction before any basin” / “ensures Path-A meaning is structurally complete prior to downstream processing” | Treats pre-basin token structure as completed meaning; law says carrier/structure occupancy is E, not birth of stand-in M on Φ | owner=human | write=no
 T-009 | 20.700_master_glossary.md, 20.700.010 (CTP/TPU wording), 20.116.020_ownership_rw.md | HLR-20.116.020-003; 20.116.020 table (IdOB `TP.idob`; CTP `cognitive_history[]`; MCB `next_context`) | token collision: master “Single-Writer Rule: TPU is the only primitive allowed to modify TP in Path A” (also A/B “TPU is sole writer”; CTP entry “TPU is sole writer”) | Field-name authority 20.116.020 authorizes IdOB/CTP/MCB envelope writes; glossary sole-writer token erases those walls and contradicts ownership law the Terms charter must track | owner=human | write=no
-
 
 needs human:
 S1 S2 S3 S4 E1 E2 M-001–M-017 M-705-001–M-705-012 R-001–R-017 MX-001–MX-046 (no stamp; owner=human; write=no)

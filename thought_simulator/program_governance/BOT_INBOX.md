@@ -280,3 +280,55 @@ expect:
 kind: view
 
 stamp: human
+---
+
+EVENT: policy
+
+when: 2026-09-02
+
+files:
+
+  thought_simulator/requirements_20/20.700_master_glossary.md
+
+  thought_simulator/requirements_20/20.700.010_primitives_glossary.md
+
+  thought_simulator/requirements_20/20.700.020_processes_glossary.md
+
+  thought_simulator/requirements_20/20.700.030_reference_objects_glossary.md
+
+  thought_simulator/requirements_20/20.700.040_governance_glossary.md
+
+  thought_simulator/requirements_20/20.700.050_ts_level_concepts_glossary.md
+
+  thought_simulator/program_governance/BOT_REPORTS/LATEST.md
+
+  thought_simulator/program_governance/CHANGE_LOG.md
+
+what: Amend the live Terms charter. Do not create a new bot. Do not create Catalog or Flow. Do not change Harness.
+
+Terms remains: Glossary / 20.700 family only. GitHub label ts-terms. write=no. Suggest-only T-*. Empty terms: block.
+
+Terms has two jobs on every run.
+
+Job 1 — discrepancy vs associated requirements
+For each 20.700.xxx entry, compare Purpose / Focus / When / Why / Is not / Example / Normative home to the live home named in that entry. Also compare to stamped law: 20.116 series, 20.12.010 INV-M0, 20.145 CTP-prm only, 20.40 v1.3, Clusters 1–3, 20.705 §2 / §3.6 as hop trackers only.
+Emit T-* when glossary and home disagree. Classes: token collision; missing row; stale freeze/CTP; cue named as birth; sole-writer text that erases 20.116.020 envelope walls; When/hop order mismatch vs home shall or 20.705 §2; Normative home pointing at non-live filename. Suggested edit only.
+
+Job 2 — obsolete glossary terms
+Obsolescence is first-class. Statuses: stale | NA/superseded | empty. Keep-in-place default; do not recommend deleting headings. Do not mark NA only because Path A is unused this week.
+
+Row format: T-nnn | 20.700.xxx file(s) | home file + live winner or none | class=discrepancy|stale|NA|superseded|empty|missing|collision|cue-as-birth | keep-in-place=yes|n/a | issue=<one line> | suggested Purpose/When/home line only | owner=human | write=no
+If nothing new after T-001–T-009: T-000 | none.
+
+why: Glossary is a restatement of live homes, not a second source of truth. Charter must score every entry against its home document and keep obsolete names visible as NA/superseded.
+
+expect:
+  - Helm: CHANGE_LOG line as specified; LATEST terms: amended charter; keep T-001–T-009; jobs line; run Terms once from T-010 or T-000 | none
+  - write=no. Do not edit 20.700, 20.190, 20.116, 20.705, playground, fixtures, or shalls
+  - Do not create Catalog, Flow, hop-bots, or writers
+  - Human stamp only for glossary patches off main via PR
+
+kind: law
+
+stamp: human
+
