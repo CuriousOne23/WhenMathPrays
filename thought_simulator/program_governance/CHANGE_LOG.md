@@ -121,3 +121,4 @@
 2026-09-02 | Terms first scan | T-001–T-009 suggested glossary edits (stale CTP, missing INV-M0/Φ rows, cue-as-birth, sole-writer collision) | write=no
 2026-09-02 | EVENT policy | Terms: score 20.700.xxx vs home shalls; obsolescence stale|NA|superseded|empty; keep-in-place; write=no | stamp=human
 2026-09-02 | Terms scan (amended charter) | T-010–T-027 discrepancy/stale/empty/missing; keep-in-place; write=no
+2026-09-02 | EVENT policy | Terms cadence: on 20.700/home/EVENT change, or weekly T-000; do not run today | stamp=human
