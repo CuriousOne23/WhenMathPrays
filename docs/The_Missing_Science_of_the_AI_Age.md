@@ -77,7 +77,7 @@ subject.
 The relational verbal space has the same structure. It is present in every
 human moment. Every conversation, every silence, every act of care or
 withdrawal — all of it is motion in a space with real force, real trajectories,
-and real consequences. And none of it has a physics.
+and real consequences. And yet this entire domain still lacks a formal physics.
 
 Traditional science has studied everything *around* this domain without
 entering it:
