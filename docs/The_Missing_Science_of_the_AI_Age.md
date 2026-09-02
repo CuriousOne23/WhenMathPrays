@@ -191,7 +191,7 @@ formally tractable. The conversation is the trajectory. Its accumulation across
 time is the relationship.
 
 For the complete mathematical specification including weight derivations and
-boundary conditions, see [`GRP_rev3.md`](../GRP_rev3.md).
+boundary conditions, see [`GRP_rev3.5.md`](GRP_rev3.5.md).
 
 ---
 
