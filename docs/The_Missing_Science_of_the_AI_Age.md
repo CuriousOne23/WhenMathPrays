@@ -94,14 +94,8 @@ configuration in real time — the actual force event, happening now, between
 these two, in this configuration. That space has no home in any existing
 framework.
 
-Nor does its complexity disqualify it. Biology has demonstrated this
-conclusively. Life is slippery at the edges — viruses replicate without
-metabolism, prions carry information without nucleic acids, colonial organisms
-exhibit intelligence that no individual member possesses. The slipperiness of
-the boundary was never used as a reason not to study life. It was used as a
-reason to study it more rigorously. Edge cases refined the theory rather than
-preventing it. The same standard applies here. The relational verbal space
-does not need clean edges before it can be studied. It needs a framework.
+Nor does its complexity disqualify it. Biology has demonstrated this conclusively. Life is slippery at the edges — viruses replicate without metabolism, prions carry information without nucleic acids, colonial organisms exhibit intelligence that no individual member possesses. The slipperiness of the boundary was never used as a reason not to study life; it was used as a reason to study it more rigorously. Edge cases refined the theory rather than preventing it. 
+The same logic applies here: ambiguity at the boundaries is evidence of a real domain, not a reason to dismiss it. The relational verbal space does not need clean edges before it can be studied. It needs a framework.
 
 ---
 
