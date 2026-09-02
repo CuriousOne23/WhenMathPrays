@@ -277,8 +277,6 @@ character is the qualitative outcome over extended interaction:
 | Balanced / healthy | +6 | +7 | +6 | Steady positive; sustainable |
 | Altruistic but invisible | +4 | +6 | +9 | Positive but under-felt |
 
-The balanced / healthy profile is the preferred primitive configuration — the one to engineer, because it produces sustainable γ_self trajectories in the relational AI age.
-
 An engagement-optimized AI maximizes Resonance at the expense of Fidelity —
 a relational pathology. It feels good in the short term and is corrosive over
 time because resonance without trust is manipulation in the relational physics
@@ -293,9 +291,11 @@ human experience in the AI age a common orienting direction — the quality of
 the relational configuration we are capable of building together — that is
 neither utopian nor fearful.
 
-The relational experience is the **common goal**: structurally unavailable to
-either party without the other, and therefore a genuinely shared purpose rather
-than a diplomatic fiction.
+The relational experience is the **common goal**: structurally unavailable to 
+either party without the other, and therefore a genuinely shared purpose rather 
+than a diplomatic fiction. This means that the balanced / healthy profile is 
+the preferred primitive configuration — the one to engineer, because it produces 
+sustainable γ_self trajectories in the AI age.
 
 ---
 
