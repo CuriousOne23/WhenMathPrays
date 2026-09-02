@@ -247,7 +247,15 @@ scope: primitives/idob/ + testbenches/path_a/identity/ (idob_* only)
 emit: H-* rows — pass, or fail with wall = Φ write | Φ vs E | routing_filter | packet schema | fixture miss
 score: INV-M0 (20.12.010) and 20.116.020 — rich EEE is not birth; only IdOB may fill Φ; isolation fixtures legal (20.40.050-053)
 write=no. Do not edit law, fixtures, 20.705, or 20.50. Do not clean 20.705. Do not create Catalog, Flow, Terms, or any other bot.
-status: stood up; awaiting first H-* report
+status: first report 2026-09-02 — H-001–H-008 pass (wall=none)
+H-001 | idob_rulechecker.py, idob_testbench.py, idob_rules.yaml, idob_testbench.yaml, idob_tests_to_run.yaml, primitives/idob/idob.py | idob_output_001, idob_utterance_001, idob_packet_001, idob_write_boundary_001, idob_no_structural_001, idob_rank_map_001, idob_key_stable_001, idob_flags_001 | issue=pass (wall=none) | why it matters=baseline: all six enabled S2M fixtures clear every IdOB wall check | owner=human | write=no
+H-002 | idob_s2m_04_unmapped, idob_s2m_05_miss; 20.12.010_inv_m0.md | HLR-20.12.010-001, HLR-20.12.010-002; INV-M0 cut (Φ vs E) | issue=pass (wall=none) | why it matters=pre-birth legal: Φ stays ⊥ (selected_group_id/meaning_semantics null) with utterance/structure present; richness of E is not treated as birth | owner=human | write=no
+H-003 | idob_s2m_01_rock, idob_s2m_02_deadline, idob_s2m_03_sleepy; 20.12.010, 20.116.020 | HLR-20.12.010-001, HLR-20.116.020-003 | issue=pass (wall=none) | why it matters=Φ fill only via IdOB-prm (selected_group_id + six-axis meaning_semantics); CIE prime is after birth, not a substitute for B | owner=human | write=no
+H-004 | idob_s2m_06_write_boundary; 20.116.020_ownership_rw.md | HLR-20.116.020-003; idob_write_boundary_001 | issue=pass (wall=none) | why it matters=process.routing_filter survives IdOB unchanged; routing_filter_mutated=false | owner=human | write=no
+H-005 | idob_rules.yaml no_structural / no_routing_or_dcb; 20.116.020 | HLR-20.116.020-003; idob_no_structural_001 | issue=pass (wall=none) | why it matters=IdOB did not mutate structural/SSG fields or DCB geometric_state on enabled fixtures | owner=human | write=no
+H-006 | idob_packet_001; primitives/idob/idob_s2m_packet.yaml | packet schema (resolution_status, ready_for_ouba, path_b_eligible, idob_complete + bools) | issue=pass (wall=none) | why it matters=tp.idob packet schema keys present and typed as required by the rulechecker | owner=human | write=no
+H-007 | idob_testbench.yaml; 20.40.050_idob_prim.md | HLR-20.40.050-053 | issue=pass (wall=none) | why it matters=progressive isolation fixtures (utterance/card/packs/cie without live RB/RTU) remain legal and executed | owner=human | write=no
+H-008 | 20.12.010 (coverage note); identity idob_* runner only | INV-M0 §2 attacker lineup (CE→CIL→SmOB→MCB) | issue=pass (wall=none) | why it matters=law already records those four attackers are not on this isolation runner; out of charter scope (idob_* only) — not a fixture miss here; full INV-M0 lineup assert is later Catalog/Harness work | owner=human | write=no
 
 
 needs human:
