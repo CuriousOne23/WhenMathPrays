@@ -448,5 +448,3 @@ the point.*
 ```
 
 ---
-
-Once Grok signs off and you commit it, `CONTENTS.md` is the last piece — it references this paper but hasn't been committed yet. Getting that in before you post the X thread means anyone who clicks through to the repo lands on a complete, navigable project.
