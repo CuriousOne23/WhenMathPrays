@@ -27,6 +27,7 @@ crossing_pack/
   proposals/
   logs/
     .gitkeep
+    probe.jsonl           # committed fixture (.jsonl may be committed)
     probe.log             # local diary (.log is not committed)
     suggest.log           # local diary (.log is not committed)
 ```

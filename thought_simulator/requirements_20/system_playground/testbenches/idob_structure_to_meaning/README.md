@@ -27,7 +27,7 @@ Supporting notes (not a second spine): `01_structure/structure.md`, `02_meaning_
 
 Short field list for Slide 00: [00_contract/vocabulary.md](00_contract/vocabulary.md).
 
-Then: slides 00-11, then `run_ts_struc2mn.py`.
+Then: slides 00-11, then `run_ts_struc2mn.py`. Sibling indexes (not on that walk): [`12_reduction/`](12_reduction/README.md), [`crossing_pack/`](crossing_pack/README.md).
 
 ## How to run
 
@@ -89,6 +89,13 @@ You can still run a single slide file directly, e.g.
 | 09 | `09_structure_assignment/` | Utterance + packs → six IDs or miss |
 | 10 | `10_residue_expand/` | Leftover → which file a human expands |
 | 11 | `11_idob_core/` | One-hop `idob.py` kernel + wall tests |
+
+Sibling folders (not on the `run_ts_struc2mn.py` 00–11 walk):
+
+| Folder | Index |
+|--------|-------|
+| `12_reduction/` | [12_reduction/README.md](12_reduction/README.md) — reduction harness vs cheap rivals |
+| `crossing_pack/` | [crossing_pack/README.md](crossing_pack/README.md) — seed intake / crossing inquiry pack |
 
 ## 07 vs 11
 

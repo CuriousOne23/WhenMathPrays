@@ -1,7 +1,7 @@
 # 12_reduction — Summation (Goal v2)
 
 **Location (repo):** `thought_simulator/requirements_20/system_playground/testbenches/idob_structure_to_meaning/12_reduction/`  
-**Status:** Agreement locked 2026-08-31. Ready to code.  
+**Status:** Agreement locked 2026-08-31. Harness landed (`run_12_reduction.py`, `fixtures.yaml`, `score_sheet.yaml`, `rivals/*` including `one_space.py`).  
 **Does not claim:** world primitives, six-axis completeness, Path A as cognition, or a finished necessity theorem.
 
 ---
@@ -10,10 +10,10 @@
 
 IdOB is defined as a structure→meaning hop. Saying “IdOB needs a mapping” is architectural identity, not a test.
 
-**Goal v2:** On shared fixtures, show whether any *cheaper* operator (frame-fill, embedding nearest-prototype, dictionary lookup) can satisfy the **five-wall package** using only its native theory and the same raw inputs.
+**Goal v2:** On shared fixtures, show whether any *cheaper* operator (frame-fill, embedding nearest-prototype, dictionary lookup, plus contrast rival `one_space`) can satisfy the **five-wall package** using only its native theory and the same raw inputs.
 
 If a cheap rival passes all walls without contamination, IdOB shrinks toward naming.  
-If all three cheap rivals fail at least one wall, uncontaminated, we have a **first conviction**: those styles cannot do the package’s work. That is not “the package is necessary in nature.”
+If all three original cheap rivals fail at least one wall, uncontaminated, we have a **first conviction**: those styles cannot do the package’s work. That is not “the package is necessary in nature.” `one_space.py` is a fourth cheap rival (contrast probe) in the harness; it is not a fourth member of that first-conviction sentence.
 
 Coverage of ordinary speech is **out of scope** for this folder.
 
@@ -29,6 +29,7 @@ A comparison harness, not a new meaning theory.
 | `frame_fill` | Style: valid structure ⇒ licensed meaning. Always births if a card exists. |
 | `embed_nn` | Style: string → nearest prototype. Always births. |
 | `dict_lookup` | Style: utterance → fixed M. No structure. |
+| `one_space` | Fourth cheap rival (contrast): one-space probe; see `rivals/one_space.py`. |
 | `run_12_reduction.py` | Runs singles, pairs, and one cross case; scores walls; prints the verdict table. |
 
 Cheap rivals **must not** read:
@@ -234,26 +235,32 @@ Forbidden sentences in code comments and README:
 | `frame_fill` | Fail W2 (`S_unmapped` births). May fail W4. |
 | `embed_nn` | Fail W2. Fail W1 if CIE is folded into the embed string. |
 | `dict_lookup` | Fail W1 on `P_rock_cie` (both keys null). |
+| `one_space` | Contrast fourth cheap rival; may fail W1/W4 on `P_rock_cie` when stance is live. |
 
 Do not tune cheap rivals until they pass. That would contaminate the comparison by another route.
 
 ---
 
-## File list to implement
+## File list (harness landed)
 
 ```
 12_reduction/
-  README.md                 # this summation, shortened if needed
+  README.md
   fixtures.yaml
   score_sheet.yaml
   rivals/idob_native.py
   rivals/frame_fill.py
   rivals/embed_nn.py
   rivals/dict_lookup.py
+  rivals/one_space.py       # fourth cheap rival (contrast)
   run_12_reduction.py
 ```
 
 `run(case) -> packet_subset` is the only required function on each rival module.
+
+From this directory:
+
+    python run_12_reduction.py
 
 ---
 
