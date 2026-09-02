@@ -117,3 +117,4 @@
 2026-09-01 | Helm weekday inbox cycle | recorded EVENT decision importance + EVENT doc-change wording alignment from BOT_INBOX | write=no
 2026-09-02 | Harness charter | Path A IdOB Rulechecker; H-* walls; INV-M0 + 20.116.020; write=no; no Catalog/Flow/Terms | stamp=human
 2026-09-02 | Harness first report | H-001–H-008 pass (wall=none); INV-M0 + 20.116.020 hold on isolation bench | write=no
+2026-09-02 | Terms charter | Glossary / 20.700; T-* suggested edits only; empty terms: block; write=no; no Catalog/Flow | stamp=human
