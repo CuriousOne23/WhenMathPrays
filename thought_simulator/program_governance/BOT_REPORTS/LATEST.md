@@ -277,7 +277,10 @@ scope: 20.116.020 ownership + 20.116.030 name separations vs 20.700.010/.020/.03
 emit: C-* keep-in-place — sole-writer | cue-as-birth | name-collision | freeze-token
 cadence: on 20.116 / INV-M0 / 20.700 EVENT or human ask; else weekly C-000 | none
 write=no. Do not edit requirement or glossary files. Do not add missing glossary rows (T-004–T-009 stay human).
-status: stood up; awaiting first run (after Flow)
+status: first scan 2026-09-03 — C-001–C-003 (suggested Purpose/When/home only)
+C-001 | 20.700.010_primitives_glossary.md (TPU) | HLR-20.116.020-001; HLR-20.116.020-003; HLR-20.116.020-006 | class=sole-writer | issue=TPU Purpose/Why still teach a Path-A single-writer for TP/meaning construction, which erases 20.116.020 envelope walls | suggested Purpose=TPU is the Path-A correction/content-mutation writer; 20.116.020 sole-writers remain IdOB (`TP.idob`, `TP.semantic.importance`, Φ), CTP (`TP.metadata.cognitive_history[]`), MCB (`TP.next_context{}`) | owner=human | write=no
+C-002 | 20.700.010_primitives_glossary.md (OuBA) | HLR-20.116.020-001 | class=sole-writer | issue=OuBA Why still “uphold the single-writer invariant,” repeating the TPU-only token | suggested Why=OuBA writes the meaning-commit freeze; do not use single-writer to erase 20.116.020 envelope owners | owner=human | write=no
+C-003 | 20.700.030_reference_objects_glossary.md (COB) | 20.116.020 COB long-term ingest; 20.116.010 OuBA freeze row | class=sole-writer | issue=Purpose/Focus/Example still name CCR consume as COB’s ingest job; 20.116 sole COB meaning-ingest door is OuBA freeze | suggested Purpose=OuBA freeze is sole COB meaning-ingest; CCR and semantic-importance residues are copy-forward/cue (When already says this) | owner=human | write=no
 
 
 terms:
