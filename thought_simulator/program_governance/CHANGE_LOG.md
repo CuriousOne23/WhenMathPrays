@@ -125,4 +125,4 @@
 2026-09-03 | EVENT policy | Create Flow then run once; Hop tracker / 20.705; F-*; write=no | stamp=human
 2026-09-03 | EVENT policy | Create Catalog then run once; Field catalog walls / 20.116; C-*; write=no | stamp=human
 2026-09-03 | EVENT policy | Run Terms once; prefer T-000 | none; new ids T-042+; kind=view | stamp=human
-2026-09-03 | Flow created + first scan 2026-09-03 | awaiting F-* | write=no
+2026-09-03 | Flow created + first scan 2026-09-03 | F-001–F-003 | write=no
