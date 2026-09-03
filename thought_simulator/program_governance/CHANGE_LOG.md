@@ -127,3 +127,4 @@
 2026-09-03 | EVENT policy | Run Terms once; prefer T-000 | none; new ids T-042+; kind=view | stamp=human
 2026-09-03 | Flow created + first scan 2026-09-03 | F-001–F-003 | write=no
 2026-09-03 | Catalog created + first scan 2026-09-03 | C-001–C-003 | write=no
+2026-09-03 | Terms once (kind=view) | T-042–T-049 remainders (not T-000) | write=no
