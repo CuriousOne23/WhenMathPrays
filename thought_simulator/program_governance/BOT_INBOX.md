@@ -332,3 +332,74 @@ kind: law
 
 stamp: human
 
+---
+
+EVENT: policy
+
+when: 2026-09-03
+
+files: thought_simulator/program_governance/ (Helm bot roster); 20.705_patha_pathb_flow.md
+
+what: Create Grokbot Flow. Then run Flow once.
+
+why: Terms owns 20.700. Nothing currently emits suggested edits to the hop tracker itself.
+
+expect:
+  - Create agent=Flow | label=Hop tracker / 20.705 | GitHub label=ts-flow | write=no
+  - Scope ONLY: 20.705 §2 (Path A string), §3.6 (A→B + conversation), §5 (OpBeh→OBG→XlateR→XP). Ignore §1 “reference-only”, §3.1–3.5, §4+, chat residue.
+  - Job: for each hop in those sections, compare to the live primitive file named on that hop (basename must exist under requirements_20/). Classes: hop-order ≠ live When | dead basename | OuB≠OuBB | CTP≠20.145 | Path B start ≠ TPTB | KnC skips SSRGn | CST as one family not three hops unless 20.705 lists Core/MS/Mux | cue named as Φ birth.
+  - Emit F-001… or F-000 | none. Row: F-nnn | 20.705 section | live home file | class=… | issue=<one line> | suggested hop-line only | owner=human | write=no
+  - Do NOT edit 20.705, 20.700, 20.40, 20.116, playground, or shalls. Do NOT create Catalog/Terms/Harness work. Do NOT invent HLRs.
+  - After create, RUN Flow once. Append F-* to BOT_REPORTS/LATEST.md and today’s dated file. Stamp CHANGE_LOG “Flow created + first scan 2026-09-03”.
+  - Cadence later: on EVENT that touches 20.705 or human ask; else weekly F-000 | none. Do not schedule a second run from this EVENT.
+
+kind: law-tracker
+
+stamp: human
+
+---
+
+EVENT: policy
+
+when: 2026-09-03
+
+files: thought_simulator/program_governance/; 20.116.020_ownership_rw.md; 20.116.030_name_separations.md; 20.700.010–.050
+
+what: Create Grokbot Catalog. Then run Catalog once.
+
+why: Need a 20.116-wall scorer so Terms is not the only reader of sole-writer / cue≠Φ.
+
+expect:
+  - Create agent=Catalog | label=Field catalog walls / 20.116 | GitHub label=ts-catalog | write=no
+  - Scope: 20.116.020 ownership table + 20.116.030 name separations, scored against 20.700.010/.020/.030/.050 entries that name those fields. Also 20.12.010 INV-M0 cut (Φ vs E) as a named law, not a new paper.
+  - Job: emit C-* when glossary or a cited home: (1) names a non-IdOB writer for TP.semantic.importance or Φ/stand-in M (2) treats IE/utterance/FFTM/richness as meaning-birth (3) treats ready_for_ouba as OuBA freeze (4) assigns USP to COB (CST-Mux wall) (5) token collision with 20.116 path. Keep-in-place=yes. Do not delete headings.
+  - Emit C-001… or C-000 | none. Row: C-nnn | 20.700.xxx or home file | 20.116 shall or INV-M0 id | class=sole-writer|cue-as-birth|name-collision|freeze-token | issue=<one line> | suggested Purpose/When/home line only | owner=human | write=no
+  - Do NOT edit any requirement or glossary file. Do NOT create Flow work. Do NOT add missing glossary rows (T-004–T-009 stay human).
+  - After create, RUN Catalog once. Append C-* to LATEST.md and today’s dated file. Stamp CHANGE_LOG “Catalog created + first scan 2026-09-03”.
+  - Cadence later: on EVENT that touches 20.116 / INV-M0 / 20.700 or human ask; else weekly C-000 | none. Do not schedule a second run from this EVENT.
+
+kind: law-tracker
+
+stamp: human
+
+---
+
+EVENT: policy
+
+when: 2026-09-03
+
+files: 20.700 family on main (post T-028–T-041 merge)
+
+what: Run Terms once. Do not create a new bot.
+
+why: Glossary punch list is on main; need T-000 | none or leftovers only.
+
+expect:
+  - Do not re-emit T-001–T-041 unless the live heading still mismatches the already-applied When/home/Purpose.
+  - Prefer T-000 | none. New ids start at T-042.
+  - write=no. Do not edit files. Do not run Flow or Catalog from this EVENT.
+
+kind: view
+
+stamp: human
+
