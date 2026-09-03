@@ -1,5 +1,5 @@
 date: 2026-09-03
-events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human); Terms charter 2026-09-02 (stamp=human); EVENT policy Terms charter amend 2026-09-02 (stamp=human); Terms re-run cadence#4 2026-09-02 (stamp=human); EVENT policy Flow create+run 2026-09-03 (stamp=human); EVENT policy Catalog create+run 2026-09-03 (stamp=human); EVENT policy Terms once 2026-09-03 (stamp=human, kind=view)
+events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human); Terms charter 2026-09-02 (stamp=human); EVENT policy Terms charter amend 2026-09-02 (stamp=human); Terms re-run cadence#4 2026-09-02 (stamp=human); EVENT policy Flow create+run 2026-09-03 (stamp=human); EVENT policy Catalog create+run 2026-09-03 (stamp=human); EVENT policy Terms once 2026-09-03 (stamp=human, kind=view); EVENT doc-change F-001–F-003 applied 2026-09-03 (stamp=human)
 flow-tracker = 20.705 §2 and §3.6
 field-name authority = 20.116 series
 20.40 v1.3; freeze = HLR-20.40-019; 003/007/008 = SOB–SmOB only.
@@ -13,6 +13,7 @@ decision: IdOB-prm is the sole producer of TP.semantic.importance. SOB/SROB/SmOB
 expect (importance 2026-08-31): Meaning: mark global-importance ownership as IdOB-prm only. Local envelope importance on SOB/SROB/SmOB/CnOB is not a write of TP.semantic.importance. Route: do not route on TP.semantic.importance. Score structure fields only. Matrix: do not add a new hop row for importance. Inventory only when the wording PR lands. Helm: add this EVENT to CHANGE_LOG. In LATEST.md note “TP.semantic.importance writer = IdOB-prm only; routing = structure fields.” Do not edit requirement files. Do not create Bots or writers.
 expect (wording alignment 2026-08-31, kind=view): Helm: add this EVENT to CHANGE_LOG. In LATEST.md note “Path-A wording alignment in one off-main PR; write=no on main requirement files until merge.” write=no on main copies of the files listed above. Do not land edits on main from bots. Score 20.705 §2 verbatim. Do not treat a shortened chain (e.g. CTP→RB→RTU→IdOB→OuBA→COB/CST) as law. Do not create Bots. Do not start a 20.705 cleanup. Do not declare Path B inactive.
 scoring: 20.705 §2 is the Path A string as written. Score R-002 / M-009 / M-011 against §2. Do not replace §2 with a shorter chain. write=no.
+F-001–F-003 applied 2026-09-03 stamp=human.
 spine:
 
 S1 | files=20.31, 20.15, 20.206 | shalls=HLR-20.206-001, HLR-20.206-002, HLR-20.206-003, VR-6 | issue=open: 20.206 wording, not a new door | why it matters=B consume-OuBA vs reject-meaning still a 20.206 wording conflict | owner=human | write=no
@@ -265,10 +266,16 @@ scope: 20.705 §2 / §3.6 / §5 only. Ignore §1 “reference-only”, §3.1–3
 emit: F-* suggested hop-line only — hop-order ≠ live When | dead basename | OuB≠OuBB | CTP≠20.145 | Path B start ≠ TPTB | KnC skips SSRGn | CST family vs Core/MS/Mux | cue named as Φ birth
 cadence: on 20.705 EVENT or human ask; else weekly F-000 | none
 write=no. Do not edit 20.705, 20.700, 20.40, 20.116, playground, or shalls. Do not invent HLRs.
-status: first scan 2026-09-03 — F-001–F-003 (suggested hop-line only)
+status: F-001–F-003 applied 2026-09-03 stamp=human; closed; next emit F-004 or F-000 | none
 F-001 | §3.6 | (missing) | class=dead basename | issue=validation hop COB→CST names 20.32.010_cst_requirements.md which is not in requirements_20/ | [COB →](20.32_cob_requirements.md) [CST-Core](20.32.010.010_cst-core.md) ; [COB →](20.32_cob_requirements.md) [CST-MS](20.32.010.020_cst-ms.md) | owner=human | write=no
+F-001 | §3.6 | (missing) | class=dead basename | issue=validation hop COB→CST names 20.32.010_cst_requirements.md which is not in requirements_20/ | [COB →](20.32_cob_requirements.md) [CST-Core](20.32.010.010_cst-core.md) ; [COB →](20.32_cob_requirements.md) [CST-MS](20.32.010.020_cst-ms.md) | owner=human | write=no
+ closed 2026-09-03 stamp=human | applied on main. Do not re-emit. write=no
 F-002 | §3.6 | (missing) | class=dead basename | issue=validation hop CST→COB names 20.32.010_cst_requirements.md which is not in requirements_20/ | [CST-Core →](20.32.010.010_cst-core.md) [COB](20.32_cob_requirements.md) ; [CST-MS →](20.32.010.020_cst-ms.md) [COB](20.32_cob_requirements.md) | owner=human | write=no
+F-002 | §3.6 | (missing) | class=dead basename | issue=validation hop CST→COB names 20.32.010_cst_requirements.md which is not in requirements_20/ | [CST-Core →](20.32.010.010_cst-core.md) [COB](20.32_cob_requirements.md) ; [CST-MS →](20.32.010.020_cst-ms.md) [COB](20.32_cob_requirements.md) | owner=human | write=no
+ closed 2026-09-03 stamp=human | applied on main. Do not re-emit. write=no
 F-003 | §5.2 | 20.168_rpu_prm.md | class=hop-order ≠ live When | issue=Path-B execution hop RPU→OuBB skips ReB; live RPU When is after RPlan and before ReB, and OuBB sits after ReB | XP → LI → REx → RPlan → RPU → ReB → OuBB | owner=human | write=no
+F-003 | §5.2 | 20.168_rpu_prm.md | class=hop-order ≠ live When | issue=Path-B execution hop RPU→OuBB skips ReB; live RPU When is after RPlan and before ReB, and OuBB sits after ReB | XP → LI → REx → RPlan → RPU → ReB → OuBB | owner=human | write=no
+ closed 2026-09-03 stamp=human | applied on main. Do not re-emit. write=no
 
 catalog:
 
