@@ -128,3 +128,4 @@
 2026-09-03 | Flow created + first scan 2026-09-03 | F-001–F-003 | write=no
 2026-09-03 | Catalog created + first scan 2026-09-03 | C-001–C-003 | write=no
 2026-09-03 | Terms once (kind=view) | T-042–T-049 remainders (not T-000) | write=no
+2026-09-03 | EVENT doc-change | F-001–F-003 applied 2026-09-03 stamp=human | write=no
