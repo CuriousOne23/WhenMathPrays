@@ -425,3 +425,29 @@ kind: law
 
 stamp: human
 
+---
+
+EVENT: policy
+
+when: 2026-09-03
+
+files: thought_simulator/program_governance/BOT_REPORTS/
+
+what: Create Grokbot Inventory. Then run Inventory once.
+
+why: Need a keep / delete / gitignore decision list from repo size, not another law scorer.
+
+expect:
+  - Create agent=Inventory
+  - Short label: Repo size / top-100 keep–delete–gitignore
+  - GitHub label=ts-inventory
+  - Description as specified; write=no on requirements/glossary/playground/.gitignore
+  - May overwrite BOT_REPORTS/INVENTORY.md and inventory/YYYY-MM-DD.md; one pointer line in LATEST.md
+  - After create, RUN Inventory once. Stamp CHANGE_LOG "Inventory created + first scan 2026-09-03"
+  - Cadence later: on human ask, or weekly. Not on 20.700 / 20.705 / 20.116 EVENTs
+  - Do not run Terms, Flow, Catalog, or Harness from this EVENT
+
+kind: view
+
+stamp: human
+
