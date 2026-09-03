@@ -122,3 +122,7 @@
 2026-09-02 | EVENT policy | Terms: score 20.700.xxx vs home shalls; obsolescence stale|NA|superseded|empty; keep-in-place; write=no | stamp=human
 2026-09-02 | Terms scan (amended charter) | T-010–T-027 discrepancy/stale/empty/missing; keep-in-place; write=no
 2026-09-02 | Terms re-run (cadence #4) | T-028–T-041 new distances only; write=no
+2026-09-03 | EVENT policy | Create Flow then run once; Hop tracker / 20.705; F-*; write=no | stamp=human
+2026-09-03 | EVENT policy | Create Catalog then run once; Field catalog walls / 20.116; C-*; write=no | stamp=human
+2026-09-03 | EVENT policy | Run Terms once; prefer T-000 | none; new ids T-042+; kind=view | stamp=human
+2026-09-03 | Flow created + first scan 2026-09-03 | awaiting F-* | write=no
