@@ -265,7 +265,10 @@ scope: 20.705 §2 / §3.6 / §5 only. Ignore §1 “reference-only”, §3.1–3
 emit: F-* suggested hop-line only — hop-order ≠ live When | dead basename | OuB≠OuBB | CTP≠20.145 | Path B start ≠ TPTB | KnC skips SSRGn | CST family vs Core/MS/Mux | cue named as Φ birth
 cadence: on 20.705 EVENT or human ask; else weekly F-000 | none
 write=no. Do not edit 20.705, 20.700, 20.40, 20.116, playground, or shalls. Do not invent HLRs.
-status: stood up; first scan in flight
+status: first scan 2026-09-03 — F-001–F-003 (suggested hop-line only)
+F-001 | §3.6 | (missing) | class=dead basename | issue=validation hop COB→CST names 20.32.010_cst_requirements.md which is not in requirements_20/ | [COB →](20.32_cob_requirements.md) [CST-Core](20.32.010.010_cst-core.md) ; [COB →](20.32_cob_requirements.md) [CST-MS](20.32.010.020_cst-ms.md) | owner=human | write=no
+F-002 | §3.6 | (missing) | class=dead basename | issue=validation hop CST→COB names 20.32.010_cst_requirements.md which is not in requirements_20/ | [CST-Core →](20.32.010.010_cst-core.md) [COB](20.32_cob_requirements.md) ; [CST-MS →](20.32.010.020_cst-ms.md) [COB](20.32_cob_requirements.md) | owner=human | write=no
+F-003 | §5.2 | 20.168_rpu_prm.md | class=hop-order ≠ live When | issue=Path-B execution hop RPU→OuBB skips ReB; live RPU When is after RPlan and before ReB, and OuBB sits after ReB | XP → LI → REx → RPlan → RPU → ReB → OuBB | owner=human | write=no
 
 catalog:
 
