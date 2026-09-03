@@ -151,7 +151,6 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - **complete** 2026-06-18
 
 ## Reference Documents
-- [20.190_glossary.md](20.190_glossary.md)
 - [20.700_master_glossary.md](20.700_master_glossary.md)
 - [20.700.010_primitives_glossary.md](20.700.010_primitives_glossary.md)
 - [20.700.020_processes_glossary.md](20.700.020_processes_glossary.md)
