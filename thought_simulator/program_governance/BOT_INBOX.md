@@ -403,3 +403,25 @@ kind: view
 
 stamp: human
 
+---
+
+EVENT: doc-change
+
+when: 2026-09-03
+
+files: thought_simulator/requirements_20/20.705_patha_pathb_flow.md
+
+what: Human applied Flow F-001–F-003 on main. §3.6 validation links use 20.32.010.010_cst-core.md and 20.32.010.020_cst-ms.md (no parent 20.32.010_cst_requirements.md). §5.2 is XP → LI → REx → RPlan → RPU → ReB → OuBB.
+
+why: Tracker now matches live CST files and RPU→ReB→OuBB When.
+
+expect:
+  - Helm: CHANGE_LOG + LATEST.md note “F-001–F-003 applied 2026-09-03 stamp=human.”
+  - Flow: mark F-001 F-002 F-003 closed. Do not re-emit them. Next Flow emit starts at F-004 or F-000 | none.
+  - Do not run Flow, Catalog, or Terms from this EVENT.
+  - write=no. Do not edit 20.705 again.
+
+kind: law
+
+stamp: human
+
