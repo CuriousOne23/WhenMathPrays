@@ -51,41 +51,31 @@ This companion document provides a **practical workflow guide** for engineers wh
 ```
 dictionaries/
 └── path_a/
-    ├── dictionary_conversion_pipeline/
+    ├── conversion_pipeline/
     │   ├── yaml_writer.py
     │   ├── json_gzip_writer.py
-    │   ├── ts_meaning_dct_path_a.py
     │   ├── batch_converter.py
     │   ├── ts_entry_builder.py
     │   ├── ... (other pipeline modules)
     │   └── wordnet_raw/
-    │       ├── index.noun
-    │       ├── index.verb
-    │       ├── index.adj
-    │       ├── index.adv
-    │       ├── data.noun
-    │       ├── data.verb
-    │       ├── data.adj
-    │       └── data.adv
+    │       ├── README.md                 # tracked
+    │       ├── *.exc, frames.vrb, ...    # tracked helpers
+    │       ├── data.noun / data.verb /   # LOCAL-ONLY (gitignored)
+    │       │   data.adj / data.adv
+    │       └── index.noun / index.verb / # LOCAL-ONLY (gitignored)
+    │           index.adj / index.sense
     │
-    ├── dictionaries_dev/
-    │   ├── meaning_dictionary_dev_01.json.gz
-    │   ├── meaning_dictionary_dev_02.json.gz
-    │   ├── meaning_dictionary_dev_03.json.gz
-    │   ├── meaning_dictionary_dev_04.json.gz
-    │   ├── meaning_dictionary_dev_05.json.gz
-    │   ├── meaning_dictionary_dev_06.json.gz
-    │   └── manifest.json
+    ├── dictionaries_dev/                 # tracked: README, tools/, modify_entries.json
+    │   └── (full *.json.gz release chunks are LOCAL-ONLY — not on GitHub)
     │
-    └── dictionaries_runtime/
-        ├── ts_meaning_dictionary_01.json.gz
-        ├── ts_meaning_dictionary_02.json.gz
-        ├── ts_meaning_dictionary_03.json.gz
-        ├── ts_meaning_dictionary_04.json.gz
-        ├── ts_meaning_dictionary_05.json.gz
-        ├── ts_meaning_dictionary_06.json.gz
-        └── manifest.json
+    ├── meaning_dictionary/dct_rev00/     # tracked: README, manifest, examples, tools/
+    │   └── (full *.json.gz meaning chunks are LOCAL-ONLY — not on GitHub)
+    │
+    └── runtime_dictionary/dct_rev00/     # tracked: README, manifest.json
+        └── (full *.json.gz runtime chunks are LOCAL-ONLY — not on GitHub)
 ```
+
+**Status (paths only):** Full WordNet `data.*` / `index.*` dumps stay local on the developer machine (see `wordnet_raw/README.md`). Full `*.json.gz` dictionary archives under Path A are gitignored and are not on GitHub. Tracked trees keep READMEs, manifests, tools, and helpers — not a committed gzip dump tree.
 
 Each dictionary version is **self‑contained**.  
 No duplicate versions of the same file are allowed.
@@ -282,36 +272,37 @@ Located in:
 wordnet_raw/
 ```
 
-Required:
+Required locally (gitignored — not on GitHub; fetch per `wordnet_raw/README.md`):
 
 - `index.noun`  
 - `index.verb`  
 - `index.adj`  
-- `index.adv`  
+- `index.adv` / `index.sense`  
 - `data.noun`  
 - `data.verb`  
 - `data.adj`  
 - `data.adv`
 
+Still tracked in `wordnet_raw/`: `README.md`, `*.exc`, `frames.vrb`, `sents.vrb`, `sentidx.vrb`.
+
 ---
 
 ## Output Files
 
-Developer dictionary (6 chunks):
+Developer / meaning dictionary chunks (local-only `*.json.gz`, not on GitHub):
 
 ```
-dictionaries_dev/meaning_dictionary_dev_01.json.gz
-...
-dictionaries_dev/meaning_dictionary_dev_06.json.gz
+meaning_dictionary/dct_rev00/meaning_dictionary_dev_XX.json.gz   # LOCAL-ONLY
+dictionaries_dev/…                                               # workspace; no committed gzip tree
 ```
 
-Runtime dictionary (6 chunks):
+Runtime dictionary chunks (local-only `*.json.gz`, not on GitHub):
 
 ```
-dictionaries_runtime/ts_meaning_dictionary_01.json.gz
-...
-dictionaries_runtime/ts_meaning_dictionary_06.json.gz
+runtime_dictionary/dct_rev00/ts_meaning_dictionary_XX.json.gz    # LOCAL-ONLY
 ```
+
+Tracked alongside those folders (when present): `README.md`, `manifest.json`, tools/helpers — not the full gzip archives.
 
 Manifest:
 

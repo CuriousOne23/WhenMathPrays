@@ -22,34 +22,33 @@ These entries are stored in **chunked JSON‑GZIP files** and organized into **v
 ```
 dictionaries_dev/
 │
-├── dct_rev00/              # Release directory (version 00)
-│   ├── meaning_dictionary_dev_01.json.gz
-│   ├── meaning_dictionary_dev_02.json.gz
-│   ├── ...
-│   └── manifest.json
+├── README.md
+├── modify_entries.json     # Example input file for modify_dev_dct.py (tracked)
 │
-├── tools/                  # Developer dictionary tools
-│   ├── inspect_chunk.py
-│   ├── inspect_chunk_setup.yaml
-│   ├── modify_dev_dct.py
-│   ├── modify_dev_dct_setup.yaml
-│   ├── output/             # New chunks + manifest_revNN.json written here
-│   └── insp_chnk_log/      # Logs for inspect_chunk.py
-│
-└── modify_entries.json     # Example input file for modify_dev_dct.py
+└── tools/                  # Developer dictionary tools (tracked)
+    ├── inspect_chunk.py
+    ├── inspect_chunk_setup.yaml
+    ├── inspect_chunk_users_guide.md
+    ├── modify_dev_dct.py
+    ├── modify_dev_dct_setup.yaml
+    ├── modify_development_dct_userguide.md
+    ├── output/             # New chunks + manifest_revNN.json written here (local)
+    └── insp_chnk_log/      # Logs for inspect_chunk.py (local)
 ```
 
-This structure is visible in your GitHub tree   [Current page](citation-section://1146972602/2).
+**Status (paths only):** On GitHub this folder tracks `README.md`, `modify_entries.json`, and `tools/` only. There is **no** committed `dct_rev00/*.json.gz` tree here. Full developer `*.json.gz` chunks (and any local release folders that hold them) stay on the developer machine and are not GitHub-visible. Meaning-dictionary releases that *are* tracked live under `../meaning_dictionary/dct_rev00/` (README / manifest / examples / tools; gzips still local-only).
 
 ---
 
 # 🔹 **Release Directories (`dct_revNN/`)**
 
-Each release directory contains:
+When present **locally**, a release directory may contain:
 
-- a complete set of developer dictionary chunks  
+- a complete set of developer dictionary chunks (`*.json.gz` — local-only, not on GitHub)  
 - a manifest (`manifest.json` or `manifest_revNN.json`)  
 - optional user‑provided files (e.g., `modify_entries.json`)  
+
+Tracked Path A meaning releases (README / manifest / examples / tools; gzips still local-only) live under `../meaning_dictionary/dct_revNN/`. This `dictionaries_dev/` workspace itself does not publish a GitHub-visible gzip tree.
 
 Release directories are **immutable**: tools never write into them.  
 New revisions are written into `tools/output/`, and users manually move them into the appropriate release directory.
@@ -208,4 +207,3 @@ It is the central location for all developer‑layer dictionary work in TS Path�
 - `README.md` (parent directory) — system architecture overview  
 
 ---
-
