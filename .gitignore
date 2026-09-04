@@ -92,6 +92,7 @@ thought_simulator/30_verification/30.tb/**/*.png
 thought_simulator/30_verification/30.tb/**/artifacts/
 
 # Local full WordNet dump - fetch per wordnet_raw/README.md
+**/*.full
 thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/conversion_pipeline/wordnet_raw/data.*
 thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/conversion_pipeline/wordnet_raw/index.*
 thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/conversion_pipeline/wordnet_raw/*.full
