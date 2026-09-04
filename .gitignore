@@ -90,3 +90,17 @@ thought_simulator/30_verification/30.tb/**/*.json
 thought_simulator/30_verification/30.tb/**/*.log
 thought_simulator/30_verification/30.tb/**/*.png
 thought_simulator/30_verification/30.tb/**/artifacts/
+
+# Local full WordNet dump - fetch per wordnet_raw/README.md
+thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/conversion_pipeline/wordnet_raw/data.*
+thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/conversion_pipeline/wordnet_raw/index.*
+thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/conversion_pipeline/wordnet_raw/*.full
+
+# Local full meaning dictionaries - samples may be added later under a different name
+thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/meaning_dictionary/**/*.json.gz
+thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/runtime_dictionary/**/*.json.gz
+thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/**/*.full
+
+# Docs images not kept in GitHub
+docs/assets/**
+docs/pictures/**
