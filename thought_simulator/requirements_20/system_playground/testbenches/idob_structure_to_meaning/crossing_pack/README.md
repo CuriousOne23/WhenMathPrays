@@ -27,33 +27,33 @@ The current README lists roles. It does not say **each `.py` reads X because …
 ### **2.1 Inputs and outputs per program**
 
 #### place.py
-Reads:
-- seed/placements.yaml — gold answer key (exact utterance match)
-- seed/hole_ledger.yaml — hole rows for gold ids (e.g. U03)
-- seed/about_index.yaml, seed/talk_families.yaml — loaded if the code loads them; say so if unused for matching
-Writes: nothing
-Why no write: placement is a return value only; gold stays the fixture
-Look for: returned dict + hole list on the terminal if you print
+- Reads:
+    - seed/placements.yaml — gold answer key (exact utterance match)
+    - seed/hole_ledger.yaml — hole rows for gold ids (e.g. U03)
+    - seed/about_index.yaml, seed/talk_families.yaml — loaded if the code loads them; say so if unused for matching
+- Writes: nothing
+- Why no write: placement is a return value only; gold stays the fixture
+- Look for: returned dict + hole list on the terminal if you print
 
 #### probe_log.py
-Reads: whatever place() reads (Seed YAML via place.py)
-Writes: logs/probe.log (default) or log_path you pass
-Why write: Stop 1 diary so tally() can count gold vs unseen
-Does not write: Seed YAML, live cards
-Look for: one JSON line per probe(); tally dict on terminal
+- Reads: whatever place() reads (Seed YAML via place.py)
+- Writes: logs/probe.log (default) or log_path you pass
+- Why write: Stop 1 diary so tally() can count gold vs unseen
+    - Does not write: Seed YAML, live cards
+- Look for: one JSON line per probe(); tally dict on terminal
 
 #### suggest_tags.py
-Reads: place() / Seed YAML; allow-lists in the module (must match Seed about/family ids — if the code does not open those YAML files, say “allow-lists copied in suggest_tags.py, not read live”)
-Writes: logs/suggest.log (default) or log_path
-Why write: Stop 2 candidate diary; local .log not committed
-Does not write: placements.yaml, cards, Door Table, $M$
-Look for: suggested_about_id / suggested_family_id / needs_review / card_id None
+- Reads: place() / Seed YAML; allow-lists in the module (must match Seed about/family ids — if the code does not open those YAML files, say “allow-lists copied in suggest_tags.py, not read live”)
+- Writes: logs/suggest.log (default) or log_path
+- Why write: Stop 2 candidate diary; local .log not committed
+    - Does not write: placements.yaml, cards, Door Table, $M$
+- Look for: suggested_about_id / suggested_family_id / needs_review / card_id None
 
 #### test_*.py
-Reads: the module under test + Seed YAML through place/suggest
-Writes: temp logs only (pytest tmp_path)
-Does not write: logs/probe.log, logs/suggest.log, seed/*
-Look for: pytest “passed”, not a diary file
+- Reads: the module under test + Seed YAML through place/suggest
+- Writes: temp logs only (pytest tmp_path)
+- Does not write: logs/probe.log, logs/suggest.log, seed/*
+- Look for: pytest “passed”, not a diary file
 
 utterance → place.py (read seed/) → probe_log.py (write probe.log) and/or suggest_tags.py (write suggest.log)
 
