@@ -3,6 +3,8 @@
 The **runtime dictionary** is the compact, TS‑efficient version of the developer dictionary.  
 It contains only the fields required by the TS runtime engine and is optimized for:
 
+Full meaning-dictionary `.json.gz` archives are local-only in this repo; any committed examples should use a different sample-oriented filename pattern.
+
 - fast loading  
 - deterministic routing  
 - minimal memory footprint  

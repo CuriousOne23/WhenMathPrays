@@ -4,6 +4,8 @@
 The **dictionary_conversion_pipeline** is the offline pre‑work system that converts **raw WordNet data** into the **TS Path A Meaning Dictionary**.  
 This pipeline performs deterministic semantic preprocessing to produce:
 
+Full meaning-dictionary `.json.gz` archives are local-only in this repo, and any committed examples should use a different sample-oriented filename pattern.
+
 - primitives  
 - invariants  
 - cue envelopes  
