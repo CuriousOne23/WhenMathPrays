@@ -123,7 +123,6 @@ Captures speculative discussion and future research directions.
 
 - **[FUNDING.md](../FUNDING.md)** — Funding and sponsorship information  
 - **[LICENSE.md](../LICENSE.md)** — Project license file  
-- **[file_list.md](file_list.md)** — Complete file inventory
 
 ---
 
