@@ -40,7 +40,7 @@ For **step‑by‑step instructions** on:
 - running `ts_meaning_dct_path_a.py`  
 - understanding input/output file locations  
 - knowing what you must modify and must not modify  
-- manually moving runtime files into `dictionaries_runtime/`
+- manually moving runtime files into `runtime_dictionary/`
 
 This companion document provides a **practical workflow guide** for engineers who need to regenerate or version dictionaries. It complements this README by focusing on **user actions**, while this README focuses on **system architecture**.
 
@@ -233,7 +233,7 @@ This is the file you run to produce the developer dictionary.
 ---
 
 ### **12. `ts_meaning_dct_path_a.py`**
-see dictionaries_runtime/tools directory
+see runtime_dictionary/tools directory
 
 ---
 

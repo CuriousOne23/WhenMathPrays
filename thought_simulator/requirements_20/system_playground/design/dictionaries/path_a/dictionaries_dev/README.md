@@ -203,7 +203,6 @@ It is the central location for all developer‑layer dictionary work in TS Path�
 
 - `inspect_chunk_users_guide.md` — how to inspect developer chunks  
 - `modify_development_dct_userguide.md` — how to modify developer chunks  
-- `how_to_gen_change_dct.md` — dictionary generation workflow  
 - `README.md` (parent directory) — system architecture overview  
 
 ---

@@ -100,6 +100,7 @@ utterance → place.py (read seed/) → probe_log.py (write probe.log) and/or su
 | `seed/talk_families.yaml` | Allowed family ids. |
 | `seed/hole_ledger.yaml` | U03 open hole. |
 | `logs/probe.log` | Local Stop 1 diary (`.log` not committed). |
+| `logs/probe.jsonl` | Committed sample rows present; running diary is `probe.log` (local). |
 | `logs/suggest.log` | Local Stop 2 diary (`.log` not committed). |
 | `proposals/` | Empty; Card Proposer later. |
 | `stopx_def_examples.md` | Command meaning and example output decode. |
