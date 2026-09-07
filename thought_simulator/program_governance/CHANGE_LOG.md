@@ -130,3 +130,4 @@
 2026-09-03 | Terms once (kind=view) | T-042–T-049 remainders (not T-000) | write=no
 2026-09-03 | EVENT doc-change | F-001–F-003 applied 2026-09-03 stamp=human | write=no
 2026-09-03 | Inventory created + first scan 2026-09-03 | INVENTORY.md top-100; keep=72 gitignore=28 delete=0 | write=no
+2026-09-07 | Flow weekly safety net | F-000 | none | write=no
