@@ -133,3 +133,4 @@
 2026-09-07 | Flow weekly safety net | F-000 | none | write=no
 2026-09-07 | Terms weekly safety net | T-050–T-051 (XP home 20.205; OuBB When needs ReB) | write=no
 2026-09-14 | Catalog weekly safety net | C-000 | none (C-001–C-003 still open) | write=no
+2026-09-14 | Terms weekly safety net | T-052–T-054 (MCB name; TPTB/TPSF headings; RSG When needs ReB) | write=no
