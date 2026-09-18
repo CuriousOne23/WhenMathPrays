@@ -147,4 +147,4 @@ Look for: all tests passed. Pytest output is a test report, not the intake diary
 
 ## 6. Won't
 
-No promote, no Door Table, no `$M$`, no new family/about ids from these scripts.
+No promote, no Door Table, no $M$, no new family/about ids from these scripts.
