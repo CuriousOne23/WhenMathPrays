@@ -2,7 +2,7 @@
 
 **Revision:** Slide-01 (learning instrument, not Path A product harness)
 **Location:** `testbenches/idob_structure_to_meaning/`
-**Date:** 2026-08-26; spine papers 2026-08-27; Slides 09–11 2026-08-27; reading path + crossing_pack note 2026-09-18
+**Date:** 2026-08-26; spine papers 2026-08-27; Slides 09–11 2026-08-27; reading path + crossing_pack note 2026-09-18; slide-map expect column 2026-09-18
 
 ## Purpose
 
@@ -13,6 +13,8 @@ It does not claim that IdOB is cognition.
 It asks the duck that can be answered: does this machine make the structure-to-meaning crossing visible?
 
 Walk the numbered slides in order. Each slide teaches one named part of the present IdOB packet. Python and YAML are filled for this learning revision.
+
+This file is the **outline**: purpose, reading order, how to run the driver, and one-line expect / not-that per slide. Formulas, worked numbers, and must-print lists live on the slide README.
 
 ## Understanding path (read before or beside the slides)
 
@@ -45,6 +47,7 @@ Inside `run_ts_struc2mn.py`:
 
 - `RUN_01_STRUCTURE` … `RUN_07_CROSSING`, `RUN_09_ASSIGN`, `RUN_10_RESIDUE_EXPAND`, `RUN_11_IDOB_CORE` turn each lesson on or off.
   Set a flag to `False`, or comment that `if RUN_…` block, to skip a lesson.
+- If several flags are True, `main()` runs them in slide order (01 → 02 → … → 11). 08 has no flag: it is a checklist.
 - Variables passed into a lesson (`card_id`, `group_id`, `cie_id`, `clip_to_unit`, `utterance`, `packs_loaded`)
   are defined and commented at the top of `run_ts_struc2mn.py`.
   Change them there. Each lesson prints what that slide is for.
@@ -52,15 +55,22 @@ Inside `run_ts_struc2mn.py`:
 You can still run a single slide file directly, e.g.
 
     python 01_structure/run_01_inspect_structure.py
+    python 03_map_lookup/run_03_lookup.py
+    python 04_ranking/run_04_rank.py
+    python 05_cie/run_05_modulate.py
+    python 06_cycle_and_delta/run_06_cycle.py
+    python 07_idob_slide/run_07_idob_slide.py
     python 09_structure_assignment/run_09_assign.py
     python 10_residue_expand/run_10_residue_expand.py
     python 11_idob_core/run_11_idob_core.py
     python 11_idob_core/tests_walls.py
 
+08 is read-only: [08_witness/checklist.md](08_witness/checklist.md).
+
 ## How to walk
 
 1. Read [papers/the_fold.md](papers/the_fold.md), then the theory paper, then the construct card for the slide you will run.
-2. Read the slide README.md.
+2. Read the slide README.md (expect / not-that / formula).
 3. Open the YAML. Field names matter more than values.
 4. Run via run_ts_struc2mn.py, enabling one lesson if you want to go slowly.
 5. Do not skip ahead to 07 until 01-06 each print one thing and refuse to print another.
@@ -79,20 +89,22 @@ You can still run a single slide file directly, e.g.
 
 ## Slide map
 
-| Slide | Folder | You gain a feel for |
-|------:|--------|---------------------|
-| 00 | `00_contract/` | Names and the contract wall |
-| 01 | `01_structure/` | Structure as geometry; no meaning floats |
-| 02 | `02_meaning_groups/` | Meaning as six named numbers on a group |
-| 03 | `03_map_lookup/` | Structure -> which groups may compete |
-| 04 | `04_ranking/` | Order among candidates only |
-| 05 | `05_cie/` | Identity moves M; structure stays fixed |
-| 06 | `06_cycle_and_delta/` | delta_h, budget, named freeze |
-| 07 | `07_idob_slide/` | Teaching wire of 01–06 on official field names |
-| 08 | `08_witness/` | Can you name every field and its job? |
-| 09 | `09_structure_assignment/` | Utterance + packs → six IDs or miss |
-| 10 | `10_residue_expand/` | Leftover → which file a human expands |
-| 11 | `11_idob_core/` | One-hop `idob.py` kernel + wall tests |
+One line of expect / not-that here. Worked scores and formulas on the slide README.
+
+| Slide | Folder | For | Expect | Not that |
+|------:|--------|-----|--------|----------|
+| 00 | `00_contract/` | Names and the contract wall | Field list matches the packet | A new geometry |
+| 01 | `01_structure/` | Structure as geometry; no meaning floats | Six IDs + `structural_key` | `physicality`…`spatiality` |
+| 02 | `02_meaning_groups/` | Meaning as six named numbers on a group | Prototype vector on a `group_id` | Structure IDs rewritten as floats |
+| 03 | `03_map_lookup/` | Structure → which groups may compete | `candidate_group_ids` (set). Empty is legal | `final_rank_order` |
+| 04 | `04_ranking/` | Order among candidates only | Winner-first list; 3001 wins `S_rock_burst` | A group the map forbade |
+| 05 | `05_cie/` | Identity moves M; structure stays fixed | `M' = M + αI`; key unchanged | New `structural_key` or new map row |
+| 06 | `06_cycle_and_delta/` | delta_h, budget, named freeze | Cycle, both deltas, `resolution_status` from the halt | Calling a budget halt `stable` |
+| 07 | `07_idob_slide/` | Teaching wire of 01–06 | One packet on official names | Truth / belief / OuBA modules |
+| 08 | `08_witness/` | Can you name every field and its job? | Checklist answers from a log | New Python |
+| 09 | `09_structure_assignment/` | Utterance + packs → six IDs or miss | `assigned` / `partial` / `unassigned`; packs printed | Meaning floats; key on a miss |
+| 10 | `10_residue_expand/` | Leftover → which file a human expands | `after_status`, `expand_target`, `next_key` or null | Invented next six-tuple; RB `firing_order` |
+| 11 | `11_idob_core/` | One-hop `idob.py` kernel + wall tests | `run_hop` packet; walls pass | Path A TR / CTP / RB; 7-feature meaning table |
 
 Sibling folders (not on the `run_ts_struc2mn.py` 00–11 walk):
 

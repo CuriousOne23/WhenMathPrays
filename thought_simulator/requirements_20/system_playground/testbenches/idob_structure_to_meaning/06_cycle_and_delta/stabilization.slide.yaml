@@ -1,4 +1,7 @@
-# STUB — this instrument revision
+# Hand knobs for this instrument revision.
+# Changing epsilon or budget is a named revision, not a silent retune.
+# Stop names: stable | identity_stable | budget_exhausted | time_exhausted
+# (time_exhausted is supervisor-only; this runner uses the first three.)
 stabilization:
   epsilon_meaning: 0.05
   epsilon_identity: 0.05

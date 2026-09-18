@@ -1,10 +1,19 @@
-"""Slide 06 — Bounded search with named freeze."""
+"""Slide 06 / Stop 6 — Bounded search with named freeze.
+
+Each cycle applies a decaying CIE shove:
+    scale = alpha * 0.5 ** (cycle - 1)
+    M_next = clip(M + scale * I)
+
+Halt names come from stabilization.slide.yaml + stop_reasons.md.
+run() returns the freeze record so Slide 07 can wire it.
+"""
 from pathlib import Path
 import sys
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 from lib.schema_load import load_yaml
 from lib.vector6 import add_scaled, delta_l2, fmt, from_mapping, zeros
+
 
 def _group_vector(group_id):
     data = load_yaml(ROOT / "02_meaning_groups" / "meaning_groups.slide.yaml")
@@ -13,12 +22,14 @@ def _group_vector(group_id):
             return from_mapping(group.get("group_dimensions"))
     return None
 
+
 def _envelope(cie_id):
     data = load_yaml(ROOT / "05_cie" / "cie.examples.yaml")
     for env in data.get("envelopes") or []:
         if env.get("cie_id") == cie_id:
             return env
     return None
+
 
 def run(group_id=1001, cie_id="physical_stance", clip_to_unit=True):
     stab = load_yaml(Path(__file__).parent / "stabilization.slide.yaml")["stabilization"]
@@ -29,7 +40,7 @@ def run(group_id=1001, cie_id="physical_stance", clip_to_unit=True):
     M = _group_vector(group_id)
     env = _envelope(cie_id)
     print("=" * 64)
-    print("LESSON 06 — CYCLE AND DELTA")
+    print("LESSON 06 / STOP 6 — CYCLE AND DELTA")
     print("Watch meaning_delta_h and identity_delta.")
     print("resolution_status is taken from the same predicate that halted.")
     print("=" * 64)
@@ -72,10 +83,18 @@ def run(group_id=1001, cie_id="physical_stance", clip_to_unit=True):
     print(f"\nresolution_status: {status}")
     print(f"cycles used:       {used}")
     print("\nEnd lesson 06.\n")
-    return {"M": M, "meaning_delta_h": last_dh, "identity_delta": last_di, "refinement_cycles": used, "resolution_status": status}
+    return {
+        "M": M,
+        "meaning_delta_h": last_dh,
+        "identity_delta": last_di,
+        "refinement_cycles": used,
+        "resolution_status": status,
+    }
+
 
 def main():
     run()
+
 
 if __name__ == "__main__":
     main()
