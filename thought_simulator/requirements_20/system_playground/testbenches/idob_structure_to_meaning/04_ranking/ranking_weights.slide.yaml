@@ -1,15 +1,19 @@
-# STUB — hand weights for this instrument revision
+# Hand weights for this instrument revision.
 # Rank ONLY ids that appear on the map for that card.
 # Scores are teaching toys, not a manifold metric.
-# Changing weights is a named revision if the machine is to stay honest.
+# Changing weights or toy rows is a named revision.
+#
+# 3001 is scored to win on S_rock_burst so rank order is not
+# a copy of the map YAML spelling.
 ranking_weights:
   cue_weight: 0.4
   invariant_weight: 0.3
   identity_weight: 0.3
 
-# Bench-only toy extras (not official IdOB fields)
+# Bench-only toy extras (not official IdOB fields).
+# These ARE the three helper outputs this revision.
 group_toy_scores:
   1001: {cue: 0.8, invariant: 0.7, identity: 0.4}
-  3001: {cue: 0.6, invariant: 0.5, identity: 0.5}
+  3001: {cue: 0.9, invariant: 0.7, identity: 0.8}
   4001: {cue: 0.5, invariant: 0.6, identity: 0.3}
   5001: {cue: 0.4, invariant: 0.8, identity: 0.2}
