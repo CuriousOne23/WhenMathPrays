@@ -1,4 +1,4 @@
-# Slide 03 — Structure bounds meaning (lookup)
+# Slide 03 / Stop 3 — Structure bounds meaning (lookup)
 
 **Theory:** [../papers/idob_s2m_theory.md](../papers/idob_s2m_theory.md) §2.3, §2.6  
 **Construct:** C5 in [../papers/idob_s2m_constructs.md](../papers/idob_s2m_constructs.md)  
@@ -11,6 +11,15 @@ Feel the bound: structure does not score meaning; it restricts the candidate set
     structural_key  (or card_id in this slide)  ->  candidate group_ids
 
 That is the whole slide.
+
+## Program
+
+`run_03_lookup.py`
+
+- `lookup(card_id)` reads `struct_to_meaning_map.slide.yaml` and returns the legal set.
+- Missing card or empty row → `[]`. That is a valid answer, not a crash.
+- `run(card_id)` prints the key and the candidate list, then returns that list.
+- Does not print rank, six-float modulation, or `meaning_delta_h`.
 
 ## What the map is
 
@@ -104,5 +113,6 @@ This map is legality **for this key only**. An empty map or a leftover `residue_
 ## Run
 
     python run_03_lookup.py
+    python ../run_ts_struc2mn.py   # with RUN_03_LOOKUP = True
 
 Exercises: [exercises.md](exercises.md)

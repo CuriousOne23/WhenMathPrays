@@ -1,4 +1,4 @@
-# Slide 04 — Rank among candidates only
+# Slide 04 / Stop 4 — Rank among candidates only
 
 **Theory:** [../papers/idob_s2m_theory.md](../papers/idob_s2m_theory.md) §2.6  
 **Construct:** C8 in [../papers/idob_s2m_constructs.md](../papers/idob_s2m_constructs.md)  
@@ -17,6 +17,68 @@ Output is `final_rank_order`: a list of `group_id`.
 **First id is the winner** — the prototype chosen as first M.
 Later ids are still legal; they lost this pass.
 
+## Ranking implemented this revision
+
+Program: `run_04_rank.py`  
+Weights: `ranking_weights.slide.yaml`
+
+### Formula
+
+Each helper is clipped to $[0, 1]$. Then:
+
+$$
+\mathrm{score}(g) =
+w_{\mathrm{cue}}\,\mathrm{cue}(g)
++ w_{\mathrm{inv}}\,\mathrm{invariant}(g)
++ w_{\mathrm{id}}\,\mathrm{identity}(g)
+$$
+
+Sort descending by score. Tie-break: smaller `group_id` first.  
+Empty candidate set → empty `final_rank_order`, `selected_group_id = None`.
+
+### Weights (hand / toy)
+
+| Weight | Value |
+|--------|------:|
+| `cue_weight` | 0.4 |
+| `invariant_weight` | 0.3 |
+| `identity_weight` | 0.3 |
+
+### Scoring helpers
+
+Named functions in `run_04_rank.py`:
+
+| Helper | Job this revision |
+|--------|-------------------|
+| `cue_score` | How well the prototype matches talk-shape cues |
+| `invariant_score` | How stable the prototype stays under small talk-shape change |
+| `identity_alignment_score` | How well the prototype sits with the current identity/stance envelope |
+
+This revision does **not** compute those from live SOB / SROB / CnOB / SmOB residue. The three helpers read `group_toy_scores` in the weights YAML. That is an instrument stub, not a claim that ranking replaces the upstream packet builders.
+
+### Toy helper table
+
+| group_id | cue | invariant | identity | score at current weights |
+|---------:|----:|----------:|---------:|-------------------------:|
+| 1001 | 0.8 | 0.7 | 0.4 | 0.650 |
+| 3001 | 0.9 | 0.7 | 0.8 | 0.810 |
+| 4001 | 0.5 | 0.6 | 0.3 | 0.470 |
+| 5001 | 0.4 | 0.8 | 0.2 | 0.460 |
+
+Worked `S_rock_burst` (map set `{1001, 3001, 5001}`):
+
+- `final_rank_order` = `[3001, 1001, 5001]`
+- `selected_group_id` = `3001`
+
+Map YAML spelling on that card is `[1001, 3001, 5001]`. Rank is different on purpose so the door and the contest stay separate.
+
+### API
+
+- `rank(card_id)` → full record (`candidate_group_ids`, `scored`, `final_rank_order`, `selected_group_id`).
+- `run(card_id)` prints the lesson and returns `final_rank_order` as a list (Slide 07 still consumes that list).
+
+Changing weights or the toy table is a **named revision**, not a silent retune of cognition.
+
 ## What ranking is
 
 The map opened some doors. Ranking picks **which door is tried first**.
@@ -25,8 +87,9 @@ It is not:
 - a new geometry
 - a manifold neighborhood
 - permission to add a group the map did not name
-- CIE (`M' = M + α I` is Slide 05)
+- CIE (`M' = M + \alpha I` is Slide 05)
 - freeze on `meaning_delta_h` (Slide 06)
+- Path A routing to IdOB (SOB → SROB → CnOB → SmOB still builds the structural packet)
 
 Feel: several legal births; one is instantiated first. The others remain on the candidate list for visibility.
 
@@ -44,8 +107,6 @@ When the map is empty, rank must stay empty. Do not invent a winner.
 3. Emit `final_rank_order` (winner first).
 4. `selected_group_id` = rank-1. That group's `group_dimensions` become first M.
 5. CIE may then move M. Rank list does not have to be recomputed unless a later revision says so.
-
-Weights here are **hand / toy** for the instrument. Changing them is a named revision if you want a different machine, not a silent retune of "cognition."
 
 ## Order: map vs rank
 
@@ -83,3 +144,4 @@ Ids after rank-1 are still **this card's** legal set. They are not Path A `firin
 ## Run
 
     python run_04_rank.py
+    python ../run_ts_struc2mn.py   # with RUN_04_RANK = True
