@@ -3,6 +3,8 @@
 Operator notes for each inquiry stop. Law stays in 730 / 731 / 740.
 Run commands from this folder with `(.venv)` active.
 
+Stops 1–2 live in this folder. Stops 3–4 live on the slide walk one level up. Do not grow `README.md` with run walkthroughs.
+
 ---
 
 ## Shared: what `python -c` means
@@ -182,6 +184,58 @@ Stop 2 success = unseen noted, tags only from Seed lists or null, hop untouched.
 
 ---
 
+## Stop 3 — Map lookup (not in this folder)
+
+Stop 3 is Slide 03. Program: `../03_map_lookup/run_03_lookup.py`.
+
+It is the door: `card_id` → `candidate_group_ids`. Filter, not rank. Empty list is valid.
+
+Run from the bench root or the slide folder:
+
+```text
+python ../03_map_lookup/run_03_lookup.py
+```
+
+Look for: `candidate_group_ids: [1001, 3001, 5001]` on `S_rock_burst`. No `final_rank_order`.
+
+Full contract: [../03_map_lookup/README.md](../03_map_lookup/README.md).
+
+Does not write Seed YAML, Door Table, or `$M$`.
+
+---
+
+## Stop 4 — Rank among map candidates only (not in this folder)
+
+Stop 4 is Slide 04. Program: `../04_ranking/run_04_rank.py`.
+
+Weighted sum of three helpers clipped to [0, 1]:
+
+```text
+score = 0.4*cue + 0.3*invariant + 0.3*identity
+```
+
+Helpers this revision read `group_toy_scores` in `ranking_weights.slide.yaml`. They do not replace SOB / SROB / CnOB / SmOB.
+
+Run:
+
+```text
+python ../04_ranking/run_04_rank.py
+```
+
+Look for on `S_rock_burst`:
+
+```text
+final_rank_order:  [3001, 1001, 5001]
+selected_group_id: 3001
+```
+
+Map spelling on that card is `[1001, 3001, 5001]`. Rank differs on purpose.
+Empty map → empty rank, no invented winner.
+
+Full contract and worked scores: [../04_ranking/README.md](../04_ranking/README.md).
+
+---
+
 ## Later stops
 
-Stop 3+ examples go in this file when those stops exist. Do not grow `README.md` with run walkthroughs.
+Stop 5+ stay on the slide walk (`05_cie/` onward). Do not grow `crossing_pack/README.md` with those walkthroughs.
