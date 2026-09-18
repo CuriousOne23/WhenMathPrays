@@ -1,4 +1,5 @@
-# STUB — fields the slide-07 log must emit
+# Fields the Slide 07 log must emit.
+# Official names only. No truth / belief / OuBA bags.
 packet_out:
   structural_hash: string
   card_id: string
