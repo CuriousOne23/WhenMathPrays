@@ -25,12 +25,12 @@ Weights: `ranking_weights.slide.yaml`
 ### Formula
 
 Each helper is clipped to $[0, 1]$. Then:
-
+  
 $$
-\mathrm{score}(g) =
-w_{\mathrm{cue}}\,\mathrm{cue}(g)
-+ w_{\mathrm{inv}}\,\mathrm{invariant}(g)
-+ w_{\mathrm{id}}\,\mathrm{identity}(g)
+\mathrm{score}(g) = 
+w_\mathrm{cue}\cdot\mathrm{invariant}(g)
+\mathrm{+} w_{\mathrm{inv}}\cdot\mathrm{invariant}(g)
+\mathrm{+} w_{\mathrm{id}}\cdot\mathrm{identity}(g)
 $$
 
 Sort descending by score. Tie-break: smaller `group_id` first.  
