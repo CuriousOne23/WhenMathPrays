@@ -2,7 +2,7 @@
 
 **Revision:** Slide-01 (learning instrument, not Path A product harness)
 **Location:** `testbenches/idob_structure_to_meaning/`
-**Date:** 2026-08-26; spine papers 2026-08-27; Slides 09–11 2026-08-27
+**Date:** 2026-08-26; spine papers 2026-08-27; Slides 09–11 2026-08-27; reading path + crossing_pack note 2026-09-18
 
 ## Purpose
 
@@ -16,12 +16,16 @@ Walk the numbered slides in order. Each slide teaches one named part of the pres
 
 ## Understanding path (read before or beside the slides)
 
-The machine was being built by feel. These two papers state the unproven theory and define the constructs the lessons use:
+Start here, in this order:
 
-1. **Theory stake** — [papers/idob_s2m_theory.md](papers/idob_s2m_theory.md)
+1. **The fold** — [papers/the_fold.md](papers/the_fold.md)
+   The feel of the crossing before the machine names. Read this first.
+2. **Theory stake** — [papers/idob_s2m_theory.md](papers/idob_s2m_theory.md)
    What Path A / IdOB claims and refuses about structure to speaker meaning-object.
-2. **Constructs + glossary** — [papers/idob_s2m_constructs.md](papers/idob_s2m_constructs.md)
+3. **Constructs + glossary** — [papers/idob_s2m_constructs.md](papers/idob_s2m_constructs.md)
    Identity, boundary, example, field, and slide for each named part. Glossary is Appendix A of that file.
+
+Worked examples (optional, after the fold): [papers/the_fold_in_practice.md](papers/the_fold_in_practice.md).
 
 Supporting notes (not a second spine): `01_structure/structure.md`, `02_meaning_groups/dimensions.md`, `03_map_lookup/README.md`, `04_ranking/README.md`, `05_cie/README.md`, `09_structure_assignment/assignment.md`, `10_residue_expand/residue_expand.md`, `11_idob_core/idob_core.md`, `papers/ts_patha_theory.md`, `papers/ts_sob2srob_req4idob.md`.
 
@@ -55,7 +59,7 @@ You can still run a single slide file directly, e.g.
 
 ## How to walk
 
-1. Skim the theory paper, then the construct card for the slide you will run.
+1. Read [papers/the_fold.md](papers/the_fold.md), then the theory paper, then the construct card for the slide you will run.
 2. Read the slide README.md.
 3. Open the YAML. Field names matter more than values.
 4. Run via run_ts_struc2mn.py, enabling one lesson if you want to go slowly.
@@ -95,7 +99,23 @@ Sibling folders (not on the `run_ts_struc2mn.py` 00–11 walk):
 | Folder | Index |
 |--------|-------|
 | `12_reduction/` | [12_reduction/README.md](12_reduction/README.md) — reduction harness vs cheap rivals |
-| `crossing_pack/` | [crossing_pack/README.md](crossing_pack/README.md) — seed intake / crossing inquiry pack |
+| `crossing_pack/` | [crossing_pack/README.md](crossing_pack/README.md) — seed intake only (Stops 1–2). Not the hop. |
+
+## crossing_pack (seed intake, not the hop)
+
+`crossing_pack/` is the front door for utterances. It is **not** Slides 03–11 and it does not run the structure-to-meaning hop.
+
+- **Stop 1** — `probe_log.py`: exact-match place against `seed/placements.yaml`; log gold vs unseen.
+- **Stop 2** — `suggest_tags.py`: propose Seed about/family tags only; `card_id` stays `None`; unseen needs review.
+
+It does not promote, does not write the Door Table, does not birth `$M$`, and does not invent new family/about ids.
+
+Stops 3 and 4 live on the slide walk:
+
+- **Stop 3 / Slide 03** — `03_map_lookup/`: structural key → legal `candidate_group_ids` (filter, not rank).
+- **Stop 4 / Slide 04** — `04_ranking/`: order among those candidates only (cue / invariant / identity-alignment scores).
+
+Operator walkthroughs for crossing_pack stops stay in [crossing_pack/stopx_def_examples.md](crossing_pack/stopx_def_examples.md). Stop 3+ examples go there when those crossing_pack stops exist; the hop itself stays in the slide folders.
 
 ## 07 vs 11
 
