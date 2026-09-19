@@ -402,7 +402,6 @@ You can read the entire block as:
 > interpretation of the sentence.”
 
 This is the identity‑conditioned meaning that flows into MCB and provenance envelopes.
-```
 
 ---
 
