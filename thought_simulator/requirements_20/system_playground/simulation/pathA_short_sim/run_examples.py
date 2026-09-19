@@ -24,6 +24,7 @@ def main() -> None:
     print("IdOB: agent_action, action_patient, relation_modifier, modifier_resolution")
     print("Not yet implemented: full IdOB family, MCB, provenance envelopes, routing entropy")
     print("This simulator demonstrates relational geometry but is not full Path-A.")
+    print("Trace now includes token-level relational mapping for CnOB, SmOB, and IdOB (Option A).")
 
 
 if __name__ == "__main__":

@@ -257,6 +257,20 @@ def CnOB(tp: TP) -> TP:
         "matched": matched,
         "unmatched": unmatched,
         "residue": residue,
+        "token_relations": {
+            "agent-action": (
+                " ".join(tp.role_segments.get("agent", [])),
+                " ".join(tp.role_segments.get("action", []))
+            ),
+            "action-relation": (
+                " ".join(tp.role_segments.get("action", [])),
+                " ".join(tp.role_segments.get("relation", []))
+            ),
+            "relation-patient": (
+                " ".join(tp.role_segments.get("relation", [])),
+                " ".join(tp.role_segments.get("patient", []))
+            )
+        }
     })
     return tp
 
@@ -276,6 +290,20 @@ def SmOB(tp: TP) -> TP:
         "operations": ops,
         "semantic_adjacent_cues": cues,
         "residue": residue,
+        "token_relations": {
+            "agent->action": (
+                " ".join(tp.role_segments.get("agent", [])),
+                " ".join(tp.role_segments.get("action", []))
+            ),
+            "action->relation": (
+                " ".join(tp.role_segments.get("action", [])),
+                " ".join(tp.role_segments.get("relation", []))
+            ),
+            "relation->patient": (
+                " ".join(tp.role_segments.get("relation", [])),
+                " ".join(tp.role_segments.get("patient", []))
+            )
+        }
     })
     return tp
 

@@ -53,6 +53,13 @@ def _minimal_idob_selection(tp: TP) -> TP:
         "notes": "[Semantic]",
         "selected_ops": selected_ops,
         "semantic_core": tp.semantic_core,
+        "token_relations": {
+            "agent": " ".join(tp.role_segments.get("agent", [])),
+            "action": " ".join(tp.role_segments.get("action", [])),
+            "relation": " ".join(tp.role_segments.get("relation", [])),
+            "patient": " ".join(tp.role_segments.get("patient", [])),
+            "modifiers": tp.semantic_adjacent_cues
+        }
     })
     return tp
 
