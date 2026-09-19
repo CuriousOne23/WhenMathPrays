@@ -1,5 +1,42 @@
-from typing import List
+from pathlib import Path
+from typing import Any, Dict, List
+
+import yaml
 from tp_substrate import TP
+
+try:
+    from support.dictionaries import (  # type: ignore
+        load_constraint_rules,
+        load_role_patterns,
+        load_segment_patterns,
+        load_semantic_rules,
+        load_token_classes,
+    )
+except ImportError:
+    _DICT_DIR = Path(__file__).resolve().parent / "support" / "dictionaries"
+
+    def _load_yaml_dictionary(file_name: str, root_key: str) -> Any:
+        file_path = _DICT_DIR / file_name
+        if not file_path.exists():
+            return {} if root_key.endswith("patterns") or root_key.endswith("classes") else []
+        with file_path.open("r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        return data.get(root_key, {} if root_key.endswith("patterns") or root_key.endswith("classes") else [])
+
+    def load_token_classes() -> Dict[str, str]:
+        return _load_yaml_dictionary("token_classes.yaml", "token_classes")
+
+    def load_segment_patterns() -> Dict[str, List[str]]:
+        return _load_yaml_dictionary("segment_patterns.yaml", "segment_patterns")
+
+    def load_role_patterns() -> Dict[str, List[str]]:
+        return _load_yaml_dictionary("role_patterns.yaml", "role_patterns")
+
+    def load_constraint_rules() -> List[str]:
+        return _load_yaml_dictionary("constraint_rules.yaml", "constraint_rules")
+
+    def load_semantic_rules() -> Dict[str, str]:
+        return _load_yaml_dictionary("semantic_rules.yaml", "semantic_rules")
 
 
 # ----- helpers (coarse heuristics) -------------------------------------------------
@@ -11,6 +48,68 @@ def _simple_tokenize(text: str) -> List[str]:
 
 def _normalize_tokens(tokens: List[str]) -> List[str]:
     return [t.lower() for t in tokens]
+
+
+def _match_np_with_pattern(token_classes: List[str], start: int, pattern: List[str]) -> int:
+    if not pattern or "NOUN" not in pattern:
+        return 0
+    i = start
+    if i < len(token_classes) and token_classes[i] == "DET":
+        i += 1
+    adj_seen = False
+    while i < len(token_classes) and token_classes[i] == "ADJ":
+        adj_seen = True
+        i += 1
+    if i < len(token_classes) and token_classes[i] == "NOUN":
+        # If ADJ is part of pattern, allow one or many ADJ.
+        if "ADJ" in pattern and not adj_seen and "DET" in pattern:
+            return 0
+        return i - start + 1
+    return 0
+
+
+def _extract_segments(tokens: List[str]) -> Dict[str, Any]:
+    token_classes_map = load_token_classes()
+    segment_patterns = load_segment_patterns()
+
+    classes = [token_classes_map.get(tok, "UNK") for tok in tokens]
+    segments: List[str] = []
+    segment_tokens: List[List[str]] = []
+
+    i = 0
+    while i < len(tokens):
+        if classes[i] == "UNK":
+            i += 1
+            continue
+
+        np_pattern = segment_patterns.get("NP", [])
+        np_len = _match_np_with_pattern(classes, i, np_pattern)
+        if np_len > 0:
+            segments.append("NP")
+            segment_tokens.append(tokens[i:i + np_len])
+            i += np_len
+            continue
+
+        matched = False
+        for seg_name, pattern in segment_patterns.items():
+            if seg_name == "NP" or not pattern:
+                continue
+            plen = len(pattern)
+            if classes[i:i + plen] == pattern:
+                segments.append(seg_name)
+                segment_tokens.append(tokens[i:i + plen])
+                i += plen
+                matched = True
+                break
+        if matched:
+            continue
+
+        i += 1
+
+    return {
+        "segments": segments,
+        "segment_tokens": segment_tokens,
+    }
 
 
 def _simple_segments(tokens: List[str]) -> List[str]:
@@ -88,21 +187,39 @@ def TPU(tp: TP) -> TP:
 
 
 def SOB(tp: TP) -> TP:
-    tp.struct_segments = _simple_segments(tp.tokens)
+    extracted = _extract_segments(tp.tokens)
+    tp.struct_segments = extracted["segments"]
+    tp.segment_tokens = extracted["segment_tokens"]
     return tp
 
 
 def SROB(tp: TP) -> TP:
-    tp.struct_roles = _simple_roles(tp.struct_segments)
+    role_patterns = load_role_patterns()
+    segment_counts: Dict[str, int] = {}
+    roles: List[str] = []
+    role_segments: Dict[str, List[str]] = {}
+
+    for idx, seg in enumerate(tp.struct_segments):
+        options = role_patterns.get(seg, ["modifier"])
+        seg_count = segment_counts.get(seg, 0)
+        role = options[min(seg_count, len(options) - 1)]
+        roles.append(role)
+        role_segments.setdefault(role, []).extend(tp.segment_tokens[idx] if idx < len(tp.segment_tokens) else [])
+        segment_counts[seg] = seg_count + 1
+
+    tp.struct_roles = roles
+    tp.role_segments = role_segments
     return tp
 
 
 def CnOB(tp: TP) -> TP:
+    allowed = set(load_constraint_rules())
     constraints = []
     roles = tp.struct_roles
     for i in range(len(roles) - 1):
         pair = f"{roles[i]}-{roles[i+1]}"
-        constraints.append(pair)
+        if pair in allowed:
+            constraints.append(pair)
     tp.constraints = constraints
     return tp
 
@@ -147,33 +264,57 @@ def CTP(tp: TP) -> TP:
 
 
 def IdOB(tp: TP) -> TP:
-    # Extremely coarse semantic core: use positions.
+    semantic_rules = load_semantic_rules()
     tokens = tp.tokens
-    core = {}
+    core: Dict[str, Any] = {}
 
-    # Agent: first noun-ish token (just take first non-stopword).
-    if tokens:
-        core["agent"] = tokens[0]
+    spans = []
+    cursor = 0
+    for seg_tokens in tp.segment_tokens:
+        start = cursor
+        end = cursor + len(seg_tokens)
+        spans.append((start, end))
+        cursor = end
 
-    # Action: crude verb heuristic: token ending with "s".
-    action = next((t for t in tokens if t.endswith("s")), None)
-    if action:
-        core["action"] = action
+    np_segments = [seg for seg, seg_tokens in zip(tp.struct_segments, tp.segment_tokens) if seg == "NP"]
+    np_tokens = [seg_tokens for seg, seg_tokens in zip(tp.struct_segments, tp.segment_tokens) if seg == "NP"]
 
-    # Patient: last noun-ish token.
-    core["patient"] = tokens[-2] if len(tokens) > 2 else tokens[-1]
+    if semantic_rules.get("agent") == "first_np" and np_tokens:
+        core["agent"] = " ".join(np_tokens[0])
+    elif tp.role_segments.get("agent"):
+        core["agent"] = " ".join(tp.role_segments["agent"])
 
-    # Modifiers: everything between agent and patient that isn't action.
-    modifiers = []
-    if "agent" in core and "patient" in core:
-        try:
-            a_idx = tokens.index(core["agent"])
-            p_idx = tokens.index(core["patient"])
-            for i in range(a_idx + 1, p_idx):
-                if tokens[i] != core.get("action"):
-                    modifiers.append(tokens[i])
-        except ValueError:
-            pass
+    if semantic_rules.get("action") == "first_verb":
+        action_token = None
+        for seg, seg_tokens in zip(tp.struct_segments, tp.segment_tokens):
+            if seg == "VP" and seg_tokens:
+                action_token = seg_tokens[0]
+                break
+        if action_token is None:
+            action_token = next((t for t in tokens if t.endswith("s")), None)
+        if action_token:
+            core["action"] = action_token
+
+    if semantic_rules.get("patient") == "last_np" and np_tokens:
+        core["patient"] = " ".join(np_tokens[-1])
+    elif tp.role_segments.get("patient"):
+        core["patient"] = " ".join(tp.role_segments["patient"])
+
+    modifiers: List[str] = []
+    if semantic_rules.get("modifiers") == "between_agent_patient":
+        agent_i = None
+        patient_i = None
+        for i, role in enumerate(tp.struct_roles):
+            if role == "agent" and agent_i is None:
+                agent_i = i
+            if role == "patient":
+                patient_i = i
+
+        if agent_i is not None and patient_i is not None and agent_i < patient_i:
+            for i in range(agent_i + 1, patient_i):
+                for tok in tp.segment_tokens[i]:
+                    if tok != core.get("action"):
+                        modifiers.append(tok)
     core["modifiers"] = modifiers
 
     tp.semantic_core = core

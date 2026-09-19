@@ -17,7 +17,9 @@ class TP:
 
     # OB-set / structural geometry
     struct_segments: List[str] = field(default_factory=list)
+    segment_tokens: List[List[str]] = field(default_factory=list)
     struct_roles: List[str] = field(default_factory=list)
+    role_segments: Dict[str, List[str]] = field(default_factory=dict)
     constraints: List[str] = field(default_factory=list)
     smoothed_geometry: bool = False
     structural_vector_frozen: bool = False

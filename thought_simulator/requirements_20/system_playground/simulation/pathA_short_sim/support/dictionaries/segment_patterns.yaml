@@ -1,0 +1,9 @@
+segment_patterns:
+  NP:
+    - DET
+    - ADJ
+    - NOUN
+  VP:
+    - VERB
+  PP:
+    - PREP

@@ -1,0 +1,5 @@
+semantic_rules:
+  agent: first_np
+  action: first_verb
+  patient: last_np
+  modifiers: between_agent_patient

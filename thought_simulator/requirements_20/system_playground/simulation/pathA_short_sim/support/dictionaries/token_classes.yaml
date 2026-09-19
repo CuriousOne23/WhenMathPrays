@@ -1,0 +1,9 @@
+token_classes:
+  the: DET
+  quick: ADJ
+  brown: ADJ
+  fox: NOUN
+  jumps: VERB
+  over: PREP
+  lazy: ADJ
+  dog: NOUN

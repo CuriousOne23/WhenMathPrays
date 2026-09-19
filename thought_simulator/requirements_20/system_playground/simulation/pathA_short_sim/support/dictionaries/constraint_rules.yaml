@@ -1,0 +1,4 @@
+constraint_rules:
+  - agent-action
+  - action-relation
+  - relation-patient

@@ -1,0 +1,8 @@
+role_patterns:
+  NP:
+    - agent
+    - patient
+  VP:
+    - action
+  PP:
+    - relation

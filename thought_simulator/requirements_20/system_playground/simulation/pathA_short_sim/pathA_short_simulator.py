@@ -26,9 +26,9 @@ PRIMITIVES: List[PrimitiveFn] = [
 def primitive_notes(name: str, tp: TP) -> str:
     """Optional human-readable notes per primitive."""
     if name == "SOB":
-        return f"Segments: {tp.struct_segments}"
+        return f"Segments: {tp.struct_segments}; Segment tokens: {tp.segment_tokens}"
     if name == "SROB":
-        return f"Roles: {tp.struct_roles}"
+        return f"Roles: {tp.struct_roles}; Role segments: {tp.role_segments}"
     if name == "IdOB":
         return f"Semantic core: {tp.semantic_core}"
     if name == "TR":
