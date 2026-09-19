@@ -13,6 +13,9 @@ def main() -> None:
     for step in result["trace"]:
         print(f"\n--- {step['primitive']} ---")
         print(f"notes: {step['notes']}")
+        # NEW: print token-level relational mapping (Option A)
+        if "token_relations" in step:
+            print("token_relations:", step["token_relations"])
         # If you want more detail, uncomment:
         # print("input:", step["input"])
         # print("output:", step["output"])
