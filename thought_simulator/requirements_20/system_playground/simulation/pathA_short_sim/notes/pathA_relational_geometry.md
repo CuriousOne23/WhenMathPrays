@@ -330,10 +330,10 @@ They are **computed relational geometry** that IdOB consumes.
 
 Based on the relational geometry above, IdOB activates:
 
-- **agent_action**
-- **action_patient**
-- **relation_modifier**
-- **modifier_resolution**
+- **agent_action → semantic_core.agent**
+- **action_patient → semantic_core.patient**
+- **relation_modifier → semantic_core.relation**
+- **modifier_resolution → semantic_core.modifiers**
 
 These operators are identity‑conditioned relational functions.
 
