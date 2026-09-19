@@ -6,6 +6,8 @@ Run the examples script from this directory:
 
 ```powershell
 python run_examples.py
+or to log:
+python run_examples.py > run.log
 ```
 
 ## Modify the Input Raw Sentence
