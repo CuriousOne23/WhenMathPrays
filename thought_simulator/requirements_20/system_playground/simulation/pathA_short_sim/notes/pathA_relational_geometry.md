@@ -227,6 +227,153 @@ This is how emergent meaning is realized.
 
 ---
 
+## **8.1 IdOB as a Relational Operator Object**
+
+Path‑A treats IdOB not as a classical “object with fields,” but as a **relational operator object**.  
+This distinction is essential for understanding how identity‑conditioned meaning emerges.
+
+### **Ports vs. Fields**
+
+IdOB has **ports**, which are *relational inputs*, and **fields**, which are *semantic outputs*.
+
+- **Ports** receive relational geometry.  
+  They are attachment points for segments and roles:
+  - agent port  
+  - action port  
+  - relation port  
+  - patient port  
+
+- **Fields** express identity‑conditioned meaning.  
+  They are produced after IdOB selects the correct operator(s):
+  - selected_ops  
+  - semantic_core.agent  
+  - semantic_core.action  
+  - semantic_core.relation  
+  - semantic_core.patient  
+  - semantic_core.modifiers  
+
+Meaning flows **through** IdOB:
+
+> **ports → operator selection → fields**
+
+Ports do not store meaning.  
+Fields do not receive meaning.  
+IdOB is a *relational processor*, not a static object.
+
+### **Mermaid Diagram: IdOB Ports and Fields**
+
+```mermaid
+flowchart LR
+    A["Agent Segment<br/>NP"] -->|agent port| IDOB
+    B["Action Segment<br/>VP"] -->|action port| IDOB
+    C["Relation Segment<br/>PP/Modifier"] -->|relation port| IDOB
+    D["Patient Segment<br/>NP"] -->|patient port| IDOB
+
+    IDOB["IdOB<br/>Identity-Conditioned Operator"] -->|semantic_core.agent| SA["Agent Meaning"]
+    IDOB -->|semantic_core.action| SB["Action Meaning"]
+    IDOB -->|semantic_core.relation| SC["Relation Meaning"]
+    IDOB -->|semantic_core.patient| SD["Patient Meaning"]
+    IDOB -->|semantic_core.modifiers| SE["Modifier Meaning"]
+```
+
+This diagram shows IdOB as a **relational operator** with:
+
+- relational inputs (ports)  
+- semantic outputs (fields)  
+
+The operator in the middle is the identity‑conditioned selection logic.
+
+---
+
+## 8.2 Example: IdOB Ports, Relational Geometry, Operators, and Fields
+
+Consider the sentence:
+
+> “The quick brown fox jumps over the lazy dog.”
+
+This example shows the full identity‑conditioned meaning pipeline in Path‑A.
+
+---
+
+### **1. Ports (IdOB Inputs)**
+
+These come directly from SROB role segmentation:
+
+- **agent port** → “the quick brown fox”
+- **action port** → “jumps”
+- **relation port** → “over”
+- **patient port** → “the lazy dog”
+
+Ports are *structural inputs*.  
+They do not contain meaning; they receive relational structure.
+
+---
+
+### **2. Relational Geometry (CnOB + SmOB)**
+
+CnOB computes constraint relations:
+
+- **agent‑action**
+- **action‑relation**
+- **relation‑patient**
+
+SmOB computes semantic adjacency:
+
+- **semantic_adjacent_cues** → [“over”]
+
+These relations are *not ports*.  
+They are **computed relational geometry** that IdOB consumes.
+
+---
+
+### **3. IdOB Operator Selection**
+
+Based on the relational geometry above, IdOB activates:
+
+- **agent_action**
+- **action_patient**
+- **relation_modifier**
+- **modifier_resolution**
+
+These operators are identity‑conditioned relational functions.
+
+---
+
+### **4. Fields (IdOB Semantic Outputs)**
+
+IdOB produces identity‑conditioned semantic meaning:
+
+```
+semantic_core = {
+    selected_ops: [
+        "agent_action",
+        "action_patient",
+        "relation_modifier",
+        "modifier_resolution"
+    ],
+    agent: "the quick brown fox",
+    action: "jumps",
+    relation: "over",
+    patient: "the lazy dog",
+    modifiers: ["over"]
+}
+```
+
+These are **IdOB’s fields** — the semantic outputs that feed MCB and provenance envelopes.
+
+They express meaning after IdOB processes relational geometry.
+
+---
+
+### **5. Flow Summary**
+
+> **Ports → Relational Geometry → IdOB Operators → Fields**
+
+This is the complete identity‑conditioned meaning pipeline in Path‑A.
+```
+
+---
+
 ## 9. Conclusion
 
 Path‑A’s power comes from a single principle:
