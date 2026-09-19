@@ -370,7 +370,6 @@ They express meaning after IdOB processes relational geometry.
 > **Ports → Relational Geometry → IdOB Operators → Fields**
 
 This is the complete identity‑conditioned meaning pipeline in Path‑A.
-```
 
 ---
 
