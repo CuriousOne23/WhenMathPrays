@@ -341,7 +341,11 @@ These operators are identity‑conditioned relational functions.
 
 ### **4. Fields (IdOB Semantic Outputs)**
 
-IdOB produces identity‑conditioned semantic meaning:
+IdOB produces identity‑conditioned semantic meaning.  
+The `semantic_core` block is not raw data — it is the *meaning* IdOB emits after
+processing relational geometry and activating the appropriate relational operators.
+
+Here is the semantic core produced for the example sentence:
 
 ```
 semantic_core = {
@@ -359,9 +363,46 @@ semantic_core = {
 }
 ```
 
-These are **IdOB’s fields** — the semantic outputs that feed MCB and provenance envelopes.
+### **How to interpret this Python structure**
 
-They express meaning after IdOB processes relational geometry.
+- **`selected_ops`**  
+  This list shows the *relational operators* IdOB activated.  
+  Each operator is a function that transforms relational geometry into meaning:
+  - `"agent_action"` → bind agent to action  
+  - `"action_patient"` → bind action to patient  
+  - `"relation_modifier"` → interpret the relation as modifying the action  
+  - `"modifier_resolution"` → resolve the modifier into semantic meaning
+
+- **`agent`**  
+  The identity‑conditioned semantic agent.  
+  This is not just the NP segment — it is the *agent meaning* after relational binding.
+
+- **`action`**  
+  The semantic action.  
+  This is the meaning of the verb after IdOB processes agent‑action and action‑patient relations.
+
+- **`relation`**  
+  The semantic relation.  
+  This is the meaning of the relational modifier (“over”) after adjacency and modifier resolution.
+
+- **`patient`**  
+  The semantic patient.  
+  This is the meaning of the NP receiving the action.
+
+- **`modifiers`**  
+  A list of resolved modifier meanings.  
+  These come from semantic adjacency and the `modifier_resolution` operator.
+
+### **Interpretation Summary**
+
+You can read the entire block as:
+
+> “Given the relational geometry (agent‑action, action‑relation, relation‑patient),
+> IdOB activated the appropriate relational operators and produced the semantic
+> interpretation of the sentence.”
+
+This is the identity‑conditioned meaning that flows into MCB and provenance envelopes.
+```
 
 ---
 
