@@ -5,6 +5,36 @@ import yaml
 from tp_substrate import TP
 
 try:
+    from thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cnob_rulechecker import check_constraints  # type: ignore
+except ImportError:
+    def check_constraints(struct_roles: List[str]) -> Any:
+        allowed = set(load_constraint_rules())
+        all_pairs = [f"{struct_roles[i]}-{struct_roles[i+1]}" for i in range(max(0, len(struct_roles) - 1))]
+        matched = [pair for pair in all_pairs if pair in allowed]
+        unmatched = [pair for pair in all_pairs if pair not in allowed]
+        residue = [pair for pair in allowed if pair not in matched]
+        return matched, unmatched, residue
+
+try:
+    from thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.smob_rulechecker import apply_smoothing  # type: ignore
+except ImportError:
+    def apply_smoothing(segment_tokens: List[List[str]], struct_roles: List[str]) -> Any:
+        ops: List[str] = []
+        cues: List[str] = []
+        residue: List[str] = []
+
+        for i in range(max(0, len(struct_roles) - 1)):
+            ops.append(f"smooth:{struct_roles[i]}->{struct_roles[i+1]}")
+
+        for seg_tokens, role in zip(segment_tokens, struct_roles):
+            if role == "relation":
+                cues.extend(seg_tokens)
+
+        if not cues:
+            residue.append("no_relation_cues")
+        return ops, cues, residue
+
+try:
     from support.dictionaries import (  # type: ignore
         load_constraint_rules,
         load_role_patterns,
@@ -213,20 +243,40 @@ def SROB(tp: TP) -> TP:
 
 
 def CnOB(tp: TP) -> TP:
-    allowed = set(load_constraint_rules())
-    constraints = []
-    roles = tp.struct_roles
-    for i in range(len(roles) - 1):
-        pair = f"{roles[i]}-{roles[i+1]}"
-        if pair in allowed:
-            constraints.append(pair)
-    tp.constraints = constraints
+    matched, unmatched, residue = check_constraints(tp.struct_roles)
+    tp.constraints_matched = matched
+    tp.constraints_unmatched = unmatched
+    tp.constraint_residue = residue
+
+    tp.constraints = matched
+    if not hasattr(tp, "trace"):
+        tp.trace = []
+    tp.trace.append({
+        "primitive": "CnOB",
+        "notes": "[OB-Set]",
+        "matched": matched,
+        "unmatched": unmatched,
+        "residue": residue,
+    })
     return tp
 
 
 def SmOB(tp: TP) -> TP:
-    # Stub: mark geometry as smoothed.
+    ops, cues, residue = apply_smoothing(tp.segment_tokens, tp.struct_roles)
+    tp.smoothing_operations = ops
+    tp.semantic_adjacent_cues = cues
+    tp.smoothing_residue = residue
+
     tp.smoothed_geometry = True
+    if not hasattr(tp, "trace"):
+        tp.trace = []
+    tp.trace.append({
+        "primitive": "SmOB",
+        "notes": "[OB-Set]",
+        "operations": ops,
+        "semantic_adjacent_cues": cues,
+        "residue": residue,
+    })
     return tp
 
 

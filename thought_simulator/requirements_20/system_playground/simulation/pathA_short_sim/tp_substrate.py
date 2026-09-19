@@ -21,6 +21,12 @@ class TP:
     struct_roles: List[str] = field(default_factory=list)
     role_segments: Dict[str, List[str]] = field(default_factory=dict)
     constraints: List[str] = field(default_factory=list)
+    constraints_matched: List[str] = field(default_factory=list)
+    constraints_unmatched: List[str] = field(default_factory=list)
+    constraint_residue: List[str] = field(default_factory=list)
+    smoothing_operations: List[str] = field(default_factory=list)
+    semantic_adjacent_cues: List[str] = field(default_factory=list)
+    smoothing_residue: List[str] = field(default_factory=list)
     smoothed_geometry: bool = False
     structural_vector_frozen: bool = False
 

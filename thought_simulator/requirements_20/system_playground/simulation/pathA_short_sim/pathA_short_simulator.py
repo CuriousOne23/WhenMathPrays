@@ -23,6 +23,40 @@ PRIMITIVES: List[PrimitiveFn] = [
 ]
 
 
+def _minimal_idob_selection(tp: TP) -> TP:
+    selected_ops = []
+
+    if "agent-action" in tp.constraints_matched:
+        selected_ops.append("agent_action")
+
+    if "action-relation" in tp.constraints_matched:
+        selected_ops.append("action_patient")
+
+    if "relation-patient" in tp.constraints_matched:
+        selected_ops.append("relation_modifier")
+
+    if tp.semantic_adjacent_cues:
+        selected_ops.append("modifier_resolution")
+
+    tp.semantic_core = {
+        "selected_ops": selected_ops,
+        "agent": " ".join(tp.role_segments.get("agent", [])),
+        "action": " ".join(tp.role_segments.get("action", [])),
+        "patient": " ".join(tp.role_segments.get("patient", [])),
+        "modifiers": tp.semantic_adjacent_cues,
+    }
+
+    if not hasattr(tp, "trace"):
+        tp.trace = []
+    tp.trace.append({
+        "primitive": "IdOB",
+        "notes": "[Semantic]",
+        "selected_ops": selected_ops,
+        "semantic_core": tp.semantic_core,
+    })
+    return tp
+
+
 def primitive_notes(name: str, tp: TP) -> str:
     """Optional human-readable notes per primitive."""
     macro = {
@@ -52,6 +86,10 @@ def primitive_notes(name: str, tp: TP) -> str:
         return f"[{macro}] Segments: {tp.struct_segments}; Segment tokens: {tp.segment_tokens}"
     if name == "SROB":
         return f"[{macro}] Roles: {tp.struct_roles}; Role segments: {tp.role_segments}"
+    if name == "CnOB":
+        return f"[{macro}] matched={tp.constraints_matched}; unmatched={tp.constraints_unmatched}; residue={tp.constraint_residue}"
+    if name == "SmOB":
+        return f"[{macro}] operations={tp.smoothing_operations}; semantic_adjacent_cues={tp.semantic_adjacent_cues}; residue={tp.smoothing_residue}"
     if name == "TR":
         return f"[{macro}] Thought Router placeholder: {tp.routing_metadata.get('thought_router_note', 'no note')}"
     if name == "TRU":
@@ -69,6 +107,8 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
     for fn in PRIMITIVES:
         input_snapshot = clone_tp(tp)
         tp = fn(tp)
+        if fn.__name__ == "IdOB":
+            tp = _minimal_idob_selection(tp)
         trace.append({
             "primitive": fn.__name__,
             "input": asdict(input_snapshot),

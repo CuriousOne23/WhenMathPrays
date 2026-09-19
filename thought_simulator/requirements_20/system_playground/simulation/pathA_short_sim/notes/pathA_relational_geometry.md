@@ -246,3 +246,14 @@ This principle explains:
 This document records the conceptual foundation of Path‑A’s relational approach.
 
 ---
+
+## Simulator Implementation Note
+The current simulator implements only the minimal relational geometry needed
+for IdOB selection:
+- agent_action
+- action_patient
+- relation_modifier
+- modifier_resolution
+
+This is intentional: it demonstrates how relational geometry drives meaning
+without requiring the full Path-A implementation.
