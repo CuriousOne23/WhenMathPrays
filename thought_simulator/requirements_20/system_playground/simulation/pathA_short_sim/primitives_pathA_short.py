@@ -253,6 +253,12 @@ def RB(tp: TP) -> TP:
     return tp
 
 
+def TR(tp: TP) -> TP:
+    # Placeholder Thought Router primitive.
+    tp.routing_metadata["thought_router_note"] = "TR placeholder executed (no-op)"
+    return tp
+
+
 def RTU(tp: TP) -> TP:
     tp.routing_committed = True
     return tp
@@ -321,7 +327,7 @@ def IdOB(tp: TP) -> TP:
     return tp
 
 
-def TR(tp: TP) -> TP:
+def TRU(tp: TP) -> TP:
     # Stub: treat as descriptive factual if no defects.
     tp.truth_relation = "descriptive_factual" if not tp.defects else "uncertain"
     return tp

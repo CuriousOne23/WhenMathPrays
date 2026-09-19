@@ -6,8 +6,8 @@ from primitives_pathA_short import (
     InB, IIInB, IE,
     CEx, CE, ISc, TPU,
     SOB, SROB, CnOB, SmOB, SSG,
-    RBU, RB, RTU, CTP,
-    IdOB, TR, OuBA,
+    RBU, RB, TR, TRU, RTU, CTP,
+    IdOB, OuBA,
 )
 
 
@@ -18,22 +18,47 @@ PRIMITIVES: List[PrimitiveFn] = [
     InB, IIInB, IE,
     CEx, CE, ISc, TPU,
     SOB, SROB, CnOB, SmOB, SSG,
-    RBU, RB, RTU, CTP,
-    IdOB, TR, OuBA,
+    RBU, RB, TR, TRU, RTU, CTP,
+    IdOB, OuBA,
 ]
 
 
 def primitive_notes(name: str, tp: TP) -> str:
     """Optional human-readable notes per primitive."""
+    macro = {
+        "InB": "Intake",
+        "IIInB": "Intake",
+        "IE": "Intake",
+        "CEx": "Correction",
+        "CE": "Correction",
+        "ISc": "Correction",
+        "TPU": "Correction",
+        "SOB": "OB-Set",
+        "SROB": "OB-Set",
+        "CnOB": "OB-Set",
+        "SmOB": "OB-Set",
+        "SSG": "OB-Set",
+        "RBU": "Routing",
+        "RB": "Routing",
+        "TR": "Routing",
+        "TRU": "Routing",
+        "RTU": "Routing",
+        "CTP": "Routing",
+        "IdOB": "Semantic",
+        "OuBA": "Final Commit",
+    }.get(name, "Unknown")
+
     if name == "SOB":
-        return f"Segments: {tp.struct_segments}; Segment tokens: {tp.segment_tokens}"
+        return f"[{macro}] Segments: {tp.struct_segments}; Segment tokens: {tp.segment_tokens}"
     if name == "SROB":
-        return f"Roles: {tp.struct_roles}; Role segments: {tp.role_segments}"
-    if name == "IdOB":
-        return f"Semantic core: {tp.semantic_core}"
+        return f"[{macro}] Roles: {tp.struct_roles}; Role segments: {tp.role_segments}"
     if name == "TR":
-        return f"Truth relation: {tp.truth_relation}"
-    return ""
+        return f"[{macro}] Thought Router placeholder: {tp.routing_metadata.get('thought_router_note', 'no note')}"
+    if name == "TRU":
+        return f"[{macro}] Truth relation: {tp.truth_relation}"
+    if name == "IdOB":
+        return f"[{macro}] Semantic core: {tp.semantic_core}"
+    return f"[{macro}]"
 
 
 def run_pathA_short(raw_text: str) -> Dict[str, Any]:
