@@ -16,7 +16,6 @@
 - Structural Interpretation Macro (OB-Set)
 - Routing Macro (including STPX, DCB, TR (Thought Router))
 - Identity and Meaning Macro (IdOB -> MCB)
-- Truth-Relation Macro (TRU)
 - Final Commit Macro (OuBA)
 
 ## Macro-by-Macro Expectations
