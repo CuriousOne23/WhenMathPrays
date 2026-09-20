@@ -3,7 +3,8 @@ from pathA_short_simulator import run_pathA_short
 
 def main() -> None:
     # sentence = "The quick brown fox jumps over the lazy dog."
-    sentence = "The rain in Spain stays mainly in the plain."
+    # sentence = "The rain in Spain stays mainly in the plain."
+    sentence = "Why is the sky blue?"
     result = run_pathA_short(sentence)
 
     print("=== Final TP ===")
