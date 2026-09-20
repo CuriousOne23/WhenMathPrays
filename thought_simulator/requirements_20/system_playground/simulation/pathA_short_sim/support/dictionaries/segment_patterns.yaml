@@ -1,9 +1,27 @@
 segment_patterns:
+  WQ:
+    - WH
+  IQ:
+    - AUX
   NP:
     - DET
-    - ADJ
     - NOUN
-  VP:
-    - VERB
+  LOC:
+    - PREP
+    - DET
+    - NOUN
   PP:
     - PREP
+    - PROPN
+  VP:
+    - VERB
+  PN:
+    - PROPN
+  CP:
+    - AUX
+  ST:
+    - VERB_STATE
+  AP:
+    - ADJ
+  RELC:
+    - REL

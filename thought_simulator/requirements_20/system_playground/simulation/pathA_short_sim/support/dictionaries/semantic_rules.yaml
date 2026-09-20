@@ -3,3 +3,13 @@ semantic_rules:
   action: first_verb
   patient: last_np
   modifiers: between_agent_patient
+  smoothing_cues:
+    - copular_state_link
+    - locative_link
+    - interrogative_scope
+    - modifier_chain
+    - nested_locative_link
+  truth_relation: descriptive_state
+  truth_relation_locative: descriptive_locative
+  truth_relation_interrogative: interrogative_open
+  truth_relation_interrogative_nested: interrogative_nested

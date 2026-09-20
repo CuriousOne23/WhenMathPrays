@@ -2,3 +2,10 @@ constraint_rules:
   - agent-action
   - action-relation
   - relation-patient
+  - theme-state
+  - copular_state_link
+  - state-location
+  - locative_link
+  - query-focus-predicate
+  - predicate-theme
+  - relation-theme

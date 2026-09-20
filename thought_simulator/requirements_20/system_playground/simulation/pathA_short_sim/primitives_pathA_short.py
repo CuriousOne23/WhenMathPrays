@@ -234,8 +234,30 @@ def SROB(tp: TP) -> TP:
         seg_count = segment_counts.get(seg, 0)
         role = options[min(seg_count, len(options) - 1)]
         roles.append(role)
-        role_segments.setdefault(role, []).extend(tp.segment_tokens[idx] if idx < len(tp.segment_tokens) else [])
         segment_counts[seg] = seg_count + 1
+
+    # Copular/state override: if a CP follows a theme, treat the next NP/AP/PN as state.
+    for i, seg in enumerate(tp.struct_segments):
+        if seg != "CP":
+            continue
+        if i > 0 and roles[i - 1] == "theme" and i + 1 < len(roles):
+            next_seg = tp.struct_segments[i + 1]
+            if next_seg in ("NP", "AP", "PN"):
+                roles[i + 1] = "state"
+
+    # Attachment override: a PN following PP/LOC is a prepositional complement,
+    # not a new theme.
+    for i, seg in enumerate(tp.struct_segments):
+        if seg != "PN" or i == 0:
+            continue
+        prev_seg = tp.struct_segments[i - 1]
+        prev_role = roles[i - 1]
+        if prev_seg in ("PP", "LOC") and prev_role in ("relation", "location"):
+            roles[i] = prev_role
+
+    role_segments = {}
+    for idx, role in enumerate(roles):
+        role_segments.setdefault(role, []).extend(tp.segment_tokens[idx] if idx < len(tp.segment_tokens) else [])
 
     tp.struct_roles = roles
     tp.role_segments = role_segments
@@ -244,6 +266,50 @@ def SROB(tp: TP) -> TP:
 
 def CnOB(tp: TP) -> TP:
     matched, unmatched, residue = check_constraints(tp.struct_roles)
+
+    def _add_match(name: str) -> None:
+        if name not in matched:
+            matched.append(name)
+        if name in residue:
+            residue.remove(name)
+
+    def _ordered_transition(from_role: str, to_role: str) -> bool:
+        from_indices = [i for i, r in enumerate(tp.struct_roles) if r == from_role]
+        to_indices = [i for i, r in enumerate(tp.struct_roles) if r == to_role]
+        return any(i < j for i in from_indices for j in to_indices)
+
+    # Copular link is a structural state transition cue, not a role-pair literal.
+    if "CP" in tp.struct_segments and "theme-state" in matched and "copular_state_link" not in matched:
+        _add_match("copular_state_link")
+
+    if "ST" in tp.struct_segments and "theme-state" not in matched:
+        if "theme" in tp.struct_roles and "state" in tp.struct_roles:
+            _add_match("theme-state")
+
+    if "LOC" in tp.struct_segments and "state-location" in matched and "locative_link" not in matched:
+        _add_match("locative_link")
+
+    # Interrogative transitions: WH-led and yes/no auxiliary-led question forms.
+    if "WQ" in tp.struct_segments and "IQ" in tp.struct_segments and "query-focus-predicate" not in matched:
+        _add_match("query-focus-predicate")
+
+    if tp.raw_text.strip().endswith("?") and tp.struct_segments[:1] == ["IQ"] and "query-focus-predicate" not in matched:
+        _add_match("query-focus-predicate")
+
+    if "predicate-theme" not in matched and "predicate" in tp.struct_roles and "theme" in tp.struct_roles:
+        p_i = tp.struct_roles.index("predicate")
+        t_i = tp.struct_roles.index("theme")
+        if p_i < t_i:
+            _add_match("predicate-theme")
+
+    # Nested interrogative transitions.
+    if _ordered_transition("theme", "relation"):
+        _add_match("theme-relation")
+    if _ordered_transition("relation", "state"):
+        _add_match("relation-state")
+    if _ordered_transition("state", "location"):
+        _add_match("state-location")
+
     tp.constraints_matched = matched
     tp.constraints_unmatched = unmatched
     tp.constraint_residue = residue
@@ -269,6 +335,18 @@ def CnOB(tp: TP) -> TP:
             "relation-patient": (
                 " ".join(tp.role_segments.get("relation", [])),
                 " ".join(tp.role_segments.get("patient", []))
+            ),
+            "state-location": (
+                " ".join(tp.role_segments.get("state", [])),
+                " ".join(tp.role_segments.get("location", []))
+            ),
+            "query-focus-predicate": (
+                " ".join(tp.role_segments.get("query_focus", [])),
+                " ".join(tp.role_segments.get("predicate", []))
+            ),
+            "predicate-theme": (
+                " ".join(tp.role_segments.get("predicate", [])),
+                " ".join(tp.role_segments.get("theme", []))
             )
         }
     })
@@ -277,6 +355,51 @@ def CnOB(tp: TP) -> TP:
 
 def SmOB(tp: TP) -> TP:
     ops, cues, residue = apply_smoothing(tp.segment_tokens, tp.struct_roles)
+
+    if "CP" in tp.struct_segments and "theme-state" in tp.constraints_matched:
+        if "copular_state_link" not in cues:
+            cues.append("copular_state_link")
+        if "smooth:copular_state_link" not in ops:
+            ops.append("smooth:copular_state_link")
+        if "no_relation_cues" in residue:
+            residue = [r for r in residue if r != "no_relation_cues"]
+
+    if "LOC" in tp.struct_segments and "state-location" in tp.constraints_matched:
+        if "locative_link" not in cues:
+            cues.append("locative_link")
+        if "smooth:locative_link" not in ops:
+            ops.append("smooth:locative_link")
+        if "no_relation_cues" in residue:
+            residue = [r for r in residue if r != "no_relation_cues"]
+
+    if "query-focus-predicate" in tp.constraints_matched or tp.raw_text.strip().endswith("?"):
+        if "interrogative_scope" not in cues:
+            cues.append("interrogative_scope")
+        if "smooth:interrogative_scope" not in ops:
+            ops.append("smooth:interrogative_scope")
+        if "no_relation_cues" in residue:
+            residue = [r for r in residue if r != "no_relation_cues"]
+
+    # Nested interrogative smoothing cues.
+    is_nested = "RELC" in tp.struct_segments or (
+        "relation" in tp.struct_roles and ("state" in tp.struct_roles or "location" in tp.struct_roles)
+    )
+    if is_nested:
+        if "modifier_chain" not in cues:
+            cues.append("modifier_chain")
+        if "smooth:modifier_chain" not in ops:
+            ops.append("smooth:modifier_chain")
+    if is_nested and "location" in tp.struct_roles:
+        if "nested_locative_link" not in cues:
+            cues.append("nested_locative_link")
+        if "smooth:nested_locative_link" not in ops:
+            ops.append("smooth:nested_locative_link")
+    if is_nested and "state" in tp.struct_roles:
+        if "nested_state_link" not in cues:
+            cues.append("nested_state_link")
+        if "smooth:nested_state_link" not in ops:
+            ops.append("smooth:nested_state_link")
+
     tp.smoothing_operations = ops
     tp.semantic_adjacent_cues = cues
     tp.smoothing_residue = residue
@@ -302,6 +425,14 @@ def SmOB(tp: TP) -> TP:
             "relation->patient": (
                 " ".join(tp.role_segments.get("relation", [])),
                 " ".join(tp.role_segments.get("patient", []))
+            ),
+            "state->location": (
+                " ".join(tp.role_segments.get("state", [])),
+                " ".join(tp.role_segments.get("location", []))
+            ),
+            "query_focus->predicate": (
+                " ".join(tp.role_segments.get("query_focus", [])),
+                " ".join(tp.role_segments.get("predicate", []))
             )
         }
     })
@@ -406,8 +537,22 @@ def IdOB(tp: TP) -> TP:
 
 
 def TRU(tp: TP) -> TP:
-    # Stub: treat as descriptive factual if no defects.
-    tp.truth_relation = "descriptive_factual" if not tp.defects else "uncertain"
+    # Copular/state sentences use descriptive_state; fallback keeps prior behavior.
+    is_interrogative = "query-focus-predicate" in tp.constraints_matched or tp.raw_text.strip().endswith("?")
+    is_nested = "RELC" in tp.struct_segments or (
+        "relation" in tp.struct_roles and ("state" in tp.struct_roles or "location" in tp.struct_roles)
+    )
+
+    if is_interrogative and is_nested:
+        tp.truth_relation = "interrogative_nested"
+    elif is_interrogative:
+        tp.truth_relation = "interrogative_open"
+    elif "LOC" in tp.struct_segments and "state-location" in tp.constraints_matched:
+        tp.truth_relation = "descriptive_locative"
+    elif "CP" in tp.struct_segments and "theme-state" in tp.constraints_matched:
+        tp.truth_relation = "descriptive_state"
+    else:
+        tp.truth_relation = "descriptive_factual" if not tp.defects else "uncertain"
     return tp
 
 

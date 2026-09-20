@@ -26,6 +26,34 @@ PRIMITIVES: List[PrimitiveFn] = [
 def _minimal_idob_selection(tp: TP) -> TP:
     selected_ops = []
 
+    if "theme-state" in tp.constraints_matched:
+        selected_ops.append("theme_state")
+
+    if "state-location" in tp.constraints_matched:
+        selected_ops.append("state_location")
+
+    if "query-focus-predicate" in tp.constraints_matched:
+        selected_ops.append("query_resolution")
+
+        q_focus = " ".join(tp.role_segments.get("query_focus", []))
+        has_location = "location" in tp.struct_roles
+        has_state = "state" in tp.struct_roles
+
+        if q_focus in ("where", "where?") or has_location:
+            selected_ops.append("interrogative_relation_request")
+        elif q_focus in ("why", "why?") or has_state:
+            selected_ops.append("interrogative_property_request")
+        else:
+            selected_ops.append("interrogative_identity_request")
+
+    if "modifier_chain" in tp.semantic_adjacent_cues or "relation" in tp.struct_roles:
+        selected_ops.append("nested_modifier_resolution")
+
+    if "nested_state_link" in tp.semantic_adjacent_cues or "nested_locative_link" in tp.semantic_adjacent_cues or (
+        "state" in tp.struct_roles and "location" in tp.struct_roles
+    ):
+        selected_ops.append("nested_state_location_resolution")
+
     if "agent-action" in tp.constraints_matched:
         selected_ops.append("agent_action")
 
@@ -38,12 +66,44 @@ def _minimal_idob_selection(tp: TP) -> TP:
     if tp.semantic_adjacent_cues:
         selected_ops.append("modifier_resolution")
 
+    query_focus = " ".join(tp.role_segments.get("query_focus", []))
+    predicate = " ".join(tp.role_segments.get("predicate", []))
+    theme = " ".join(tp.role_segments.get("theme", tp.role_segments.get("agent", [])))
+    relation_modifiers = " ".join(tp.role_segments.get("relation", []))
+
+    location_tokens = tp.role_segments.get("location", [])
+    has_location = bool(location_tokens)
+
+    state_tokens: List[str] = []
+    if has_location:
+        for seg, role, seg_tokens in zip(tp.struct_segments, tp.struct_roles, tp.segment_tokens):
+            if role == "state" and seg in ("CP", "ST"):
+                state_tokens.extend(seg_tokens)
+    else:
+        for seg, role, seg_tokens in zip(tp.struct_segments, tp.struct_roles, tp.segment_tokens):
+            if role == "state" and seg != "CP":
+                state_tokens.extend(seg_tokens)
+
+    if not state_tokens:
+        state_tokens = tp.role_segments.get("state", [])
+
     tp.semantic_core = {
         "selected_ops": selected_ops,
-        "agent": " ".join(tp.role_segments.get("agent", [])),
+        "query_focus": query_focus,
+        "predicate": predicate,
+        "theme": theme,
+        "relation_modifiers": relation_modifiers,
+        "complement": " ".join(location_tokens if location_tokens else state_tokens),
+        "agent": theme,
+        "state": " ".join(state_tokens),
+        "location": " ".join(location_tokens),
         "action": " ".join(tp.role_segments.get("action", [])),
         "patient": " ".join(tp.role_segments.get("patient", [])),
-        "modifiers": tp.semantic_adjacent_cues,
+        "modifiers": [
+            c
+            for c in tp.semantic_adjacent_cues
+            if c not in ("copular_state_link", "locative_link", "interrogative_scope")
+        ],
     }
 
     if not hasattr(tp, "trace"):
@@ -54,6 +114,9 @@ def _minimal_idob_selection(tp: TP) -> TP:
         "selected_ops": selected_ops,
         "semantic_core": tp.semantic_core,
         "token_relations": {
+            "query_focus": " ".join(tp.role_segments.get("query_focus", [])),
+            "predicate": " ".join(tp.role_segments.get("predicate", [])),
+            "theme": " ".join(tp.role_segments.get("theme", [])),
             "agent": " ".join(tp.role_segments.get("agent", [])),
             "action": " ".join(tp.role_segments.get("action", [])),
             "relation": " ".join(tp.role_segments.get("relation", [])),

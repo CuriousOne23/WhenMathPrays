@@ -1,8 +1,24 @@
 role_patterns:
+  WQ:
+    - query_focus
+  IQ:
+    - predicate
   NP:
-    - agent
-    - patient
+    - theme
+    - state
+  LOC:
+    - location
   VP:
     - action
   PP:
+    - relation
+  PN:
+    - theme
+  CP:
+    - state
+  ST:
+    - state
+  AP:
+    - state
+  RELC:
     - relation

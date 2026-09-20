@@ -1,9 +1,53 @@
 token_classes:
   the: DET
+  a: DET
   quick: ADJ
   brown: ADJ
+  blue: ADJ
+  "blue?": ADJ
+  cold: ADJ
+  bright: ADJ
+  "bright?": ADJ
   fox: NOUN
+  sky: NOUN
+  rain: NOUN
+  book: NOUN
+  "book?": NOUN
+  table: NOUN
+  "table?": NOUN
+  plain: NOUN
+  city: NOUN
+  "book?": NOUN
   jumps: VERB
+  is: AUX
+  are: AUX
+  "plain?": NOUN
+  was: AUX
+  were: AUX
+  do: AUX
+  does: AUX
+  did: AUX
+  stay: VERB_STATE
+  becomes: VERB_STATE
+  seems: VERB_STATE
+  stays: VERB_STATE
+  remains: VERB_STATE
+  that: REL
+  who: WH
+  what: WH
+  where: WH
+  "where?": WH
+  when: WH
+  why: WH
+  "why?": WH
+  how: WH
   over: PREP
+  in: PREP
+  "on": PREP
+  under: PREP
+  near: PREP
+  mainly: ADV
   lazy: ADJ
   dog: NOUN
+  paris: PROPN
+  spain: PROPN
