@@ -4,6 +4,9 @@ This directory contains a toy Thought Simulator (TS), Path-A simulator.
 
 Its purpose is educational: provide an architectural feel for major Path-A blocks, TP evolution across primitives, and dictionary-driven behavior while remaining lightweight and inspectable.
 
+## User Guide
+The [user_guide](user_guide.md) states how to run the Path A short simulator.
+
 ## Short Simulator Macro Categories
 
 - Intake Macro: InB, IIInB, IE
