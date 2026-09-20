@@ -116,12 +116,33 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
         tp = fn(tp)
         if fn.__name__ == "IdOB":
             tp = _minimal_idob_selection(tp)
-        trace.append({
+
+        trace_entry = {
             "primitive": fn.__name__,
             "input": asdict(input_snapshot),
             "output": asdict(tp),
             "notes": primitive_notes(fn.__name__, tp),
-        })
+        }
+
+        # Carry primitive-level diagnostic payloads (e.g., token_relations)
+        # from tp.trace into the public run trace consumed by run_examples.py.
+        if hasattr(tp, "trace") and tp.trace:
+            latest = tp.trace[-1]
+            if latest.get("primitive") == fn.__name__:
+                for key in (
+                    "matched",
+                    "unmatched",
+                    "residue",
+                    "operations",
+                    "semantic_adjacent_cues",
+                    "selected_ops",
+                    "semantic_core",
+                    "token_relations",
+                ):
+                    if key in latest:
+                        trace_entry[key] = latest[key]
+
+        trace.append(trace_entry)
 
     return {
         "final_tp": asdict(tp),
