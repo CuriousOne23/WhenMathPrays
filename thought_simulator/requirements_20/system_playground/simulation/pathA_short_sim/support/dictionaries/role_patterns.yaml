@@ -1,24 +1,88 @@
+# ============================================================
+# Role Patterns for Path-A Short Simulator
+# Each segment type (NP, PN, VP, CP, AP, ST, PP, LOC, RELC, IQ, WQ)
+# is defined in segment_patterns.yaml.
+#
+# This file maps segment types → semantic roles.
+# Comments explain what each abbreviation means.
+# ============================================================
+
 role_patterns:
+# ------------------------------------------------------------
+# WQ — Wh-Question Token
+# Interrogative focus words.
+# Examples: "who", "what", "where", "when", "why", "how"
+# ------------------------------------------------------------
   WQ:
     - query_focus
+# ------------------------------------------------------------
+# IQ — Interrogative Clause
+# Auxiliary/copular anchor for interrogatives.
+# Examples: "is" (in questions), "does"
+# ------------------------------------------------------------
   IQ:
     - predicate
+# ------------------------------------------------------------
+# NP — Noun Phrase
+# Core entities: themes, agents, patients.
+# Examples: "the sky", "the book", "the rain"
+# ------------------------------------------------------------
   NP:
     - theme
     - state
+# ------------------------------------------------------------
+# LOC — Locative Complement
+# Location expressions.
+# Examples: "on the table", "in the plain"
+# ------------------------------------------------------------
   LOC:
     - location
+# ------------------------------------------------------------
+# VP — Verb Phrase (action verbs)
+# Non-copular action verbs.
+# Examples: "runs", "eats", "moves"
+# ------------------------------------------------------------
   VP:
     - action
+# ------------------------------------------------------------
+# PP — Prepositional Phrase
+# Modifier or relational phrase.
+# Examples: "in Spain", "on the table"
+# ------------------------------------------------------------
   PP:
     - relation
+# ------------------------------------------------------------
+# PN — Proper Noun
+# Named entities.
+# Examples: "Paris", "John", "Spain"
+# ------------------------------------------------------------
   PN:
     - theme
+# ------------------------------------------------------------
+# CP — Copular Phrase
+# Copular verbs linking theme → state.
+# Examples: "is", "are"
+# ------------------------------------------------------------
   CP:
     - state
+# ------------------------------------------------------------
+# ST — State Verb
+# Non-copular state verbs.
+# Examples: "stays", "remains"
+# ------------------------------------------------------------
   ST:
     - state
+# ------------------------------------------------------------
+# AP — Adjective Phrase
+# Descriptive state expressions.
+# Examples: "blue", "bright"
+# ------------------------------------------------------------
   AP:
     - state
+# ------------------------------------------------------------
+# RELC — Relative Clause
+# Nested descriptive structures.
+# Examples: "that is blue", "that is on the table"
+# ------------------------------------------------------------
   RELC:
     - relation
