@@ -10,6 +10,8 @@ or to log:
 python run_examples.py > run.log
 ```
 
+See [pathA_supported_sentences.md](notes/pathA_supported_sentences.md) to see current sentences run_examples.py supports.
+
 ## Modify the Input Raw Sentence
 
 Open run_examples.py and change the raw input sentence passed into run_pathA_short(...), then rerun the script.
