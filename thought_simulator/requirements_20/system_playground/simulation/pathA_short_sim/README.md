@@ -58,3 +58,5 @@ Its purpose is educational: provide an architectural feel for major Path-A block
 
 - Architectural simulation details: [support/docs/architectural_simulation.md](support/docs/architectural_simulation.md)
 - Dictionary reference and schema: [support/docs/dictionaries_reference.md](support/docs/dictionaries_reference.md)
+- Heart of the theory for TS, Path A: [Theoretical heart for Path A](notes/pathA_relational_geometry.md)
+- Effects of AI on humanity: [AI Age effects on humanity](notes/The_Human_Self_in_the_AI_Age.md)
