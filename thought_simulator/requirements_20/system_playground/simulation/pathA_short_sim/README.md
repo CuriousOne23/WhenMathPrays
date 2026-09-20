@@ -56,5 +56,5 @@ Its purpose is educational: provide an architectural feel for major Path-A block
 
 ## Related Documents
 
-- Architectural simulation details: support/docs/architectural_simulation.md
-- Dictionary reference and schema: support/docs/dictionaries_reference.md
+- Architectural simulation details: [support/docs/architectural_simulation.md](support/docs/architectural_simulation.md)
+- Dictionary reference and schema: [support/docs/dictionaries_reference.md](support/docs/dictionaries_reference.md)
