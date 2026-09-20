@@ -1,6 +1,6 @@
 # PathA Short Simulation README
 
-This directory contains a toy Path-A simulator.
+This directory contains a toy Thought Simulator (TS), Path-A simulator.
 
 Its purpose is educational: provide an architectural feel for major Path-A blocks, TP evolution across primitives, and dictionary-driven behavior while remaining lightweight and inspectable.
 
