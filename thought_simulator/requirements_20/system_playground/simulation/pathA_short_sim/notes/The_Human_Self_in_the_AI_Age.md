@@ -8,6 +8,7 @@ This paper argues that the **AI Age** introduces a decisive fork in human self�
 
 - **AI Age *without* TS** → Humans begin to see themselves as biological neural networks, inferior versions of AI.  
 - **AI Age *with* TS** → Humans understand themselves as relational‑cognition beings, the origin of meaning, identity, and semantic geometry.
+See: [README.md](../README.md), Thought Simulator (TS)
 
 This fork determines whether the AI Age diminishes human identity or reveals it.
 
