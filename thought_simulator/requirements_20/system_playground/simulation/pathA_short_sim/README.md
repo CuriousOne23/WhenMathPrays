@@ -152,19 +152,19 @@ Full details and canonical TP traces are in:
 # **9. Related Documents**
 
 - Architectural simulation details:  
- [architectural_simulation.md](support/docs/architectural_simulation.md)
+ [support/doc/architectural_simulation.md](support/docs/architectural_simulation.md)
 
 - Dictionary reference and schema:  
-  [dictionaries_reference.md](support/docs/dictionaries_reference.md)
+  [support/doc/dictionaries_reference.md](support/docs/dictionaries_reference.md)
 
 - Core theory of Path‑A relational geometry:  
-  [pathA_relational_geometry.md](notes/pathA_relational_geometry.md)
+  [notes/pathA_relational_geometry.md](notes/pathA_relational_geometry.md)
 
 - Supported sentence families and examples:  
-  [pathA_supported_sentences.md](notes/pathA_supported_sentences.md)
+  [notes/pathA_supported_sentences.md](notes/pathA_supported_sentences.md)
 
 - Conceptual notes on AI and humanity:  
-  [The_Human_Self_in_the_AI_Age.md](notes/The_Human_Self_in_the_AI_Age.md)
+  [notes/The_Human_Self_in_the_AI_Age.md](notes/The_Human_Self_in_the_AI_Age.md)
 
 ---
 
