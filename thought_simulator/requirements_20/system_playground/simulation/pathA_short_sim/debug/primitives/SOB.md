@@ -42,42 +42,49 @@ These classes correspond to the structural geometries defined in your segment di
 
 ---
 
-## **4. SOB Output Schema**
+# **4. Structural Variables Filled by SOB (Local View)**  
+SOB is the first primitive in the Path‑A pipeline. It establishes the **structural segmentation envelope** that all downstream primitives depend on.  
+This section shows **only** the structural variables that SOB fills, along with those it leaves empty for later primitives.
 
-SOB produces a structured block in `debug_out.md` with the following fields:
+For the **full IdOB structural envelope**, see:  
+**`IdOB.md — Section 4: IdOB Structural Envelope (Canonical)`**
 
-### **segments**  
-List of segment classes detected (e.g., `WQ`, `IQ`, `NP`).
+---
 
-### **segment_tokens**  
-Token lists grouped by segment.
+## **4.1 Structural Origin Mini‑Table (SOB View)**
 
-### **roles**  
-Empty at SOB stage; filled by SROB.
+| Structural Term          | Filled by SOB? | Notes |
+|--------------------------|----------------|-------|
+| **segments**             | ✔              | SOB performs segmentation and assigns segment classes (e.g., WQ, IQ, NP). |
+| **segment_tokens**       | ✔              | SOB groups tokens into segments according to segment geometry. |
+| **roles**                | ✘              | Assigned by SROB. SOB does not perform role assignment. |
+| **constraints_matched**  | ✘              | Determined by CnOB. SOB does not evaluate constraints. |
+| **residue**              | ✘              | Produced by CnOB. SOB does not generate constraint residue. |
+| **smoothing_operations** | ✘              | Produced only by SmOB. SOB performs no smoothing. |
+| **smoothing_residue**    | ✘              | Produced only by SmOB. |
+| **semantic_adjacent_cues** | ✘            | Produced only by SmOB. |
+| **semantic_core**        | ✘              | Constructed by IdOB. SOB does not interpret meaning. |
+| **truth_relation**       | ✘              | Determined by IdOB. |
+| **token_relations**      | ✘              | Determined by IdOB. |
+| **ob_set_notes**         | ✔              | SOB produces structural notes summarizing segmentation. |
 
-### **constraints_matched**  
-Empty at SOB stage; filled by CnOB.
+---
 
-### **residue**  
-Structural residue from segmentation.
+## **4.2 Summary**
 
-### **smoothing_residue**  
-Empty at SOB stage.
+SOB fills **only** the structural segmentation layer:
 
-### **smoothing_operations**  
-Empty at SOB stage.
+- `segments`  
+- `segment_tokens`  
+- `ob_set_notes`
 
-### **semantic_adjacent_cues**  
-Empty at SOB stage.
+All other structural, relational, smoothing, and semantic variables are filled by downstream primitives:
 
-### **semantic_core**  
-Empty at SOB stage.
+```
+SOB → SROB → CnOB → SmOB → IdOB
+```
 
-### **token_relations**  
-Empty at SOB stage.
-
-### **ob_set_notes**  
-Human‑readable notes summarizing the segmentation.
+This mini‑table provides a quick mnemonic reference when debugging SOB output.
 
 ---
 
