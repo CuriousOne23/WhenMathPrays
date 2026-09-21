@@ -161,6 +161,6 @@ smob_smoothing_residue = ['underspecification_adjacent']
 This shows how token intuition becomes basin residue.
 
 For full examples across all primitives, see:  
-**[Appendix X — Token‑to‑Structure Bridge]**
+**[Appendix X — Token‑to‑Structure Bridge](../primitives/appendix_x_token_to_structure_bridge.md)**
 
 ---
