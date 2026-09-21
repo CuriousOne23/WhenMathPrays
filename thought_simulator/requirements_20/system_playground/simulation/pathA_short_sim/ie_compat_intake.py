@@ -31,6 +31,8 @@ def _tokenize_ie_compat(raw_text: str) -> List[Dict[str, int | str]]:
 
 
 def _classify_token(surface: str) -> str:
+    if "\ufffd" in surface:
+        return "ANOMALY"
     if len(surface) == 1 and re.match(r"[^\w\s]", surface, re.UNICODE):
         return "PUNCT"
     if surface.isdigit():
@@ -44,11 +46,13 @@ def build_committed_stream(raw_text: str) -> dict:
 
     token_specs = _tokenize_ie_compat(raw_text)
     tokens = []
+    anomalies = []
 
     for idx, spec in enumerate(token_specs, start=1):
         surface = str(spec["surface"])
         normalized_unicode = unicodedata.normalize("NFC", surface)
         normalized = normalized_unicode.lower()
+        token_class = _classify_token(surface)
 
         token_flags: List[str] = []
         if idx == 1:
@@ -58,12 +62,27 @@ def build_committed_stream(raw_text: str) -> dict:
 
         normalization_flags: List[str] = []
         normalization_rule_ids: List[str] = []
+        anomaly_flags: List[str] = []
         if normalized_unicode != surface:
             normalization_flags.append("unicode_nfc")
             normalization_rule_ids.append("norm.unicode.nfc.001")
         if normalized != surface:
             normalization_flags.append("case_folded")
             normalization_rule_ids.append("norm.casefold.001")
+
+        if token_class == "ANOMALY":
+            anomaly_flags.append("replacement_char")
+            anomalies.append(
+                {
+                    "anomaly_id": f"a-{len(anomalies) + 1}",
+                    "token_id": idx,
+                    "anomaly_type": "replacement_char",
+                    "detected_by_rule": "anom.detect.replacement_char.001",
+                    "repaired": False,
+                    "repair_rule_id": None,
+                    "repair_explanation": None,
+                }
+            )
 
         tokens.append(
             {
@@ -73,14 +92,14 @@ def build_committed_stream(raw_text: str) -> dict:
                 "span_end": int(spec["span_end"]),
                 "surface": surface,
                 "normalized": normalized,
-                "token_class": _classify_token(surface),
+                "token_class": token_class,
                 "role": {
                     "chosen": "none",
                     "candidates": [],
                 },
                 "flags": {
                     "token_flags": token_flags,
-                    "anomaly_flags": [],
+                    "anomaly_flags": anomaly_flags,
                     "normalization_flags": normalization_flags,
                 },
                 "provenance": {
@@ -125,7 +144,7 @@ def build_committed_stream(raw_text: str) -> dict:
         },
         "segments": segments,
         "tokens": tokens,
-        "anomalies": [],
+        "anomalies": anomalies,
         "deltas": {
             "parity_status": "identical",
             "delta_count": 0,

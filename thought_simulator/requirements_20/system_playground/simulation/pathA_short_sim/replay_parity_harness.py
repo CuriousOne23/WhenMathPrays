@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -23,8 +24,8 @@ CASES: List[Dict[str, Any]] = [
     {
         "id": "anomalies",
         "raw_text": "abc\ufffddef",
-        "status": "pending",
-        "description": "Anomaly token classification and repair rules pending.",
+        "status": "active",
+        "description": "Anomaly tokens are classified and recorded with deterministic flags.",
     },
     {
         "id": "normalization",
@@ -115,6 +116,50 @@ def _check_unicode_marks(stream: Dict[str, Any]) -> Tuple[bool, List[str], Dict[
     return len(failed) == 0, failed, details
 
 
+def _check_anomalies(stream: Dict[str, Any]) -> Tuple[bool, List[str], Dict[str, Any]]:
+    tokens = stream.get("tokens", [])
+    anomalies = stream.get("anomalies", [])
+
+    surfaces = [t.get("surface") for t in tokens]
+    classes = [t.get("token_class") for t in tokens]
+    anomaly_tokens = [t for t in tokens if t.get("token_class") == "ANOMALY"]
+
+    checks = [
+        (surfaces == ["abc", "\ufffd", "def"], "anomaly tokenization mismatch"),
+        (classes == ["WORD", "ANOMALY", "WORD"], "anomaly token class sequence mismatch"),
+        (len(anomaly_tokens) == 1, "expected exactly one ANOMALY token"),
+        (len(anomalies) == 1, "expected exactly one anomaly record"),
+    ]
+
+    if anomaly_tokens:
+        checks.append(
+            (
+                "replacement_char" in anomaly_tokens[0].get("flags", {}).get("anomaly_flags", []),
+                "replacement_char anomaly flag missing",
+            )
+        )
+
+    if anomalies:
+        checks.extend(
+            [
+                (anomalies[0].get("token_id") == 2, "anomaly token_id mismatch"),
+                (anomalies[0].get("anomaly_type") == "replacement_char", "anomaly type mismatch"),
+                (
+                    anomalies[0].get("detected_by_rule") == "anom.detect.replacement_char.001",
+                    "anomaly detection rule id mismatch",
+                ),
+            ]
+        )
+
+    failed = [msg for ok, msg in checks if not ok]
+    details = {
+        "surfaces": surfaces,
+        "classes": classes,
+        "anomaly_records": anomalies,
+    }
+    return len(failed) == 0, failed, details
+
+
 def _check_deterministic_ids(raw_text: str) -> Tuple[bool, List[str], Dict[str, Any]]:
     stream_a = build_committed_stream(raw_text)
     stream_b = build_committed_stream(raw_text)
@@ -150,6 +195,8 @@ def _evaluate_case(case: Dict[str, Any]) -> Dict[str, Any]:
             ok, failed, details = _check_punctuation(stream)
         elif case_id == "unicode_marks":
             ok, failed, details = _check_unicode_marks(stream)
+        elif case_id == "anomalies":
+            ok, failed, details = _check_anomalies(stream)
         else:
             ok, failed, details = False, ["active case has no evaluator"], {}
 
@@ -215,7 +262,8 @@ def main() -> int:
         out_path = Path(args.output)
         out_path.write_text(text + "\n", encoding="utf-8")
     else:
-        print(text)
+        # Emit UTF-8 bytes directly to avoid Windows console code-page failures.
+        sys.stdout.buffer.write((text + "\n").encode("utf-8"))
 
     return 0 if payload["overall_status"] == "pass" else 2
 
