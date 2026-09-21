@@ -132,3 +132,194 @@ These illustrate cue extraction and basin stabilization.
 - SmOB provides the **canonical pre‑semantic representation** for routing and identity.
 
 ---
+
+# **Appendix A — What SmOB Means by Smoothing, Adjacency, and Smoothing Residue**
+
+SmOB = **Semantic Object Basin**, not “Smoothing Object Block.”  
+The term *smoothing* inside SmOB refers to **basin‑level stabilization**, not semantic interpretation and not cumulative residue across primitives.
+
+This appendix defines the three key concepts SmOB uses.
+
+---
+
+# **A.1 What is “Smoothing” in SmOB?**  
+### **Definition**  
+In SmOB, *smoothing* means:
+
+> **Deterministic basin‑level stabilization of upstream structural residue so that semantic‑adjacent cues can be extracted and compressed into a replay‑safe pre‑semantic representation.**
+
+It is **not** semantic smoothing, statistical smoothing, or linguistic smoothing.
+
+It is a **basin operation** that:
+
+- resolves adjacency discontinuities  
+- resolves continuity breaks  
+- resolves role‑alignment inconsistencies  
+- resolves segment‑alignment inconsistencies  
+- prepares deterministic pre‑semantic compression  
+
+### **Why SmOB performs smoothing**  
+Because SOB → SROB → CnOB produce **structural residue** that is:
+
+- partially matched  
+- discontinuous  
+- adjacency‑incomplete  
+- role‑incomplete  
+- constraint‑incomplete  
+
+SmOB must stabilize this residue before IdOB can form identity.
+
+### **Outputs of smoothing**  
+- `smoothing_operations`  
+- `smoothing_residue`  
+- `semantic_adjacent_cues`  
+
+---
+
+# **A.2 What is “Adjacency” in SmOB?**  
+### **Definition**  
+Adjacency in SmOB means:
+
+> **Semantic‑adjacent relationships between segments, roles, constraints, or cues that are not explicitly connected but are implicitly related.**
+
+Examples of semantic‑adjacent relationships:
+
+- interrogative scope adjacency  
+- modality adjacency  
+- affect adjacency  
+- conflict adjacency  
+- underspecification adjacency  
+- descriptive adjacency  
+- locative adjacency  
+- state adjacency  
+
+### **Why adjacency matters**  
+Adjacency determines:
+
+- which cues SmOB extracts  
+- which cues IdOB uses  
+- which truth‑relations are possible  
+- which identity geometries are valid  
+
+### **Adjacency cues SmOB extracts**  
+Examples:
+
+- `interrogative_scope`  
+- `modality_cue`  
+- `affect_marker`  
+- `conflict_adjacent`  
+- `underspecification_adjacent`  
+- `descriptive_adjacent`  
+- `locative_adjacent`  
+- `state_adjacent`  
+
+These become part of:
+
+- `semantic_adjacent_cues`  
+- `tr_input_vector`  
+- `presemantic_residue_hash`
+
+---
+
+# **A.3 What is “Smoothing Residue”?**  
+### **Definition**  
+`smoothing_residue` is:
+
+> **The leftover structural material after SmOB performs basin‑level smoothing.**
+
+It is **not**:
+
+- cumulative residue from SOB  
+- cumulative residue from SROB  
+- cumulative residue from CnOB  
+- residue from the entire pipeline  
+
+It is **only** the residue produced by SmOB’s basin operations.
+
+### **Why smoothing_residue exists**  
+Because SmOB’s basin operations may leave:
+
+- unresolved adjacency  
+- unresolved modality cues  
+- unresolved affect markers  
+- unresolved conflict‑adjacent signals  
+- unresolved underspecification signals  
+
+These must be passed to IdOB **separately** from CnOB residue.
+
+### **IdOB needs both residues**  
+- **CnOB residue** → constraint failures  
+- **SmOB residue** → basin smoothing failures  
+
+These are distinct failure modes.
+
+---
+
+# **A.4 Examples**
+
+### **Example 1 — Adjacency Smoothing**
+Input residue from CnOB:
+```
+residue: ['interrogative_scope', 'state_adjacent']
+```
+
+SmOB applies adjacency smoothing:
+```
+smoothing_operations: ['adjacency_smoothing']
+semantic_adjacent_cues: ['interrogative_scope', 'state_adjacent']
+smoothing_residue: []
+```
+
+### **Example 2 — Continuity Smoothing**
+Input residue:
+```
+residue: ['modality_cue', 'underspecification_adjacent']
+```
+
+SmOB applies continuity smoothing:
+```
+smoothing_operations: ['continuity_smoothing']
+semantic_adjacent_cues: ['modality_cue']
+smoothing_residue: ['underspecification_adjacent']
+```
+
+### **Example 3 — Role‑Alignment Smoothing**
+Input residue:
+```
+residue: ['modifier_chain']
+```
+
+SmOB applies role smoothing:
+```
+smoothing_operations: ['role_smoothing']
+semantic_adjacent_cues: ['modifier_chain']
+smoothing_residue: []
+```
+
+### **Example 4 — Segment‑Alignment Smoothing**
+Input residue:
+```
+residue: ['locative_adjacent']
+```
+
+SmOB applies segment smoothing:
+```
+smoothing_operations: ['segment_smoothing']
+semantic_adjacent_cues: ['locative_adjacent']
+smoothing_residue: []
+```
+
+---
+
+# **A.5 Summary**
+
+- **Smoothing** = basin‑level stabilization  
+- **Adjacency** = semantic‑adjacent relationships SmOB extracts  
+- **Smoothing_residue** = leftover material after SmOB’s basin operations  
+
+SmOB is the **Semantic Object Basin**, not a semantic interpreter.  
+Its job is to produce a **deterministic pre‑semantic representation** for IdOB and the Thought Router.
+
+---
+
+
