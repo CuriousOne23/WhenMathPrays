@@ -66,7 +66,7 @@ Everything the simulator does must be built on top of tokens.
 
 # **2. SOB — From Tokens → Segments**
 
-SOB groups tokens into **segments** using segment geometry.
+SOB groups tokens into [segments](../fields/struct_segments.md) using segment geometry.
 
 Example segmentation:
 ```
