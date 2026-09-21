@@ -1,11 +1,3 @@
-Here is a **complete, rewritten, structurally correct, token‑aware** version of **constraints_matched.md**, fully aligned with your simulator architecture and grounded in the content of your current tab   [Current page](citation-section://1147020954/2).
-
-This rewrite keeps the field definition clean **but also bridges token‑intuition → structured‑world meaning**, and it points to **Appendix X — Token‑to‑Structure Bridge** for full examples.
-
-You can paste this directly into GitHub.
-
----
-
 # **constraints_matched.md — Constraint Geometry Match Field**
 
 ## **1. Definition**  
