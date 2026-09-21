@@ -1,8 +1,8 @@
-# **SOB.md — Segment Observation Block**  
+# **SOB.md — structural Object Basin**  
 ### *Path‑A Short Simulator Primitive Documentation*
 
 ## **1. Definition**  
-The **Segment Observation Block (SOB)** is the first primitive in the Path‑A short simulation chain. It performs structural segmentation of the input utterance and establishes the segment geometry that all downstream primitives depend on. SOB identifies admissible segment classes and constructs the structural envelope for role assignment, constraint matching, smoothing, and identity formation. 
+The **Structural Object Basin (SOB)** is the first primitive in the Path‑A short simulation chain. It performs structural segmentation of the input utterance and establishes the segment geometry that all downstream primitives depend on. SOB identifies admissible segment classes and constructs the structural envelope for role assignment, constraint matching, smoothing, and identity formation. 
 
 SOB is responsible for answering the question:
 
