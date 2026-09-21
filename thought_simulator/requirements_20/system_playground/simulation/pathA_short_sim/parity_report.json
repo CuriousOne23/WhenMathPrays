@@ -1,0 +1,157 @@
+{
+  "contract_version": "ie-compat-v1",
+  "generated_at_utc": "2026-09-21T13:48:00.998045+00:00",
+  "harness": "replay_parity_harness",
+  "overall_status": "pass",
+  "results": [
+    {
+      "case_id": "punctuation",
+      "checks": [],
+      "description": "Punctuation is emitted as standalone tokens.",
+      "details": {
+        "classes": [
+          "WORD",
+          "PUNCT",
+          "WORD",
+          "PUNCT"
+        ],
+        "surfaces": [
+          "Hello",
+          ",",
+          "world",
+          "!"
+        ]
+      },
+      "pass": true,
+      "raw_text": "Hello, world!",
+      "status": "executed"
+    },
+    {
+      "case_id": "unicode_marks",
+      "checks": [],
+      "description": "Combining unicode marks are normalized deterministically.",
+      "details": {
+        "normalization_flags": [
+          "unicode_nfc",
+          "case_folded"
+        ],
+        "normalization_rule_ids": [
+          "norm.unicode.nfc.001",
+          "norm.casefold.001"
+        ],
+        "normalized": [
+          "café"
+        ],
+        "surfaces": [
+          "café"
+        ]
+      },
+      "pass": true,
+      "raw_text": "café",
+      "status": "executed"
+    },
+    {
+      "case_id": "anomalies",
+      "checks": [],
+      "description": "Anomaly token classification and repair rules pending.",
+      "details": {
+        "note": "not executed"
+      },
+      "pass": false,
+      "raw_text": "abc�def",
+      "status": "pending"
+    },
+    {
+      "case_id": "normalization",
+      "checks": [],
+      "description": "Whitespace normalization parity checks pending.",
+      "details": {
+        "note": "not executed"
+      },
+      "pass": false,
+      "raw_text": "a   b\tc",
+      "status": "pending"
+    },
+    {
+      "case_id": "multi_token_roles",
+      "checks": [],
+      "description": "Multi-token role matcher parity checks pending.",
+      "details": {
+        "note": "not executed"
+      },
+      "pass": false,
+      "raw_text": "in front of the house",
+      "status": "pending"
+    },
+    {
+      "case_id": "dictionary_precedence",
+      "checks": [],
+      "description": "Layered dictionary precedence checks pending.",
+      "details": {
+        "note": "not executed"
+      },
+      "pass": false,
+      "raw_text": "where is lead",
+      "status": "pending"
+    },
+    {
+      "case_id": "segment_boundaries",
+      "checks": [],
+      "description": "Explicit boundary parity checks pending.",
+      "details": {
+        "note": "not executed"
+      },
+      "pass": false,
+      "raw_text": "First. Second.",
+      "status": "pending"
+    },
+    {
+      "case_id": "token_flags_propagation",
+      "checks": [],
+      "description": "Token-flag propagation checks pending.",
+      "details": {
+        "note": "not executed"
+      },
+      "pass": false,
+      "raw_text": "(alpha)",
+      "status": "pending"
+    },
+    {
+      "case_id": "deterministic_ids",
+      "checks": [],
+      "description": "Token and segment IDs are stable across runs.",
+      "details": {
+        "ids_a": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "ids_b": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      },
+      "pass": true,
+      "raw_text": "repeatable input",
+      "status": "executed"
+    }
+  ],
+  "summary": {
+    "executed": 3,
+    "failed": 0,
+    "passed": 3,
+    "pending": 6,
+    "total_selected": 9
+  }
+}

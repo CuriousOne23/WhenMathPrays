@@ -1,0 +1,111 @@
+harness: replay_parity_harness
+contract_version: ie-compat-v1
+generated_at_utc: '2026-09-21T13:48:02.318934+00:00'
+overall_status: pass
+summary:
+  total_selected: 9
+  executed: 3
+  passed: 3
+  failed: 0
+  pending: 6
+results:
+- case_id: punctuation
+  status: executed
+  pass: true
+  raw_text: Hello, world!
+  description: Punctuation is emitted as standalone tokens.
+  checks: []
+  details:
+    surfaces:
+    - Hello
+    - ','
+    - world
+    - '!'
+    classes:
+    - WORD
+    - PUNCT
+    - WORD
+    - PUNCT
+- case_id: unicode_marks
+  status: executed
+  pass: true
+  raw_text: café
+  description: Combining unicode marks are normalized deterministically.
+  checks: []
+  details:
+    surfaces:
+    - café
+    normalized:
+    - café
+    normalization_flags:
+    - unicode_nfc
+    - case_folded
+    normalization_rule_ids:
+    - norm.unicode.nfc.001
+    - norm.casefold.001
+- case_id: anomalies
+  status: pending
+  pass: false
+  raw_text: abc�def
+  description: Anomaly token classification and repair rules pending.
+  checks: []
+  details:
+    note: not executed
+- case_id: normalization
+  status: pending
+  pass: false
+  raw_text: "a   b\tc"
+  description: Whitespace normalization parity checks pending.
+  checks: []
+  details:
+    note: not executed
+- case_id: multi_token_roles
+  status: pending
+  pass: false
+  raw_text: in front of the house
+  description: Multi-token role matcher parity checks pending.
+  checks: []
+  details:
+    note: not executed
+- case_id: dictionary_precedence
+  status: pending
+  pass: false
+  raw_text: where is lead
+  description: Layered dictionary precedence checks pending.
+  checks: []
+  details:
+    note: not executed
+- case_id: segment_boundaries
+  status: pending
+  pass: false
+  raw_text: First. Second.
+  description: Explicit boundary parity checks pending.
+  checks: []
+  details:
+    note: not executed
+- case_id: token_flags_propagation
+  status: pending
+  pass: false
+  raw_text: (alpha)
+  description: Token-flag propagation checks pending.
+  checks: []
+  details:
+    note: not executed
+- case_id: deterministic_ids
+  status: executed
+  pass: true
+  raw_text: repeatable input
+  description: Token and segment IDs are stable across runs.
+  checks: []
+  details:
+    ids_a:
+    - - 1
+      - 1
+    - - 2
+      - 1
+    ids_b:
+    - - 1
+      - 1
+    - - 2
+      - 1
+
