@@ -47,7 +47,7 @@ If SmOB cannot stabilize one of them, it becomes **smoothing_residue**.
 This field is the structured‑world representation of **what SmOB could not fix**.
 
 For a full walkthrough from tokens → segments → roles → constraints → basin, see:  
-**Appendix X — Token‑to‑Structure Bridge**
+**[Appendix X — Token‑to‑Structure Bridge](../primitives/appendix_x_token_to_structure_bridge.md)**
 
 ---
 
