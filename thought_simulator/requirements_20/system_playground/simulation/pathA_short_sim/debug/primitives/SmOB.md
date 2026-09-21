@@ -309,10 +309,6 @@ semantic_adjacent_cues: ['locative_adjacent']
 smoothing_residue: []
 ```
 
-You’re right to call this out, Jeff — in the appendix I *named* the smoothing types but didn’t give **explicit, concrete examples** of each type. Let’s fix that cleanly and add **real SmOB‑style examples** that match your simulator’s residue/cue geometry.
-
-Below is a drop‑in replacement section you can paste directly into **SmOB.md Appendix A**, giving **full examples for each smoothing type**.
-
 ---
 
 ## **A.4.1 Detailed Examples of Each SmOB Smoothing Type**
