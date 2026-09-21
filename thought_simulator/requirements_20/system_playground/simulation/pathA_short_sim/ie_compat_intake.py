@@ -47,9 +47,12 @@ def build_committed_stream(raw_text: str) -> dict:
     token_specs = _tokenize_ie_compat(raw_text)
     tokens = []
     anomalies = []
+    prev_end: int | None = None
 
     for idx, spec in enumerate(token_specs, start=1):
         surface = str(spec["surface"])
+        span_start = int(spec["span_start"])
+        span_end = int(spec["span_end"])
         normalized_unicode = unicodedata.normalize("NFC", surface)
         normalized = normalized_unicode.lower()
         token_class = _classify_token(surface)
@@ -63,6 +66,15 @@ def build_committed_stream(raw_text: str) -> dict:
         normalization_flags: List[str] = []
         normalization_rule_ids: List[str] = []
         anomaly_flags: List[str] = []
+
+        if prev_end is not None:
+            interstitial = raw_text[prev_end:span_start]
+            # IE-compat placeholder: any non-canonical token boundary whitespace
+            # is marked as a collapsed whitespace normalization event.
+            if interstitial and interstitial != " ":
+                normalization_flags.append("whitespace_collapsed")
+                normalization_rule_ids.append("norm.whitespace.collapse.001")
+
         if normalized_unicode != surface:
             normalization_flags.append("unicode_nfc")
             normalization_rule_ids.append("norm.unicode.nfc.001")
@@ -88,8 +100,8 @@ def build_committed_stream(raw_text: str) -> dict:
             {
                 "token_id": idx,
                 "segment_id": 1,
-                "span_start": int(spec["span_start"]),
-                "span_end": int(spec["span_end"]),
+                "span_start": span_start,
+                "span_end": span_end,
                 "surface": surface,
                 "normalized": normalized,
                 "token_class": token_class,
@@ -111,6 +123,7 @@ def build_committed_stream(raw_text: str) -> dict:
                 },
             }
         )
+        prev_end = span_end
 
     segment_end = len(tokens) if tokens else 1
     segments = [

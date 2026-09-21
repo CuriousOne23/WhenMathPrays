@@ -30,8 +30,8 @@ CASES: List[Dict[str, Any]] = [
     {
         "id": "normalization",
         "raw_text": "a   b\tc",
-        "status": "pending",
-        "description": "Whitespace normalization parity checks pending.",
+        "status": "active",
+        "description": "Whitespace normalization is deterministic and recorded in token provenance.",
     },
     {
         "id": "multi_token_roles",
@@ -54,8 +54,8 @@ CASES: List[Dict[str, Any]] = [
     {
         "id": "token_flags_propagation",
         "raw_text": "(alpha)",
-        "status": "pending",
-        "description": "Token-flag propagation checks pending.",
+        "status": "active",
+        "description": "Token flags are propagated deterministically across punctuation boundaries.",
     },
     {
         "id": "deterministic_ids",
@@ -160,6 +160,70 @@ def _check_anomalies(stream: Dict[str, Any]) -> Tuple[bool, List[str], Dict[str,
     return len(failed) == 0, failed, details
 
 
+def _check_normalization(stream: Dict[str, Any]) -> Tuple[bool, List[str], Dict[str, Any]]:
+    tokens = stream.get("tokens", [])
+    surfaces = [t.get("surface") for t in tokens]
+    normalized = [t.get("normalized") for t in tokens]
+    spans = [(t.get("span_start"), t.get("span_end")) for t in tokens]
+
+    checks = [
+        (surfaces == ["a", "b", "c"], "normalized tokenization mismatch"),
+        (normalized == ["a", "b", "c"], "normalized values mismatch"),
+        (spans == [(0, 1), (4, 5), (6, 7)], "token spans mismatch"),
+        (
+            "whitespace_collapsed" in tokens[1].get("flags", {}).get("normalization_flags", [])
+            if len(tokens) > 1
+            else False,
+            "second token missing whitespace_collapsed flag",
+        ),
+        (
+            "norm.whitespace.collapse.001" in tokens[1].get("provenance", {}).get("normalization_rule_ids", [])
+            if len(tokens) > 1
+            else False,
+            "second token missing whitespace normalization rule id",
+        ),
+        (
+            "whitespace_collapsed" in tokens[2].get("flags", {}).get("normalization_flags", [])
+            if len(tokens) > 2
+            else False,
+            "third token missing whitespace_collapsed flag",
+        ),
+    ]
+
+    failed = [msg for ok, msg in checks if not ok]
+    details = {
+        "surfaces": surfaces,
+        "normalized": normalized,
+        "spans": spans,
+        "token2_normalization_flags": tokens[1].get("flags", {}).get("normalization_flags", []) if len(tokens) > 1 else [],
+        "token3_normalization_flags": tokens[2].get("flags", {}).get("normalization_flags", []) if len(tokens) > 2 else [],
+    }
+    return len(failed) == 0, failed, details
+
+
+def _check_token_flags_propagation(stream: Dict[str, Any]) -> Tuple[bool, List[str], Dict[str, Any]]:
+    tokens = stream.get("tokens", [])
+    surfaces = [t.get("surface") for t in tokens]
+    classes = [t.get("token_class") for t in tokens]
+    token_flags = [t.get("flags", {}).get("token_flags", []) for t in tokens]
+
+    checks = [
+        (surfaces == ["(", "alpha", ")"], "tokenization mismatch for punctuation-wrapped token"),
+        (classes == ["PUNCT", "WORD", "PUNCT"], "token class sequence mismatch"),
+        ("boundary_left" in token_flags[0] if len(token_flags) > 0 else False, "first token missing boundary_left flag"),
+        ("boundary_right" in token_flags[-1] if len(token_flags) > 0 else False, "last token missing boundary_right flag"),
+        (token_flags[1] == [] if len(token_flags) > 1 else False, "middle token should not have boundary flags"),
+    ]
+
+    failed = [msg for ok, msg in checks if not ok]
+    details = {
+        "surfaces": surfaces,
+        "classes": classes,
+        "token_flags": token_flags,
+    }
+    return len(failed) == 0, failed, details
+
+
 def _check_deterministic_ids(raw_text: str) -> Tuple[bool, List[str], Dict[str, Any]]:
     stream_a = build_committed_stream(raw_text)
     stream_b = build_committed_stream(raw_text)
@@ -197,6 +261,10 @@ def _evaluate_case(case: Dict[str, Any]) -> Dict[str, Any]:
             ok, failed, details = _check_unicode_marks(stream)
         elif case_id == "anomalies":
             ok, failed, details = _check_anomalies(stream)
+        elif case_id == "normalization":
+            ok, failed, details = _check_normalization(stream)
+        elif case_id == "token_flags_propagation":
+            ok, failed, details = _check_token_flags_propagation(stream)
         else:
             ok, failed, details = False, ["active case has no evaluator"], {}
 
