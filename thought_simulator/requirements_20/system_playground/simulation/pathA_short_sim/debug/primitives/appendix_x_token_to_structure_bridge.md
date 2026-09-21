@@ -99,7 +99,7 @@ SOB’s structural function:
 
 # **3. SROB — From Segments → Roles**
 
-SROB assigns **functional roles** to segments.
+SROB assigns  [functional roles](../fields/struct_roles.md)  to segments.
 
 Example:
 ```
@@ -165,8 +165,8 @@ SmOB receives residue from CnOB and performs:
 
 Example:
 ```
-smoothing_operations: ['adjacency_smoothing']
-semantic_adjacent_cues: ['interrogative_scope', 'state_adjacent']
+smoothing_operations: ['adjacency_smoothing'](../fields/semantic_adjacent_cues.md) 
+semantic_adjacent_cues: ['interrogative_scope', 'state_adjacent'](../fields/semantic_adjacent_cues.md) 
 smoothing_residue: []
 ```
 
@@ -202,7 +202,7 @@ IdOB forms:
 Example:
 ```
 identity_geometry = referential_identity
-semantic_core = ['entity', 'locative_modifier']
+semantic_core = ['entity', 'locative_modifier'](../fields/idob_packet.md)
 truth_relation = 'interrogative'
 ```
 
