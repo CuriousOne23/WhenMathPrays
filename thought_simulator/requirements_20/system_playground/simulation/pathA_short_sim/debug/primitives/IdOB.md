@@ -1,18 +1,19 @@
 # IdOB
 
-## Purpose
-Construct contract-shaped identity packet and select operation candidates.
+definition: IdOB (Identity Observation Block) confirms referential, structural, or semantic identity across interpretation. It evaluates identity geometry, forms identity packets, and ensures stable referential coherence. IdOB integrates structural, semantic, and constraint signals to maintain consistent identity across primitives.
 
-## Inputs
-- committed_stream
-- constraints_matched
-- semantic_adjacent_cues
+allowed_values:
+	- referential_identity
+	- structural_identity
+	- semantic_identity
+	- packet_identity
 
-## Outputs
-- idob_packet
-- idob_complete
-- path_b_eligible
+effects:
+	- activates identity confirmation pathways
+	- shapes packet formation for identity-related fields
+	- influences semantic cue propagation for SmOB
+	- constrains role alignment for SROB
 
-## Debug Checks
-- Packet contains required contract keys.
-- Selection is deterministic for identical signal sets.
+example:
+	- "IdOB fired: identity_geometry=referential_identity, idob_packet=referential_packet"
+	- "IdOB packet formed: identity_geometry=packet_identity, residue=semantic_residue"
