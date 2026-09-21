@@ -160,6 +160,8 @@ SOB provides the structural anchors for identity confirmation.
 
 These relationships match the effects listed in your current SOB.md. 
 
+---
+
 ## **8. Explanation and Examples Starting from Tokens**
 
 See [Appendix X — Token‑to‑Structure Bridge](appendix_x_token_to_structure_bridge.md)  
