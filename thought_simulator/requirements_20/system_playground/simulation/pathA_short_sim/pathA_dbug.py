@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -65,6 +66,110 @@ def resolve_link(
     return str(links_registry.get(section, {}).get(key, ""))
 
 
+def _literal_eval_safe(value: str) -> Any:
+    try:
+        return ast.literal_eval(value)
+    except (ValueError, SyntaxError):
+        return value
+
+
+def _extract_literal_or_text(line: str, marker: str) -> Any:
+    start = line.find(marker)
+    if start < 0:
+        return None
+    tail = line[start + len(marker) :].strip()
+    if not tail:
+        return ""
+
+    if tail[0] in "[{(":
+        opener = tail[0]
+        closer = {
+            "[": "]",
+            "{": "}",
+            "(": ")",
+        }[opener]
+        depth = 0
+        in_quote = ""
+        escape = False
+        for i, ch in enumerate(tail):
+            if escape:
+                escape = False
+                continue
+            if ch == "\\":
+                escape = True
+                continue
+            if in_quote:
+                if ch == in_quote:
+                    in_quote = ""
+                continue
+            if ch in ('"', "'"):
+                in_quote = ch
+                continue
+            if ch == opener:
+                depth += 1
+            elif ch == closer:
+                depth -= 1
+                if depth == 0:
+                    literal_text = tail[: i + 1]
+                    return _literal_eval_safe(literal_text)
+        return _literal_eval_safe(tail)
+
+    for sep in [";", ","]:
+        idx = tail.find(sep)
+        if idx != -1:
+            tail = tail[:idx].strip()
+            break
+    return _literal_eval_safe(tail)
+
+
+def _merge_list(target: List[Any], incoming: Any) -> None:
+    if incoming is None:
+        return
+    if isinstance(incoming, list):
+        values = incoming
+    else:
+        values = [incoming]
+    for value in values:
+        if value not in target:
+            target.append(value)
+
+
+def _render_scalar(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    return str(value)
+
+
+def _append_list_block(lines: List[str], label: str, values: List[Any]) -> None:
+    lines.append(f"- {label}:")
+    if not values:
+        lines.append("  - []")
+        return
+    for value in values:
+        lines.append(f"  - {_render_scalar(value)}")
+
+
+def _append_dict_block(lines: List[str], label: str, mapping: Dict[str, Any]) -> None:
+    lines.append(f"- {label}:")
+    if not mapping:
+        lines.append("  - {}")
+        return
+    for key, value in mapping.items():
+        if isinstance(value, list):
+            lines.append(f"  {key}:")
+            if value:
+                for item in value:
+                    lines.append(f"    - {_render_scalar(item)}")
+            else:
+                lines.append("    - []")
+        elif isinstance(value, dict):
+            lines.append(f"  {key}:")
+            for inner_key, inner_value in value.items():
+                lines.append(f"    {inner_key}: {_render_scalar(inner_value)}")
+        else:
+            lines.append(f"  {key}: {_render_scalar(value)}")
+
+
 def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
     """Parse run.log into structured intermediate data."""
     primitive_headers = [
@@ -109,89 +214,89 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     primitive = block["primitive"]
     raw_lines = block["lines"]
 
-    def _value_after_colon(line: str, label: str) -> str:
-        _, _, tail = line.partition(label)
-        return tail.strip()
-
-    def _value_after_marker(line: str, marker: str) -> str:
-        start = line.find(marker)
-        if start < 0:
-            return ""
-        start += len(marker)
-        end = len(line)
-        for stop_marker in [",", ";"]:
-            idx = line.find(stop_marker, start)
-            if idx != -1:
-                end = min(end, idx)
-        return line[start:end].strip()
-
-    segments: List[str] = []
-    roles: List[str] = []
-    constraints_matched: List[str] = []
-    residue: List[str] = []
-    smoothing_operations: List[str] = []
-    semantic_adjacent_cues: List[str] = []
-    semantic_core_ops: List[str] = []
+    segments: List[Any] = []
+    segment_tokens: List[Any] = []
+    roles: List[Any] = []
+    constraints_matched: List[Any] = []
+    residue: List[Any] = []
+    smoothing_residue: List[Any] = []
+    smoothing_operations: List[Any] = []
+    semantic_adjacent_cues: List[Any] = []
+    semantic_core: Dict[str, Any] = {}
     truth_relation = ""
-    token_relations: List[str] = []
-    ob_set_notes: List[str] = []
+    token_relations: Dict[str, Any] = {}
+    ob_set_notes: List[Any] = []
 
     for line in raw_lines:
-        if "Segments:" in line:
-            value = _value_after_colon(line, "Segments:")
-            if value:
-                segments.append(value)
-        if "Roles:" in line:
-            value = _value_after_colon(line, "Roles:")
-            if value:
-                roles.append(value)
+        extracted = _extract_literal_or_text(line, "Segments:")
+        if extracted is not None:
+            _merge_list(segments, extracted)
 
-        if "matched=" in line:
-            value = _value_after_marker(line, "matched=")
-            if value:
-                constraints_matched.append(value)
-        if "residue=" in line:
-            value = _value_after_marker(line, "residue=")
-            if value:
-                residue.append(value)
-        if "operations=" in line:
-            value = _value_after_marker(line, "operations=")
-            if value:
-                smoothing_operations.append(value)
-        if "semantic_adjacent_cues=" in line:
-            value = _value_after_marker(line, "semantic_adjacent_cues=")
-            if value:
-                semantic_adjacent_cues.append(value)
+        extracted = _extract_literal_or_text(line, "Segment tokens:")
+        if extracted is not None:
+            _merge_list(segment_tokens, extracted)
 
-        if "Semantic core:" in line:
-            value = _value_after_colon(line, "Semantic core:")
-            if value:
-                semantic_core_ops.append(value)
+        extracted = _extract_literal_or_text(line, "Roles:")
+        if extracted is not None:
+            _merge_list(roles, extracted)
 
-        if "Truth relation:" in line:
-            truth_relation = _value_after_colon(line, "Truth relation:")
-        if "truth_relation:" in line:
-            truth_relation = _value_after_colon(line, "truth_relation:")
+        extracted = _extract_literal_or_text(line, "matched=")
+        if extracted is not None:
+            _merge_list(constraints_matched, extracted)
 
-        if "token_relations:" in line:
-            value = _value_after_colon(line, "token_relations:")
-            if value:
-                token_relations.append(value)
+        extracted = _extract_literal_or_text(line, "residue=")
+        if extracted is not None:
+            _merge_list(residue, extracted)
+
+        extracted = _extract_literal_or_text(line, "smoothing_residue=")
+        if extracted is not None:
+            _merge_list(smoothing_residue, extracted)
+
+        extracted = _extract_literal_or_text(line, "operations=")
+        if extracted is not None:
+            _merge_list(smoothing_operations, extracted)
+
+        extracted = _extract_literal_or_text(line, "semantic_adjacent_cues=")
+        if extracted is not None:
+            _merge_list(semantic_adjacent_cues, extracted)
+
+        extracted = _extract_literal_or_text(line, "Semantic core:")
+        if isinstance(extracted, dict):
+            semantic_core.update(extracted)
+
+        extracted = _extract_literal_or_text(line, "token_relations:")
+        if isinstance(extracted, dict):
+            token_relations.update(extracted)
+
+        extracted_truth = _extract_literal_or_text(line, "Truth relation:")
+        if extracted_truth not in (None, ""):
+            truth_relation = _render_scalar(extracted_truth)
+        extracted_truth_lower = _extract_literal_or_text(line, "truth_relation:")
+        if extracted_truth_lower not in (None, ""):
+            truth_relation = _render_scalar(extracted_truth_lower)
 
         if "OB-Set" in line or "OB Set" in line:
-            ob_set_notes.append(line.strip())
+            _merge_list(ob_set_notes, line.strip())
+
+    if not smoothing_residue:
+        _merge_list(smoothing_residue, residue)
+
+    if truth_relation:
+        semantic_core["truth_relation"] = truth_relation
 
     return {
         "primitive": primitive,
         "raw": raw_lines,
         "summary": f"Primitive {primitive} fired.",
         "segments": segments,
+        "segment_tokens": segment_tokens,
         "roles": roles,
         "constraints_matched": constraints_matched,
         "residue": residue,
+        "smoothing_residue": smoothing_residue,
         "smoothing_operations": smoothing_operations,
         "semantic_adjacent_cues": semantic_adjacent_cues,
-        "semantic_core_ops": semantic_core_ops,
+        "semantic_core": semantic_core,
         "truth_relation": truth_relation,
         "token_relations": token_relations,
         "ob_set_notes": ob_set_notes,
@@ -199,10 +304,39 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def interpret_all_blocks(parsed_log: Dict[str, Any]) -> List[Dict[str, Any]]:
-    interpreted_blocks: List[Dict[str, Any]] = []
+    interpreted_by_primitive: Dict[str, Dict[str, Any]] = {}
     for block in parsed_log["blocks"]:
-        interpreted_blocks.append(interpret_block(block))
-    return interpreted_blocks
+        interpreted = interpret_block(block)
+        primitive = interpreted["primitive"]
+        if primitive not in interpreted_by_primitive:
+            interpreted_by_primitive[primitive] = interpreted
+            continue
+
+        current = interpreted_by_primitive[primitive]
+        _merge_list(current["raw"], interpreted.get("raw", []))
+        _merge_list(current["segments"], interpreted.get("segments", []))
+        _merge_list(current["segment_tokens"], interpreted.get("segment_tokens", []))
+        _merge_list(current["roles"], interpreted.get("roles", []))
+        _merge_list(
+            current["constraints_matched"], interpreted.get("constraints_matched", [])
+        )
+        _merge_list(current["residue"], interpreted.get("residue", []))
+        _merge_list(current["smoothing_residue"], interpreted.get("smoothing_residue", []))
+        _merge_list(
+            current["smoothing_operations"], interpreted.get("smoothing_operations", [])
+        )
+        _merge_list(
+            current["semantic_adjacent_cues"], interpreted.get("semantic_adjacent_cues", [])
+        )
+        _merge_list(current["ob_set_notes"], interpreted.get("ob_set_notes", []))
+
+        current["semantic_core"].update(interpreted.get("semantic_core", {}))
+        current["token_relations"].update(interpreted.get("token_relations", {}))
+        if interpreted.get("truth_relation"):
+            current["truth_relation"] = interpreted["truth_relation"]
+            current["semantic_core"]["truth_relation"] = interpreted["truth_relation"]
+
+    return list(interpreted_by_primitive.values())
 
 
 def extract_segment_info(block: Dict[str, Any]) -> Dict[str, Any]:
@@ -322,19 +456,37 @@ def generate_output(
     for block in interpreted_blocks:
         primitive = block.get("primitive")
         lines.append(f"### {primitive}")
-        lines.append(f"- segments: {block.get('segments', [])}")
-        lines.append(f"- roles: {block.get('roles', [])}")
-        lines.append(f"- constraints_matched: {block.get('constraints_matched', [])}")
-        lines.append(f"- residue: {block.get('residue', [])}")
-        lines.append(f"- smoothing_operations: {block.get('smoothing_operations', [])}")
-        lines.append(f"- semantic_adjacent_cues: {block.get('semantic_adjacent_cues', [])}")
-        lines.append(f"- semantic_core_ops: {block.get('semantic_core_ops', [])}")
-        lines.append(f"- truth_relation: {block.get('truth_relation', '')}")
+        _append_list_block(lines, "segments", block.get("segments", []))
+        lines.append("")
+        _append_list_block(lines, "segment_tokens", block.get("segment_tokens", []))
+        lines.append("")
+        _append_list_block(lines, "roles", block.get("roles", []))
+        lines.append("")
+        _append_list_block(
+            lines, "constraints_matched", block.get("constraints_matched", [])
+        )
+        lines.append("")
+        _append_list_block(lines, "residue", block.get("residue", []))
+        lines.append("")
+        _append_list_block(lines, "smoothing_residue", block.get("smoothing_residue", []))
+        lines.append("")
+        _append_list_block(
+            lines, "smoothing_operations", block.get("smoothing_operations", [])
+        )
+        lines.append("")
+        _append_list_block(
+            lines, "semantic_adjacent_cues", block.get("semantic_adjacent_cues", [])
+        )
+        lines.append("")
+        _append_dict_block(lines, "semantic_core", block.get("semantic_core", {}))
         if block.get("token_relations"):
-            lines.append(f"- token_relations: {block.get('token_relations')}")
+            lines.append("")
+            _append_dict_block(lines, "token_relations", block.get("token_relations", {}))
         if block.get("ob_set_notes"):
-            lines.append(f"- ob_set_notes: {block.get('ob_set_notes')}")
+            lines.append("")
+            _append_list_block(lines, "ob_set_notes", block.get("ob_set_notes", []))
         relative_path = primitive_links.get(primitive, "")
+        lines.append("")
         lines.append(f"See: [{primitive}]({relative_path})")
         lines.append("")
 

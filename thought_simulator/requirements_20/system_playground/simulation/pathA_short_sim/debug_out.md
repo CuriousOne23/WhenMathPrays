@@ -25,96 +25,226 @@
 
 ## Interpreted Blocks
 ### SOB
-- segments: ["['WQ', 'IQ', 'NP']; Segment tokens: [['why'], ['is'], ['the', 'sky', 'blue']]"]
-- roles: []
-- constraints_matched: []
-- residue: []
-- smoothing_operations: []
-- semantic_adjacent_cues: []
-- semantic_core_ops: []
-- truth_relation: 
-- ob_set_notes: ["notes: [OB-Set] Segments: ['WQ', 'IQ', 'NP']; Segment tokens: [['why'], ['is'], ['the', 'sky', 'blue']]"]
+- segments:
+  - WQ
+  - IQ
+  - NP
+
+- segment_tokens:
+  - ['why']
+  - ['is']
+  - ['the', 'sky', 'blue']
+
+- roles:
+  - []
+
+- constraints_matched:
+  - []
+
+- residue:
+  - []
+
+- smoothing_residue:
+  - []
+
+- smoothing_operations:
+  - []
+
+- semantic_adjacent_cues:
+  - []
+
+- semantic_core:
+  - {}
+
+- ob_set_notes:
+  - notes: [OB-Set] Segments: ['WQ', 'IQ', 'NP']; Segment tokens: [['why'], ['is'], ['the', 'sky', 'blue']]
+
 See: [SOB](debug/primitives/SOB.md)
 
 ### SROB
-- segments: []
-- roles: ["['none', 'none', 'none']; Role segments: {}"]
-- constraints_matched: []
-- residue: []
-- smoothing_operations: []
-- semantic_adjacent_cues: []
-- semantic_core_ops: []
-- truth_relation: 
-- ob_set_notes: ["notes: [OB-Set] Roles: ['none', 'none', 'none']; Role segments: {}"]
+- segments:
+  - []
+
+- segment_tokens:
+  - []
+
+- roles:
+  - none
+
+- constraints_matched:
+  - []
+
+- residue:
+  - []
+
+- smoothing_residue:
+  - []
+
+- smoothing_operations:
+  - []
+
+- semantic_adjacent_cues:
+  - []
+
+- semantic_core:
+  - {}
+
+- ob_set_notes:
+  - notes: [OB-Set] Roles: ['none', 'none', 'none']; Role segments: {}
+
 See: [SROB](debug/primitives/SROB.md)
 
 ### CnOB
-- segments: []
-- roles: []
-- constraints_matched: ["['query-focus-predicate']"]
-- residue: ["['relation-patient'"]
-- smoothing_operations: []
-- semantic_adjacent_cues: []
-- semantic_core_ops: []
-- truth_relation: 
-- token_relations: ["{'agent-action': ('', ''), 'action-relation': ('', ''), 'relation-patient': ('', ''), 'state-location': ('', ''), 'query-focus-predicate': ('', ''), 'predicate-theme': ('', '')}"]
-- ob_set_notes: ["notes: [OB-Set] matched=['query-focus-predicate']; unmatched=['none-none', 'none-none']; residue=['relation-patient', 'action-relation', 'agent-action', 'state-location', 'copular_state_link', 'predicate-theme', 'locative_link', 'theme-state', 'relation-theme']"]
+- segments:
+  - []
+
+- segment_tokens:
+  - []
+
+- roles:
+  - []
+
+- constraints_matched:
+  - query-focus-predicate
+
+- residue:
+  - relation-patient
+  - action-relation
+  - agent-action
+  - state-location
+  - copular_state_link
+  - predicate-theme
+  - locative_link
+  - theme-state
+  - relation-theme
+
+- smoothing_residue:
+  - relation-patient
+  - action-relation
+  - agent-action
+  - state-location
+  - copular_state_link
+  - predicate-theme
+  - locative_link
+  - theme-state
+  - relation-theme
+
+- smoothing_operations:
+  - []
+
+- semantic_adjacent_cues:
+  - []
+
+- semantic_core:
+  - {}
+
+- token_relations:
+  agent-action: ('', '')
+  action-relation: ('', '')
+  relation-patient: ('', '')
+  state-location: ('', '')
+  query-focus-predicate: ('', '')
+  predicate-theme: ('', '')
+
+- ob_set_notes:
+  - notes: [OB-Set] matched=['query-focus-predicate']; unmatched=['none-none', 'none-none']; residue=['relation-patient', 'action-relation', 'agent-action', 'state-location', 'copular_state_link', 'predicate-theme', 'locative_link', 'theme-state', 'relation-theme']
+
 See: [CnOB](debug/primitives/CnOB.md)
 
 ### SmOB
-- segments: []
-- roles: []
-- constraints_matched: []
-- residue: ['[]']
-- smoothing_operations: ["['smooth:none->none'"]
-- semantic_adjacent_cues: ["['interrogative_scope']"]
-- semantic_core_ops: []
-- truth_relation: interrogative_open
-- token_relations: ["{'agent->action': ('', ''), 'action->relation': ('', ''), 'relation->patient': ('', ''), 'state->location': ('', ''), 'query_focus->predicate': ('', '')}"]
-- ob_set_notes: ["notes: [OB-Set] operations=['smooth:none->none', 'smooth:none->none', 'smooth:interrogative_scope']; semantic_adjacent_cues=['interrogative_scope']; residue=[]", 'notes: [OB-Set]']
+- segments:
+  - []
+
+- segment_tokens:
+  - []
+
+- roles:
+  - []
+
+- constraints_matched:
+  - []
+
+- residue:
+  - []
+
+- smoothing_residue:
+  - []
+
+- smoothing_operations:
+  - smooth:none->none
+  - smooth:interrogative_scope
+
+- semantic_adjacent_cues:
+  - interrogative_scope
+
+- semantic_core:
+  truth_relation: interrogative_open
+
+- token_relations:
+  agent->action: ('', '')
+  action->relation: ('', '')
+  relation->patient: ('', '')
+  state->location: ('', '')
+  query_focus->predicate: ('', '')
+
+- ob_set_notes:
+  - notes: [OB-Set] operations=['smooth:none->none', 'smooth:none->none', 'smooth:interrogative_scope']; semantic_adjacent_cues=['interrogative_scope']; residue=[]
+  - notes: [OB-Set]
+
 See: [SmOB](debug/primitives/SmOB.md)
 
 ### IdOB
-- segments: []
-- roles: []
-- constraints_matched: []
-- residue: []
-- smoothing_operations: []
-- semantic_adjacent_cues: []
-- semantic_core_ops: ["{'selected_ops': ['query_resolution', 'interrogative_identity_request', 'modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': []}"]
-- truth_relation: 
-- token_relations: ["{'query_focus': '', 'predicate': '', 'theme': '', 'agent': '', 'action': '', 'relation': '', 'patient': '', 'modifiers': ['interrogative_scope']}"]
-See: [IdOB](debug/primitives/IdOB.md)
+- segments:
+  - []
 
-### CnOB
-- segments: []
-- roles: []
-- constraints_matched: []
-- residue: []
-- smoothing_operations: []
-- semantic_adjacent_cues: []
-- semantic_core_ops: []
-- truth_relation: 
-See: [CnOB](debug/primitives/CnOB.md)
+- segment_tokens:
+  - []
 
-### SmOB
-- segments: []
-- roles: []
-- constraints_matched: []
-- residue: []
-- smoothing_operations: []
-- semantic_adjacent_cues: []
-- semantic_core_ops: []
-- truth_relation: 
-See: [SmOB](debug/primitives/SmOB.md)
+- roles:
+  - []
 
-### IdOB
-- segments: []
-- roles: []
-- constraints_matched: []
-- residue: []
-- smoothing_operations: []
-- semantic_adjacent_cues: []
-- semantic_core_ops: []
-- truth_relation: 
+- constraints_matched:
+  - []
+
+- residue:
+  - []
+
+- smoothing_residue:
+  - []
+
+- smoothing_operations:
+  - []
+
+- semantic_adjacent_cues:
+  - []
+
+- semantic_core:
+  selected_ops:
+    - query_resolution
+    - interrogative_identity_request
+    - modifier_resolution
+  query_focus: 
+  predicate: 
+  theme: 
+  relation_modifiers: 
+  complement: 
+  agent: 
+  state: 
+  location: 
+  action: 
+  patient: 
+  modifiers:
+    - []
+
+- token_relations:
+  query_focus: 
+  predicate: 
+  theme: 
+  agent: 
+  action: 
+  relation: 
+  patient: 
+  modifiers:
+    - interrogative_scope
+
 See: [IdOB](debug/primitives/IdOB.md)
