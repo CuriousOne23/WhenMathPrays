@@ -1,9 +1,3 @@
-Here is a **complete, rewritten, token‑aware, structured‑world‑aligned** version of **smoothing_operations.md**, fully consistent with your SmOB.md, your field architecture, and Appendix X — Token‑to‑Structure Bridge.
-
-You can paste this directly into your repo.
-
----
-
 # **smoothing_operations.md — Basin Smoothing Operations Field**
 
 ## **1. Definition**  
