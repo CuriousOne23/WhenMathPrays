@@ -158,6 +158,64 @@ in the base directory.
 - Show how structural and semantic cues propagate.
 - Provide conceptual explanations for each primitive.
 
+### 3.1 Links Provided Inside `debug_out.log`
+
+The debugger automatically embeds clickable links inside `debug_out.log` to help you navigate the documentation for each geometry dimension, field, and primitive. These links are generated from `links.yaml` and point to the Markdown files located in the `debug/` directory.
+
+Each link serves as a quick reference, allowing you to jump directly to the relevant explanation for any structure the debugger reports.
+
+#### **Types of Links Included**
+
+The following categories of links appear in `debug_out.log`:
+
+- **Dimension links**  
+  These point to files under `debug/dimensions/` and explain:
+  - segment geometry  
+  - role geometry  
+  - constraint geometry  
+  - smoothing geometry  
+  - identity geometry  
+  - meaning geometry  
+
+- **Field links**  
+  These point to files under `debug/fields/` and explain:
+  - struct_segments  
+  - struct_roles  
+  - constraints_matched  
+  - semantic_adjacent_cues  
+  - idob_packet  
+  - residue  
+
+- **Primitive links**  
+  These point to files under `debug/primitives/` and explain:
+  - SOB  
+  - SROB  
+  - CnOB  
+  - SmOB  
+  - IdOB  
+
+- **Example links**  
+  These point to symbolic examples under `debug/examples/`.
+
+#### **How These Links Help**
+
+- They provide **instant access** to definitions, allowed values, effects, and symbolic examples.
+- They help you **interpret each primitive block** reported in the log.
+- They allow you to **cross‑reference geometry and fields** without searching manually.
+- They make the debugger output **self‑documenting**, ideal for:
+  - debugging  
+  - training  
+  - teaching  
+  - onboarding new contributors  
+
+#### **VS Code Compatibility**
+
+Even though `debug_out.log` is a `.log` file, **VS Code treats all Markdown‑style links as clickable**, including:
+
+[Looks like the result wasn't safe to show. Let's switch things up and try something else!]
+
+Clicking these links in VS Code on Windows will open the corresponding `.md` file immediately. No special configuration is required.
+
 ---
 
 ## 4. Notes
