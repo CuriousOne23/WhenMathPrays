@@ -1,0 +1,480 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://whenmathprays.local/schemas/committed_token_stream.v1.schema.json",
+  "title": "CommittedTokenStreamV1",
+  "description": "IE compatibility contract for deterministic intake replay.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "stream_id",
+    "source",
+    "pipeline_versions",
+    "dictionary_context",
+    "segments",
+    "tokens",
+    "anomalies",
+    "deltas"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "ie-compat-v1"
+    },
+    "stream_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "pipeline_versions": {
+      "$ref": "#/$defs/pipelineVersions"
+    },
+    "dictionary_context": {
+      "$ref": "#/$defs/dictionaryContext"
+    },
+    "segments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/segment"
+      }
+    },
+    "tokens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/token"
+      }
+    },
+    "anomalies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/anomaly"
+      }
+    },
+    "deltas": {
+      "$ref": "#/$defs/deltaReport"
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_text",
+        "raw_text_hash",
+        "intake_profile",
+        "created_at_utc"
+      ],
+      "properties": {
+        "raw_text": {
+          "type": "string"
+        },
+        "raw_text_hash": {
+          "type": "string",
+          "minLength": 8
+        },
+        "intake_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at_utc": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "pipelineVersions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tokenizer_version",
+        "normalization_version",
+        "dictionary_bundle_version",
+        "id_strategy_version"
+      ],
+      "properties": {
+        "tokenizer_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "normalization_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dictionary_bundle_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id_strategy_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "dictionaryContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layer_order",
+        "precedence_mode",
+        "bundle_hash"
+      ],
+      "properties": {
+        "layer_order": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "runtime_dictionary",
+              "dev_dictionary",
+              "meaning_dictionary",
+              "reference_objects",
+              "field_reference_tables",
+              "flow_contracts"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "precedence_mode": {
+          "type": "string",
+          "enum": [
+            "ordered-first-hit-with-longest-match"
+          ]
+        },
+        "bundle_hash": {
+          "type": "string",
+          "minLength": 8
+        }
+      }
+    },
+    "segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "segment_id",
+        "start_token_id",
+        "end_token_id",
+        "boundary_reason"
+      ],
+      "properties": {
+        "segment_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "start_token_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "end_token_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "boundary_reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "token": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "token_id",
+        "segment_id",
+        "span_start",
+        "span_end",
+        "surface",
+        "normalized",
+        "token_class",
+        "role",
+        "flags",
+        "provenance"
+      ],
+      "properties": {
+        "token_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "segment_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "span_start": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "span_end": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "surface": {
+          "type": "string"
+        },
+        "normalized": {
+          "type": "string"
+        },
+        "token_class": {
+          "type": "string",
+          "enum": [
+            "WORD",
+            "NUMBER",
+            "PUNCT",
+            "UNICODE_MARK",
+            "ANOMALY",
+            "BOUNDARY",
+            "ROLE",
+            "SEGMENT",
+            "SEMANTIC",
+            "CONSTRAINT",
+            "UNKNOWN"
+          ]
+        },
+        "role": {
+          "$ref": "#/$defs/roleSelection"
+        },
+        "flags": {
+          "$ref": "#/$defs/tokenFlags"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      }
+    },
+    "roleSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chosen",
+        "candidates"
+      ],
+      "properties": {
+        "chosen": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/roleCandidate"
+          }
+        }
+      }
+    },
+    "roleCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role_name",
+        "score",
+        "match_rule_id",
+        "match_layer"
+      ],
+      "properties": {
+        "role_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "score": {
+          "type": "number"
+        },
+        "match_rule_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "match_layer": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "tokenFlags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "token_flags",
+        "anomaly_flags",
+        "normalization_flags"
+      ],
+      "properties": {
+        "token_flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "anomaly_flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "normalization_flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "normalization_rule_ids",
+        "dictionary_rule_id",
+        "dictionary_layer",
+        "precedence_rank",
+        "multi_token_match_id"
+      ],
+      "properties": {
+        "normalization_rule_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dictionary_rule_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dictionary_layer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "precedence_rank": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "multi_token_match_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "anomaly": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anomaly_id",
+        "token_id",
+        "anomaly_type",
+        "detected_by_rule",
+        "repaired",
+        "repair_rule_id",
+        "repair_explanation"
+      ],
+      "properties": {
+        "anomaly_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "token_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "anomaly_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detected_by_rule": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repaired": {
+          "type": "boolean"
+        },
+        "repair_rule_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "repair_explanation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "deltaReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parity_status",
+        "delta_count",
+        "entries"
+      ],
+      "properties": {
+        "parity_status": {
+          "type": "string",
+          "enum": [
+            "identical",
+            "explainable_delta",
+            "mismatch"
+          ]
+        },
+        "delta_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/deltaEntry"
+          }
+        }
+      }
+    },
+    "deltaEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "token_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "rule_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
