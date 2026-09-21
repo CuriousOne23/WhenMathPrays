@@ -1,16 +1,20 @@
 # struct_segments
 
-## Meaning
-Canonical list of structural segments produced for the utterance.
+definition: The struct_segments field records the structural segmentation recognized during interpretation. It encodes how token spans were grouped into atomic, composite, or recursive segments and provides the structural basis for role and constraint evaluation. This field reflects the simulator's segmentation decisions across primitives.
 
-## Shape
-- List of segment objects or labels
-- Deterministic order
+allowed_values:
+	- atomic_segment
+	- composite_segment
+	- recursive_segment
+	- discontinuous_segment
 
-## Produced By
-- SOB
+effects:
+	- influences role geometry resolution for SROB
+	- constrains admissible segment classes for SOB
+	- shapes constraint satisfaction envelopes for CnOB
+	- interacts with smoothing geometry during SmOB
 
-## Debug Checks
-- Segment boundaries align with committed tokens.
-- Empty only when input is empty.
+example:
+	- "SOB fired: struct_segments=composite_segment, segment_geometry=composite"
+	- "CnOB matched: struct_segments=atomic_segment, constraint_geometry=adjacency_rule"
 

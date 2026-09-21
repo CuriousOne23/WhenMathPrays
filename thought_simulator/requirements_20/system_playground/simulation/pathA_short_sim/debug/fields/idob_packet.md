@@ -1,16 +1,20 @@
 # idob_packet
 
-## Meaning
-Contract-shaped IdOB payload carrying structural key, candidates, selected operation, and readiness flags.
+definition: The idob_packet field records identity-related packet formation, capturing how referential or structural identity is consolidated across interpretation. It reflects how identity geometry interacts with semantic and structural cues to produce stable referential packets. This field supports identity confirmation and referential coherence.
 
-## Shape
-- Mapping with deterministic keys
-- Includes completion and eligibility indicators
+allowed_values:
+	- referential_packet
+	- structural_packet
+	- semantic_packet
+	- continuity_packet
 
-## Produced By
-- IdOB
+effects:
+	- activates identity confirmation for IdOB
+	- shapes packet formation for identity-related fields
+	- influences semantic cue propagation for SmOB
+	- constrains role alignment for SROB
 
-## Debug Checks
-- Required keys are present for non-empty inputs.
-- selected_candidate_index is valid for available candidates.
+example:
+	- "IdOB packet formed: idob_packet=referential_packet, identity_geometry=referential_identity"
+	- "IdOB fired: idob_packet=semantic_packet, meaning_geometry=semantic_cue"
 

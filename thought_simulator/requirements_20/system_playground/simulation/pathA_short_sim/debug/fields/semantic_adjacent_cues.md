@@ -1,16 +1,20 @@
 # semantic_adjacent_cues
 
-## Meaning
-Adjacency or transition cues used to smooth semantic interpretation.
+definition: The semantic_adjacent_cues field records meaning-bearing signals that arise from adjacency relationships between segments or roles. It reflects how semantic cues propagate through structural geometry and how meaning geometry interacts with primitive activation. This field captures semantic continuity across interpretation.
 
-## Shape
-- List of cue identifiers
-- Ordered or set-like depending on implementation
+allowed_values:
+	- adjacent_cue
+	- propagated_cue
+	- structural_cue
+	- semantic_cue
 
-## Produced By
-- SmOB
+effects:
+	- activates semantic cue propagation for SmOB
+	- influences constraint satisfaction for CnOB
+	- shapes identity confirmation for IdOB
+	- interacts with role geometry during SROB evaluation
 
-## Debug Checks
-- Cue presence is justified by local structural transitions.
-- Minimal false positives on simple sentences.
+example:
+	- "SmOB applied: semantic_adjacent_cues=adjacent_cue, role_geometry=modifier"
+	- "IdOB fired: semantic_adjacent_cues=semantic_cue, identity_geometry=referential_identity"
 
