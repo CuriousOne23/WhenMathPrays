@@ -1,16 +1,3 @@
-Absolutely, Jeff — here is a **complete, rewritten, token‑aware, structured‑world‑aligned** version of **residue.md**, fully consistent with your active tab content  and with Appendix X — Token‑to‑Structure Bridge.
-
-This rewrite fixes the core problem: **residue only makes sense in the structured world**, but readers only understand tokens.  
-So the rewrite explicitly bridges:
-
-- **token intuition → structured residue**  
-- **primitive‑specific residue types**  
-- **how residue flows through the pipeline**  
-
-You can paste this directly into your repo.
-
----
-
 # **residue.md — Structural Residue Field**
 
 ## **1. Definition**  
