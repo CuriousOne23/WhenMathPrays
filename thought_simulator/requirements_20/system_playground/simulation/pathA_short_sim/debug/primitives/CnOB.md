@@ -1,8 +1,8 @@
-# **CnOB.md — Constraint Observation Block**  
+# **CnOB.md — Constraint Object Basin**  
 ### *Path‑A Short Simulator Primitive Documentation*
 
 ## **1. Definition**  
-The **Constraint Observation Block (CnOB)** evaluates **structural**, **adjacency**, and **compatibility constraints** across segments and roles.  
+The **Constraint Object Basin (CnOB)** evaluates **structural**, **adjacency**, and **compatibility constraints** across segments and roles.  
 Its purpose is to determine whether the utterance satisfies the required **constraint geometry** for downstream primitives.
 
 This aligns with your current file’s definition:  
