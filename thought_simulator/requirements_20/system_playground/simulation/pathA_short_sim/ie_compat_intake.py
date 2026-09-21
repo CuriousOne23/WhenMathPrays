@@ -24,6 +24,23 @@ _MULTI_TOKEN_ROLE_PATTERNS = [
     }
 ]
 
+_SINGLE_TOKEN_ROLE_ENTRIES = {
+    "lead": [
+        {
+            "role": "theme",
+            "rule_id": "role.dict.runtime.lead.001",
+            "layer": "runtime_dictionary",
+            "precedence_rank": 1,
+        },
+        {
+            "role": "action",
+            "rule_id": "role.dict.meaning.lead.001",
+            "layer": "meaning_dictionary",
+            "precedence_rank": 3,
+        },
+    ]
+}
+
 
 def _tokenize_ie_compat(raw_text: str) -> List[Dict[str, int | str]]:
     # Split into word chunks (optionally followed by combining marks)
@@ -96,6 +113,37 @@ def _apply_multi_token_roles(tokens: List[dict]) -> None:
             token["provenance"]["multi_token_match_id"] = match_id
 
         i += best_len
+
+
+def _apply_single_token_dictionary_roles(tokens: List[dict]) -> None:
+    for token in tokens:
+        # Preserve explicit multi-token assignments.
+        if token.get("provenance", {}).get("multi_token_match_id") is not None:
+            continue
+
+        norm = token.get("normalized", "")
+        entries = _SINGLE_TOKEN_ROLE_ENTRIES.get(norm, [])
+        if not entries:
+            continue
+
+        ordered = sorted(entries, key=lambda e: int(e["precedence_rank"]))
+        chosen = ordered[0]
+
+        token["role"] = {
+            "chosen": chosen["role"],
+            "candidates": [
+                {
+                    "role_name": entry["role"],
+                    "score": 1.0,
+                    "match_rule_id": entry["rule_id"],
+                    "match_layer": entry["layer"],
+                }
+                for entry in ordered
+            ],
+        }
+        token["provenance"]["dictionary_rule_id"] = chosen["rule_id"]
+        token["provenance"]["dictionary_layer"] = chosen["layer"]
+        token["provenance"]["precedence_rank"] = chosen["precedence_rank"]
 
 
 def build_committed_stream(raw_text: str) -> dict:
@@ -184,6 +232,7 @@ def build_committed_stream(raw_text: str) -> dict:
         prev_end = span_end
 
     _apply_multi_token_roles(tokens)
+    _apply_single_token_dictionary_roles(tokens)
 
     segment_end = len(tokens) if tokens else 1
     segments = [

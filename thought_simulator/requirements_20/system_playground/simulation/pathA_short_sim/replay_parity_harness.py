@@ -42,8 +42,8 @@ CASES: List[Dict[str, Any]] = [
     {
         "id": "dictionary_precedence",
         "raw_text": "where is lead",
-        "status": "pending",
-        "description": "Layered dictionary precedence checks pending.",
+        "status": "active",
+        "description": "Layered dictionary precedence is deterministic for ambiguous token mappings.",
     },
     {
         "id": "segment_boundaries",
@@ -260,6 +260,55 @@ def _check_multi_token_roles(stream: Dict[str, Any]) -> Tuple[bool, List[str], D
     return len(failed) == 0, failed, details
 
 
+def _check_dictionary_precedence(stream: Dict[str, Any]) -> Tuple[bool, List[str], Dict[str, Any]]:
+    tokens = stream.get("tokens", [])
+    surfaces = [t.get("surface") for t in tokens]
+    normalized = [t.get("normalized") for t in tokens]
+
+    lead_token = None
+    for token in tokens:
+        if token.get("normalized") == "lead":
+            lead_token = token
+            break
+
+    if lead_token is None:
+        return False, ["lead token not found for precedence check"], {
+            "surfaces": surfaces,
+            "normalized": normalized,
+        }
+
+    role = lead_token.get("role", {})
+    candidates = role.get("candidates", [])
+    candidate_layers = [c.get("match_layer") for c in candidates]
+    chosen_role = role.get("chosen")
+    chosen_rule = lead_token.get("provenance", {}).get("dictionary_rule_id")
+    chosen_layer = lead_token.get("provenance", {}).get("dictionary_layer")
+    chosen_rank = lead_token.get("provenance", {}).get("precedence_rank")
+
+    checks = [
+        (surfaces == ["where", "is", "lead"], "tokenization mismatch for precedence case"),
+        (chosen_role == "theme", "chosen role should come from runtime dictionary"),
+        (chosen_layer == "runtime_dictionary", "chosen dictionary layer should be runtime_dictionary"),
+        (chosen_rule == "role.dict.runtime.lead.001", "chosen dictionary rule id mismatch"),
+        (chosen_rank == 1, "chosen precedence rank mismatch"),
+        ("runtime_dictionary" in candidate_layers, "runtime_dictionary candidate missing"),
+        ("meaning_dictionary" in candidate_layers, "meaning_dictionary candidate missing"),
+        (len(candidates) >= 2, "expected at least two candidates for ambiguous token"),
+    ]
+
+    failed = [msg for ok, msg in checks if not ok]
+    details = {
+        "surfaces": surfaces,
+        "chosen_role": chosen_role,
+        "chosen_layer": chosen_layer,
+        "chosen_rule": chosen_rule,
+        "chosen_rank": chosen_rank,
+        "candidate_layers": candidate_layers,
+        "candidate_rules": [c.get("match_rule_id") for c in candidates],
+    }
+    return len(failed) == 0, failed, details
+
+
 def _check_deterministic_ids(raw_text: str) -> Tuple[bool, List[str], Dict[str, Any]]:
     stream_a = build_committed_stream(raw_text)
     stream_b = build_committed_stream(raw_text)
@@ -303,6 +352,8 @@ def _evaluate_case(case: Dict[str, Any]) -> Dict[str, Any]:
             ok, failed, details = _check_token_flags_propagation(stream)
         elif case_id == "multi_token_roles":
             ok, failed, details = _check_multi_token_roles(stream)
+        elif case_id == "dictionary_precedence":
+            ok, failed, details = _check_dictionary_precedence(stream)
         else:
             ok, failed, details = False, ["active case has no evaluator"], {}
 
