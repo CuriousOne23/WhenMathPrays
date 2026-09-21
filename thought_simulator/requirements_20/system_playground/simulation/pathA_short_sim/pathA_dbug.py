@@ -45,8 +45,14 @@ def load_links_registry(links_path: Path = LINKS_PATH) -> Dict[str, Any]:
 
 def load_run_log(run_log_path: Path) -> List[str]:
     """Load run.log from a CLI-supplied path."""
-    # TODO: Handle alternate encodings if required.
-    return run_log_path.read_text(encoding="utf-8").splitlines()
+    encodings = ["utf-8", "utf-8-sig", "utf-16", "utf-16-le", "utf-16-be"]
+    for encoding in encodings:
+        try:
+            return run_log_path.read_text(encoding=encoding).splitlines()
+        except UnicodeDecodeError:
+            continue
+    # Fall back to a permissive read if none of the common encodings decode cleanly.
+    return run_log_path.read_text(encoding="utf-8", errors="replace").splitlines()
 
 
 def resolve_link(

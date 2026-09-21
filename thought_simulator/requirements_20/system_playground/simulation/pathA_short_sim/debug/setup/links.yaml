@@ -1,36 +1,29 @@
+# links.yaml
+# Maps debugger documentation files to their GitHub locations.
+# Used by the debugger to generate clickable links in debug_out.log.
+
 dimensions:
-	segment_geometry: "./dimensions/segment_geometry.md"
-	role_geometry: "./dimensions/role_geometry.md"
-	constraint_geometry: "./dimensions/constraint_geometry.md"
-	smoothing_geometry: "./dimensions/smoothing_geometry.md"
-	identity_geometry: "./dimensions/identity_geometry.md"
-	meaning_geometry: "./dimensions/meaning_geometry.md"
+  segment_geometry: "debug/dimensions/segment_geometry.md"
+  role_geometry: "debug/dimensions/role_geometry.md"
+  constraint_geometry: "debug/dimensions/constraint_geometry.md"
+  smoothing_geometry: "debug/dimensions/smoothing_geometry.md"
+  identity_geometry: "debug/dimensions/identity_geometry.md"
+  meaning_geometry: "debug/dimensions/meaning_geometry.md"
 
 fields:
-	struct_segments: "./fields/struct_segments.md"
-	struct_roles: "./fields/struct_roles.md"
-	constraints_matched: "./fields/constraints_matched.md"
-	semantic_adjacent_cues: "./fields/semantic_adjacent_cues.md"
-	idob_packet: "./fields/idob_packet.md"
-	residue: "./fields/residue.md"
+  struct_segments: "debug/fields/struct_segments.md"
+  struct_roles: "debug/fields/struct_roles.md"
+  constraints_matched: "debug/fields/constraints_matched.md"
+  semantic_adjacent_cues: "debug/fields/semantic_adjacent_cues.md"
+  idob_packet: "debug/fields/idob_packet.md"
+  residue: "debug/fields/residue.md"
 
 primitives:
-	SOB: "./primitives/SOB.md"
-	SROB: "./primitives/SROB.md"
-	CnOB: "./primitives/CnOB.md"
-	SmOB: "./primitives/SmOB.md"
-	IdOB: "./primitives/IdOB.md"
+  SOB: "debug/primitives/SOB.md"
+  SROB: "debug/primitives/SROB.md"
+  CnOB: "debug/primitives/CnOB.md"
+  SmOB: "debug/primitives/SmOB.md"
+  IdOB: "debug/primitives/IdOB.md"
 
-values:
-	WQ: "../design/dictionaries/path_a/structure_dictionary/WQ.md"
-	IQ: "../design/dictionaries/path_a/structure_dictionary/IQ.md"
-	NP: "../design/dictionaries/path_a/structure_dictionary/NP.md"
-	AP: "../design/dictionaries/path_a/structure_dictionary/AP.md"
-
-	predicate: "../design/dictionaries/path_a/structure_dictionary/roles/predicate.md"
-	theme: "../design/dictionaries/path_a/structure_dictionary/roles/theme.md"
-	query_focus: "../design/dictionaries/path_a/structure_dictionary/roles/query_focus.md"
-
-idob:
-	interrogative_property_request: "../primitives/idob/idob_py_struc_pgm.md"
-	theme_state: "../primitives/idob/idob_py_struc_pgm.md"
+examples:
+  placeholder: "debug/examples/placeholder.md"

@@ -1,24 +1,36 @@
-include_links: true
-verbosity: high
+# debug_setup.yaml
+# Defines which documentation files the debugger should load and how they are grouped.
 
 dimensions:
-	- segment_geometry
-	- role_geometry
-	- constraint_geometry
-	- smoothing_geometry
-	- identity_geometry
-	- meaning_geometry
+  - segment_geometry
+  - role_geometry
+  - constraint_geometry
+  - smoothing_geometry
+  - identity_geometry
+  - meaning_geometry
 
 fields:
-	- struct_segments
-	- struct_roles
-	- constraints_matched
-	- semantic_adjacent_cues
-	- idob_packet
+  - struct_segments
+  - struct_roles
+  - constraints_matched
+  - semantic_adjacent_cues
+  - idob_packet
+  - residue
 
 primitives:
-	- SOB
-	- SROB
-	- CnOB
-	- SmOB
-	- IdOB
+  - SOB
+  - SROB
+  - CnOB
+  - SmOB
+  - IdOB
+
+examples:
+  - placeholder
+
+# Debugger behavior flags (static, no scanning/searching)
+settings:
+  include_links: true
+  include_examples: true
+  include_effects: true
+  include_allowed_values: true
+  include_definitions: true
