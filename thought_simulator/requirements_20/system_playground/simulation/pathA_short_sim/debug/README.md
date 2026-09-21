@@ -113,7 +113,7 @@ These files allow the debugger to generate clickable links in `debug_out.log`.
 From the simulator root:
 
 ```bash
-python pathA_dbug.py --run_log path/to/run.log --base_dir .
+python pathA_dbug.py path/to/run.log --base_dir .
 ```
 
 This produces:
