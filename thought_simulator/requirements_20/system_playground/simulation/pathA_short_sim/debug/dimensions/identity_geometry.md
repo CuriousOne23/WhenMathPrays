@@ -1,17 +1,20 @@
 # identity_geometry
 
-## Definition
-Describe identity selection behavior at IdOB and readiness for downstream use.
+definition: Identity geometry encodes how structural and semantic elements are recognized as belonging to the same referential or functional identity. It governs identity confirmation, packet formation, and referential stability across primitives. Identity geometry ensures consistent interpretation of repeated or related structures.
 
-## Derived From
-- IdOB packet construction
-- CnOB and SmOB signal fusion
+allowed_values:
+	- referential_identity
+	- structural_identity
+	- semantic_identity
+	- packet_identity
 
-## Debug Checks
-- idob_complete reflects packet completeness rules.
-- path_b_eligible remains deterministic for repeated runs.
+effects:
+	- activates identity confirmation for IdOB
+	- shapes packet formation for identity-related fields
+	- influences semantic cue propagation for SmOB
+	- constrains role alignment for SROB
 
-## Related Fields
-- idob_packet
-- residue
+example:
+	- "IdOB fired: identity_geometry=referential_identity, segment_geometry=atomic"
+	- "IdOB packet formed: identity_geometry=packet_identity, meaning_geometry=adjacent_cue"
 

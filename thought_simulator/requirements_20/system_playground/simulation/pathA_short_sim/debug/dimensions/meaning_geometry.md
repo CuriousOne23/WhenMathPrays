@@ -1,16 +1,19 @@
 # meaning_geometry
 
-## Definition
-Describe mapping from selected operations into semantic_core and meaning payloads.
+definition: Meaning geometry encodes how semantic cues, adjacent signals, and meaning-bearing structures propagate through interpretation. It determines how semantic rules activate, how cues interact with structural geometry, and how primitives incorporate meaning into evolving representations. Meaning geometry governs semantic coherence across the pipeline.
 
-## Derived From
-- IdOB selected operations
-- minimal semantic selection stage
+allowed_values:
+	- adjacent_cue
+	- propagated_cue
+	- structural_cue
+	- semantic_cue
 
-## Debug Checks
-- meaning semantics align with selected operations.
-- semantic_core remains synchronized with idob packet where required.
+effects:
+	- activates semantic cue propagation for SmOB
+	- influences constraint satisfaction for CnOB
+	- shapes identity confirmation for IdOB
+	- interacts with role geometry during SROB evaluation
 
-## Related Fields
-- idob_packet
-- semantic_adjacent_cues
+example:
+	- "SmOB applied: meaning_geometry=adjacent_cue, role_geometry=modifier"
+	- "IdOB fired: meaning_geometry=semantic_cue, identity_geometry=referential_identity"

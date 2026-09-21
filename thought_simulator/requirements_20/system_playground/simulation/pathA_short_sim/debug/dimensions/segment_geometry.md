@@ -1,16 +1,19 @@
 # segment_geometry
 
-## Definition
-Describe how structural segments are formed and bounded in PathA_short_sim.
+definition: Segment geometry encodes the structural form, adjacency, and class membership of token spans. It determines how the simulator groups tokens into coherent segments and how those segments participate in structural interpretation. Segment geometry governs head-dependent relations, admissible segment classes, and the structural envelope within which primitives operate.
 
-## Derived From
-- SOB outputs
-- committed_stream segment_id values
+allowed_values:
+	- atomic
+	- composite
+	- recursive
+	- discontinuous
 
-## Debug Checks
-- Segment count matches expected phrase partitioning.
-- Each segment has deterministic token membership.
+effects:
+	- constrains admissible segment classes during SOB evaluation
+	- influences role geometry resolution for SROB
+	- shapes constraint satisfaction envelopes for CnOB
+	- determines structural continuity requirements for smoothing operations
 
-## Related Fields
-- struct_segments
-- residue
+example:
+	- "SOB fired: segment_geometry=composite, role_geometry=modifier"
+	- "CnOB matched: segment_geometry=atomic, constraint_geometry=adjacency_rule"

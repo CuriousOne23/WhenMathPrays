@@ -96,6 +96,50 @@ def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
     return {"blocks": blocks}
 
 
+def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
+    primitive = block["primitive"]
+    raw_lines = block["lines"]
+    segment_info = extract_segment_info(block)
+    role_info = extract_role_info(block)
+    constraint_info = extract_constraint_info(block)
+    return {
+        "primitive": primitive,
+        "raw": raw_lines,
+        "summary": f"Primitive {primitive} fired with {len(raw_lines)} lines.",
+        "segment_info": segment_info,
+        "role_info": role_info,
+        "constraint_info": constraint_info,
+    }
+
+
+def interpret_all_blocks(parsed_log: Dict[str, Any]) -> List[Dict[str, Any]]:
+    interpreted_blocks: List[Dict[str, Any]] = []
+    for block in parsed_log["blocks"]:
+        interpreted_blocks.append(interpret_block(block))
+    return interpreted_blocks
+
+
+def extract_segment_info(block: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "status": "not_implemented",
+        "primitive": block["primitive"],
+    }
+
+
+def extract_role_info(block: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "status": "not_implemented",
+        "primitive": block["primitive"],
+    }
+
+
+def extract_constraint_info(block: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "status": "not_implemented",
+        "primitive": block["primitive"],
+    }
+
+
 def explain_dimensions(
     parsed_log: Dict[str, Any],
     debug_setup: Dict[str, Any],
@@ -154,6 +198,7 @@ def generate_output(
     dimensions_explanations: Dict[str, Any],
     field_explanations: Dict[str, Any],
     primitive_explanations: Dict[str, Any],
+    interpreted_blocks: List[Dict[str, Any]],
     debug_setup: Dict[str, Any],
 ) -> str:
     """Generate final output text from assembled explanation data."""
@@ -172,6 +217,11 @@ def generate_output(
     lines.append("## Primitives")
     for item in primitive_explanations.get("primitives", []):
         lines.append(f"- {item.get('name')}: {item.get('link')}")
+
+    lines.append("")
+    lines.append("## Interpreted Blocks")
+    for block in interpreted_blocks:
+        lines.append(f"- {block.get('primitive')}: {block.get('summary')}")
 
     return "\n".join(lines)
 
@@ -198,6 +248,7 @@ def main() -> None:
             print("Loaded run log.")
 
         parsed_log = parse_run_log(run_log_lines)
+        interpreted_blocks = interpret_all_blocks(parsed_log)
         if args.verbose:
             print("Parsed run log.")
         dimensions_explanations = explain_dimensions(
@@ -225,6 +276,7 @@ def main() -> None:
             dimensions_explanations,
             field_explanations,
             primitive_explanations,
+            interpreted_blocks,
             debug_setup,
         )
         write_debug_output(output_text, Path(args.base_dir))
