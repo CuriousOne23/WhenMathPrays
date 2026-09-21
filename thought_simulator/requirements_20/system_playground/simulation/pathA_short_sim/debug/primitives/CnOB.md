@@ -115,3 +115,8 @@ These illustrate constraint matching and residue generation.
 - CnOB is required for deterministic meaning: without constraints, IdOB cannot form identity.
 
 ---
+
+## **8. Explanation and Examples Starting from Tokens**
+
+See [Appendix X — Token‑to‑Structure Bridge](appendix_x_token_to_structure_bridge.md)  
+for a full walkthrough from tokens → segments → roles → constraints → basin → identity.
