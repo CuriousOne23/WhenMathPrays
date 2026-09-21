@@ -1,0 +1,24 @@
+include_links: true
+verbosity: high
+
+dimensions:
+	- segment_geometry
+	- role_geometry
+	- constraint_geometry
+	- smoothing_geometry
+	- identity_geometry
+	- meaning_geometry
+
+fields:
+	- struct_segments
+	- struct_roles
+	- constraints_matched
+	- semantic_adjacent_cues
+	- idob_packet
+
+primitives:
+	- SOB
+	- SROB
+	- CnOB
+	- SmOB
+	- IdOB

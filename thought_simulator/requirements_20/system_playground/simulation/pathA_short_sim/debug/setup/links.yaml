@@ -1,0 +1,36 @@
+dimensions:
+	segment_geometry: "./dimensions/segment_geometry.md"
+	role_geometry: "./dimensions/role_geometry.md"
+	constraint_geometry: "./dimensions/constraint_geometry.md"
+	smoothing_geometry: "./dimensions/smoothing_geometry.md"
+	identity_geometry: "./dimensions/identity_geometry.md"
+	meaning_geometry: "./dimensions/meaning_geometry.md"
+
+fields:
+	struct_segments: "./fields/struct_segments.md"
+	struct_roles: "./fields/struct_roles.md"
+	constraints_matched: "./fields/constraints_matched.md"
+	semantic_adjacent_cues: "./fields/semantic_adjacent_cues.md"
+	idob_packet: "./fields/idob_packet.md"
+	residue: "./fields/residue.md"
+
+primitives:
+	SOB: "./primitives/SOB.md"
+	SROB: "./primitives/SROB.md"
+	CnOB: "./primitives/CnOB.md"
+	SmOB: "./primitives/SmOB.md"
+	IdOB: "./primitives/IdOB.md"
+
+values:
+	WQ: "../design/dictionaries/path_a/structure_dictionary/WQ.md"
+	IQ: "../design/dictionaries/path_a/structure_dictionary/IQ.md"
+	NP: "../design/dictionaries/path_a/structure_dictionary/NP.md"
+	AP: "../design/dictionaries/path_a/structure_dictionary/AP.md"
+
+	predicate: "../design/dictionaries/path_a/structure_dictionary/roles/predicate.md"
+	theme: "../design/dictionaries/path_a/structure_dictionary/roles/theme.md"
+	query_focus: "../design/dictionaries/path_a/structure_dictionary/roles/query_focus.md"
+
+idob:
+	interrogative_property_request: "../primitives/idob/idob_py_struc_pgm.md"
+	theme_state: "../primitives/idob/idob_py_struc_pgm.md"
