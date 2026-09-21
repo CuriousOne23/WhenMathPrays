@@ -122,7 +122,7 @@ def _extract_literal_or_text(line: str, marker: str) -> Any:
     return _literal_eval_safe(tail)
 
 
-def _merge_list(target: List[Any], incoming: Any) -> None:
+def _merge_list(target: List[Any], incoming: Any, dedup: bool = False) -> None:
     if incoming is None:
         return
     if isinstance(incoming, list):
@@ -130,7 +130,10 @@ def _merge_list(target: List[Any], incoming: Any) -> None:
     else:
         values = [incoming]
     for value in values:
-        if value not in target:
+        if dedup:
+            if value not in target:
+                target.append(value)
+        else:
             target.append(value)
 
 
@@ -168,6 +171,66 @@ def _append_dict_block(lines: List[str], label: str, mapping: Dict[str, Any]) ->
                 lines.append(f"    {inner_key}: {_render_scalar(inner_value)}")
         else:
             lines.append(f"  {key}: {_render_scalar(value)}")
+
+
+def _normalize_ob_set_notes(notes: List[Any]) -> List[str]:
+    normalized: List[str] = []
+    for note in notes:
+        if not isinstance(note, str):
+            normalized.append(f"OB-Set: {_render_scalar(note)}")
+            continue
+
+        if "OB-Set" not in note and "OB Set" not in note:
+            normalized.append(f"OB-Set: {note.strip()}")
+            continue
+
+        tail = note
+        if "[OB-Set]" in tail:
+            tail = tail.split("[OB-Set]", 1)[1]
+        elif "OB Set" in tail:
+            tail = tail.split("OB Set", 1)[1]
+        parts = [part.strip() for part in tail.split(";") if part.strip()]
+
+        if not parts:
+            normalized.append("OB-Set: (no details)")
+            continue
+
+        for part in parts:
+            if part.startswith("Segments:"):
+                payload = _extract_literal_or_text(part, "Segments:")
+                if isinstance(payload, list):
+                    normalized.append(f"OB-Set: Segments = {', '.join(str(v) for v in payload)}")
+                else:
+                    normalized.append(f"OB-Set: Segments = {_render_scalar(payload)}")
+            elif part.startswith("Segment tokens:"):
+                payload = _extract_literal_or_text(part, "Segment tokens:")
+                if isinstance(payload, list):
+                    groups = [str(group) for group in payload]
+                    normalized.append(f"OB-Set: Segment tokens = {' | '.join(groups)}")
+                else:
+                    normalized.append(f"OB-Set: Segment tokens = {_render_scalar(payload)}")
+            else:
+                normalized.append(f"OB-Set: {part}")
+    return normalized
+
+
+def _normalize_token_relations(mapping: Dict[str, Any]) -> List[str]:
+    relations: List[str] = []
+    for key, value in mapping.items():
+        if not isinstance(value, (tuple, list)) or len(value) < 2:
+            continue
+        left_value = str(value[0]).strip()
+        right_value = str(value[1]).strip()
+        if not left_value or not right_value:
+            continue
+
+        relation_key = str(key).replace("->", "-").replace("_", "-")
+        if "-" in relation_key:
+            source, target = relation_key.split("-", 1)
+            relations.append(f"{source.strip()} → {target.strip()}")
+        else:
+            relations.append(f"{relation_key.strip()} →")
+    return relations
 
 
 def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
@@ -230,35 +293,35 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     for line in raw_lines:
         extracted = _extract_literal_or_text(line, "Segments:")
         if extracted is not None:
-            _merge_list(segments, extracted)
+            _merge_list(segments, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "Segment tokens:")
         if extracted is not None:
-            _merge_list(segment_tokens, extracted)
+            _merge_list(segment_tokens, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "Roles:")
         if extracted is not None:
-            _merge_list(roles, extracted)
+            _merge_list(roles, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "matched=")
         if extracted is not None:
-            _merge_list(constraints_matched, extracted)
+            _merge_list(constraints_matched, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "residue=")
         if extracted is not None:
-            _merge_list(residue, extracted)
+            _merge_list(residue, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "smoothing_residue=")
         if extracted is not None:
-            _merge_list(smoothing_residue, extracted)
+            _merge_list(smoothing_residue, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "operations=")
         if extracted is not None:
-            _merge_list(smoothing_operations, extracted)
+            _merge_list(smoothing_operations, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "semantic_adjacent_cues=")
         if extracted is not None:
-            _merge_list(semantic_adjacent_cues, extracted)
+            _merge_list(semantic_adjacent_cues, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "Semantic core:")
         if isinstance(extracted, dict):
@@ -276,10 +339,7 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
             truth_relation = _render_scalar(extracted_truth_lower)
 
         if "OB-Set" in line or "OB Set" in line:
-            _merge_list(ob_set_notes, line.strip())
-
-    if not smoothing_residue:
-        _merge_list(smoothing_residue, residue)
+            _merge_list(ob_set_notes, line.strip(), dedup=False)
 
     if truth_relation:
         semantic_core["truth_relation"] = truth_relation
@@ -313,22 +373,26 @@ def interpret_all_blocks(parsed_log: Dict[str, Any]) -> List[Dict[str, Any]]:
             continue
 
         current = interpreted_by_primitive[primitive]
-        _merge_list(current["raw"], interpreted.get("raw", []))
-        _merge_list(current["segments"], interpreted.get("segments", []))
-        _merge_list(current["segment_tokens"], interpreted.get("segment_tokens", []))
-        _merge_list(current["roles"], interpreted.get("roles", []))
+        _merge_list(current["raw"], interpreted.get("raw", []), dedup=True)
+        _merge_list(current["segments"], interpreted.get("segments", []), dedup=True)
         _merge_list(
-            current["constraints_matched"], interpreted.get("constraints_matched", [])
+            current["segment_tokens"], interpreted.get("segment_tokens", []), dedup=True
         )
-        _merge_list(current["residue"], interpreted.get("residue", []))
-        _merge_list(current["smoothing_residue"], interpreted.get("smoothing_residue", []))
+        _merge_list(current["roles"], interpreted.get("roles", []), dedup=False)
         _merge_list(
-            current["smoothing_operations"], interpreted.get("smoothing_operations", [])
+            current["constraints_matched"], interpreted.get("constraints_matched", []), dedup=True
+        )
+        _merge_list(current["residue"], interpreted.get("residue", []), dedup=True)
+        _merge_list(
+            current["smoothing_residue"], interpreted.get("smoothing_residue", []), dedup=True
         )
         _merge_list(
-            current["semantic_adjacent_cues"], interpreted.get("semantic_adjacent_cues", [])
+            current["smoothing_operations"], interpreted.get("smoothing_operations", []), dedup=True
         )
-        _merge_list(current["ob_set_notes"], interpreted.get("ob_set_notes", []))
+        _merge_list(
+            current["semantic_adjacent_cues"], interpreted.get("semantic_adjacent_cues", []), dedup=True
+        )
+        _merge_list(current["ob_set_notes"], interpreted.get("ob_set_notes", []), dedup=True)
 
         current["semantic_core"].update(interpreted.get("semantic_core", {}))
         current["token_relations"].update(interpreted.get("token_relations", {}))
@@ -448,6 +512,14 @@ def generate_output(
         lines.append(f"- {name}: [{name}]({relative_path})")
 
     lines.append("")
+    lines.append("## Primitive Summary")
+    lines.append("- SOB: structural segmentation")
+    lines.append("- SROB: role assignment")
+    lines.append("- CnOB: constraint matching")
+    lines.append("- SmOB: smoothing + semantic adjacency")
+    lines.append("- IdOB: semantic core + truth relation")
+
+    lines.append("")
     lines.append("## Interpreted Blocks")
     primitive_links = {
         item.get("name"): item.get("link")
@@ -479,16 +551,41 @@ def generate_output(
         )
         lines.append("")
         _append_dict_block(lines, "semantic_core", block.get("semantic_core", {}))
-        if block.get("token_relations"):
-            lines.append("")
-            _append_dict_block(lines, "token_relations", block.get("token_relations", {}))
-        if block.get("ob_set_notes"):
-            lines.append("")
-            _append_list_block(lines, "ob_set_notes", block.get("ob_set_notes", []))
+
+        lines.append("")
+        lines.append("- token_relations:")
+        relations = _normalize_token_relations(block.get("token_relations", {}))
+        if relations:
+            for relation in relations:
+                lines.append(f"  - {relation}")
+        else:
+            lines.append("  - []")
+
+        lines.append("")
+        normalized_notes = _normalize_ob_set_notes(block.get("ob_set_notes", []))
+        _append_list_block(lines, "ob_set_notes", normalized_notes)
+
         relative_path = primitive_links.get(primitive, "")
         lines.append("")
         lines.append(f"See: [{primitive}]({relative_path})")
         lines.append("")
+
+    smob_block = next((b for b in interpreted_blocks if b.get("primitive") == "SmOB"), {})
+    idob_block = next((b for b in interpreted_blocks if b.get("primitive") == "IdOB"), {})
+    idob_semantic_core = idob_block.get("semantic_core", {})
+
+    lines.append("## Semantic Summary")
+    lines.append(f"- truth_relation: {smob_block.get('truth_relation', '')}")
+    _append_list_block(
+        lines,
+        "semantic_adjacent_cues",
+        smob_block.get("semantic_adjacent_cues", []),
+    )
+    _append_list_block(
+        lines,
+        "selected_ops",
+        idob_semantic_core.get("selected_ops", []),
+    )
 
     return "\n".join(lines)
 

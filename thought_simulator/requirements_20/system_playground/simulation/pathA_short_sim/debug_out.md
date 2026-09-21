@@ -23,6 +23,13 @@
 - SmOB: [SmOB](debug/primitives/SmOB.md)
 - IdOB: [IdOB](debug/primitives/IdOB.md)
 
+## Primitive Summary
+- SOB: structural segmentation
+- SROB: role assignment
+- CnOB: constraint matching
+- SmOB: smoothing + semantic adjacency
+- IdOB: semantic core + truth relation
+
 ## Interpreted Blocks
 ### SOB
 - segments:
@@ -56,8 +63,12 @@
 - semantic_core:
   - {}
 
+- token_relations:
+  - []
+
 - ob_set_notes:
-  - notes: [OB-Set] Segments: ['WQ', 'IQ', 'NP']; Segment tokens: [['why'], ['is'], ['the', 'sky', 'blue']]
+  - OB-Set: Segments = WQ, IQ, NP
+  - OB-Set: Segment tokens = ['why'] | ['is'] | ['the', 'sky', 'blue']
 
 See: [SOB](debug/primitives/SOB.md)
 
@@ -69,6 +80,8 @@ See: [SOB](debug/primitives/SOB.md)
   - []
 
 - roles:
+  - none
+  - none
   - none
 
 - constraints_matched:
@@ -89,8 +102,12 @@ See: [SOB](debug/primitives/SOB.md)
 - semantic_core:
   - {}
 
+- token_relations:
+  - []
+
 - ob_set_notes:
-  - notes: [OB-Set] Roles: ['none', 'none', 'none']; Role segments: {}
+  - OB-Set: Roles: ['none', 'none', 'none']
+  - OB-Set: Role segments: {}
 
 See: [SROB](debug/primitives/SROB.md)
 
@@ -119,15 +136,7 @@ See: [SROB](debug/primitives/SROB.md)
   - relation-theme
 
 - smoothing_residue:
-  - relation-patient
-  - action-relation
-  - agent-action
-  - state-location
-  - copular_state_link
-  - predicate-theme
-  - locative_link
-  - theme-state
-  - relation-theme
+  - []
 
 - smoothing_operations:
   - []
@@ -139,15 +148,12 @@ See: [SROB](debug/primitives/SROB.md)
   - {}
 
 - token_relations:
-  agent-action: ('', '')
-  action-relation: ('', '')
-  relation-patient: ('', '')
-  state-location: ('', '')
-  query-focus-predicate: ('', '')
-  predicate-theme: ('', '')
+  - []
 
 - ob_set_notes:
-  - notes: [OB-Set] matched=['query-focus-predicate']; unmatched=['none-none', 'none-none']; residue=['relation-patient', 'action-relation', 'agent-action', 'state-location', 'copular_state_link', 'predicate-theme', 'locative_link', 'theme-state', 'relation-theme']
+  - OB-Set: matched=['query-focus-predicate']
+  - OB-Set: unmatched=['none-none', 'none-none']
+  - OB-Set: residue=['relation-patient', 'action-relation', 'agent-action', 'state-location', 'copular_state_link', 'predicate-theme', 'locative_link', 'theme-state', 'relation-theme']
 
 See: [CnOB](debug/primitives/CnOB.md)
 
@@ -172,6 +178,7 @@ See: [CnOB](debug/primitives/CnOB.md)
 
 - smoothing_operations:
   - smooth:none->none
+  - smooth:none->none
   - smooth:interrogative_scope
 
 - semantic_adjacent_cues:
@@ -181,15 +188,13 @@ See: [CnOB](debug/primitives/CnOB.md)
   truth_relation: interrogative_open
 
 - token_relations:
-  agent->action: ('', '')
-  action->relation: ('', '')
-  relation->patient: ('', '')
-  state->location: ('', '')
-  query_focus->predicate: ('', '')
+  - []
 
 - ob_set_notes:
-  - notes: [OB-Set] operations=['smooth:none->none', 'smooth:none->none', 'smooth:interrogative_scope']; semantic_adjacent_cues=['interrogative_scope']; residue=[]
-  - notes: [OB-Set]
+  - OB-Set: operations=['smooth:none->none', 'smooth:none->none', 'smooth:interrogative_scope']
+  - OB-Set: semantic_adjacent_cues=['interrogative_scope']
+  - OB-Set: residue=[]
+  - OB-Set: (no details)
 
 See: [SmOB](debug/primitives/SmOB.md)
 
@@ -237,14 +242,18 @@ See: [SmOB](debug/primitives/SmOB.md)
     - []
 
 - token_relations:
-  query_focus: 
-  predicate: 
-  theme: 
-  agent: 
-  action: 
-  relation: 
-  patient: 
-  modifiers:
-    - interrogative_scope
+  - []
+
+- ob_set_notes:
+  - []
 
 See: [IdOB](debug/primitives/IdOB.md)
+
+## Semantic Summary
+- truth_relation: interrogative_open
+- semantic_adjacent_cues:
+  - interrogative_scope
+- selected_ops:
+  - query_resolution
+  - interrogative_identity_request
+  - modifier_resolution
