@@ -1,8 +1,8 @@
-# **SROB.md — Segment Role Observation Block**  
+# **SROB.md — Structural Refinement Object Basin**  
 ### *Path‑A Short Simulator Primitive Documentation*
 
 ## **1. Definition**  
-The **Segment Role Observation Block (SROB)** assigns **functional roles** to segments produced by SOB. These roles determine how each segment participates in dependency formation, constraint evaluation, smoothing, and identity formation.
+The **Structural Refinement Object Basin (SROB)** assigns **functional roles** to segments produced by SOB. These roles determine how each segment participates in dependency formation, constraint evaluation, smoothing, and identity formation.
 
 SROB evaluates **role geometry** and aligns structural units with functional patterns such as **head**, **modifier**, **predicate**, or **argument**.  
 This matches the intent described in your current file: SROB “assigns functional roles to segments” and “evaluates role geometry”.
