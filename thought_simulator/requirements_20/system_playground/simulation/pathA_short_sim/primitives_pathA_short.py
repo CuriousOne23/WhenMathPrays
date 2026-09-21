@@ -232,57 +232,190 @@ def _derive_segment_label_from_role(role: str) -> str:
     return role_to_segment.get(role, "NP")
 
 
+def _rule_based_segment_label(seg_tokens: List[str], previous_labels: List[str]) -> str:
+    if not seg_tokens:
+        return "NP"
+
+    wh_words = {"who", "what", "where", "when", "why", "how"}
+    aux_q = {"is", "are", "was", "were", "do", "does", "did", "can", "could", "will", "would", "shall", "should"}
+    copular = {"is", "are", "was", "were", "be", "been", "being"}
+    state_verbs = {"stay", "stays", "stayed", "remain", "remains", "remained"}
+    preps = {"in", "on", "at", "under", "over", "into", "onto", "from", "to", "of", "with", "by", "for"}
+    rel_markers = {"that", "which", "who", "whom", "whose"}
+    determiners = {"the", "a", "an", "this", "that", "these", "those", "my", "your", "our", "their"}
+    pronouns = {"i", "you", "he", "she", "it", "we", "they"}
+
+    first = seg_tokens[0]
+    non_punct = [t for t in seg_tokens if t.isalnum()]
+    last_label = previous_labels[-1] if previous_labels else ""
+
+    if first in wh_words:
+        return "WQ"
+    if first in rel_markers and len(seg_tokens) > 1:
+        return "RELC"
+    if first in aux_q and last_label == "WQ":
+        return "IQ"
+    if first in copular:
+        return "CP"
+    if first in state_verbs:
+        return "ST"
+    if first in preps:
+        return "LOC"
+
+    # If this chunk follows a copular/auxiliary chunk and is short/non-determiner-led,
+    # treat it as adjectival complement.
+    if last_label in ("CP", "IQ") and first not in determiners and first not in pronouns and len(non_punct) <= 2:
+        return "AP"
+
+    return "NP"
+
+
+def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: List[str]) -> Dict[str, List[Any]]:
+    wh_words = {"who", "what", "where", "when", "why", "how"}
+    aux_q = {"is", "are", "was", "were", "do", "does", "did", "can", "could", "will", "would", "shall", "should"}
+    copular = {"is", "are", "was", "were", "be", "been", "being"}
+    state_verbs = {"stay", "stays", "stayed", "remain", "remains", "remained"}
+    preps = {"in", "on", "at", "under", "over", "into", "onto", "from", "to", "of", "with", "by", "for"}
+    rel_markers = {"that", "which", "who", "whom", "whose"}
+    determiners = {"the", "a", "an", "this", "that", "these", "those", "my", "your", "our", "their"}
+    punctuation = {".", "!", "?", ",", ";", ":"}
+
+    labels: List[str] = []
+    chunks: List[List[str]] = []
+
+    i = 0
+    while i < len(seg_tokens):
+        tok = seg_tokens[i]
+        if tok in punctuation:
+            i += 1
+            continue
+
+        if tok in wh_words:
+            labels.append("WQ")
+            chunks.append([tok])
+            i += 1
+            continue
+
+        if tok in rel_markers:
+            labels.append("RELC")
+            chunks.append([tok])
+            i += 1
+            continue
+
+        if tok in aux_q and labels and labels[-1] == "WQ":
+            labels.append("IQ")
+            chunks.append([tok])
+            i += 1
+            continue
+
+        if tok in copular:
+            labels.append("CP")
+            chunks.append([tok])
+            i += 1
+            continue
+
+        if tok in state_verbs:
+            labels.append("ST")
+            chunks.append([tok])
+            i += 1
+            continue
+
+        if tok in preps:
+            j = i + 1
+            loc_chunk = [tok]
+            while j < len(seg_tokens):
+                nxt = seg_tokens[j]
+                if nxt in punctuation:
+                    break
+                if nxt in wh_words or nxt in aux_q or nxt in copular or nxt in state_verbs or nxt in rel_markers:
+                    break
+                loc_chunk.append(nxt)
+                j += 1
+            labels.append("LOC")
+            chunks.append(loc_chunk)
+            i = j
+            continue
+
+        j = i
+        phrase_chunk: List[str] = []
+        while j < len(seg_tokens):
+            nxt = seg_tokens[j]
+            if nxt in punctuation:
+                break
+            if j > i and (nxt in wh_words or nxt in aux_q or nxt in copular or nxt in state_verbs or nxt in preps or nxt in rel_markers):
+                break
+            phrase_chunk.append(nxt)
+            j += 1
+
+        inferred = _rule_based_segment_label(phrase_chunk, previous_labels + labels)
+        if inferred == "NP" and labels and labels[-1] in ("CP", "IQ", "ST"):
+            if phrase_chunk and phrase_chunk[0] not in determiners:
+                inferred = "AP"
+
+        labels.append(inferred)
+        chunks.append(phrase_chunk)
+        i = j
+
+    if not labels:
+        fallback_label = _rule_based_segment_label(seg_tokens, previous_labels)
+        return {
+            "labels": [fallback_label],
+            "chunks": [seg_tokens],
+        }
+
+    return {
+        "labels": labels,
+        "chunks": chunks,
+    }
+
+
 def _adapter_segments_from_committed(committed_stream: Dict[str, Any]) -> Dict[str, Any]:
-    seg_tokens = _committed_segment_tokens(committed_stream)
     tokens = committed_stream.get("tokens", [])
     segments = committed_stream.get("segments", [])
     by_id = {int(t.get("token_id", 0)): t for t in tokens}
 
     struct_segments: List[str] = []
-    fallback_used = False
+    segment_tokens: List[List[str]] = []
     for seg in sorted(segments, key=lambda s: int(s.get("segment_id", 0))):
         start_id = int(seg.get("start_token_id", 0))
         end_id = int(seg.get("end_token_id", 0))
+        seg_surface_tokens: List[str] = []
         roles: List[str] = []
         for token_id in range(start_id, end_id + 1):
             tok = by_id.get(token_id)
             if not tok:
                 continue
+            seg_surface_tokens.append(str(tok.get("normalized", tok.get("surface", ""))))
             chosen = str(tok.get("role", {}).get("chosen", "none"))
             if chosen and chosen != "none":
                 roles.append(chosen)
 
-        if roles:
-            struct_segments.append(_derive_segment_label_from_role(roles[0]))
+        if not seg_surface_tokens:
             continue
 
-        # Bridge fallback: reuse existing legacy extractor for segment typing.
-        fallback_used = True
-        seg_surface_tokens: List[str] = []
-        for token_id in range(start_id, end_id + 1):
-            tok = by_id.get(token_id)
-            if tok:
-                seg_surface_tokens.append(str(tok.get("normalized", tok.get("surface", ""))))
+        if roles:
+            struct_segments.append(_derive_segment_label_from_role(roles[0]))
+            segment_tokens.append(seg_surface_tokens)
+            continue
 
-        extracted = _extract_segments(seg_surface_tokens)
-        if extracted["segments"]:
-            struct_segments.append(extracted["segments"][0])
-        else:
-            struct_segments.append("NP")
+        # Deterministic bridge labeling from committed boundaries and token stream.
+        # No legacy YAML segment-pattern fallback is used here.
+        split = _split_and_label_committed_segment(seg_surface_tokens, struct_segments)
+        struct_segments.extend(split["labels"])
+        segment_tokens.extend(split["chunks"])
 
     return {
         "segments": struct_segments,
-        "segment_tokens": seg_tokens,
-        "legacy_fallback_used": fallback_used,
+        "segment_tokens": segment_tokens,
+        "legacy_fallback_used": False,
     }
 
 
 def _adapter_roles_from_committed(tp: TP) -> Dict[str, Any]:
     committed_stream = tp.committed_stream
     tokens = committed_stream.get("tokens", []) if isinstance(committed_stream, dict) else []
-    segments = committed_stream.get("segments", []) if isinstance(committed_stream, dict) else []
 
-    if not tokens or not segments:
+    if not tokens:
         return {
             "used": False,
             "struct_roles": [],
@@ -290,57 +423,52 @@ def _adapter_roles_from_committed(tp: TP) -> Dict[str, Any]:
             "legacy_fallback_used": False,
         }
 
-    by_id = {int(t.get("token_id", 0)): t for t in tokens}
+    def _token_role(tok: Dict[str, Any]) -> str:
+        role_obj = tok.get("role", {})
+        chosen = str(role_obj.get("chosen", "none"))
+        if chosen and chosen != "none":
+            return chosen
+
+        candidates = role_obj.get("candidates", [])
+        if candidates:
+            candidate_role = str(candidates[0].get("role_name", "none"))
+            if candidate_role:
+                return candidate_role
+        return "none"
+
+    # Map committed token roles onto SOB-produced segment token chunks.
+    # Use only committed-stream role fields; no YAML role fallback.
+    stream_tokens: List[tuple[str, str]] = []
+    for tok in tokens:
+        if str(tok.get("token_class", "")) == "PUNCT":
+            continue
+        token_text = str(tok.get("normalized", tok.get("surface", "")))
+        stream_tokens.append((token_text, _token_role(tok)))
+
     struct_roles: List[str] = []
     role_segments: Dict[str, List[str]] = {}
 
-    role_patterns = load_role_patterns()
-    segment_counts: Dict[str, int] = {}
-    fallback_used = False
+    cursor = 0
+    for seg_chunk in tp.segment_tokens:
+        chunk_roles: List[str] = []
+        for _ in seg_chunk:
+            if cursor < len(stream_tokens):
+                token_text, role = stream_tokens[cursor]
+                cursor += 1
+            else:
+                token_text, role = "", "none"
+            chunk_roles.append(role)
+            if role != "none" and token_text:
+                role_segments.setdefault(role, []).append(token_text)
 
-    for idx, seg in enumerate(sorted(segments, key=lambda s: int(s.get("segment_id", 0)))):
-        start_id = int(seg.get("start_token_id", 0))
-        end_id = int(seg.get("end_token_id", 0))
-
-        chosen_tokens: List[tuple[str, str]] = []
-        for token_id in range(start_id, end_id + 1):
-            tok = by_id.get(token_id)
-            if not tok:
-                continue
-            chosen = str(tok.get("role", {}).get("chosen", "none"))
-            if chosen and chosen != "none":
-                token_text = str(tok.get("normalized", tok.get("surface", "")))
-                chosen_tokens.append((chosen, token_text))
-
-        if chosen_tokens:
-            seg_role = chosen_tokens[0][0]
-            struct_roles.append(seg_role)
-            for chosen, token_text in chosen_tokens:
-                role_segments.setdefault(chosen, []).append(token_text)
-            continue
-
-        # Bridge fallback: if stream has no chosen role for this segment,
-        # keep existing role-pattern behavior so legacy outputs still work.
-        fallback_used = True
-        seg_name = tp.struct_segments[idx] if idx < len(tp.struct_segments) else "NP"
-        options = role_patterns.get(seg_name, ["modifier"])
-        seg_count = segment_counts.get(seg_name, 0)
-        seg_role = options[min(seg_count, len(options) - 1)]
-        segment_counts[seg_name] = seg_count + 1
+        seg_role = next((r for r in chunk_roles if r != "none"), "none")
         struct_roles.append(seg_role)
-
-        for token_id in range(start_id, end_id + 1):
-            tok = by_id.get(token_id)
-            if not tok:
-                continue
-            token_text = str(tok.get("normalized", tok.get("surface", "")))
-            role_segments.setdefault(seg_role, []).append(token_text)
 
     return {
         "used": True,
         "struct_roles": struct_roles,
         "role_segments": role_segments,
-        "legacy_fallback_used": fallback_used,
+        "legacy_fallback_used": False,
     }
 
 
@@ -432,57 +560,27 @@ def SOB(tp: TP) -> TP:
 
 def SROB(tp: TP) -> TP:
     committed_adapted = _adapter_roles_from_committed(tp)
-    if committed_adapted["used"]:
-        tp.struct_roles = committed_adapted["struct_roles"]
-        tp.role_segments = committed_adapted["role_segments"]
+    if not committed_adapted["used"]:
+        tp.struct_roles = ["none" for _ in tp.struct_segments]
+        tp.role_segments = {}
         _record_bridge(
             tp,
             "SROB",
-            committed_adapter_used=True,
-            legacy_fallback_used=bool(committed_adapted.get("legacy_fallback_used")),
-            detail="roles mapped from committed token.role.chosen values",
+            committed_adapter_used=False,
+            legacy_fallback_used=False,
+            detail="committed roles unavailable; emitted deterministic 'none' roles",
         )
         return tp
 
-    _record_bridge(tp, "SROB", committed_adapter_used=False, legacy_fallback_used=True, detail="committed roles unavailable; legacy role_patterns used")
-
-    role_patterns = load_role_patterns()
-    segment_counts: Dict[str, int] = {}
-    roles: List[str] = []
-    role_segments: Dict[str, List[str]] = {}
-
-    for idx, seg in enumerate(tp.struct_segments):
-        options = role_patterns.get(seg, ["modifier"])
-        seg_count = segment_counts.get(seg, 0)
-        role = options[min(seg_count, len(options) - 1)]
-        roles.append(role)
-        segment_counts[seg] = seg_count + 1
-
-    # Copular/state override: if a CP follows a theme, treat the next NP/AP/PN as state.
-    for i, seg in enumerate(tp.struct_segments):
-        if seg != "CP":
-            continue
-        if i > 0 and roles[i - 1] == "theme" and i + 1 < len(roles):
-            next_seg = tp.struct_segments[i + 1]
-            if next_seg in ("NP", "AP", "PN"):
-                roles[i + 1] = "state"
-
-    # Attachment override: a PN following PP/LOC is a prepositional complement,
-    # not a new theme.
-    for i, seg in enumerate(tp.struct_segments):
-        if seg != "PN" or i == 0:
-            continue
-        prev_seg = tp.struct_segments[i - 1]
-        prev_role = roles[i - 1]
-        if prev_seg in ("PP", "LOC") and prev_role in ("relation", "location"):
-            roles[i] = prev_role
-
-    role_segments = {}
-    for idx, role in enumerate(roles):
-        role_segments.setdefault(role, []).extend(tp.segment_tokens[idx] if idx < len(tp.segment_tokens) else [])
-
-    tp.struct_roles = roles
-    tp.role_segments = role_segments
+    tp.struct_roles = committed_adapted["struct_roles"]
+    tp.role_segments = committed_adapted["role_segments"]
+    _record_bridge(
+        tp,
+        "SROB",
+        committed_adapter_used=True,
+        legacy_fallback_used=False,
+        detail="roles mapped from committed token.role fields only",
+    )
     return tp
 
 

@@ -1,0 +1,420 @@
+{
+  "generated_at_utc": "2026-09-21T15:00:10.754754+00:00",
+  "sentence_count": 12,
+  "primitive_count": 20,
+  "example_sentences": [
+    "The quick brown fox jumps over the lazy dog.",
+    "The rain in Spain stays mainly in the plain.",
+    "The sky is blue.",
+    "Paris is a city.",
+    "The book is on the table.",
+    "The rain stays in the plain.",
+    "Where is the book?",
+    "Is the book on the table?",
+    "Why is the sky blue?",
+    "Why does the rain in Spain stay mainly in the plain?",
+    "Where is the book that is on the table?",
+    "Why is the sky that is blue bright?"
+  ],
+  "overall": {
+    "counts": {
+      "committed": 60,
+      "mixed": 0,
+      "legacy": 0,
+      "n/a": 180
+    },
+    "percentages": {
+      "committed": 25.0,
+      "mixed": 0.0,
+      "legacy": 0.0,
+      "n/a": 75.0
+    },
+    "total_primitive_executions": 240
+  },
+  "per_primitive": {
+    "counts": {
+      "InB": {
+        "committed": 12,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 0
+      },
+      "IIInB": {
+        "committed": 12,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 0
+      },
+      "IE": {
+        "committed": 12,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 0
+      },
+      "CEx": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "CE": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "ISc": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "TPU": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "SOB": {
+        "committed": 12,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 0
+      },
+      "SROB": {
+        "committed": 12,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 0
+      },
+      "CnOB": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "SmOB": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "SSG": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "RBU": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "RB": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "TR": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "TRU": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "RTU": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "CTP": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "IdOB": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      },
+      "OuBA": {
+        "committed": 0,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 12
+      }
+    },
+    "percentages": {
+      "InB": {
+        "committed": 100.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 0.0
+      },
+      "IIInB": {
+        "committed": 100.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 0.0
+      },
+      "IE": {
+        "committed": 100.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 0.0
+      },
+      "CEx": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "CE": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "ISc": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "TPU": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "SOB": {
+        "committed": 100.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 0.0
+      },
+      "SROB": {
+        "committed": 100.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 0.0
+      },
+      "CnOB": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "SmOB": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "SSG": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "RBU": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "RB": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "TR": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "TRU": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "RTU": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "CTP": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "IdOB": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      },
+      "OuBA": {
+        "committed": 0.0,
+        "mixed": 0.0,
+        "legacy": 0.0,
+        "n/a": 100.0
+      }
+    }
+  },
+  "per_sentence": [
+    {
+      "sentence": "The quick brown fox jumps over the lazy dog.",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "The rain in Spain stays mainly in the plain.",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "The sky is blue.",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "Paris is a city.",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "The book is on the table.",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "The rain stays in the plain.",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "Where is the book?",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "Is the book on the table?",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "Why is the sky blue?",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "Why does the rain in Spain stay mainly in the plain?",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "Where is the book that is on the table?",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    },
+    {
+      "sentence": "Why is the sky that is blue bright?",
+      "counts": {
+        "committed": 5,
+        "mixed": 0,
+        "legacy": 0,
+        "n/a": 15
+      },
+      "committed_or_mixed_steps": 5,
+      "legacy_steps": 0
+    }
+  ],
+  "readiness": {
+    "legacy_present": false,
+    "sob_fully_committed": true,
+    "srob_fully_committed": true,
+    "intake_fully_committed": true
+  }
+}
