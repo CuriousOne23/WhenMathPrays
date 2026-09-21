@@ -104,3 +104,8 @@ These illustrate role assignment and semantic cue propagation.
 - SROB is required for deterministic meaning: without roles, IdOB cannot form identity.
 
 ---
+
+## **8. Explanation and Examples Starting from Tokens**
+
+See [Appendix X — Token‑to‑Structure Bridge](appendix_x_token_to_structure_bridge.md)  
+for a full walkthrough from tokens → segments → roles → constraints → basin → identity.
