@@ -187,6 +187,14 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
             "notes": primitive_notes(fn.__name__, tp),
         }
 
+        bridge_payload = tp.bridge_trace.get(fn.__name__, {
+            "mode": "n/a",
+            "committed_adapter_used": False,
+            "legacy_fallback_used": False,
+            "detail": "primitive does not use intake bridge adapters",
+        })
+        trace_entry["bridge_trace"] = bridge_payload
+
         # Carry primitive-level diagnostic payloads (e.g., token_relations)
         # from tp.trace into the public run trace consumed by run_examples.py.
         if hasattr(tp, "trace") and tp.trace:

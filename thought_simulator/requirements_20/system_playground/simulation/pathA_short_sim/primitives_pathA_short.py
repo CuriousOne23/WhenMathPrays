@@ -174,6 +174,29 @@ def _simple_roles(segments: List[str]) -> List[str]:
     return roles
 
 
+def _record_bridge(
+    tp: TP,
+    primitive: str,
+    committed_adapter_used: bool,
+    legacy_fallback_used: bool,
+    detail: str,
+) -> None:
+    mode = "committed"
+    if committed_adapter_used and legacy_fallback_used:
+        mode = "mixed"
+    elif legacy_fallback_used and not committed_adapter_used:
+        mode = "legacy"
+    elif not committed_adapter_used and not legacy_fallback_used:
+        mode = "n/a"
+
+    tp.bridge_trace[primitive] = {
+        "mode": mode,
+        "committed_adapter_used": committed_adapter_used,
+        "legacy_fallback_used": legacy_fallback_used,
+        "detail": detail,
+    }
+
+
 def _committed_segment_tokens(committed_stream: Dict[str, Any]) -> List[List[str]]:
     tokens = committed_stream.get("tokens", [])
     segments = committed_stream.get("segments", [])
@@ -216,6 +239,7 @@ def _adapter_segments_from_committed(committed_stream: Dict[str, Any]) -> Dict[s
     by_id = {int(t.get("token_id", 0)): t for t in tokens}
 
     struct_segments: List[str] = []
+    fallback_used = False
     for seg in sorted(segments, key=lambda s: int(s.get("segment_id", 0))):
         start_id = int(seg.get("start_token_id", 0))
         end_id = int(seg.get("end_token_id", 0))
@@ -233,6 +257,7 @@ def _adapter_segments_from_committed(committed_stream: Dict[str, Any]) -> Dict[s
             continue
 
         # Bridge fallback: reuse existing legacy extractor for segment typing.
+        fallback_used = True
         seg_surface_tokens: List[str] = []
         for token_id in range(start_id, end_id + 1):
             tok = by_id.get(token_id)
@@ -248,6 +273,7 @@ def _adapter_segments_from_committed(committed_stream: Dict[str, Any]) -> Dict[s
     return {
         "segments": struct_segments,
         "segment_tokens": seg_tokens,
+        "legacy_fallback_used": fallback_used,
     }
 
 
@@ -261,6 +287,7 @@ def _adapter_roles_from_committed(tp: TP) -> Dict[str, Any]:
             "used": False,
             "struct_roles": [],
             "role_segments": {},
+            "legacy_fallback_used": False,
         }
 
     by_id = {int(t.get("token_id", 0)): t for t in tokens}
@@ -269,6 +296,7 @@ def _adapter_roles_from_committed(tp: TP) -> Dict[str, Any]:
 
     role_patterns = load_role_patterns()
     segment_counts: Dict[str, int] = {}
+    fallback_used = False
 
     for idx, seg in enumerate(sorted(segments, key=lambda s: int(s.get("segment_id", 0)))):
         start_id = int(seg.get("start_token_id", 0))
@@ -293,6 +321,7 @@ def _adapter_roles_from_committed(tp: TP) -> Dict[str, Any]:
 
         # Bridge fallback: if stream has no chosen role for this segment,
         # keep existing role-pattern behavior so legacy outputs still work.
+        fallback_used = True
         seg_name = tp.struct_segments[idx] if idx < len(tp.struct_segments) else "NP"
         options = role_patterns.get(seg_name, ["modifier"])
         seg_count = segment_counts.get(seg_name, 0)
@@ -311,6 +340,7 @@ def _adapter_roles_from_committed(tp: TP) -> Dict[str, Any]:
         "used": True,
         "struct_roles": struct_roles,
         "role_segments": role_segments,
+        "legacy_fallback_used": fallback_used,
     }
 
 
@@ -324,8 +354,10 @@ def InB(tp: TP) -> TP:
     committed_tokens = committed_stream.get("tokens", [])
     if committed_tokens:
         tp.tokens = [str(t.get("surface", "")) for t in committed_tokens]
+        _record_bridge(tp, "InB", committed_adapter_used=True, legacy_fallback_used=False, detail="tokens sourced from committed_stream")
     else:
         tp.tokens = _simple_tokenize(tp.raw_text)
+        _record_bridge(tp, "InB", committed_adapter_used=False, legacy_fallback_used=True, detail="committed_stream empty; legacy tokenizer used")
     return tp
 
 
@@ -334,6 +366,13 @@ def IIInB(tp: TP) -> TP:
     if isinstance(tp.committed_stream, dict):
         anomalies = tp.committed_stream.get("anomalies", [])
     tp.defects = [f"anomaly:{a.get('anomaly_type', 'unknown')}" for a in anomalies] if anomalies else []
+    _record_bridge(
+        tp,
+        "IIInB",
+        committed_adapter_used=isinstance(tp.committed_stream, dict) and bool(tp.committed_stream),
+        legacy_fallback_used=not (isinstance(tp.committed_stream, dict) and bool(tp.committed_stream)),
+        detail="defects mapped from committed_stream anomalies",
+    )
     return tp
 
 
@@ -341,8 +380,10 @@ def IE(tp: TP) -> TP:
     committed_tokens = tp.committed_stream.get("tokens", []) if isinstance(tp.committed_stream, dict) else []
     if committed_tokens:
         tp.tokens = [str(t.get("normalized", t.get("surface", ""))) for t in committed_tokens]
+        _record_bridge(tp, "IE", committed_adapter_used=True, legacy_fallback_used=False, detail="normalized tokens sourced from committed_stream")
     else:
         tp.tokens = _normalize_tokens(tp.tokens)
+        _record_bridge(tp, "IE", committed_adapter_used=False, legacy_fallback_used=True, detail="committed_stream missing; legacy normalization used")
     tp.normalized_text = " ".join(tp.tokens)
     return tp
 
@@ -373,8 +414,16 @@ def TPU(tp: TP) -> TP:
 def SOB(tp: TP) -> TP:
     if isinstance(tp.committed_stream, dict) and tp.committed_stream.get("segments"):
         extracted = _adapter_segments_from_committed(tp.committed_stream)
+        _record_bridge(
+            tp,
+            "SOB",
+            committed_adapter_used=True,
+            legacy_fallback_used=bool(extracted.get("legacy_fallback_used")),
+            detail="segments and segment_tokens mapped from committed_stream",
+        )
     else:
         extracted = _extract_segments(tp.tokens)
+        _record_bridge(tp, "SOB", committed_adapter_used=False, legacy_fallback_used=True, detail="committed segments unavailable; legacy segment extractor used")
 
     tp.struct_segments = extracted["segments"]
     tp.segment_tokens = extracted["segment_tokens"]
@@ -386,7 +435,16 @@ def SROB(tp: TP) -> TP:
     if committed_adapted["used"]:
         tp.struct_roles = committed_adapted["struct_roles"]
         tp.role_segments = committed_adapted["role_segments"]
+        _record_bridge(
+            tp,
+            "SROB",
+            committed_adapter_used=True,
+            legacy_fallback_used=bool(committed_adapted.get("legacy_fallback_used")),
+            detail="roles mapped from committed token.role.chosen values",
+        )
         return tp
+
+    _record_bridge(tp, "SROB", committed_adapter_used=False, legacy_fallback_used=True, detail="committed roles unavailable; legacy role_patterns used")
 
     role_patterns = load_role_patterns()
     segment_counts: Dict[str, int] = {}
