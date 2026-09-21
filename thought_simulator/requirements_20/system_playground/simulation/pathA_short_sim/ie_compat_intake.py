@@ -14,6 +14,16 @@ _LAYER_ORDER = [
     "flow_contracts",
 ]
 
+_MULTI_TOKEN_ROLE_PATTERNS = [
+    {
+        "tokens": ["in", "front", "of"],
+        "role": "relation",
+        "rule_id": "role.multi.in_front_of.001",
+        "layer": "runtime_dictionary",
+        "precedence_rank": 1,
+    }
+]
+
 
 def _tokenize_ie_compat(raw_text: str) -> List[Dict[str, int | str]]:
     # Split into word chunks (optionally followed by combining marks)
@@ -38,6 +48,54 @@ def _classify_token(surface: str) -> str:
     if surface.isdigit():
         return "NUMBER"
     return "WORD"
+
+
+def _apply_multi_token_roles(tokens: List[dict]) -> None:
+    if not tokens:
+        return
+
+    next_match_id = 1
+    i = 0
+    while i < len(tokens):
+        best_pattern = None
+        best_len = 0
+
+        for pattern in _MULTI_TOKEN_ROLE_PATTERNS:
+            seq = pattern["tokens"]
+            n = len(seq)
+            if i + n > len(tokens):
+                continue
+            window = [t.get("normalized", "") for t in tokens[i:i + n]]
+            if window == seq and n > best_len:
+                best_pattern = pattern
+                best_len = n
+
+        if best_pattern is None:
+            i += 1
+            continue
+
+        match_id = f"mtr-{next_match_id}"
+        next_match_id += 1
+
+        for j in range(i, i + best_len):
+            token = tokens[j]
+            token["role"] = {
+                "chosen": best_pattern["role"],
+                "candidates": [
+                    {
+                        "role_name": best_pattern["role"],
+                        "score": 1.0,
+                        "match_rule_id": best_pattern["rule_id"],
+                        "match_layer": best_pattern["layer"],
+                    }
+                ],
+            }
+            token["provenance"]["dictionary_rule_id"] = best_pattern["rule_id"]
+            token["provenance"]["dictionary_layer"] = best_pattern["layer"]
+            token["provenance"]["precedence_rank"] = best_pattern["precedence_rank"]
+            token["provenance"]["multi_token_match_id"] = match_id
+
+        i += best_len
 
 
 def build_committed_stream(raw_text: str) -> dict:
@@ -124,6 +182,8 @@ def build_committed_stream(raw_text: str) -> dict:
             }
         )
         prev_end = span_end
+
+    _apply_multi_token_roles(tokens)
 
     segment_end = len(tokens) if tokens else 1
     segments = [

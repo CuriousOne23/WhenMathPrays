@@ -36,8 +36,8 @@ CASES: List[Dict[str, Any]] = [
     {
         "id": "multi_token_roles",
         "raw_text": "in front of the house",
-        "status": "pending",
-        "description": "Multi-token role matcher parity checks pending.",
+        "status": "active",
+        "description": "Multi-token role matching is deterministic with shared match provenance.",
     },
     {
         "id": "dictionary_precedence",
@@ -224,6 +224,42 @@ def _check_token_flags_propagation(stream: Dict[str, Any]) -> Tuple[bool, List[s
     return len(failed) == 0, failed, details
 
 
+def _check_multi_token_roles(stream: Dict[str, Any]) -> Tuple[bool, List[str], Dict[str, Any]]:
+    tokens = stream.get("tokens", [])
+    surfaces = [t.get("surface") for t in tokens]
+    normalized = [t.get("normalized") for t in tokens]
+    chosen_roles = [t.get("role", {}).get("chosen") for t in tokens]
+    match_ids = [t.get("provenance", {}).get("multi_token_match_id") for t in tokens]
+
+    checks = [
+        (surfaces == ["in", "front", "of", "the", "house"], "tokenization mismatch for multi-token role case"),
+        (normalized == ["in", "front", "of", "the", "house"], "normalized sequence mismatch"),
+        (chosen_roles[:3] == ["relation", "relation", "relation"], "first three tokens should be relation role"),
+        (chosen_roles[3:] == ["none", "none"], "tokens outside match should remain role none"),
+        (
+            len({mid for mid in match_ids[:3] if mid is not None}) == 1,
+            "matched tokens must share one multi_token_match_id",
+        ),
+        (match_ids[3] is None and match_ids[4] is None, "unmatched tokens should not carry multi_token_match_id"),
+        (
+            all(
+                t.get("provenance", {}).get("dictionary_rule_id") == "role.multi.in_front_of.001"
+                for t in tokens[:3]
+            ),
+            "matched tokens missing expected dictionary_rule_id",
+        ),
+    ]
+
+    failed = [msg for ok, msg in checks if not ok]
+    details = {
+        "surfaces": surfaces,
+        "chosen_roles": chosen_roles,
+        "multi_token_match_ids": match_ids,
+        "dictionary_rule_ids": [t.get("provenance", {}).get("dictionary_rule_id") for t in tokens],
+    }
+    return len(failed) == 0, failed, details
+
+
 def _check_deterministic_ids(raw_text: str) -> Tuple[bool, List[str], Dict[str, Any]]:
     stream_a = build_committed_stream(raw_text)
     stream_b = build_committed_stream(raw_text)
@@ -265,6 +301,8 @@ def _evaluate_case(case: Dict[str, Any]) -> Dict[str, Any]:
             ok, failed, details = _check_normalization(stream)
         elif case_id == "token_flags_propagation":
             ok, failed, details = _check_token_flags_propagation(stream)
+        elif case_id == "multi_token_roles":
+            ok, failed, details = _check_multi_token_roles(stream)
         else:
             ok, failed, details = False, ["active case has no evaluator"], {}
 
