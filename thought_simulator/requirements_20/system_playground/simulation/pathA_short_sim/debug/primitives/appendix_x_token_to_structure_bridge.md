@@ -185,7 +185,7 @@ SmOB sees:
 SmOB’s structural function:
 - **[extract semantic‑adjacent cues](../fields/semantic_adjacent_cues.md)**  
 - **[perform basin smoothing](../fields/smoothing_operations.md)**  
-- **produce smoothing_residue**  
+- **produce SmOB smoothing_residue](../fields/smob_smoothing_residue.md)**  
 - **produce ob_set_notes**  
 
 ---
