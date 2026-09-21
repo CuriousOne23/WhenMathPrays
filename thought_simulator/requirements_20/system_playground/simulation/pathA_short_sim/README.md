@@ -149,6 +149,16 @@ Full details and canonical TP traces are in:
 
 ---
 
+# Debugger, Training and Teaching Tool
+
+A debugger, training and teaching tool executable pathA_dbug.py has been provided, which will operate on the output of run_examples.py, in the example below this will be run.log file:
+
+```
+python run_examples.py > run.log
+```
+
+For more information see debug directory [README.md](debug/README.md).
+
 # **9. Related Documents**
 
 - Architectural simulation details:  
