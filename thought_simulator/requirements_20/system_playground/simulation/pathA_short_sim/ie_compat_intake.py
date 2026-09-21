@@ -2,7 +2,7 @@ import hashlib
 import re
 import unicodedata
 from datetime import datetime, timezone
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 
 _LAYER_ORDER = [
@@ -146,6 +146,47 @@ def _apply_single_token_dictionary_roles(tokens: List[dict]) -> None:
         token["provenance"]["precedence_rank"] = chosen["precedence_rank"]
 
 
+def _assign_segments(tokens: List[dict]) -> Tuple[List[dict], List[dict]]:
+    if not tokens:
+        return tokens, []
+
+    segments: List[dict] = []
+    segment_id = 1
+    start_idx = 0
+
+    for i, token in enumerate(tokens):
+        surface = token.get("surface")
+        if surface in (".", "!", "?"):
+            for j in range(start_idx, i + 1):
+                tokens[j]["segment_id"] = segment_id
+
+            segments.append(
+                {
+                    "segment_id": segment_id,
+                    "start_token_id": tokens[start_idx]["token_id"],
+                    "end_token_id": tokens[i]["token_id"],
+                    "boundary_reason": "inferred_rule_id:terminal_punctuation",
+                }
+            )
+            segment_id += 1
+            start_idx = i + 1
+
+    if start_idx < len(tokens):
+        for j in range(start_idx, len(tokens)):
+            tokens[j]["segment_id"] = segment_id
+
+        segments.append(
+            {
+                "segment_id": segment_id,
+                "start_token_id": tokens[start_idx]["token_id"],
+                "end_token_id": tokens[-1]["token_id"],
+                "boundary_reason": "inferred_rule_id:end_of_stream",
+            }
+        )
+
+    return tokens, segments
+
+
 def build_committed_stream(raw_text: str) -> dict:
     raw_text_hash = hashlib.sha256(raw_text.encode("utf-8")).hexdigest()
     stream_id = hashlib.sha256(("ie-compat-v1|" + raw_text).encode("utf-8")).hexdigest()[:16]
@@ -233,16 +274,7 @@ def build_committed_stream(raw_text: str) -> dict:
 
     _apply_multi_token_roles(tokens)
     _apply_single_token_dictionary_roles(tokens)
-
-    segment_end = len(tokens) if tokens else 1
-    segments = [
-        {
-            "segment_id": 1,
-            "start_token_id": 1,
-            "end_token_id": segment_end,
-            "boundary_reason": "inferred_rule_id:single_segment_v1",
-        }
-    ]
+    tokens, segments = _assign_segments(tokens)
 
     return {
         "contract_version": "ie-compat-v1",

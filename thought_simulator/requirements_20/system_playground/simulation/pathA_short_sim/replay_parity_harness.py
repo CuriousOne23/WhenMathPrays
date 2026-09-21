@@ -48,8 +48,8 @@ CASES: List[Dict[str, Any]] = [
     {
         "id": "segment_boundaries",
         "raw_text": "First. Second.",
-        "status": "pending",
-        "description": "Explicit boundary parity checks pending.",
+        "status": "active",
+        "description": "Segment boundaries are assigned deterministically from terminal punctuation.",
     },
     {
         "id": "token_flags_propagation",
@@ -309,6 +309,39 @@ def _check_dictionary_precedence(stream: Dict[str, Any]) -> Tuple[bool, List[str
     return len(failed) == 0, failed, details
 
 
+def _check_segment_boundaries(stream: Dict[str, Any]) -> Tuple[bool, List[str], Dict[str, Any]]:
+    tokens = stream.get("tokens", [])
+    segments = stream.get("segments", [])
+
+    surfaces = [t.get("surface") for t in tokens]
+    segment_ids = [t.get("segment_id") for t in tokens]
+    segment_ranges = [
+        (s.get("segment_id"), s.get("start_token_id"), s.get("end_token_id"), s.get("boundary_reason"))
+        for s in segments
+    ]
+
+    checks = [
+        (surfaces == ["First", ".", "Second", "."], "tokenization mismatch for segment case"),
+        (segment_ids == [1, 1, 2, 2], "token segment_id assignment mismatch"),
+        (len(segments) == 2, "expected exactly two segments"),
+        (
+            segment_ranges == [
+                (1, 1, 2, "inferred_rule_id:terminal_punctuation"),
+                (2, 3, 4, "inferred_rule_id:terminal_punctuation"),
+            ],
+            "segment metadata mismatch",
+        ),
+    ]
+
+    failed = [msg for ok, msg in checks if not ok]
+    details = {
+        "surfaces": surfaces,
+        "token_segment_ids": segment_ids,
+        "segment_ranges": segment_ranges,
+    }
+    return len(failed) == 0, failed, details
+
+
 def _check_deterministic_ids(raw_text: str) -> Tuple[bool, List[str], Dict[str, Any]]:
     stream_a = build_committed_stream(raw_text)
     stream_b = build_committed_stream(raw_text)
@@ -354,6 +387,8 @@ def _evaluate_case(case: Dict[str, Any]) -> Dict[str, Any]:
             ok, failed, details = _check_multi_token_roles(stream)
         elif case_id == "dictionary_precedence":
             ok, failed, details = _check_dictionary_precedence(stream)
+        elif case_id == "segment_boundaries":
+            ok, failed, details = _check_segment_boundaries(stream)
         else:
             ok, failed, details = False, ["active case has no evaluator"], {}
 
