@@ -9,6 +9,7 @@ class TP:
     raw_text: str = ""
     tokens: List[str] = field(default_factory=list)
     normalized_text: str = ""
+    committed_stream: Dict[str, Any] = field(default_factory=dict)
 
     # Defects & correction
     defects: List[str] = field(default_factory=list)

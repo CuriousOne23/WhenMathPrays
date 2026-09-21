@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import yaml
+from ie_compat_intake import build_committed_stream
 from tp_substrate import TP
 
 try:
@@ -173,22 +174,175 @@ def _simple_roles(segments: List[str]) -> List[str]:
     return roles
 
 
+def _committed_segment_tokens(committed_stream: Dict[str, Any]) -> List[List[str]]:
+    tokens = committed_stream.get("tokens", [])
+    segments = committed_stream.get("segments", [])
+    by_id = {int(t.get("token_id", 0)): t for t in tokens}
+
+    grouped: List[List[str]] = []
+    for seg in sorted(segments, key=lambda s: int(s.get("segment_id", 0))):
+        start_id = int(seg.get("start_token_id", 0))
+        end_id = int(seg.get("end_token_id", 0))
+        seg_tokens: List[str] = []
+        for token_id in range(start_id, end_id + 1):
+            tok = by_id.get(token_id)
+            if not tok:
+                continue
+            seg_tokens.append(str(tok.get("normalized", tok.get("surface", ""))))
+        if seg_tokens:
+            grouped.append(seg_tokens)
+    return grouped
+
+
+def _derive_segment_label_from_role(role: str) -> str:
+    role_to_segment = {
+        "query_focus": "WQ",
+        "predicate": "IQ",
+        "theme": "NP",
+        "agent": "NP",
+        "patient": "NP",
+        "action": "VP",
+        "relation": "PP",
+        "location": "LOC",
+        "state": "AP",
+    }
+    return role_to_segment.get(role, "NP")
+
+
+def _adapter_segments_from_committed(committed_stream: Dict[str, Any]) -> Dict[str, Any]:
+    seg_tokens = _committed_segment_tokens(committed_stream)
+    tokens = committed_stream.get("tokens", [])
+    segments = committed_stream.get("segments", [])
+    by_id = {int(t.get("token_id", 0)): t for t in tokens}
+
+    struct_segments: List[str] = []
+    for seg in sorted(segments, key=lambda s: int(s.get("segment_id", 0))):
+        start_id = int(seg.get("start_token_id", 0))
+        end_id = int(seg.get("end_token_id", 0))
+        roles: List[str] = []
+        for token_id in range(start_id, end_id + 1):
+            tok = by_id.get(token_id)
+            if not tok:
+                continue
+            chosen = str(tok.get("role", {}).get("chosen", "none"))
+            if chosen and chosen != "none":
+                roles.append(chosen)
+
+        if roles:
+            struct_segments.append(_derive_segment_label_from_role(roles[0]))
+            continue
+
+        # Bridge fallback: reuse existing legacy extractor for segment typing.
+        seg_surface_tokens: List[str] = []
+        for token_id in range(start_id, end_id + 1):
+            tok = by_id.get(token_id)
+            if tok:
+                seg_surface_tokens.append(str(tok.get("normalized", tok.get("surface", ""))))
+
+        extracted = _extract_segments(seg_surface_tokens)
+        if extracted["segments"]:
+            struct_segments.append(extracted["segments"][0])
+        else:
+            struct_segments.append("NP")
+
+    return {
+        "segments": struct_segments,
+        "segment_tokens": seg_tokens,
+    }
+
+
+def _adapter_roles_from_committed(tp: TP) -> Dict[str, Any]:
+    committed_stream = tp.committed_stream
+    tokens = committed_stream.get("tokens", []) if isinstance(committed_stream, dict) else []
+    segments = committed_stream.get("segments", []) if isinstance(committed_stream, dict) else []
+
+    if not tokens or not segments:
+        return {
+            "used": False,
+            "struct_roles": [],
+            "role_segments": {},
+        }
+
+    by_id = {int(t.get("token_id", 0)): t for t in tokens}
+    struct_roles: List[str] = []
+    role_segments: Dict[str, List[str]] = {}
+
+    role_patterns = load_role_patterns()
+    segment_counts: Dict[str, int] = {}
+
+    for idx, seg in enumerate(sorted(segments, key=lambda s: int(s.get("segment_id", 0)))):
+        start_id = int(seg.get("start_token_id", 0))
+        end_id = int(seg.get("end_token_id", 0))
+
+        chosen_tokens: List[tuple[str, str]] = []
+        for token_id in range(start_id, end_id + 1):
+            tok = by_id.get(token_id)
+            if not tok:
+                continue
+            chosen = str(tok.get("role", {}).get("chosen", "none"))
+            if chosen and chosen != "none":
+                token_text = str(tok.get("normalized", tok.get("surface", "")))
+                chosen_tokens.append((chosen, token_text))
+
+        if chosen_tokens:
+            seg_role = chosen_tokens[0][0]
+            struct_roles.append(seg_role)
+            for chosen, token_text in chosen_tokens:
+                role_segments.setdefault(chosen, []).append(token_text)
+            continue
+
+        # Bridge fallback: if stream has no chosen role for this segment,
+        # keep existing role-pattern behavior so legacy outputs still work.
+        seg_name = tp.struct_segments[idx] if idx < len(tp.struct_segments) else "NP"
+        options = role_patterns.get(seg_name, ["modifier"])
+        seg_count = segment_counts.get(seg_name, 0)
+        seg_role = options[min(seg_count, len(options) - 1)]
+        segment_counts[seg_name] = seg_count + 1
+        struct_roles.append(seg_role)
+
+        for token_id in range(start_id, end_id + 1):
+            tok = by_id.get(token_id)
+            if not tok:
+                continue
+            token_text = str(tok.get("normalized", tok.get("surface", "")))
+            role_segments.setdefault(seg_role, []).append(token_text)
+
+    return {
+        "used": True,
+        "struct_roles": struct_roles,
+        "role_segments": role_segments,
+    }
+
+
 # ----- primitives ------------------------------------------------------------------
 
 
 def InB(tp: TP) -> TP:
-    tp.tokens = _simple_tokenize(tp.raw_text)
+    committed_stream = build_committed_stream(tp.raw_text)
+    tp.committed_stream = committed_stream
+
+    committed_tokens = committed_stream.get("tokens", [])
+    if committed_tokens:
+        tp.tokens = [str(t.get("surface", "")) for t in committed_tokens]
+    else:
+        tp.tokens = _simple_tokenize(tp.raw_text)
     return tp
 
 
 def IIInB(tp: TP) -> TP:
-    # For now, assume no defects.
-    tp.defects = []
+    anomalies = []
+    if isinstance(tp.committed_stream, dict):
+        anomalies = tp.committed_stream.get("anomalies", [])
+    tp.defects = [f"anomaly:{a.get('anomaly_type', 'unknown')}" for a in anomalies] if anomalies else []
     return tp
 
 
 def IE(tp: TP) -> TP:
-    tp.tokens = _normalize_tokens(tp.tokens)
+    committed_tokens = tp.committed_stream.get("tokens", []) if isinstance(tp.committed_stream, dict) else []
+    if committed_tokens:
+        tp.tokens = [str(t.get("normalized", t.get("surface", ""))) for t in committed_tokens]
+    else:
+        tp.tokens = _normalize_tokens(tp.tokens)
     tp.normalized_text = " ".join(tp.tokens)
     return tp
 
@@ -217,13 +371,23 @@ def TPU(tp: TP) -> TP:
 
 
 def SOB(tp: TP) -> TP:
-    extracted = _extract_segments(tp.tokens)
+    if isinstance(tp.committed_stream, dict) and tp.committed_stream.get("segments"):
+        extracted = _adapter_segments_from_committed(tp.committed_stream)
+    else:
+        extracted = _extract_segments(tp.tokens)
+
     tp.struct_segments = extracted["segments"]
     tp.segment_tokens = extracted["segment_tokens"]
     return tp
 
 
 def SROB(tp: TP) -> TP:
+    committed_adapted = _adapter_roles_from_committed(tp)
+    if committed_adapted["used"]:
+        tp.struct_roles = committed_adapted["struct_roles"]
+        tp.role_segments = committed_adapted["role_segments"]
+        return tp
+
     role_patterns = load_role_patterns()
     segment_counts: Dict[str, int] = {}
     roles: List[str] = []
