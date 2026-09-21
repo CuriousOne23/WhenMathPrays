@@ -309,6 +309,170 @@ semantic_adjacent_cues: ['locative_adjacent']
 smoothing_residue: []
 ```
 
+You’re right to call this out, Jeff — in the appendix I *named* the smoothing types but didn’t give **explicit, concrete examples** of each type. Let’s fix that cleanly and add **real SmOB‑style examples** that match your simulator’s residue/cue geometry.
+
+Below is a drop‑in replacement section you can paste directly into **SmOB.md Appendix A**, giving **full examples for each smoothing type**.
+
+---
+
+## **A.4.1 Detailed Examples of Each SmOB Smoothing Type**
+
+These examples use the *actual* kinds of residue and cues your simulator produces in `debug_out.md` (e.g., `interrogative_scope`, `modifier_chain`, `locative_adjacent`, `underspecification_adjacent`, etc.).
+
+Each example shows:
+
+- **input residue** (from SOB → SROB → CnOB)  
+- **the smoothing type SmOB applies**  
+- **semantic‑adjacent cues extracted**  
+- **smoothing_residue** (leftover basin material)
+
+---
+
+### ⭐ **1. Adjacency Smoothing**  
+Adjacency smoothing resolves **semantic‑adjacent relationships** that are present but structurally discontinuous.
+
+#### **Example**
+Input residue:
+```
+residue: ['interrogative_scope', 'state_adjacent']
+```
+
+SmOB applies adjacency smoothing:
+```
+smoothing_operations: ['adjacency_smoothing']
+semantic_adjacent_cues: ['interrogative_scope', 'state_adjacent']
+smoothing_residue: []
+```
+
+#### **Interpretation**
+SmOB recognizes that:
+
+- `interrogative_scope` is adjacent to the main clause  
+- `state_adjacent` is adjacent to the predicate  
+
+Both cues are valid and stable → no leftover residue.
+
+---
+
+### ⭐ **2. Continuity Smoothing**  
+Continuity smoothing resolves **breaks in semantic continuity**, especially modality and underspecification.
+
+#### **Example**
+Input residue:
+```
+residue: ['modality_cue', 'underspecification_adjacent']
+```
+
+SmOB applies continuity smoothing:
+```
+smoothing_operations: ['continuity_smoothing']
+semantic_adjacent_cues: ['modality_cue']
+smoothing_residue: ['underspecification_adjacent']
+```
+
+#### **Interpretation**
+SmOB stabilizes:
+
+- `modality_cue` (“might”, “could”, “should”) → extractable  
+- `underspecification_adjacent` (“something”, “somewhere”) → still unresolved → becomes smoothing_residue
+
+This is a **classic basin split**: one cue extracted, one left unresolved.
+
+---
+
+### ⭐ **3. Role‑Alignment Smoothing**  
+Role smoothing resolves mismatches between segment roles and semantic adjacency.
+
+### **Example**
+Input residue:
+```
+residue: ['modifier_chain']
+```
+
+SmOB applies role smoothing:
+```
+smoothing_operations: ['role_smoothing']
+semantic_adjacent_cues: ['modifier_chain']
+smoothing_residue: []
+```
+
+#### **Interpretation**
+SmOB stabilizes the modifier chain:
+
+- “the rain **in Spain**”  
+- “the book **on the table**”  
+
+Role alignment is clean → no leftover residue.
+
+---
+
+### ⭐ **4. Segment‑Alignment Smoothing**  
+Segment smoothing resolves adjacency between segments that are structurally separated but semantically linked.
+
+#### **Example**
+Input residue:
+```
+residue: ['locative_adjacent']
+```
+
+SmOB applies segment smoothing:
+```
+smoothing_operations: ['segment_smoothing']
+semantic_adjacent_cues: ['locative_adjacent']
+smoothing_residue: []
+```
+
+#### **Interpretation**
+SmOB stabilizes:
+
+- NP → LOC adjacency  
+- “the book” → “on the table”  
+- “the rain” → “in the plain”
+
+Segment alignment is clean → no leftover residue.
+
+---
+
+### ⭐ **5. Basin Compression Smoothing**  
+This is the “catch‑all” smoothing type used when residue is mixed or ambiguous.
+
+### **Example**
+Input residue:
+```
+residue: ['conflict_adjacent', 'modality_cue', 'underspecification_adjacent']
+```
+
+SmOB applies basin compression smoothing:
+```
+smoothing_operations: ['basin_compression_smoothing']
+semantic_adjacent_cues: ['modality_cue', 'conflict_adjacent']
+smoothing_residue: ['underspecification_adjacent']
+```
+
+#### **Interpretation**
+SmOB extracts:
+
+- `modality_cue` (“might”, “could”)  
+- `conflict_adjacent` (“but”, “however”)  
+
+But leaves:
+
+- `underspecification_adjacent` (“something”, “somewhere”)  
+
+This is the most common multi‑cue basin pattern.
+
+---
+
+## ⭐ **A.4.2 Summary Table of Smoothing Types and Examples**
+
+| Smoothing Type | Example Input | Extracted Cues | Smoothing Residue |
+|----------------|---------------|----------------|-------------------|
+| adjacency_smoothing | `['interrogative_scope', 'state_adjacent']` | both cues | none |
+| continuity_smoothing | `['modality_cue', 'underspecification_adjacent']` | modality only | underspecification |
+| role_smoothing | `['modifier_chain']` | modifier_chain | none |
+| segment_smoothing | `['locative_adjacent']` | locative_adjacent | none |
+| basin_compression_smoothing | `['conflict_adjacent','modality_cue','underspecification_adjacent']` | conflict + modality | underspecification |
+
 ---
 
 # **A.5 Summary**
