@@ -165,7 +165,7 @@ SmOB receives residue from CnOB and performs:
 
 Example:
 ```
-smoothing_operations: ['adjacency_smoothing']
+smoothing_operations: ['adjacency_smoothing'](../fields/smoothing_operations.md)
 semantic_adjacent_cues: ['interrogative_scope', 'state_adjacent'](../fields/semantic_adjacent_cues.md) 
 smoothing_residue: []
 ```
@@ -183,8 +183,8 @@ SmOB sees:
 - no leftover residue  
 
 SmOB’s structural function:
-- **extract semantic‑adjacent cues**  
-- **perform basin smoothing**  
+- **[extract semantic‑adjacent cues](../fields/semantic_adjacent_cues.md)**  
+- **[perform basin smoothing](../fields/smoothing_operations.md)**  
 - **produce smoothing_residue**  
 - **produce ob_set_notes**  
 
