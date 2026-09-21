@@ -149,7 +149,7 @@ Full details and canonical TP traces are in:
 
 ---
 
-# Debugger, Training and Teaching Tool
+# **9. Debugger, Training and Teaching Tool**
 
 A debugger, training and teaching tool executable pathA_dbug.py has been provided, which will operate on the output of run_examples.py, in the example below this will be run.log file:
 
@@ -159,7 +159,7 @@ python run_examples.py > run.log
 
 For more information see debug directory [README.md](debug/README.md).
 
-# **9. Related Documents**
+# **10. Related Documents**
 
 - Architectural simulation details:  
  [support/doc/architectural_simulation.md](support/docs/architectural_simulation.md)
@@ -178,7 +178,7 @@ For more information see debug directory [README.md](debug/README.md).
 
 ---
 
-# **10. Directory Structure (for new users)**
+# **11. Directory Structure (for new users)**
 
 ```
 pathA_short_sim/
@@ -189,12 +189,53 @@ pathA_short_sim/
 ├── tp_substrate.py
 │
 ├── support/
-│   └── dictionaries/
-│       ├── token_classes.yaml
-│       ├── segment_patterns.yaml
-│       ├── role_patterns.yaml
-│       ├── constraint_rules.yaml
-│       └── semantic_rules.yaml
+│   ├── dictionaries/
+│   │   ├── token_classes.yaml
+│   │   ├── segment_patterns.yaml
+│   │   ├── role_patterns.yaml
+│   │   ├── constraint_rules.yaml
+│   │   └── semantic_rules.yaml
+│   │
+│   └── docs/
+│       ├── README.md
+│       ├── token_classes.md
+│       ├── segment_patterns.md
+│       ├── role_patterns.md
+│       ├── constraint_rules.md
+│       └── semantic_rules.md
+│
+├── debug/
+│   ├── README.md
+│   │
+│   ├── dimensions/
+│   │   ├── segment_geometry.md
+│   │   ├── role_geometry.md
+│   │   ├── constraint_geometry.md
+│   │   ├── smoothing_geometry.md
+│   │   ├── identity_geometry.md
+│   │   └── meaning_geometry.md
+│   │
+│   ├── fields/
+│   │   ├── struct_segments.md
+│   │   ├── struct_roles.md
+│   │   ├── constraints_matched.md
+│   │   ├── semantic_adjacent_cues.md
+│   │   ├── idob_packet.md
+│   │   └── residue.md
+│   │
+│   ├── primitives/
+│   │   ├── SOB.md
+│   │   ├── SROB.md
+│   │   ├── CnOB.md
+│   │   ├── SmOB.md
+│   │   └── IdOB.md
+│   │
+│   ├── examples/
+│   │   └── placeholder.md
+│   │
+│   └── setup/
+│       ├── debug_setup.yaml
+│       └── links.yaml
 │
 ├── notes/
 │   ├── pathA_supported_sentences.md
