@@ -133,7 +133,7 @@ SROB’s structural function:
 
 CnOB checks whether segment + role combinations satisfy structural rules.
 
-Example residue:
+Example [residue]:
 ```
 residue = ['interrogative_scope', 'locative_adjacent']
 ```
@@ -149,8 +149,8 @@ CnOB sees:
 - locative adjacency not fully stabilized  
 
 CnOB’s structural function:
-- **match constraints**  
-- **produce constraint residue**  
+- **[match constraints](../fields/constraints_matched.md)**  
+- **[produce constraint residue](../fields/residue.md)**  
 - **produce ob_set_notes**  
 
 ---
@@ -165,7 +165,7 @@ SmOB receives residue from CnOB and performs:
 
 Example:
 ```
-smoothing_operations: ['adjacency_smoothing'](../fields/semantic_adjacent_cues.md) 
+smoothing_operations: ['adjacency_smoothing']
 semantic_adjacent_cues: ['interrogative_scope', 'state_adjacent'](../fields/semantic_adjacent_cues.md) 
 smoothing_residue: []
 ```
@@ -197,12 +197,12 @@ IdOB forms:
 - semantic_core  
 - truth_relation  
 - identity_geometry  
-- identity_packet  
+- [identitiy_packet](../fields/idob_packet.md)
 
 Example:
 ```
 identity_geometry = referential_identity
-semantic_core = ['entity', 'locative_modifier'](../fields/idob_packet.md)
+semantic_core = ['entity', 'locative_modifier']
 truth_relation = 'interrogative'
 ```
 
