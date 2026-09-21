@@ -102,7 +102,7 @@ Contains configuration files used by the debugger:
 - `debug_setup.yaml` — lists all documentation files to load  
 - `links.yaml` — maps documentation names to relative paths  
 
-These files allow the debugger to generate clickable links in `debug_out.log`.
+These files allow the debugger to generate clickable links in `debug_out.md`.
 
 ---
 
@@ -119,7 +119,7 @@ python pathA_dbug.py path/to/run.log --base-dir .
 This produces:
 
 ```
-debug_out.log
+debug_out.md
 ```
 
 in the base directory.
@@ -158,9 +158,9 @@ in the base directory.
 - Show how structural and semantic cues propagate.
 - Provide conceptual explanations for each primitive.
 
-### 3.1 Links Provided Inside `debug_out.log`
+### 3.1 Links Provided Inside `debug_out.md`
 
-The debugger automatically embeds clickable links inside `debug_out.log` to help you navigate the documentation for each geometry dimension, field, and primitive. These links are generated from `links.yaml` and point to the Markdown files located in the `debug/` directory.
+The debugger automatically embeds clickable links inside `debug_out.md` to help you navigate the documentation for each geometry dimension, field, and primitive. These links are generated from `links.yaml` and point to the Markdown files located in the `debug/` directory.
 
 Each link serves as a quick reference, allowing you to jump directly to the relevant explanation for any structure the debugger reports.
 
@@ -210,11 +210,7 @@ The following categories of links appear in `debug_out.log`:
 
 #### **VS Code Compatibility**
 
-Even though `debug_out.log` is a `.log` file, **VS Code treats all Markdown‑style links as clickable**, including:
-
-[Looks like the result wasn't safe to show. Let's switch things up and try something else!]
-
-Clicking these links in VS Code on Windows will open the corresponding `.md` file immediately. No special configuration is required.
+This debugger writes Markdown output to `debug_out.md` so links are active as Markdown hyperlinks in VS Code preview and Markdown-aware viewers.
 
 ---
 

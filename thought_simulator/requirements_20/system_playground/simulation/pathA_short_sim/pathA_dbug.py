@@ -60,29 +60,32 @@ def resolve_link(
     section: str,
     key: str,
     base_dir: Path,
-) -> Path:
-    """Resolve a relative link path from links.yaml into an absolute path."""
-    # TODO: Add robust error handling for missing sections or keys.
-    relative_path = links_registry.get(section, {}).get(key, "")
-    return (base_dir / relative_path).resolve()
+) -> str:
+    """Return the relative link path from links.yaml unchanged."""
+    return str(links_registry.get(section, {}).get(key, ""))
 
 
 def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
     """Parse run.log into structured intermediate data."""
-    primitive_headers = {
-        "SOB:": "SOB",
-        "SROB:": "SROB",
-        "CnOB:": "CnOB",
-        "SmOB:": "SmOB",
-        "IdOB:": "IdOB",
-    }
+    primitive_headers = [
+        ("SOB:", "SOB"),
+        ("SROB:", "SROB"),
+        ("CnOB:", "CnOB"),
+        ("SmOB:", "SmOB"),
+        ("IdOB:", "IdOB"),
+        ("--- SOB ---", "SOB"),
+        ("--- SROB ---", "SROB"),
+        ("--- CnOB ---", "CnOB"),
+        ("--- SmOB ---", "SmOB"),
+        ("--- IdOB ---", "IdOB"),
+    ]
 
     blocks: List[Dict[str, Any]] = []
     current_block: Dict[str, Any] | None = None
 
     for line in run_log_lines:
         matched_primitive = None
-        for header, primitive_name in primitive_headers.items():
+        for header, primitive_name in primitive_headers:
             if header in line:
                 matched_primitive = primitive_name
                 break
@@ -105,16 +108,93 @@ def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
 def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     primitive = block["primitive"]
     raw_lines = block["lines"]
-    segment_info = extract_segment_info(block)
-    role_info = extract_role_info(block)
-    constraint_info = extract_constraint_info(block)
+
+    def _value_after_colon(line: str, label: str) -> str:
+        _, _, tail = line.partition(label)
+        return tail.strip()
+
+    def _value_after_marker(line: str, marker: str) -> str:
+        start = line.find(marker)
+        if start < 0:
+            return ""
+        start += len(marker)
+        end = len(line)
+        for stop_marker in [",", ";"]:
+            idx = line.find(stop_marker, start)
+            if idx != -1:
+                end = min(end, idx)
+        return line[start:end].strip()
+
+    segments: List[str] = []
+    roles: List[str] = []
+    constraints_matched: List[str] = []
+    residue: List[str] = []
+    smoothing_operations: List[str] = []
+    semantic_adjacent_cues: List[str] = []
+    semantic_core_ops: List[str] = []
+    truth_relation = ""
+    token_relations: List[str] = []
+    ob_set_notes: List[str] = []
+
+    for line in raw_lines:
+        if "Segments:" in line:
+            value = _value_after_colon(line, "Segments:")
+            if value:
+                segments.append(value)
+        if "Roles:" in line:
+            value = _value_after_colon(line, "Roles:")
+            if value:
+                roles.append(value)
+
+        if "matched=" in line:
+            value = _value_after_marker(line, "matched=")
+            if value:
+                constraints_matched.append(value)
+        if "residue=" in line:
+            value = _value_after_marker(line, "residue=")
+            if value:
+                residue.append(value)
+        if "operations=" in line:
+            value = _value_after_marker(line, "operations=")
+            if value:
+                smoothing_operations.append(value)
+        if "semantic_adjacent_cues=" in line:
+            value = _value_after_marker(line, "semantic_adjacent_cues=")
+            if value:
+                semantic_adjacent_cues.append(value)
+
+        if "Semantic core:" in line:
+            value = _value_after_colon(line, "Semantic core:")
+            if value:
+                semantic_core_ops.append(value)
+
+        if "Truth relation:" in line:
+            truth_relation = _value_after_colon(line, "Truth relation:")
+        if "truth_relation:" in line:
+            truth_relation = _value_after_colon(line, "truth_relation:")
+
+        if "token_relations:" in line:
+            value = _value_after_colon(line, "token_relations:")
+            if value:
+                token_relations.append(value)
+
+        if "OB-Set" in line or "OB Set" in line:
+            ob_set_notes.append(line.strip())
+
     return {
         "primitive": primitive,
         "raw": raw_lines,
-        "summary": f"Primitive {primitive} fired with {len(raw_lines)} lines.",
-        "segment_info": segment_info,
-        "role_info": role_info,
-        "constraint_info": constraint_info,
+        "summary": f"Primitive {primitive} fired.",
+        "segments": segments,
+        "roles": roles,
+        "constraints_matched": constraints_matched,
+        "residue": residue,
+        "smoothing_operations": smoothing_operations,
+        "semantic_adjacent_cues": semantic_adjacent_cues,
+        "semantic_core_ops": semantic_core_ops,
+        "truth_relation": truth_relation,
+        "token_relations": token_relations,
+        "ob_set_notes": ob_set_notes,
     }
 
 
@@ -210,30 +290,59 @@ def generate_output(
     """Generate final output text from assembled explanation data."""
     lines: List[str] = []
 
+    lines.append("# Debug Report")
+    lines.append("")
+
     lines.append("## Dimensions")
     for item in dimensions_explanations.get("dimensions", []):
-        lines.append(f"- {item.get('name')}: {item.get('link')}")
+        name = item.get("name")
+        relative_path = item.get("link")
+        lines.append(f"- {name}: [{name}]({relative_path})")
 
     lines.append("")
     lines.append("## Fields")
     for item in field_explanations.get("fields", []):
-        lines.append(f"- {item.get('name')}: {item.get('link')}")
+        name = item.get("name")
+        relative_path = item.get("link")
+        lines.append(f"- {name}: [{name}]({relative_path})")
 
     lines.append("")
     lines.append("## Primitives")
     for item in primitive_explanations.get("primitives", []):
-        lines.append(f"- {item.get('name')}: {item.get('link')}")
+        name = item.get("name")
+        relative_path = item.get("link")
+        lines.append(f"- {name}: [{name}]({relative_path})")
 
     lines.append("")
     lines.append("## Interpreted Blocks")
+    primitive_links = {
+        item.get("name"): item.get("link")
+        for item in primitive_explanations.get("primitives", [])
+    }
     for block in interpreted_blocks:
-        lines.append(f"- {block.get('primitive')}: {block.get('summary')}")
+        primitive = block.get("primitive")
+        lines.append(f"### {primitive}")
+        lines.append(f"- segments: {block.get('segments', [])}")
+        lines.append(f"- roles: {block.get('roles', [])}")
+        lines.append(f"- constraints_matched: {block.get('constraints_matched', [])}")
+        lines.append(f"- residue: {block.get('residue', [])}")
+        lines.append(f"- smoothing_operations: {block.get('smoothing_operations', [])}")
+        lines.append(f"- semantic_adjacent_cues: {block.get('semantic_adjacent_cues', [])}")
+        lines.append(f"- semantic_core_ops: {block.get('semantic_core_ops', [])}")
+        lines.append(f"- truth_relation: {block.get('truth_relation', '')}")
+        if block.get("token_relations"):
+            lines.append(f"- token_relations: {block.get('token_relations')}")
+        if block.get("ob_set_notes"):
+            lines.append(f"- ob_set_notes: {block.get('ob_set_notes')}")
+        relative_path = primitive_links.get(primitive, "")
+        lines.append(f"See: [{primitive}]({relative_path})")
+        lines.append("")
 
     return "\n".join(lines)
 
 
 def write_debug_output(output_text: str, base_dir: Path) -> None:
-    output_path = base_dir / "debug_out.log"
+    output_path = base_dir / "debug_out.md"
     with output_path.open("w", encoding="utf-8") as handle:
         handle.write(output_text)
 
@@ -287,7 +396,7 @@ def main() -> None:
         )
         write_debug_output(output_text, Path(args.base_dir))
         if args.verbose:
-            print("Wrote debug_out.log.")
+            print("Wrote debug_out.md.")
     except Exception as e:
         print(f"Debugging failed: {e}")
 
