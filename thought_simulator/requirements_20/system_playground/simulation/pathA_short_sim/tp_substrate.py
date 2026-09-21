@@ -40,6 +40,9 @@ class TP:
     # Semantics & truth
     semantic_core: Dict[str, Any] = field(default_factory=dict)
     truth_relation: str = ""
+    idob: Dict[str, Any] = field(default_factory=dict)
+    idob_complete: bool = False
+    path_b_eligible: bool = False
 
     # Meta / commit
     commit_flags: Dict[str, bool] = field(default_factory=dict)

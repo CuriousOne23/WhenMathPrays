@@ -106,11 +106,18 @@ def _minimal_idob_selection(tp: TP) -> TP:
         ],
     }
 
+    if isinstance(tp.idob, dict):
+        # Keep IdOB packet semantic payload in sync unless the contract expects null.
+        if tp.idob.get("meaning_semantics") is not None:
+            tp.idob["meaning_semantics"] = dict(tp.semantic_core)
+            tp.idob["meaning_semantics_prime"] = dict(tp.semantic_core)
+
     if not hasattr(tp, "trace"):
         tp.trace = []
     tp.trace.append({
         "primitive": "IdOB",
         "notes": "[Semantic]",
+        "idob_packet": tp.idob,
         "selected_ops": selected_ops,
         "semantic_core": tp.semantic_core,
         "token_relations": {
@@ -206,6 +213,7 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
                     "residue",
                     "operations",
                     "semantic_adjacent_cues",
+                    "idob_packet",
                     "selected_ops",
                     "semantic_core",
                     "token_relations",
