@@ -487,6 +487,29 @@ def generate_output(
 ) -> str:
     """Generate final output text from assembled explanation data."""
     lines: List[str] = []
+    dimension_definitions = {
+        "segment_geometry": "Definition of segment geometry.",
+        "role_geometry": "Definition of role geometry.",
+        "constraint_geometry": "Definition of constraint geometry.",
+        "smoothing_geometry": "Definition of smoothing geometry.",
+        "identity_geometry": "Definition of identity geometry.",
+        "meaning_geometry": "Definition of meaning geometry.",
+    }
+    field_definitions = {
+        "struct_segments": "Structural segments recognized by the simulator.",
+        "struct_roles": "Roles assigned to segments.",
+        "constraints_matched": "Constraints successfully matched.",
+        "semantic_adjacent_cues": "Semantic cues adjacent to structural elements.",
+        "idob_packet": "Identity packet produced by IdOB.",
+        "residue": "Residual structural or semantic material.",
+    }
+    primitive_definitions = {
+        "SOB": "Segment Observation Block.",
+        "SROB": "Segment Role Observation Block.",
+        "CnOB": "Constraint Observation Block.",
+        "SmOB": "Smoothing Observation Block.",
+        "IdOB": "Identity Observation Block.",
+    }
 
     lines.append("# Debug Report")
     lines.append("")
@@ -495,21 +518,24 @@ def generate_output(
     for item in dimensions_explanations.get("dimensions", []):
         name = item.get("name")
         relative_path = item.get("link")
-        lines.append(f"- {name}: [{name}]({relative_path})")
+        definition = dimension_definitions.get(name, "")
+        lines.append(f"- [{name}:]({relative_path}) {definition}")
 
     lines.append("")
     lines.append("## Fields")
     for item in field_explanations.get("fields", []):
         name = item.get("name")
         relative_path = item.get("link")
-        lines.append(f"- {name}: [{name}]({relative_path})")
+        definition = field_definitions.get(name, "")
+        lines.append(f"- [{name}:]({relative_path}) {definition}")
 
     lines.append("")
     lines.append("## Primitives")
     for item in primitive_explanations.get("primitives", []):
         name = item.get("name")
         relative_path = item.get("link")
-        lines.append(f"- {name}: [{name}]({relative_path})")
+        definition = primitive_definitions.get(name, "")
+        lines.append(f"- [{name}:]({relative_path}) {definition}")
 
     lines.append("")
     lines.append("## Primitive Summary")

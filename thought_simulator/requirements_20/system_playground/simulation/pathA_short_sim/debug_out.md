@@ -1,27 +1,27 @@
 # Debug Report
 
 ## Dimensions
-- segment_geometry: [segment_geometry](debug/dimensions/segment_geometry.md)
-- role_geometry: [role_geometry](debug/dimensions/role_geometry.md)
-- constraint_geometry: [constraint_geometry](debug/dimensions/constraint_geometry.md)
-- smoothing_geometry: [smoothing_geometry](debug/dimensions/smoothing_geometry.md)
-- identity_geometry: [identity_geometry](debug/dimensions/identity_geometry.md)
-- meaning_geometry: [meaning_geometry](debug/dimensions/meaning_geometry.md)
+- [segment_geometry:](debug/dimensions/segment_geometry.md) Definition of segment geometry.
+- [role_geometry:](debug/dimensions/role_geometry.md) Definition of role geometry.
+- [constraint_geometry:](debug/dimensions/constraint_geometry.md) Definition of constraint geometry.
+- [smoothing_geometry:](debug/dimensions/smoothing_geometry.md) Definition of smoothing geometry.
+- [identity_geometry:](debug/dimensions/identity_geometry.md) Definition of identity geometry.
+- [meaning_geometry:](debug/dimensions/meaning_geometry.md) Definition of meaning geometry.
 
 ## Fields
-- struct_segments: [struct_segments](debug/fields/struct_segments.md)
-- struct_roles: [struct_roles](debug/fields/struct_roles.md)
-- constraints_matched: [constraints_matched](debug/fields/constraints_matched.md)
-- semantic_adjacent_cues: [semantic_adjacent_cues](debug/fields/semantic_adjacent_cues.md)
-- idob_packet: [idob_packet](debug/fields/idob_packet.md)
-- residue: [residue](debug/fields/residue.md)
+- [struct_segments:](debug/fields/struct_segments.md) Structural segments recognized by the simulator.
+- [struct_roles:](debug/fields/struct_roles.md) Roles assigned to segments.
+- [constraints_matched:](debug/fields/constraints_matched.md) Constraints successfully matched.
+- [semantic_adjacent_cues:](debug/fields/semantic_adjacent_cues.md) Semantic cues adjacent to structural elements.
+- [idob_packet:](debug/fields/idob_packet.md) Identity packet produced by IdOB.
+- [residue:](debug/fields/residue.md) Residual structural or semantic material.
 
 ## Primitives
-- SOB: [SOB](debug/primitives/SOB.md)
-- SROB: [SROB](debug/primitives/SROB.md)
-- CnOB: [CnOB](debug/primitives/CnOB.md)
-- SmOB: [SmOB](debug/primitives/SmOB.md)
-- IdOB: [IdOB](debug/primitives/IdOB.md)
+- [SOB:](debug/primitives/SOB.md) Segment Observation Block.
+- [SROB:](debug/primitives/SROB.md) Segment Role Observation Block.
+- [CnOB:](debug/primitives/CnOB.md) Constraint Observation Block.
+- [SmOB:](debug/primitives/SmOB.md) Smoothing Observation Block.
+- [IdOB:](debug/primitives/IdOB.md) Identity Observation Block.
 
 ## Primitive Summary
 - SOB: structural segmentation
