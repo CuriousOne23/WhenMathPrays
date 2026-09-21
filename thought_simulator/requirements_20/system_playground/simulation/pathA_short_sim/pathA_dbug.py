@@ -488,27 +488,27 @@ def generate_output(
     """Generate final output text from assembled explanation data."""
     lines: List[str] = []
     dimension_definitions = {
-        "segment_geometry": "Definition of segment geometry.",
-        "role_geometry": "Definition of role geometry.",
-        "constraint_geometry": "Definition of constraint geometry.",
-        "smoothing_geometry": "Definition of smoothing geometry.",
-        "identity_geometry": "Definition of identity geometry.",
-        "meaning_geometry": "Definition of meaning geometry.",
+        "segment_geometry": "How the simulator divides an utterance into structural segments.",
+        "role_geometry": "How functional roles attach to segments.",
+        "constraint_geometry": "How structural and semantic constraints are evaluated.",
+        "smoothing_geometry": "How smoothing operations resolve ambiguity and adjacency.",
+        "identity_geometry": "How identity and referential structure propagate.",
+        "meaning_geometry": "How semantic cues and meaning structures propagate.",
     }
     field_definitions = {
-        "struct_segments": "Structural segments recognized by the simulator.",
-        "struct_roles": "Roles assigned to segments.",
-        "constraints_matched": "Constraints successfully matched.",
+        "struct_segments": "The segments detected during structural parsing.",
+        "struct_roles": "The roles assigned to each segment.",
+        "constraints_matched": "Constraints successfully satisfied.",
         "semantic_adjacent_cues": "Semantic cues adjacent to structural elements.",
-        "idob_packet": "Identity packet produced by IdOB.",
-        "residue": "Residual structural or semantic material.",
+        "idob_packet": "The identity packet produced by IdOB.",
+        "residue": "Unmatched or leftover structural/semantic material.",
     }
     primitive_definitions = {
-        "SOB": "Segment Observation Block.",
-        "SROB": "Segment Role Observation Block.",
-        "CnOB": "Constraint Observation Block.",
-        "SmOB": "Smoothing Observation Block.",
-        "IdOB": "Identity Observation Block.",
+        "SOB": "Performs structural segmentation.",
+        "SROB": "Assigns roles to segments.",
+        "CnOB": "Matches constraints and produces residue.",
+        "SmOB": "Applies smoothing and adjacency resolution.",
+        "IdOB": "Builds the identity packet and semantic core.",
     }
 
     lines.append("# Debug Report")

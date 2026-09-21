@@ -1,27 +1,27 @@
 # Debug Report
 
 ## Dimensions
-- [segment_geometry:](debug/dimensions/segment_geometry.md) Definition of segment geometry.
-- [role_geometry:](debug/dimensions/role_geometry.md) Definition of role geometry.
-- [constraint_geometry:](debug/dimensions/constraint_geometry.md) Definition of constraint geometry.
-- [smoothing_geometry:](debug/dimensions/smoothing_geometry.md) Definition of smoothing geometry.
-- [identity_geometry:](debug/dimensions/identity_geometry.md) Definition of identity geometry.
-- [meaning_geometry:](debug/dimensions/meaning_geometry.md) Definition of meaning geometry.
+- [segment_geometry:](debug/dimensions/segment_geometry.md) How the simulator divides an utterance into structural segments.
+- [role_geometry:](debug/dimensions/role_geometry.md) How functional roles attach to segments.
+- [constraint_geometry:](debug/dimensions/constraint_geometry.md) How structural and semantic constraints are evaluated.
+- [smoothing_geometry:](debug/dimensions/smoothing_geometry.md) How smoothing operations resolve ambiguity and adjacency.
+- [identity_geometry:](debug/dimensions/identity_geometry.md) How identity and referential structure propagate.
+- [meaning_geometry:](debug/dimensions/meaning_geometry.md) How semantic cues and meaning structures propagate.
 
 ## Fields
-- [struct_segments:](debug/fields/struct_segments.md) Structural segments recognized by the simulator.
-- [struct_roles:](debug/fields/struct_roles.md) Roles assigned to segments.
-- [constraints_matched:](debug/fields/constraints_matched.md) Constraints successfully matched.
+- [struct_segments:](debug/fields/struct_segments.md) The segments detected during structural parsing.
+- [struct_roles:](debug/fields/struct_roles.md) The roles assigned to each segment.
+- [constraints_matched:](debug/fields/constraints_matched.md) Constraints successfully satisfied.
 - [semantic_adjacent_cues:](debug/fields/semantic_adjacent_cues.md) Semantic cues adjacent to structural elements.
-- [idob_packet:](debug/fields/idob_packet.md) Identity packet produced by IdOB.
-- [residue:](debug/fields/residue.md) Residual structural or semantic material.
+- [idob_packet:](debug/fields/idob_packet.md) The identity packet produced by IdOB.
+- [residue:](debug/fields/residue.md) Unmatched or leftover structural/semantic material.
 
 ## Primitives
-- [SOB:](debug/primitives/SOB.md) Segment Observation Block.
-- [SROB:](debug/primitives/SROB.md) Segment Role Observation Block.
-- [CnOB:](debug/primitives/CnOB.md) Constraint Observation Block.
-- [SmOB:](debug/primitives/SmOB.md) Smoothing Observation Block.
-- [IdOB:](debug/primitives/IdOB.md) Identity Observation Block.
+- [SOB:](debug/primitives/SOB.md) Performs structural segmentation.
+- [SROB:](debug/primitives/SROB.md) Assigns roles to segments.
+- [CnOB:](debug/primitives/CnOB.md) Matches constraints and produces residue.
+- [SmOB:](debug/primitives/SmOB.md) Applies smoothing and adjacency resolution.
+- [IdOB:](debug/primitives/IdOB.md) Builds the identity packet and semantic core.
 
 ## Primitive Summary
 - SOB: structural segmentation
