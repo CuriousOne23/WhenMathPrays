@@ -14,6 +14,16 @@ from primitives_pathA_short import (
 PrimitiveFn = Any  # simple alias; each primitive is a callable(tp) -> tp
 
 
+TRACE_KEY_ALIASES_BY_PRIMITIVE: Dict[str, Dict[str, str]] = {
+    "CnOB": {
+        "constraint_residue": "residue",
+    },
+    "SmOB": {
+        "basin_residue": "smoothing_residue",
+    },
+}
+
+
 PRIMITIVES: List[PrimitiveFn] = [
     InB, IIInB, IE,
     CEx, CE, ISc, TPU,
@@ -212,8 +222,11 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
                     "matched",
                     "unmatched",
                     "residue",
+                    "constraint_residue",
                     "operations",
                     "semantic_adjacent_cues",
+                    "smoothing_residue",
+                    "basin_residue",
                     "idob_packet",
                     "selected_ops",
                     "semantic_core",
@@ -221,6 +234,14 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
                 ):
                     if key in latest:
                         primitive_trace_entry[key] = latest[key]
+
+        # Batch 5 compatibility layer: keep legacy and canonical keys in sync.
+        alias_map = TRACE_KEY_ALIASES_BY_PRIMITIVE.get(fn.__name__, {})
+        for canonical_key, legacy_key in alias_map.items():
+            if canonical_key in primitive_trace_entry and legacy_key not in primitive_trace_entry:
+                primitive_trace_entry[legacy_key] = primitive_trace_entry[canonical_key]
+            elif legacy_key in primitive_trace_entry and canonical_key not in primitive_trace_entry:
+                primitive_trace_entry[canonical_key] = primitive_trace_entry[legacy_key]
 
         trace.append(primitive_trace_entry)
 

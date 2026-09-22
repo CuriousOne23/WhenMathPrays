@@ -281,8 +281,9 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     segment_tokens: List[Any] = []
     roles: List[Any] = []
     constraints_matched: List[Any] = []
-    residue: List[Any] = []
-    smoothing_residue: List[Any] = []
+    constraints_unmatched: List[Any] = []
+    constraint_residue: List[Any] = []
+    basin_residue: List[Any] = []
     smoothing_operations: List[Any] = []
     semantic_adjacent_cues: List[Any] = []
     semantic_core: Dict[str, Any] = {}
@@ -307,15 +308,42 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         if extracted is not None:
             _merge_list(constraints_matched, extracted, dedup=False)
 
+        extracted = _extract_literal_or_text(line, "constraints_matched=")
+        if extracted is not None:
+            _merge_list(constraints_matched, extracted, dedup=False)
+
+        extracted = _extract_literal_or_text(line, "unmatched=")
+        if extracted is not None:
+            _merge_list(constraints_unmatched, extracted, dedup=False)
+
+        extracted = _extract_literal_or_text(line, "constraints_unmatched=")
+        if extracted is not None:
+            _merge_list(constraints_unmatched, extracted, dedup=False)
+
         extracted = _extract_literal_or_text(line, "residue=")
         if extracted is not None:
-            _merge_list(residue, extracted, dedup=False)
+            if primitive == "SmOB":
+                _merge_list(basin_residue, extracted, dedup=False)
+            else:
+                _merge_list(constraint_residue, extracted, dedup=False)
+
+        extracted = _extract_literal_or_text(line, "constraint_residue=")
+        if extracted is not None:
+            _merge_list(constraint_residue, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "smoothing_residue=")
         if extracted is not None:
-            _merge_list(smoothing_residue, extracted, dedup=False)
+            _merge_list(basin_residue, extracted, dedup=False)
+
+        extracted = _extract_literal_or_text(line, "basin_residue=")
+        if extracted is not None:
+            _merge_list(basin_residue, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "operations=")
+        if extracted is not None:
+            _merge_list(smoothing_operations, extracted, dedup=False)
+
+        extracted = _extract_literal_or_text(line, "smoothing_operations=")
         if extracted is not None:
             _merge_list(smoothing_operations, extracted, dedup=False)
 
@@ -352,8 +380,9 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         "segment_tokens": segment_tokens,
         "roles": roles,
         "constraints_matched": constraints_matched,
-        "residue": residue,
-        "smoothing_residue": smoothing_residue,
+        "constraints_unmatched": constraints_unmatched,
+        "constraint_residue": constraint_residue,
+        "basin_residue": basin_residue,
         "smoothing_operations": smoothing_operations,
         "semantic_adjacent_cues": semantic_adjacent_cues,
         "semantic_core": semantic_core,
@@ -382,9 +411,12 @@ def interpret_all_blocks(parsed_log: Dict[str, Any]) -> List[Dict[str, Any]]:
         _merge_list(
             current["constraints_matched"], interpreted.get("constraints_matched", []), dedup=True
         )
-        _merge_list(current["residue"], interpreted.get("residue", []), dedup=True)
         _merge_list(
-            current["smoothing_residue"], interpreted.get("smoothing_residue", []), dedup=True
+            current["constraints_unmatched"], interpreted.get("constraints_unmatched", []), dedup=True
+        )
+        _merge_list(current["constraint_residue"], interpreted.get("constraint_residue", []), dedup=True)
+        _merge_list(
+            current["basin_residue"], interpreted.get("basin_residue", []), dedup=True
         )
         _merge_list(
             current["smoothing_operations"], interpreted.get("smoothing_operations", []), dedup=True
@@ -538,15 +570,16 @@ def generate_output(
         lines.append(f"- [{name}:]({relative_path}) {definition}")
 
     lines.append("")
-    lines.append("## Primitive Summary")
-    lines.append("- SOB: structural segmentation")
-    lines.append("- SROB: role assignment")
-    lines.append("- CnOB: constraint matching")
-    lines.append("- SmOB: smoothing + semantic adjacency")
-    lines.append("- IdOB: semantic core + truth relation")
+    lines.append("## Canonical Routing Ladder Summary")
+    lines.append("- Tokens -> Segments -> Roles -> Constraints/Cues -> Basin -> Identity")
+    lines.append("- SOB: structural segmentation stage")
+    lines.append("- SROB: role assignment stage")
+    lines.append("- CnOB: constraint matching stage")
+    lines.append("- SmOB: smoothing and basin-adjacency stage")
+    lines.append("- IdOB: identity and meaning-bundle stage")
 
     lines.append("")
-    lines.append("## Interpreted Blocks")
+    lines.append("## Stage Interpretations")
     primitive_links = {
         item.get("name"): item.get("link")
         for item in primitive_explanations.get("primitives", [])
@@ -564,9 +597,13 @@ def generate_output(
             lines, "constraints_matched", block.get("constraints_matched", [])
         )
         lines.append("")
-        _append_list_block(lines, "residue", block.get("residue", []))
+        _append_list_block(
+            lines, "constraints_unmatched", block.get("constraints_unmatched", [])
+        )
         lines.append("")
-        _append_list_block(lines, "smoothing_residue", block.get("smoothing_residue", []))
+        _append_list_block(lines, "constraint_residue", block.get("constraint_residue", []))
+        lines.append("")
+        _append_list_block(lines, "basin_residue", block.get("basin_residue", []))
         lines.append("")
         _append_list_block(
             lines, "smoothing_operations", block.get("smoothing_operations", [])
@@ -600,7 +637,7 @@ def generate_output(
     idob_block = next((b for b in interpreted_blocks if b.get("primitive") == "IdOB"), {})
     idob_semantic_core = idob_block.get("semantic_core", {})
 
-    lines.append("## Semantic Summary")
+    lines.append("## Meaning Bundle Summary")
     lines.append(f"- truth_relation: {smob_block.get('truth_relation', '')}")
     _append_list_block(
         lines,

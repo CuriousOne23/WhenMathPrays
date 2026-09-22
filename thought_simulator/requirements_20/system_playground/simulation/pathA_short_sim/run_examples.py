@@ -5,10 +5,10 @@ def main() -> None:
     # sentence = "The quick brown fox jumps over the lazy dog."
     # sentence = "The rain in Spain stays mainly in the plain."
     sentence = "Why is the sky blue?"
-    result = run_pathA_short(sentence)
+    simulation_result = run_pathA_short(sentence)
 
     print("=== Final TP ===")
-    for k, v in result["final_tp"].items():
+    for k, v in simulation_result["final_tp"].items():
         print(f"{k}: {v}")
 
     print("\n=== Trace ===")
@@ -19,19 +19,55 @@ def main() -> None:
         "n/a": 0,
     }
 
-    for step in result["trace"]:
-        print(f"\n--- {step['primitive']} ---")
-        print(f"notes: {step['notes']}")
-        if "bridge_trace" in step:
-            print("bridge_trace:", step["bridge_trace"])
-            mode = str(step["bridge_trace"].get("mode", "n/a"))
+    for primitive_trace_entry in simulation_result["trace"]:
+        print(f"\n--- {primitive_trace_entry['primitive']} ---")
+        print(f"notes: {primitive_trace_entry['notes']}")
+        if "bridge_trace" in primitive_trace_entry:
+            print("bridge_trace:", primitive_trace_entry["bridge_trace"])
+            mode = str(primitive_trace_entry["bridge_trace"].get("mode", "n/a"))
             if mode in bridge_mode_counts:
                 bridge_mode_counts[mode] += 1
             else:
                 bridge_mode_counts["n/a"] += 1
         # NEW: print token-level relational mapping (Option A)
-        if "token_relations" in step:
-            print("token_relations:", step["token_relations"])
+        if "token_relations" in primitive_trace_entry:
+            print("token_relations:", primitive_trace_entry["token_relations"])
+
+        # Batch 6 transition: emit canonical external keys while legacy notes remain.
+        primitive_name = primitive_trace_entry["primitive"]
+        if primitive_name == "CnOB":
+            constraints_matched = primitive_trace_entry.get(
+                "constraints_matched",
+                primitive_trace_entry.get("matched", []),
+            )
+            constraints_unmatched = primitive_trace_entry.get(
+                "constraints_unmatched",
+                primitive_trace_entry.get("unmatched", []),
+            )
+            constraint_residue = primitive_trace_entry.get(
+                "constraint_residue",
+                primitive_trace_entry.get("residue", []),
+            )
+            print(f"constraints_matched={constraints_matched}")
+            print(f"constraints_unmatched={constraints_unmatched}")
+            print(f"constraint_residue={constraint_residue}")
+
+        if primitive_name == "SmOB":
+            smoothing_operations = primitive_trace_entry.get(
+                "smoothing_operations",
+                primitive_trace_entry.get("operations", []),
+            )
+            semantic_adjacent_cues = primitive_trace_entry.get("semantic_adjacent_cues", [])
+            basin_residue = primitive_trace_entry.get(
+                "basin_residue",
+                primitive_trace_entry.get(
+                    "smoothing_residue",
+                    primitive_trace_entry.get("residue", []),
+                ),
+            )
+            print(f"smoothing_operations={smoothing_operations}")
+            print(f"semantic_adjacent_cues={semantic_adjacent_cues}")
+            print(f"basin_residue={basin_residue}")
         # If you want more detail, uncomment:
         # print("input:", step["input"])
         # print("output:", step["output"])

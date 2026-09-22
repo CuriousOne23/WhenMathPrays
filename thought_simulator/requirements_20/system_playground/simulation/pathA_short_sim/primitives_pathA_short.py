@@ -644,6 +644,7 @@ def CnOB(tp: TP) -> TP:
         "matched": constraints_matched,
         "unmatched": constraints_unmatched,
         "residue": constraint_residue,
+        "constraint_residue": constraint_residue,
         "token_relations": {
             "agent-action": (
                 " ".join(tp.role_segments.get("agent", [])),
@@ -734,6 +735,8 @@ def SmOB(tp: TP) -> TP:
         "operations": smoothing_operations,
         "semantic_adjacent_cues": semantic_adjacent_cues,
         "residue": smoothing_residue,
+        "smoothing_residue": smoothing_residue,
+        "basin_residue": smoothing_residue,
         "token_relations": {
             "agent->action": (
                 " ".join(tp.role_segments.get("agent", [])),

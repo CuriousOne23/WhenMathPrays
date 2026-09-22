@@ -23,14 +23,15 @@
 - [SmOB:](debug/primitives/SmOB.md) Applies smoothing and adjacency resolution.
 - [IdOB:](debug/primitives/IdOB.md) Builds the identity packet and semantic core.
 
-## Primitive Summary
-- SOB: structural segmentation
-- SROB: role assignment
-- CnOB: constraint matching
-- SmOB: smoothing + semantic adjacency
-- IdOB: semantic core + truth relation
+## Canonical Routing Ladder Summary
+- Tokens -> Segments -> Roles -> Constraints/Cues -> Basin -> Identity
+- SOB: structural segmentation stage
+- SROB: role assignment stage
+- CnOB: constraint matching stage
+- SmOB: smoothing and basin-adjacency stage
+- IdOB: identity and meaning-bundle stage
 
-## Interpreted Blocks
+## Stage Interpretations
 ### SOB
 - segments:
   - WQ
@@ -48,10 +49,13 @@
 - constraints_matched:
   - []
 
-- residue:
+- constraints_unmatched:
   - []
 
-- smoothing_residue:
+- constraint_residue:
+  - []
+
+- basin_residue:
   - []
 
 - smoothing_operations:
@@ -87,10 +91,13 @@ See: [SOB](debug/primitives/SOB.md)
 - constraints_matched:
   - []
 
-- residue:
+- constraints_unmatched:
   - []
 
-- smoothing_residue:
+- constraint_residue:
+  - []
+
+- basin_residue:
   - []
 
 - smoothing_operations:
@@ -123,19 +130,49 @@ See: [SROB](debug/primitives/SROB.md)
 
 - constraints_matched:
   - query-focus-predicate
+  - query-focus-predicate
+  - query-focus-predicate
+  - none-none
+  - none-none
 
-- residue:
-  - copular_state_link
-  - action-relation
+- constraints_unmatched:
+  - none-none
+  - none-none
+  - none-none
+  - none-none
+  - none-none
+  - none-none
+
+- constraint_residue:
+  - relation-theme
   - relation-patient
+  - state-location
+  - predicate-theme
+  - action-relation
   - agent-action
+  - theme-state
+  - copular_state_link
   - locative_link
   - relation-theme
-  - predicate-theme
+  - relation-patient
   - state-location
+  - predicate-theme
+  - action-relation
+  - agent-action
   - theme-state
+  - copular_state_link
+  - locative_link
+  - relation-theme
+  - relation-patient
+  - state-location
+  - predicate-theme
+  - action-relation
+  - agent-action
+  - theme-state
+  - copular_state_link
+  - locative_link
 
-- smoothing_residue:
+- basin_residue:
   - []
 
 - smoothing_operations:
@@ -153,7 +190,7 @@ See: [SROB](debug/primitives/SROB.md)
 - ob_set_notes:
   - OB-Set: matched=['query-focus-predicate']
   - OB-Set: unmatched=['none-none', 'none-none']
-  - OB-Set: residue=['copular_state_link', 'action-relation', 'relation-patient', 'agent-action', 'locative_link', 'relation-theme', 'predicate-theme', 'state-location', 'theme-state']
+  - OB-Set: residue=['relation-theme', 'relation-patient', 'state-location', 'predicate-theme', 'action-relation', 'agent-action', 'theme-state', 'copular_state_link', 'locative_link']
 
 See: [CnOB](debug/primitives/CnOB.md)
 
@@ -170,18 +207,28 @@ See: [CnOB](debug/primitives/CnOB.md)
 - constraints_matched:
   - []
 
-- residue:
+- constraints_unmatched:
   - []
 
-- smoothing_residue:
+- constraint_residue:
+  - []
+
+- basin_residue:
   - []
 
 - smoothing_operations:
   - smooth:none->none
   - smooth:none->none
   - smooth:interrogative_scope
+  - smooth:none->none
+  - smooth:none->none
+  - smooth:interrogative_scope
+  - smooth:none->none
+  - smooth:none->none
+  - smooth:interrogative_scope
 
 - semantic_adjacent_cues:
+  - interrogative_scope
   - interrogative_scope
 
 - semantic_core:
@@ -211,10 +258,13 @@ See: [SmOB](debug/primitives/SmOB.md)
 - constraints_matched:
   - []
 
-- residue:
+- constraints_unmatched:
   - []
 
-- smoothing_residue:
+- constraint_residue:
+  - []
+
+- basin_residue:
   - []
 
 - smoothing_operations:
@@ -249,9 +299,10 @@ See: [SmOB](debug/primitives/SmOB.md)
 
 See: [IdOB](debug/primitives/IdOB.md)
 
-## Semantic Summary
+## Meaning Bundle Summary
 - truth_relation: interrogative_open
 - semantic_adjacent_cues:
+  - interrogative_scope
   - interrogative_scope
 - selected_ops:
   - query_resolution

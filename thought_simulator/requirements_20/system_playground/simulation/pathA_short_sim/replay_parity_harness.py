@@ -370,27 +370,27 @@ def _evaluate_case(case: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     if case_id == "deterministic_ids":
-        ok, failed, details = _check_deterministic_ids(raw_text)
+        ok, failed_checks, details = _check_deterministic_ids(raw_text)
     else:
         stream = build_committed_stream(raw_text)
         if case_id == "punctuation":
-            ok, failed, details = _check_punctuation(stream)
+            ok, failed_checks, details = _check_punctuation(stream)
         elif case_id == "unicode_marks":
-            ok, failed, details = _check_unicode_marks(stream)
+            ok, failed_checks, details = _check_unicode_marks(stream)
         elif case_id == "anomalies":
-            ok, failed, details = _check_anomalies(stream)
+            ok, failed_checks, details = _check_anomalies(stream)
         elif case_id == "normalization":
-            ok, failed, details = _check_normalization(stream)
+            ok, failed_checks, details = _check_normalization(stream)
         elif case_id == "token_flags_propagation":
-            ok, failed, details = _check_token_flags_propagation(stream)
+            ok, failed_checks, details = _check_token_flags_propagation(stream)
         elif case_id == "multi_token_roles":
-            ok, failed, details = _check_multi_token_roles(stream)
+            ok, failed_checks, details = _check_multi_token_roles(stream)
         elif case_id == "dictionary_precedence":
-            ok, failed, details = _check_dictionary_precedence(stream)
+            ok, failed_checks, details = _check_dictionary_precedence(stream)
         elif case_id == "segment_boundaries":
-            ok, failed, details = _check_segment_boundaries(stream)
+            ok, failed_checks, details = _check_segment_boundaries(stream)
         else:
-            ok, failed, details = False, ["active case has no evaluator"], {}
+            ok, failed_checks, details = False, ["active case has no evaluator"], {}
 
     return {
         "case_id": case_id,
@@ -398,21 +398,21 @@ def _evaluate_case(case: Dict[str, Any]) -> Dict[str, Any]:
         "pass": ok,
         "raw_text": raw_text,
         "description": case["description"],
-        "checks": [] if ok else failed,
+        "checks": [] if ok else failed_checks,
         "details": details,
     }
 
 
 def run_harness(case_filter: Optional[str] = None) -> Dict[str, Any]:
-    selected = [c for c in CASES if case_filter in (None, c["id"]) ]
+    selected_cases = [c for c in CASES if case_filter in (None, c["id"])]
 
-    results = [_evaluate_case(c) for c in selected]
-    executed = [r for r in results if r["status"] == "executed"]
-    pending = [r for r in results if r["status"] == "pending"]
-    passed = [r for r in executed if r["pass"]]
-    failed = [r for r in executed if not r["pass"]]
+    case_results = [_evaluate_case(case) for case in selected_cases]
+    executed_results = [result for result in case_results if result["status"] == "executed"]
+    pending_results = [result for result in case_results if result["status"] == "pending"]
+    passed_results = [result for result in executed_results if result["pass"]]
+    failed_results = [result for result in executed_results if not result["pass"]]
 
-    overall_status = "pass" if not failed else "fail"
+    overall_status = "pass" if not failed_results else "fail"
 
     return {
         "harness": "replay_parity_harness",
@@ -420,13 +420,13 @@ def run_harness(case_filter: Optional[str] = None) -> Dict[str, Any]:
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "overall_status": overall_status,
         "summary": {
-            "total_selected": len(selected),
-            "executed": len(executed),
-            "passed": len(passed),
-            "failed": len(failed),
-            "pending": len(pending),
+            "total_selected": len(selected_cases),
+            "executed": len(executed_results),
+            "passed": len(passed_results),
+            "failed": len(failed_results),
+            "pending": len(pending_results),
         },
-        "results": results,
+        "results": case_results,
     }
 
 
