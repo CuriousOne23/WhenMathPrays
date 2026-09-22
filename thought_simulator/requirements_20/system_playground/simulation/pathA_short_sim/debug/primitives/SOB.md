@@ -1,170 +1,53 @@
-# **SOB.md — structural Object Basin**  
-### *Path‑A Short Simulator Primitive Documentation*
+﻿# SOB
+### *A canonical primitive document for Path-A structured world*
 
-## **1. Definition**  
-The **Structural Object Basin (SOB)** is the first primitive in the Path‑A short simulation chain. It performs structural segmentation of the input utterance and establishes the segment geometry that all downstream primitives depend on. SOB identifies admissible segment classes and constructs the structural envelope for role assignment, constraint matching, smoothing, and identity formation. 
+## 1. Purpose
+`SOB` performs deterministic segmentation of structured input into canonical segment fields.
 
-SOB is responsible for answering the question:
+## 2. Inputs
+- Geometry source: `segment_geometry` from `../dimensions/segment_geometry.md`.
+- Upstream state: token stream context required for segmentation.
 
-> **“How is this utterance structurally divided?”**
+## 3. Outputs
+- `struct_segments`
+- `segment_tokens`
 
-This segmentation determines whether the simulator can proceed deterministically through SROB → CnOB → SmOB → IdOB.
+## 4. Structural Function
+`SOB` applies segment geometry categories (`atomic`, `composite`, `recursive`, `discontinuous`) to form canonical segment labels and token-group mappings. This establishes the structural state consumed by all downstream primitives.
 
----
+## 5. Deterministic Algorithm (Conceptual)
+1. Read token stream state.
+2. Apply `segment_geometry` rules to identify admissible segment boundaries.
+3. Emit canonical segment labels into `struct_segments`.
+4. Emit token group mapping into `segment_tokens`.
+5. Forward structured state to `SROB`.
 
-## **2. Purpose and Function**
-
-SOB evaluates:
-
-- **segment geometry** (atomic, composite, recursive, discontinuous)  
-- **segment class admissibility**  
-- **structural envelope** for downstream primitives  
-- **segment token grouping**  
-- **structural residue** (if segmentation is incomplete)
-
-These behaviors are consistent with the effects described in your existing SOB.md:  
-- SOB constrains role geometry activation for SROB  
-- SOB shapes constraint satisfaction envelopes for CnOB  
-- SOB influences smoothing requirements for SmOB  
-- SOB provides structural anchors for IdOB identity confirmation 
-
----
-
-## **3. Allowed Segment Classes**  
-SOB may classify segments into the following admissible classes: 
-
-- `atomic_segment`  
-- `composite_segment`  
-- `recursive_segment`  
-- `discontinuous_segment`
-
-These classes correspond to the structural geometries defined in your segment dictionaries.
-
----
-
-# **4. Structural Variables Filled by SOB (Local View)**  
-SOB is the first primitive in the Path‑A pipeline. It establishes the **structural segmentation envelope** that all downstream primitives depend on.  
-This section shows **only** the structural variables that SOB fills, along with those it leaves empty for later primitives.
-
-For the **full IdOB structural envelope**, see:  
-**`IdOB.md — Section 4: IdOB Structural Envelope (Canonical)`**
-
----
-
-## **4.1 Structural Origin Mini‑Table (SOB View)**
-
-| Structural Term          | Filled by SOB? | Notes |
-|--------------------------|----------------|-------|
-| **segments**             | ✔              | SOB performs segmentation and assigns segment classes (e.g., WQ, IQ, NP). |
-| **segment_tokens**       | ✔              | SOB groups tokens into segments according to segment geometry. |
-| **roles**                | ✘              | Assigned by SROB. SOB does not perform role assignment. |
-| **constraints_matched**  | ✘              | Determined by CnOB. SOB does not evaluate constraints. |
-| **residue**              | ✘              | Produced by CnOB. SOB does not generate constraint residue. |
-| **smoothing_operations** | ✘              | Produced only by SmOB. SOB performs no smoothing. |
-| **smoothing_residue**    | ✘              | Produced only by SmOB. |
-| **semantic_adjacent_cues** | ✘            | Produced only by SmOB. |
-| **semantic_core**        | ✘              | Constructed by IdOB. SOB does not interpret meaning. |
-| **truth_relation**       | ✘              | Determined by IdOB. |
-| **token_relations**      | ✘              | Determined by IdOB. |
-| **ob_set_notes**         | ✔              | SOB produces structural notes summarizing segmentation. |
-
----
-
-## **4.2 Summary**
-
-SOB fills **only** the structural segmentation layer:
-
-- `segments`  
-- `segment_tokens`  
-- `ob_set_notes`
-
-All other structural, relational, smoothing, and semantic variables are filled by downstream primitives:
-
+## 6. Minimal Example
+- input fields:
+```text
+tokens = ["Where", "is", "the", "book", "on", "the", "table", "?"]
 ```
-SOB → SROB → CnOB → SmOB → IdOB
+- primitive activation:
+```text
+SOB activates segment_geometry = composite
+```
+- output fields:
+```text
+struct_segments = ["WQ", "NP", "LOC"]
+segment_tokens = {
+  "WQ": ["Where"],
+  "NP": ["the", "book"],
+  "LOC": ["on", "the", "table"]
+}
 ```
 
-This mini‑table provides a quick mnemonic reference when debugging SOB output.
+## 7. Cross-Primitive Interaction
+- Preceding primitive: none in Path-A pipeline.
+- Consuming primitive: `SROB` directly; state also constrains `CnOB`, `SmOB`, and `IdOB` downstream.
+- Pipeline position: first stage in `SOB -> SROB -> CnOB -> SmOB -> IdOB`.
 
----
-
-## **5. Example (from your simulator)**  
-This is the exact example you described — the one you want to appear when clicking SOB:
-
-```
-segments:
-  - WQ
-  - IQ
-  - NP
-
-segment_tokens:
-  - ['why']
-  - ['is']
-  - ['the', 'sky', 'blue']
-
-roles:
-  - []
-
-constraints_matched:
-  - []
-
-residue:
-  - []
-
-smoothing_residue:
-  - []
-
-smoothing_operations:
-  - []
-
-semantic_adjacent_cues:
-  - []
-
-semantic_core:
-  - {}
-
-token_relations:
-  - []
-
-ob_set_notes:
-  - OB-Set: Segments = WQ, IQ, NP
-  - OB-Set: Segment tokens = ['why'] | ['is'] | ['the', 'sky', 'blue']
-```
-
-This example is fully aligned with the SOB definition and the structural envelope described in your existing SOB.md. 
-
----
-
-## **6. Notes**
-
-- SOB is purely structural; it does not assign roles or meaning.  
-- SOB success is a **hard requirement** for deterministic meaning.  
-- If SOB fails (unknown tokens, unmatched segment patterns), IdOB sufficiency becomes impossible.  
-- SOB output is the mnemonic anchor for debugging — clicking SOB should always show this schema and example.
-
----
-
-## **7. Relationship to Downstream Primitives**
-
-SOB → SROB  
-SOB constrains which roles can be assigned.
-
-SOB → CnOB  
-SOB shapes the constraint satisfaction envelope.
-
-SOB → SmOB  
-SOB determines adjacency and smoothing requirements.
-
-SOB → IdOB  
-SOB provides the structural anchors for identity confirmation.
-
-These relationships match the effects listed in your current SOB.md. 
-
----
-
-## **8. Explanation and Examples Starting from Tokens**
-
-See [Appendix X — Token‑to‑Structure Bridge](appendix_x_token_to_structure_bridge.md)  
-for a full walkthrough from tokens → segments → roles → constraints → basin → identity.
-
----
+## 8. Notes for Debugging
+- Typical values: `struct_segments` entries such as `WQ`, `NP`, `LOC`.
+- Edge cases: empty segmentation or unmatched segment boundaries.
+- Common mistakes: segment labels not aligned with `segment_tokens` keys.
+- Validate correctness: confirm one-to-one coverage of grouped tokens by emitted segment labels.

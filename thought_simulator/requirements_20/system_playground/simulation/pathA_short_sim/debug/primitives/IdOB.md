@@ -1,165 +1,79 @@
-# **IdOB.md — Identity Observation Block**  
-### *Path‑A Short Simulator Primitive Documentation*
+﻿# IdOB
+### *A canonical primitive document for Path-A structured world*
 
-## **1. Definition**  
-The **Identity Observation Block (IdOB)** is the final primitive in the Path‑A short simulation chain. Its purpose is to confirm **referential**, **structural**, and **semantic identity** across the interpretation pipeline. IdOB evaluates identity geometry, forms identity packets, and ensures stable referential coherence across primitives. 
+## 1. Purpose
+`IdOB` performs deterministic identity stabilization and emits the final Path-A identity packet.
 
-IdOB integrates structural, semantic, and constraint signals to maintain consistent identity across SOB → SROB → CnOB → SmOB. 
+## 2. Inputs
+- Geometry sources:
+- `identity_geometry` from `../dimensions/identity_geometry.md`
+- `semantic_core` from `../dimensions/semantic_core.md`
+- `truth_relation` from `../dimensions/truth_relation.md`
+- Canonical fields consumed:
+- `struct_segments`
+- `segment_tokens`
+- `struct_roles`
+- `constraints_matched`
+- `constraints_unmatched`
+- `constraint_residue`
+- `smoothing_operations`
+- `semantic_adjacent_cues`
+- `basin_residue`
 
----
+## 3. Outputs
+- `idob_packet`
+- `identity_geometry`
+- `truth_relation`
+- `semantic_core`
 
-## **2. Purpose and Function**
+## 4. Structural Function
+`IdOB` integrates upstream structured, constraint, and basin state to resolve identity type, truth relation, and stabilized semantic core. It emits a deterministic packet representing final identity state.
 
-IdOB answers the question:
+## 5. Deterministic Algorithm (Conceptual)
+1. Read upstream canonical structural fields.
+2. Evaluate identity stabilization conditions.
+3. Resolve identity type (`referential_identity`, `structural_identity`, `semantic_identity`, or `packet_identity`).
+4. Resolve `truth_relation` state.
+5. Resolve stabilized `semantic_core`.
+6. Emit final `idob_packet` containing the resolved identity outputs.
 
-> **“Do we have enough structural, relational, and semantic information to form identity deterministically?”**
-
-IdOB performs:
-
-- **identity geometry evaluation**  
-- **identity packet formation**  
-- **truth‑relation determination**  
-- **semantic core construction**  
-- **referential coherence checks**  
-- **identity sufficiency evaluation**
-
-If IdOB cannot form identity deterministically, it emits a structured insufficiency report.
-
----
-
-## **3. Allowed Identity Geometries**
-
-IdOB may confirm identity in the following modes:  
-
-
-- `referential_identity`  
-- `structural_identity`  
-- `semantic_identity`  
-- `packet_identity`
-
-These correspond to the identity geometries defined in your routing and meaning dictionaries.
-
----
-
-# **4. IdOB Structural Envelope (Canonical)**  
-### *All structural variables IdOB consumes*
-
-This section is the **canonical home** for the full structural envelope.  
-All other primitives (SOB, SROB, CnOB, SmOB) link here.
-
-IdOB consumes the following structural, relational, smoothing, and semantic variables:
-
-### **4.1 Structural Variables**
-- **segments** — structural segmentation classes  
-- **segment_tokens** — token groups per segment  
-- **roles** — functional roles assigned by SROB  
-- **constraints_matched** — constraints satisfied by CnOB  
-- **residue** — leftover structural material from CnOB  
-
-### **4.2 Smoothing Variables**
-- **smoothing_operations** — smoothing actions applied by SmOB  
-- **smoothing_residue** — leftover smoothing material  
-- **semantic_adjacent_cues** — semantic cues discovered by SmOB  
-
-### **4.3 Semantic Variables**
-- **semantic_core** — IdOB’s semantic identity structure  
-- **truth_relation** — semantic truth mode (interrogative, declarative, unknown)  
-- **token_relations** — referential links between tokens  
-
-### **4.4 Notes**
-- **ob_set_notes** — human‑readable summary of structural segmentation  
-
-These variables form the **complete IdOB structural envelope**.
-
----
-
-# **4.1 Structural Origin Table**  
-### *Which primitive fills which structural variable?*
-
-| Structural Term          | SOB | SROB | CnOB | SmOB | IdOB | Comments |
-|--------------------------|-----|------|------|------|------|----------|
-| **segments**             | ✔   |      |      |      |      | segmentation |
-| **segment_tokens**       | ✔   |      |      |      |      | segmentation |
-| **roles**                |     | ✔    |      |      |      | role assignment |
-| **constraints_matched**  |     |      | ✔    |      |      | constraint matching |
-| **residue**              |     |      | ✔    |      |      | constraint residue |
-| **smoothing_operations** |     |      |      | ✔    |      | smoothing |
-| **smoothing_residue**    |     |      |      | ✔    |      | smoothing |
-| **semantic_adjacent_cues** |   |      |      | ✔    |      | smoothing cues |
-| **semantic_core**        |     |      |      |      | ✔    | identity formation |
-| **truth_relation**       |     |      |      |      | ✔    | identity formation |
-| **token_relations**      |     |      |      |      | ✔    | referential identity |
-| **ob_set_notes**         | ✔   | ✔    | ✔    | ✔    | ✔    | summary notes |
-
-This table is the **canonical reference** for all primitives.
-
----
-
-# **5. IdOB Effects**
-
-IdOB produces the following effects:  
-
-
-- activates identity confirmation pathways  
-- shapes packet formation for identity‑related fields  
-- influences semantic cue propagation for SmOB  
-- constrains role alignment for SROB  
-
-These effects ensure stable identity propagation across the pipeline.
-
----
-
-# **6. IdOB Example**
-
-Examples adapted from your existing IdOB.md:  
-
-
+## 6. Minimal Example
+- input fields:
+```text
+struct_segments = ["WQ", "NP", "LOC"]
+struct_roles = {
+  "WQ": "interrogative_head",
+  "NP": "entity",
+  "LOC": "locative_modifier"
+}
+constraints_matched = ["adjacency_rule", "compatibility_rule"]
+constraint_residue = ["interrogative_scope", "locative_adjacent"]
+semantic_adjacent_cues = ["interrogative_scope", "locative_adjacent"]
+basin_residue = []
 ```
-IdOB fired:
-  identity_geometry = referential_identity
-  idob_packet = referential_packet
+- primitive activation:
+```text
+IdOB resolves identity stabilization
+```
+- output fields:
+```text
+identity_geometry = "referential_identity"
+truth_relation = "interrogative"
+semantic_core = ["entity", "locative_modifier"]
+idob_packet = {
+  "identity_geometry": "referential_identity",
+  "truth_relation": "interrogative",
+  "semantic_core": ["entity", "locative_modifier"]
+}
 ```
 
-```
-IdOB packet formed:
-  identity_geometry = packet_identity
-  residue = semantic_residue
-```
+## 7. Cross-Primitive Interaction
+- Preceding primitive: `SmOB`.
+- Consuming primitive: none inside the Path-A primitive chain; this is the terminal primitive output stage.
+- Pipeline position: fifth stage in `SOB -> SROB -> CnOB -> SmOB -> IdOB`.
 
-These examples illustrate identity geometry confirmation and packet formation.
-
----
-
-# **7. IdOB Sufficiency Summary**
-
-IdOB is **sufficient** when:
-
-- all structural variables are filled  
-- constraints are matched  
-- smoothing operations are resolved  
-- semantic core can be formed  
-- truth relation can be determined  
-- identity packet is coherent  
-
-IdOB is **insufficient** when:
-
-- any structural variable is missing  
-- constraints fail  
-- smoothing fails  
-- semantic core cannot be formed  
-- truth relation cannot be determined  
-
-Insufficiency triggers a diagnostic report for dictionary/pattern evolution.
-
----
-
-# **8. Links to Other Primitives**
-
-Each primitive includes a local Section 4 mini‑table and links back here:
-
-- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
-- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
-- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`  
-- `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`
-
----
+## 8. Notes for Debugging
+- Typical values: identity type plus truth relation and semantic core set.
+- Edge cases: unresolved identity state with incomplete upstream fields.
+- Common mistakes: inconsistent packet values compared to resolved identity outputs.
+- Validate correctness: verify internal consistency across `identity_geometry`, `truth_relation`, `semantic_core`, and `idob_packet`.

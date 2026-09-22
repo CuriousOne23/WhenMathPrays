@@ -1,111 +1,58 @@
-# **SROB.md — Structural Refinement Object Basin**  
-### *Path‑A Short Simulator Primitive Documentation*
+﻿# SROB
+### *A canonical primitive document for Path-A structured world*
 
-## **1. Definition**  
-The **Structural Refinement Object Basin (SROB)** assigns **functional roles** to segments produced by SOB. These roles determine how each segment participates in dependency formation, constraint evaluation, smoothing, and identity formation.
+## 1. Purpose
+`SROB` performs deterministic role assignment over segmented structure.
 
-SROB evaluates **role geometry** and aligns structural units with functional patterns such as **head**, **modifier**, **predicate**, or **argument**.  
-This matches the intent described in your current file: SROB “assigns functional roles to segments” and “evaluates role geometry”.
+## 2. Inputs
+- Geometry source: `role_geometry` from `../dimensions/role_geometry.md`.
+- Canonical fields consumed:
+- `struct_segments`
+- `segment_tokens`
 
----
+## 3. Outputs
+- `struct_roles`
 
-## **2. Purpose and Function**
+## 4. Structural Function
+`SROB` maps segment labels to role values using role geometry categories (`head`, `modifier`, `predicate`, `argument`). This role state is required for deterministic constraint evaluation.
 
-SROB answers the question:
+## 5. Deterministic Algorithm (Conceptual)
+1. Read `struct_segments` and `segment_tokens`.
+2. Apply `role_geometry` mapping rules.
+3. Assign canonical role values to each segment.
+4. Emit role map in `struct_roles`.
+5. Forward role state to `CnOB`.
 
-> **“What functional role does each segment play in the utterance?”**
-
-SROB provides the functional backbone for:
-
-- constraint evaluation (CnOB)  
-- semantic cue propagation (SmOB)  
-- identity confirmation (IdOB)  
-
-This aligns with your existing description that SROB “determines how segments participate in dependency formation” and “shapes semantic cue propagation”.
----
-
-## **3. Allowed Role Values**
-
-SROB may assign any of the following roles:
-
-- **head**  
-- **modifier**  
-- **predicate**  
-- **argument**
-
----
-
-## **4. Structural Variables Filled by SROB (Local View)**  
-SROB is the second primitive in the Path‑A pipeline.  
-It fills **only** the functional role layer.
-
-For the **full IdOB structural envelope**, see:  
-**`IdOB.md — Section 4: IdOB Structural Envelope (Canonical)`**
-
-### **4.1 Structural Origin Mini‑Table (SROB View)**
-
-| Structural Term          | Filled by SROB? | Notes |
-|--------------------------|----------------|-------|
-| **segments**             | ✘              | Provided by SOB. SROB does not modify segmentation. |
-| **segment_tokens**       | ✘              | Provided by SOB. |
-| **roles**                | ✔              | **Primary output of SROB** — assigns functional roles (head, modifier, predicate, argument). |
-| **constraints_matched**  | ✘              | Determined by CnOB. SROB only prepares role geometry for constraint evaluation. |
-| **residue**              | ✘              | Produced by CnOB. |
-| **smoothing_operations** | ✘              | Produced only by SmOB. |
-| **smoothing_residue**    | ✘              | Produced only by SmOB. |
-| **semantic_adjacent_cues** | ✘            | Produced only by SmOB. |
-| **semantic_core**        | ✘              | Constructed by IdOB. |
-| **truth_relation**       | ✘              | Determined by IdOB. |
-| **token_relations**      | ✘              | Determined by IdOB. |
-| **ob_set_notes**         | ✔              | SROB may add notes about role geometry activation. |
-
-### **4.2 Summary**
-
-SROB fills:
-
-- `roles`  
-- `ob_set_notes` (role‑related notes)
-
-All other structural, relational, smoothing, and semantic variables are filled by downstream primitives:
-
+## 6. Minimal Example
+- input fields:
+```text
+struct_segments = ["WQ", "NP", "LOC"]
+segment_tokens = {
+  "WQ": ["Where"],
+  "NP": ["the", "book"],
+  "LOC": ["on", "the", "table"]
+}
 ```
-SOB → SROB → CnOB → SmOB → IdOB
+- primitive activation:
+```text
+SROB activates role_geometry = modifier
+```
+- output fields:
+```text
+struct_roles = {
+  "WQ": "interrogative_head",
+  "NP": "entity",
+  "LOC": "locative_modifier"
+}
 ```
 
----
+## 7. Cross-Primitive Interaction
+- Preceding primitive: `SOB`.
+- Consuming primitive: `CnOB`; outputs influence `SmOB` and `IdOB` downstream.
+- Pipeline position: second stage in `SOB -> SROB -> CnOB -> SmOB -> IdOB`.
 
-## **5. Effects**
-
-SROB produces the following effects (aligned with your current file):
-
-- activates role pattern matching for constraint evaluation in **CnOB**   
-- shapes semantic cue propagation for **SmOB** 
-- influences identity confirmation pathways for **IdOB** 
-- constrains segment geometry interpretation for **SOB** (role feedback loop)
-
----
-
-## **6. Examples**
-
-Examples adapted from your current SROB.md:
-
-- `"SROB fired: role_geometry=head, struct_roles=head"`
-- `"SROB fired: role_geometry=modifier, semantic_adjacent_cues=adjacent_cue"`
-
-These illustrate role assignment and semantic cue propagation.
-
----
-
-## **7. Notes**
-
-- SROB does not change segmentation.  
-- SROB does not evaluate constraints.  
-- SROB does not perform smoothing.  
-- SROB is required for deterministic meaning: without roles, IdOB cannot form identity.
-
----
-
-## **8. Explanation and Examples Starting from Tokens**
-
-See [Appendix X — Token‑to‑Structure Bridge](appendix_x_token_to_structure_bridge.md)  
-for a full walkthrough from tokens → segments → roles → constraints → basin → identity.
+## 8. Notes for Debugging
+- Typical values: role assignments including `interrogative_head`, `entity`, `locative_modifier`.
+- Edge cases: missing role assignment for one or more segments.
+- Common mistakes: role keys not matching segment labels.
+- Validate correctness: confirm complete role coverage for each segment in `struct_segments`.
