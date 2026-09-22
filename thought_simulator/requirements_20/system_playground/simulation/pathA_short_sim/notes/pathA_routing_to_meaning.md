@@ -63,12 +63,12 @@ This factorization and independence are demonstrated in:
 
 A Path A state for an utterance $U$ can be addressed by:
 
-- **utterance_id** (or window id),
-- **segment_id** (SOB),
-- **role_id** (SROB),
-- **constraint_id** (CnOB),
-- **basin_id** (SmOB),
-- **identity_id** (IdOB).
+- **utterance_id**, $\text{u}\_{id}$, (or window id),
+- **segment_id**, $\text{s}\_{id}$, (SOB),
+- **role_id**, $\text{r}\_{id}$, (SROB),
+- **constraint_id**, $\text{c}\_{id}$, (CnOB),
+- **basin_id**, $\text{b}\_{id}$, (SmOB),
+- **identity_id**, $\text{i}\_{id}$, (IdOB).
 
 Conceptually:
 
