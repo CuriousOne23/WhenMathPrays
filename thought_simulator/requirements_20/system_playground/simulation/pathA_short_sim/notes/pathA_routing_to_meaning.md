@@ -34,10 +34,8 @@ Let:
 - $\mathcal{I}$ = IdOB space (identity_geometry, truth_relation, semantic_core, idob_packet)
 
 Then the **Path A structured state space** is:
-
-
-
-$$
+  
+$$  
 \mathcal{X}_\text{PathA}
 =
 \mathcal{S}
@@ -50,8 +48,6 @@ $$
 \times
 \mathcal{I}
 $$
-
-
 
 This factorization and independence are demonstrated in:
 
