@@ -57,7 +57,7 @@ This factorization and independence are demonstrated in:
 
 ### **2.1 Geometry Definitions (grounded)**
 
-Path A is built from five independent structural geometries. Each geometry is defined in **today‑world terms**, using concepts familiar to anyone who works with language, cognition, or structured data, this results in a 6th structure, Meaning (MnOB) which is a function or mapping done by IdOB.
+Path A is built from **five manifold geometries** that operate independently yet compose into a single cognitive pipeline. Each geometry is defined in **today‑world terms**, using concepts familiar to anyone who works with language, cognition, or structured data. When these geometries interact, they produce a sixth structure — **Meaning (MnOB)** — which is *not* a primitive but the **emergent mapping** performed inside Identity geometry (IdOB). TS is the first cognitive architecture designed so that meaning is **inherently emergent**, arising directly from the interaction of its geometries rather than being predefined or symbolically stored.
 
 ---
 
