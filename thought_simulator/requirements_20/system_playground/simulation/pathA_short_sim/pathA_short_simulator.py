@@ -24,47 +24,47 @@ PRIMITIVES: List[PrimitiveFn] = [
 
 
 def _minimal_idob_selection(tp: TP) -> TP:
-    selected_ops = []
+    semantic_operations: List[str] = []
 
     if "theme-state" in tp.constraints_matched:
-        selected_ops.append("theme_state")
+        semantic_operations.append("theme_state")
 
     if "state-location" in tp.constraints_matched:
-        selected_ops.append("state_location")
+        semantic_operations.append("state_location")
 
     if "query-focus-predicate" in tp.constraints_matched:
-        selected_ops.append("query_resolution")
+        semantic_operations.append("query_resolution")
 
-        q_focus = " ".join(tp.role_segments.get("query_focus", []))
-        has_location = "location" in tp.struct_roles
-        has_state = "state" in tp.struct_roles
+        query_focus_text = " ".join(tp.role_segments.get("query_focus", []))
+        has_location_role = "location" in tp.struct_roles
+        has_state_role = "state" in tp.struct_roles
 
-        if q_focus in ("where", "where?") or has_location:
-            selected_ops.append("interrogative_relation_request")
-        elif q_focus in ("why", "why?") or has_state:
-            selected_ops.append("interrogative_property_request")
+        if query_focus_text in ("where", "where?") or has_location_role:
+            semantic_operations.append("interrogative_relation_request")
+        elif query_focus_text in ("why", "why?") or has_state_role:
+            semantic_operations.append("interrogative_property_request")
         else:
-            selected_ops.append("interrogative_identity_request")
+            semantic_operations.append("interrogative_identity_request")
 
     if "modifier_chain" in tp.semantic_adjacent_cues or "relation" in tp.struct_roles:
-        selected_ops.append("nested_modifier_resolution")
+        semantic_operations.append("nested_modifier_resolution")
 
     if "nested_state_link" in tp.semantic_adjacent_cues or "nested_locative_link" in tp.semantic_adjacent_cues or (
         "state" in tp.struct_roles and "location" in tp.struct_roles
     ):
-        selected_ops.append("nested_state_location_resolution")
+        semantic_operations.append("nested_state_location_resolution")
 
     if "agent-action" in tp.constraints_matched:
-        selected_ops.append("agent_action")
+        semantic_operations.append("agent_action")
 
     if "action-relation" in tp.constraints_matched:
-        selected_ops.append("action_patient")
+        semantic_operations.append("action_patient")
 
     if "relation-patient" in tp.constraints_matched:
-        selected_ops.append("relation_modifier")
+        semantic_operations.append("relation_modifier")
 
     if tp.semantic_adjacent_cues:
-        selected_ops.append("modifier_resolution")
+        semantic_operations.append("modifier_resolution")
 
     query_focus = " ".join(tp.role_segments.get("query_focus", []))
     predicate = " ".join(tp.role_segments.get("predicate", []))
@@ -88,7 +88,7 @@ def _minimal_idob_selection(tp: TP) -> TP:
         state_tokens = tp.role_segments.get("state", [])
 
     tp.semantic_core = {
-        "selected_ops": selected_ops,
+        "selected_ops": semantic_operations,
         "query_focus": query_focus,
         "predicate": predicate,
         "theme": theme,
@@ -106,11 +106,12 @@ def _minimal_idob_selection(tp: TP) -> TP:
         ],
     }
 
-    if isinstance(tp.idob, dict):
+    idob_packet = tp.idob
+    if isinstance(idob_packet, dict):
         # Keep IdOB packet semantic payload in sync unless the contract expects null.
-        if tp.idob.get("meaning_semantics") is not None:
-            tp.idob["meaning_semantics"] = dict(tp.semantic_core)
-            tp.idob["meaning_semantics_prime"] = dict(tp.semantic_core)
+        if idob_packet.get("meaning_semantics") is not None:
+            idob_packet["meaning_semantics"] = dict(tp.semantic_core)
+            idob_packet["meaning_semantics_prime"] = dict(tp.semantic_core)
 
     if not hasattr(tp, "trace"):
         tp.trace = []
@@ -118,7 +119,7 @@ def _minimal_idob_selection(tp: TP) -> TP:
         "primitive": "IdOB",
         "notes": "[Semantic]",
         "idob_packet": tp.idob,
-        "selected_ops": selected_ops,
+        "selected_ops": semantic_operations,
         "semantic_core": tp.semantic_core,
         "token_relations": {
             "query_focus": " ".join(tp.role_segments.get("query_focus", [])),
@@ -182,25 +183,25 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
     trace: List[Dict[str, Any]] = []
 
     for fn in PRIMITIVES:
-        input_snapshot = clone_tp(tp)
+        input_tp_snapshot = clone_tp(tp)
         tp = fn(tp)
         if fn.__name__ == "IdOB":
             tp = _minimal_idob_selection(tp)
 
-        trace_entry = {
+        primitive_trace_entry = {
             "primitive": fn.__name__,
-            "input": asdict(input_snapshot),
+            "input": asdict(input_tp_snapshot),
             "output": asdict(tp),
             "notes": primitive_notes(fn.__name__, tp),
         }
 
-        bridge_payload = tp.bridge_trace.get(fn.__name__, {
+        bridge_trace_entry = tp.bridge_trace.get(fn.__name__, {
             "mode": "n/a",
             "committed_adapter_used": False,
             "legacy_fallback_used": False,
             "detail": "primitive does not use intake bridge adapters",
         })
-        trace_entry["bridge_trace"] = bridge_payload
+        primitive_trace_entry["bridge_trace"] = bridge_trace_entry
 
         # Carry primitive-level diagnostic payloads (e.g., token_relations)
         # from tp.trace into the public run trace consumed by run_examples.py.
@@ -219,9 +220,9 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
                     "token_relations",
                 ):
                     if key in latest:
-                        trace_entry[key] = latest[key]
+                        primitive_trace_entry[key] = latest[key]
 
-        trace.append(trace_entry)
+        trace.append(primitive_trace_entry)
 
     return {
         "final_tp": asdict(tp),

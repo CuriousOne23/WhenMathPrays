@@ -125,15 +125,15 @@ See: [SROB](debug/primitives/SROB.md)
   - query-focus-predicate
 
 - residue:
-  - relation-patient
-  - action-relation
-  - agent-action
-  - state-location
   - copular_state_link
-  - predicate-theme
+  - action-relation
+  - relation-patient
+  - agent-action
   - locative_link
-  - theme-state
   - relation-theme
+  - predicate-theme
+  - state-location
+  - theme-state
 
 - smoothing_residue:
   - []
@@ -153,7 +153,7 @@ See: [SROB](debug/primitives/SROB.md)
 - ob_set_notes:
   - OB-Set: matched=['query-focus-predicate']
   - OB-Set: unmatched=['none-none', 'none-none']
-  - OB-Set: residue=['relation-patient', 'action-relation', 'agent-action', 'state-location', 'copular_state_link', 'predicate-theme', 'locative_link', 'theme-state', 'relation-theme']
+  - OB-Set: residue=['copular_state_link', 'action-relation', 'relation-patient', 'agent-action', 'locative_link', 'relation-theme', 'predicate-theme', 'state-location', 'theme-state']
 
 See: [CnOB](debug/primitives/CnOB.md)
 

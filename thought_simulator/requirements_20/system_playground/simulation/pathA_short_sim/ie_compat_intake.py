@@ -150,7 +150,7 @@ def _assign_segments(tokens: List[dict]) -> Tuple[List[dict], List[dict]]:
     if not tokens:
         return tokens, []
 
-    segments: List[dict] = []
+    struct_segments: List[dict] = []
     segment_id = 1
     start_idx = 0
 
@@ -160,7 +160,7 @@ def _assign_segments(tokens: List[dict]) -> Tuple[List[dict], List[dict]]:
             for j in range(start_idx, i + 1):
                 tokens[j]["segment_id"] = segment_id
 
-            segments.append(
+            struct_segments.append(
                 {
                     "segment_id": segment_id,
                     "start_token_id": tokens[start_idx]["token_id"],
@@ -175,7 +175,7 @@ def _assign_segments(tokens: List[dict]) -> Tuple[List[dict], List[dict]]:
         for j in range(start_idx, len(tokens)):
             tokens[j]["segment_id"] = segment_id
 
-        segments.append(
+        struct_segments.append(
             {
                 "segment_id": segment_id,
                 "start_token_id": tokens[start_idx]["token_id"],
@@ -184,7 +184,7 @@ def _assign_segments(tokens: List[dict]) -> Tuple[List[dict], List[dict]]:
             }
         )
 
-    return tokens, segments
+    return tokens, struct_segments
 
 
 def build_committed_stream(raw_text: str) -> dict:
