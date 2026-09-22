@@ -25,16 +25,24 @@ except ImportError:
         cues: List[str] = []
         residue: List[str] = []
 
-        for i in range(max(0, len(struct_roles) - 1)):
-            ops.append(f"smooth:{struct_roles[i]}->{struct_roles[i+1]}")
+        if len(struct_roles) > 1:
+            ops.append("adjacency_smoothing")
+        if any(role == "none" for role in struct_roles):
+            ops.append("role_smoothing")
 
-        for seg_tokens, role in zip(segment_tokens, struct_roles):
-            if role == "relation":
-                cues.extend(seg_tokens)
+        flat_tokens = [tok for group in segment_tokens for tok in group]
+        if any(tok in {"where", "who", "what", "when", "why", "how"} for tok in flat_tokens):
+            cues.append("interrogative_scope")
+        if any(tok in {"in", "on", "at", "under", "over", "into", "onto"} for tok in flat_tokens):
+            cues.append("locative_adjacent")
 
+        if "interrogative_scope" in cues:
+            ops.append("segment_smoothing")
         if not cues:
-            residue.append("no_relation_cues")
-        return ops, cues, residue
+            ops.append("basin_compression_smoothing")
+
+        # Canonical SmOB keeps basin residue empty in this fallback.
+        return list(dict.fromkeys(ops)), list(dict.fromkeys(cues)), residue
 
 try:
     from support.dictionaries import (  # type: ignore
@@ -162,16 +170,16 @@ def _simple_segments(tokens: List[str]) -> List[str]:
 def _simple_roles(struct_segments: List[str]) -> List[str]:
     roles = []
     for seg in struct_segments:
-        if seg == "NP" and not roles:
-            roles.append("agent")
-        elif seg == "VP":
-            roles.append("action")
-        elif seg == "PP":
-            roles.append("relation")
+        if seg == "WQ":
+            roles.append("interrogative_head")
+        elif seg == "LOC":
+            roles.append("locative_modifier")
+        elif seg == "IQ":
+            roles.append("state")
         elif seg == "NP":
-            roles.append("patient")
+            roles.append("entity")
         else:
-            roles.append("modifier")
+            roles.append("none")
     return roles
 
 
@@ -220,15 +228,11 @@ def _committed_segment_tokens(committed_stream: Dict[str, Any]) -> List[List[str
 
 def _derive_segment_label_from_role(role: str) -> str:
     role_to_segment = {
-        "query_focus": "WQ",
-        "predicate": "IQ",
-        "theme": "NP",
-        "agent": "NP",
-        "patient": "NP",
-        "action": "VP",
-        "relation": "PP",
+        "interrogative_head": "WQ",
+        "state": "IQ",
+        "entity": "NP",
         "location": "LOC",
-        "state": "AP",
+        "locative_modifier": "LOC",
     }
     return role_to_segment.get(role, "NP")
 
@@ -586,50 +590,33 @@ def SROB(tp: TP) -> TP:
 
 
 def CnOB(tp: TP) -> TP:
-    constraints_matched, constraints_unmatched, constraint_residue = check_constraints(tp.struct_roles)
+    _ = check_constraints(tp.struct_roles)
 
-    def _add_match(name: str) -> None:
-        if name not in constraints_matched:
-            constraints_matched.append(name)
-        if name in constraint_residue:
-            constraint_residue.remove(name)
+    canonical_rules = [
+        "adjacency_rule",
+        "compatibility_rule",
+        "structural_rule",
+        "continuity_rule",
+    ]
 
-    def _ordered_transition(from_role: str, to_role: str) -> bool:
-        from_indices = [i for i, r in enumerate(tp.struct_roles) if r == from_role]
-        to_indices = [i for i, r in enumerate(tp.struct_roles) if r == to_role]
-        return any(i < j for i in from_indices for j in to_indices)
+    constraints_matched: List[str] = []
+    if tp.struct_segments and tp.segment_tokens:
+        constraints_matched.append("structural_rule")
+    if tp.struct_roles and any(role != "none" for role in tp.struct_roles):
+        constraints_matched.append("compatibility_rule")
+    if "WQ" in tp.struct_segments or "LOC" in tp.struct_segments:
+        constraints_matched.append("adjacency_rule")
+    if tp.struct_roles and all(role != "none" for role in tp.struct_roles):
+        constraints_matched.append("continuity_rule")
 
-    # Copular link is a structural state transition cue, not a role-pair literal.
-    if "CP" in tp.struct_segments and "theme-state" in constraints_matched and "copular_state_link" not in constraints_matched:
-        _add_match("copular_state_link")
+    constraints_matched = list(dict.fromkeys(constraints_matched))
+    constraints_unmatched = [rule for rule in canonical_rules if rule not in constraints_matched]
 
-    if "ST" in tp.struct_segments and "theme-state" not in constraints_matched:
-        if "theme" in tp.struct_roles and "state" in tp.struct_roles:
-            _add_match("theme-state")
-
-    if "LOC" in tp.struct_segments and "state-location" in constraints_matched and "locative_link" not in constraints_matched:
-        _add_match("locative_link")
-
-    # Interrogative transitions: WH-led and yes/no auxiliary-led question forms.
-    if "WQ" in tp.struct_segments and "IQ" in tp.struct_segments and "query-focus-predicate" not in constraints_matched:
-        _add_match("query-focus-predicate")
-
-    if tp.raw_text.strip().endswith("?") and tp.struct_segments[:1] == ["IQ"] and "query-focus-predicate" not in constraints_matched:
-        _add_match("query-focus-predicate")
-
-    if "predicate-theme" not in constraints_matched and "predicate" in tp.struct_roles and "theme" in tp.struct_roles:
-        p_i = tp.struct_roles.index("predicate")
-        t_i = tp.struct_roles.index("theme")
-        if p_i < t_i:
-            _add_match("predicate-theme")
-
-    # Nested interrogative transitions.
-    if _ordered_transition("theme", "relation"):
-        _add_match("theme-relation")
-    if _ordered_transition("relation", "state"):
-        _add_match("relation-state")
-    if _ordered_transition("state", "location"):
-        _add_match("state-location")
+    constraint_residue: List[str] = []
+    if ("WQ" in tp.struct_segments or tp.raw_text.strip().endswith("?")) and "continuity_rule" in constraints_unmatched:
+        constraint_residue.append("interrogative_scope")
+    if "LOC" in tp.struct_segments and "adjacency_rule" in constraints_matched:
+        constraint_residue.append("locative_adjacent")
 
     tp.constraints_matched = constraints_matched
     tp.constraints_unmatched = constraints_unmatched
@@ -640,122 +627,59 @@ def CnOB(tp: TP) -> TP:
         tp.trace = []
     tp.trace.append({
         "primitive": "CnOB",
-        "notes": "[OB-Set]",
+        "notes": "[Canonical]",
         "constraints_matched": constraints_matched,
         "constraints_unmatched": constraints_unmatched,
         "constraint_residue": constraint_residue,
-        "token_relations": {
-            "agent-action": (
-                " ".join(tp.role_segments.get("agent", [])),
-                " ".join(tp.role_segments.get("action", []))
-            ),
-            "action-relation": (
-                " ".join(tp.role_segments.get("action", [])),
-                " ".join(tp.role_segments.get("relation", []))
-            ),
-            "relation-patient": (
-                " ".join(tp.role_segments.get("relation", [])),
-                " ".join(tp.role_segments.get("patient", []))
-            ),
-            "state-location": (
-                " ".join(tp.role_segments.get("state", [])),
-                " ".join(tp.role_segments.get("location", []))
-            ),
-            "query-focus-predicate": (
-                " ".join(tp.role_segments.get("query_focus", [])),
-                " ".join(tp.role_segments.get("predicate", []))
-            ),
-            "predicate-theme": (
-                " ".join(tp.role_segments.get("predicate", [])),
-                " ".join(tp.role_segments.get("theme", []))
-            )
-        }
     })
     return tp
 
 
 def SmOB(tp: TP) -> TP:
-    smoothing_operations, semantic_adjacent_cues, smoothing_residue = apply_smoothing(tp.segment_tokens, tp.struct_roles)
+    base_ops, base_cues, _ = apply_smoothing(tp.segment_tokens, tp.struct_roles)
 
-    if "CP" in tp.struct_segments and "theme-state" in tp.constraints_matched:
-        if "copular_state_link" not in semantic_adjacent_cues:
-            semantic_adjacent_cues.append("copular_state_link")
-        if "smooth:copular_state_link" not in smoothing_operations:
-            smoothing_operations.append("smooth:copular_state_link")
-        if "no_relation_cues" in smoothing_residue:
-            smoothing_residue = [r for r in smoothing_residue if r != "no_relation_cues"]
+    allowed_ops = {
+        "adjacency_smoothing",
+        "continuity_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "basin_compression_smoothing",
+    }
+    allowed_cues = {"interrogative_scope", "locative_adjacent"}
 
-    if "LOC" in tp.struct_segments and "state-location" in tp.constraints_matched:
-        if "locative_link" not in semantic_adjacent_cues:
-            semantic_adjacent_cues.append("locative_link")
-        if "smooth:locative_link" not in smoothing_operations:
-            smoothing_operations.append("smooth:locative_link")
-        if "no_relation_cues" in smoothing_residue:
-            smoothing_residue = [r for r in smoothing_residue if r != "no_relation_cues"]
+    semantic_adjacent_cues = [cue for cue in base_cues if cue in allowed_cues]
+    if ("WQ" in tp.struct_segments or tp.raw_text.strip().endswith("?")) and "interrogative_scope" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("interrogative_scope")
+    if "LOC" in tp.struct_segments and "locative_adjacent" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("locative_adjacent")
 
-    if "query-focus-predicate" in tp.constraints_matched or tp.raw_text.strip().endswith("?"):
-        if "interrogative_scope" not in semantic_adjacent_cues:
-            semantic_adjacent_cues.append("interrogative_scope")
-        if "smooth:interrogative_scope" not in smoothing_operations:
-            smoothing_operations.append("smooth:interrogative_scope")
-        if "no_relation_cues" in smoothing_residue:
-            smoothing_residue = [r for r in smoothing_residue if r != "no_relation_cues"]
+    smoothing_operations = [op for op in base_ops if op in allowed_ops]
+    if "interrogative_scope" in semantic_adjacent_cues and "adjacency_smoothing" not in smoothing_operations:
+        smoothing_operations.append("adjacency_smoothing")
+    if "locative_adjacent" in semantic_adjacent_cues and "segment_smoothing" not in smoothing_operations:
+        smoothing_operations.append("segment_smoothing")
+    if tp.constraints_unmatched and "continuity_rule" in tp.constraints_unmatched and "continuity_smoothing" not in smoothing_operations:
+        smoothing_operations.append("continuity_smoothing")
+    if any(role == "none" for role in tp.struct_roles) and "role_smoothing" not in smoothing_operations:
+        smoothing_operations.append("role_smoothing")
+    if not smoothing_operations:
+        smoothing_operations.append("basin_compression_smoothing")
 
-    # Nested interrogative smoothing cues.
-    is_nested = "RELC" in tp.struct_segments or (
-        "relation" in tp.struct_roles and ("state" in tp.struct_roles or "location" in tp.struct_roles)
-    )
-    if is_nested:
-        if "modifier_chain" not in semantic_adjacent_cues:
-            semantic_adjacent_cues.append("modifier_chain")
-        if "smooth:modifier_chain" not in smoothing_operations:
-            smoothing_operations.append("smooth:modifier_chain")
-    if is_nested and "location" in tp.struct_roles:
-        if "nested_locative_link" not in semantic_adjacent_cues:
-            semantic_adjacent_cues.append("nested_locative_link")
-        if "smooth:nested_locative_link" not in smoothing_operations:
-            smoothing_operations.append("smooth:nested_locative_link")
-    if is_nested and "state" in tp.struct_roles:
-        if "nested_state_link" not in semantic_adjacent_cues:
-            semantic_adjacent_cues.append("nested_state_link")
-        if "smooth:nested_state_link" not in smoothing_operations:
-            smoothing_operations.append("smooth:nested_state_link")
+    basin_residue: List[str] = []
 
-    tp.smoothing_operations = smoothing_operations
-    tp.semantic_adjacent_cues = semantic_adjacent_cues
-    tp.smoothing_residue = smoothing_residue
+    tp.smoothing_operations = list(dict.fromkeys(smoothing_operations))
+    tp.semantic_adjacent_cues = list(dict.fromkeys(semantic_adjacent_cues))
+    tp.basin_residue = basin_residue
 
     tp.smoothed_geometry = True
     if not hasattr(tp, "trace"):
         tp.trace = []
     tp.trace.append({
         "primitive": "SmOB",
-        "notes": "[OB-Set]",
-        "smoothing_operations": smoothing_operations,
-        "semantic_adjacent_cues": semantic_adjacent_cues,
-        "basin_residue": smoothing_residue,
-        "token_relations": {
-            "agent->action": (
-                " ".join(tp.role_segments.get("agent", [])),
-                " ".join(tp.role_segments.get("action", []))
-            ),
-            "action->relation": (
-                " ".join(tp.role_segments.get("action", [])),
-                " ".join(tp.role_segments.get("relation", []))
-            ),
-            "relation->patient": (
-                " ".join(tp.role_segments.get("relation", [])),
-                " ".join(tp.role_segments.get("patient", []))
-            ),
-            "state->location": (
-                " ".join(tp.role_segments.get("state", [])),
-                " ".join(tp.role_segments.get("location", []))
-            ),
-            "query_focus->predicate": (
-                " ".join(tp.role_segments.get("query_focus", [])),
-                " ".join(tp.role_segments.get("predicate", []))
-            )
-        }
+        "notes": "[Canonical]",
+        "smoothing_operations": tp.smoothing_operations,
+        "semantic_adjacent_cues": tp.semantic_adjacent_cues,
+        "basin_residue": basin_residue,
     })
     return tp
 
@@ -768,12 +692,12 @@ def SSG(tp: TP) -> TP:
 def RBU(tp: TP) -> TP:
     # Very coarse routing metadata from roles.
     meta = {}
-    if "agent" in tp.struct_roles:
-        meta["agent_role_index"] = tp.struct_roles.index("agent")
-    if "action" in tp.struct_roles:
-        meta["action_role_index"] = tp.struct_roles.index("action")
-    if "patient" in tp.struct_roles:
-        meta["patient_role_index"] = tp.struct_roles.index("patient")
+    if "interrogative_head" in tp.struct_roles:
+        meta["interrogative_head_index"] = tp.struct_roles.index("interrogative_head")
+    if "entity" in tp.struct_roles:
+        meta["entity_index"] = tp.struct_roles.index("entity")
+    if "locative_modifier" in tp.struct_roles:
+        meta["locative_modifier_index"] = tp.struct_roles.index("locative_modifier")
     tp.routing_metadata = meta
     return tp
 
@@ -830,30 +754,17 @@ def _idob_structural_key(tp: TP) -> str:
 
 
 def _idob_candidates_from_signals(tp: TP) -> List[int]:
-    candidates: List[int] = []
-    is_interrogative = "query-focus-predicate" in tp.constraints_matched or tp.raw_text.strip().endswith("?")
-    is_nested = "modifier_chain" in tp.semantic_adjacent_cues or "nested_locative_link" in tp.semantic_adjacent_cues or "nested_state_link" in tp.semantic_adjacent_cues
-
-    if is_interrogative and is_nested:
-        candidates = [5001, 3001]
-    elif is_interrogative:
-        candidates = [3001]
-    elif "theme-state" in tp.constraints_matched:
-        candidates = [4001]
-    elif "state-location" in tp.constraints_matched or "locative_link" in tp.constraints_matched:
-        candidates = [3001]
-    elif tp.constraints_matched:
-        candidates = [1001]
-
-    # Keep deterministic unique order.
-    dedup: List[int] = []
-    seen = set()
-    for gid in candidates:
-        if gid in seen:
-            continue
-        seen.add(gid)
-        dedup.append(gid)
-    return dedup
+    is_interrogative = "interrogative_scope" in tp.semantic_adjacent_cues or tp.raw_text.strip().endswith("?")
+    has_locative = "locative_adjacent" in tp.semantic_adjacent_cues
+    if is_interrogative and has_locative:
+        return [3001]
+    if is_interrogative:
+        return [2001]
+    if has_locative:
+        return [1002]
+    if tp.constraints_matched:
+        return [1001]
+    return []
 
 
 def _idob_expected_override(tp: TP) -> Dict[str, Any]:
@@ -874,109 +785,59 @@ def _idob_expected_override(tp: TP) -> Dict[str, Any]:
 
 
 def _build_idob_packet(tp: TP) -> Dict[str, Any]:
-    selected_group_ids = _idob_candidates_from_signals(tp)
-    selected_group_id = selected_group_ids[0] if selected_group_ids else None
-    is_empty = selected_group_id is None
+    candidate_group_ids = _idob_candidates_from_signals(tp)
 
-    residue_code = None
-    if selected_group_id == 1001 and "action-relation" not in tp.constraints_matched and "theme-state" not in tp.constraints_matched:
-        residue_code = "static_object_vs_dynamic_action"
+    if "interrogative_scope" in tp.semantic_adjacent_cues or tp.raw_text.strip().endswith("?"):
+        truth_relation = "interrogative"
+    elif tp.constraints_matched:
+        truth_relation = "declarative"
+    else:
+        truth_relation = "unknown"
 
-    resolution_status = "one_pass_complete"
-    if is_empty:
-        resolution_status = "empty_map"
-    elif tp.raw_text.strip().lower().startswith("zzzz"):
-        resolution_status = "unassigned"
+    semantic_core: List[str] = []
+    if any(role == "entity" for role in tp.struct_roles):
+        semantic_core.append("entity")
+    if "locative_adjacent" in tp.semantic_adjacent_cues:
+        semantic_core.append("locative_modifier")
+    if not semantic_core and tp.struct_roles:
+        semantic_core.append("entity")
 
-    ready_for_ouba = not is_empty
-    path_b_eligible = bool(ready_for_ouba and residue_code is None)
-    idob_complete = bool(path_b_eligible and resolution_status == "one_pass_complete")
+    if truth_relation == "interrogative":
+        identity_geometry = "referential_identity"
+    elif candidate_group_ids:
+        identity_geometry = "structural_identity"
+    else:
+        identity_geometry = "semantic_identity"
 
-    meaning_semantics = {
-        "query_focus": " ".join(tp.role_segments.get("query_focus", [])),
-        "predicate": " ".join(tp.role_segments.get("predicate", [])),
-        "theme": " ".join(tp.role_segments.get("theme", [])),
-        "state": " ".join(tp.role_segments.get("state", [])),
-        "location": " ".join(tp.role_segments.get("location", [])),
-        "modifiers": list(tp.semantic_adjacent_cues),
+    return {
+        "identity_geometry": identity_geometry,
+        "truth_relation": truth_relation,
+        "semantic_core": semantic_core,
+        "idob_packet": {
+            "identity_geometry": identity_geometry,
+            "truth_relation": truth_relation,
+            "semantic_core": semantic_core,
+        },
     }
-
-    packet: Dict[str, Any] = {
-        "utterance": tp.raw_text,
-        "card_id": None,
-        "assignment_status": "derived_from_simulation",
-        "structural_key": _idob_structural_key(tp),
-        "residue_code": residue_code,
-        "identity_residual": {"magnitude": "none" if residue_code is None else "medium", "pattern": "none" if residue_code is None else "leftover"},
-        "candidate_group_ids": selected_group_ids,
-        "final_rank_order": selected_group_ids,
-        "selected_group_id": selected_group_id,
-        "cie_id": "neutral",
-        "first_meaning_cycle": True,
-        "meaning_delta_h": 0.0,
-        "meaning_cie_delta": 0.0,
-        "resolution_status": resolution_status,
-        "ready_for_ouba": ready_for_ouba,
-        "path_b_eligible": path_b_eligible,
-        "idob_complete": idob_complete,
-        "routing_filter_mutated": False,
-        "expand_target": None,
-        "meaning_semantics": meaning_semantics if not is_empty else None,
-        "meaning_semantics_prime": meaning_semantics if not is_empty else None,
-        "contract_source": "simulated_contract_v1",
-        "contract_match_id": None,
-    }
-
-    override = _idob_expected_override(tp)
-    if override:
-        expected = override.get("expected", {})
-        packet["contract_match_id"] = override.get("test_id")
-        packet["contract_source"] = "idob_testbench_expected"
-
-        for key in (
-            "resolution_status",
-            "selected_group_id",
-            "ready_for_ouba",
-            "path_b_eligible",
-            "idob_complete",
-            "residue_code",
-            "first_meaning_cycle",
-            "structural_key",
-        ):
-            if key in expected:
-                packet[key] = expected.get(key)
-
-        if expected.get("meaning_semantics", "__omit__") is None:
-            packet["meaning_semantics"] = None
-            packet["meaning_semantics_prime"] = None
-
-        if expected.get("routing_filter_unchanged"):
-            packet["routing_filter_mutated"] = False
-
-        sel = packet.get("selected_group_id")
-        if sel is None:
-            packet["candidate_group_ids"] = []
-            packet["final_rank_order"] = []
-        else:
-            packet["candidate_group_ids"] = [sel]
-            packet["final_rank_order"] = [sel]
-
-    return packet
 
 
 def IdOB(tp: TP) -> TP:
     packet = _build_idob_packet(tp)
-    tp.idob = packet
-    tp.path_b_eligible = bool(packet.get("path_b_eligible", False))
-    tp.idob_complete = bool(packet.get("idob_complete", False))
+    tp.idob = packet.get("idob_packet", {})
+    tp.semantic_core = packet.get("semantic_core", [])
+    tp.truth_relation = str(packet.get("truth_relation", "unknown"))
+    tp.path_b_eligible = bool(tp.idob)
+    tp.idob_complete = bool(tp.idob)
 
     if not hasattr(tp, "trace"):
         tp.trace = []
     tp.trace.append(
         {
             "primitive": "IdOB",
-            "notes": "[Semantic]",
-            "idob_packet": packet,
+            "notes": "[Canonical]",
+            "idob_packet": tp.idob,
+            "semantic_core": tp.semantic_core,
+            "truth_relation": tp.truth_relation,
         }
     )
 
@@ -984,22 +845,12 @@ def IdOB(tp: TP) -> TP:
 
 
 def TRU(tp: TP) -> TP:
-    # Copular/state sentences use descriptive_state; fallback keeps prior behavior.
-    is_interrogative = "query-focus-predicate" in tp.constraints_matched or tp.raw_text.strip().endswith("?")
-    is_nested = "RELC" in tp.struct_segments or (
-        "relation" in tp.struct_roles and ("state" in tp.struct_roles or "location" in tp.struct_roles)
-    )
-
-    if is_interrogative and is_nested:
-        tp.truth_relation = "interrogative_nested"
-    elif is_interrogative:
-        tp.truth_relation = "interrogative_open"
-    elif "LOC" in tp.struct_segments and "state-location" in tp.constraints_matched:
-        tp.truth_relation = "descriptive_locative"
-    elif "CP" in tp.struct_segments and "theme-state" in tp.constraints_matched:
-        tp.truth_relation = "descriptive_state"
+    if "interrogative_scope" in tp.semantic_adjacent_cues or tp.raw_text.strip().endswith("?"):
+        tp.truth_relation = "interrogative"
+    elif tp.constraints_matched:
+        tp.truth_relation = "declarative"
     else:
-        tp.truth_relation = "descriptive_factual" if not tp.defects else "uncertain"
+        tp.truth_relation = "unknown"
     return tp
 
 

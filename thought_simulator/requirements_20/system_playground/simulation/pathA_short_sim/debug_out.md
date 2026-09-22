@@ -4,22 +4,22 @@
 - [segment_geometry:](debug/dimensions/segment_geometry.md) How the simulator divides an utterance into structural segments.
 - [role_geometry:](debug/dimensions/role_geometry.md) How functional roles attach to segments.
 - [constraint_geometry:](debug/dimensions/constraint_geometry.md) How structural and semantic constraints are evaluated.
-- [smoothing_geometry:](debug/dimensions/smoothing_geometry.md) How smoothing operations resolve ambiguity and adjacency.
+- [smoothing_geometry:]() How smoothing operations resolve ambiguity and adjacency.
 - [identity_geometry:](debug/dimensions/identity_geometry.md) How identity and referential structure propagate.
-- [meaning_geometry:](debug/dimensions/meaning_geometry.md) How semantic cues and meaning structures propagate.
+- [meaning_geometry:]() How semantic cues and meaning structures propagate.
 
 ## Fields
 - [struct_segments:](debug/fields/struct_segments.md) The segments detected during structural parsing.
-- [segment_tokens:](debug/fields/struct_segments.md) Token groups attached to each structural segment.
+- [segment_tokens:](debug/fields/segment_tokens.md) Token groups attached to each structural segment.
 - [struct_roles:](debug/fields/struct_roles.md) The roles assigned to each segment.
 - [constraints_matched:](debug/fields/constraints_matched.md) Constraints successfully satisfied.
-- [constraints_unmatched:](debug/fields/constraints_matched.md) Constraints that remained unsatisfied.
-- [constraint_residue:](debug/fields/residue.md) Residual mismatch material from CnOB.
+- [constraints_unmatched:](debug/fields/constraints_unmatched.md) Constraints that remained unsatisfied.
+- [constraint_residue:](debug/fields/constraint_residue.md) Residual mismatch material from CnOB.
 - [smoothing_operations:](debug/fields/smoothing_operations.md) Smoothing transforms applied by SmOB.
 - [semantic_adjacent_cues:](debug/fields/semantic_adjacent_cues.md) Semantic cues adjacent to structural elements.
-- [basin_residue:](debug/fields/smob_smoothing_residue.md) Residual unresolved basin-level material from SmOB.
-- [truth_relation:](debug/fields/idob_packet.md) Truth relation selected for meaning resolution.
-- [semantic_core:](debug/fields/idob_packet.md) Identity-conditioned semantic bundle emitted by IdOB.
+- [basin_residue:](debug/fields/basin_residue.md) Residual unresolved basin-level material from SmOB.
+- [truth_relation:](debug/dimensions/truth_relation.md) Truth relation selected for meaning resolution.
+- [semantic_core:](debug/dimensions/semantic_core.md) Identity-conditioned semantic bundle emitted by IdOB.
 - [idob_packet:](debug/fields/idob_packet.md) The identity packet produced by IdOB.
 
 ## Primitives

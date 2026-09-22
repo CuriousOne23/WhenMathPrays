@@ -29,12 +29,18 @@ def main() -> None:
                 bridge_mode_counts[mode] += 1
             else:
                 bridge_mode_counts["n/a"] += 1
-        # NEW: print token-level relational mapping (Option A)
-        if "token_relations" in primitive_trace_entry:
-            print("token_relations:", primitive_trace_entry["token_relations"])
-
-        # Batch 6 transition: emit canonical external keys while legacy notes remain.
+        # Emit only canonical primitive outputs.
         primitive_name = primitive_trace_entry["primitive"]
+        if primitive_name == "SOB":
+            struct_segments = primitive_trace_entry.get("struct_segments", [])
+            segment_tokens = primitive_trace_entry.get("segment_tokens", [])
+            print(f"struct_segments={struct_segments}")
+            print(f"segment_tokens={segment_tokens}")
+
+        if primitive_name == "SROB":
+            struct_roles = primitive_trace_entry.get("struct_roles", [])
+            print(f"struct_roles={struct_roles}")
+
         if primitive_name == "CnOB":
             constraints_matched = primitive_trace_entry.get("constraints_matched", [])
             constraints_unmatched = primitive_trace_entry.get("constraints_unmatched", [])
@@ -50,6 +56,14 @@ def main() -> None:
             print(f"smoothing_operations={smoothing_operations}")
             print(f"semantic_adjacent_cues={semantic_adjacent_cues}")
             print(f"basin_residue={basin_residue}")
+
+        if primitive_name == "IdOB":
+            idob_packet = primitive_trace_entry.get("idob_packet", {})
+            semantic_core = primitive_trace_entry.get("semantic_core", [])
+            truth_relation = primitive_trace_entry.get("truth_relation", "")
+            print(f"idob_packet={idob_packet}")
+            print(f"semantic_core={semantic_core}")
+            print(f"truth_relation={truth_relation}")
         # If you want more detail, uncomment:
         # print("input:", step["input"])
         # print("output:", step["output"])
@@ -57,11 +71,11 @@ def main() -> None:
     print("\n=== Simulator Capability Summary ===")
     print("CnOB: constraint matching, residue extraction (implemented)")
     print("SmOB: smoothing operations, semantic-adjacent cues (implemented)")
-    print("Routing: minimal IdOB selection (implemented)")
-    print("IdOB: agent_action, action_patient, relation_modifier, modifier_resolution")
+    print("Routing: canonical Path-A ladder (implemented)")
+    print("IdOB: idob_packet, semantic_core, truth_relation")
     print("Not yet implemented: full IdOB family, MCB, provenance envelopes, routing entropy")
     print("This simulator demonstrates relational geometry but is not full Path-A.")
-    print("Trace now includes token-level relational mapping for CnOB, SmOB, and IdOB (Option A).")
+    print("Trace now emits canonical primitive fields only.")
 
     print("\n=== Bridge Usage Summary ===")
     print(f"committed: {bridge_mode_counts['committed']}")

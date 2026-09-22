@@ -174,44 +174,7 @@ def _append_dict_block(lines: List[str], label: str, mapping: Dict[str, Any]) ->
 
 
 def _normalize_ob_set_notes(notes: List[Any]) -> List[str]:
-    normalized: List[str] = []
-    for note in notes:
-        if not isinstance(note, str):
-            normalized.append(f"OB-Set: {_render_scalar(note)}")
-            continue
-
-        if "OB-Set" not in note and "OB Set" not in note:
-            normalized.append(f"OB-Set: {note.strip()}")
-            continue
-
-        tail = note
-        if "[OB-Set]" in tail:
-            tail = tail.split("[OB-Set]", 1)[1]
-        elif "OB Set" in tail:
-            tail = tail.split("OB Set", 1)[1]
-        parts = [part.strip() for part in tail.split(";") if part.strip()]
-
-        if not parts:
-            normalized.append("OB-Set: (no details)")
-            continue
-
-        for part in parts:
-            if part.startswith("Segments:"):
-                payload = _extract_literal_or_text(part, "Segments:")
-                if isinstance(payload, list):
-                    normalized.append(f"OB-Set: struct_segments = {', '.join(str(v) for v in payload)}")
-                else:
-                    normalized.append(f"OB-Set: struct_segments = {_render_scalar(payload)}")
-            elif part.startswith("Segment tokens:"):
-                payload = _extract_literal_or_text(part, "Segment tokens:")
-                if isinstance(payload, list):
-                    groups = [str(group) for group in payload]
-                    normalized.append(f"OB-Set: segment_tokens = {' | '.join(groups)}")
-                else:
-                    normalized.append(f"OB-Set: segment_tokens = {_render_scalar(payload)}")
-            else:
-                normalized.append(f"OB-Set: {part}")
-    return normalized
+    return []
 
 
 def _normalize_token_relations(mapping: Dict[str, Any]) -> List[str]:
@@ -288,11 +251,14 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     semantic_adjacent_cues: List[Any] = []
     semantic_core: Dict[str, Any] = {}
     truth_relation = ""
-    token_relations: Dict[str, Any] = {}
-    ob_set_notes: List[Any] = []
+    idob_packet: Dict[str, Any] = {}
 
     for line in raw_lines:
         extracted = _extract_literal_or_text(line, "Segments:")
+        if extracted is not None:
+            _merge_list(segments, extracted, dedup=False)
+
+        extracted = _extract_literal_or_text(line, "struct_segments=")
         if extracted is not None:
             _merge_list(segments, extracted, dedup=False)
 
@@ -300,7 +266,15 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         if extracted is not None:
             _merge_list(segment_tokens, extracted, dedup=False)
 
+        extracted = _extract_literal_or_text(line, "segment_tokens=")
+        if extracted is not None:
+            _merge_list(segment_tokens, extracted, dedup=False)
+
         extracted = _extract_literal_or_text(line, "Roles:")
+        if extracted is not None:
+            _merge_list(roles, extracted, dedup=False)
+
+        extracted = _extract_literal_or_text(line, "struct_roles=")
         if extracted is not None:
             _merge_list(roles, extracted, dedup=False)
 
@@ -332,9 +306,15 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         if isinstance(extracted, dict):
             semantic_core.update(extracted)
 
-        extracted = _extract_literal_or_text(line, "token_relations:")
+        extracted = _extract_literal_or_text(line, "semantic_core=")
+        if isinstance(extracted, list):
+            semantic_core["values"] = extracted
+        elif isinstance(extracted, dict):
+            semantic_core.update(extracted)
+
+        extracted = _extract_literal_or_text(line, "idob_packet=")
         if isinstance(extracted, dict):
-            token_relations.update(extracted)
+            idob_packet.update(extracted)
 
         extracted_truth = _extract_literal_or_text(line, "Truth relation:")
         if extracted_truth not in (None, ""):
@@ -342,9 +322,6 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         extracted_truth_lower = _extract_literal_or_text(line, "truth_relation:")
         if extracted_truth_lower not in (None, ""):
             truth_relation = _render_scalar(extracted_truth_lower)
-
-        if "OB-Set" in line or "OB Set" in line:
-            _merge_list(ob_set_notes, line.strip(), dedup=False)
 
     if truth_relation:
         semantic_core["truth_relation"] = truth_relation
@@ -364,8 +341,7 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         "semantic_adjacent_cues": semantic_adjacent_cues,
         "semantic_core": semantic_core,
         "truth_relation": truth_relation,
-        "token_relations": token_relations,
-        "ob_set_notes": ob_set_notes,
+        "idob_packet": idob_packet,
     }
 
 
@@ -401,10 +377,8 @@ def interpret_all_blocks(parsed_log: Dict[str, Any]) -> List[Dict[str, Any]]:
         _merge_list(
             current["semantic_adjacent_cues"], interpreted.get("semantic_adjacent_cues", []), dedup=True
         )
-        _merge_list(current["ob_set_notes"], interpreted.get("ob_set_notes", []), dedup=True)
-
         current["semantic_core"].update(interpreted.get("semantic_core", {}))
-        current["token_relations"].update(interpreted.get("token_relations", {}))
+        current["idob_packet"].update(interpreted.get("idob_packet", {}))
         if interpreted.get("truth_relation"):
             current["truth_relation"] = interpreted["truth_relation"]
             current["semantic_core"]["truth_relation"] = interpreted["truth_relation"]
@@ -500,9 +474,9 @@ def generate_output(
         "segment_geometry": "How the simulator divides an utterance into structural segments.",
         "role_geometry": "How functional roles attach to segments.",
         "constraint_geometry": "How structural and semantic constraints are evaluated.",
-        "smoothing_geometry": "How smoothing operations resolve ambiguity and adjacency.",
         "identity_geometry": "How identity and referential structure propagate.",
-        "meaning_geometry": "How semantic cues and meaning structures propagate.",
+        "semantic_core": "How IdOB stabilizes canonical semantic_core.",
+        "truth_relation": "How IdOB stabilizes canonical truth_relation.",
     }
     field_definitions = {
         "struct_segments": "The segments detected during structural parsing.",
@@ -567,49 +541,42 @@ def generate_output(
         item.get("name"): item.get("link")
         for item in primitive_explanations.get("primitives", [])
     }
+    primitive_output_fields = {
+        "SOB": ["struct_segments", "segment_tokens"],
+        "SROB": ["struct_roles"],
+        "CnOB": ["constraints_matched", "constraints_unmatched", "constraint_residue"],
+        "SmOB": ["smoothing_operations", "semantic_adjacent_cues", "basin_residue"],
+        "IdOB": ["idob_packet", "semantic_core", "truth_relation"],
+    }
+
+    field_value_lookup = {
+        "struct_segments": "segments",
+        "segment_tokens": "segment_tokens",
+        "struct_roles": "roles",
+        "constraints_matched": "constraints_matched",
+        "constraints_unmatched": "constraints_unmatched",
+        "constraint_residue": "constraint_residue",
+        "smoothing_operations": "smoothing_operations",
+        "semantic_adjacent_cues": "semantic_adjacent_cues",
+        "basin_residue": "basin_residue",
+        "idob_packet": "idob_packet",
+        "semantic_core": "semantic_core",
+        "truth_relation": "truth_relation",
+    }
+
     for block in interpreted_blocks:
         primitive = block.get("primitive")
         lines.append(f"### {primitive}")
-        _append_list_block(lines, "struct_segments", block.get("segments", []))
-        lines.append("")
-        _append_list_block(lines, "segment_tokens", block.get("segment_tokens", []))
-        lines.append("")
-        _append_list_block(lines, "struct_roles", block.get("roles", []))
-        lines.append("")
-        _append_list_block(
-            lines, "constraints_matched", block.get("constraints_matched", [])
-        )
-        lines.append("")
-        _append_list_block(
-            lines, "constraints_unmatched", block.get("constraints_unmatched", [])
-        )
-        lines.append("")
-        _append_list_block(lines, "constraint_residue", block.get("constraint_residue", []))
-        lines.append("")
-        _append_list_block(lines, "basin_residue", block.get("basin_residue", []))
-        lines.append("")
-        _append_list_block(
-            lines, "smoothing_operations", block.get("smoothing_operations", [])
-        )
-        lines.append("")
-        _append_list_block(
-            lines, "semantic_adjacent_cues", block.get("semantic_adjacent_cues", [])
-        )
-        lines.append("")
-        _append_dict_block(lines, "semantic_core", block.get("semantic_core", {}))
-
-        lines.append("")
-        lines.append("- token_relations:")
-        relations = _normalize_token_relations(block.get("token_relations", {}))
-        if relations:
-            for relation in relations:
-                lines.append(f"  - {relation}")
-        else:
-            lines.append("  - []")
-
-        lines.append("")
-        normalized_notes = _normalize_ob_set_notes(block.get("ob_set_notes", []))
-        _append_list_block(lines, "ob_set_notes", normalized_notes)
+        for field_name in primitive_output_fields.get(str(primitive), []):
+            data_key = field_value_lookup[field_name]
+            value = block.get(data_key)
+            if isinstance(value, list):
+                _append_list_block(lines, field_name, value)
+            elif isinstance(value, dict):
+                _append_dict_block(lines, field_name, value)
+            else:
+                lines.append(f"- {field_name}: {_render_scalar(value)}")
+            lines.append("")
 
         relative_path = primitive_links.get(primitive, "")
         lines.append("")
@@ -621,17 +588,17 @@ def generate_output(
     idob_semantic_core = idob_block.get("semantic_core", {})
 
     lines.append("## Meaning Bundle Summary")
-    lines.append(f"- truth_relation: {smob_block.get('truth_relation', '')}")
+    lines.append(f"- truth_relation: {idob_block.get('truth_relation', '')}")
     _append_list_block(
         lines,
         "semantic_adjacent_cues",
         smob_block.get("semantic_adjacent_cues", []),
     )
-    _append_list_block(
-        lines,
-        "selected_ops",
-        idob_semantic_core.get("selected_ops", []),
-    )
+    if isinstance(idob_semantic_core, dict):
+        _append_dict_block(lines, "semantic_core", idob_semantic_core)
+    else:
+        _append_list_block(lines, "semantic_core", idob_semantic_core if isinstance(idob_semantic_core, list) else [])
+    _append_dict_block(lines, "idob_packet", idob_block.get("idob_packet", {}))
 
     return "\n".join(lines)
 
