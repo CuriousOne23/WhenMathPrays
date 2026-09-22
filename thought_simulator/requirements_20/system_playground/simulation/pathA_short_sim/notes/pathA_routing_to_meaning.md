@@ -55,23 +55,15 @@ This factorization and independence are demonstrated in:
 
 ### 2.1 Geometry Definitions
 
-- **Segment geometry (SOB)** — The structural space describing how the token stream is
-  partitioned into segments, including segment boundaries, segment types, and the
-  structural relationships between segments.
+- **Segment geometry (SOB)** — The structural space describing how the token stream is partitioned into segments, including segment boundaries, segment types, and the structural relationships between segments.
 
-- **Role geometry (SROB)** — The structural space describing how segments participate
-  in communicative roles (speaker, addressee, proposition, modifier, etc.) and how
-  these roles relate to one another.
+- **Role geometry (SROB)** — The structural space describing how segments participate in communicative roles (speaker, addressee, proposition, modifier, etc.) and how these roles relate to one another.
 
-- **Constraint geometry (CnOB)** — The structural space describing rule‑level
-  constraints applied to segments and roles, including matched constraints and
-  unresolved constraint residue.
+- **Constraint geometry (CnOB)** — The structural space describing rule‑level constraints applied to segments and roles, including matched constraints and unresolved constraint residue.
 
-- **Basin geometry (SmOB)** — The structural space describing semantic adjacency,
-  smoothing operations, stabilized basin structure, and unresolved basin residue.
+- **Basin geometry (SmOB)** — The structural space describing semantic adjacency, smoothing operations, stabilized basin structure, and unresolved basin residue.
 
-- **Identity geometry (IdOB)** — The structural space describing identity formation,
-  semantic core, truth‑relation, and the final IdOB packet representing meaning.
+- **Identity geometry (IdOB)** — The structural space describing identity formation, semantic core, truth‑relation, and the final IdOB packet representing meaning.
 
 This keeps the section tight and readable while giving each geometry a clear identity.
 
