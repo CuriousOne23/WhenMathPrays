@@ -88,15 +88,15 @@ Role geometry describes how segments participate in these roles and how the role
 ---
 
 #### **Constraint geometry (CnOB)**  
-A **constraint** is a rule that must be satisfied for an utterance to be interpretable — familiar grammatical, logical, or attachment rules that govern everyday language.
+A **constraint** is a coherence rule that determines whether segments and roles can fit together into an interpretable structure. Segment geometry forms specific referent/event units, and Role geometry assigns communicative functions to them — but these units do not automatically combine into meaning. Constraint geometry checks the familiar grammatical, logical, and attachment rules that allow segments and roles to form a **coherent, stable utterance**.
 
 **Examples:**  
-- subject–verb agreement: “he *runs*”  
-- modifier attachment: “the red car” (modifier must attach to a noun)  
-- argument completeness: “she gave him the book” (all required parts present)  
-- interrogative scope: “what did he say” (question must have scope)
+- subject–verb agreement: “he *runs*” (segment + role must align)  
+- modifier attachment: “the red car” (modifier must attach to a noun segment)  
+- argument completeness: “she gave him the book” (all required roles present)  
+- interrogative scope: “what did he say” (question must have a valid scope)
 
-Constraint geometry is the structural space where these rule checks are applied and where any unresolved constraint residue is recorded.
+Constraint geometry is the structural space where these coherence checks are applied, ensuring that Segment and Role geometry can combine into a meaningful whole. Any unresolved constraint residue is recorded here.
 
 ---
 
