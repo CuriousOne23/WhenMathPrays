@@ -114,14 +114,28 @@ Basin geometry is the space where these semantic adjacency clusters are formed a
 ---
 
 #### **Identity geometry (IdOB)**  
-**Identity** is the final meaning of the utterance — who or what is being referred to, what is being asserted, and how that assertion fits into the world.
+Identity geometry is the **final manifold interpreter** that stabilizes the utterance’s referent, event/state, assertion, and truth‑relation. Segment geometry provides specific referent/event units; Role geometry assigns communicative functions; Constraint geometry ensures structural coherence; Basin geometry composes semantic adjacency clusters. Identity geometry integrates all of these into a single, objective interpretive structure.
+
+IdOB does not retrieve or store meaning. It performs the **final stabilization** that allows meaning to *emerge* from the composition created by the prior geometries. This emergence is not mystical or “special”; it is the scientific fact that meaning is **constructed**, **not predefined**, and **unique to the utterance**. Identity geometry resolves the referent, the assertion made about it, and the truth‑relation — producing the stabilized structure that Meaning geometry (MnOB) records.
 
 **Examples:**  
-- “the red car” → identity = a specific car  
-- “he is late” → identity = the person + lateness event  
-- “the meeting was canceled” → identity = the meeting + cancellation fact  
+- “the red car is broken” → IdOB stabilizes:  
+  - referent: a specific car  
+  - state: broken  
+  - assertion: the car is broken  
+  - truth‑relation: asserted as true  
+- “he left early” → IdOB stabilizes:  
+  - referent: a specific person  
+  - event: leaving  
+  - temporal relation: early  
+  - truth‑relation: asserted as true  
+- “the meeting was canceled” → IdOB stabilizes:  
+  - referent: a specific meeting  
+  - event: cancellation  
+  - assertion: the meeting was canceled  
+  - truth‑relation: asserted as true  
 
-Identity geometry is the space where the utterance’s semantic core, referent, assertion, and truth‑relation are formed into the final IdOB packet.
+Identity geometry is therefore the **final integrator** of the utterance’s structure, producing the stabilized interpretive packet that Meaning geometry maps. It is the last step before meaning simply **Is**.
 
 ---
 
