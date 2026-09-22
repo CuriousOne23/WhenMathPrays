@@ -57,7 +57,7 @@ This factorization and independence are demonstrated in:
 
 ### **2.1 Geometry Definitions (grounded)**
 
-Path A is built from five independent structural geometries. Each geometry is defined in **today‑world terms**, using concepts familiar to anyone who works with language, cognition, or structured data.
+Path A is built from five independent structural geometries. Each geometry is defined in **today‑world terms**, using concepts familiar to anyone who works with language, cognition, or structured data, this results in a 6th structure, Meaning (MnOB) which is a function or mapping done by IdOB.
 
 ---
 
@@ -122,6 +122,20 @@ Basin geometry is the space where meaning is stabilized by grouping semantically
 - “the meeting was canceled” → identity = the meeting + cancellation fact  
 
 Identity geometry is the space where the utterance’s semantic core, referent, assertion, and truth‑relation are formed into the final IdOB packet.
+
+---
+
+#### **Meaning geometry (MnOB)**  
+**Meaning geometry is not an OB primitive.** It is the *mapping* performed inside **Identity geometry (IdOB)** that integrates Segment, Role, Constraint, and Basin geometry into the final stabilized interpretive structure. Meaning is the **emergent output** of IdOB — the complete referent‑event configuration formed when all prior geometries align without contradiction.
+
+Meaning geometry records this final interpretive structure: the specific referent, the specific event or state, the assertion made about it, and the truth‑relation IdOB resolves.
+
+**Examples:**  
+- “the red car is broken” → meaning = a specific car + a specific state + a coherent assertion  
+- “he left early” → meaning = a specific person + a specific event + a temporal relation  
+- “the meeting was canceled” → meaning = a specific meeting + a cancellation event + a truth‑relation  
+
+Meaning geometry is therefore the **IdOB output**, not a standalone primitive.
 
 ---
 
