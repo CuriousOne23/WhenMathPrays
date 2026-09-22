@@ -3,16 +3,31 @@
 Date: 2026-09-22
 Scope root: thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/debug
 
-This map records the canonical Path-A debug document targets, what currently exists, what is missing, and recommended migration actions.
-No rename, delete, or content update actions were performed.
+This document is the authoritative Path-A canonical debug document map for dimensions, fields, primitives, and bridge coverage.
 
-## 1) Canonical Document List
+Execution status for this update:
+- NOT executed: no file create/rename/delete/rewrite actions outside this map
+- NOT executed: no edits to links.yaml
+- NOT executed: no edits to debug/primitives/appendix_x_token_to_structure_bridge.md
 
-### Dimensions (canonical)
+## 1. Canonical Document List (Authoritative Target)
+
+### Canonical Dimensions
+- debug/dimensions/segment_geometry.md
 - debug/dimensions/role_geometry.md
 - debug/dimensions/identity_geometry.md
+- debug/dimensions/constraint_geometry.md
+- debug/dimensions/semantic_core.md
+- debug/dimensions/truth_relation.md
 
-### Fields (canonical)
+### Canonical Primitives
+- debug/primitives/SOB.md
+- debug/primitives/SROB.md
+- debug/primitives/CnOB.md
+- debug/primitives/SmOB.md
+- debug/primitives/IdOB.md
+
+### Canonical Fields
 - debug/fields/struct_segments.md
 - debug/fields/segment_tokens.md
 - debug/fields/struct_roles.md
@@ -22,42 +37,44 @@ No rename, delete, or content update actions were performed.
 - debug/fields/smoothing_operations.md
 - debug/fields/semantic_adjacent_cues.md
 - debug/fields/basin_residue.md
-- debug/fields/truth_relation.md
-- debug/fields/semantic_core.md
 - debug/fields/idob_packet.md
 
-### Primitives (canonical)
-- debug/primitives/sob.md
-- debug/primitives/srob.md
-- debug/primitives/cnob.md
-- debug/primitives/smob.md
-- debug/primitives/idob.md
-
-### Bridge (canonical)
+### Canonical Bridge
 - debug/primitives/appendix_x_token_to_structure_bridge.md
 
-## 2) Existing Documents Detected
+## 2. Existing Documents Detected
 
-### debug/primitives/
+### Existing primitives documents
 - debug/primitives/README.md
 - debug/primitives/primitives.md
 - debug/primitives/appendix_x_token_to_structure_bridge.md
 
-### debug/dimensions/
+### Existing dimensions documents
 - debug/dimensions/README.md
 - debug/dimensions/dimensions.md
 
-### debug/fields/
+### Existing fields documents
 - debug/fields/README.md
 - debug/fields/fields.md
 
-## 3) Missing Canonical Documents
+## 3. Missing Canonical Documents
 
-### Dimensions
+### Missing canonical dimensions
+- debug/dimensions/segment_geometry.md
 - debug/dimensions/role_geometry.md
 - debug/dimensions/identity_geometry.md
+- debug/dimensions/constraint_geometry.md
+- debug/dimensions/semantic_core.md
+- debug/dimensions/truth_relation.md
 
-### Fields
+### Missing canonical primitives
+- debug/primitives/SOB.md
+- debug/primitives/SROB.md
+- debug/primitives/CnOB.md
+- debug/primitives/SmOB.md
+- debug/primitives/IdOB.md
+
+### Missing canonical fields
 - debug/fields/struct_segments.md
 - debug/fields/segment_tokens.md
 - debug/fields/struct_roles.md
@@ -67,81 +84,54 @@ No rename, delete, or content update actions were performed.
 - debug/fields/smoothing_operations.md
 - debug/fields/semantic_adjacent_cues.md
 - debug/fields/basin_residue.md
-- debug/fields/truth_relation.md
-- debug/fields/semantic_core.md
 - debug/fields/idob_packet.md
 
-### Primitives
-- debug/primitives/sob.md
-- debug/primitives/srob.md
-- debug/primitives/cnob.md
-- debug/primitives/smob.md
-- debug/primitives/idob.md
+### Missing canonical bridge
+- None
 
-### Bridge
-- None (canonical bridge document already exists)
+## 4. Legacy Umbrella Documents
 
-## 4) Legacy Documents That Should Be Renamed Or Removed
-
-These files are generic umbrella docs and do not match canonical Path-A per-concept naming:
-- debug/dimensions/dimensions.md
-- debug/fields/fields.md
+The following umbrella files exist and should be transitioned away from as canonical per-concept documents are introduced:
 - debug/primitives/primitives.md
+- debug/dimensions/dimensions.md
+- debug/fields/fields.md
 
-Optional legacy-to-keep index files (not canonical concept docs, but useful as folder entry points):
+## 5. Recommended Actions (NOT Executed)
+
+### Create (NOT executed)
+- Create all missing canonical dimensions listed in Section 3.
+- Create all missing canonical primitives listed in Section 3.
+- Create all missing canonical fields listed in Section 3.
+
+### Rename (NOT executed)
+- Rename debug/primitives/primitives.md to debug/primitives/_legacy_primitives_overview.md if historical retention is required.
+- Rename debug/dimensions/dimensions.md to debug/dimensions/_legacy_dimensions_overview.md if historical retention is required.
+- Rename debug/fields/fields.md to debug/fields/_legacy_fields_overview.md if historical retention is required.
+
+### Delete (NOT executed)
+- Delete legacy umbrella docs only after canonical replacements exist and links are migrated:
+- debug/primitives/primitives.md
+- debug/dimensions/dimensions.md
+- debug/fields/fields.md
+
+### Rewrite (NOT executed)
+- Rewrite README index pages to point first to canonical per-concept docs once they are created:
+- debug/primitives/README.md
 - debug/dimensions/README.md
 - debug/fields/README.md
-- debug/primitives/README.md
 
-## 5) Recommended Actions (Do Not Execute In This Batch)
+### Remain As-Is (NOT executed)
+- Keep debug/primitives/appendix_x_token_to_structure_bridge.md unchanged as the canonical bridge document.
+- Keep links.yaml unchanged in this batch.
 
-1. Create canonical dimension documents:
-- debug/dimensions/role_geometry.md
-- debug/dimensions/identity_geometry.md
+## 6. Consistency Coverage Check
 
-2. Create canonical field documents:
-- debug/fields/struct_segments.md
-- debug/fields/segment_tokens.md
-- debug/fields/struct_roles.md
-- debug/fields/constraints_matched.md
-- debug/fields/constraints_unmatched.md
-- debug/fields/constraint_residue.md
-- debug/fields/smoothing_operations.md
-- debug/fields/semantic_adjacent_cues.md
-- debug/fields/basin_residue.md
-- debug/fields/truth_relation.md
-- debug/fields/semantic_core.md
-- debug/fields/idob_packet.md
-
-3. Create canonical primitive documents:
-- debug/primitives/sob.md
-- debug/primitives/srob.md
-- debug/primitives/cnob.md
-- debug/primitives/smob.md
-- debug/primitives/idob.md
-
-4. Bridge handling:
-- Keep debug/primitives/appendix_x_token_to_structure_bridge.md as canonical bridge.
-- Do not rename, move, or edit bridge in this batch.
-
-5. Legacy umbrella docs transition:
-- Rename or remove after canonical per-concept docs are created and validated:
-  - debug/dimensions/dimensions.md
-  - debug/fields/fields.md
-  - debug/primitives/primitives.md
-
-6. README handling:
-- Keep README.md files as navigational index pages, or convert them to explicit canonical index pages if a stricter naming policy is required.
-
-## Consistency Check
-
-Canonical vocabulary covered in this map:
-- Segments: struct_segments, segment_tokens
+Canonical vocabulary represented by this map:
+- Segments: struct_segments, segment_tokens, segment_geometry
 - Roles: struct_roles, role_geometry
-- Constraints (CnOB): constraints_matched, constraints_unmatched, constraint_residue
+- Constraints (CnOB): constraints_matched, constraints_unmatched, constraint_residue, constraint_geometry
 - Smoothing/Basin (SmOB): smoothing_operations, semantic_adjacent_cues, basin_residue
 - Identity (IdOB): identity_geometry, truth_relation, semantic_core, idob_packet
 
-No existing markdown files were modified.
-No files were renamed or deleted.
-No setup yaml or bridge file was edited.
+Validation note:
+- This file is structured as valid markdown with complete canonical listings and explicit NOT executed action labels.
