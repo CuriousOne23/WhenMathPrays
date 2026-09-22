@@ -114,7 +114,7 @@ Basin geometry is the space where these semantic adjacency clusters are formed a
 ---
 
 #### **Identity geometry (IdOB)**  
-Identity geometry is the **final manifold interpreter** that stabilizes the utterance’s referent, event/state, assertion, and truth‑relation. Segment geometry provides specific referent/event units; Role geometry assigns communicative functions; Constraint geometry ensures structural coherence; Basin geometry composes semantic adjacency clusters. Identity geometry integrates all of these into a single, objective interpretive structure.
+Identity geometry is the **final manifold interpreter** that stabilizes the utterance’s referent, event/state, assertion, and truth‑relation. Segment geometry provides specific referent/event units; Role geometry assigns communicative functions; Constraint geometry ensures structural coherence; Basin geometry composes semantic adjacency clusters. Identity geometry integrates all of these into a single, objective interpretive structure. The definition of **semantic_core** is the stabilized set of referent/event features that IdOB resolves as part of the identity packet.
 
 IdOB does not retrieve or store meaning. It performs the **final stabilization** that allows meaning to *emerge* from the composition created by the prior geometries. This emergence is not mystical or “special”; it is the scientific fact that meaning is **constructed**, **not predefined**, and **unique to the utterance**. Identity geometry resolves the referent, the assertion made about it, and the truth‑relation — producing the stabilized structure that Meaning geometry (MnOB) records.
 
@@ -167,6 +167,7 @@ A Path A state for an utterance $U$ can be addressed by:
 - **constraint_id**, $\text{c}\_{id}$, (CnOB),
 - **basin_id**, $\text{b}\_{id}$, (SmOB),
 - **identity_id**, $\text{i}\_{id}$, (IdOB).
+  - identity_id refers to the address of the IdOB state, not the idob_packet produced by identity geometry.
 
 Conceptually:
 
@@ -216,12 +217,13 @@ For an utterance $U$:
    - Output: `constraints_matched`, `constraint_residue`  
    - Operation: apply structural/semantic constraints to roles and segments, leaving unresolved rule‑level mismatches as `constraint_residue`.
 
-4. **Constraints + Cues → Basin + basin_residue**  
+4. **Constraints + Cues → Basin + basin_residue**
+   (cues = semantic_adjacent_cues, operations = smoothing_operations)
    - Primitive: **SmOB**  
    - Output: `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue`  
    - Operation: apply named smoothing operations to semantic adjacency cues, stabilizing a basin geometry and leaving unresolved adjacency/basin signals as `basin_residue`.
 
-5. **Basin → Identity / Meaning**  
+6. **Basin → Identity / Meaning**  
    - Primitive: **IdOB**  
    - Output: `identity_geometry`, `truth_relation`, `semantic_core`, `idob_packet`  
    - Operation: form identity and meaning from the stabilized basin plus residues.
