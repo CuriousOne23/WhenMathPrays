@@ -95,7 +95,7 @@ Current intent example:
 
 Impact on TP evolution:
 
-- Filters role transition pairs recorded in constraints.
+- Filters role transition pairs recorded in constraints_matched and constrains constraint_residue.
 
 ## semantic_rules.yaml
 
@@ -129,7 +129,12 @@ Representative TP outputs after OB-Set primitives:
 - segment_tokens: [[the quick brown fox], [jumps], [over], [the lazy dog]]
 - struct_roles: [agent, action, relation, patient]
 - role_segments: {agent: [...], action: [...], relation: [...], patient: [...]}
-- constraints: [agent-action, action-relation, relation-patient]
+- constraints_matched: [agent-action, action-relation, relation-patient]
+- constraints_unmatched: []
+- constraint_residue: []
+- smoothing_operations: [smooth:locative_link]
+- semantic_adjacent_cues: [locative_link]
+- basin_residue: []
 
 ## How Dictionaries Influence TP Evolution
 

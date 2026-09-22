@@ -23,7 +23,8 @@ The final TP is the end-state substrate after all primitives run. Focus on:
 - tokens and normalized_text for intake output
 - struct_segments and segment_tokens for OB-Set output
 - struct_roles and role_segments for role assignment output
-- constraints for allowed role-transition checks
+- constraints_matched, constraints_unmatched, and constraint_residue for CnOB output
+- smoothing_operations, semantic_adjacent_cues, and basin_residue for SmOB output
 - routing_metadata and routing_decision for routing behavior
 - semantic_core for extracted agent/action/patient/modifiers
 - commit_flags for macro completion checkpoints

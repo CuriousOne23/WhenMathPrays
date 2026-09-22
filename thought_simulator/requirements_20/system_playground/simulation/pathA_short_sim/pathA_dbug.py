@@ -304,44 +304,21 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         if extracted is not None:
             _merge_list(roles, extracted, dedup=False)
 
-        extracted = _extract_literal_or_text(line, "matched=")
-        if extracted is not None:
-            _merge_list(constraints_matched, extracted, dedup=False)
-
         extracted = _extract_literal_or_text(line, "constraints_matched=")
         if extracted is not None:
             _merge_list(constraints_matched, extracted, dedup=False)
-
-        extracted = _extract_literal_or_text(line, "unmatched=")
-        if extracted is not None:
-            _merge_list(constraints_unmatched, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "constraints_unmatched=")
         if extracted is not None:
             _merge_list(constraints_unmatched, extracted, dedup=False)
 
-        extracted = _extract_literal_or_text(line, "residue=")
-        if extracted is not None:
-            if primitive == "SmOB":
-                _merge_list(basin_residue, extracted, dedup=False)
-            else:
-                _merge_list(constraint_residue, extracted, dedup=False)
-
         extracted = _extract_literal_or_text(line, "constraint_residue=")
         if extracted is not None:
             _merge_list(constraint_residue, extracted, dedup=False)
 
-        extracted = _extract_literal_or_text(line, "smoothing_residue=")
-        if extracted is not None:
-            _merge_list(basin_residue, extracted, dedup=False)
-
         extracted = _extract_literal_or_text(line, "basin_residue=")
         if extracted is not None:
             _merge_list(basin_residue, extracted, dedup=False)
-
-        extracted = _extract_literal_or_text(line, "operations=")
-        if extracted is not None:
-            _merge_list(smoothing_operations, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "smoothing_operations=")
         if extracted is not None:

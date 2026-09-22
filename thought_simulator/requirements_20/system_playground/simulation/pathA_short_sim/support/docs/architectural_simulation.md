@@ -61,7 +61,7 @@ What it should accomplish:
 - Convert normalized tokens into structural segments and role geometry.
 
 TP fields that should feel right:
-- struct_segments, segment_tokens, struct_roles, role_segments, constraints, smoothed_geometry, structural_vector_frozen.
+- struct_segments, segment_tokens, struct_roles, role_segments, constraints_matched, constraints_unmatched, constraint_residue, smoothing_operations, semantic_adjacent_cues, basin_residue, smoothed_geometry, structural_vector_frozen.
 
 Support dependencies:
 - token_classes.yaml
@@ -136,7 +136,7 @@ Successful simulation:
 
 1. Validate Intake first: tokenization and normalization must be stable.
 2. Validate Correction next: correction fields and commit flag must update predictably.
-3. Validate OB-Set next: segments, segment_tokens, roles, role_segments, constraints.
+3. Validate OB-Set next: struct_segments, segment_tokens, struct_roles, role_segments, constraints_matched, constraints_unmatched, constraint_residue, smoothing_operations, semantic_adjacent_cues, basin_residue.
 4. Validate Routing next: metadata, decision, TR placeholder step, TRU truth-relation, route commit.
 5. Validate Semantic next: semantic_core extraction should align with dictionaries.
 6. Validate Commit last: final path completion flag and coherent end-state TP.

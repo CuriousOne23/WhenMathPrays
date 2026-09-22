@@ -131,46 +131,32 @@ See: [SROB](debug/primitives/SROB.md)
 - constraints_matched:
   - query-focus-predicate
   - query-focus-predicate
-  - query-focus-predicate
-  - none-none
-  - none-none
 
 - constraints_unmatched:
   - none-none
   - none-none
   - none-none
   - none-none
-  - none-none
-  - none-none
 
 - constraint_residue:
-  - relation-theme
-  - relation-patient
+  - locative_link
   - state-location
-  - predicate-theme
   - action-relation
+  - relation-patient
   - agent-action
+  - predicate-theme
   - theme-state
+  - relation-theme
   - copular_state_link
   - locative_link
-  - relation-theme
-  - relation-patient
   - state-location
-  - predicate-theme
   - action-relation
-  - agent-action
-  - theme-state
-  - copular_state_link
-  - locative_link
-  - relation-theme
   - relation-patient
-  - state-location
-  - predicate-theme
-  - action-relation
   - agent-action
+  - predicate-theme
   - theme-state
+  - relation-theme
   - copular_state_link
-  - locative_link
 
 - basin_residue:
   - []
@@ -188,9 +174,9 @@ See: [SROB](debug/primitives/SROB.md)
   - []
 
 - ob_set_notes:
-  - OB-Set: matched=['query-focus-predicate']
-  - OB-Set: unmatched=['none-none', 'none-none']
-  - OB-Set: residue=['relation-theme', 'relation-patient', 'state-location', 'predicate-theme', 'action-relation', 'agent-action', 'theme-state', 'copular_state_link', 'locative_link']
+  - OB-Set: constraints_matched=['query-focus-predicate']
+  - OB-Set: constraints_unmatched=['none-none', 'none-none']
+  - OB-Set: constraint_residue=['locative_link', 'state-location', 'action-relation', 'relation-patient', 'agent-action', 'predicate-theme', 'theme-state', 'relation-theme', 'copular_state_link']
 
 See: [CnOB](debug/primitives/CnOB.md)
 
@@ -223,9 +209,6 @@ See: [CnOB](debug/primitives/CnOB.md)
   - smooth:none->none
   - smooth:none->none
   - smooth:interrogative_scope
-  - smooth:none->none
-  - smooth:none->none
-  - smooth:interrogative_scope
 
 - semantic_adjacent_cues:
   - interrogative_scope
@@ -238,9 +221,9 @@ See: [CnOB](debug/primitives/CnOB.md)
   - []
 
 - ob_set_notes:
-  - OB-Set: operations=['smooth:none->none', 'smooth:none->none', 'smooth:interrogative_scope']
+  - OB-Set: smoothing_operations=['smooth:none->none', 'smooth:none->none', 'smooth:interrogative_scope']
   - OB-Set: semantic_adjacent_cues=['interrogative_scope']
-  - OB-Set: residue=[]
+  - OB-Set: basin_residue=[]
   - OB-Set: (no details)
 
 See: [SmOB](debug/primitives/SmOB.md)

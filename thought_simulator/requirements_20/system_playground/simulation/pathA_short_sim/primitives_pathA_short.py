@@ -641,9 +641,8 @@ def CnOB(tp: TP) -> TP:
     tp.trace.append({
         "primitive": "CnOB",
         "notes": "[OB-Set]",
-        "matched": constraints_matched,
-        "unmatched": constraints_unmatched,
-        "residue": constraint_residue,
+        "constraints_matched": constraints_matched,
+        "constraints_unmatched": constraints_unmatched,
         "constraint_residue": constraint_residue,
         "token_relations": {
             "agent-action": (
@@ -732,10 +731,8 @@ def SmOB(tp: TP) -> TP:
     tp.trace.append({
         "primitive": "SmOB",
         "notes": "[OB-Set]",
-        "operations": smoothing_operations,
+        "smoothing_operations": smoothing_operations,
         "semantic_adjacent_cues": semantic_adjacent_cues,
-        "residue": smoothing_residue,
-        "smoothing_residue": smoothing_residue,
         "basin_residue": smoothing_residue,
         "token_relations": {
             "agent->action": (

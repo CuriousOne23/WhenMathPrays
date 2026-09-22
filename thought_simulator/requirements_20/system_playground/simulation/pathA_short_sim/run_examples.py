@@ -36,35 +36,17 @@ def main() -> None:
         # Batch 6 transition: emit canonical external keys while legacy notes remain.
         primitive_name = primitive_trace_entry["primitive"]
         if primitive_name == "CnOB":
-            constraints_matched = primitive_trace_entry.get(
-                "constraints_matched",
-                primitive_trace_entry.get("matched", []),
-            )
-            constraints_unmatched = primitive_trace_entry.get(
-                "constraints_unmatched",
-                primitive_trace_entry.get("unmatched", []),
-            )
-            constraint_residue = primitive_trace_entry.get(
-                "constraint_residue",
-                primitive_trace_entry.get("residue", []),
-            )
+            constraints_matched = primitive_trace_entry.get("constraints_matched", [])
+            constraints_unmatched = primitive_trace_entry.get("constraints_unmatched", [])
+            constraint_residue = primitive_trace_entry.get("constraint_residue", [])
             print(f"constraints_matched={constraints_matched}")
             print(f"constraints_unmatched={constraints_unmatched}")
             print(f"constraint_residue={constraint_residue}")
 
         if primitive_name == "SmOB":
-            smoothing_operations = primitive_trace_entry.get(
-                "smoothing_operations",
-                primitive_trace_entry.get("operations", []),
-            )
+            smoothing_operations = primitive_trace_entry.get("smoothing_operations", [])
             semantic_adjacent_cues = primitive_trace_entry.get("semantic_adjacent_cues", [])
-            basin_residue = primitive_trace_entry.get(
-                "basin_residue",
-                primitive_trace_entry.get(
-                    "smoothing_residue",
-                    primitive_trace_entry.get("residue", []),
-                ),
-            )
+            basin_residue = primitive_trace_entry.get("basin_residue", [])
             print(f"smoothing_operations={smoothing_operations}")
             print(f"semantic_adjacent_cues={semantic_adjacent_cues}")
             print(f"basin_residue={basin_residue}")

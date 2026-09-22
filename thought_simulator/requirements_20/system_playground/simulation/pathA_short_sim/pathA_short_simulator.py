@@ -14,16 +14,6 @@ from primitives_pathA_short import (
 PrimitiveFn = Any  # simple alias; each primitive is a callable(tp) -> tp
 
 
-TRACE_KEY_ALIASES_BY_PRIMITIVE: Dict[str, Dict[str, str]] = {
-    "CnOB": {
-        "constraint_residue": "residue",
-    },
-    "SmOB": {
-        "basin_residue": "smoothing_residue",
-    },
-}
-
-
 PRIMITIVES: List[PrimitiveFn] = [
     InB, IIInB, IE,
     CEx, CE, ISc, TPU,
@@ -175,9 +165,17 @@ def primitive_notes(name: str, tp: TP) -> str:
     if name == "SROB":
         return f"[{macro}] Roles: {tp.struct_roles}; Role segments: {tp.role_segments}"
     if name == "CnOB":
-        return f"[{macro}] matched={tp.constraints_matched}; unmatched={tp.constraints_unmatched}; residue={tp.constraint_residue}"
+        return (
+            f"[{macro}] constraints_matched={tp.constraints_matched}; "
+            f"constraints_unmatched={tp.constraints_unmatched}; "
+            f"constraint_residue={tp.constraint_residue}"
+        )
     if name == "SmOB":
-        return f"[{macro}] operations={tp.smoothing_operations}; semantic_adjacent_cues={tp.semantic_adjacent_cues}; residue={tp.smoothing_residue}"
+        return (
+            f"[{macro}] smoothing_operations={tp.smoothing_operations}; "
+            f"semantic_adjacent_cues={tp.semantic_adjacent_cues}; "
+            f"basin_residue={tp.smoothing_residue}"
+        )
     if name == "TR":
         return f"[{macro}] Thought Router placeholder: {tp.routing_metadata.get('thought_router_note', 'no note')}"
     if name == "TRU":
@@ -219,13 +217,11 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
             latest = tp.trace[-1]
             if latest.get("primitive") == fn.__name__:
                 for key in (
-                    "matched",
-                    "unmatched",
-                    "residue",
+                    "constraints_matched",
+                    "constraints_unmatched",
                     "constraint_residue",
-                    "operations",
+                    "smoothing_operations",
                     "semantic_adjacent_cues",
-                    "smoothing_residue",
                     "basin_residue",
                     "idob_packet",
                     "selected_ops",
@@ -234,14 +230,6 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
                 ):
                     if key in latest:
                         primitive_trace_entry[key] = latest[key]
-
-        # Batch 5 compatibility layer: keep legacy and canonical keys in sync.
-        alias_map = TRACE_KEY_ALIASES_BY_PRIMITIVE.get(fn.__name__, {})
-        for canonical_key, legacy_key in alias_map.items():
-            if canonical_key in primitive_trace_entry and legacy_key not in primitive_trace_entry:
-                primitive_trace_entry[legacy_key] = primitive_trace_entry[canonical_key]
-            elif legacy_key in primitive_trace_entry and canonical_key not in primitive_trace_entry:
-                primitive_trace_entry[canonical_key] = primitive_trace_entry[legacy_key]
 
         trace.append(primitive_trace_entry)
 
