@@ -33,11 +33,10 @@ Let:
 - $\mathcal{B}$ = SmOB space (smoothing_operations, semantic_adjacent_cues, basin_residue)  
 - $\mathcal{I}$ = IdOB space (identity_geometry, truth_relation, semantic_core, idob_packet)
 
-Then the **Path A structured state space** is:
-  
-$$  
-\mathcal{X}_\text{PathA}
-=
+Then the **Path A structured state space** is:  
+
+$$
+\mathcal{X}\\_\mathrm{PathA} =
 \mathcal{S}
 \times
 \mathcal{R}
