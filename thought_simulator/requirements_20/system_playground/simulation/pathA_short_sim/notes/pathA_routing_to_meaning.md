@@ -126,7 +126,7 @@ Identity geometry is the space where the utterance’s semantic core, referent, 
 ---
 
 #### **Meaning geometry (MnOB)**  
-**Meaning geometry is not an OB primitive.** It is the *mapping* performed inside **Identity geometry (IdOB)** that integrates Segment, Role, Constraint, and Basin geometry into the final stabilized interpretive structure. Meaning is an **emergent property** of this integration — not “emergent” in the philosophical sense of being special or mysterious, but emergent in the scientific sense that it is **constructed**, **not pre‑stored**, and **unique to the utterance**. Meaning is the interpretive structure that *arises* when all prior geometries align without contradiction.
+**Meaning geometry is not an OB primitive.** It is the *mapping* performed inside **Identity geometry (IdOB)** that integrates Segment, Role, Constraint, and Basin geometry into the final stabilized interpretive structure. Meaning is an **emergent property** of this integration — not “emergent” in the philosophical sense of being special or mysterious, but emergent in the scientific sense that it is **constructed**, **not pre‑stored**, and **unique to the utterance**. For cognition, meaning must be allowed to emerge rather than be predefined; TS is the first cognitive machine architected so that meaning is **inherently emergent** and arises directly from the interaction of its geometries.
 
 Meaning geometry records this final structure: the specific referent, the specific event or state, the assertion made about it, and the truth‑relation IdOB resolves. This structure is **not predefined** or “canned”; it is the objective interpretive packet that simply **Is** once IdOB completes its mapping.
 
