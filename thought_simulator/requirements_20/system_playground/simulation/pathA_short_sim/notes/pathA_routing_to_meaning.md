@@ -53,46 +53,74 @@ This factorization and independence are demonstrated in:
 - `path_ab_tst_run_cp_6-19-2026.md`  
   (Path‑A / Path‑AB test‑run logic simulation)
 
-### 2.1 Geometry Definitions
+---
 
-- **Segment geometry (SOB)** — The structural space describing how the token stream is partitioned into segments, including segment boundaries, segment types, and the structural relationships between segments.
+# **2.1 Geometry Definitions (grounded)**
 
-- **Role geometry (SROB)** — The structural space describing how segments participate in communicative roles (speaker, addressee, proposition, modifier, etc.) and how these roles relate to one another.
-
-- **Constraint geometry (CnOB)** — The structural space describing rule‑level constraints applied to segments and roles, including matched constraints and unresolved constraint residue.
-
-- **Basin geometry (SmOB)** — The structural space describing semantic adjacency, smoothing operations, stabilized basin structure, and unresolved basin residue.
-
-- **Identity geometry (IdOB)** — The structural space describing identity formation, semantic core, truth‑relation, and the final IdOB packet representing meaning.
-
-This keeps the section tight and readable while giving each geometry a clear identity.
+Path A is built from five independent structural geometries. Each geometry is defined in **today‑world terms**, using concepts familiar to anyone who works with language, cognition, or structured data.
 
 ---
 
-### 2.2 Geometry Examples
+### **Segment geometry (SOB)**  
+A **segment** is a *unit of expression* that naturally functions together in everyday language — a word, phrase, or clause. Segments are “contiguous” because their tokens appear together and act as a coherent unit.
 
-- **Segment geometry examples**
-  - segment_tokens: ["the", "red", "car"]
-  - struct_segments: noun_phrase, modifier_phrase
+**Examples:**  
+- “the red car” → a noun‑phrase segment  
+- “in the kitchen” → a locative segment  
+- “he left early” → a clause segment  
 
-- **Role geometry examples**
-  - struct_roles: proposition_role, modifier_role
-  - role_geometry: speaker_role → addressee_role linkage
+Segment geometry is the structural space describing how these units are identified and organized.
 
-- **Constraint geometry examples**
-  - constraints_matched: argument_structure_ok, tense_consistent
-  - constraint_residue: modifier_chain_ambiguous, interrogative_scope_unresolved
+---
 
-- **Basin geometry examples**
-  - semantic_adjacent_cues: continuity_cue, locative_adjacent
-  - basin_residue: unstable_modality_cue, conflict_adjacent
+### **Role geometry (SROB)**  
+A **role** is the communicative function a segment plays in an utterance — such as speaker, addressee, proposition, modifier, or referent.
 
-- **Identity geometry examples**
-  - semantic_core: identity of the referent “the red car”
-  - truth_relation: assertion_true, assertion_unknown
-  - idob_packet: final meaning bundle for the utterance
+**Examples:**  
+- “I think…” → speaker role  
+- “you should…” → addressee role  
+- “the red car” → referent role  
+- “quickly” → modifier role  
 
-These examples are intentionally simple — they illustrate the geometry without locking you into specific field names or implementation details.
+Role geometry describes how segments participate in these roles and how the roles relate to one another.
+
+---
+
+### **Constraint geometry (CnOB)**  
+A **constraint** is a rule that must be satisfied for an utterance to be interpretable — familiar grammatical, logical, or attachment rules that govern everyday language.
+
+**Examples:**  
+- subject–verb agreement: “he *runs*”  
+- modifier attachment: “the red car” (modifier must attach to a noun)  
+- argument completeness: “she gave him the book” (all required parts present)  
+- interrogative scope: “what did he say” (question must have scope)
+
+Constraint geometry is the structural space where these rule checks are applied and where any unresolved constraint residue is recorded.
+
+---
+
+### **Basin geometry (SmOB)**  
+**Semantic adjacency** means two parts of an utterance are close in meaning based on familiar cues: shared topic, shared referent, shared time, shared location, or shared event. Humans intuitively group such elements together.
+
+**Examples:**  
+- “the doctor” ↔ “he” → same referent  
+- “yesterday” ↔ “the meeting” → same time frame  
+- “in the kitchen” ↔ “the stove” → same location  
+- “the car” ↔ “the red one” → same object
+
+Basin geometry is the space where meaning is stabilized by grouping semantically adjacent elements into coherent clusters, and where any unresolved basin residue is recorded.
+
+---
+
+### **Identity geometry (IdOB)**  
+**Identity** is the final meaning of the utterance — who or what is being referred to, what is being asserted, and how that assertion fits into the world.
+
+**Examples:**  
+- “the red car” → identity = a specific car  
+- “he is late” → identity = the person + lateness event  
+- “the meeting was canceled” → identity = the meeting + cancellation fact  
+
+Identity geometry is the space where the utterance’s semantic core, referent, assertion, and truth‑relation are formed into the final IdOB packet.
 
 ---
 
