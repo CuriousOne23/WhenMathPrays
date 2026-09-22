@@ -87,8 +87,9 @@ Role geometry describes how segments participate in these roles and how the role
 
 ---
 
+# **Revised Constraint geometry (CnOB)**  
 #### **Constraint geometry (CnOB)**  
-A **constraint** is a coherence rule that determines whether segments and roles can fit together into an interpretable structure. Segment geometry forms specific referent/event units, and Role geometry assigns communicative functions to them — but these units do not automatically combine into meaning. Constraint geometry checks the familiar grammatical, logical, and attachment rules that allow segments and roles to form a **coherent, stable utterance**.
+A **constraint** is a coherence rule that determines whether segments and roles can be integrated into a stable referent–event structure. Segment geometry forms specific referent/event units, and Role geometry assigns communicative functions to them — but these units do not automatically yield an interpretable utterance. Constraint geometry checks the familiar grammatical, logical, and attachment rules that allow segments and roles to form a **coherent structure** that can support IdOB’s meaning mapping.
 
 **Examples:**  
 - subject–verb agreement: “he *runs*” (segment + role must align)  
@@ -96,7 +97,7 @@ A **constraint** is a coherence rule that determines whether segments and roles 
 - argument completeness: “she gave him the book” (all required roles present)  
 - interrogative scope: “what did he say” (question must have a valid scope)
 
-Constraint geometry is the structural space where these coherence checks are applied, ensuring that Segment and Role geometry can combine into a meaningful whole. Any unresolved constraint residue is recorded here.
+Constraint geometry is the structural space where these coherence checks are applied, ensuring that Segment and Role geometry can integrate into a stable referent–event configuration. This configuration is the **required input** for Identity geometry (IdOB), which performs the Meaning geometry mapping. Any unresolved constraint residue is recorded here.
 
 ---
 
