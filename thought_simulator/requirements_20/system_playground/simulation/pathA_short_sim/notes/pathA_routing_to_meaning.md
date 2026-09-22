@@ -53,6 +53,61 @@ This factorization and independence are demonstrated in:
 - `path_ab_tst_run_cp_6-19-2026.md`  
   (Path‑A / Path‑AB test‑run logic simulation)
 
+### 2.1 Geometry Definitions
+
+- **Segment geometry (SOB)** — The structural space describing how the token stream is
+  partitioned into segments, including segment boundaries, segment types, and the
+  structural relationships between segments.
+
+- **Role geometry (SROB)** — The structural space describing how segments participate
+  in communicative roles (speaker, addressee, proposition, modifier, etc.) and how
+  these roles relate to one another.
+
+- **Constraint geometry (CnOB)** — The structural space describing rule‑level
+  constraints applied to segments and roles, including matched constraints and
+  unresolved constraint residue.
+
+- **Basin geometry (SmOB)** — The structural space describing semantic adjacency,
+  smoothing operations, stabilized basin structure, and unresolved basin residue.
+
+- **Identity geometry (IdOB)** — The structural space describing identity formation,
+  semantic core, truth‑relation, and the final IdOB packet representing meaning.
+
+This keeps the section tight and readable while giving each geometry a clear identity.
+
+---
+
+### **2.2 Geometry Examples**
+
+This subsection should give **one or two concrete examples** per geometry — not exhaustive lists, just enough to make the definitions “real.”
+
+Here is the recommended text:
+
+### 2.2 Geometry Examples
+
+- **Segment geometry examples**
+  - segment_tokens: ["the", "red", "car"]
+  - struct_segments: noun_phrase, modifier_phrase
+
+- **Role geometry examples**
+  - struct_roles: proposition_role, modifier_role
+  - role_geometry: speaker_role → addressee_role linkage
+
+- **Constraint geometry examples**
+  - constraints_matched: argument_structure_ok, tense_consistent
+  - constraint_residue: modifier_chain_ambiguous, interrogative_scope_unresolved
+
+- **Basin geometry examples**
+  - semantic_adjacent_cues: continuity_cue, locative_adjacent
+  - basin_residue: unstable_modality_cue, conflict_adjacent
+
+- **Identity geometry examples**
+  - semantic_core: identity of the referent “the red car”
+  - truth_relation: assertion_true, assertion_unknown
+  - idob_packet: final meaning bundle for the utterance
+
+These examples are intentionally simple — they illustrate the geometry without locking you into specific field names or implementation details.
+
 ---
 
 ## 3. Addressing
