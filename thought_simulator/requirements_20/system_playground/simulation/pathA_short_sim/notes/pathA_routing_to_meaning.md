@@ -223,7 +223,7 @@ For an utterance $U$:
    - Output: `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue`  
    - Operation: apply named smoothing operations to semantic adjacency cues, stabilizing a basin geometry and leaving unresolved adjacency/basin signals as `basin_residue`.
 
-6. **Basin → Identity / Meaning**  
+5. **Basin → Identity / Meaning**  
    - Primitive: **IdOB**  
    - Output: `identity_geometry`, `truth_relation`, `semantic_core`, `idob_packet`  
    - Operation: form identity and meaning from the stabilized basin plus residues.
