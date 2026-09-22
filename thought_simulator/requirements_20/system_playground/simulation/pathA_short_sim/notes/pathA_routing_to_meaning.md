@@ -364,14 +364,7 @@ the **rectangular window** was empirically validated as the correct windowing fu
 
 Therefore, TSMeaningRoute(U) uses a **non‑overlapping rectangular window** W(⋅, t) of fixed length.
 
-In addition, because TS uses non‑overlapping rectangular windows, utterances are
-**corpuscular**: each window is a discrete relational frame with hard independence
-boundaries. TS does not blend or taper information across windows, so any reference
-to a past statement must be **explicitly encoded** in the current window’s structured
-state (e.g., via segment geometry, role geometry, constraint structure, or identity
-geometry). This follows directly from the empirical windowing results in
-thought_simulator/requirements_20/system_simulation/manifold/ts_mapping_simulation_test.md,
-where tapered windows (Hanning, Gaussian) violated independence and stability.
+In addition, because TS uses non‑overlapping rectangular windows, utterances are **corpuscular**: each window is a discrete relational frame with hard independence boundaries. TS does not blend or taper information across windows, so any reference to a past statement must be **explicitly encoded** in the current window’s structured state. This window choice is capturing how humans communicate, and not driven by efficiency in cognition processing. This follows directly from the empirical windowing results in thought_simulator/requirements_20/system_simulation/manifold/ ts_mapping_simulation_test.md, where tapered windows (Hanning, Gaussian) violated independence and stability.
 
 ---
 
