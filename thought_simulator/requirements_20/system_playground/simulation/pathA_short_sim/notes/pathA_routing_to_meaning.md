@@ -77,12 +77,6 @@ This keeps the section tight and readable while giving each geometry a clear ide
 
 ---
 
-### **2.2 Geometry Examples**
-
-This subsection should give **one or two concrete examples** per geometry — not exhaustive lists, just enough to make the definitions “real.”
-
-Here is the recommended text:
-
 ### 2.2 Geometry Examples
 
 - **Segment geometry examples**
