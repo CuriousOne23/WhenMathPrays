@@ -265,8 +265,7 @@ For an utterance $U$:
 
 
 $$
-G(U)
-=
+G(U) =
 (\text{SOB}(U),
 \text{SROB}(U),
 \text{CnOB}(U),
@@ -275,25 +274,15 @@ G(U)
 $$
 
 
-
-
-
 $$
-\text{Meaning}(U)
-=
-\text{IdOB}(U)
-=
+\text{Meaning}(U) = \text{IdOB}(U) =
 (\text{identity\_geometry},
 \text{truth\_relation},
 \text{semantic\_core},
 \text{idob\_packet})
 $$
 
-
-
 Routing to meaning is:
-
-
 
 $$
 \text{RouteToMeaning}(U)
@@ -304,8 +293,6 @@ G(U)
 \rightarrow
 \text{IdOB}(U)
 $$
-
-
 
 ---
 
@@ -326,8 +313,7 @@ Then:
 
 
 $$
-\text{TSMeaningRoute}(U)
-=
+\text{TSMeaningRoute}(U) =
 W(\phi(G(U)), t)
 $$
 
@@ -346,8 +332,7 @@ Because:
 
 
 $$
-\mathcal{X}_\text{PathA}
-=
+\mathcal{X}\\_\text{PathA} =
 \mathcal{S}
 \times
 \mathcal{R}
