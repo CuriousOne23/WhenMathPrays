@@ -262,24 +262,21 @@ This bundle is the **final product** of routing:
 
 For an utterance $U$:
 
-
-
 $$
 G(U) =
-(\text{SOB}(U),
-\text{SROB}(U),
-\text{CnOB}(U),
-\text{SmOB}(U),
-\text{IdOB}(U))
+(\text{SOB(U), }
+\text{SROB(U), }
+\text{CnOB(U), }
+\text{SmOB(U), }
+\text{IdOB(U))}
 $$
 
 
 $$
-\text{Meaning}(U) = \text{IdOB}(U) =
-(\text{identity\_geometry},
-\text{truth\_relation},
-\text{semantic\_core},
-\text{idob\_packet})
+\text{Meaning}(U) = \text{IdOB}(U) = (\text{identity}\\_\text{geometry, }
+\text{truth}\\_\text{relation, }
+\text{semantic}\\_\text{core, }
+\text{idob}\\_\text{packet)}
 $$
 
 Routing to meaning is:
