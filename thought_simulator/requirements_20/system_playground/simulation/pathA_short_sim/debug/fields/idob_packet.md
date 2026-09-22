@@ -199,7 +199,7 @@ idob_packet = {
 This shows how token intuition becomes structured identity.
 
 For full examples across all primitives:  
-See [Appendix X — Token‑to‑Structure Bridge](appendix_x_token_to_structure_bridge.md) 
+See [Appendix X — Token‑to‑Structure Bridge](../primitives/appendix_x_token_to_structure_bridge.md)  
 
 
 
