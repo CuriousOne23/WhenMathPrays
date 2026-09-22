@@ -135,7 +135,7 @@ IdOB fired:
 ---
 
 ## **7. Token‑to‑Structure Comparison Example**
-
+https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/debug/fields/struct_roles.md
 ### **Token view**
 > “the book on the table”  
 You intuitively know:
@@ -171,7 +171,7 @@ identity_geometry = referential_identity
 This shows how token intuition becomes structured role geometry.
 
 For full examples across all primitives, see:  
-[Appendix X — Token‑to‑Structure Bridge](appendix_x_token_to_structure_bridge.md) 
+[Appendix X — Token‑to‑Structure Bridge](../primitives/appendix_x_token_to_structure_bridge.md)  
 
 ---
  

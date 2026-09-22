@@ -138,6 +138,6 @@ For full examples across all primitives, see:
 ## **7. Cross‑Reference**  
 For a complete walkthrough from tokens → segments → roles → constraints → basin → identity, see:
 
-See [Appendix X — Token‑to‑Structure Bridge](appendix_x_token_to_structure_bridge.md)  
+See [Appendix X — Token‑to‑Structure Bridge](../primitives/appendix_x_token_to_structure_bridge.md)  
 
 This appendix provides examples for every field, including `constraints_matched`.
