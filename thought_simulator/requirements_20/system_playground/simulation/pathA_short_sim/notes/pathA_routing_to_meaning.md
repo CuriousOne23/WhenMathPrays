@@ -55,25 +55,26 @@ This factorization and independence are demonstrated in:
 
 ---
 
-# **2.1 Geometry Definitions (grounded)**
+### **2.1 Geometry Definitions (grounded)**
 
 Path A is built from five independent structural geometries. Each geometry is defined in **today‑world terms**, using concepts familiar to anyone who works with language, cognition, or structured data.
 
 ---
 
-### **Segment geometry (SOB)**  
-A **segment** is a *unit of expression* that naturally functions together in everyday language — a word, phrase, or clause. Segments are “contiguous” because their tokens appear together and act as a coherent unit.
+#### **Segment geometry (SOB) — revised definition**
+
+A **segment** is a word, phrase, or clause that reaches **interpretive completeness**: human cognition can stabilize it as a *specific* referent or event. Categories (“car”), properties (“red”), and types (“red car”) do not reach this threshold. Completeness arises only when the expression supports a **definite, indexable referent**, such as “the red car,” which the mind can represent as a coherent, standalone unit.
 
 **Examples:**  
-- “the red car” → a noun‑phrase segment  
-- “in the kitchen” → a locative segment  
-- “he left early” → a clause segment  
+- “the red car” → a complete referent segment  
+- “in the kitchen” → a complete locative segment  
+- “he left early” → a complete event segment  
 
-Segment geometry is the structural space describing how these units are identified and organized.
+Segment geometry is the structural space describing how these cognitively complete units are identified and organized.
 
 ---
 
-### **Role geometry (SROB)**  
+#### **Role geometry (SROB)**  
 A **role** is the communicative function a segment plays in an utterance — such as speaker, addressee, proposition, modifier, or referent.
 
 **Examples:**  
@@ -86,7 +87,7 @@ Role geometry describes how segments participate in these roles and how the role
 
 ---
 
-### **Constraint geometry (CnOB)**  
+#### **Constraint geometry (CnOB)**  
 A **constraint** is a rule that must be satisfied for an utterance to be interpretable — familiar grammatical, logical, or attachment rules that govern everyday language.
 
 **Examples:**  
@@ -99,7 +100,7 @@ Constraint geometry is the structural space where these rule checks are applied 
 
 ---
 
-### **Basin geometry (SmOB)**  
+#### **Basin geometry (SmOB)**  
 **Semantic adjacency** means two parts of an utterance are close in meaning based on familiar cues: shared topic, shared referent, shared time, shared location, or shared event. Humans intuitively group such elements together.
 
 **Examples:**  
@@ -112,7 +113,7 @@ Basin geometry is the space where meaning is stabilized by grouping semantically
 
 ---
 
-### **Identity geometry (IdOB)**  
+#### **Identity geometry (IdOB)**  
 **Identity** is the final meaning of the utterance — who or what is being referred to, what is being asserted, and how that assertion fits into the world.
 
 **Examples:**  
