@@ -72,28 +72,24 @@ A Path A state for an utterance $U$ can be addressed by:
 
 Conceptually:
 
-
-
 $$
-\text{Addr}(U)
-=
-(u\_id,
-s\_id,
-r\_id,
-c\_id,
-b\_id,
-i\_id)
+\text{Addr}(U) =
+(u\_{id},
+s\_{id},
+r\_{id},
+c\_{id},
+b\_{id},
+i\_{id})
 $$
-
 
 
 Each component of this address lives in its own structural space:
 
-- $s\_id \in \mathcal{S}$  
-- $r\_id \in \mathcal{R}$  
-- $c\_id \in \mathcal{C}$  
-- $b\_id \in \mathcal{B}$  
-- $i\_id \in \mathcal{I}$
+- $s\_{id} \in \mathcal{S}$  
+- $r\_{id} \in \mathcal{R}$  
+- $c\_{id} \in \mathcal{C}$  
+- $b\_{id} \in \mathcal{B}$  
+- $i\_{id} \in \mathcal{I}$
 
 Addressing is **structural**: it does not depend on pipeline order, only on the factored geometry.
 
