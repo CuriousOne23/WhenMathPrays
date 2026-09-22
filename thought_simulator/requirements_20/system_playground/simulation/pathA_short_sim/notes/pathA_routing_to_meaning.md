@@ -101,15 +101,15 @@ Constraint geometry is the structural space where these coherence checks are app
 ---
 
 #### **Basin geometry (SmOB)**  
-**Semantic adjacency** means two parts of an utterance are close in meaning based on familiar cues: shared topic, shared referent, shared time, shared location, or shared event. Humans intuitively group such elements together.
+**Basin geometry forms the semantic clusters that allow the utterance to become a coherent composition.** After Segment geometry provides specific referent/event units, and Role and Constraint geometry establish their functions and structural coherence, Basin geometry groups elements that are close in meaning based on familiar cues: shared referent, shared time, shared location, shared topic, or shared event. These clusters are how human cognition naturally composes an utterance into a single interpretable image.
 
 **Examples:**  
-- “the doctor” ↔ “he” → same referent  
-- “yesterday” ↔ “the meeting” → same time frame  
-- “in the kitchen” ↔ “the stove” → same location  
-- “the car” ↔ “the red one” → same object
+- “the doctor” ↔ “he” → same referent cluster  
+- “yesterday” ↔ “the meeting” → same time cluster  
+- “in the kitchen” ↔ “the stove” → same location cluster  
+- “the car” ↔ “the red one” → same object cluster  
 
-Basin geometry is the space where meaning is stabilized by grouping semantically adjacent elements into coherent clusters, and where any unresolved basin residue is recorded.
+Basin geometry is the space where these semantic adjacency clusters are formed and stabilized. Any unresolved basin residue is recorded here. These clusters provide the **composition** that Identity geometry (IdOB) uses to perform its final meaning mapping.
 
 ---
 
@@ -126,9 +126,9 @@ Identity geometry is the space where the utterance’s semantic core, referent, 
 ---
 
 #### **Meaning geometry (MnOB)**  
-**Meaning geometry is not an OB primitive.** It is the *mapping* performed inside **Identity geometry (IdOB)** that integrates Segment, Role, Constraint, and Basin geometry into the final stabilized interpretive structure. Meaning is the **emergent output** of IdOB — the complete referent‑event configuration formed when all prior geometries align without contradiction.
+**Meaning geometry is not an OB primitive.** It is the *mapping* performed inside **Identity geometry (IdOB)** that integrates Segment, Role, Constraint, and Basin geometry into the final stabilized interpretive structure. Meaning is an **emergent property** of this integration — not “emergent” in the philosophical sense of being special or mysterious, but emergent in the scientific sense that it is **constructed**, **not pre‑stored**, and **unique to the utterance**. Meaning is the interpretive structure that *arises* when all prior geometries align without contradiction.
 
-Meaning geometry records this final interpretive structure: the specific referent, the specific event or state, the assertion made about it, and the truth‑relation IdOB resolves.
+Meaning geometry records this final structure: the specific referent, the specific event or state, the assertion made about it, and the truth‑relation IdOB resolves. This structure is **not predefined** or “canned”; it is the objective interpretive packet that simply **Is** once IdOB completes its mapping.
 
 **Examples:**  
 - “the red car is broken” → meaning = a specific car + a specific state + a coherent assertion  
