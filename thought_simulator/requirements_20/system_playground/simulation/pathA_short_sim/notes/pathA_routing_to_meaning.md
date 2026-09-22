@@ -87,7 +87,6 @@ Role geometry describes how segments participate in these roles and how the role
 
 ---
 
-# **Revised Constraint geometry (CnOB)**  
 #### **Constraint geometry (CnOB)**  
 A **constraint** is a coherence rule that determines whether segments and roles can be integrated into a stable referent–event structure. Segment geometry forms specific referent/event units, and Role geometry assigns communicative functions to them — but these units do not automatically yield an interpretable utterance. Constraint geometry checks the familiar grammatical, logical, and attachment rules that allow segments and roles to form a **coherent structure** that can support IdOB’s meaning mapping.
 
