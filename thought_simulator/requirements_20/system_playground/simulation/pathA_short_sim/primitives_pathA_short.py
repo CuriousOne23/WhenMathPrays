@@ -105,7 +105,7 @@ def _extract_segments(tokens: List[str]) -> Dict[str, Any]:
     segment_patterns = load_segment_patterns()
 
     classes = [token_classes_map.get(tok, "UNK") for tok in tokens]
-    segments: List[str] = []
+    struct_segments: List[str] = []
     segment_tokens: List[List[str]] = []
 
     i = 0
@@ -117,7 +117,7 @@ def _extract_segments(tokens: List[str]) -> Dict[str, Any]:
         np_pattern = segment_patterns.get("NP", [])
         np_len = _match_np_with_pattern(classes, i, np_pattern)
         if np_len > 0:
-            segments.append("NP")
+            struct_segments.append("NP")
             segment_tokens.append(tokens[i:i + np_len])
             i += np_len
             continue
@@ -128,7 +128,7 @@ def _extract_segments(tokens: List[str]) -> Dict[str, Any]:
                 continue
             plen = len(pattern)
             if classes[i:i + plen] == pattern:
-                segments.append(seg_name)
+                struct_segments.append(seg_name)
                 segment_tokens.append(tokens[i:i + plen])
                 i += plen
                 matched = True
@@ -139,7 +139,7 @@ def _extract_segments(tokens: List[str]) -> Dict[str, Any]:
         i += 1
 
     return {
-        "segments": segments,
+        "struct_segments": struct_segments,
         "segment_tokens": segment_tokens,
     }
 
@@ -147,21 +147,21 @@ def _extract_segments(tokens: List[str]) -> Dict[str, Any]:
 def _simple_segments(tokens: List[str]) -> List[str]:
     # Very coarse: DET/ADJ/NOUN → NP, VERB → VP, PREP → PP
     # This is just to give you a feel; you can refine later.
-    segments = []
+    struct_segments = []
     has_verb = any(t.endswith("s") for t in tokens)  # crude verb heuristic
     if has_verb:
-        segments = ["NP", "VP"]
+        struct_segments = ["NP", "VP"]
         if "over" in tokens or "under" in tokens or "on" in tokens:
-            segments.append("PP")
-            segments.append("NP")
+            struct_segments.append("PP")
+            struct_segments.append("NP")
     else:
-        segments = ["NP"]
-    return segments
+        struct_segments = ["NP"]
+    return struct_segments
 
 
-def _simple_roles(segments: List[str]) -> List[str]:
+def _simple_roles(struct_segments: List[str]) -> List[str]:
     roles = []
-    for seg in segments:
+    for seg in struct_segments:
         if seg == "NP" and not roles:
             roles.append("agent")
         elif seg == "VP":
@@ -406,7 +406,7 @@ def _adapter_segments_from_committed(committed_stream: Dict[str, Any]) -> Dict[s
         segment_tokens.extend(split["chunks"])
 
     return {
-        "segments": struct_segments,
+        "struct_segments": struct_segments,
         "segment_tokens": segment_tokens,
         "legacy_fallback_used": False,
     }
@@ -554,7 +554,7 @@ def SOB(tp: TP) -> TP:
         extracted = _extract_segments(tp.tokens)
         _record_bridge(tp, "SOB", committed_adapter_used=False, legacy_fallback_used=True, detail="committed segments unavailable; legacy segment extractor used")
 
-    tp.struct_segments = extracted["segments"]
+    tp.struct_segments = extracted["struct_segments"]
     tp.segment_tokens = extracted["segment_tokens"]
     return tp
 
@@ -586,13 +586,13 @@ def SROB(tp: TP) -> TP:
 
 
 def CnOB(tp: TP) -> TP:
-    matched, unmatched, residue = check_constraints(tp.struct_roles)
+    constraints_matched, constraints_unmatched, constraint_residue = check_constraints(tp.struct_roles)
 
     def _add_match(name: str) -> None:
-        if name not in matched:
-            matched.append(name)
-        if name in residue:
-            residue.remove(name)
+        if name not in constraints_matched:
+            constraints_matched.append(name)
+        if name in constraint_residue:
+            constraint_residue.remove(name)
 
     def _ordered_transition(from_role: str, to_role: str) -> bool:
         from_indices = [i for i, r in enumerate(tp.struct_roles) if r == from_role]
@@ -600,24 +600,24 @@ def CnOB(tp: TP) -> TP:
         return any(i < j for i in from_indices for j in to_indices)
 
     # Copular link is a structural state transition cue, not a role-pair literal.
-    if "CP" in tp.struct_segments and "theme-state" in matched and "copular_state_link" not in matched:
+    if "CP" in tp.struct_segments and "theme-state" in constraints_matched and "copular_state_link" not in constraints_matched:
         _add_match("copular_state_link")
 
-    if "ST" in tp.struct_segments and "theme-state" not in matched:
+    if "ST" in tp.struct_segments and "theme-state" not in constraints_matched:
         if "theme" in tp.struct_roles and "state" in tp.struct_roles:
             _add_match("theme-state")
 
-    if "LOC" in tp.struct_segments and "state-location" in matched and "locative_link" not in matched:
+    if "LOC" in tp.struct_segments and "state-location" in constraints_matched and "locative_link" not in constraints_matched:
         _add_match("locative_link")
 
     # Interrogative transitions: WH-led and yes/no auxiliary-led question forms.
-    if "WQ" in tp.struct_segments and "IQ" in tp.struct_segments and "query-focus-predicate" not in matched:
+    if "WQ" in tp.struct_segments and "IQ" in tp.struct_segments and "query-focus-predicate" not in constraints_matched:
         _add_match("query-focus-predicate")
 
-    if tp.raw_text.strip().endswith("?") and tp.struct_segments[:1] == ["IQ"] and "query-focus-predicate" not in matched:
+    if tp.raw_text.strip().endswith("?") and tp.struct_segments[:1] == ["IQ"] and "query-focus-predicate" not in constraints_matched:
         _add_match("query-focus-predicate")
 
-    if "predicate-theme" not in matched and "predicate" in tp.struct_roles and "theme" in tp.struct_roles:
+    if "predicate-theme" not in constraints_matched and "predicate" in tp.struct_roles and "theme" in tp.struct_roles:
         p_i = tp.struct_roles.index("predicate")
         t_i = tp.struct_roles.index("theme")
         if p_i < t_i:
@@ -631,19 +631,19 @@ def CnOB(tp: TP) -> TP:
     if _ordered_transition("state", "location"):
         _add_match("state-location")
 
-    tp.constraints_matched = matched
-    tp.constraints_unmatched = unmatched
-    tp.constraint_residue = residue
+    tp.constraints_matched = constraints_matched
+    tp.constraints_unmatched = constraints_unmatched
+    tp.constraint_residue = constraint_residue
 
-    tp.constraints = matched
+    tp.constraints = constraints_matched
     if not hasattr(tp, "trace"):
         tp.trace = []
     tp.trace.append({
         "primitive": "CnOB",
         "notes": "[OB-Set]",
-        "matched": matched,
-        "unmatched": unmatched,
-        "residue": residue,
+        "matched": constraints_matched,
+        "unmatched": constraints_unmatched,
+        "residue": constraint_residue,
         "token_relations": {
             "agent-action": (
                 " ".join(tp.role_segments.get("agent", [])),
@@ -675,55 +675,55 @@ def CnOB(tp: TP) -> TP:
 
 
 def SmOB(tp: TP) -> TP:
-    ops, cues, residue = apply_smoothing(tp.segment_tokens, tp.struct_roles)
+    smoothing_operations, semantic_adjacent_cues, smoothing_residue = apply_smoothing(tp.segment_tokens, tp.struct_roles)
 
     if "CP" in tp.struct_segments and "theme-state" in tp.constraints_matched:
-        if "copular_state_link" not in cues:
-            cues.append("copular_state_link")
-        if "smooth:copular_state_link" not in ops:
-            ops.append("smooth:copular_state_link")
-        if "no_relation_cues" in residue:
-            residue = [r for r in residue if r != "no_relation_cues"]
+        if "copular_state_link" not in semantic_adjacent_cues:
+            semantic_adjacent_cues.append("copular_state_link")
+        if "smooth:copular_state_link" not in smoothing_operations:
+            smoothing_operations.append("smooth:copular_state_link")
+        if "no_relation_cues" in smoothing_residue:
+            smoothing_residue = [r for r in smoothing_residue if r != "no_relation_cues"]
 
     if "LOC" in tp.struct_segments and "state-location" in tp.constraints_matched:
-        if "locative_link" not in cues:
-            cues.append("locative_link")
-        if "smooth:locative_link" not in ops:
-            ops.append("smooth:locative_link")
-        if "no_relation_cues" in residue:
-            residue = [r for r in residue if r != "no_relation_cues"]
+        if "locative_link" not in semantic_adjacent_cues:
+            semantic_adjacent_cues.append("locative_link")
+        if "smooth:locative_link" not in smoothing_operations:
+            smoothing_operations.append("smooth:locative_link")
+        if "no_relation_cues" in smoothing_residue:
+            smoothing_residue = [r for r in smoothing_residue if r != "no_relation_cues"]
 
     if "query-focus-predicate" in tp.constraints_matched or tp.raw_text.strip().endswith("?"):
-        if "interrogative_scope" not in cues:
-            cues.append("interrogative_scope")
-        if "smooth:interrogative_scope" not in ops:
-            ops.append("smooth:interrogative_scope")
-        if "no_relation_cues" in residue:
-            residue = [r for r in residue if r != "no_relation_cues"]
+        if "interrogative_scope" not in semantic_adjacent_cues:
+            semantic_adjacent_cues.append("interrogative_scope")
+        if "smooth:interrogative_scope" not in smoothing_operations:
+            smoothing_operations.append("smooth:interrogative_scope")
+        if "no_relation_cues" in smoothing_residue:
+            smoothing_residue = [r for r in smoothing_residue if r != "no_relation_cues"]
 
     # Nested interrogative smoothing cues.
     is_nested = "RELC" in tp.struct_segments or (
         "relation" in tp.struct_roles and ("state" in tp.struct_roles or "location" in tp.struct_roles)
     )
     if is_nested:
-        if "modifier_chain" not in cues:
-            cues.append("modifier_chain")
-        if "smooth:modifier_chain" not in ops:
-            ops.append("smooth:modifier_chain")
+        if "modifier_chain" not in semantic_adjacent_cues:
+            semantic_adjacent_cues.append("modifier_chain")
+        if "smooth:modifier_chain" not in smoothing_operations:
+            smoothing_operations.append("smooth:modifier_chain")
     if is_nested and "location" in tp.struct_roles:
-        if "nested_locative_link" not in cues:
-            cues.append("nested_locative_link")
-        if "smooth:nested_locative_link" not in ops:
-            ops.append("smooth:nested_locative_link")
+        if "nested_locative_link" not in semantic_adjacent_cues:
+            semantic_adjacent_cues.append("nested_locative_link")
+        if "smooth:nested_locative_link" not in smoothing_operations:
+            smoothing_operations.append("smooth:nested_locative_link")
     if is_nested and "state" in tp.struct_roles:
-        if "nested_state_link" not in cues:
-            cues.append("nested_state_link")
-        if "smooth:nested_state_link" not in ops:
-            ops.append("smooth:nested_state_link")
+        if "nested_state_link" not in semantic_adjacent_cues:
+            semantic_adjacent_cues.append("nested_state_link")
+        if "smooth:nested_state_link" not in smoothing_operations:
+            smoothing_operations.append("smooth:nested_state_link")
 
-    tp.smoothing_operations = ops
-    tp.semantic_adjacent_cues = cues
-    tp.smoothing_residue = residue
+    tp.smoothing_operations = smoothing_operations
+    tp.semantic_adjacent_cues = semantic_adjacent_cues
+    tp.smoothing_residue = smoothing_residue
 
     tp.smoothed_geometry = True
     if not hasattr(tp, "trace"):
@@ -731,9 +731,9 @@ def SmOB(tp: TP) -> TP:
     tp.trace.append({
         "primitive": "SmOB",
         "notes": "[OB-Set]",
-        "operations": ops,
-        "semantic_adjacent_cues": cues,
-        "residue": residue,
+        "operations": smoothing_operations,
+        "semantic_adjacent_cues": semantic_adjacent_cues,
+        "residue": smoothing_residue,
         "token_relations": {
             "agent->action": (
                 " ".join(tp.role_segments.get("agent", [])),
