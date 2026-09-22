@@ -342,7 +342,6 @@ $$
 $$
 
 
-
 TS can:
 
 - treat each primitive’s geometry as an independent axis,
@@ -350,6 +349,20 @@ TS can:
 - maintain replay determinism and window invariance.
 
 This is why **structural independence** is key to TS.
+
+### 8.3. Windowing choice (rectangular window)
+
+Per the TS mapping simulation test  
+(see: thought_simulator/requirements_20/system_simulation/manifold/ts_mapping_simulation_test.md),  
+the **rectangular window** was empirically validated as the correct windowing function for TS.
+
+- It preserves **window independence**.
+- It introduces **no tapering leakage**.
+- It maintains **stable manifold placement**.
+- It keeps **neighborhood consistency** intact.
+- It avoids curvature distortion seen in Hanning and Gaussian windows.
+
+Therefore, TSMeaningRoute(U) uses a **non‑overlapping rectangular window** W(⋅, t) of fixed length.
 
 ---
 
