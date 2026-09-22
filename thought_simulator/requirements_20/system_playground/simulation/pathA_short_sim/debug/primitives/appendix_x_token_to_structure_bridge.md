@@ -31,8 +31,8 @@ Pipeline:
 Tokens
  → SOB (segments)
  → SROB (roles)
- → CnOB (constraints + residue)
- → SmOB (semantic-adjacent cues + basin smoothing)
+ → CnOB (constraints + constraint_residue)
+ → SmOB (semantic_adjacent_cues + basin smoothing)
  → IdOB (identity formation)
 ```
 
@@ -133,9 +133,9 @@ SROB’s structural function:
 
 CnOB checks whether segment + role combinations satisfy structural rules.
 
-Example [residue]:
+Example [constraint_residue](../fields/constraint_residue.md):
 ```
-residue = ['interrogative_scope', 'locative_adjacent']
+constraint_residue = ['interrogative_scope', 'locative_adjacent']
 ```
 
 ### Token intuition
@@ -150,24 +150,25 @@ CnOB sees:
 
 CnOB’s structural function:
 - **[match constraints](../fields/constraints_matched.md)**  
-- **[produce constraint residue](../fields/residue.md)**  
+- **[track unmatched constraints](../fields/constraints_unmatched.md)**  
+- **[produce constraint_residue](../fields/constraint_residue.md)**  
 - **produce ob_set_notes**  
 
 ---
 
 # **5. SmOB — From Constraints → Basin Stabilization**
 
-SmOB receives residue from CnOB and performs:
+SmOB receives constraint_residue from CnOB and performs:
 
-- semantic‑adjacent cue extraction  
+- semantic_adjacent_cues extraction  
 - basin‑level smoothing  
 - deterministic pre‑semantic compression  
 
 Example:
 ```
 smoothing_operations: ['adjacency_smoothing'](../fields/smoothing_operations.md)
-semantic_adjacent_cues: ['interrogative_scope', 'state_adjacent'](../fields/semantic_adjacent_cues.md) 
-smoothing_residue: []
+semantic_adjacent_cues: ['interrogative_scope', 'locative_adjacent'](../fields/semantic_adjacent_cues.md) 
+basin_residue: []
 ```
 
 ### Token intuition
@@ -179,13 +180,13 @@ You see:
 ### Structured world
 SmOB sees:
 - interrogative_scope adjacency  
-- state adjacency  
-- no leftover residue  
+- locative adjacency  
+- no leftover basin_residue  
 
 SmOB’s structural function:
-- **[extract semantic‑adjacent cues](../fields/semantic_adjacent_cues.md)**  
+- **[extract semantic_adjacent_cues](../fields/semantic_adjacent_cues.md)**  
 - **[perform basin smoothing](../fields/smoothing_operations.md)**  
-- **[produce SmOB smoothing_residue](../fields/smob_smoothing_residue.md)**  
+- **[produce basin_residue](../fields/basin_residue.md)**  
 - **produce ob_set_notes**  
 
 ---
@@ -194,10 +195,10 @@ SmOB’s structural function:
 
 IdOB forms:
 
-- semantic_core  
-- truth_relation  
-- identity_geometry  
-- [identitiy_packet](../fields/idob_packet.md)
+- [semantic_core](../dimensions/semantic_core.md)  
+- [truth_relation](../dimensions/truth_relation.md)  
+- [identity_geometry](../dimensions/identity_geometry.md)  
+- [idob_packet](../fields/idob_packet.md)
 
 Example:
 ```
@@ -231,8 +232,8 @@ IdOB’s structural function:
 |-------|------------|-----------------|------------------|
 | SOB | “Where / the book / on the table” | WQ, NP, LOC segments | segments, segment_tokens |
 | SROB | “question / entity / modifier” | interrogative_head, entity, locative_modifier | roles |
-| CnOB | “question applies to clause” | interrogative_scope residue | constraints_matched, residue |
-| SmOB | “semantic adjacency” | semantic_adjacent_cues | smoothing_operations, smoothing_residue |
+| CnOB | “question applies to clause” | interrogative_scope constraint_residue | constraints_matched, constraints_unmatched, constraint_residue |
+| SmOB | “semantic adjacency” | semantic_adjacent_cues | smoothing_operations, basin_residue |
 | IdOB | “identity of the question” | referential_identity | identity_geometry, semantic_core |
 
 This table is the **core bridge** between intuition and structure.
@@ -259,7 +260,7 @@ NP → entity
 ```
 
 ### **8.3 CnOB Example**
-Residue:
+constraint_residue:
 ```
 ['interrogative_scope']
 ```
@@ -268,7 +269,7 @@ Residue:
 Basin:
 ```
 semantic_adjacent_cues: ['interrogative_scope']
-smoothing_residue: []
+basin_residue: []
 ```
 
 ### **8.5 IdOB Example**
@@ -291,7 +292,7 @@ Functional assignments created by SROB.
 ### **constraints_matched**
 Structural rules satisfied by CnOB.
 
-### **residue**
+### **constraint_residue**
 Leftover structural material from CnOB.
 
 ### **semantic_adjacent_cues**
@@ -300,7 +301,7 @@ Pre‑semantic signals extracted by SmOB.
 ### **smoothing_operations**
 Basin‑level stabilization actions.
 
-### **smoothing_residue**
+### **basin_residue**
 Leftover basin material after SmOB smoothing.
 
 ### **semantic_core**
