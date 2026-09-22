@@ -12,11 +12,17 @@ dimensions:
 
 fields:
   struct_segments: "debug/fields/struct_segments.md"
+  segment_tokens: "debug/fields/struct_segments.md"
   struct_roles: "debug/fields/struct_roles.md"
   constraints_matched: "debug/fields/constraints_matched.md"
+  constraints_unmatched: "debug/fields/constraints_matched.md"
+  constraint_residue: "debug/fields/residue.md"
+  smoothing_operations: "debug/fields/smoothing_operations.md"
   semantic_adjacent_cues: "debug/fields/semantic_adjacent_cues.md"
+  basin_residue: "debug/fields/smob_smoothing_residue.md"
+  truth_relation: "debug/fields/idob_packet.md"
+  semantic_core: "debug/fields/idob_packet.md"
   idob_packet: "debug/fields/idob_packet.md"
-  residue: "debug/fields/residue.md"
 
 primitives:
   SOB: "debug/primitives/SOB.md"

@@ -199,16 +199,16 @@ def _normalize_ob_set_notes(notes: List[Any]) -> List[str]:
             if part.startswith("Segments:"):
                 payload = _extract_literal_or_text(part, "Segments:")
                 if isinstance(payload, list):
-                    normalized.append(f"OB-Set: Segments = {', '.join(str(v) for v in payload)}")
+                    normalized.append(f"OB-Set: struct_segments = {', '.join(str(v) for v in payload)}")
                 else:
-                    normalized.append(f"OB-Set: Segments = {_render_scalar(payload)}")
+                    normalized.append(f"OB-Set: struct_segments = {_render_scalar(payload)}")
             elif part.startswith("Segment tokens:"):
                 payload = _extract_literal_or_text(part, "Segment tokens:")
                 if isinstance(payload, list):
                     groups = [str(group) for group in payload]
-                    normalized.append(f"OB-Set: Segment tokens = {' | '.join(groups)}")
+                    normalized.append(f"OB-Set: segment_tokens = {' | '.join(groups)}")
                 else:
-                    normalized.append(f"OB-Set: Segment tokens = {_render_scalar(payload)}")
+                    normalized.append(f"OB-Set: segment_tokens = {_render_scalar(payload)}")
             else:
                 normalized.append(f"OB-Set: {part}")
     return normalized
@@ -506,16 +506,22 @@ def generate_output(
     }
     field_definitions = {
         "struct_segments": "The segments detected during structural parsing.",
+        "segment_tokens": "Token groups attached to each structural segment.",
         "struct_roles": "The roles assigned to each segment.",
         "constraints_matched": "Constraints successfully satisfied.",
+        "constraints_unmatched": "Constraints that remained unsatisfied.",
+        "constraint_residue": "Residual mismatch material from CnOB.",
+        "smoothing_operations": "Smoothing transforms applied by SmOB.",
         "semantic_adjacent_cues": "Semantic cues adjacent to structural elements.",
+        "basin_residue": "Residual unresolved basin-level material from SmOB.",
+        "truth_relation": "Truth relation selected for meaning resolution.",
+        "semantic_core": "Identity-conditioned semantic bundle emitted by IdOB.",
         "idob_packet": "The identity packet produced by IdOB.",
-        "residue": "Unmatched or leftover structural/semantic material.",
     }
     primitive_definitions = {
         "SOB": "Performs structural segmentation.",
         "SROB": "Assigns roles to segments.",
-        "CnOB": "Matches constraints and produces residue.",
+        "CnOB": "Matches constraints and emits canonical constraint fields.",
         "SmOB": "Applies smoothing and adjacency resolution.",
         "IdOB": "Builds the identity packet and semantic core.",
     }
@@ -564,11 +570,11 @@ def generate_output(
     for block in interpreted_blocks:
         primitive = block.get("primitive")
         lines.append(f"### {primitive}")
-        _append_list_block(lines, "segments", block.get("segments", []))
+        _append_list_block(lines, "struct_segments", block.get("segments", []))
         lines.append("")
         _append_list_block(lines, "segment_tokens", block.get("segment_tokens", []))
         lines.append("")
-        _append_list_block(lines, "roles", block.get("roles", []))
+        _append_list_block(lines, "struct_roles", block.get("roles", []))
         lines.append("")
         _append_list_block(
             lines, "constraints_matched", block.get("constraints_matched", [])
