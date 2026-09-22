@@ -4,9 +4,7 @@
 - [segment_geometry:](debug/dimensions/segment_geometry.md) How the simulator divides an utterance into structural segments.
 - [role_geometry:](debug/dimensions/role_geometry.md) How functional roles attach to segments.
 - [constraint_geometry:](debug/dimensions/constraint_geometry.md) How structural and semantic constraints are evaluated.
-- [smoothing_geometry:]() How smoothing operations resolve ambiguity and adjacency.
 - [identity_geometry:](debug/dimensions/identity_geometry.md) How identity and referential structure propagate.
-- [meaning_geometry:]() How semantic cues and meaning structures propagate.
 
 ## Fields
 - [struct_segments:](debug/fields/struct_segments.md) The segments detected during structural parsing.
@@ -39,6 +37,14 @@
 
 ## Stage Interpretations
 ### SOB
+- tokens:
+  - why
+  - is
+  - the
+  - sky
+  - blue
+  - ?
+
 - struct_segments:
   - WQ
   - IQ
@@ -49,251 +55,78 @@
   - ['is']
   - ['the', 'sky', 'blue']
 
-- struct_roles:
-  - []
-
-- constraints_matched:
-  - []
-
-- constraints_unmatched:
-  - []
-
-- constraint_residue:
-  - []
-
-- basin_residue:
-  - []
-
-- smoothing_operations:
-  - []
-
-- semantic_adjacent_cues:
-  - []
-
-- semantic_core:
-  - {}
-
-- token_relations:
-  - []
-
-- ob_set_notes:
-  - OB-Set: struct_segments = WQ, IQ, NP
-  - OB-Set: segment_tokens = ['why'] | ['is'] | ['the', 'sky', 'blue']
 
 See: [SOB](debug/primitives/SOB.md)
 
 ### SROB
-- struct_segments:
-  - []
-
-- segment_tokens:
-  - []
-
 - struct_roles:
   - none
   - none
   - none
 
-- constraints_matched:
-  - []
-
-- constraints_unmatched:
-  - []
-
-- constraint_residue:
-  - []
-
-- basin_residue:
-  - []
-
-- smoothing_operations:
-  - []
-
-- semantic_adjacent_cues:
-  - []
-
-- semantic_core:
-  - {}
-
-- token_relations:
-  - []
-
-- ob_set_notes:
-  - OB-Set: Roles: ['none', 'none', 'none']
-  - OB-Set: Role segments: {}
 
 See: [SROB](debug/primitives/SROB.md)
 
 ### CnOB
-- struct_segments:
-  - []
-
-- segment_tokens:
-  - []
-
-- struct_roles:
-  - []
-
 - constraints_matched:
-  - query-focus-predicate
-  - query-focus-predicate
+  - structural_rule
+  - adjacency_rule
+  - structural_rule
+  - adjacency_rule
 
 - constraints_unmatched:
-  - none-none
-  - none-none
-  - none-none
-  - none-none
+  - compatibility_rule
+  - continuity_rule
+  - compatibility_rule
+  - continuity_rule
 
 - constraint_residue:
-  - locative_link
-  - state-location
-  - action-relation
-  - relation-patient
-  - agent-action
-  - predicate-theme
-  - theme-state
-  - relation-theme
-  - copular_state_link
-  - locative_link
-  - state-location
-  - action-relation
-  - relation-patient
-  - agent-action
-  - predicate-theme
-  - theme-state
-  - relation-theme
-  - copular_state_link
+  - interrogative_scope
+  - interrogative_scope
 
-- basin_residue:
-  - []
-
-- smoothing_operations:
-  - []
-
-- semantic_adjacent_cues:
-  - []
-
-- semantic_core:
-  - {}
-
-- token_relations:
-  - []
-
-- ob_set_notes:
-  - OB-Set: constraints_matched=['query-focus-predicate']
-  - OB-Set: constraints_unmatched=['none-none', 'none-none']
-  - OB-Set: constraint_residue=['locative_link', 'state-location', 'action-relation', 'relation-patient', 'agent-action', 'predicate-theme', 'theme-state', 'relation-theme', 'copular_state_link']
 
 See: [CnOB](debug/primitives/CnOB.md)
 
 ### SmOB
-- struct_segments:
-  - []
-
-- segment_tokens:
-  - []
-
-- struct_roles:
-  - []
-
-- constraints_matched:
-  - []
-
-- constraints_unmatched:
-  - []
-
-- constraint_residue:
-  - []
-
-- basin_residue:
-  - []
-
 - smoothing_operations:
-  - smooth:none->none
-  - smooth:none->none
-  - smooth:interrogative_scope
-  - smooth:none->none
-  - smooth:none->none
-  - smooth:interrogative_scope
+  - adjacency_smoothing
+  - role_smoothing
+  - segment_smoothing
+  - continuity_smoothing
+  - adjacency_smoothing
+  - role_smoothing
+  - segment_smoothing
+  - continuity_smoothing
 
 - semantic_adjacent_cues:
   - interrogative_scope
   - interrogative_scope
 
-- semantic_core:
-  truth_relation: interrogative_open
-
-- token_relations:
+- basin_residue:
   - []
 
-- ob_set_notes:
-  - OB-Set: smoothing_operations=['smooth:none->none', 'smooth:none->none', 'smooth:interrogative_scope']
-  - OB-Set: semantic_adjacent_cues=['interrogative_scope']
-  - OB-Set: basin_residue=[]
-  - OB-Set: (no details)
 
 See: [SmOB](debug/primitives/SmOB.md)
 
 ### IdOB
-- struct_segments:
-  - []
+- idob_packet:
+  identity_geometry: referential_identity
+  truth_relation: interrogative
+  semantic_core:
+    - entity
 
-- segment_tokens:
-  - []
-
-- struct_roles:
-  - []
-
-- constraints_matched:
-  - []
-
-- constraints_unmatched:
-  - []
-
-- constraint_residue:
-  - []
-
-- basin_residue:
-  - []
-
-- smoothing_operations:
-  - []
-
-- semantic_adjacent_cues:
-  - []
-
-- semantic_core:
-  selected_ops:
-    - query_resolution
-    - interrogative_identity_request
-    - modifier_resolution
-  query_focus: 
-  predicate: 
-  theme: 
-  relation_modifiers: 
-  complement: 
-  agent: 
-  state: 
-  location: 
-  action: 
-  patient: 
-  modifiers:
-    - []
-
-- token_relations:
-  - []
-
-- ob_set_notes:
-  - []
 
 See: [IdOB](debug/primitives/IdOB.md)
 
 ## Meaning Bundle Summary
-- truth_relation: interrogative_open
+- truth_relation: interrogative
 - semantic_adjacent_cues:
   - interrogative_scope
   - interrogative_scope
-- selected_ops:
-  - query_resolution
-  - interrogative_identity_request
-  - modifier_resolution
+- semantic_core:
+  - entity
+- idob_packet:
+  identity_geometry: referential_identity
+  truth_relation: interrogative
+  semantic_core:
+    - entity

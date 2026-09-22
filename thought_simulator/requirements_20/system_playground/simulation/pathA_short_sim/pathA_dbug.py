@@ -213,8 +213,14 @@ def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
 
     blocks: List[Dict[str, Any]] = []
     current_block: Dict[str, Any] | None = None
+    raw_tokens: List[Any] = []
 
     for line in run_log_lines:
+        if not raw_tokens:
+            extracted_tokens = _extract_literal_or_text(line, "tokens:")
+            if isinstance(extracted_tokens, list):
+                raw_tokens = extracted_tokens
+
         matched_primitive = None
         for header, primitive_name in primitive_headers:
             if header in line:
@@ -233,7 +239,7 @@ def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
     if current_block is not None:
         blocks.append(current_block)
 
-    return {"blocks": blocks}
+    return {"blocks": blocks, "raw_tokens": raw_tokens}
 
 
 def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
@@ -302,10 +308,6 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         if extracted is not None:
             _merge_list(semantic_adjacent_cues, extracted, dedup=False)
 
-        extracted = _extract_literal_or_text(line, "Semantic core:")
-        if isinstance(extracted, dict):
-            semantic_core.update(extracted)
-
         extracted = _extract_literal_or_text(line, "semantic_core=")
         if isinstance(extracted, list):
             semantic_core["values"] = extracted
@@ -315,6 +317,11 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         extracted = _extract_literal_or_text(line, "idob_packet=")
         if isinstance(extracted, dict):
             idob_packet.update(extracted)
+            if isinstance(idob_packet.get("semantic_core"), list):
+                semantic_core = {"values": idob_packet["semantic_core"]}
+            truth_from_packet = idob_packet.get("truth_relation")
+            if truth_from_packet not in (None, ""):
+                truth_relation = _render_scalar(truth_from_packet)
 
         extracted_truth = _extract_literal_or_text(line, "Truth relation:")
         if extracted_truth not in (None, ""):
@@ -466,6 +473,7 @@ def generate_output(
     field_explanations: Dict[str, Any],
     primitive_explanations: Dict[str, Any],
     interpreted_blocks: List[Dict[str, Any]],
+    raw_tokens: List[Any],
     debug_setup: Dict[str, Any],
 ) -> str:
     """Generate final output text from assembled explanation data."""
@@ -504,8 +512,18 @@ def generate_output(
     lines.append("")
 
     lines.append("## Dimensions")
+    canonical_dimensions = {
+        "segment_geometry",
+        "role_geometry",
+        "constraint_geometry",
+        "identity_geometry",
+        "semantic_core",
+        "truth_relation",
+    }
     for item in dimensions_explanations.get("dimensions", []):
         name = item.get("name")
+        if name not in canonical_dimensions:
+            continue
         relative_path = item.get("link")
         definition = dimension_definitions.get(name, "")
         lines.append(f"- [{name}:]({relative_path}) {definition}")
@@ -546,7 +564,7 @@ def generate_output(
         "SROB": ["struct_roles"],
         "CnOB": ["constraints_matched", "constraints_unmatched", "constraint_residue"],
         "SmOB": ["smoothing_operations", "semantic_adjacent_cues", "basin_residue"],
-        "IdOB": ["idob_packet", "semantic_core", "truth_relation"],
+        "IdOB": ["idob_packet"],
     }
 
     field_value_lookup = {
@@ -567,6 +585,9 @@ def generate_output(
     for block in interpreted_blocks:
         primitive = block.get("primitive")
         lines.append(f"### {primitive}")
+        if primitive == "SOB":
+            _append_list_block(lines, "tokens", raw_tokens)
+            lines.append("")
         for field_name in primitive_output_fields.get(str(primitive), []):
             data_key = field_value_lookup[field_name]
             value = block.get(data_key)
@@ -585,20 +606,18 @@ def generate_output(
 
     smob_block = next((b for b in interpreted_blocks if b.get("primitive") == "SmOB"), {})
     idob_block = next((b for b in interpreted_blocks if b.get("primitive") == "IdOB"), {})
-    idob_semantic_core = idob_block.get("semantic_core", {})
+    idob_packet = idob_block.get("idob_packet", {})
 
     lines.append("## Meaning Bundle Summary")
-    lines.append(f"- truth_relation: {idob_block.get('truth_relation', '')}")
+    lines.append(f"- truth_relation: {_render_scalar(idob_packet.get('truth_relation', ''))}")
     _append_list_block(
         lines,
         "semantic_adjacent_cues",
         smob_block.get("semantic_adjacent_cues", []),
     )
-    if isinstance(idob_semantic_core, dict):
-        _append_dict_block(lines, "semantic_core", idob_semantic_core)
-    else:
-        _append_list_block(lines, "semantic_core", idob_semantic_core if isinstance(idob_semantic_core, list) else [])
-    _append_dict_block(lines, "idob_packet", idob_block.get("idob_packet", {}))
+    semantic_core_values = idob_packet.get("semantic_core", [])
+    _append_list_block(lines, "semantic_core", semantic_core_values if isinstance(semantic_core_values, list) else [])
+    _append_dict_block(lines, "idob_packet", idob_packet if isinstance(idob_packet, dict) else {})
 
     return "\n".join(lines)
 
@@ -654,6 +673,7 @@ def main() -> None:
             field_explanations,
             primitive_explanations,
             interpreted_blocks,
+            parsed_log.get("raw_tokens", []),
             debug_setup,
         )
         write_debug_output(output_text, Path(args.base_dir))
