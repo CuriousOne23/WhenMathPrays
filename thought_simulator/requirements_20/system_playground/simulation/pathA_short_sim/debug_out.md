@@ -46,23 +46,17 @@
   - ?
 
 - struct_segments:
-  - WQ
-  - IQ
-  - NP
+  - []
 
 - segment_tokens:
-  - ['why']
-  - ['is']
-  - ['the', 'sky', 'blue']
+  - []
 
 
 See: [SOB](debug/primitives/SOB.md)
 
 ### SROB
 - struct_roles:
-  - none
-  - none
-  - none
+  - []
 
 
 See: [SROB](debug/primitives/SROB.md)
@@ -71,17 +65,12 @@ See: [SROB](debug/primitives/SROB.md)
 - constraints_matched:
   - structural_rule
   - adjacency_rule
-  - structural_rule
-  - adjacency_rule
 
 - constraints_unmatched:
   - compatibility_rule
   - continuity_rule
-  - compatibility_rule
-  - continuity_rule
 
 - constraint_residue:
-  - interrogative_scope
   - interrogative_scope
 
 
@@ -93,13 +82,8 @@ See: [CnOB](debug/primitives/CnOB.md)
   - role_smoothing
   - segment_smoothing
   - continuity_smoothing
-  - adjacency_smoothing
-  - role_smoothing
-  - segment_smoothing
-  - continuity_smoothing
 
 - semantic_adjacent_cues:
-  - interrogative_scope
   - interrogative_scope
 
 - basin_residue:
@@ -121,7 +105,6 @@ See: [IdOB](debug/primitives/IdOB.md)
 ## Meaning Bundle Summary
 - truth_relation: interrogative
 - semantic_adjacent_cues:
-  - interrogative_scope
   - interrogative_scope
 - semantic_core:
   - entity

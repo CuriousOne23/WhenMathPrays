@@ -260,15 +260,6 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     idob_packet: Dict[str, Any] = {}
 
     for line in raw_lines:
-        stripped = line.strip()
-        # Ignore legacy per-primitive echo metadata and notes payloads.
-        if stripped.startswith("notes:"):
-            continue
-        if stripped.startswith("bridge_trace:"):
-            continue
-        if stripped.startswith("token_relations:"):
-            continue
-
         extracted = _extract_literal_or_text(line, "Segments:")
         if extracted is not None:
             _merge_list(segments, extracted, dedup=False)
