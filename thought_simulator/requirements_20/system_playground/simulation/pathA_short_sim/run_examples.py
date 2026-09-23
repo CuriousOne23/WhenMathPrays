@@ -108,7 +108,9 @@ def main() -> None:
     # PA-CSE-004 / locative
     # sentence = "The rain stays in the plain."
     # PA-CSE-007 / interrogative
-    sentence = "Is the book on the table?"
+    # sentence = "Is the book on the table?"
+    # PA-CSE-010 / mixed_inter
+    sentence = "Where is the book that is on the table?"
     simulation_result = run_pathA_short(sentence)
     final_tp = simulation_result["final_tp"]
 
