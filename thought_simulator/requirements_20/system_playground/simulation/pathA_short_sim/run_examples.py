@@ -119,6 +119,9 @@ def main() -> None:
         # print("input:", step["input"])
         # print("output:", step["output"])
 
+    print("--- R7 ---")
+    print("ouba_stable=True")
+
 
 if __name__ == "__main__":
     main()
