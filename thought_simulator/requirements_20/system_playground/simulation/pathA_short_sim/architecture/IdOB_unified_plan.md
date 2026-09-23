@@ -3,8 +3,8 @@
 ### Path-A short simulator
 ### 2026-09-23
 
-Status: consolidated review draft. Not landed.
-Scope: short sim only. MCB omitted.
+Status: consolidated plan. R1–R3 and D1–D3 landed. R4a catalog next.
+Scope: short sim only. MCB omitted (R5).
 Construct: **IdOB space $\mathcal{I}$ is a frozen registry of IdOBObjects;
 IdOB is the deterministic overlap-sum of their contributions;
 the packet on TP is that sum; the debugger observes that packet;
@@ -73,7 +73,7 @@ $$
 - Overlap default: near+same key merge; near+different coexist; far+same suppress by priority; far+different coexist.
 - Residual never suppresses a non-residual object.
 - Geometry = indicator of $A(U)$ plus claimed roles. No embeddings.
-- The debugger observes the IdOB sum, $\oplus$; it never performs a second $\oplus$.
+- The Debugger observes the IdOB sum, $\oplus$; it never performs a second $\oplus$.
     - It does not re-run IdOB logic.
     - It does not re-sum contributions.
     - It does not apply overlap rules.
@@ -85,11 +85,68 @@ $$
 
 ## 3. Architecture
 
-### 3.1 IdOBObject PSC
+### 3.1 IdOBObject catalog frame (YAML)
 
-`name, family, psc_id, schema_ref, input_requirements, activation, output_fields, invariants, overlap_near, overlap_far, overlap_mode, priority, interface_contract`
+An IdOBObject is a catalog document plus a tiny apply stub. It is not a
+closure in `legacy.py`.
 
-Activation language: `all|any|not|has_role|has_constraint|has_cue|text_endswith|role_text_in`. No Python in YAML.
+```yaml
+schema_ref: idob_object.v1
+psc_id: PSC-IdOB-<name>-v1          # per-object id
+name: locative
+family: locative                     # for the eight live objects, family = name
+priority: 20
+
+identity:
+  label: "Locative descriptive"
+  description: "..."
+  tags: ["descriptive", "locative"]
+
+association:
+  geometries:
+    - [NP, CP, LOC]                  # claimed segment shapes, not a second SOB
+  roles: [theme, state, location]    # TP roles, not SOB labels
+
+contribution_schema:
+  semantic_core:
+    type: dict
+    keys: [theme, state, location, complement, ...]   # live core keys only
+  selected_ops:
+    type: list
+    items: [state_location]          # live op strings only
+  truth_relation_family:
+    type: str
+    default: descriptive_locative    # locked enum
+
+overlap:
+  near: [copular_state, mixed_descriptive]
+  far: [agent_action]
+
+psc_invariants:                      # extras only; I8/I10 live in defaults
+  - id: I8
+    field: contribution_schema
+    rule: writes_only_declared_fields
+
+behavior:
+  apply: idob.behaviors.locative:apply
+```
+
+Locks:
+
+- **No `claimed_fields`.** `contribution_schema` is the bound. Any key
+  written that is not listed there is a run-time PSC violation.
+- **Activation is data** (predicate tree in the catalog / engine
+  predicates). **Apply is code** (`idob/behaviors/`).
+- Shared invariants I8 and I10 live in `support/idob_psc_defaults.yaml`.
+  Object YAML only adds extras. Digest hashes specs + `schema_ref` +
+  defaults file.
+- `family` is the algebra axis. Human category goes in `identity.tags`.
+- R4a copies **live** `semantic_core` keys and `selected_ops` strings.
+  New names are a different gate.
+
+Activation language remains
+`all|any|not|has_role|has_constraint|has_cue|text_endswith|role_text_in`.
+No Python in YAML.
 
 ### 3.2 Invariants
 
@@ -121,7 +178,12 @@ complete: bool
 tru_hint: str            # copied from TRU for alignment
 ```
 
-This **is** `tp.idob` after R3. `run_examples` prints these keys. `pathA_dbug` scrapes these keys. No fourth schema.
+This **is** `tp.idob` after R3/D3. Frozen. `run_examples` prints these
+keys. `pathA_dbug` scrapes these keys. No fourth schema.
+
+R4 does **not** add spec/YAML blobs to the packet. The catalog lives
+off-packet. PSC uses existing `psc_violations` and `registry_digest`.
+D4 joins `contributors` to `identity.label` from YAML.
 
 ### 3.4 Flow
 
@@ -132,17 +194,27 @@ This **is** `tp.idob` after R3. `run_examples` prints these keys. `pathA_dbug` s
 ## 4. Engine software
 
 ```text
-idob/object.py registry.py predicates.py sum.py packets.py legacy.py
-support/idob_objects.yaml
+idob/object.py registry.py predicates.py sum.py packets.py
+idob/behaviors/          # apply stubs (R4a)
+idob/psc.py              # checker (R4b)
+idob/legacy.py           # migration leftover until apply moves
+support/idob_objects/*.yaml
+support/idob_psc_defaults.yaml
 support/idob_object.v1.schema.json
 support/idob_packet.v1.schema.json
 ```
 
-`IdOB(tp)` = `sum_idob` + writeback. v1 objects lift existing branches only:
-copular_state, locative, mixed_descriptive, interrogative_wh,
-interrogative_polar, agent_action, modifier_resolution, residual_identity.
+`IdOB(tp)` = `sum_idob` + writeback.
 
-R1 uses `legacy_monolith` as the sole object so traces stay bit-identical.
+`registry.py` loads `support/idob_objects/*.yaml`, binds
+`behavior.apply`, builds the overlap graph from catalog `overlap`
+blocks, and computes `registry_digest` from canonical specs +
+`schema_ref` + hash of `support/idob_psc_defaults.yaml`. It does not
+hash Python.
+
+Eight live objects (family = name): copular_state, locative,
+mixed_descriptive, interrogative_wh, interrogative_polar, agent_action,
+modifier_resolution, residual_identity. No `overlap_identity` object.
 
 ---
 
@@ -217,28 +289,43 @@ R0  Freeze engine oracle (packets / selected_ops / mood)
 D0  Freeze collapsed-era debug_out.md fixtures (do not beautify)
 
 R1  legacy_monolith behind sum_idob — bit-identical to R0
-    (optional: contributors=['legacy_monolith'] already on packet;
-     do not change debugger)
-
 R2  Split objects + overlap graph — same selected_ops oracle
-
 R3  Single writer; dict-only semantic_core; TRU cannot clobber
-    ─────────────────────────────────────────────
-D1  run_examples log contract (§5)          ← first observer-side code
-D2  pathA_dbug parser accepts new keys;
-    old Meaning Bundle Summary still prints
+D1  run_examples log contract (§5)
+D2  pathA_dbug parser accepts new keys
 D3  IdOB Space Summary + glossary + TRU compare
-    ─────────────────────────────────────────────
+    ── landed ─────────────────────────────────
 
-R4  Per-object PSC tests + eval-order permutation
-D4  Print psc_violations, inactive_objects, |I|, |A(U)| even when empty
+R4a Catalog lift
+    Eight YAML files; live core keys and selected_ops strings only.
+    Registry loads YAML; apply still points at existing functions.
+    Overlap graph closed (all live edges appear in some YAML).
+    Load fails if a name does not resolve.
+    Exit: eight files load; registry_digest stable;
+    packet oracles bit-identical to R3.
+    New core key or op string = a different gate, not R4a.
+    Do not land psc.py in the same commit.
 
-R5  MCB seam copies only
-R6  New families only after R4
+R4b PSC
+    idob/psc.py: spec + contribution + TP.
+    Load-time: unique names, closed graph, known behavior symbols.
+    Run-time: unlisted keys, I8, I10, extras from object YAML.
+    Violations: {object_id, invariant, field, detail}.
+    Eval-order permutation remains a test.
+
+D4  Debugger prints psc_violations (even []), |I|, |A(U)|,
+    inactive_objects; joins contributors → identity.label.
+    No spec dumps.
+
+D5  Optional catalog appendix (space listing: name, family,
+    priority, overlap). Not per-run YAML.
+
+R5  MCB seam copies only. No catalog/PSC work moves here.
+R6  New object = YAML + optional apply stub; closed overlap.
 ```
 
-**Forbidden:** debugger printer changes in the same commit as an object split.
-**Allowed now:** this plan, D0 fixture capture, comments only.
+**Forbidden:** debugger printer changes in the same commit as R4a.
+**Forbidden:** changing live op/core strings inside R4a.
 
 ### Gate proofs
 
@@ -250,7 +337,10 @@ R6  New families only after R4
 | R3 | One IdOB writer; `semantic_core` dict on TP |
 | D1 | Log lines literal-eval; no `semantic_core=[]` for dict cores |
 | D3 | *The sky is blue.* one descriptive contributor, empty overlap, declarative, dict core |
-| R4/D4 | Empty `psc_violations: []` visible |
+| R4a | Eight YAML load; digest stable; R3 packet oracle holds |
+| R4b | Unlisted key → psc_violation; I8/I10 from defaults |
+| D4 | `psc_violations: []` visible; contributor labels from catalog |
+| R5 | MCB copies only |
 
 ---
 
@@ -258,12 +348,13 @@ R6  New families only after R4
 
 | Gate | Files |
 |---|---|
-| R1 | new `idob/*`, thin `IdOB()`, keep `_minimal_idob_selection` |
-| R2 | `support/idob_objects.yaml`, split apply methods |
-| R3 | delete sequencer second pass; `tp_substrate` dict-only; TRU hint |
-| D1 | `run_examples.py` only |
-| D2–D3 | `pathA_dbug.py`, `debug/setup/*` |
-| D4 | debugger print + R4 tests |
+| R1–R3 | `idob/*` landed; single writer |
+| D1–D3 | log contract + IdOB Space Summary landed |
+| R4a | `support/idob_objects/*.yaml`, defaults, registry YAML load |
+| R4b | `idob/psc.py` |
+| D4 | `pathA_dbug.py` join to `identity.label` |
+| D5 | optional catalog appendix |
+| R5 | MCB seam only |
 
 ---
 
@@ -281,4 +372,5 @@ R6  New families only after R4
 
 ## 10. One-sentence plan
 
-**Stand up $\mathcal{I}$ behind a monolith (R1), split it (R2), make IdOB the only writer (R3), then teach `run_examples` to emit the space (D1) and `pathA_dbug` to observe it (D2–D4) — same names, same packet, no second glossary, no debugger motion before the sum is real.**
+**R1–R3 made the sum real; D1–D3 observe the packet; R4a names $\mathcal{I}$ as a hashed YAML catalog with live keys; R4b checks spec against contribution; D4 joins names to `identity.label`; the packet stays still; R5 is still MCB.**
+
