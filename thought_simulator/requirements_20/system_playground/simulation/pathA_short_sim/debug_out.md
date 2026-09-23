@@ -38,15 +38,22 @@
 ## Stage Interpretations
 ### SOB
 - tokens:
+  - why
+  - is
+  - the
+  - sky
+  - blue
+  - ?
+
+- struct_segments:
+  - WQ
+  - IQ
+  - NP
+
+- segment_tokens:
   - ['why']
   - ['is']
   - ['the', 'sky', 'blue']
-
-- struct_segments:
-  - []
-
-- segment_tokens:
-  - []
 
 
 See: [SOB](debug/primitives/SOB.md)

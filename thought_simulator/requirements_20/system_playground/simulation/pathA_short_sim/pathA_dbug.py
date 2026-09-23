@@ -217,9 +217,11 @@ def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
 
     for line in run_log_lines:
         if not raw_tokens:
-            extracted_tokens = _extract_literal_or_text(line, "tokens:")
-            if isinstance(extracted_tokens, list):
-                raw_tokens = extracted_tokens
+            stripped = line.strip()
+            if stripped.startswith("tokens:"):
+                extracted_tokens = _extract_literal_or_text(stripped, "tokens:")
+                if isinstance(extracted_tokens, list):
+                    raw_tokens = extracted_tokens
 
         matched_primitive = None
         for header, primitive_name in primitive_headers:
