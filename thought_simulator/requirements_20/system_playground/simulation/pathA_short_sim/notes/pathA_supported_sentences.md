@@ -192,7 +192,7 @@ WQ → IQ → NP → RELC → IQ → AP → AP
 
 The examples above are canonical and can be added directly to `run_examples.py` for regression testing.
 
-As of 2026-09-23 the committed live runner sentence is *Where is the book?* (PA-CSE-006). Passing seeds are left commented in `run_examples.py`.
+As of 2026-09-23 the committed live runner sentence is *The book is on the table.* (PA-CSE-003). Passing seeds are left commented in `run_examples.py`.
 
 ---
 
@@ -221,11 +221,11 @@ Status values follow `notes/pathA_cse/00_header.md` §8.
 | ID | Utterance | Status | Notes |
 |---|---|---|---|
 | PA-CSE-001 / copular | The sky is blue. | Implemented | Pipeline complete. Segments NP → CP → AP. Commented in runner. |
-| PA-CSE-002 / copular | Paris is a city. | In work | Catalog seed. Documented-only. NP complement. |
-| PA-CSE-003 / locative | The book is on the table. | In work | Catalog seed. Documented-only. CP locative. |
+| PA-CSE-002 / copular | Paris is a city. | Implemented | Pipeline complete. Segments NP → CP → NP. Commented in runner. |
+| PA-CSE-003 / locative | The book is on the table. | Implemented | Pipeline complete. Segments NP → CP → LOC. Live in runner. |
 | PA-CSE-004 / locative | The rain stays in the plain. | In work | Catalog seed. Documented-only. ST locative. |
 | PA-CSE-005 / mixed_desc | The rain in Spain stays mainly in the plain. | Implemented | Pipeline complete. Commented in runner. |
-| PA-CSE-006 / interrogative | Where is the book? | Implemented | Pipeline complete. Segments WQ → IQ → NP. Live in runner. |
+| PA-CSE-006 / interrogative | Where is the book? | Implemented | Pipeline complete. Segments WQ → IQ → NP. Commented in runner. |
 | PA-CSE-007 / interrogative | Is the book on the table? | In work | Catalog seed. Documented-only. Polar → TRU `interrogative_open`. |
 | PA-CSE-008 / interrogative | Why is the sky blue? | Implemented | Pipeline complete. Commented in runner. |
 | PA-CSE-009 / mixed_inter | Why does the rain in Spain stay mainly in the plain? | In work | Catalog seed. Documented-only. |
