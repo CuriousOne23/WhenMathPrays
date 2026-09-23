@@ -24,6 +24,7 @@ fields:
   - idob_packet
 
 primitives:
+  - IE
   - SOB
   - SROB
   - CnOB

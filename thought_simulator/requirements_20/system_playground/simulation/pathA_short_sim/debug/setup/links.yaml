@@ -25,6 +25,7 @@ fields:
   idob_packet: "debug/fields/idob_packet.md"
 
 primitives:
+  IE: "debug/primitives/IE.md"
   SOB: "debug/primitives/SOB.md"
   SROB: "debug/primitives/SROB.md"
   CnOB: "debug/primitives/CnOB.md"

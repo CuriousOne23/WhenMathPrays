@@ -21,6 +21,7 @@
 - [idob_packet:](debug/fields/idob_packet.md) The identity packet produced by IdOB.
 
 ## Primitives
+- [IE:](debug/primitives/IE.md) Builds IE-compatible token intake structures.
 - [SOB:](debug/primitives/SOB.md) Performs structural segmentation.
 - [SROB:](debug/primitives/SROB.md) Assigns roles to segments.
 - [CnOB:](debug/primitives/CnOB.md) Matches constraints and emits canonical constraint fields.
@@ -36,9 +37,51 @@
 - IdOB: identity and meaning-bundle stage
 
 ## Stage Interpretations
+### IE
+- tokens:
+  - Why
+  - is
+  - the
+  - sky
+  - blue
+  - ?
+
+- normalized_tokens:
+  - why
+  - is
+  - the
+  - sky
+  - blue
+  - ?
+
+- token_classes:
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - PUNCT
+
+- roles:
+  - none
+  - none
+  - none
+  - none
+  - none
+  - none
+
+- segments:
+  - 1
+
+- segment_tokens:
+  - ['Why', 'is', 'the', 'sky', 'blue', '?']
+
+
+See: [IE](debug/primitives/IE.md)
+
 ### SOB
 - tokens:
-  - why
+  - Why
   - is
   - the
   - sky
@@ -51,9 +94,7 @@
   - NP
 
 - segment_tokens:
-  - ['why']
-  - ['is']
-  - ['the', 'sky', 'blue']
+  - ['Why', 'is', 'the', 'sky', 'blue']
 
 
 See: [SOB](debug/primitives/SOB.md)

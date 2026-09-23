@@ -32,6 +32,8 @@ R3_IDOB_KEYS = [
     "tru_hint",
 ]
 
+TERMINAL_PUNCTUATION = {".", "!", "?"}
+
 
 def build_arg_parser() -> argparse.ArgumentParser:
     """Create a CLI parser for debug analysis inputs."""
@@ -296,6 +298,24 @@ def _normalize_ob_set_notes(notes: List[Any]) -> List[str]:
     return []
 
 
+def _strip_terminal_punctuation_from_segment_tokens(values: Any) -> Any:
+    if not isinstance(values, list):
+        return values
+
+    cleaned: List[Any] = []
+    for item in values:
+        if isinstance(item, list):
+            filtered = []
+            for token in item:
+                if isinstance(token, str) and token in TERMINAL_PUNCTUATION:
+                    continue
+                filtered.append(token)
+            cleaned.append(filtered)
+        else:
+            cleaned.append(item)
+    return cleaned
+
+
 def _normalize_token_relations(mapping: Dict[str, Any]) -> List[str]:
     relations: List[str] = []
     for key, value in mapping.items():
@@ -339,11 +359,13 @@ def _load_idob_identity_labels(base_dir: Path) -> Dict[str, str]:
 def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
     """Parse run.log into structured intermediate data."""
     primitive_headers = [
+        ("IE:", "IE"),
         ("SOB:", "SOB"),
         ("SROB:", "SROB"),
         ("CnOB:", "CnOB"),
         ("SmOB:", "SmOB"),
         ("IdOB:", "IdOB"),
+        ("--- IE ---", "IE"),
         ("--- SOB ---", "SOB"),
         ("--- SROB ---", "SROB"),
         ("--- CnOB ---", "CnOB"),
@@ -388,6 +410,9 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     primitive = block["primitive"]
     raw_lines = block["lines"]
 
+    tokens: List[Any] = []
+    normalized_tokens: List[Any] = []
+    token_classes: List[Any] = []
     segments: List[Any] = []
     segment_tokens: List[Any] = []
     roles: List[Any] = []
@@ -411,6 +436,43 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     saw_idob_packet = False
 
     for line in raw_lines:
+        stripped = line.strip()
+
+        if stripped.startswith("tokens:"):
+            extracted = _extract_literal_or_text(stripped, "tokens:")
+            if extracted is not None:
+                _merge_list(tokens, extracted, dedup=False)
+
+        if stripped.startswith("tokens="):
+            extracted = _extract_literal_or_text(stripped, "tokens=")
+            if extracted is not None:
+                _merge_list(tokens, extracted, dedup=False)
+
+        if stripped.startswith("normalized_tokens:"):
+            extracted = _extract_literal_or_text(stripped, "normalized_tokens:")
+            if extracted is not None:
+                _merge_list(normalized_tokens, extracted, dedup=False)
+
+        if stripped.startswith("normalized_tokens="):
+            extracted = _extract_literal_or_text(stripped, "normalized_tokens=")
+            if extracted is not None:
+                _merge_list(normalized_tokens, extracted, dedup=False)
+
+        if stripped.startswith("token_classes:"):
+            extracted = _extract_literal_or_text(stripped, "token_classes:")
+            if extracted is not None:
+                _merge_list(token_classes, extracted, dedup=False)
+
+        if stripped.startswith("token_classes="):
+            extracted = _extract_literal_or_text(stripped, "token_classes=")
+            if extracted is not None:
+                _merge_list(token_classes, extracted, dedup=False)
+
+        if stripped.startswith("segments:"):
+            extracted = _extract_literal_or_text(stripped, "segments:")
+            if extracted is not None:
+                _merge_list(segments, extracted, dedup=False)
+
         extracted = _extract_literal_or_text(line, "Segments:")
         if extracted is not None:
             _merge_list(segments, extracted, dedup=False)
@@ -427,7 +489,15 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         if extracted is not None:
             _merge_list(segment_tokens, extracted, dedup=False)
 
+        extracted = _extract_literal_or_text(line, "segment_tokens:")
+        if extracted is not None:
+            _merge_list(segment_tokens, extracted, dedup=False)
+
         extracted = _extract_literal_or_text(line, "Roles:")
+        if extracted is not None:
+            _merge_list(roles, extracted, dedup=False)
+
+        extracted = _extract_literal_or_text(line, "roles:")
         if extracted is not None:
             _merge_list(roles, extracted, dedup=False)
 
@@ -514,6 +584,9 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         "primitive": primitive,
         "raw": raw_lines,
         "summary": f"Primitive {primitive} fired.",
+        "tokens": tokens,
+        "normalized_tokens": normalized_tokens,
+        "token_classes": token_classes,
         "segments": segments,
         "segment_tokens": segment_tokens,
         "roles": roles,
@@ -548,6 +621,11 @@ def interpret_all_blocks(parsed_log: Dict[str, Any]) -> List[Dict[str, Any]]:
 
         current = interpreted_by_primitive[primitive]
         _merge_list(current["raw"], interpreted.get("raw", []), dedup=True)
+        _merge_list(current["tokens"], interpreted.get("tokens", []), dedup=True)
+        _merge_list(
+            current["normalized_tokens"], interpreted.get("normalized_tokens", []), dedup=True
+        )
+        _merge_list(current["token_classes"], interpreted.get("token_classes", []), dedup=True)
         _merge_list(current["segments"], interpreted.get("segments", []), dedup=True)
         _merge_list(
             current["segment_tokens"], interpreted.get("segment_tokens", []), dedup=True
@@ -696,6 +774,7 @@ def generate_output(
         "idob_packet": "The identity packet produced by IdOB.",
     }
     primitive_definitions = {
+        "IE": "Builds IE-compatible token intake structures.",
         "SOB": "Performs structural segmentation.",
         "SROB": "Assigns roles to segments.",
         "CnOB": "Matches constraints and emits canonical constraint fields.",
@@ -755,6 +834,7 @@ def generate_output(
         for item in primitive_explanations.get("primitives", [])
     }
     primitive_output_fields = {
+        "IE": ["tokens", "normalized_tokens", "token_classes", "roles", "segments", "segment_tokens"],
         "SOB": ["struct_segments", "segment_tokens"],
         "SROB": ["struct_roles"],
         "CnOB": ["constraints_matched", "constraints_unmatched", "constraint_residue"],
@@ -763,6 +843,11 @@ def generate_output(
     }
 
     field_value_lookup = {
+        "tokens": "tokens",
+        "normalized_tokens": "normalized_tokens",
+        "token_classes": "token_classes",
+        "roles": "roles",
+        "segments": "segments",
         "struct_segments": "segments",
         "segment_tokens": "segment_tokens",
         "struct_roles": "roles",
@@ -786,6 +871,8 @@ def generate_output(
         for field_name in primitive_output_fields.get(str(primitive), []):
             data_key = field_value_lookup[field_name]
             value = block.get(data_key)
+            if primitive == "SOB" and field_name == "segment_tokens":
+                value = _strip_terminal_punctuation_from_segment_tokens(value)
             if isinstance(value, list):
                 _append_list_block(lines, field_name, value)
             elif isinstance(value, dict):

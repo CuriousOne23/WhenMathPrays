@@ -30,6 +30,67 @@ def _ordered_idob_packet(packet: object) -> dict:
     return {key: packet.get(key) for key in IDOB_PACKET_KEY_ORDER}
 
 
+def _committed_stream_view(committed_stream: object) -> dict:
+    if not isinstance(committed_stream, dict):
+        return {
+            "tokens": [],
+            "normalized_tokens": [],
+            "token_classes": [],
+            "roles": [],
+            "segments": [],
+            "segment_tokens": [],
+        }
+
+    token_objects = committed_stream.get("tokens", [])
+    if not isinstance(token_objects, list):
+        token_objects = []
+
+    segment_objects = committed_stream.get("segments", [])
+    if not isinstance(segment_objects, list):
+        segment_objects = []
+
+    tokens = []
+    normalized_tokens = []
+    token_classes = []
+    roles = []
+
+    for token in token_objects:
+        if not isinstance(token, dict):
+            continue
+        tokens.append(str(token.get("surface", "")))
+        normalized_tokens.append(str(token.get("normalized", "")))
+        token_classes.append(str(token.get("token_class", "")))
+        role_value = token.get("role", "")
+        if isinstance(role_value, dict):
+            roles.append(str(role_value.get("chosen", "")))
+        else:
+            roles.append(str(role_value))
+
+    segments = []
+    segment_tokens = []
+    for seg in segment_objects:
+        if not isinstance(seg, dict):
+            continue
+        seg_id = seg.get("segment_id")
+        segments.append(seg_id)
+        grouped_tokens = []
+        for token in token_objects:
+            if not isinstance(token, dict):
+                continue
+            if token.get("segment_id") == seg_id:
+                grouped_tokens.append(str(token.get("surface", "")))
+        segment_tokens.append(grouped_tokens)
+
+    return {
+        "tokens": tokens,
+        "normalized_tokens": normalized_tokens,
+        "token_classes": token_classes,
+        "roles": roles,
+        "segments": segments,
+        "segment_tokens": segment_tokens,
+    }
+
+
 def main() -> None:
     # sentence = "The quick brown fox jumps over the lazy dog."
     # sentence = "The rain in Spain stays mainly in the plain."
@@ -56,6 +117,13 @@ def main() -> None:
     }
 
     print("=== Final TP ===")
+    final_tp_ie = _committed_stream_view(final_tp.get("committed_stream", {}))
+    print(f"tokens: {final_tp_ie['tokens']}")
+    print(f"normalized_tokens: {final_tp_ie['normalized_tokens']}")
+    print(f"token_classes: {final_tp_ie['token_classes']}")
+    print(f"roles: {final_tp_ie['roles']}")
+    print(f"segments: {final_tp_ie['segments']}")
+    print(f"segment_tokens: {final_tp_ie['segment_tokens']}")
     for k, v in canonical_final_tp.items():
         print(f"{k}: {v}")
 
@@ -73,18 +141,26 @@ def main() -> None:
             struct_segments = primitive_trace_entry.get("struct_segments", primitive_output.get("struct_segments", []))
             segment_tokens = primitive_trace_entry.get("segment_tokens", primitive_output.get("segment_tokens", []))
             committed_stream = primitive_trace_entry.get("committed_stream", primitive_output.get("committed_stream", {}))
-            raw_tokens = []
-            if isinstance(committed_stream, dict):
-                token_objects = committed_stream.get("tokens", [])
-                if isinstance(token_objects, list):
-                    raw_tokens = [
-                        t["normalized"]
-                        for t in token_objects
-                        if isinstance(t, dict) and "normalized" in t
-                    ]
-            print("tokens:", raw_tokens)
+            sob_ie = _committed_stream_view(committed_stream)
+            print(f"tokens: {sob_ie['tokens']}")
             print(f"struct_segments={struct_segments}")
-            print(f"segment_tokens={segment_tokens}")
+            if sob_ie["segment_tokens"]:
+                print(f"segment_tokens={sob_ie['segment_tokens']}")
+            else:
+                print(f"segment_tokens={segment_tokens}")
+
+        if primitive_name == "IE":
+            primitive_output = primitive_trace_entry.get("output", {})
+            if not isinstance(primitive_output, dict):
+                primitive_output = {}
+            committed_stream = primitive_trace_entry.get("committed_stream", primitive_output.get("committed_stream", {}))
+            ie_view = _committed_stream_view(committed_stream)
+            print(f"tokens: {ie_view['tokens']}")
+            print(f"normalized_tokens: {ie_view['normalized_tokens']}")
+            print(f"token_classes: {ie_view['token_classes']}")
+            print(f"roles: {ie_view['roles']}")
+            print(f"segments: {ie_view['segments']}")
+            print(f"segment_tokens: {ie_view['segment_tokens']}")
 
         if primitive_name == "SROB":
             struct_roles = primitive_trace_entry.get("struct_roles", [])
