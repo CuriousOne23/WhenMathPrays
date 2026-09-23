@@ -224,7 +224,7 @@ Status values follow `notes/pathA_cse/00_header.md` §8.
 | PA-CSE-002 / copular | Paris is a city. | In work | Catalog seed. Documented-only. NP complement. |
 | PA-CSE-003 / locative | The book is on the table. | In work | Catalog seed. Documented-only. CP locative. |
 | PA-CSE-004 / locative | The rain stays in the plain. | In work | Catalog seed. Documented-only. ST locative. |
-| PA-CSE-005 / mixed_desc | The rain in Spain stays mainly in the plain. | In work | Catalog seed. Documented-only. |
+| PA-CSE-005 / mixed_desc | The rain in Spain stays mainly in the plain. | Implemented | Catalog seed. Documented-only. |
 | PA-CSE-006 / interrogative | Where is the book? | In work | Catalog seed. Documented-only. WH. |
 | PA-CSE-007 / interrogative | Is the book on the table? | In work | Catalog seed. Documented-only. Polar → TRU `interrogative_open`. |
 | PA-CSE-008 / interrogative | Why is the sky blue? | Implemented | Live in committed `run_examples.py`. |
