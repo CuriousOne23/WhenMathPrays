@@ -12,6 +12,26 @@ DEBUG_DIR = Path(__file__).resolve().parent / "debug"
 SETUP_PATH = DEBUG_DIR / "setup" / "debug_setup.yaml"
 LINKS_PATH = DEBUG_DIR / "setup" / "links.yaml"
 
+R3_IDOB_KEYS = [
+    "identity_geometry",
+    "truth_relation",
+    "truth_relation_family",
+    "semantic_core",
+    "selected_ops",
+    "claimed_fields",
+    "contributors",
+    "contributions",
+    "activation_set",
+    "inactive_objects",
+    "residual_activated",
+    "overlap_events",
+    "meaning_delta",
+    "psc_violations",
+    "registry_digest",
+    "complete",
+    "tru_hint",
+]
+
 
 def build_arg_parser() -> argparse.ArgumentParser:
     """Create a CLI parser for debug analysis inputs."""
@@ -137,6 +157,105 @@ def _merge_list(target: List[Any], incoming: Any, dedup: bool = False) -> None:
             target.append(value)
 
 
+def _extract_idob_packet_literal(line: str) -> Dict[str, Any]:
+    extracted = _extract_literal_or_text(line, "idob_packet=")
+    if isinstance(extracted, dict):
+        return extracted
+    return {}
+
+
+def parse_semantic_core_dict(idob_packet: Dict[str, Any]) -> Dict[str, Any]:
+    value = idob_packet.get("semantic_core", {})
+    if isinstance(value, dict):
+        return dict(value)
+    return {}
+
+
+def parse_selected_ops_list(idob_packet: Dict[str, Any]) -> List[Any]:
+    value = idob_packet.get("selected_ops", [])
+    if isinstance(value, list):
+        return list(value)
+    return []
+
+
+def parse_contributors_list(idob_packet: Dict[str, Any]) -> List[Any]:
+    value = idob_packet.get("contributors", [])
+    if isinstance(value, list):
+        return list(value)
+    return []
+
+
+def parse_contributions_list(idob_packet: Dict[str, Any]) -> List[Any]:
+    value = idob_packet.get("contributions", [])
+    if isinstance(value, list):
+        return list(value)
+    return []
+
+
+def parse_overlap_events_list(idob_packet: Dict[str, Any]) -> List[Any]:
+    value = idob_packet.get("overlap_events", [])
+    if isinstance(value, list):
+        return list(value)
+    return []
+
+
+def parse_meaning_delta_dict(idob_packet: Dict[str, Any]) -> Dict[str, Any]:
+    value = idob_packet.get("meaning_delta", {})
+    if isinstance(value, dict):
+        return dict(value)
+    return {}
+
+
+def parse_registry_digest(idob_packet: Dict[str, Any]) -> str:
+    value = idob_packet.get("registry_digest", "")
+    return value if isinstance(value, str) else ""
+
+
+def parse_truth_relation_family(idob_packet: Dict[str, Any]) -> str:
+    value = idob_packet.get("truth_relation_family", "")
+    return value if isinstance(value, str) else ""
+
+
+def parse_tru_hint(idob_packet: Dict[str, Any]) -> str:
+    value = idob_packet.get("tru_hint", "")
+    return value if isinstance(value, str) else ""
+
+
+def _is_r3_idob_packet(idob_packet: Dict[str, Any]) -> bool:
+    if not idob_packet:
+        return False
+    return any(key in idob_packet for key in R3_IDOB_KEYS)
+
+
+def _parse_r3_idob_line(line: str) -> Dict[str, Any]:
+    packet = _extract_idob_packet_literal(line)
+    return {
+        "idob_packet": packet,
+        "semantic_core": parse_semantic_core_dict(packet),
+        "selected_ops": parse_selected_ops_list(packet),
+        "contributors": parse_contributors_list(packet),
+        "contributions": parse_contributions_list(packet),
+        "overlap_events": parse_overlap_events_list(packet),
+        "meaning_delta": parse_meaning_delta_dict(packet),
+        "registry_digest": parse_registry_digest(packet),
+        "truth_relation_family": parse_truth_relation_family(packet),
+        "tru_hint": parse_tru_hint(packet),
+        "truth_relation": _render_scalar(packet.get("truth_relation", "")) if packet else "",
+    }
+
+
+def _parse_collapsed_idob_line(line: str) -> Dict[str, Any]:
+    packet = _extract_idob_packet_literal(line)
+    semantic_core: Dict[str, Any] = {}
+    if isinstance(packet.get("semantic_core"), list):
+        semantic_core = {"values": packet["semantic_core"]}
+    return {
+        "idob_packet": packet,
+        "semantic_core": semantic_core,
+        "truth_relation": _render_scalar(packet.get("truth_relation", "")) if packet else "",
+    }
+
+
 def _render_scalar(value: Any) -> str:
     if isinstance(value, str):
         return value
@@ -259,7 +378,16 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     semantic_adjacent_cues: List[Any] = []
     semantic_core: Dict[str, Any] = {}
     truth_relation = ""
+    truth_relation_family = ""
+    tru_hint = ""
+    selected_ops: List[Any] = []
+    contributors: List[Any] = []
+    contributions: List[Any] = []
+    overlap_events: List[Any] = []
+    meaning_delta: Dict[str, Any] = {}
+    registry_digest = ""
     idob_packet: Dict[str, Any] = {}
+    saw_idob_packet = False
 
     for line in raw_lines:
         extracted = _extract_literal_or_text(line, "Segments:")
@@ -316,14 +444,32 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         elif isinstance(extracted, dict):
             semantic_core.update(extracted)
 
-        extracted = _extract_literal_or_text(line, "idob_packet=")
-        if isinstance(extracted, dict):
-            idob_packet.update(extracted)
-            if isinstance(idob_packet.get("semantic_core"), list):
-                semantic_core = {"values": idob_packet["semantic_core"]}
-            truth_from_packet = idob_packet.get("truth_relation")
-            if truth_from_packet not in (None, ""):
-                truth_relation = _render_scalar(truth_from_packet)
+        packet_literal = _extract_idob_packet_literal(line)
+        if packet_literal:
+            saw_idob_packet = True
+            idob_packet.update(packet_literal)
+            if _is_r3_idob_packet(packet_literal):
+                parsed_r3 = _parse_r3_idob_line(line)
+                semantic_core = parsed_r3.get("semantic_core", {})
+                selected_ops = parsed_r3.get("selected_ops", [])
+                contributors = parsed_r3.get("contributors", [])
+                contributions = parsed_r3.get("contributions", [])
+                overlap_events = parsed_r3.get("overlap_events", [])
+                meaning_delta = parsed_r3.get("meaning_delta", {})
+                registry_digest = parsed_r3.get("registry_digest", "")
+                truth_relation_family = parsed_r3.get("truth_relation_family", "")
+                tru_hint = parsed_r3.get("tru_hint", "")
+                truth_from_packet = parsed_r3.get("truth_relation", "")
+                if truth_from_packet not in (None, ""):
+                    truth_relation = _render_scalar(truth_from_packet)
+            else:
+                parsed_collapsed = _parse_collapsed_idob_line(line)
+                collapsed_core = parsed_collapsed.get("semantic_core", {})
+                if collapsed_core:
+                    semantic_core = collapsed_core
+                truth_from_packet = parsed_collapsed.get("truth_relation", "")
+                if truth_from_packet not in (None, ""):
+                    truth_relation = _render_scalar(truth_from_packet)
 
         extracted_truth = _extract_literal_or_text(line, "Truth relation:")
         if extracted_truth not in (None, ""):
@@ -334,6 +480,14 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
 
     if truth_relation:
         semantic_core["truth_relation"] = truth_relation
+    if truth_relation_family and "truth_relation_family" not in semantic_core:
+        semantic_core["truth_relation_family"] = truth_relation_family
+    if tru_hint and "tru_hint" not in semantic_core:
+        semantic_core["tru_hint"] = tru_hint
+    if selected_ops and "selected_ops" not in semantic_core:
+        semantic_core["selected_ops"] = selected_ops
+    if saw_idob_packet and not isinstance(semantic_core, dict):
+        semantic_core = {}
 
     return {
         "primitive": primitive,
@@ -350,6 +504,14 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         "semantic_adjacent_cues": semantic_adjacent_cues,
         "semantic_core": semantic_core,
         "truth_relation": truth_relation,
+        "truth_relation_family": truth_relation_family,
+        "tru_hint": tru_hint,
+        "selected_ops": selected_ops,
+        "contributors": contributors,
+        "contributions": contributions,
+        "overlap_events": overlap_events,
+        "meaning_delta": meaning_delta,
+        "registry_digest": registry_digest,
         "idob_packet": idob_packet,
     }
 
@@ -388,6 +550,16 @@ def interpret_all_blocks(parsed_log: Dict[str, Any]) -> List[Dict[str, Any]]:
         )
         current["semantic_core"].update(interpreted.get("semantic_core", {}))
         current["idob_packet"].update(interpreted.get("idob_packet", {}))
+        current["selected_ops"] = interpreted.get("selected_ops", current.get("selected_ops", []))
+        current["contributors"] = interpreted.get("contributors", current.get("contributors", []))
+        current["contributions"] = interpreted.get("contributions", current.get("contributions", []))
+        current["overlap_events"] = interpreted.get("overlap_events", current.get("overlap_events", []))
+        current["meaning_delta"] = interpreted.get("meaning_delta", current.get("meaning_delta", {}))
+        current["registry_digest"] = interpreted.get("registry_digest", current.get("registry_digest", ""))
+        current["truth_relation_family"] = interpreted.get(
+            "truth_relation_family", current.get("truth_relation_family", "")
+        )
+        current["tru_hint"] = interpreted.get("tru_hint", current.get("tru_hint", ""))
         if interpreted.get("truth_relation"):
             current["truth_relation"] = interpreted["truth_relation"]
             current["semantic_core"]["truth_relation"] = interpreted["truth_relation"]
