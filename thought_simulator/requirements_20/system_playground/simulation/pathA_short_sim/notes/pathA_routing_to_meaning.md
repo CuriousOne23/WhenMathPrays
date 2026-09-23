@@ -13,6 +13,8 @@ This document captures our current thinking about **routing to meaning in Path A
 
 It is a **snapshot** of the present conceptual state, intended to be refined and polished later.
 
+For meaning it is correct to say that Path A TS demonstrates that **"Meaning emerges from objects' relational structure."** This is more correct than to say, Path A TS shows that "Meaning is emergent from the relational structure of objects." since the word "is" noun-ifies or objectifies meaning and the prior statement verbalizes meaning.
+
 ---
 
 ## 2. Structural basis (geometry recap)
