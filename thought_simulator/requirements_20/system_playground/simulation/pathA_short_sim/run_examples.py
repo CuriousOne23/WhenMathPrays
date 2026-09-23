@@ -121,6 +121,8 @@ def main() -> None:
 
     print("--- R7 ---")
     print("ouba_stable=True")
+    print("--- R8 ---")
+    print("pipeline_ready=True")
 
 
 if __name__ == "__main__":
