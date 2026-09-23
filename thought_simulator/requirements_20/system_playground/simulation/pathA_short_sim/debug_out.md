@@ -100,8 +100,58 @@ See: [SmOB](debug/primitives/SmOB.md)
 - idob_packet:
   identity_geometry: referential_identity
   truth_relation: interrogative
+  truth_relation_family: interrogative_polar
   semantic_core:
-    - entity
+    selected_ops: ['modifier_resolution']
+    query_focus: 
+    predicate: 
+    theme: 
+    relation_modifiers: 
+    complement: 
+    agent: 
+    state: 
+    location: 
+    action: 
+    patient: 
+    modifiers: []
+  selected_ops:
+    - modifier_resolution
+  claimed_fields:
+    - truth_relation
+    - truth_relation_family_hint
+    - selected_ops
+    - semantic_core
+    - semantic_core_tokens
+    - identity_geometry
+  contributors:
+    - interrogative_polar
+    - agent_action
+    - modifier_resolution
+    - residual_identity
+  contributions:
+    - {'name': 'interrogative_polar', 'family': 'interrogative_polar', 'priority': 11, 'fragment': {'truth_relation': 'interrogative', 'truth_relation_family_hint': 'interrogative_polar'}}
+    - {'name': 'agent_action', 'family': 'residual_identity', 'priority': 50, 'fragment': {}}
+    - {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'semantic_core_tokens': ['entity']}}
+    - {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'referential_identity', 'truth_relation': 'interrogative'}}
+  activation_set:
+    - interrogative_polar
+    - agent_action
+    - modifier_resolution
+    - residual_identity
+  inactive_objects:
+    - interrogative_wh
+    - copular_state
+    - locative
+    - mixed_descriptive
+  residual_activated: True
+  overlap_events:
+    - []
+  meaning_delta:
+  psc_violations:
+    - []
+  registry_digest: d774aea096213eeee17b5ddb948edcfa26432ab09e5d2fe81d737e67ca51fada
+  complete: True
+  tru_hint: interrogative
 
 
 See: [IdOB](debug/primitives/IdOB.md)
@@ -111,9 +161,59 @@ See: [IdOB](debug/primitives/IdOB.md)
 - semantic_adjacent_cues:
   - interrogative_scope
 - semantic_core:
-  - entity
+  - []
 - idob_packet:
   identity_geometry: referential_identity
   truth_relation: interrogative
+  truth_relation_family: interrogative_polar
   semantic_core:
-    - entity
+    selected_ops: ['modifier_resolution']
+    query_focus: 
+    predicate: 
+    theme: 
+    relation_modifiers: 
+    complement: 
+    agent: 
+    state: 
+    location: 
+    action: 
+    patient: 
+    modifiers: []
+  selected_ops:
+    - modifier_resolution
+  claimed_fields:
+    - truth_relation
+    - truth_relation_family_hint
+    - selected_ops
+    - semantic_core
+    - semantic_core_tokens
+    - identity_geometry
+  contributors:
+    - interrogative_polar
+    - agent_action
+    - modifier_resolution
+    - residual_identity
+  contributions:
+    - {'name': 'interrogative_polar', 'family': 'interrogative_polar', 'priority': 11, 'fragment': {'truth_relation': 'interrogative', 'truth_relation_family_hint': 'interrogative_polar'}}
+    - {'name': 'agent_action', 'family': 'residual_identity', 'priority': 50, 'fragment': {}}
+    - {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'semantic_core_tokens': ['entity']}}
+    - {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'referential_identity', 'truth_relation': 'interrogative'}}
+  activation_set:
+    - interrogative_polar
+    - agent_action
+    - modifier_resolution
+    - residual_identity
+  inactive_objects:
+    - interrogative_wh
+    - copular_state
+    - locative
+    - mixed_descriptive
+  residual_activated: True
+  overlap_events:
+    - []
+  meaning_delta:
+  psc_violations:
+    - []
+  registry_digest: d774aea096213eeee17b5ddb948edcfa26432ab09e5d2fe81d737e67ca51fada
+  complete: True
+  tru_hint: interrogative
