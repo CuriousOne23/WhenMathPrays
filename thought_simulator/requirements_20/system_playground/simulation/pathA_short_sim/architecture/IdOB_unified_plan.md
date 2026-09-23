@@ -73,7 +73,12 @@ $$
 - Overlap default: near+same key merge; near+different coexist; far+same suppress by priority; far+different coexist.
 - Residual never suppresses a non-residual object.
 - Geometry = indicator of $A(U)$ plus claimed roles. No embeddings.
-- Debugger is an observer of this algebra, not a second $\oplus$.
+- The debugger observes the IdOB sum, $\oplus$; it never performs a second $\oplus$.
+    - It does not re-run IdOB logic.
+    - It does not re-sum contributions.
+    - It does not apply overlap rules.
+    - It does not merge or suppress fields.
+    - It does not produce its own packet.
 
 ---
 
