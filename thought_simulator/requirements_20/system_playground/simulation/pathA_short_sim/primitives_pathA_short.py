@@ -3,6 +3,8 @@ from typing import Any, Dict, List
 import hashlib
 
 import yaml
+from idob.registry import registry
+from idob.sum import sum_idob
 from ie_compat_intake import build_committed_stream
 from tp_substrate import TP
 
@@ -822,12 +824,12 @@ def _build_idob_packet(tp: TP) -> Dict[str, Any]:
 
 
 def IdOB(tp: TP) -> TP:
-    packet = _build_idob_packet(tp)
-    tp.idob = packet.get("idob_packet", {})
+    packet = sum_idob(tp, registry)
+    tp.idob = packet
     tp.semantic_core = packet.get("semantic_core", [])
     tp.truth_relation = str(packet.get("truth_relation", "unknown"))
-    tp.path_b_eligible = bool(tp.idob)
     tp.idob_complete = bool(tp.idob)
+    tp.path_b_eligible = bool(tp.idob)
 
     if not hasattr(tp, "trace"):
         tp.trace = []
