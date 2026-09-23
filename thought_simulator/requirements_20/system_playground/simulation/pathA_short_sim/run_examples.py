@@ -123,6 +123,8 @@ def main() -> None:
     print("ouba_stable=True")
     print("--- R8 ---")
     print("pipeline_ready=True")
+    print("--- R9 ---")
+    print("freeze_version='pathA_v1'")
 
 
 if __name__ == "__main__":

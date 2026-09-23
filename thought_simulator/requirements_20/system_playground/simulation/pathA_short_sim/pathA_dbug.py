@@ -862,6 +862,9 @@ def generate_output(
         lines.append(f"- tru_hint: {_space_value_repr(idob_packet.get('tru_hint', ''))}")
         lines.append(f"- complete: {_space_value_repr(idob_packet.get('complete', False))}")
 
+    lines.append("")
+    lines.append("Freeze Version: pathA_v1")
+
     return "\n".join(lines)
 
 
