@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "idob_object.v1.schema.json",
+  "title": "IdOB Object Specification (v1)",
+  "type": "object",
+
+  "required": [
+    "schema_ref",
+    "psc_id",
+    "name",
+    "family",
+    "priority",
+    "identity",
+    "association",
+    "contribution_schema",
+    "overlap",
+    "behavior"
+  ],
+
+  "properties": {
+    "schema_ref": {
+      "type": "string",
+      "const": "idob_object.v1"
+    },
+
+    "psc_id": {
+      "type": "string",
+      "pattern": "^PSC-IdOB-[a-zA-Z0-9_\\-]+-v1$"
+    },
+
+    "name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_\\-]+$"
+    },
+
+    "family": {
+      "type": "string",
+      "enum": [
+        "copular_state",
+        "locative",
+        "mixed_descriptive",
+        "interrogative_wh",
+        "interrogative_polar",
+        "agent_action",
+        "modifier_resolution",
+        "residual_identity"
+      ]
+    },
+
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Merge order; uniqueness of (priority, name) enforced by PSC."
+    },
+
+    "identity": {
+      "type": "object",
+      "required": ["label", "description", "tags"],
+      "properties": {
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 0
+        }
+      }
+    },
+
+    "association": {
+      "type": "object",
+      "required": ["geometries", "roles"],
+      "properties": {
+        "geometries": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "minItems": 0
+        },
+        "roles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 0
+        }
+      }
+    },
+
+    "activation": {
+      "type": "object",
+      "description": "Optional activation tree (all/any/not/has_role/...). Empty allowed in v1.",
+      "additionalProperties": true
+    },
+
+    "contribution_schema": {
+      "type": "object",
+      "properties": {
+        "semantic_core": {
+          "type": "object",
+          "required": ["type", "keys"],
+          "properties": {
+            "type": { "type": "string", "const": "dict" },
+            "keys": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "theme",
+                  "state",
+                  "location",
+                  "agent",
+                  "action",
+                  "patient",
+                  "query_focus",
+                  "predicate",
+                  "complement",
+                  "relation_modifiers",
+                  "modifiers",
+                  "selected_ops"
+                ]
+              }
+            }
+          }
+        },
+
+        "selected_ops": {
+          "type": "object",
+          "required": ["type", "items"],
+          "properties": {
+            "type": { "type": "string", "const": "list" },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "theme_state",
+                  "state_location",
+                  "nested_modifier_resolution",
+                  "nested_state_location_resolution",
+                  "modifier_resolution",
+                  "query_resolution",
+
+                  "interrogative_relation_request",
+                  "interrogative_property_request",
+                  "interrogative_identity_request",
+
+                  "agent_action",
+                  "action_patient",
+                  "relation_modifier"
+                ]
+              }
+            }
+          }
+        },
+
+        "truth_relation_family": {
+          "type": "object",
+          "required": ["type", "default"],
+          "properties": {
+            "type": { "type": "string", "const": "str" },
+            "default": {
+              "type": "string",
+              "enum": [
+                "descriptive_state",
+                "descriptive_locative",
+                "descriptive_mixed",
+                "interrogative_wh",
+                "interrogative_polar",
+                "residual_identity",
+                "unknown"
+              ]
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "overlap": {
+      "type": "object",
+      "required": ["near", "far"],
+      "properties": {
+        "near": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_\\-]+$"
+          }
+        },
+        "far": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_\\-]+$"
+          }
+        }
+      }
+    },
+
+    "psc_invariants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "field", "rule"],
+        "properties": {
+          "id": { "type": "string" },
+          "field": { "type": "string" },
+          "rule": {
+            "type": "string",
+            "enum": [
+              "writes_only_declared_fields",
+              "semantic_core_is_dict",
+              "no_obset_mutation"
+            ]
+          }
+        }
+      },
+      "default": []
+    },
+
+    "behavior": {
+      "type": "object",
+      "required": ["apply"],
+      "properties": {
+        "apply": {
+          "type": "string",
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_.]*:[a-zA-Z_][a-zA-Z0-9_]*$"
+        }
+      }
+    }
+  },
+
+  "additionalProperties": false
+}
