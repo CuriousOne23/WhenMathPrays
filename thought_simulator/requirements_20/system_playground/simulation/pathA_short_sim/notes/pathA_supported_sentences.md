@@ -220,7 +220,7 @@ Status values follow `notes/pathA_cse/00_header.md` §8.
 
 Mandatory status-change metadata (required for every row update):
 
-- **Hole ID** must be explicit and must match `notes/pathA_cse/00_header.md` §9.
+- **Hole ID** must be explicit and must match [notes/pathA_cse/00_header.md](pathA_cse/00_header.md) §9.
 - **Capability note** must explicitly name what capability was added or what frozen object is still required.
 
 Formal implemented-definition gate: A row is `Implemented` only when baseline is captured, one reversible delta is applied (if applicable), full gate passes (`run_examples.py` -> `run.log` -> `pathA_dbug.py` -> `debug_out.md`), consolidation sweep passes, regression sweep passes in forward and reverse sequence, no cross-sentence interactions remain, no packet-shape drift is detected, no TRU drift is detected, no segment-alphabet drift is detected, no frozen-object violation is detected, and any reversible rule/cue pair has exclusive ownership.
