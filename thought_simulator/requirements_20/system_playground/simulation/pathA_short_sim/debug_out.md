@@ -36,9 +36,43 @@
 - SmOB: smoothing and basin-adjacency stage
 - IdOB: identity and meaning-bundle stage
 
+## Final TP Intake Geometry
+- tp_ie_tokens:
+  - Why
+  - is
+  - the
+  - sky
+  - blue
+  - ?
+- tp_ie_normalized_tokens:
+  - why
+  - is
+  - the
+  - sky
+  - blue
+  - ?
+- tp_ie_token_classes:
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - PUNCT
+- tp_ie_roles:
+  - none
+  - none
+  - none
+  - none
+  - none
+  - none
+- tp_ie_segments:
+  - 1
+- tp_ie_segment_tokens:
+  - ['Why', 'is', 'the', 'sky', 'blue', '?']
+
 ## Stage Interpretations
 ### IE
-- tokens:
+- ie_tokens:
   - Why
   - is
   - the
@@ -46,7 +80,7 @@
   - blue
   - ?
 
-- normalized_tokens:
+- ie_normalized_tokens:
   - why
   - is
   - the
@@ -54,7 +88,7 @@
   - blue
   - ?
 
-- token_classes:
+- ie_token_classes:
   - WORD
   - WORD
   - WORD
@@ -62,7 +96,7 @@
   - WORD
   - PUNCT
 
-- roles:
+- ie_roles:
   - none
   - none
   - none
@@ -70,17 +104,17 @@
   - none
   - none
 
-- segments:
+- ie_segments:
   - 1
 
-- segment_tokens:
+- ie_segment_tokens:
   - ['Why', 'is', 'the', 'sky', 'blue', '?']
 
 
 See: [IE](debug/primitives/IE.md)
 
 ### SOB
-- tokens:
+- sob_tokens:
   - Why
   - is
   - the
@@ -88,13 +122,15 @@ See: [IE](debug/primitives/IE.md)
   - blue
   - ?
 
-- struct_segments:
+- sob_struct_segments:
   - WQ
   - IQ
   - NP
 
-- segment_tokens:
-  - ['Why', 'is', 'the', 'sky', 'blue']
+- sob_segment_tokens:
+  - ['why']
+  - ['is']
+  - ['the', 'sky', 'blue']
 
 
 See: [SOB](debug/primitives/SOB.md)

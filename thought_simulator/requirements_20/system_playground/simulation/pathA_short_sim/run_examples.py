@@ -118,12 +118,12 @@ def main() -> None:
 
     print("=== Final TP ===")
     final_tp_ie = _committed_stream_view(final_tp.get("committed_stream", {}))
-    print(f"tokens: {final_tp_ie['tokens']}")
-    print(f"normalized_tokens: {final_tp_ie['normalized_tokens']}")
-    print(f"token_classes: {final_tp_ie['token_classes']}")
-    print(f"roles: {final_tp_ie['roles']}")
-    print(f"segments: {final_tp_ie['segments']}")
-    print(f"segment_tokens: {final_tp_ie['segment_tokens']}")
+    print(f"tp_ie_tokens: {final_tp_ie['tokens']}")
+    print(f"tp_ie_normalized_tokens: {final_tp_ie['normalized_tokens']}")
+    print(f"tp_ie_token_classes: {final_tp_ie['token_classes']}")
+    print(f"tp_ie_roles: {final_tp_ie['roles']}")
+    print(f"tp_ie_segments: {final_tp_ie['segments']}")
+    print(f"tp_ie_segment_tokens: {final_tp_ie['segment_tokens']}")
     for k, v in canonical_final_tp.items():
         print(f"{k}: {v}")
 
@@ -142,12 +142,9 @@ def main() -> None:
             segment_tokens = primitive_trace_entry.get("segment_tokens", primitive_output.get("segment_tokens", []))
             committed_stream = primitive_trace_entry.get("committed_stream", primitive_output.get("committed_stream", {}))
             sob_ie = _committed_stream_view(committed_stream)
-            print(f"tokens: {sob_ie['tokens']}")
-            print(f"struct_segments={struct_segments}")
-            if sob_ie["segment_tokens"]:
-                print(f"segment_tokens={sob_ie['segment_tokens']}")
-            else:
-                print(f"segment_tokens={segment_tokens}")
+            print(f"sob_tokens: {sob_ie['tokens']}")
+            print(f"sob_struct_segments={struct_segments}")
+            print(f"sob_segment_tokens={segment_tokens}")
 
         if primitive_name == "IE":
             primitive_output = primitive_trace_entry.get("output", {})
@@ -155,12 +152,12 @@ def main() -> None:
                 primitive_output = {}
             committed_stream = primitive_trace_entry.get("committed_stream", primitive_output.get("committed_stream", {}))
             ie_view = _committed_stream_view(committed_stream)
-            print(f"tokens: {ie_view['tokens']}")
-            print(f"normalized_tokens: {ie_view['normalized_tokens']}")
-            print(f"token_classes: {ie_view['token_classes']}")
-            print(f"roles: {ie_view['roles']}")
-            print(f"segments: {ie_view['segments']}")
-            print(f"segment_tokens: {ie_view['segment_tokens']}")
+            print(f"ie_tokens: {ie_view['tokens']}")
+            print(f"ie_normalized_tokens: {ie_view['normalized_tokens']}")
+            print(f"ie_token_classes: {ie_view['token_classes']}")
+            print(f"ie_roles: {ie_view['roles']}")
+            print(f"ie_segments: {ie_view['segments']}")
+            print(f"ie_segment_tokens: {ie_view['segment_tokens']}")
 
         if primitive_name == "SROB":
             struct_roles = primitive_trace_entry.get("struct_roles", [])
