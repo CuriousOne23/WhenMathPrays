@@ -112,6 +112,14 @@ These files allow the debugger to generate clickable links in `debug_out.md`.
 
 From the simulator root:
 
+First you need to run pathA_short_sim executable and pipe the results into a log file, e.g., run.log.
+
+```
+python run_examples.py > run.log
+```
+
+Then run the debugger on run.log:
+
 ```bash
 python pathA_dbug.py path/to/run.log --base-dir .
 ```
