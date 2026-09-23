@@ -100,7 +100,11 @@ def main() -> None:
     # PA-CSE-001 / copular
     # sentence = "The sky is blue."
     # PA-CSE-006 / interrogative
-    sentence = "Where is the book?"
+    # sentence = "Where is the book?"
+    # PA-CSE-002 / copular
+    # sentence = "Paris is a city."
+    # PA-CSE-003 / locative
+    sentence = "The book is on the table."
     simulation_result = run_pathA_short(sentence)
     final_tp = simulation_result["final_tp"]
 
