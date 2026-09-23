@@ -5,7 +5,7 @@
 
 Status: consolidated review draft. Not landed.
 Scope: short sim only. MCB omitted.
-Construct: **IdOB space \(\mathcal{I}\) is a frozen registry of IdOBObjects;
+Construct: **IdOB space $\mathcal{I}$ is a frozen registry of IdOBObjects;
 IdOB is the deterministic overlap-sum of their contributions;
 the packet on TP is that sum; the debugger observes that packet;
 `run_examples.py` is the emitter that makes the space visible.**
@@ -30,11 +30,11 @@ Hard rule: **the debugger does not move until the engine has one writer and the 
 | Token | Meaning |
 |---|---|
 | IdOB | Summation operator / primitive. Not an object. |
-| IdOB space \(\mathcal{I}\) | Frozen registry snapshot |
+| IdOB space $\mathcal{I}$ | Frozen registry snapshot |
 | IdOBObject | One bounded extractor |
 | family | copular_state \| locative \| mixed_descriptive \| interrogative_wh \| interrogative_polar \| residual_identity |
 | activation / activation_set | Objects with act=1 |
-| inactive_objects | \(\mathcal{I}\setminus A(U)\) |
+| inactive_objects | $\mathcal{I}\setminus A(U)$ |
 | contribution / contributions | Per-object packet fragments |
 | contributors | Activated ids, `(priority, name)` order |
 | idob_packet | Sum written to `tp.idob` |
@@ -72,8 +72,8 @@ $$
 - Family sum: one family wins; descriptive+interrogative → `descriptive_mixed` + interrogative mood.
 - Overlap default: near+same key merge; near+different coexist; far+same suppress by priority; far+different coexist.
 - Residual never suppresses a non-residual object.
-- Geometry = indicator of \(A(U)\) plus claimed roles. No embeddings.
-- Debugger is an observer of this algebra, not a second \(\oplus\).
+- Geometry = indicator of $A(U)$ plus claimed roles. No embeddings.
+- Debugger is an observer of this algebra, not a second $\oplus$.
 
 ---
 
@@ -275,4 +275,4 @@ R6  New families only after R4
 
 ## 10. One-sentence plan
 
-**Stand up \(\mathcal{I}\) behind a monolith (R1), split it (R2), make IdOB the only writer (R3), then teach `run_examples` to emit the space (D1) and `pathA_dbug` to observe it (D2–D4) — same names, same packet, no second glossary, no debugger motion before the sum is real.**
+**Stand up $\mathcal{I}$ behind a monolith (R1), split it (R2), make IdOB the only writer (R3), then teach `run_examples` to emit the space (D1) and `pathA_dbug` to observe it (D2–D4) — same names, same packet, no second glossary, no debugger motion before the sum is real.**
