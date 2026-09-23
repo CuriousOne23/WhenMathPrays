@@ -1,3 +1,5 @@
+import hashlib
+import json
 from typing import Dict, List, Tuple
 
 from idob.legacy import (
@@ -15,7 +17,7 @@ from idob.object import IdOBObject
 
 
 def build_r2_registry() -> List[IdOBObject]:
-    return [
+    unsorted = [
         copular_state,
         locative,
         mixed_descriptive,
@@ -25,6 +27,7 @@ def build_r2_registry() -> List[IdOBObject]:
         modifier_resolution,
         residual_identity,
     ]
+    return sorted(unsorted, key=lambda obj: (obj.priority, obj.name))
 
 
 def build_r2_overlap_graph() -> Dict[str, Dict[Tuple[str, str], str]]:
@@ -44,6 +47,33 @@ def build_r2_overlap_graph() -> Dict[str, Dict[Tuple[str, str], str]]:
     return {"near": near, "far": far}
 
 
+def compute_registry_digest(registry: List[IdOBObject], overlap_graph: Dict[str, Dict[Tuple[str, str], str]]) -> str:
+    object_rows = [
+        {
+            "name": obj.name,
+            "family": obj.family,
+            "priority": obj.priority,
+        }
+        for obj in registry
+    ]
+    near_edges = [
+        {"a": a, "b": b, "mode": mode}
+        for (a, b), mode in sorted(overlap_graph.get("near", {}).items())
+    ]
+    far_edges = [
+        {"a": a, "b": b, "mode": mode}
+        for (a, b), mode in sorted(overlap_graph.get("far", {}).items())
+    ]
+    payload = {
+        "objects": object_rows,
+        "near": near_edges,
+        "far": far_edges,
+    }
+    blob = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()
+
+
 registry = build_r2_registry()
 overlap_graph = build_r2_overlap_graph()
 parity_oracle = legacy_monolith
+registry_digest = compute_registry_digest(registry, overlap_graph)

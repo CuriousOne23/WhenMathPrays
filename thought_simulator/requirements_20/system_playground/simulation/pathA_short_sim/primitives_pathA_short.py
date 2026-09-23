@@ -826,10 +826,13 @@ def _build_idob_packet(tp: TP) -> Dict[str, Any]:
 def IdOB(tp: TP) -> TP:
     packet = sum_idob(tp, registry)
     tp.idob = packet
-    tp.semantic_core = packet.get("semantic_core", [])
+    semantic_core = packet.get("semantic_core", {})
+    if not isinstance(semantic_core, dict):
+        semantic_core = {}
+    tp.semantic_core = semantic_core
     tp.truth_relation = str(packet.get("truth_relation", "unknown"))
-    tp.idob_complete = bool(tp.idob)
-    tp.path_b_eligible = bool(tp.idob)
+    tp.idob_complete = bool(packet.get("complete", False))
+    tp.path_b_eligible = bool(packet.get("complete", False))
 
     if not hasattr(tp, "trace"):
         tp.trace = []
@@ -840,6 +843,7 @@ def IdOB(tp: TP) -> TP:
             "idob_packet": tp.idob,
             "semantic_core": tp.semantic_core,
             "truth_relation": tp.truth_relation,
+            "selected_ops": packet.get("selected_ops", []),
         }
     )
 
@@ -853,6 +857,7 @@ def TRU(tp: TP) -> TP:
         tp.truth_relation = "declarative"
     else:
         tp.truth_relation = "unknown"
+    tp.routing_metadata["tru_hint"] = tp.truth_relation
     return tp
 
 
