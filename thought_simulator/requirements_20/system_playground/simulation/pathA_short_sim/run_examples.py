@@ -93,8 +93,14 @@ def _committed_stream_view(committed_stream: object) -> dict:
 
 def main() -> None:
     # sentence = "The quick brown fox jumps over the lazy dog."
-    sentence = "The rain in Spain stays mainly in the plain."
+    # PA-CSE-005 / mixed_desc
+    # sentence = "The rain in Spain stays mainly in the plain."
+    # PA-CSE-008 / interrogative
     # sentence = "Why is the sky blue?"
+    # PA-CSE-001 / copular
+    # sentence = "The sky is blue."
+    # PA-CSE-006 / interrogative
+    sentence = "Where is the book?"
     simulation_result = run_pathA_short(sentence)
     final_tp = simulation_result["final_tp"]
 
@@ -202,4 +208,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
