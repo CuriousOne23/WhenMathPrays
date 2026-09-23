@@ -79,6 +79,7 @@ $$
     - It does not apply overlap rules.
     - It does not merge or suppress fields.
     - It does not produce its own packet.
+    - $\oplus$, implies a structured, multi‑object combination, not necessarily numeric but structure
 
 ---
 
