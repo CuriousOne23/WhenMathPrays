@@ -1,4 +1,5 @@
 from pathA_short_simulator import run_pathA_short
+from mcb import seam
 
 
 IDOB_PACKET_KEY_ORDER = [
@@ -107,6 +108,9 @@ def main() -> None:
         if primitive_name == "IdOB":
             idob_packet = primitive_trace_entry.get("idob_packet", {})
             print(f"idob_packet={repr(_ordered_idob_packet(idob_packet))}")
+            print("--- MCB ---")
+            mcb_packet = seam.copy_from_idob(_ordered_idob_packet(idob_packet))
+            print(f"mcb_packet={repr(mcb_packet)}")
         # If you want more detail, uncomment:
         # print("input:", step["input"])
         # print("output:", step["output"])
