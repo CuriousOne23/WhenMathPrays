@@ -38,8 +38,23 @@ def main() -> None:
 
         primitive_name = primitive_trace_entry["primitive"]
         if primitive_name == "SOB":
-            struct_segments = primitive_trace_entry.get("struct_segments", [])
-            segment_tokens = primitive_trace_entry.get("segment_tokens", [])
+            primitive_output = primitive_trace_entry.get("output", {})
+            if not isinstance(primitive_output, dict):
+                primitive_output = {}
+
+            struct_segments = primitive_trace_entry.get("struct_segments", primitive_output.get("struct_segments", []))
+            segment_tokens = primitive_trace_entry.get("segment_tokens", primitive_output.get("segment_tokens", []))
+            committed_stream = primitive_trace_entry.get("committed_stream", primitive_output.get("committed_stream", {}))
+            raw_tokens = []
+            if isinstance(committed_stream, dict):
+                token_objects = committed_stream.get("tokens", [])
+                if isinstance(token_objects, list):
+                    raw_tokens = [
+                        t["normalized"]
+                        for t in token_objects
+                        if isinstance(t, dict) and "normalized" in t
+                    ]
+            print("tokens:", raw_tokens)
             print(f"struct_segments={struct_segments}")
             print(f"segment_tokens={segment_tokens}")
 
