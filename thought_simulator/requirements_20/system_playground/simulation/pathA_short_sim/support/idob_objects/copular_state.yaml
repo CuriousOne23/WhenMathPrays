@@ -1,0 +1,29 @@
+schema_ref: idob_object.v1
+psc_id: PSC-IdOB-copular_state-v1
+name: copular_state
+family: copular_state
+priority: 20
+identity:
+  label: Copular State
+  description: Declarative copular/state contribution from existing R3 behavior.
+  tags: [descriptive, copular]
+association:
+  geometries: []
+  roles: [theme, state]
+activation: {}
+contribution_schema:
+  semantic_core:
+    type: dict
+    keys: [theme, state, location, agent, action, patient, query_focus, predicate, complement, relation_modifiers, modifiers, selected_ops]
+  selected_ops:
+    type: list
+    items: [theme_state, state_location, nested_modifier_resolution, nested_state_location_resolution, modifier_resolution, query_resolution, interrogative_relation_request, interrogative_property_request, interrogative_identity_request, agent_action, action_patient, relation_modifier]
+  truth_relation_family:
+    type: str
+    default: descriptive_state
+overlap:
+  near: [locative]
+  far: []
+psc_invariants: []
+behavior:
+  apply: idob.legacy:_copular_state_apply

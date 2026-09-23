@@ -1,0 +1,29 @@
+schema_ref: idob_object.v1
+psc_id: PSC-IdOB-mixed_descriptive-v1
+name: mixed_descriptive
+family: mixed_descriptive
+priority: 40
+identity:
+  label: Mixed Descriptive
+  description: Descriptive identity token contribution from existing R3 behavior.
+  tags: [descriptive, mixed]
+association:
+  geometries: []
+  roles: [theme, state, location]
+activation: {}
+contribution_schema:
+  semantic_core:
+    type: dict
+    keys: [theme, state, location, agent, action, patient, query_focus, predicate, complement, relation_modifiers, modifiers, selected_ops]
+  selected_ops:
+    type: list
+    items: [theme_state, state_location, nested_modifier_resolution, nested_state_location_resolution, modifier_resolution, query_resolution, interrogative_relation_request, interrogative_property_request, interrogative_identity_request, agent_action, action_patient, relation_modifier]
+  truth_relation_family:
+    type: str
+    default: descriptive_state
+overlap:
+  near: [modifier_resolution]
+  far: []
+psc_invariants: []
+behavior:
+  apply: idob.legacy:_mixed_descriptive_apply

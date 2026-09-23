@@ -1,0 +1,29 @@
+schema_ref: idob_object.v1
+psc_id: PSC-IdOB-interrogative_wh-v1
+name: interrogative_wh
+family: interrogative_wh
+priority: 10
+identity:
+  label: Interrogative WH
+  description: WH interrogative contribution from existing R3 behavior.
+  tags: [interrogative, wh]
+association:
+  geometries: []
+  roles: [query_focus, predicate]
+activation: {}
+contribution_schema:
+  semantic_core:
+    type: dict
+    keys: [theme, state, location, agent, action, patient, query_focus, predicate, complement, relation_modifiers, modifiers, selected_ops]
+  selected_ops:
+    type: list
+    items: [theme_state, state_location, nested_modifier_resolution, nested_state_location_resolution, modifier_resolution, query_resolution, interrogative_relation_request, interrogative_property_request, interrogative_identity_request, agent_action, action_patient, relation_modifier]
+  truth_relation_family:
+    type: str
+    default: interrogative_wh
+overlap:
+  near: [interrogative_polar]
+  far: [copular_state]
+psc_invariants: []
+behavior:
+  apply: idob.legacy:_interrogative_wh_apply
