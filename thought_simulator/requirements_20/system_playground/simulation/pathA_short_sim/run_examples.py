@@ -1,5 +1,6 @@
 from pathA_short_simulator import run_pathA_short
-from mcb import seam
+from mcb.seam import copy_from_idob
+from ouba.assembly import build_ouba
 
 
 IDOB_PACKET_KEY_ORDER = [
@@ -109,8 +110,11 @@ def main() -> None:
             idob_packet = primitive_trace_entry.get("idob_packet", {})
             print(f"idob_packet={repr(_ordered_idob_packet(idob_packet))}")
             print("--- MCB ---")
-            mcb_packet = seam.copy_from_idob(_ordered_idob_packet(idob_packet))
+            mcb_packet = copy_from_idob(_ordered_idob_packet(idob_packet))
             print(f"mcb_packet={repr(mcb_packet)}")
+            ouba_packet = build_ouba(mcb_packet)
+            print("--- OuBA ---")
+            print(f"ouba_packet={repr(ouba_packet)}")
         # If you want more detail, uncomment:
         # print("input:", step["input"])
         # print("output:", step["output"])
