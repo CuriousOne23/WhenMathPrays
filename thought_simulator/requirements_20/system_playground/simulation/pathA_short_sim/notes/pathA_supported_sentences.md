@@ -192,7 +192,7 @@ WQ → IQ → NP → RELC → IQ → AP → AP
 
 The examples above are canonical and can be added directly to `run_examples.py` for regression testing.
 
-As of 2026-09-23 the committed live runner sentence is *Is the book on the table?* (PA-CSE-007). Passing seeds are left commented in `run_examples.py`.
+As of 2026-09-23 the committed live runner sentence is *Where is the book that is on the table?* (PA-CSE-010). Passing seeds are left commented in `run_examples.py`.
 
 ---
 
@@ -226,11 +226,11 @@ Status values follow `notes/pathA_cse/00_header.md` §8.
 | PA-CSE-004 / locative | The rain stays in the plain. | Implemented | Pipeline complete. Segments NP → ST → LOC. Commented in runner. |
 | PA-CSE-005 / mixed_desc | The rain in Spain stays mainly in the plain. | Implemented | Pipeline complete. Commented in runner. |
 | PA-CSE-006 / interrogative | Where is the book? | Implemented | Pipeline complete. Segments WQ → IQ → NP. Commented in runner. |
-| PA-CSE-007 / interrogative | Is the book on the table? | Implemented | Pipeline complete. Segments CP → NP → LOC (catalog wants IQ → NP → LOC). Live in runner. |
+| PA-CSE-007 / interrogative | Is the book on the table? | Implemented | Pipeline complete. Segments IQ → NP → LOC after IQ rule. Commented in runner. |
 | PA-CSE-008 / interrogative | Why is the sky blue? | Implemented | Pipeline complete. Commented in runner. |
-| PA-CSE-009 / mixed_inter | Why does the rain in Spain stay mainly in the plain? | In work | Catalog seed. Documented-only. |
-| PA-CSE-010 / mixed_inter | Where is the book that is on the table? | In work | Catalog seed. Documented-only. RELC. |
-| PA-CSE-011 / mixed_inter | Why is the sky that is blue bright? | In work | Catalog seed. Documented-only. RELC + AP stack. |
+| PA-CSE-009 / mixed_inter | Why does the rain in Spain stay mainly in the plain? | In work | Completes locally; not promoted this pass. |
+| PA-CSE-010 / mixed_inter | Where is the book that is on the table? | Implemented | Pipeline complete. Segments WQ → IQ → NP → RELC → IQ → LOC. Live in runner. |
+| PA-CSE-011 / mixed_inter | Why is the sky that is blue bright? | In work | Completes locally; AP stack still fused. |
 | PA-CSE-012 / copular | Close the door. | Not yet implemented | Stretch: imperative. Would require new sentence family or segment type. |
 | PA-CSE-013 / copular | The sky is not blue. | Not yet implemented | Stretch: negation. Would require new constraint / cue. |
 | PA-CSE-014 / locative | The book is on the table and the lamp is on the desk. | Not yet implemented | Stretch: coordination. Would require new segment type or constraint family. |
