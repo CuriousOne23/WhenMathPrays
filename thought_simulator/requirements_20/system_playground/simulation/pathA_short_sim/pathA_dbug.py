@@ -793,6 +793,26 @@ def generate_output(
     _append_list_block(lines, "semantic_core", semantic_core_values if isinstance(semantic_core_values, list) else [])
     _append_dict_block(lines, "idob_packet", idob_packet if isinstance(idob_packet, dict) else {})
 
+    if _is_r3_idob_packet(idob_packet if isinstance(idob_packet, dict) else {}):
+        def _space_value_repr(value: Any) -> str:
+            if isinstance(value, (list, dict)):
+                return repr(value)
+            return _render_scalar(value)
+
+        lines.append("")
+        lines.append("## IdOB Space Summary")
+        lines.append(f"- contributors: {_space_value_repr(idob_packet.get('contributors', []))}")
+        lines.append(f"- contributions: {_space_value_repr(idob_packet.get('contributions', []))}")
+        lines.append(f"- activation_set: {_space_value_repr(idob_packet.get('activation_set', []))}")
+        lines.append(f"- inactive_objects: {_space_value_repr(idob_packet.get('inactive_objects', []))}")
+        lines.append(f"- residual_activated: {_space_value_repr(idob_packet.get('residual_activated', False))}")
+        lines.append(f"- overlap_events: {_space_value_repr(idob_packet.get('overlap_events', []))}")
+        lines.append(f"- meaning_delta: {_space_value_repr(idob_packet.get('meaning_delta', {}))}")
+        lines.append(f"- registry_digest: {_space_value_repr(idob_packet.get('registry_digest', ''))}")
+        lines.append(f"- truth_relation_family: {_space_value_repr(idob_packet.get('truth_relation_family', ''))}")
+        lines.append(f"- tru_hint: {_space_value_repr(idob_packet.get('tru_hint', ''))}")
+        lines.append(f"- complete: {_space_value_repr(idob_packet.get('complete', False))}")
+
     return "\n".join(lines)
 
 
