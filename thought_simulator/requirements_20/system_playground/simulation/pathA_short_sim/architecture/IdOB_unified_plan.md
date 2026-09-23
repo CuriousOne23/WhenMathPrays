@@ -87,6 +87,8 @@ $$
 
 ### 3.1 IdOBObject catalog frame (YAML)
 
+The IdOBObject catalog is validated against support/idob_schemas/idob_object.v1.schema.json.
+
 An IdOBObject is a catalog document plus a tiny apply stub. It is not a
 closure in `legacy.py`.
 
@@ -192,6 +194,10 @@ D4 joins `contributors` to `identity.label` from YAML.
 ---
 
 ## 4. Engine software
+
+support/idob_schemas/idob_object.v1.schema.json
+support/idob_schemas/idob_psc_defaults.yaml   (R4a)
+support/idob_objects/                         (R4a)
 
 ```text
 idob/object.py registry.py predicates.py sum.py packets.py
@@ -305,6 +311,10 @@ R4a Catalog lift
     packet oracles bit-identical to R3.
     New core key or op string = a different gate, not R4a.
     Do not land psc.py in the same commit.
+    R4a lifts the eight existing objects into YAML validated by idob_object.v1.schema.json.
+    Packet oracles remain bit‑identical to R3.
+    Overlap graph must be closed.
+    Digest must be stable.
 
 R4b PSC
     idob/psc.py: spec + contribution + TP.
