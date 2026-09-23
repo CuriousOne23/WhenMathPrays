@@ -1,6 +1,33 @@
 from pathA_short_simulator import run_pathA_short
 
 
+IDOB_PACKET_KEY_ORDER = [
+    "identity_geometry",
+    "truth_relation",
+    "truth_relation_family",
+    "semantic_core",
+    "selected_ops",
+    "claimed_fields",
+    "contributors",
+    "contributions",
+    "activation_set",
+    "inactive_objects",
+    "residual_activated",
+    "overlap_events",
+    "meaning_delta",
+    "psc_violations",
+    "registry_digest",
+    "complete",
+    "tru_hint",
+]
+
+
+def _ordered_idob_packet(packet: object) -> dict:
+    if not isinstance(packet, dict):
+        return {}
+    return {key: packet.get(key) for key in IDOB_PACKET_KEY_ORDER}
+
+
 def main() -> None:
     # sentence = "The quick brown fox jumps over the lazy dog."
     # sentence = "The rain in Spain stays mainly in the plain."
@@ -24,7 +51,6 @@ def main() -> None:
         "basin_residue": final_tp.get("basin_residue", final_tp.get("smoothing_residue", [])),
         "truth_relation": truth_relation,
         "semantic_core": semantic_core,
-        "idob_packet": idob_packet if isinstance(idob_packet, dict) else {},
     }
 
     print("=== Final TP ===")
@@ -80,14 +106,7 @@ def main() -> None:
 
         if primitive_name == "IdOB":
             idob_packet = primitive_trace_entry.get("idob_packet", {})
-            idob_semantic_core = []
-            idob_truth_relation = ""
-            if isinstance(idob_packet, dict):
-                idob_semantic_core = idob_packet.get("semantic_core", [])
-                idob_truth_relation = idob_packet.get("truth_relation", "")
-            print(f"idob_packet={idob_packet if isinstance(idob_packet, dict) else {}}")
-            print(f"semantic_core={idob_semantic_core if isinstance(idob_semantic_core, list) else []}")
-            print(f"truth_relation={idob_truth_relation}")
+            print(f"idob_packet={repr(_ordered_idob_packet(idob_packet))}")
         # If you want more detail, uncomment:
         # print("input:", step["input"])
         # print("output:", step["output"])
