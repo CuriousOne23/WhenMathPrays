@@ -111,7 +111,7 @@ def _sum_split_packet(
     if truth_relation == "interrogative":
         identity_geometry = "referential_identity"
 
-    from idob.registry import registry_digest
+    from idob.registry import evaluate_psc_after_apply, registry_digest
     from idob.registry import parity_oracle
 
     legacy_packet = as_packet(parity_oracle.apply(tp))
@@ -146,6 +146,9 @@ def _sum_split_packet(
         "complete": True,
         "tru_hint": str(tru_hint),
     }
+
+    # R4b PSC runs after apply and reports only; no value mutation.
+    idob_packet["psc_violations"] = evaluate_psc_after_apply(tp, contributions, idob_packet)
 
     return as_packet(idob_packet)
 

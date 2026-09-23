@@ -10,11 +10,13 @@ from idob.legacy import (
     legacy_monolith,
 )
 from idob.object import IdOBObject
+from idob.psc import evaluate_psc, load_psc_defaults
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 SUPPORT_DIR = ROOT_DIR / "support"
 SCHEMA_PATH = SUPPORT_DIR / "idob_schemas" / "idob_object.v1.schema.json"
+PSC_DEFAULTS_PATH = SUPPORT_DIR / "idob_schemas" / "idob_psc_defaults.yaml"
 OBJECTS_DIR = SUPPORT_DIR / "idob_objects"
 
 
@@ -132,9 +134,11 @@ def compute_registry_digest(
     registry: List[IdOBObject],
     overlap_graph: Dict[str, Dict[Tuple[str, str], str]],
     schema_path: Path,
+    psc_defaults_path: Path,
     specs: List[Tuple[Path, Dict[str, Any]]],
 ) -> str:
     schema_blob = schema_path.read_text(encoding="utf-8")
+    psc_defaults_blob = psc_defaults_path.read_text(encoding="utf-8")
     object_rows = [
         {
             "name": obj.name,
@@ -153,6 +157,7 @@ def compute_registry_digest(
     ]
     payload = {
         "schema_sha256": hashlib.sha256(schema_blob.encode("utf-8")).hexdigest(),
+        "psc_defaults_sha256": hashlib.sha256(psc_defaults_blob.encode("utf-8")).hexdigest(),
         "objects": object_rows,
         "near": near_edges,
         "far": far_edges,
@@ -168,9 +173,36 @@ def compute_registry_digest(
     return hashlib.sha256(blob).hexdigest()
 
 
+def _object_specs_by_name(specs: List[Tuple[Path, Dict[str, Any]]]) -> Dict[str, Dict[str, Any]]:
+    by_name: Dict[str, Dict[str, Any]] = {}
+    for _path, spec in specs:
+        by_name[str(spec["name"])] = spec
+    return by_name
+
+
+def _object_identity_labels(specs: List[Tuple[Path, Dict[str, Any]]]) -> Dict[str, str]:
+    labels: Dict[str, str] = {}
+    for _path, spec in specs:
+        identity = spec.get("identity", {}) or {}
+        labels[str(spec["name"])] = str(identity.get("label", str(spec["name"])))
+    return labels
+
+
+def get_identity_label(object_name: str) -> str:
+    return object_labels_by_name.get(object_name, object_name)
+
+
+def evaluate_psc_after_apply(tp: Any, contributions: List[Dict[str, Any]], packet: Dict[str, Any]) -> List[Dict[str, str]]:
+    # PSC is report-only in R4b; it never mutates contribution or packet values.
+    return evaluate_psc(object_specs_by_name, contributions, tp, packet, psc_defaults)
+
+
 registry = build_r2_registry()
 schema = _load_schema(SCHEMA_PATH)
 object_specs = _load_object_specs(OBJECTS_DIR, schema)
+object_specs_by_name = _object_specs_by_name(object_specs)
+object_labels_by_name = _object_identity_labels(object_specs)
+psc_defaults = load_psc_defaults(PSC_DEFAULTS_PATH)
 overlap_graph = build_r2_overlap_graph(object_specs)
 parity_oracle = legacy_monolith
-registry_digest = compute_registry_digest(registry, overlap_graph, SCHEMA_PATH, object_specs)
+registry_digest = compute_registry_digest(registry, overlap_graph, SCHEMA_PATH, PSC_DEFAULTS_PATH, object_specs)

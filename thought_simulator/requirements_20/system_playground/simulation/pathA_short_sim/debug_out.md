@@ -149,7 +149,7 @@ See: [SmOB](debug/primitives/SmOB.md)
   meaning_delta:
   psc_violations:
     - []
-  registry_digest: d774aea096213eeee17b5ddb948edcfa26432ab09e5d2fe81d737e67ca51fada
+  registry_digest: 693600ce4cab15ee344e89e070a490b2b82f6d7d490f244d314c23fd5497c453
   complete: True
   tru_hint: interrogative
 
@@ -214,19 +214,22 @@ See: [IdOB](debug/primitives/IdOB.md)
   meaning_delta:
   psc_violations:
     - []
-  registry_digest: d774aea096213eeee17b5ddb948edcfa26432ab09e5d2fe81d737e67ca51fada
+  registry_digest: 693600ce4cab15ee344e89e070a490b2b82f6d7d490f244d314c23fd5497c453
   complete: True
   tru_hint: interrogative
 
 ## IdOB Space Summary
 - contributors: ['interrogative_polar', 'agent_action', 'modifier_resolution', 'residual_identity']
+- contributor_labels: ['interrogative_polar -> Interrogative Polar', 'agent_action -> Agent Action', 'modifier_resolution -> Modifier Resolution', 'residual_identity -> Residual Identity']
 - contributions: [{'name': 'interrogative_polar', 'family': 'interrogative_polar', 'priority': 11, 'fragment': {'truth_relation': 'interrogative', 'truth_relation_family_hint': 'interrogative_polar'}}, {'name': 'agent_action', 'family': 'residual_identity', 'priority': 50, 'fragment': {}}, {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'semantic_core_tokens': ['entity']}}, {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'referential_identity', 'truth_relation': 'interrogative'}}]
 - activation_set: ['interrogative_polar', 'agent_action', 'modifier_resolution', 'residual_identity']
 - inactive_objects: ['interrogative_wh', 'copular_state', 'locative', 'mixed_descriptive']
 - residual_activated: True
 - overlap_events: []
 - meaning_delta: {}
-- registry_digest: d774aea096213eeee17b5ddb948edcfa26432ab09e5d2fe81d737e67ca51fada
+- psc_violation_count: 0
+- psc_violations: []
+- registry_digest: 693600ce4cab15ee344e89e070a490b2b82f6d7d490f244d314c23fd5497c453
 - truth_relation_family: interrogative_polar
 - tru_hint: interrogative
 - complete: True

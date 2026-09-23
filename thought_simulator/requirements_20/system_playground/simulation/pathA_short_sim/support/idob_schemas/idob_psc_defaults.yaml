@@ -1,0 +1,8 @@
+schema_ref: idob_psc_defaults.v1
+defaults:
+  - id: I8
+    field: semantic_core
+    rule: writes_only_declared_fields
+  - id: I10
+    field: semantic_core
+    rule: semantic_core_is_dict

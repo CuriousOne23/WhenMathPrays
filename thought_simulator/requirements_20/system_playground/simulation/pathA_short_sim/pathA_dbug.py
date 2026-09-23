@@ -315,6 +315,27 @@ def _normalize_token_relations(mapping: Dict[str, Any]) -> List[str]:
     return relations
 
 
+def _load_idob_identity_labels(base_dir: Path) -> Dict[str, str]:
+    labels: Dict[str, str] = {}
+    objects_dir = base_dir / "support" / "idob_objects"
+    if not objects_dir.exists():
+        return labels
+
+    for path in sorted(objects_dir.glob("*.yaml")):
+        try:
+            spec = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        except Exception:
+            continue
+        if not isinstance(spec, dict):
+            continue
+        name = str(spec.get("name", "")).strip()
+        identity = spec.get("identity", {}) or {}
+        label = str(identity.get("label", "")).strip() if isinstance(identity, dict) else ""
+        if name:
+            labels[name] = label or name
+    return labels
+
+
 def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
     """Parse run.log into structured intermediate data."""
     primitive_headers = [
@@ -799,15 +820,43 @@ def generate_output(
                 return repr(value)
             return _render_scalar(value)
 
+        base_dir = Path(__file__).resolve().parent
+        idob_labels = _load_idob_identity_labels(base_dir)
+        contributors = idob_packet.get("contributors", [])
+        if not isinstance(contributors, list):
+            contributors = []
+        contributor_labels = [f"{name} -> {idob_labels.get(str(name), str(name))}" for name in contributors]
+
+        psc_violations = idob_packet.get("psc_violations", [])
+        if not isinstance(psc_violations, list):
+            psc_violations = []
+        psc_human: List[str] = []
+        for row in psc_violations:
+            if not isinstance(row, dict):
+                psc_human.append(_render_scalar(row))
+                continue
+            object_name = str(row.get("object", ""))
+            object_label = idob_labels.get(object_name, object_name)
+            invariant = _render_scalar(row.get("invariant", ""))
+            field = _render_scalar(row.get("field", ""))
+            rule = _render_scalar(row.get("rule", ""))
+            detail = _render_scalar(row.get("detail", ""))
+            psc_human.append(
+                f"{object_name} ({object_label}) | invariant={invariant} field={field} rule={rule} detail={detail}"
+            )
+
         lines.append("")
         lines.append("## IdOB Space Summary")
         lines.append(f"- contributors: {_space_value_repr(idob_packet.get('contributors', []))}")
+        lines.append(f"- contributor_labels: {_space_value_repr(contributor_labels)}")
         lines.append(f"- contributions: {_space_value_repr(idob_packet.get('contributions', []))}")
         lines.append(f"- activation_set: {_space_value_repr(idob_packet.get('activation_set', []))}")
         lines.append(f"- inactive_objects: {_space_value_repr(idob_packet.get('inactive_objects', []))}")
         lines.append(f"- residual_activated: {_space_value_repr(idob_packet.get('residual_activated', False))}")
         lines.append(f"- overlap_events: {_space_value_repr(idob_packet.get('overlap_events', []))}")
         lines.append(f"- meaning_delta: {_space_value_repr(idob_packet.get('meaning_delta', {}))}")
+        lines.append(f"- psc_violation_count: {_space_value_repr(len(psc_violations))}")
+        lines.append(f"- psc_violations: {_space_value_repr(psc_human)}")
         lines.append(f"- registry_digest: {_space_value_repr(idob_packet.get('registry_digest', ''))}")
         lines.append(f"- truth_relation_family: {_space_value_repr(idob_packet.get('truth_relation_family', ''))}")
         lines.append(f"- tru_hint: {_space_value_repr(idob_packet.get('tru_hint', ''))}")
