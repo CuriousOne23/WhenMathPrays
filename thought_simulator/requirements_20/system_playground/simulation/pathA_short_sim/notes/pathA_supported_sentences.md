@@ -218,26 +218,31 @@ Status values follow `notes/pathA_cse/00_header.md` §8.
 - **In work** — family / dictionary pattern present; committed runner does not invoke this utterance.
 - **Not yet implemented** — missing pattern, or would require a new frozen object.
 
-| ID | Utterance | Status | Notes |
-|---|---|---|---|
-| PA-CSE-001 / copular | The sky is blue. | Implemented | Pipeline complete. Segments NP → CP → AP. Commented in runner. |
-| PA-CSE-002 / copular | Paris is a city. | Implemented | Pipeline complete. Segments NP → CP → NP. Commented in runner. |
-| PA-CSE-003 / locative | The book is on the table. | Implemented | Pipeline complete. Segments NP → CP → LOC. Commented in runner. |
-| PA-CSE-004 / locative | The rain stays in the plain. | Implemented | Pipeline complete. Segments NP → ST → LOC. Commented in runner. |
-| PA-CSE-005 / mixed_desc | The rain in Spain stays mainly in the plain. | Implemented | Pipeline complete. Commented in runner. |
-| PA-CSE-006 / interrogative | Where is the book? | Implemented | Pipeline complete. Segments WQ → IQ → NP. Commented in runner. |
-| PA-CSE-007 / interrogative | Is the book on the table? | Implemented | Pipeline complete. Segments IQ → NP → LOC after IQ rule. Commented in runner. |
-| PA-CSE-008 / interrogative | Why is the sky blue? | Implemented | Pipeline complete. Commented in runner. |
-| PA-CSE-009 / mixed_inter | Why does the rain in Spain stay mainly in the plain? | In work | Completes locally; not promoted this pass. |
-| PA-CSE-010 / mixed_inter | Where is the book that is on the table? | Implemented | Pipeline complete. Segments WQ → IQ → NP → RELC → IQ → LOC. Live in runner. |
-| PA-CSE-011 / mixed_inter | Why is the sky that is blue bright? | In work | Completes locally; AP stack still fused. |
-| PA-CSE-012 / copular | Close the door. | Not yet implemented | Stretch: imperative. Would require new sentence family or segment type. |
-| PA-CSE-013 / copular | The sky is not blue. | Not yet implemented | Stretch: negation. Would require new constraint / cue. |
-| PA-CSE-014 / locative | The book is on the table and the lamp is on the desk. | Not yet implemented | Stretch: coordination. Would require new segment type or constraint family. |
-| PA-CSE-015 / locative | If the book is on the table, the lamp is in the hall. | Not yet implemented | Stretch: conditional. Would require new TRU label: conditional. |
-| PA-CSE-016 / locative | On the table. | Not yet implemented | Stretch: fragment. Would require residual / fragment handling. |
-| PA-CSE-017 / copular | I am tired. | Not yet implemented | Stretch: 1st person. Would require speaker role if first-class. |
-| PA-CSE-018 / copular | The door was closed by the wind. | Not yet implemented | Stretch: passive. Would require new family or IdOB use-pattern. |
-| PA-CSE-019 / copular | Every sky is blue. | Not yet implemented | Stretch: quantified NP. Would require new constraint / cue. |
-| PA-CSE-020 / copular | How blue the sky is! | Not yet implemented | Stretch: exclamative. Would require new TRU label: exclamative. |
-| PA-CSE-021 / interrogative | Please put the book on the table. | Not yet implemented | Stretch: non-WH request. Would require new family or speech-act TRU. |
+Mandatory status-change metadata (required for every row update):
+
+- **Hole ID** must be explicit and must match `notes/pathA_cse/00_header.md` §9.
+- **Capability note** must explicitly name what capability was added or what frozen object is still required.
+
+| ID | Utterance | Hole ID | Status | Capability Note | Notes |
+|---|---|---|---|---|---|
+| PA-CSE-001 / copular | The sky is blue. | HOLE-03 | Implemented | Copular AP complement stabilized in SOB/SROB path. | Pipeline complete. Segments NP → CP → AP. Commented in runner. |
+| PA-CSE-002 / copular | Paris is a city. | HOLE-03 | Implemented | Copular NP complement stabilized in SOB/SROB path. | Pipeline complete. Segments NP → CP → NP. Commented in runner. |
+| PA-CSE-003 / locative | The book is on the table. | HOLE-04 | Implemented | CP→LOC locative composition stabilized. | Pipeline complete. Segments NP → CP → LOC. Commented in runner. |
+| PA-CSE-004 / locative | The rain stays in the plain. | HOLE-04 | Implemented | ST→LOC state-verb locative composition stabilized. | Pipeline complete. Segments NP → ST → LOC. Commented in runner. |
+| PA-CSE-005 / mixed_desc | The rain in Spain stays mainly in the plain. | HOLE-06 | Implemented | PP/PN modifier chain handling stabilized. | Pipeline complete. Commented in runner. |
+| PA-CSE-006 / interrogative | Where is the book? | HOLE-01 | Implemented | WH interrogative scope + WQ/IQ routing stabilized. | Pipeline complete. Segments WQ → IQ → NP. Commented in runner. |
+| PA-CSE-007 / interrogative | Is the book on the table? | HOLE-02 | Implemented | Polar IQ-fronted interrogative handling stabilized. | Pipeline complete. Segments IQ → NP → LOC after IQ rule. Commented in runner. |
+| PA-CSE-008 / interrogative | Why is the sky blue? | HOLE-01 | Implemented | WH-state interrogative baseline stabilized. | Pipeline complete. Commented in runner. |
+| PA-CSE-009 / mixed_inter | Why does the rain in Spain stay mainly in the plain? | HOLE-06 | In work | Mixed-interrogative with modifier stack completes locally; promotion gate pending. | Completes locally; not promoted this pass. |
+| PA-CSE-010 / mixed_inter | Where is the book that is on the table? | HOLE-05 | Implemented | RELC + nested interrogative-locative chain stabilized. | Pipeline complete. Segments WQ → IQ → NP → RELC → IQ → LOC. Commented in runner this pass. |
+| PA-CSE-011 / mixed_inter | Why is the sky that is blue bright? | HOLE-05 | In work | Nested AP stack inside RELC still fused; needs AP split capability. | Completes locally; AP stack still fused. |
+| PA-CSE-012 / copular | Please close the door. | HOLE-09 | In work | Request-force imperative handling in CnOB/SmOB: `request_imperative_rule` + `request_imperative_clause` cue for polite request imperatives. | Full gate passes with PA-CSE-012 active in runner (`run_examples.py` -> `run.log` -> `pathA_dbug.py` -> `debug_out.md`); directive-family/TRU policy remains open for promotion to Implemented. |
+| PA-CSE-013 / copular | The sky is not blue. | HOLE-08 | Implemented | Negation handling in CnOB/SmOB: `negation_scope_rule` + `negated_state` cue for negative copular declaratives. | Full gate passed earlier this rollout; sentence is commented in runner this pass. |
+| PA-CSE-014 / locative | The book is on the table and the lamp is on the desk. | HOLE-11 | Implemented | Multi-clause composition in CnOB/SmOB: `coordination_composition_rule` + `coordinated_clauses` cue for coordinated locative declaratives. | Full gate passed earlier this rollout; sentence is commented in runner this pass. |
+| PA-CSE-015 / locative | If the book is on the table, the lamp is in the hall. | HOLE-10 | In work | Multi-clause conditional composition in CnOB/SmOB: `conditional_composition_rule` + `conditional_clauses` cue (TRU remains declarative). | Full gate passes with PA-CSE-015 active in runner (`run_examples.py` -> `run.log` -> `pathA_dbug.py` -> `debug_out.md`); promotion to Implemented is blocked pending conditional TRU label. |
+| PA-CSE-016 / locative | On the table. | HOLE-12 | In work | Fragment/ellipsis handling in CnOB/SmOB: `fragment_ellipsis_rule` + `fragment_ellipsis` cue for LOC-only utterance shape. | Full gate passes with PA-CSE-016 active in runner (`run_examples.py` -> `run.log` -> `pathA_dbug.py` -> `debug_out.md`); residual completion policy remains open for promotion to Implemented. |
+| PA-CSE-017 / copular | I am tired. | HOLE-13 | In work | First-person handling in CnOB/SmOB: `first_person_state_rule` + `first_person_speaker` cue for first-person copular state shape. | Full gate passes with PA-CSE-017 active in runner (`run_examples.py` -> `run.log` -> `pathA_dbug.py` -> `debug_out.md`); first-class speaker-role handling beyond cue-level remains open for promotion to Implemented. |
+| PA-CSE-018 / copular | The book was written. | HOLE-14 | In work | Passive-voice handling in CnOB/SmOB: `passive_voice_rule` + `passive_voice_clause` cue for auxiliary+participle passive shape. | Full gate passes with PA-CSE-018 active in runner (`run_examples.py` -> `run.log` -> `pathA_dbug.py` -> `debug_out.md`); by-phrase role mapping remains open for promotion to Implemented. |
+| PA-CSE-019 / copular | Every sky is blue. | HOLE-15 | Implemented | Quantifier handling in CnOB/SmOB: `quantifier_scope_rule` + `quantified_np` cue for quantified NP declaratives. | Full gate passed earlier this rollout; sentence is commented in runner this pass. |
+| PA-CSE-020 / copular | Close the door. | HOLE-16 | In work | Imperative-voice handling in CnOB/SmOB: `imperative_voice_rule` + `imperative_voice_clause` cue for imperative command-head utterance shape. | Full gate passes with PA-CSE-020 active in runner (`run_examples.py` -> `run.log` -> `pathA_dbug.py` -> `debug_out.md`); directive-family/TRU policy remains open for promotion to Implemented. |
+| PA-CSE-021 / interrogative | What a beautiful day! | HOLE-09 | In work | Exclamative-force handling in CnOB/SmOB: `exclamative_force_rule` + `exclamative_force_clause` cue for exclamative WH-head utterance shape. | Full gate passes with PA-CSE-021 active in runner (`run_examples.py` -> `run.log` -> `pathA_dbug.py` -> `debug_out.md`); TRU remains interrogative under current policy, so promotion to Implemented is pending force/TRU alignment policy. |

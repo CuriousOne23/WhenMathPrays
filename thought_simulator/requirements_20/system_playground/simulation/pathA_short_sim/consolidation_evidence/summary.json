@@ -1,0 +1,142 @@
+[
+  {
+    "id": "PA-CSE-015",
+    "sentence": "If the book is on the table, the lamp is in the hall.",
+    "rule": "conditional_composition_rule",
+    "cue": "conditional_clauses",
+    "rule_in_runlog": true,
+    "cue_in_runlog": true,
+    "rule_in_debugout": true,
+    "cue_in_debugout": true,
+    "truth_relation": "declarative",
+    "struct_segments": [
+      "NP",
+      "CP",
+      "LOC",
+      "NP",
+      "CP",
+      "LOC"
+    ],
+    "constraints_matched": [
+      "structural_rule",
+      "adjacency_rule",
+      "conditional_composition_rule"
+    ],
+    "semantic_adjacent_cues": [
+      "locative_adjacent",
+      "conditional_clauses"
+    ]
+  },
+  {
+    "id": "PA-CSE-016",
+    "sentence": "On the table.",
+    "rule": "fragment_ellipsis_rule",
+    "cue": "fragment_ellipsis",
+    "rule_in_runlog": true,
+    "cue_in_runlog": true,
+    "rule_in_debugout": true,
+    "cue_in_debugout": true,
+    "truth_relation": "declarative",
+    "struct_segments": [
+      "LOC"
+    ],
+    "constraints_matched": [
+      "structural_rule",
+      "adjacency_rule",
+      "fragment_ellipsis_rule"
+    ],
+    "semantic_adjacent_cues": [
+      "locative_adjacent",
+      "fragment_ellipsis"
+    ]
+  },
+  {
+    "id": "PA-CSE-017",
+    "sentence": "I am tired.",
+    "rule": "first_person_state_rule",
+    "cue": "first_person_speaker",
+    "rule_in_runlog": true,
+    "cue_in_runlog": true,
+    "rule_in_debugout": true,
+    "cue_in_debugout": true,
+    "truth_relation": "declarative",
+    "struct_segments": [
+      "NP"
+    ],
+    "constraints_matched": [
+      "structural_rule",
+      "first_person_state_rule"
+    ],
+    "semantic_adjacent_cues": [
+      "first_person_speaker"
+    ]
+  },
+  {
+    "id": "PA-CSE-018",
+    "sentence": "The book was written.",
+    "rule": "passive_voice_rule",
+    "cue": "passive_voice_clause",
+    "rule_in_runlog": true,
+    "cue_in_runlog": true,
+    "rule_in_debugout": true,
+    "cue_in_debugout": true,
+    "truth_relation": "declarative",
+    "struct_segments": [
+      "NP",
+      "CP",
+      "AP"
+    ],
+    "constraints_matched": [
+      "structural_rule",
+      "passive_voice_rule"
+    ],
+    "semantic_adjacent_cues": [
+      "passive_voice_clause"
+    ]
+  },
+  {
+    "id": "PA-CSE-020",
+    "sentence": "Close the door.",
+    "rule": "imperative_voice_rule",
+    "cue": "imperative_voice_clause",
+    "rule_in_runlog": true,
+    "cue_in_runlog": true,
+    "rule_in_debugout": true,
+    "cue_in_debugout": true,
+    "truth_relation": "declarative",
+    "struct_segments": [
+      "NP"
+    ],
+    "constraints_matched": [
+      "structural_rule",
+      "imperative_voice_rule"
+    ],
+    "semantic_adjacent_cues": [
+      "imperative_voice_clause"
+    ]
+  },
+  {
+    "id": "PA-CSE-021",
+    "sentence": "What a beautiful day!",
+    "rule": "exclamative_force_rule",
+    "cue": "exclamative_force_clause",
+    "rule_in_runlog": true,
+    "cue_in_runlog": true,
+    "rule_in_debugout": true,
+    "cue_in_debugout": true,
+    "truth_relation": "interrogative",
+    "struct_segments": [
+      "WQ",
+      "NP"
+    ],
+    "constraints_matched": [
+      "structural_rule",
+      "adjacency_rule",
+      "exclamative_force_rule"
+    ],
+    "semantic_adjacent_cues": [
+      "interrogative_scope",
+      "exclamative_force_clause"
+    ]
+  }
+]

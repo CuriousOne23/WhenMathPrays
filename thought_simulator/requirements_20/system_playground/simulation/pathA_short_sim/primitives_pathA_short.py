@@ -594,12 +594,48 @@ def SROB(tp: TP) -> TP:
 def CnOB(tp: TP) -> TP:
     _ = check_constraints(tp.struct_roles)
 
+    quantifier_heads = {"every", "all", "each"}
+    first_token = tp.tokens[0].strip().lower() if tp.tokens else ""
+    has_quantified_np = first_token in quantifier_heads
+    has_negation_marker = any(tok in {"not", "n't", "never"} for tok in tp.tokens)
+    has_coordination = "and" in tp.tokens and tp.struct_segments.count("CP") >= 2 and tp.struct_segments.count("LOC") >= 2
+    has_conditional_composition = first_token == "if" and tp.struct_segments.count("CP") >= 2 and tp.struct_segments.count("LOC") >= 2
+    has_locative_fragment = len(tp.struct_segments) == 1 and tp.struct_segments[0] == "LOC"
+    has_first_person_state = first_token == "i" and "am" in tp.tokens
+    passive_auxiliaries = {"was", "were", "is", "are", "been", "be"}
+    passive_participles = {"written", "known", "seen", "given", "taken", "done", "made", "closed"}
+    has_passive_voice = any(tok in passive_auxiliaries for tok in tp.tokens) and any(tok.endswith("ed") or tok in passive_participles for tok in tp.tokens)
+    imperative_heads = {"close", "open", "stop", "go", "put", "take"}
+    has_imperative_voice = first_token in imperative_heads and not tp.raw_text.strip().endswith("?")
+    has_request_imperative = first_token == "please" and len(tp.tokens) > 1 and tp.tokens[1] in imperative_heads
+    has_exclamative_force = tp.raw_text.strip().endswith("!") and first_token in {"what", "how"}
+
     canonical_rules = [
         "adjacency_rule",
         "compatibility_rule",
         "structural_rule",
         "continuity_rule",
     ]
+    if has_quantified_np:
+        canonical_rules.append("quantifier_scope_rule")
+    if has_negation_marker:
+        canonical_rules.append("negation_scope_rule")
+    if has_coordination:
+        canonical_rules.append("coordination_composition_rule")
+    if has_conditional_composition:
+        canonical_rules.append("conditional_composition_rule")
+    if has_locative_fragment:
+        canonical_rules.append("fragment_ellipsis_rule")
+    if has_first_person_state:
+        canonical_rules.append("first_person_state_rule")
+    if has_passive_voice:
+        canonical_rules.append("passive_voice_rule")
+    if has_imperative_voice:
+        canonical_rules.append("imperative_voice_rule")
+    if has_request_imperative:
+        canonical_rules.append("request_imperative_rule")
+    if has_exclamative_force:
+        canonical_rules.append("exclamative_force_rule")
 
     constraints_matched: List[str] = []
     if tp.struct_segments and tp.segment_tokens:
@@ -610,6 +646,26 @@ def CnOB(tp: TP) -> TP:
         constraints_matched.append("adjacency_rule")
     if tp.struct_roles and all(role != "none" for role in tp.struct_roles):
         constraints_matched.append("continuity_rule")
+    if has_quantified_np and "NP" in tp.struct_segments:
+        constraints_matched.append("quantifier_scope_rule")
+    if has_negation_marker and "CP" in tp.struct_segments:
+        constraints_matched.append("negation_scope_rule")
+    if has_coordination:
+        constraints_matched.append("coordination_composition_rule")
+    if has_conditional_composition:
+        constraints_matched.append("conditional_composition_rule")
+    if has_locative_fragment:
+        constraints_matched.append("fragment_ellipsis_rule")
+    if has_first_person_state and "NP" in tp.struct_segments:
+        constraints_matched.append("first_person_state_rule")
+    if has_passive_voice and "CP" in tp.struct_segments:
+        constraints_matched.append("passive_voice_rule")
+    if has_imperative_voice and "NP" in tp.struct_segments:
+        constraints_matched.append("imperative_voice_rule")
+    if has_request_imperative and "NP" in tp.struct_segments:
+        constraints_matched.append("request_imperative_rule")
+    if has_exclamative_force:
+        constraints_matched.append("exclamative_force_rule")
 
     constraints_matched = list(dict.fromkeys(constraints_matched))
     constraints_unmatched = [rule for rule in canonical_rules if rule not in constraints_matched]
@@ -647,13 +703,46 @@ def SmOB(tp: TP) -> TP:
         "segment_smoothing",
         "basin_compression_smoothing",
     }
-    allowed_cues = {"interrogative_scope", "locative_adjacent"}
+    allowed_cues = {
+        "interrogative_scope",
+        "locative_adjacent",
+        "quantified_np",
+        "negated_state",
+        "coordinated_clauses",
+        "conditional_clauses",
+        "fragment_ellipsis",
+        "first_person_speaker",
+        "passive_voice_clause",
+        "imperative_voice_clause",
+        "request_imperative_clause",
+        "exclamative_force_clause",
+    }
 
     semantic_adjacent_cues = [cue for cue in base_cues if cue in allowed_cues]
     if ("WQ" in tp.struct_segments or tp.raw_text.strip().endswith("?")) and "interrogative_scope" not in semantic_adjacent_cues:
         semantic_adjacent_cues.append("interrogative_scope")
     if "LOC" in tp.struct_segments and "locative_adjacent" not in semantic_adjacent_cues:
         semantic_adjacent_cues.append("locative_adjacent")
+    if "quantifier_scope_rule" in tp.constraints_matched and "quantified_np" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("quantified_np")
+    if "negation_scope_rule" in tp.constraints_matched and "negated_state" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("negated_state")
+    if "coordination_composition_rule" in tp.constraints_matched and "coordinated_clauses" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("coordinated_clauses")
+    if "conditional_composition_rule" in tp.constraints_matched and "conditional_clauses" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("conditional_clauses")
+    if "fragment_ellipsis_rule" in tp.constraints_matched and "fragment_ellipsis" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("fragment_ellipsis")
+    if "first_person_state_rule" in tp.constraints_matched and "first_person_speaker" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("first_person_speaker")
+    if "passive_voice_rule" in tp.constraints_matched and "passive_voice_clause" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("passive_voice_clause")
+    if "imperative_voice_rule" in tp.constraints_matched and "imperative_voice_clause" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("imperative_voice_clause")
+    if "request_imperative_rule" in tp.constraints_matched and "request_imperative_clause" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("request_imperative_clause")
+    if "exclamative_force_rule" in tp.constraints_matched and "exclamative_force_clause" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("exclamative_force_clause")
 
     smoothing_operations = [op for op in base_ops if op in allowed_ops]
     if "interrogative_scope" in semantic_adjacent_cues and "adjacency_smoothing" not in smoothing_operations:

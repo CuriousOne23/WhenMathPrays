@@ -110,7 +110,62 @@ def main() -> None:
     # PA-CSE-007 / interrogative
     # sentence = "Is the book on the table?"
     # PA-CSE-010 / mixed_inter
-    sentence = "Where is the book that is on the table?"
+    # sentence = "Where is the book that is on the table?"
+    # PA-CSE-019 / copular / HOLE-15
+    # sentence = "Every sky is blue."
+    # PA-CSE-013 / copular / HOLE-08
+    # sentence = "The sky is not blue."
+    # PA-CSE-014 / locative / HOLE-11
+    # sentence = "The book is on the table and the lamp is on the desk."
+    # PA-CSE-015 / locative / HOLE-10
+    # sentence = "If the book is on the table, the lamp is in the hall."
+    # PA-CSE-016 / locative / HOLE-12
+    # sentence = "On the table."
+    # PA-CSE-017 / copular / HOLE-13
+    # sentence = "I am tired."
+    # PA-CSE-018 / copular / HOLE-14
+    # sentence = "The book was written."
+    # PA-CSE-020 / copular / HOLE-16
+    # sentence = "Close the door."
+    # PA-CSE-021 / interrogative / HOLE-09
+    # sentence = "What a beautiful day!"
+    # PA-CSE-012 / copular / HOLE-09
+    sentence = "Please close the door."
+
+    # Grouped rollout queue (Not yet implemented) -- keep commented until promoted.
+    # Mandatory status-change metadata for each promotion:
+    # - Hole ID: must be recorded in notes/pathA_supported_sentences.md section 10
+    # - Capability note: explicit capability added or frozen object required
+
+    # Group A: speech-act / exclamative
+    # PA-CSE-012 / copular / HOLE-09 -- capability: request-force imperative handling marker
+    # sentence = "Please close the door."
+    # PA-CSE-020 / copular / HOLE-16 -- capability: imperative voice handling marker
+    # sentence = "Close the door."
+    # PA-CSE-021 / interrogative / HOLE-09 -- capability: exclamative-force handling marker
+    # sentence = "What a beautiful day!"
+
+    # Group B: negation + quantification
+    # PA-CSE-013 / copular / HOLE-08 -- capability: negation cue + polarity constraint
+    # sentence = "The sky is not blue."
+    # PA-CSE-019 / copular / HOLE-15 -- capability: quantified NP cue + universal constraint
+    # sentence = "Every sky is blue."
+
+    # Group C: coordination + conditional
+    # PA-CSE-014 / locative / HOLE-11 -- capability: clause coordination composition
+    # sentence = "The book is on the table and the lamp is on the desk."
+    # PA-CSE-015 / locative / HOLE-10 -- capability: conditional connective + TRU support
+    # sentence = "If the book is on the table, the lamp is in the hall."
+
+    # Group D: fragment / ellipsis
+    # PA-CSE-016 / locative / HOLE-12 -- capability: fragment handling and residual completion policy
+    # sentence = "On the table."
+
+    # Group E: person + passive voice
+    # PA-CSE-017 / copular / HOLE-13 -- capability: first-person speaker role handling
+    # sentence = "I am tired."
+    # PA-CSE-018 / copular / HOLE-14 -- capability: passive voice mapping and by-phrase roles
+    # sentence = "The book was written."
     simulation_result = run_pathA_short(sentence)
     final_tp = simulation_result["final_tp"]
 

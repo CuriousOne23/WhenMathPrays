@@ -1,0 +1,155 @@
+{
+  "truth_relation_set": [
+    "declarative",
+    "interrogative"
+  ],
+  "segment_label_set": [
+    "AP",
+    "CP",
+    "LOC",
+    "NP",
+    "WQ"
+  ],
+  "rows": [
+    {
+      "id": "PA-CSE-015",
+      "exactly_one_custom_rule": true,
+      "exactly_one_custom_cue": true,
+      "custom_rule": [
+        "conditional_composition_rule"
+      ],
+      "custom_cue": [
+        "conditional_clauses"
+      ],
+      "rule_in_runlog": true,
+      "cue_in_runlog": true,
+      "rule_in_debugout": true,
+      "cue_in_debugout": true,
+      "truth_relation": "declarative",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "LOC",
+        "NP",
+        "CP",
+        "LOC"
+      ],
+      "truth_relation_family": "descriptive_mixed",
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "id": "PA-CSE-016",
+      "exactly_one_custom_rule": true,
+      "exactly_one_custom_cue": true,
+      "custom_rule": [
+        "fragment_ellipsis_rule"
+      ],
+      "custom_cue": [
+        "fragment_ellipsis"
+      ],
+      "rule_in_runlog": true,
+      "cue_in_runlog": true,
+      "rule_in_debugout": true,
+      "cue_in_debugout": true,
+      "truth_relation": "declarative",
+      "struct_segments": [
+        "LOC"
+      ],
+      "truth_relation_family": "descriptive_mixed",
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "id": "PA-CSE-017",
+      "exactly_one_custom_rule": true,
+      "exactly_one_custom_cue": true,
+      "custom_rule": [
+        "first_person_state_rule"
+      ],
+      "custom_cue": [
+        "first_person_speaker"
+      ],
+      "rule_in_runlog": true,
+      "cue_in_runlog": true,
+      "rule_in_debugout": true,
+      "cue_in_debugout": true,
+      "truth_relation": "declarative",
+      "struct_segments": [
+        "NP"
+      ],
+      "truth_relation_family": "descriptive_state",
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "id": "PA-CSE-018",
+      "exactly_one_custom_rule": true,
+      "exactly_one_custom_cue": true,
+      "custom_rule": [
+        "passive_voice_rule"
+      ],
+      "custom_cue": [
+        "passive_voice_clause"
+      ],
+      "rule_in_runlog": true,
+      "cue_in_runlog": true,
+      "rule_in_debugout": true,
+      "cue_in_debugout": true,
+      "truth_relation": "declarative",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "truth_relation_family": "descriptive_state",
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "id": "PA-CSE-020",
+      "exactly_one_custom_rule": true,
+      "exactly_one_custom_cue": true,
+      "custom_rule": [
+        "imperative_voice_rule"
+      ],
+      "custom_cue": [
+        "imperative_voice_clause"
+      ],
+      "rule_in_runlog": true,
+      "cue_in_runlog": true,
+      "rule_in_debugout": true,
+      "cue_in_debugout": true,
+      "truth_relation": "declarative",
+      "struct_segments": [
+        "NP"
+      ],
+      "truth_relation_family": "descriptive_state",
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "id": "PA-CSE-021",
+      "exactly_one_custom_rule": true,
+      "exactly_one_custom_cue": true,
+      "custom_rule": [
+        "exclamative_force_rule"
+      ],
+      "custom_cue": [
+        "exclamative_force_clause"
+      ],
+      "rule_in_runlog": true,
+      "cue_in_runlog": true,
+      "rule_in_debugout": true,
+      "cue_in_debugout": true,
+      "truth_relation": "interrogative",
+      "struct_segments": [
+        "WQ",
+        "NP"
+      ],
+      "truth_relation_family": "interrogative_polar",
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    }
+  ]
+}

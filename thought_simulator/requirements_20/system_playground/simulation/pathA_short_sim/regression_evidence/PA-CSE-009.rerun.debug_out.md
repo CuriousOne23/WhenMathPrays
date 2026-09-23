@@ -38,18 +38,39 @@
 
 ## Final TP Intake Geometry
 - tp_ie_tokens:
-  - What
-  - a
-  - beautiful
-  - day
-  - !
+  - Why
+  - does
+  - the
+  - rain
+  - in
+  - Spain
+  - stay
+  - mainly
+  - in
+  - the
+  - plain
+  - ?
 - tp_ie_normalized_tokens:
-  - what
-  - a
-  - beautiful
-  - day
-  - !
+  - why
+  - does
+  - the
+  - rain
+  - in
+  - spain
+  - stay
+  - mainly
+  - in
+  - the
+  - plain
+  - ?
 - tp_ie_token_classes:
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - WORD
   - WORD
   - WORD
   - WORD
@@ -61,28 +82,56 @@
   - none
   - none
   - none
+  - none
+  - none
+  - none
+  - none
+  - none
+  - none
+  - none
 - tp_ie_segments:
   - 1
 - tp_ie_segment_tokens:
-  - ['What', 'a', 'beautiful', 'day', '!']
+  - ['Why', 'does', 'the', 'rain', 'in', 'Spain', 'stay', 'mainly', 'in', 'the', 'plain', '?']
 
 ## Stage Interpretations
 ### IE
 - ie_tokens:
-  - What
-  - a
-  - beautiful
-  - day
-  - !
+  - Why
+  - does
+  - the
+  - rain
+  - in
+  - Spain
+  - stay
+  - mainly
+  - in
+  - the
+  - plain
+  - ?
 
 - ie_normalized_tokens:
-  - what
-  - a
-  - beautiful
-  - day
-  - !
+  - why
+  - does
+  - the
+  - rain
+  - in
+  - spain
+  - stay
+  - mainly
+  - in
+  - the
+  - plain
+  - ?
 
 - ie_token_classes:
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - WORD
+  - WORD
   - WORD
   - WORD
   - WORD
@@ -95,31 +144,55 @@
   - none
   - none
   - none
+  - none
+  - none
+  - none
+  - none
+  - none
+  - none
+  - none
 
 - ie_segments:
   - 1
 
 - ie_segment_tokens:
-  - ['What', 'a', 'beautiful', 'day', '!']
+  - ['Why', 'does', 'the', 'rain', 'in', 'Spain', 'stay', 'mainly', 'in', 'the', 'plain', '?']
 
 
 See: [IE](debug/primitives/IE.md)
 
 ### SOB
 - sob_tokens:
-  - What
-  - a
-  - beautiful
-  - day
-  - !
+  - Why
+  - does
+  - the
+  - rain
+  - in
+  - Spain
+  - stay
+  - mainly
+  - in
+  - the
+  - plain
+  - ?
 
 - sob_struct_segments:
   - WQ
+  - IQ
   - NP
+  - LOC
+  - ST
+  - AP
+  - LOC
 
 - sob_segment_tokens:
-  - ['what']
-  - ['a', 'beautiful', 'day']
+  - ['why']
+  - ['does']
+  - ['the', 'rain']
+  - ['in', 'spain']
+  - ['stay']
+  - ['mainly']
+  - ['in', 'the', 'plain']
 
 
 See: [SOB](debug/primitives/SOB.md)
@@ -135,7 +208,6 @@ See: [SROB](debug/primitives/SROB.md)
 - constraints_matched:
   - structural_rule
   - adjacency_rule
-  - exclamative_force_rule
 
 - constraints_unmatched:
   - compatibility_rule
@@ -143,6 +215,7 @@ See: [SROB](debug/primitives/SROB.md)
 
 - constraint_residue:
   - interrogative_scope
+  - locative_adjacent
 
 
 See: [CnOB](debug/primitives/CnOB.md)
@@ -156,7 +229,7 @@ See: [CnOB](debug/primitives/CnOB.md)
 
 - semantic_adjacent_cues:
   - interrogative_scope
-  - exclamative_force_clause
+  - locative_adjacent
 
 - basin_residue:
   - []
@@ -181,39 +254,41 @@ See: [SmOB](debug/primitives/SmOB.md)
     location: 
     action: 
     patient: 
-    modifiers: ['exclamative_force_clause']
+    modifiers: ['locative_adjacent']
   selected_ops:
     - modifier_resolution
   claimed_fields:
     - truth_relation
     - truth_relation_family_hint
+    - semantic_core_tokens
     - selected_ops
     - semantic_core
-    - semantic_core_tokens
     - identity_geometry
   contributors:
     - interrogative_polar
+    - locative
     - agent_action
     - modifier_resolution
     - residual_identity
   contributions:
     - {'name': 'interrogative_polar', 'family': 'interrogative_polar', 'priority': 11, 'fragment': {'truth_relation': 'interrogative', 'truth_relation_family_hint': 'interrogative_polar'}}
+    - {'name': 'locative', 'family': 'locative', 'priority': 30, 'fragment': {'semantic_core_tokens': ['locative_modifier'], 'truth_relation_family_hint': 'descriptive_locative'}}
     - {'name': 'agent_action', 'family': 'residual_identity', 'priority': 50, 'fragment': {}}
-    - {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['exclamative_force_clause']}, 'semantic_core_tokens': ['entity']}}
+    - {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['locative_adjacent']}, 'semantic_core_tokens': ['locative_modifier']}}
     - {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'referential_identity', 'truth_relation': 'interrogative'}}
   activation_set:
     - interrogative_polar
+    - locative
     - agent_action
     - modifier_resolution
     - residual_identity
   inactive_objects:
     - interrogative_wh
     - copular_state
-    - locative
     - mixed_descriptive
   residual_activated: True
   overlap_events:
-    - []
+    - {'a': 'residual_identity', 'b': 'locative', 'mode': 'coexist', 'fields': []}
   meaning_delta:
   psc_violations:
     - []
@@ -228,7 +303,7 @@ See: [IdOB](debug/primitives/IdOB.md)
 - truth_relation: interrogative
 - semantic_adjacent_cues:
   - interrogative_scope
-  - exclamative_force_clause
+  - locative_adjacent
 - semantic_core:
   - []
 - idob_packet:
@@ -247,39 +322,41 @@ See: [IdOB](debug/primitives/IdOB.md)
     location: 
     action: 
     patient: 
-    modifiers: ['exclamative_force_clause']
+    modifiers: ['locative_adjacent']
   selected_ops:
     - modifier_resolution
   claimed_fields:
     - truth_relation
     - truth_relation_family_hint
+    - semantic_core_tokens
     - selected_ops
     - semantic_core
-    - semantic_core_tokens
     - identity_geometry
   contributors:
     - interrogative_polar
+    - locative
     - agent_action
     - modifier_resolution
     - residual_identity
   contributions:
     - {'name': 'interrogative_polar', 'family': 'interrogative_polar', 'priority': 11, 'fragment': {'truth_relation': 'interrogative', 'truth_relation_family_hint': 'interrogative_polar'}}
+    - {'name': 'locative', 'family': 'locative', 'priority': 30, 'fragment': {'semantic_core_tokens': ['locative_modifier'], 'truth_relation_family_hint': 'descriptive_locative'}}
     - {'name': 'agent_action', 'family': 'residual_identity', 'priority': 50, 'fragment': {}}
-    - {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['exclamative_force_clause']}, 'semantic_core_tokens': ['entity']}}
+    - {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['locative_adjacent']}, 'semantic_core_tokens': ['locative_modifier']}}
     - {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'referential_identity', 'truth_relation': 'interrogative'}}
   activation_set:
     - interrogative_polar
+    - locative
     - agent_action
     - modifier_resolution
     - residual_identity
   inactive_objects:
     - interrogative_wh
     - copular_state
-    - locative
     - mixed_descriptive
   residual_activated: True
   overlap_events:
-    - []
+    - {'a': 'residual_identity', 'b': 'locative', 'mode': 'coexist', 'fields': []}
   meaning_delta:
   psc_violations:
     - []
@@ -288,13 +365,13 @@ See: [IdOB](debug/primitives/IdOB.md)
   tru_hint: interrogative
 
 ## IdOB Space Summary
-- contributors: ['interrogative_polar', 'agent_action', 'modifier_resolution', 'residual_identity']
-- contributor_labels: ['interrogative_polar -> Interrogative Polar', 'agent_action -> Agent Action', 'modifier_resolution -> Modifier Resolution', 'residual_identity -> Residual Identity']
-- contributions: [{'name': 'interrogative_polar', 'family': 'interrogative_polar', 'priority': 11, 'fragment': {'truth_relation': 'interrogative', 'truth_relation_family_hint': 'interrogative_polar'}}, {'name': 'agent_action', 'family': 'residual_identity', 'priority': 50, 'fragment': {}}, {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['exclamative_force_clause']}, 'semantic_core_tokens': ['entity']}}, {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'referential_identity', 'truth_relation': 'interrogative'}}]
-- activation_set: ['interrogative_polar', 'agent_action', 'modifier_resolution', 'residual_identity']
-- inactive_objects: ['interrogative_wh', 'copular_state', 'locative', 'mixed_descriptive']
+- contributors: ['interrogative_polar', 'locative', 'agent_action', 'modifier_resolution', 'residual_identity']
+- contributor_labels: ['interrogative_polar -> Interrogative Polar', 'locative -> Locative', 'agent_action -> Agent Action', 'modifier_resolution -> Modifier Resolution', 'residual_identity -> Residual Identity']
+- contributions: [{'name': 'interrogative_polar', 'family': 'interrogative_polar', 'priority': 11, 'fragment': {'truth_relation': 'interrogative', 'truth_relation_family_hint': 'interrogative_polar'}}, {'name': 'locative', 'family': 'locative', 'priority': 30, 'fragment': {'semantic_core_tokens': ['locative_modifier'], 'truth_relation_family_hint': 'descriptive_locative'}}, {'name': 'agent_action', 'family': 'residual_identity', 'priority': 50, 'fragment': {}}, {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['modifier_resolution'], 'semantic_core': {'selected_ops': ['modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['locative_adjacent']}, 'semantic_core_tokens': ['locative_modifier']}}, {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'referential_identity', 'truth_relation': 'interrogative'}}]
+- activation_set: ['interrogative_polar', 'locative', 'agent_action', 'modifier_resolution', 'residual_identity']
+- inactive_objects: ['interrogative_wh', 'copular_state', 'mixed_descriptive']
 - residual_activated: True
-- overlap_events: []
+- overlap_events: [{'a': 'residual_identity', 'b': 'locative', 'mode': 'coexist', 'fields': []}]
 - meaning_delta: {}
 - psc_violation_count: 0
 - psc_violations: []

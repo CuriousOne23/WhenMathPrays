@@ -1,0 +1,22 @@
+{
+  "PA-CSE-012": {
+    "constraints_matched": [
+      "structural_rule",
+      "request_imperative_rule"
+    ],
+    "semantic_adjacent_cues": [
+      "request_imperative_clause"
+    ],
+    "truth_relation": "declarative"
+  },
+  "PA-CSE-020": {
+    "constraints_matched": [
+      "structural_rule",
+      "imperative_voice_rule"
+    ],
+    "semantic_adjacent_cues": [
+      "imperative_voice_clause"
+    ],
+    "truth_relation": "declarative"
+  }
+}

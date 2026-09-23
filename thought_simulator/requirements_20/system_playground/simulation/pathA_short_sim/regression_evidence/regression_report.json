@@ -1,0 +1,1472 @@
+{
+  "suite": "PathA v1 regression sweep",
+  "case_count": 21,
+  "case_ids": [
+    "PA-CSE-001",
+    "PA-CSE-002",
+    "PA-CSE-003",
+    "PA-CSE-004",
+    "PA-CSE-005",
+    "PA-CSE-006",
+    "PA-CSE-007",
+    "PA-CSE-008",
+    "PA-CSE-009",
+    "PA-CSE-010",
+    "PA-CSE-011",
+    "PA-CSE-012",
+    "PA-CSE-013",
+    "PA-CSE-014",
+    "PA-CSE-015",
+    "PA-CSE-016",
+    "PA-CSE-017",
+    "PA-CSE-018",
+    "PA-CSE-019",
+    "PA-CSE-020",
+    "PA-CSE-021"
+  ],
+  "truth_relation_set": [
+    "declarative",
+    "interrogative"
+  ],
+  "segment_label_set": [
+    "AP",
+    "CP",
+    "IQ",
+    "LOC",
+    "NP",
+    "RELC",
+    "ST",
+    "WQ"
+  ],
+  "all_pipeline_ready": true,
+  "all_freeze_version_ok": true,
+  "all_idob_shape_ok": true,
+  "issues": [
+    {
+      "kind": "cross_sentence_rule_interaction",
+      "target_id": "PA-CSE-020",
+      "rule": "imperative_voice_rule",
+      "owners": [
+        "PA-CSE-012",
+        "PA-CSE-020"
+      ]
+    },
+    {
+      "kind": "cross_sentence_cue_interaction",
+      "target_id": "PA-CSE-020",
+      "cue": "imperative_voice_clause",
+      "owners": [
+        "PA-CSE-012",
+        "PA-CSE-020"
+      ]
+    }
+  ],
+  "forward_results": [
+    {
+      "cid": "PA-CSE-001",
+      "sentence": "The sky is blue.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-001.fwd.run.log",
+      "debugout": "PA-CSE-001.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule"
+      ],
+      "semantic_adjacent_cues": [],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-002",
+      "sentence": "Paris is a city.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-002.fwd.run.log",
+      "debugout": "PA-CSE-002.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule"
+      ],
+      "semantic_adjacent_cues": [],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-003",
+      "sentence": "The book is on the table.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-003.fwd.run.log",
+      "debugout": "PA-CSE-003.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-004",
+      "sentence": "The rain stays in the plain.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-004.fwd.run.log",
+      "debugout": "PA-CSE-004.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "ST",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-005",
+      "sentence": "The rain in Spain stays mainly in the plain.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-005.fwd.run.log",
+      "debugout": "PA-CSE-005.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "LOC",
+        "ST",
+        "AP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-006",
+      "sentence": "Where is the book?",
+      "status": "Implemented",
+      "runlog": "PA-CSE-006.fwd.run.log",
+      "debugout": "PA-CSE-006.fwd.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-007",
+      "sentence": "Is the book on the table?",
+      "status": "Implemented",
+      "runlog": "PA-CSE-007.fwd.run.log",
+      "debugout": "PA-CSE-007.fwd.debug_out.md",
+      "struct_segments": [
+        "IQ",
+        "NP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent",
+        "interrogative_scope"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-008",
+      "sentence": "Why is the sky blue?",
+      "status": "Implemented",
+      "runlog": "PA-CSE-008.fwd.run.log",
+      "debugout": "PA-CSE-008.fwd.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-009",
+      "sentence": "Why does the rain in Spain stay mainly in the plain?",
+      "status": "In work",
+      "runlog": "PA-CSE-009.fwd.run.log",
+      "debugout": "PA-CSE-009.fwd.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP",
+        "LOC",
+        "ST",
+        "AP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope",
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-010",
+      "sentence": "Where is the book that is on the table?",
+      "status": "Implemented",
+      "runlog": "PA-CSE-010.fwd.run.log",
+      "debugout": "PA-CSE-010.fwd.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP",
+        "RELC",
+        "IQ",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope",
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-011",
+      "sentence": "Why is the sky that is blue bright?",
+      "status": "In work",
+      "runlog": "PA-CSE-011.fwd.run.log",
+      "debugout": "PA-CSE-011.fwd.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP",
+        "RELC",
+        "IQ",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-012",
+      "sentence": "Close the door.",
+      "status": "Not yet implemented",
+      "runlog": "PA-CSE-012.fwd.run.log",
+      "debugout": "PA-CSE-012.fwd.debug_out.md",
+      "struct_segments": [
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "imperative_voice_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "imperative_voice_clause"
+      ],
+      "smoothing_operations": [
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-013",
+      "sentence": "The sky is not blue.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-013.fwd.run.log",
+      "debugout": "PA-CSE-013.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "negation_scope_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "negated_state"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-014",
+      "sentence": "The book is on the table and the lamp is on the desk.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-014.fwd.run.log",
+      "debugout": "PA-CSE-014.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "LOC",
+        "CP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule",
+        "coordination_composition_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent",
+        "coordinated_clauses"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-015",
+      "sentence": "If the book is on the table, the lamp is in the hall.",
+      "status": "In work",
+      "runlog": "PA-CSE-015.fwd.run.log",
+      "debugout": "PA-CSE-015.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "LOC",
+        "NP",
+        "CP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule",
+        "conditional_composition_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent",
+        "conditional_clauses"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-016",
+      "sentence": "On the table.",
+      "status": "In work",
+      "runlog": "PA-CSE-016.fwd.run.log",
+      "debugout": "PA-CSE-016.fwd.debug_out.md",
+      "struct_segments": [
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule",
+        "fragment_ellipsis_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent",
+        "fragment_ellipsis"
+      ],
+      "smoothing_operations": [
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-017",
+      "sentence": "I am tired.",
+      "status": "In work",
+      "runlog": "PA-CSE-017.fwd.run.log",
+      "debugout": "PA-CSE-017.fwd.debug_out.md",
+      "struct_segments": [
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "first_person_state_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "first_person_speaker"
+      ],
+      "smoothing_operations": [
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-018",
+      "sentence": "The book was written.",
+      "status": "In work",
+      "runlog": "PA-CSE-018.fwd.run.log",
+      "debugout": "PA-CSE-018.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "passive_voice_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "passive_voice_clause"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-019",
+      "sentence": "Every sky is blue.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-019.fwd.run.log",
+      "debugout": "PA-CSE-019.fwd.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "quantifier_scope_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "quantified_np"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-020",
+      "sentence": "Close the door.",
+      "status": "In work",
+      "runlog": "PA-CSE-020.fwd.run.log",
+      "debugout": "PA-CSE-020.fwd.debug_out.md",
+      "struct_segments": [
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "imperative_voice_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "imperative_voice_clause"
+      ],
+      "smoothing_operations": [
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-021",
+      "sentence": "What a beautiful day!",
+      "status": "In work",
+      "runlog": "PA-CSE-021.fwd.run.log",
+      "debugout": "PA-CSE-021.fwd.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule",
+        "exclamative_force_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope",
+        "exclamative_force_clause"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    }
+  ],
+  "reverse_results": [
+    {
+      "cid": "PA-CSE-021",
+      "sentence": "What a beautiful day!",
+      "status": "In work",
+      "runlog": "PA-CSE-021.rev.run.log",
+      "debugout": "PA-CSE-021.rev.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule",
+        "exclamative_force_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope",
+        "exclamative_force_clause"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-020",
+      "sentence": "Close the door.",
+      "status": "In work",
+      "runlog": "PA-CSE-020.rev.run.log",
+      "debugout": "PA-CSE-020.rev.debug_out.md",
+      "struct_segments": [
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "imperative_voice_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "imperative_voice_clause"
+      ],
+      "smoothing_operations": [
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-019",
+      "sentence": "Every sky is blue.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-019.rev.run.log",
+      "debugout": "PA-CSE-019.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "quantifier_scope_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "quantified_np"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-018",
+      "sentence": "The book was written.",
+      "status": "In work",
+      "runlog": "PA-CSE-018.rev.run.log",
+      "debugout": "PA-CSE-018.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "passive_voice_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "passive_voice_clause"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-017",
+      "sentence": "I am tired.",
+      "status": "In work",
+      "runlog": "PA-CSE-017.rev.run.log",
+      "debugout": "PA-CSE-017.rev.debug_out.md",
+      "struct_segments": [
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "first_person_state_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "first_person_speaker"
+      ],
+      "smoothing_operations": [
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-016",
+      "sentence": "On the table.",
+      "status": "In work",
+      "runlog": "PA-CSE-016.rev.run.log",
+      "debugout": "PA-CSE-016.rev.debug_out.md",
+      "struct_segments": [
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule",
+        "fragment_ellipsis_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent",
+        "fragment_ellipsis"
+      ],
+      "smoothing_operations": [
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-015",
+      "sentence": "If the book is on the table, the lamp is in the hall.",
+      "status": "In work",
+      "runlog": "PA-CSE-015.rev.run.log",
+      "debugout": "PA-CSE-015.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "LOC",
+        "NP",
+        "CP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule",
+        "conditional_composition_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent",
+        "conditional_clauses"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-014",
+      "sentence": "The book is on the table and the lamp is on the desk.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-014.rev.run.log",
+      "debugout": "PA-CSE-014.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "LOC",
+        "CP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule",
+        "coordination_composition_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent",
+        "coordinated_clauses"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-013",
+      "sentence": "The sky is not blue.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-013.rev.run.log",
+      "debugout": "PA-CSE-013.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "negation_scope_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "negated_state"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-012",
+      "sentence": "Close the door.",
+      "status": "Not yet implemented",
+      "runlog": "PA-CSE-012.rev.run.log",
+      "debugout": "PA-CSE-012.rev.debug_out.md",
+      "struct_segments": [
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "imperative_voice_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "imperative_voice_clause"
+      ],
+      "smoothing_operations": [
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-011",
+      "sentence": "Why is the sky that is blue bright?",
+      "status": "In work",
+      "runlog": "PA-CSE-011.rev.run.log",
+      "debugout": "PA-CSE-011.rev.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP",
+        "RELC",
+        "IQ",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-010",
+      "sentence": "Where is the book that is on the table?",
+      "status": "Implemented",
+      "runlog": "PA-CSE-010.rev.run.log",
+      "debugout": "PA-CSE-010.rev.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP",
+        "RELC",
+        "IQ",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope",
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-009",
+      "sentence": "Why does the rain in Spain stay mainly in the plain?",
+      "status": "In work",
+      "runlog": "PA-CSE-009.rev.run.log",
+      "debugout": "PA-CSE-009.rev.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP",
+        "LOC",
+        "ST",
+        "AP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope",
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-008",
+      "sentence": "Why is the sky blue?",
+      "status": "Implemented",
+      "runlog": "PA-CSE-008.rev.run.log",
+      "debugout": "PA-CSE-008.rev.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-007",
+      "sentence": "Is the book on the table?",
+      "status": "Implemented",
+      "runlog": "PA-CSE-007.rev.run.log",
+      "debugout": "PA-CSE-007.rev.debug_out.md",
+      "struct_segments": [
+        "IQ",
+        "NP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent",
+        "interrogative_scope"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-006",
+      "sentence": "Where is the book?",
+      "status": "Implemented",
+      "runlog": "PA-CSE-006.rev.run.log",
+      "debugout": "PA-CSE-006.rev.debug_out.md",
+      "struct_segments": [
+        "WQ",
+        "IQ",
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "interrogative_scope"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "interrogative",
+      "truth_relation_family": "interrogative_polar",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-005",
+      "sentence": "The rain in Spain stays mainly in the plain.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-005.rev.run.log",
+      "debugout": "PA-CSE-005.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "LOC",
+        "ST",
+        "AP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-004",
+      "sentence": "The rain stays in the plain.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-004.rev.run.log",
+      "debugout": "PA-CSE-004.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "ST",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-003",
+      "sentence": "The book is on the table.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-003.rev.run.log",
+      "debugout": "PA-CSE-003.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "LOC"
+      ],
+      "constraints_matched": [
+        "structural_rule",
+        "adjacency_rule"
+      ],
+      "semantic_adjacent_cues": [
+        "locative_adjacent"
+      ],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "segment_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_mixed",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-002",
+      "sentence": "Paris is a city.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-002.rev.run.log",
+      "debugout": "PA-CSE-002.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "NP"
+      ],
+      "constraints_matched": [
+        "structural_rule"
+      ],
+      "semantic_adjacent_cues": [],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    },
+    {
+      "cid": "PA-CSE-001",
+      "sentence": "The sky is blue.",
+      "status": "Implemented",
+      "runlog": "PA-CSE-001.rev.run.log",
+      "debugout": "PA-CSE-001.rev.debug_out.md",
+      "struct_segments": [
+        "NP",
+        "CP",
+        "AP"
+      ],
+      "constraints_matched": [
+        "structural_rule"
+      ],
+      "semantic_adjacent_cues": [],
+      "smoothing_operations": [
+        "adjacency_smoothing",
+        "role_smoothing",
+        "basin_compression_smoothing",
+        "continuity_smoothing"
+      ],
+      "basin_residue": [],
+      "truth_relation": "declarative",
+      "truth_relation_family": "descriptive_state",
+      "freeze_version_ok": true,
+      "pipeline_ready_ok": true,
+      "idob_shape_ok": true,
+      "idob_missing_keys": [],
+      "idob_extra_keys": []
+    }
+  ]
+}
