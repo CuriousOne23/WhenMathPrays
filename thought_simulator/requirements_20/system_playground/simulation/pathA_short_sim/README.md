@@ -1,7 +1,7 @@
 # **PathA Short Simulation — README**
 
 This directory contains the **Path‑A Short Simulator**, a lightweight, dictionary‑driven Thought Simulator (TS).  
-Its purpose is **educational**: provide an architectural feel for major Path‑A blocks, show Thought Packet (TP) evolution across primitives, and demonstrate how segmentation, roles, constraints, smoothing, packet assembly, and truth‑relations interact.
+Its purpose is **educational**: provide an architectural feel for major Path‑A blocks, show Thought Packet (TP) evolution across primitives, and demonstrate how segmentation, structural labels, constraints, adjacent-cue handling, packet assembly, and truth‑relations interact.
 
 The simulator is intentionally small, inspectable, and modifiable.
 
@@ -11,6 +11,10 @@ Start here for Identity Observation Block (IdOB) names and the walk from ordinar
 - [user_guide.md](user_guide.md) — run two utterances; structure vs packet  
 - [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md) — eight catalog families  
 - [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md) — meaning on this path is the `idob_packet`
+- [architecture/path_a_realization_charter.md](architecture/path_a_realization_charter.md) — lineup vs reserved 20.40 capability
+- [architecture/idob_meaning_lock.md](architecture/idob_meaning_lock.md) — packet contract
+
+Official expansions (20.700.010): Structural Observation Block (SOB), Structural Refinement Observation Block (SROB), Constraint Observation Block (CnOB), Semantic Observation Block (SmOB), Identity Observation Block (IdOB). Short-sim field names are teaching aliases. 20.40 remains richer; realized functions are listed in each prim’s Path-A-short section.
 
 ---
 
@@ -33,9 +37,9 @@ and are exercised in
 The simulator produces:
 
 - segmentation (`struct_segments`)  
-- role assignment (`struct_roles`)  
+- structural labels (`struct_roles`)  
 - constraint matching (`constraints_matched`)  
-- smoothing cues (`semantic_adjacent_cues`)  
+- adjacent cues (`semantic_adjacent_cues`)  
 - IdOB packet (`idob_packet`, dict `semantic_core`)  
 - truth‑relation (`truth_relation`)  
 
@@ -173,6 +177,12 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 - IdOB seam (start here for names):  
   [architecture/idob_seam.md](architecture/idob_seam.md)
 
+- Realization charter (lineup vs reserved 20.40):  
+  [architecture/path_a_realization_charter.md](architecture/path_a_realization_charter.md)
+
+- Meaning-as-packet lock:  
+  [architecture/idob_meaning_lock.md](architecture/idob_meaning_lock.md)
+
 - IdOB object space (eight families):  
   [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md)
 
@@ -212,6 +222,8 @@ pathA_short_sim/
 |
 |-- architecture/
 |   |-- idob_seam.md
+|   |-- idob_meaning_lock.md
+|   |-- path_a_realization_charter.md
 |   `-- IdOB_unified_plan.md
 |
 |-- support/
