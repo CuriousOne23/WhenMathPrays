@@ -3,7 +3,9 @@
 **Date:** 2026-09-28  
 **Companion to:** [IdOB_unified_plan.md](IdOB_unified_plan.md)  
 **Seam:** [idob_seam.md](idob_seam.md)  
-**Space:** [idob_object_space.md](../notes/idob_object_space/idob_object_space.md)
+**Space:** [idob_object_space.md](../notes/idob_object_space/idob_object_space.md)  
+**Charter:** [path_a_realization_charter.md](path_a_realization_charter.md)  
+**Requirements:** `20.40.050` IdOB-sum face; S2M/CIE reserved
 
 This page is the Path‑A short-sim **meaning contract** in teaching voice. Engine gates stay in the unified plan. Do not import Structure-to-Meaning (S2M), Cognitive Identity Envelope (CIE), or Meaning Signal Layer (MSL) into Identity Observation Block (IdOB).
 
@@ -63,4 +65,4 @@ Activation trees in v1 YAML are `{}`. Apply still points at `idob.legacy`. See o
 
 ## Who does not write meaning
 
-Segment Observation Block (SOB), Segment Role Observation Block (SROB), Constraint Observation Block (CnOB), and Smoothing Observation Block (SmOB) write structure. Truth-Relation Update (TRU) writes `tru_hint` and must not clobber a completed IdOB mood. Output Binding / Assemble (OuBA) freezes. MCB is omitted.
+Structural Observation Block (SOB), Structural Refinement Observation Block (SROB), Constraint Observation Block (CnOB), and Semantic Observation Block (SmOB) write structure. Truth-Relation Update (TRU) writes `tru_hint` and must not clobber a completed IdOB mood. Output Binding / Assemble (OuBA) freezes. MCB is omitted.

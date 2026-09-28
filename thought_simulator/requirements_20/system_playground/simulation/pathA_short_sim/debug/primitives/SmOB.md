@@ -1,8 +1,10 @@
-﻿# SmOB
+**Official:** Semantic Observation Block (SmOB) — 20.40.040. Path-A-short realizes adjacent cues; “smoothing” is an operation of Job 1, not the name. Job 2 hash reserved.
+
+# SmOB
 ### *A canonical primitive document for Path-A structured world*
 
 ## 1. Purpose
-`SmOB` performs deterministic basin stabilization over unresolved constraint-stage output.
+`SmOB` performs deterministic adjacent-cue extraction (Job 1). Basin-merge / smoothing is an operation inside that job. Job 2 compression is not realized in Path-A-short.
 
 ## 2. Inputs
 - Geometry source: semantic-core stabilization context from `../dimensions/semantic_core.md`.
@@ -18,7 +20,7 @@
 - `smob_smoothing_residue` (compatibility field name)
 
 ## 4. Structural Function
-`SmOB` applies named smoothing operations to unresolved constraint signals and emits stabilized semantic-adjacent cues plus unresolved basin output. This stage prepares deterministic identity input.
+`SmOB` applies named smoothing operations to unresolved constraint signals and emits stabilized semantic-adjacent cues plus unresolved basin output. This stage prepares deterministic identity input. It does not write IdOB meaning.
 
 ## 5. Deterministic Algorithm (Conceptual)
 1. Read `constraint_residue` and related constraint state.

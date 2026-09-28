@@ -1,4 +1,6 @@
-﻿# SOB
+**Official:** Structural Observation Block (SOB) — 20.40.010. Path-A-short realizes segment cut (`struct_segments`). Other 20.40.010 hints reserved.
+
+# SOB
 ### *A canonical primitive document for Path-A structured world*
 
 ## 1. Purpose

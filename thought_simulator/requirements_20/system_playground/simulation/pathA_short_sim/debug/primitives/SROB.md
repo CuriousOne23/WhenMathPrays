@@ -1,8 +1,10 @@
-﻿# SROB
+**Official:** Structural Refinement Observation Block (SROB) — 20.40.020. Path-A-short realizes pre-semantic structural labels (`struct_roles`). Not semantic role labeling.
+
+# SROB
 ### *A canonical primitive document for Path-A structured world*
 
 ## 1. Purpose
-`SROB` performs deterministic role assignment over segmented structure.
+`SROB` performs deterministic structural-label assignment over segmented structure (pre-semantic; not meaning).
 
 ## 2. Inputs
 - Geometry source: `role_geometry` from `../dimensions/role_geometry.md`.
@@ -14,14 +16,14 @@
 - `struct_roles`
 
 ## 4. Structural Function
-`SROB` maps segment labels to role values using role geometry categories (`head`, `modifier`, `predicate`, `argument`). This role state is required for deterministic constraint evaluation.
+`SROB` maps segment labels to positional/structural cues using role geometry categories (`head`, `modifier`, `predicate`, `argument`). These labels are required for deterministic constraint evaluation. They are not IdOB meaning.
 
 ## 5. Deterministic Algorithm (Conceptual)
 1. Read `struct_segments` and `segment_tokens`.
 2. Apply `role_geometry` mapping rules.
-3. Assign canonical role values to each segment.
-4. Emit role map in `struct_roles`.
-5. Forward role state to `CnOB`.
+3. Assign canonical structural labels to each segment.
+4. Emit label map in `struct_roles`.
+5. Forward state to `CnOB`.
 
 ## 6. Minimal Example
 - input fields:
@@ -52,7 +54,7 @@ struct_roles = {
 - Pipeline position: second stage in `SOB -> SROB -> CnOB -> SmOB -> IdOB`.
 
 ## 8. Notes for Debugging
-- Typical values: role assignments including `interrogative_head`, `entity`, `locative_modifier`.
-- Edge cases: missing role assignment for one or more segments.
-- Common mistakes: role keys not matching segment labels.
-- Validate correctness: confirm complete role coverage for each segment in `struct_segments`.
+- Typical values: labels including `interrogative_head`, `entity`, `locative_modifier`.
+- Edge cases: missing label for one or more segments.
+- Common mistakes: treating `struct_roles` as IdOB `semantic_core`.
+- Validate correctness: confirm complete label coverage for each segment in `struct_segments`.
