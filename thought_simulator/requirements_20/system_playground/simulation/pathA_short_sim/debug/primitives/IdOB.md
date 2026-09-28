@@ -1,16 +1,19 @@
+**Official:** Identity Observation Block (IdOB) — 20.40.050. Path-A-short realizes IdOB-sum / `idob_packet`. IdOB-S2M / CIE / `meaning_delta_h` reserved.
+
 # IdOB
 
 ### Identity Observation Block — Path‑A short simulator teaching card
 
 **Seam:** [../../architecture/idob_seam.md](../../architecture/idob_seam.md)  
 **Space:** [../../notes/idob_object_space/idob_object_space.md](../../notes/idob_object_space/idob_object_space.md)  
-**Packet contract:** [../../architecture/IdOB_unified_plan.md](../../architecture/IdOB_unified_plan.md)
+**Packet contract:** [../../architecture/IdOB_unified_plan.md](../../architecture/IdOB_unified_plan.md)  
+**Charter:** [../../architecture/path_a_realization_charter.md](../../architecture/path_a_realization_charter.md)
 
 ## 1. This world → this primitive
 
 This world: after you have heard the chunks of a sentence, something in you settles *what is being claimed* and *whether it was told or asked*.
 
-Path A: the Identity Observation Block (IdOB) does **not** hear the words first. Segment Observation Block (SOB), Segment Role Observation Block (SROB), Constraint Observation Block (CnOB), and Smoothing Observation Block (SmOB) already wrote structure onto the Thought Packet (TP). IdOB is the **summation operator** over a frozen catalog. It writes one `idob_packet`. It is not an object. The debugger must not sum again.
+Path A: the Identity Observation Block (IdOB) does **not** hear the words first. Structural Observation Block (SOB), Structural Refinement Observation Block (SROB), Constraint Observation Block (CnOB), and Semantic Observation Block (SmOB) already wrote structure onto the Thought Packet (TP). IdOB is the **summation operator** over a frozen catalog. It writes one `idob_packet`. It is not an object. The debugger must not sum again.
 
 ## 2. Inputs (structure someone else wrote)
 
@@ -51,7 +54,7 @@ IdOB activates a subset $A(U)$ of the eight catalog files, merges fragments with
 
 ### *The sky is blue.*
 
-Structure already on the TP: theme + state segments and roles.
+Structure already on the TP: theme + state segments and labels.
 
 ```text
 activation_set includes a descriptive family (copular_state)

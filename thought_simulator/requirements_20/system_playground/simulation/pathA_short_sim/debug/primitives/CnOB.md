@@ -1,8 +1,10 @@
-﻿# CnOB
+**Official:** Constraint Observation Block (CnOB) — 20.40.030. Path-A-short realizes constraint residue on the walk. C1–C7 tables reserved.
+
+# CnOB
 ### *A canonical primitive document for Path-A structured world*
 
 ## 1. Purpose
-`CnOB` performs deterministic constraint evaluation over segmented and role-assigned structure.
+`CnOB` performs deterministic constraint evaluation over segmented and structurally labeled structure.
 
 ## 2. Inputs
 - Geometry source: `constraint_geometry` from `../dimensions/constraint_geometry.md`.
