@@ -1,79 +1,85 @@
-﻿# IdOB
-### *A canonical primitive document for Path-A structured world*
+# IdOB
 
-## 1. Purpose
-`IdOB` performs deterministic identity stabilization and emits the final Path-A identity packet.
+### Identity Observation Block — Path‑A short simulator teaching card
 
-## 2. Inputs
-- Geometry sources:
-- `identity_geometry` from `../dimensions/identity_geometry.md`
-- `semantic_core` from `../dimensions/semantic_core.md`
-- `truth_relation` from `../dimensions/truth_relation.md`
-- Canonical fields consumed:
-- `struct_segments`
-- `segment_tokens`
-- `struct_roles`
-- `constraints_matched`
-- `constraints_unmatched`
-- `constraint_residue`
-- `smoothing_operations`
-- `semantic_adjacent_cues`
-- `basin_residue`
+**Seam:** [../../architecture/idob_seam.md](../../architecture/idob_seam.md)  
+**Space:** [../../notes/idob_object_space/idob_object_space.md](../../notes/idob_object_space/idob_object_space.md)  
+**Packet contract:** [../../architecture/IdOB_unified_plan.md](../../architecture/IdOB_unified_plan.md)
 
-## 3. Outputs
-- `idob_packet`
-- `identity_geometry`
-- `truth_relation`
-- `semantic_core`
+## 1. This world → this primitive
 
-## 4. Structural Function
-`IdOB` integrates upstream structured, constraint, and basin state to resolve identity type, truth relation, and stabilized semantic core. It emits a deterministic packet representing final identity state.
+This world: after you have heard the chunks of a sentence, something in you settles *what is being claimed* and *whether it was told or asked*.
 
-## 5. Deterministic Algorithm (Conceptual)
-1. Read upstream canonical structural fields.
-2. Evaluate identity stabilization conditions.
-3. Resolve identity type (`referential_identity`, `structural_identity`, `semantic_identity`, or `packet_identity`).
-4. Resolve `truth_relation` state.
-5. Resolve stabilized `semantic_core`.
-6. Emit final `idob_packet` containing the resolved identity outputs.
+Path A: the Identity Observation Block (IdOB) does **not** hear the words first. Segment Observation Block (SOB), Segment Role Observation Block (SROB), Constraint Observation Block (CnOB), and Smoothing Observation Block (SmOB) already wrote structure onto the Thought Packet (TP). IdOB is the **summation operator** over a frozen catalog. It writes one `idob_packet`. It is not an object. The debugger must not sum again.
 
-## 6. Minimal Example
-- input fields:
+## 2. Inputs (structure someone else wrote)
+
+Geometry sources:
+
+- `identity_geometry` — [../dimensions/identity_geometry.md](../dimensions/identity_geometry.md)
+- `semantic_core` — [../dimensions/semantic_core.md](../dimensions/semantic_core.md) (after IdOB this is a **dict**)
+- `truth_relation` — [../dimensions/truth_relation.md](../dimensions/truth_relation.md)
+
+Canonical fields consumed (not rewritten as OB-set):
+
+- `struct_segments`, `segment_tokens` — SOB  
+- `struct_roles` — SROB  
+- `constraints_matched`, `constraints_unmatched`, `constraint_residue` — CnOB  
+- `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue` — SmOB  
+- `tru_hint` — Truth-Relation Update (TRU)
+
+## 3. Outputs (the packet)
+
+- `idob_packet` — the sum  
+- `identity_geometry` — structural_identity \| referential_identity \| semantic_identity  
+- `truth_relation` — declarative \| interrogative \| unknown  
+- `truth_relation_family`  
+- `semantic_core` — **dict** (`theme`, `state`, `location`, …). Never a list as canonical.  
+- `activation_set`, `contributors`, `contributions`  
+- `inactive_objects`, `residual_activated`  
+- `overlap_events` — executed object adjacency  
+- `meaning_delta` — legacy vs split field diff (not Structure-to-Meaning $\Delta h$)  
+- `psc_violations`, `registry_digest`, `complete`, `tru_hint`
+
+Field card: [../fields/idob_packet.md](../fields/idob_packet.md).
+
+## 4. Structural function
+
+IdOB activates a subset $A(U)$ of the eight catalog files, merges fragments with dict-only `semantic_core`, applies declared overlap as `overlap_events`, and writes one packet. Primitive Specification Contract (PSC): objects do not mutate the Observation Block set (OB-set).
+
+## 5. Minimal examples
+
+### *The sky is blue.*
+
+Structure already on the TP: theme + state segments and roles.
+
 ```text
-struct_segments = ["WQ", "NP", "LOC"]
-struct_roles = {
-  "WQ": "interrogative_head",
-  "NP": "entity",
-  "LOC": "locative_modifier"
-}
-constraints_matched = ["adjacency_rule", "compatibility_rule"]
-constraint_residue = ["interrogative_scope", "locative_adjacent"]
-semantic_adjacent_cues = ["interrogative_scope", "locative_adjacent"]
-basin_residue = []
-```
-- primitive activation:
-```text
-IdOB resolves identity stabilization
-```
-- output fields:
-```text
-identity_geometry = "referential_identity"
-truth_relation = "interrogative"
-semantic_core = ["entity", "locative_modifier"]
-idob_packet = {
-  "identity_geometry": "referential_identity",
-  "truth_relation": "interrogative",
-  "semantic_core": ["entity", "locative_modifier"]
-}
+activation_set includes a descriptive family (copular_state)
+overlap_events = []
+truth_relation = declarative
+semantic_core = { ... dict, not a list ... }
 ```
 
-## 7. Cross-Primitive Interaction
-- Preceding primitive: `SmOB`.
-- Consuming primitive: none inside the Path-A primitive chain; this is the terminal primitive output stage.
-- Pipeline position: fifth stage in `SOB -> SROB -> CnOB -> SmOB -> IdOB`.
+### *Where is the book that is on the table?*
 
-## 8. Notes for Debugging
-- Typical values: identity type plus truth relation and semantic core set.
-- Edge cases: unresolved identity state with incomplete upstream fields.
-- Common mistakes: inconsistent packet values compared to resolved identity outputs.
-- Validate correctness: verify internal consistency across `identity_geometry`, `truth_relation`, `semantic_core`, and `idob_packet`.
+```text
+activation_set may include interrogative_wh plus locative / descriptive names
+overlap_events may be nonempty
+truth_relation = interrogative
+semantic_core is still a dict
+```
+
+Do not call the book an IdOB object. Adjacency in `overlap_events` is **object** adjacency (catalog), not word neighbors.
+
+## 6. Cross-primitive interaction
+
+- Preceding: SmOB (and TRU earlier for `tru_hint`).  
+- Following in this short sim: Output Binding / Assemble (OuBA). Meaning Composition Block (MCB) omitted.  
+- Pipeline: `SOB → SROB → CnOB → SmOB → IdOB`.
+
+## 7. Notes for debugging
+
+- Typical miss: treating list `semantic_core` as legal after IdOB. That is PSC I10.  
+- Typical miss: debugger re-merging contributions.  
+- Typical miss: six linguistic types (Actor, Action, …) as catalog names.  
+- Validate: packet keys match `identity_geometry`, `truth_relation`, dict `semantic_core`, and `activation_set`.

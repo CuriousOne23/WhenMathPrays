@@ -1,9 +1,16 @@
 # **PathA Short Simulation — README**
 
 This directory contains the **Path‑A Short Simulator**, a lightweight, dictionary‑driven Thought Simulator (TS).  
-Its purpose is **educational**: provide an architectural feel for major Path‑A blocks, show TP evolution across primitives, and demonstrate how segmentation, roles, constraints, smoothing, semantic‑core assembly, and truth‑relations interact.
+Its purpose is **educational**: provide an architectural feel for major Path‑A blocks, show Thought Packet (TP) evolution across primitives, and demonstrate how segmentation, roles, constraints, smoothing, packet assembly, and truth‑relations interact.
 
 The simulator is intentionally small, inspectable, and modifiable.
+
+Start here for Identity Observation Block (IdOB) names and the walk from ordinary talk into Path‑A language:
+
+- [architecture/idob_seam.md](architecture/idob_seam.md) — names, adjacency, do-not-mix table  
+- [user_guide.md](user_guide.md) — run two utterances; structure vs packet  
+- [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md) — eight catalog families  
+- [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md) — meaning on this path is the `idob_packet`
 
 ---
 
@@ -29,10 +36,10 @@ The simulator produces:
 - role assignment (`struct_roles`)  
 - constraint matching (`constraints_matched`)  
 - smoothing cues (`semantic_adjacent_cues`)  
-- semantic core (`semantic_core`)  
+- IdOB packet (`idob_packet`, dict `semantic_core`)  
 - truth‑relation (`truth_relation`)  
 
-This gives users a complete view of Path‑A’s relational geometry.
+This gives users a complete view of Path‑A’s factored structure plus the IdOB sum.
 
 ---
 
@@ -44,10 +51,9 @@ See the **User Guide**:
 
 It explains:
 
-- how to install dependencies  
 - how to run `run_examples.py`  
 - how to add your own sentences  
-- how to inspect TP evolution  
+- how to inspect TP evolution as two columns (OB-set vs packet)
 
 ---
 
@@ -78,14 +84,14 @@ For reference, the full Path‑A system contains:
 - Truth‑Relation Macro (TRU)  
 - Final Commit Macro (OuBA)
 
-The short simulator implements a **subset** of these with simplified behavior.
+The short simulator implements a **subset** of these with simplified behavior. Meaning Composition Block (MCB) is omitted.
 
 ---
 
 # **5. Mapping: Real Path‑A → Toy Simulator**
 
 | Full Path‑A Macro | Real Primitive(s) | Toy Primitive(s) | Status in Toy |
-|-------------------|-------------------|------------------|----------------|
+|-------------------|-------------------|------------------|---------------|
 | Intake | InB, IIInB, IE | InB, IIInB, IE | Implemented |
 | Correction | CEx, CE, ISc, TPU | CEx, CE, ISc, TPU | Implemented (simplified) |
 | Structural Interpretation (OB‑Set) | SOB, SROB, CnOB, SmOB, SSG | SOB, SROB, CnOB, SmOB, SSG | Implemented (dictionary‑driven) |
@@ -122,7 +128,7 @@ This section gives a new user a quick overview of the simulator’s capabilities
 - *Why is the sky that is blue bright?*
 
 Full details and canonical TP traces are in:  
-[pathA_supported_sentences.md](notes/pathA_supported_sentences.md
+[pathA_supported_sentences.md](notes/pathA_supported_sentences.md)
 
 ---
 
@@ -130,7 +136,7 @@ Full details and canonical TP traces are in:
 
 1. Implement STPX and DCB for richer routing behavior.  
 2. Replace TR placeholder with full Thought Router logic.  
-3. Add MCB after IdOB for deeper identity/meaning composition.  
+3. Add MCB after IdOB for deeper identity/meaning composition (copy-only seam first).  
 4. Expand correction logic with scored candidates and provenance.  
 5. Extend OB‑Set outputs into explicit structural graph objects.  
 6. Add richer truth‑relation logic referencing provenance and semantic cues.
@@ -145,7 +151,8 @@ Full details and canonical TP traces are in:
 - No structural graph objects (list‑based only).  
 - No routing entropy or confidence metrics.  
 - No cross‑sentence memory or latent priors.  
-- Not all production Path‑A constraints are implemented.
+- Not all production Path‑A constraints are implemented.  
+- No Structure-to-Meaning (S2M) $M$-vector, no Cognitive Identity Envelope (CIE), no Meaning Signal Layer (MSL) inside IdOB.
 
 ---
 
@@ -159,16 +166,30 @@ python run_examples.py > run.log
 
 For more information see debug directory [README.md](debug/README.md).
 
+IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](debug/primitives/IdOB.md).
+
 # **10. Related Documents**
 
+- IdOB seam (start here for names):  
+  [architecture/idob_seam.md](architecture/idob_seam.md)
+
+- IdOB object space (eight families):  
+  [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md)
+
+- IdOB meaning contract / gates:  
+  [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md)
+
 - Architectural simulation details:  
- [support/doc/architectural_simulation.md](support/docs/architectural_simulation.md)
+  [support/docs/architectural_simulation.md](support/docs/architectural_simulation.md)
 
 - Dictionary reference and schema:  
-  [support/doc/dictionaries_reference.md](support/docs/dictionaries_reference.md)
+  [support/docs/dictionaries_reference.md](support/docs/dictionaries_reference.md)
 
 - Core theory of Path‑A relational geometry:  
   [notes/pathA_relational_geometry.md](notes/pathA_relational_geometry.md)
+
+- Routing ladder snapshot:  
+  [notes/pathA_routing_to_meaning.md](notes/pathA_routing_to_meaning.md)
 
 - Supported sentence families and examples:  
   [notes/pathA_supported_sentences.md](notes/pathA_supported_sentences.md)
@@ -182,67 +203,42 @@ For more information see debug directory [README.md](debug/README.md).
 
 ```
 pathA_short_sim/
-│
-├── run_examples.py
-├── pathA_short_simulator.py
-├── primitives_pathA_short.py
-├── tp_substrate.py
-│
-├── support/
-│   ├── dictionaries/
-│   │   ├── token_classes.yaml
-│   │   ├── segment_patterns.yaml
-│   │   ├── role_patterns.yaml
-│   │   ├── constraint_rules.yaml
-│   │   └── semantic_rules.yaml
-│   │
-│   └── docs/
-│       ├── README.md
-│       ├── token_classes.md
-│       ├── segment_patterns.md
-│       ├── role_patterns.md
-│       ├── constraint_rules.md
-│       └── semantic_rules.md
-│
-├── debug/
-│   ├── README.md
-│   │
-│   ├── dimensions/
-│   │   ├── segment_geometry.md
-│   │   ├── role_geometry.md
-│   │   ├── constraint_geometry.md
-│   │   ├── smoothing_geometry.md
-│   │   ├── identity_geometry.md
-│   │   └── meaning_geometry.md
-│   │
-│   ├── fields/
-│   │   ├── struct_segments.md
-│   │   ├── struct_roles.md
-│   │   ├── constraints_matched.md
-│   │   ├── semantic_adjacent_cues.md
-│   │   ├── idob_packet.md
-│   │   └── residue.md
-│   │
-│   ├── primitives/
-│   │   ├── SOB.md
-│   │   ├── SROB.md
-│   │   ├── CnOB.md
-│   │   ├── SmOB.md
-│   │   └── IdOB.md
-│   │
-│   ├── examples/
-│   │   └── placeholder.md
-│   │
-│   └── setup/
-│       ├── debug_setup.yaml
-│       └── links.yaml
-│
-├── notes/
-│   ├── pathA_supported_sentences.md
-│   ├── pathA_relational_geometry.md
-│   └── The_Human_Self_in_the_AI_Age.md
-│
-└── user_guide.md
+|
+|-- run_examples.py
+|-- pathA_short_simulator.py
+|-- primitives_pathA_short.py
+|-- tp_substrate.py
+|-- pathA_dbug.py
+|
+|-- architecture/
+|   |-- idob_seam.md
+|   `-- IdOB_unified_plan.md
+|
+|-- support/
+|   |-- dictionaries/
+|   |-- idob_objects/
+|   |-- idob_schemas/
+|   `-- docs/
+|
+|-- idob/
+|   |-- sum.py
+|   |-- packets.py
+|   |-- registry.py
+|   `-- ...
+|
+|-- debug/
+|   |-- README.md
+|   |-- dimensions/
+|   |-- fields/
+|   |-- primitives/
+|   |   `-- IdOB.md
+|   `-- setup/
+|
+|-- notes/
+|   |-- idob_object_space/idob_object_space.md
+|   |-- pathA_supported_sentences.md
+|   |-- pathA_relational_geometry.md
+|   `-- pathA_routing_to_meaning.md
+|
+`-- user_guide.md
 ```
-
----
