@@ -4,7 +4,10 @@ This guide starts with a sentence you already know, then shows how the Path‑A 
 
 Names and hard words (object, adjacency, meaning, packet): [architecture/idob_seam.md](architecture/idob_seam.md).  
 Catalog (eight families only): [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md).  
-Packet contract: [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md).
+Packet contract: [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md).  
+Charter: [architecture/path_a_realization_charter.md](architecture/path_a_realization_charter.md).
+
+**Official expansions:** Structural Observation Block (SOB), Structural Refinement Observation Block (SROB), Constraint Observation Block (CnOB), Semantic Observation Block (SmOB), Identity Observation Block (IdOB). Debug field names (`struct_segments`, `struct_roles`, smoothing) are teaching aliases of those jobs. Full contracts: `20.40.010`–`20.40.050`.
 
 ---
 
@@ -50,8 +53,8 @@ Path A splits that into:
 
 | Column A — structure (Observation Block set, OB-set) | Column B — meaning on this path (IdOB packet) |
 |---|---|
-| Chunks, roles, constraints, smoothing cues | Which catalog objects fired and what dict they summed |
-| Written by Segment Observation Block (SOB), Segment Role Observation Block (SROB), Constraint Observation Block (CnOB), Smoothing Observation Block (SmOB) | Written by IdOB only |
+| Chunks, structural labels, constraints, adjacent cues | Which catalog objects fired and what dict they summed |
+| Written by Structural Observation Block (SOB), Structural Refinement Observation Block (SROB), Constraint Observation Block (CnOB), Semantic Observation Block (SmOB) | Written by IdOB only |
 | `struct_segments`, `struct_roles`, `constraints_matched`, `semantic_adjacent_cues`, residues | `activation_set`, `semantic_core` (**dict**), `truth_relation`, `overlap_events`, `meaning_delta`, `idob_packet` |
 
 IdOB does not invent the chunks. If column A is empty or wrong, column B cannot “know the sky.”
@@ -61,7 +64,7 @@ IdOB does not invent the chunks. If column A is empty or wrong, column B cannot 
 | Structure (who wrote it) | Packet (IdOB) |
 |---|---|
 | SOB: noun-phrase + state material | Expect one descriptive contributor (`copular_state` family) |
-| SROB: theme / state jobs | `semantic_core` is a dict (keys such as `theme`, `state`) — **not** a list |
+| SROB: theme / state structural labels | `semantic_core` is a dict (keys such as `theme`, `state`) — **not** a list |
 | CnOB: copular constraints can close | `truth_relation` declarative; `tru_hint` from Truth-Relation Update (TRU) should align |
 | SmOB: little basin leftover | `overlap_events` typically `[]` |
 
@@ -74,9 +77,9 @@ This world: you ask where the book is, and you pin which book with a clause.
 | Structure | Packet |
 |---|---|
 | SOB: question word, entity, locative, relative clause | `activation_set` may list more than one name |
-| SROB: query focus + entity + location | `semantic_core` dict may hold `query_focus` and `location` |
+| SROB: query focus + entity + location labels | `semantic_core` dict may hold `query_focus` and `location` |
 | CnOB: interrogative scope + locative attachment (`constraint_residue` if scope is messy) | `truth_relation` interrogative |
-| SmOB: book + table in one picture (basin adjacency) | `overlap_events` may be nonempty — **object** adjacency executed, not word neighbors |
+| SmOB: book + table in one picture (adjacent-cue / smoothing *operation*) | `overlap_events` may be nonempty — **object** adjacency executed, not word neighbors |
 
 Three uses of adjacency (do not collapse them):
 
@@ -167,7 +170,7 @@ Meaning Composition Block (MCB) is omitted in this short sim.
 - Confirm token normalization in **IE**
 - Verify YAML dictionaries contain expected entries (OB-set rules under `support/dictionaries`)
 - Check **SOB** segment alignment
-- Check **SROB** role progression
+- Check **SROB** structural-label progression
 - Confirm **CnOB** transition pairs in `constraint_rules.yaml`
 - Confirm **IdOB** against the catalog and the packet, not against a six-type linguistic list
 - If `semantic_core` prints as a list after IdOB, treat that as a contract break (Primitive Specification Contract (PSC) I10), not as “the meaning”
