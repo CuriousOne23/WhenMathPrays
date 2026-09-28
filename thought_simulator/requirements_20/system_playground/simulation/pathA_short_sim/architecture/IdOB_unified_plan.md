@@ -8,7 +8,9 @@ Scope: short sim only. Meaning Composition Block (MCB) omitted (R5).
 Seam: [idob_seam.md](idob_seam.md)
 Object space: [idob_object_space.md](../notes/idob_object_space/idob_object_space.md)
 Meaning-as-packet teaching contract: [idob_meaning_lock.md](idob_meaning_lock.md)
-Observer: [user_guide.md](../user_guide.md)
+Observer: [user_guide.md](../user_guide.md)  
+Charter: [path_a_realization_charter.md](path_a_realization_charter.md)  
+Reserve (IdOB-S2M / CIE / `meaning_delta_h` remain in 20.40.050): `20.700.010`
 
 Construct: **Identity Observation Block (IdOB) space $\mathcal{I}$ is a frozen registry of IdOB objects (IdOBObjects);
 IdOB is the deterministic overlap-sum of their contributions;
@@ -16,6 +18,8 @@ the packet on the Thought Packet (TP) is that sum; the debugger observes that pa
 `run_examples.py` is the emitter that makes the space visible.**
 
 Meaning on this path is the packet. Teaching contract and instrument aliases: [idob_meaning_lock.md](idob_meaning_lock.md). Do not import Meaning Signal Layer (MSL), Cognitive Identity Envelope (CIE), or Structure-to-Meaning (S2M) $M$ here. R5 is not their parking lot.
+
+Path-A-short realizes the **IdOB-sum** face of 20.40.050. The S2M / CIE face stays in 20.40.050 as reserved capability. This file does not add HLRs.
 
 ---
 
