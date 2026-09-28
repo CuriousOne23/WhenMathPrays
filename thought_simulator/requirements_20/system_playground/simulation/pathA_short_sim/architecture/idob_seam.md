@@ -6,6 +6,11 @@
 
 This page is the join. It does not define the catalog and it does not define the packet writer. It stops names from trading places.
 
+**Official expansions** (20.700.010 / 20.40): Structural Observation Block (SOB); Structural Refinement Observation Block (SROB); Constraint Observation Block (CnOB); Semantic Observation Block (SmOB); Identity Observation Block (IdOB).  
+Charter: [path_a_realization_charter.md](path_a_realization_charter.md). Realization notes: `20.40.010`–`20.40.050`.
+
+Teaching row below used older expansions (Segment / Segment Role / Smoothing). Those words remain as **aliases** after the official name. They do not replace 20.40 jobs.
+
 ---
 
 ## 1. This world, then Path A
@@ -18,10 +23,10 @@ The Path‑A Thought Simulator (TS) short simulator does **not** start there. It
 |---|---|
 | A sentence you can say | An **utterance** (carrier string). Not meaning. |
 | Words in order | Tokens / normalized text — Intake Engine (IE) |
-| Chunks you can point at (*the sky*, *on the table*) | **Segment geometry** — Segment Observation Block (SOB) |
-| The job of a chunk (thing talked about, place, question word) | **Role geometry** — Segment Role Observation Block (SROB) |
+| Chunks you can point at (*the sky*, *on the table*) | **Segment geometry** — Structural Observation Block (SOB) |
+| The job of a chunk (thing talked about, place, question word) | **Structural labels** — Structural Refinement Observation Block (SROB) |
 | “Does this combination hold?” | **Constraint geometry** — Constraint Observation Block (CnOB) |
-| “Which pieces belong in the same picture?” | **Basin / smoothing** — Smoothing Observation Block (SmOB) |
+| “Which pieces belong in the same picture?” | **Basin / smoothing** — Semantic Observation Block (SmOB) |
 | “What claim is this, and what do we emit?” | **IdOB space + sum** — Identity Observation Block (IdOB) |
 | Telling vs asking | **Truth relation** — Truth-Relation Update (TRU) hint + IdOB sum |
 
@@ -35,7 +40,8 @@ The Path‑A Thought Simulator (TS) short simulator does **not** start there. It
 2. **This seam** — names and do-not-mix table.  
 3. [user_guide.md](../user_guide.md) — run two utterances; structure column vs packet column.  
 4. [idob_object_space.md](../notes/idob_object_space/idob_object_space.md) — the eight catalog families (structure of the space).  
-5. [IdOB_unified_plan.md](IdOB_unified_plan.md) — meaning as the packet the sum writes; engine and debugger gates.
+5. [IdOB_unified_plan.md](IdOB_unified_plan.md) — meaning as the packet the sum writes; engine and debugger gates.  
+6. [path_a_realization_charter.md](path_a_realization_charter.md) — lineup vs reserved 20.40 capability.
 
 Older snapshot of the ladder (tokens → segments → roles → constraints → basin → identity): [pathA_routing_to_meaning.md](../notes/pathA_routing_to_meaning.md). Treat it as teaching voice. It must not override the packet schema in the unified plan or in `idob/sum.py`.
 
@@ -74,10 +80,10 @@ Expand on first use in **each** document, then use the short form.
 | Thought Packet (TP) | TP |
 | Identity Observation Block (IdOB) | IdOB |
 | IdOB object (IdOBObject) | IdOBObject |
-| Segment Observation Block (SOB) | SOB |
-| Segment Role Observation Block (SROB) | SROB |
+| Structural Observation Block (SOB) | SOB |
+| Structural Refinement Observation Block (SROB) | SROB |
 | Constraint Observation Block (CnOB) | CnOB |
-| Smoothing Observation Block (SmOB) | SmOB |
+| Semantic Observation Block (SmOB) | SmOB |
 | Observation Block set (OB-set) | OB-set |
 | Primitive Specification Contract (PSC) | PSC |
 | Truth-Relation Update (TRU) | TRU |
@@ -88,6 +94,8 @@ Expand on first use in **each** document, then use the short form.
 | Cognitive Identity Envelope (CIE) | CIE |
 | Intake Engine (IE) | IE |
 | YAML catalog / JSON Schema | write in full at first mention of the file |
+
+Teaching aliases after first official use: segments (`struct_segments`), structural labels (`struct_roles`), smoothing (Job 1 operation of SmOB).
 
 ---
 
@@ -167,7 +175,7 @@ Worked utterance: *Where is the book that is on the table?*
 
 | Primitive | Writes (structure) | Does not write |
 |---|---|---|
-| SOB | `struct_segments`, `segment_tokens` | packet, roles |
+| SOB | `struct_segments`, `segment_tokens` | packet, structural labels |
 | SROB | `struct_roles` | packet, constraints |
 | CnOB | `constraints_matched`, `constraints_unmatched`, `constraint_residue` | packet |
 | SmOB | `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue` | packet |
