@@ -1,230 +1,179 @@
-# **idob_object_space.md**  
-### *Path A — IdOB Object Space (First Draft)*
+# Path A — IdOB object space
 
-## **1. Overview**
-The IdOB object space is the internal semantic manifold of Path A.  
-It defines the *geometry* through which meaning emerges from relational structure.  
-IdOB objects are not meanings; they are **meaning‑refinement operators** — regions of semantic space with boundaries, adjacency, interfaces, and identity‑conditioned behavior.
+**Document:** `idob_object_space.md`  
+**Layer:** structure of Identity Observation Block (IdOB) space $\mathcal{I}$ only  
+**Date:** 2026-09-28  
+**Oracle:** `support/idob_objects/*.yaml` + `support/idob_schemas/idob_object.v1.schema.json`  
+**Seam:** [idob_seam.md](../../architecture/idob_seam.md)  
+**Meaning / packet:** [IdOB_unified_plan.md](../../architecture/IdOB_unified_plan.md)  
+**How to look:** [user_guide.md](../../user_guide.md)
 
-This paper defines the minimal, complete set of IdOB object types required for Path A to produce stable, reversible meaning packets.
-
----
-
-## **2. Motivation**
-Upstream spaces (SOB, SROB, CnOB, SmOB) provide:
-
-- adjacency  
-- identity roles  
-- constraints  
-- smoothing  
-
-But they do not produce meaning.
-
-Meaning emerges only when these structures are passed through IdOB.
-
-To make IdOB inspectable, reversible, and packet‑stable, we must define its internal object space — the set of operators that refine relational structure into semantic geometry.
+This page starts in ordinary talk, then stays in the **catalog**. It does not define meaning. It does not define $\Delta h$. It does not import the Meaning Signal Layer (MSL), the Cognitive Identity Envelope (CIE), or Structure-to-Meaning (S2M).
 
 ---
 
-## **3. What Is an IdOB Object?**
-An **IdOB object** is a region of meaning geometry with:
+## 1. This world → this page
 
-- a **boundary**  
-- an **interface**  
-- **adjacency** to other IdOB objects  
-- an **identity‑conditioned rule set**  
-- **input/output behavior**  
-- **nearness relations**  
-- **composition rules**  
+In ordinary talk we name *who*, *what happens*, *where*, *how much*. Those are useful teaching words. They are **not** the objects in this simulator.
 
-IdOB objects refine meaning by transforming relational structure into semantic geometry.  
-They are the “atoms” of meaning refinement.
+In the Path‑A Thought Simulator (TS) short sim, an **IdOB object (IdOBObject)** is a named catalog entry that may write a **fragment** onto a packet. The book in *The book is on the table.* is a referent (usually a `theme` or similar core key). It is not an IdOBObject.
+
+IdOB space $\mathcal{I}$ is the frozen set of those catalog entries. Eight YAML files. The Identity Observation Block (IdOB) primitive **sums** whatever subset activates. The sum is meaning-side. This file only says what may exist and how entries are allowed to sit next to each other **as declarations**.
 
 ---
 
-## **4. The Six Foundational IdOB Object Types**
-These six object types form the minimal complete basis for meaning refinement in Path A.  
-They arise directly from sentence structure and are observable in the debug tool.
+## 2. What an IdOBObject is (structure)
+
+An IdOBObject is a YAML document validated by `idob_object.v1.schema.json`. Required slots:
+
+| Slot | What it is in this world | What it is here |
+|---|---|---|
+| `name` | A label | Unique catalog id (`locative`, …) |
+| `family` | Relatives | Algebra axis. Not always equal to `name` (see helpers below). |
+| `priority` | Importance | Sum order key with `name` |
+| `identity.label` / `tags` | Human nickname | Teaching tags only. Not a second type system. |
+| `association.roles` | Jobs in the sentence | Claim-role vocabulary this object *may* speak |
+| `association.geometries` | Shape of chunks | Claimed segment-shape lists. Live files currently use `[]`. |
+| `activation` | On-switch | Predicate tree language. Live files currently use `{}`. Apply still lives in `idob.legacy`. |
+| `contribution_schema` | What it is allowed to write | Bound on `semantic_core` keys, `selected_ops` strings, default `truth_relation_family` |
+| `overlap.near` / `overlap.far` | Neighbors | **Object adjacency (3)** — declared edges, not executed events |
+| `behavior.apply` | What it does | Symbol `module:function`. Live apply is still `idob.legacy:_…_apply` |
+| `psc_id` / `psc_invariants` | House rules | Primitive Specification Contract (PSC) id. Live objects list `psc_invariants: []`. Shared rules live in `support/idob_schemas/idob_psc_defaults.yaml`. |
+
+**Boundary** of an object = the schema + that YAML. A key written at run time that is not in `contribution_schema` is a PSC matter (unified plan), not a new object type.
+
+**Interface** = `contribution_schema` + `association.roles`. Objects compose only if declared overlap and schema allow it. Composition *eligibility* is this file. Composition *result* is the packet.
+
+**Forbidden on this page:** semantic manifold, curvature, center of mass, meaning-refinement operator, MSL, CIE, S2M $M$, calling the six linguistic labels object types.
 
 ---
 
-### **4.1 Actor Objects**
-Refine meaning by identifying *who* or *what* participates in the relational structure.
+## 3. The eight catalog names
 
-**Sources:**  
-- SROB identity roles  
-- SOB noun adjacency  
+These are the live files under `support/idob_objects/`. The JSON Schema `family` enum lists the same eight strings as *legal family values*. Two helper files **declare a shared family** instead of `family = name`. Document the YAML, not the wish.
 
-**Behavior:**  
-- anchor identity  
-- bind roles  
-- set semantic center of mass  
+| `name` | YAML `family` | `priority` | Claimed `association.roles` | Declared `overlap.near` | Declared `overlap.far` | Default `truth_relation_family` |
+|---|---|---|---|---|---|---|
+| `interrogative_wh` | `interrogative_wh` | 10 | query_focus, predicate | interrogative_polar | copular_state | interrogative_wh |
+| `interrogative_polar` | `interrogative_polar` | 11 | query_focus, predicate | — | copular_state | interrogative_polar |
+| `copular_state` | `copular_state` | 20 | theme, state | locative | — | descriptive_state |
+| `locative` | `locative` | 30 | location | mixed_descriptive | — | descriptive_locative |
+| `mixed_descriptive` | `mixed_descriptive` | 40 | theme, state, location | modifier_resolution | — | descriptive_state |
+| `agent_action` | `residual_identity` | 50 | agent, action, patient | — | — | residual_identity |
+| `modifier_resolution` | `mixed_descriptive` | 60 | theme, state, location, relation, action, patient | — | — | descriptive_mixed |
+| `residual_identity` | `residual_identity` | 90 | — | — | copular_state, locative | residual_identity |
 
-Actor Objects define the “semantic anchor points” of the manifold.
+`agent_action` and `modifier_resolution` are **helper objects**. They have their own `name`. They do not get a second object-type system. Their `family` field is what YAML says.
 
----
-
-### **4.2 Action Objects**
-Refine meaning by capturing *what is happening* — the verb geometry.
-
-**Sources:**  
-- verb phrases  
-- relational predicates  
-
-**Behavior:**  
-- define process geometry  
-- set temporal direction  
-- establish relational dynamics  
-
-Action Objects define the manifold’s directional and dynamic structure.
+Activation trees are empty in v1 YAML. Which object *actually* fires on an utterance is still decided in legacy apply plus whatever the registry binds. This page may list **eligibility by sentence family** as teaching, not as a filled predicate tree.
 
 ---
 
-### **4.3 Relation Objects**
-Refine meaning by specifying *how* actors and actions connect.
+## 4. Claim-role vocabulary (not types)
 
-**Sources:**  
-- prepositions  
-- relational markers  
+Actor, Action, Relation, Modifier, Constraint, Context were a first-draft taxonomy. They are **not** catalog types.
 
-**Behavior:**  
-- define geometric edges  
-- set adjacency constraints  
-- shape manifold connectivity  
+They map onto keys and roles the schema already locks on `semantic_core`:
 
-Relation Objects define the “edges” and “bridges” of meaning geometry.
+| Teaching word | Path A home | Who writes the structure that feeds it |
+|---|---|---|
+| Actor / thing talked about | core keys `theme`, `agent`, `patient` | SROB roles; IdOB may claim them |
+| Action / what happens | core keys `action`, `predicate` | SROB; helper `agent_action` may contribute |
+| Relation / how connected | `location`, `complement`, `relation_modifiers` | SROB + CnOB; `locative` may claim `location` |
+| Modifier / quality or degree | `modifiers`, `relation_modifiers` | SROB; helper `modifier_resolution` |
+| Constraint | **not an IdOBObject** | Constraint Observation Block (CnOB) |
+| Context / frame | **not an IdOBObject** | SmOB cues + earlier metadata; not a catalog family |
 
----
-
-### **4.4 Modifier Objects**
-Refine meaning by shaping the *quality* or *degree* of actors or actions.
-
-**Sources:**  
-- adjectives  
-- adverbs  
-- quantifiers  
-
-**Behavior:**  
-- warp geometry  
-- adjust curvature  
-- tune semantic intensity  
-
-Modifier Objects define local geometric distortions — curvature, intensity, emphasis.
+Constraint and Context stay upstream. They do not become IdOB families.
 
 ---
 
-### **4.5 Constraint Objects**
-Refine meaning by imposing *rules* or *limits* on the manifold.
+## 5. Adjacency here means object adjacency
 
-**Sources:**  
-- CnOB constraint geometry  
-- logical conditions  
+See the seam for the three Path‑A uses of **adjacency**.
 
-**Behavior:**  
-- prune invalid geometry  
-- enforce identity‑conditioned rules  
-- stabilize packet formation  
+This file only owns **(3) object adjacency**:
 
-Constraint Objects define the manifold’s “legal structure” — what is allowed, required, or forbidden.
+- Declared in YAML as `overlap.near` and `overlap.far`.  
+- Not segment neighbors.  
+- Not basin cues.  
+- Not `overlap_events`. Those are executed in `idob/packets.py` / `idob/sum.py` and belong to the unified plan.
 
----
-
-### **4.6 Context Objects**
-Refine meaning by embedding the sentence in a broader frame.
-
-**Sources:**  
-- SmOB smoothing  
-- tense, aspect  
-- discourse markers  
-
-**Behavior:**  
-- shift manifold origin  
-- set temporal or conceptual frame  
-- condition all other IdOB objects  
-
-Context Objects define the manifold’s global frame — temporal, conceptual, or discourse‑level.
+Example: `locative.overlap.near` includes `mixed_descriptive`. If both fire on one utterance, the sum may record an event for that pair. The declaration does not by itself write the packet.
 
 ---
 
-## **5. IdOB Object Boundaries**
-Each IdOB object has a boundary defined by:
+## 6. Structure-only examples
 
-- the relational structure that activates it  
-- the identity conditions that constrain it  
-- the smoothing operations that stabilize it  
+Utterances from [pathA_supported_sentences.md](../pathA_supported_sentences.md). This section says **which catalog names are in play as teaching**, not what `semantic_core` contains.
 
-Boundaries ensure that IdOB objects do not “bleed” into each other and that packet formation remains reversible.
+### 6.1 *The sky is blue.*
 
----
+This world: someone tells you the sky’s color.
 
-## **6. IdOB Object Adjacency**
-Adjacency defines how IdOB objects interact.
+| Primitive | What it did (structure) |
+|---|---|
+| Segment Observation Block (SOB) | Chunks such as a noun phrase and a state complement |
+| Segment Role Observation Block (SROB) | Theme vs state jobs |
+| Constraint Observation Block (CnOB) | Copular / state constraints can close |
+| Smoothing Observation Block (SmOB) | Little leftover picture-work |
+| IdOB catalog | `copular_state` is the family this sentence family was built for |
 
-Two objects are adjacent if:
+Object adjacency: typically one descriptive contributor. Declared near-edges need not fire.
 
-- their boundaries touch,  
-- their interfaces exchange structure,  
-- or their rule sets jointly refine meaning.
+### 6.2 *The book is on the table.*
 
-Adjacency is the backbone of meaning geometry — it determines how meaning packets form and stabilize.
+This world: someone tells you where the book is.
 
----
+| Primitive | What it did |
+|---|---|
+| SOB | Entity chunk + locative chunk |
+| SROB | Theme / location jobs |
+| CnOB | Locative attachment |
+| SmOB | Book and table in one picture |
+| IdOB catalog | `locative` (and often `copular_state` as a near neighbor in the catalog) |
 
-## **7. IdOB Object Interfaces**
-Interfaces define how objects pass structure to one another.
+String adjacency: *on the table* sits on the entity.  
+Object adjacency: `copular_state` declares near `locative`. That is catalog geometry, not word order.
 
-An interface includes:
+### 6.3 *Where is the book that is on the table?*
 
-- input conditions  
-- output conditions  
-- identity‑conditioned rules  
-- smoothing requirements  
+This world: someone asks where the book is, and also pins the book with a relative clause.
 
-Interfaces allow IdOB objects to compose into larger semantic structures.
+| Primitive | What it did |
+|---|---|
+| SOB | Question word, entity, locative, relative material |
+| SROB | Query focus + entity + location |
+| CnOB | Interrogative scope + locative attachment |
+| SmOB | Book + table remain one picture while the question wraps them |
+| IdOB catalog | `interrogative_wh` plus locative / descriptive families may all be eligible |
 
----
-
-## **8. IdOB Object Composition**
-IdOB objects compose into the IdOB function through:
-
-- adjacency  
-- interface compatibility  
-- constraint satisfaction  
-- smoothing alignment  
-
-The composition of IdOB objects yields a **meaning packet** — the final output of Path A.
-
-Composition is reversible, deterministic, and stable under replay.
-
----
-
-## **9. Debugging and Visualization**
-The IdOB debug tool reveals:
-
-- object activation  
-- adjacency patterns  
-- boundary interactions  
-- packet formation  
-
-This paper provides the conceptual foundation for interpreting those visualizations.
-
-Debugging IdOB object space is the primary method for refining boundaries, interfaces, and adjacency rules.
+Three adjacencies at once (seam §5):  
+(1) *book* touches the clause.  
+(2) book + table stay one picture.  
+(3) more than one IdOB name can be active; executed overlap is a packet field, not this page.
 
 ---
 
-## **10. Future Work**
-- Subtyping IdOB objects  
-- Formalizing adjacency metrics  
-- Packet stability proofs  
-- Integration with Path B  
-- Mapping IdOB object space to higher‑order meaning structures  
+## 7. Composition eligibility (not the packet)
+
+Objects may compose when:
+
+- each is in $\mathcal{I}$,  
+- schemas list the keys they will write,  
+- declared overlap covers the pair if both activate,  
+- PSC shared defaults still hold (no OB-set mutation; `semantic_core` remains a dict after IdOB).
+
+The composed **result** is `idob_packet`. That result is not specified here.
 
 ---
 
-## **11. Summary**
-The IdOB object space is the final conceptual component of Path A.  
-With these six object types defined, Path A becomes a complete, reversible, inspectable architecture for meaning emergence.
+## 8. What this file will not grow into
 
-This paper establishes the internal geometry of IdOB — the space where meaning is refined, stabilized, and made explicit.
+- No MSL chapter.  
+- No CIE / $M' = M + \alpha I$.  
+- No S2M six-axis stand-in.  
+- No six-type “foundational basis” that rivals the eight files.  
+- No debugger second sum.
 
----
+If a sentence on this page cannot be pointed at a YAML field or at SOB/SROB/CnOB/SmOB, it belongs somewhere else.
