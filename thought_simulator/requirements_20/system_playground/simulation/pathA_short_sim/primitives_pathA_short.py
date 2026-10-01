@@ -5,6 +5,7 @@ import hashlib
 import yaml
 from idob.registry import registry
 from idob.sum import sum_idob
+from desks.segments import extract_segments
 from ie_compat_intake import build_committed_stream
 from tp_substrate import TP
 
@@ -90,68 +91,6 @@ def _simple_tokenize(text: str) -> List[str]:
 
 def _normalize_tokens(tokens: List[str]) -> List[str]:
     return [t.lower() for t in tokens]
-
-
-def _match_np_with_pattern(token_classes: List[str], start: int, pattern: List[str]) -> int:
-    if not pattern or "NOUN" not in pattern:
-        return 0
-    i = start
-    if i < len(token_classes) and token_classes[i] == "DET":
-        i += 1
-    adj_seen = False
-    while i < len(token_classes) and token_classes[i] == "ADJ":
-        adj_seen = True
-        i += 1
-    if i < len(token_classes) and token_classes[i] == "NOUN":
-        # If ADJ is part of pattern, allow one or many ADJ.
-        if "ADJ" in pattern and not adj_seen and "DET" in pattern:
-            return 0
-        return i - start + 1
-    return 0
-
-
-def _extract_segments(tokens: List[str]) -> Dict[str, Any]:
-    token_classes_map = load_token_classes()
-    segment_patterns = load_segment_patterns()
-
-    classes = [token_classes_map.get(tok, "UNK") for tok in tokens]
-    struct_segments: List[str] = []
-    segment_tokens: List[List[str]] = []
-
-    i = 0
-    while i < len(tokens):
-        if classes[i] == "UNK":
-            i += 1
-            continue
-
-        np_pattern = segment_patterns.get("NP", [])
-        np_len = _match_np_with_pattern(classes, i, np_pattern)
-        if np_len > 0:
-            struct_segments.append("NP")
-            segment_tokens.append(tokens[i:i + np_len])
-            i += np_len
-            continue
-
-        matched = False
-        for seg_name, pattern in segment_patterns.items():
-            if seg_name == "NP" or not pattern:
-                continue
-            plen = len(pattern)
-            if classes[i:i + plen] == pattern:
-                struct_segments.append(seg_name)
-                segment_tokens.append(tokens[i:i + plen])
-                i += plen
-                matched = True
-                break
-        if matched:
-            continue
-
-        i += 1
-
-    return {
-        "struct_segments": struct_segments,
-        "segment_tokens": segment_tokens,
-    }
 
 
 def _simple_segments(tokens: List[str]) -> List[str]:
@@ -564,7 +503,11 @@ def SOB(tp: TP) -> TP:
             detail="segments and segment_tokens mapped from committed_stream",
         )
     else:
-        extracted = _extract_segments(tp.tokens)
+        extracted = extract_segments(
+            tp.tokens,
+            load_token_classes(),
+            load_segment_patterns(),
+        )
         _record_bridge(tp, "SOB", committed_adapter_used=False, legacy_fallback_used=True, detail="committed segments unavailable; legacy segment extractor used")
 
     tp.struct_segments = extracted["struct_segments"]
