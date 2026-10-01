@@ -55,7 +55,8 @@ def _legacy_identity_geometry(tp: Any, truth_relation: str) -> str:
 def _legacy_semantic_core_tokens(tp: Any) -> list:
     semantic_core = []
     if has_entity_role(tp):
-        semantic_core.append("entity")
+        return_semantic = semantic_core
+        return_semantic.append("entity")
     if has_locative(tp):
         semantic_core.append("locative_modifier")
     if not semantic_core and has_roles(tp):
@@ -72,6 +73,9 @@ def _build_selected_ops(tp: Any) -> list:
 
     if "theme-state" in constraints_matched:
         semantic_operations.append("theme_state")
+
+    if "negated_state" in semantic_adjacent_cues or "negation_scope_rule" in constraints_matched:
+        semantic_operations.append("negated_state")
 
     if "state-location" in constraints_matched:
         semantic_operations.append("state_location")
@@ -170,8 +174,13 @@ def build_semantic_profile(tp: Any) -> Dict[str, Any]:
     }
 
 
-def _copular_state_apply(_: Any) -> Dict[str, Any]:
-    return {"truth_relation": "declarative", "truth_relation_family_hint": "descriptive_state"}
+def _copular_state_apply(tp: Any) -> Dict[str, Any]:
+    fragment = {"truth_relation": "declarative", "truth_relation_family_hint": "descriptive_state"}
+    cues = getattr(tp, "semantic_adjacent_cues", []) or []
+    rules = getattr(tp, "constraints_matched", []) or []
+    if "negated_state" in cues or "negation_scope_rule" in rules:
+        fragment["selected_ops"] = ["negated_state"]
+    return fragment
 
 
 def _locative_apply(_: Any) -> Dict[str, Any]:
