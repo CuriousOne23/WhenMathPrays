@@ -84,6 +84,10 @@ def _has_speaker(tp: Any) -> bool:
     return _cue_or_rule(tp, "first_person_speaker", "first_person_state_rule")
 
 
+def _has_passive(tp: Any) -> bool:
+    return _cue_or_rule(tp, "passive_voice_clause", "passive_voice_rule")
+
+
 def _build_selected_ops(tp: Any) -> list:
     semantic_operations = []
     constraints_matched = getattr(tp, "constraints_matched", [])
@@ -96,6 +100,8 @@ def _build_selected_ops(tp: Any) -> list:
         semantic_operations.append("negated_state")
     if _has_speaker(tp):
         semantic_operations.append("first_person_speaker")
+    if _has_passive(tp):
+        semantic_operations.append("passive_voice")
     if _has_coordination(tp):
         semantic_operations.append("coordinated_clauses")
     if _has_conditional(tp):
@@ -234,8 +240,13 @@ def _interrogative_polar_apply(_: Any) -> Dict[str, Any]:
 
 def _agent_action_apply(tp: Any) -> Dict[str, Any]:
     selected_ops = _build_selected_ops(tp)
+    extra = []
     if "agent_action" in selected_ops:
-        return {"selected_ops_add": ["agent_action"]}
+        extra.append("agent_action")
+    if _has_passive(tp):
+        extra.append("passive_voice")
+    if extra:
+        return {"selected_ops_add": extra}
     return {}
 
 
