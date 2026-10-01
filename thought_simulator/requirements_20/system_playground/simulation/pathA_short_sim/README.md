@@ -5,6 +5,13 @@ Its purpose is **educational**: provide an architectural feel for major Path‑A
 
 The simulator is intentionally small, inspectable, and modifiable.
 
+Consult this page first. It is enough to find files and run checks. It is not enough to decide a new cue, a new card, a family name, or a sentence that does not already print. For those, open the four pages below before editing.
+
+- [notes/pathA_coverage.md](notes/pathA_coverage.md) — what prints, what is a hole, what is shut  
+- [architecture/idob_seam.md](architecture/idob_seam.md) — names, adjacency, do-not-mix table  
+- [architecture/idob_meaning_lock.md](architecture/idob_meaning_lock.md) — packet contract; no Structure-to-Meaning geometry inside IdOB  
+- [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md) — stamp families  
+
 Start here for Identity Observation Block (IdOB) names and the walk from ordinary talk into Path‑A language:
 
 - [notes/bench_walk/00_how_to_walk.md](notes/bench_walk/00_how_to_walk.md) — new-reader track: false image, stamp card, empty hook, shut S2M door  
@@ -177,6 +184,9 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 
 # **10. Related Documents**
 
+- Coverage map (printed, hole, shut):  
+  [notes/pathA_coverage.md](notes/pathA_coverage.md)
+
 - Bench walk (new reader, false image to shut door):  
   [notes/bench_walk/00_how_to_walk.md](notes/bench_walk/00_how_to_walk.md)
 
@@ -255,6 +265,7 @@ pathA_short_sim/
 |   `-- setup/
 |
 |-- notes/
+|   |-- pathA_coverage.md
 |   |-- bench_walk/00_how_to_walk.md
 |   |-- idob_object_space/idob_object_space.md
 |   |-- pathA_supported_sentences.md
