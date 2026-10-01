@@ -2,145 +2,78 @@
 
 **Document:** `notes/pathA_coverage.md`  
 **Date:** 2026-10-01  
-**Status:** base. May gain rows. The cuts below stay.  
+**Status:** base, with an account of the claim pass. May gain rows. The cuts below stay.  
+**Meter:** 43% used when this account was written.  
 **Does not define tokens.** Authorities: [idob_seam.md](../architecture/idob_seam.md), [idob_object_space.md](idob_object_space/idob_object_space.md), [IdOB_unified_plan.md](../architecture/IdOB_unified_plan.md), [idob_meaning_lock.md](../architecture/idob_meaning_lock.md).
 
 ## Purpose
 
-This page is the current development-target map for Path A short sim. Open it to say developed, next, or hole. Other files define the tokens and hold the catalogs. This page names the lists, defines each row, and links out. It does not copy those catalogs.
-
-A hole names a list and a row. "Path A does not cover *and*" is not a verdict. "Form list has coordination. Claim backlog still holds it" is a verdict.
+This page is the current development-target map for Path A short sim. Open it to say developed, wired, hole, or shut. Other files define the tokens. This page does not copy those catalogs.
 
 ## What this page covers
 
-The desks that write the signed form and the card: Structural Observation Block (SOB), Structural Refinement Observation Block (SROB), Constraint Observation Block (CnOB), Semantic Observation Block (SmOB), Identity Observation Block (IdOB). Output Binding / Assemble (OuBA) is named only as the lock on the card. Truth-Relation Update (TRU) is named only where a mood hint must not clobber the card.
-
-That span is the IdOB meaning hop: structure to `idob_packet`. It is not Structure-to-Meaning (S2M).
+Structural Observation Block through Identity Observation Block, then Output Binding / Assemble as the lock on the card. That span is the IdOB meaning hop. It is not Structure-to-Meaning (S2M).
 
 ## What this page does not cover
 
-Intake, correction, and routing are upstream. They are not scored. Meaning Composition Block (MCB) is omitted in the short sim. No second IdOB sum. No embeddings.
-
-S2M is recorded and not scored. See the shut door. This page does not create a dictionary for \(M\).
+Intake, correction, and routing are not scored. Meaning Composition Block is omitted. S2M is recorded and not scored.
 
 ## Status words
 
-Used only here.
-
 | Word | Means |
 |---|---|
-| developed | The row exists and a replay can show it. |
-| unclaimed | The form already has the cue. No stamp prints the line. |
-| form hole | The signed form has no circle, hat, fit, or cue for the shape. |
-| shut | Named, empty, not a coverage hole in the four lists. |
-
-"Coverage is good" means the family list replays and the claim-backlog row you care about is no longer unclaimed. "Not good" names the list and the row.
-
-New facts get a row on the list that owns them. They do not become a sixth list because a sentence felt new. A new list requires a sentence on this page saying why the four could not hold it.
+| developed | The row exists and a full runner replay can show it. |
+| wired | The stamp prints the op when the cue is already on a stand-in packet. Full runner replay not run. |
+| stamp hole | The form has the cue. No honest card may print the force. |
+| form hole | The signed form has no circle or hat for the shape. |
+| shut | Named, empty, not a hole in the four lists. |
 
 ## Family list
 
-**Definition.** Sentence shapes the short-sim pipeline already runs end to end: SOB through IdOB. Not the stretch list.
-
-**Authority.** [pathA_supported_sentences.md](pathA_supported_sentences.md).
-
-| Row | Definition | Status | Example |
-|---|---|---|---|
-| Copular / state | Property or identity of a theme. Hats: theme, state. | developed | *The sky is blue.* |
-| Locative | Place of a theme. Hats: theme, location. | developed | *The book is on the table.* |
-| Mixed descriptive | Nested modifier or place chain on a descriptive. | developed | *The rain in Spain stays mainly in the plain.* |
-| Interrogative | Wh or yes/no question over a descriptive shape. | developed | *Where is the book?* |
-| Mixed interrogative | Question scope over a nested descriptive. Overlap, not a seventh stamp family. | developed | *Where is the book that is on the table?* |
-
-A hole on this list is a shape with no family at all. Coordination is not that hole.
+Five shapes, developed: copular, locative, mixed descriptive, interrogative, mixed interrogative. Authority: [pathA_supported_sentences.md](pathA_supported_sentences.md).
 
 ## Form list
 
-**Definition.** What the structure desks can write on the signed form before any stamp fires. Circles (SOB), hats (SROB), fits (CnOB), cues (SmOB and CnOB notes). A claim cannot own a note the form does not have.
-
-**Authority.** Exerciser holes in [pathA_supported_sentences.md](pathA_supported_sentences.md). Primitive cards under `debug/primitives/`.
-
-| Row | What is written | Status | Note |
-|---|---|---|---|
-| Entity and complement circles | *the book*, *on the table*, *blue* | developed | SOB |
-| Hats | theme, state, location, query focus | developed | SROB. A hat is not a stamp. |
-| Locative and copular fits | combination may close | developed | CnOB |
-| Scene cue | pieces in one picture | developed | SmOB. Basin adjacency, not object adjacency. |
-| Negation cue | denied state | developed as a cue | *The sky is not blue.* |
-| Command cue | bare imperative | developed as a cue | *Close the door.* |
-| Request cue | polite imperative, distinct from bare command | developed as a cue | *Please close the door.* |
-| Coordination cue | two clauses joined | developed as a cue | *and the lamp is on the desk* |
-| Conditional cue | one clause depends on another | developed as a cue | *If the book is on the table, ...* |
-| Fragment cue | place or piece with a missing hat | developed as a cue | *On the table.* |
-| Speaker cue | first person | developed as a cue | *I am tired.* |
-| Passive cue | acted-on | developed as a cue | *The book was written.* |
-| Quantifier cue | how much of the theme | developed as a cue | *Every sky is blue.* |
-| Exclamative cue | force that is not a question | developed as a cue | *What a beautiful day!* |
-| Reporting circle | "she said that..." | form hole | No circle yet. |
-| Recipient hat | *Give me the book.* | form hole | No recipient hat yet. |
-| Relative subject that is not the head | *The book that John bought* | form hole | Relative clause whose subject is not the book. |
-
-A form-list row can be developed and still sit on the claim backlog. The cue is written. The line is not printed.
+Cues for negation, command, request, coordination, conditional, fragment, speaker, passive, quantifier, and exclamative are developed as cues. Three form holes remain: reporting circle (*She said the book is on the table.*), recipient hat (*Give me the book.*), relative subject that is not the head (*The book that John bought*).
 
 ## Stamp list
 
-**Definition.** The IdOBObject drawer. One card is a named spec that may wake and print claim lines. It is not the book, not the packet, not S2M. This is the dictionary Path A has.
+Eight cards, plus a proposed `imperative` card not on `main` at this writing. On-switches are still empty in YAML. Apply still lives in code.
 
-**Authority.** [idob_object_space.md](idob_object_space/idob_object_space.md). Files under `support/idob_objects/`. On-switches are empty in YAML (`activation: {}`). Apply still lives in `idob.legacy`.
-
-| Card | Family on the card | May print | Status |
-|---|---|---|---|
-| `copular_state` | `copular_state` | theme, state | developed as a card; switch not data |
-| `locative` | `locative` | location | developed as a card; switch not data |
-| `mixed_descriptive` | `mixed_descriptive` | theme, state, location | developed as a card; switch not data |
-| `interrogative_wh` | `interrogative_wh` | query_focus, predicate | developed as a card; switch not data |
-| `interrogative_polar` | `interrogative_polar` | query_focus, predicate | developed as a card; switch not data |
-| `agent_action` | `residual_identity` | agent, action, patient | weak row: helper filed as residual |
-| `modifier_resolution` | `mixed_descriptive` | theme, state, location, relation, action, patient | helper; not a second type system |
-| `residual_identity` | `residual_identity` | none declared | developed as the leftover card |
-
-A hole on this list is a force no current card may honestly print. Bare command is the clearest candidate. Do not pretend it into `copular_state`.
+| Card | Status |
+|---|---|
+| `copular_state` | developed as a card; negation, speaker, quantifier wired |
+| `locative` | developed as a card; coordination, conditional, fragment wired |
+| `mixed_descriptive` | developed as a card |
+| `interrogative_wh` | developed as a card; must not own exclamative |
+| `interrogative_polar` | developed as a card |
+| `agent_action` | weak row; passive wired; family still `residual_identity` |
+| `modifier_resolution` | helper |
+| `residual_identity` | leftover card |
+| `imperative` | not on `main`; proposed for command and request |
 
 ## Claim backlog
 
-**Definition.** Cues on the form list that no stamp prints. The stretch list. A claim is one row: an on-switch for that cue, and the line the stamp may write. A row leaves only when the packet prints the line and the family list does not move.
+| Row | Sentence | Status | Where |
+|---|---|---|---|
+| Negation | *The sky is not blue.* | wired | `negated_state` on `copular_state` |
+| Coordination | *The book is on the table and the lamp is on the desk.* | wired | `coordinated_clauses` on `locative` |
+| Conditional | *If the book is on the table, the lamp is in the hall.* | wired | `conditional_clauses` on `locative` |
+| Fragment | *On the table.* | wired | `fragment_ellipsis` on `locative` |
+| Speaker | *I am tired.* | wired | `first_person_speaker` on `copular_state` |
+| Passive | *The book was written.* | wired | `passive_voice` on `agent_action`; by-phrase still open |
+| Quantifier | *Every sky is blue.* | wired | `quantified_np` on `copular_state` |
+| Action | *The cat chased the mouse.* | wired as an op | `agent_action` already prints; family still residual |
+| Bare command | *Close the door.* | stamp hole | no honest card on `main` |
+| Request | *Please close the door.* | stamp hole | distinct from bare command |
+| Exclamative | *What a beautiful day!* | stamp hole | not a question card |
 
-Not a dictionary. Not more facts about the book. Not S2M.
-
-| Row | Sentence | Cue present | Line the card drops | Card that should own it | Status |
-|---|---|---|---|---|---|
-| Negation | *The sky is not blue.* | negation | denied, not only blue | `copular_state` | unclaimed |
-| Bare command | *Close the door.* | command | command force | no honest card yet | unclaimed |
-| Request | *Please close the door.* | request | request, distinct from bare command | no honest card yet | unclaimed |
-| Coordination | *The book is on the table and the lamp is on the desk.* | coordination | two place-claims, joined | `locative`, twice, with a join recorded | unclaimed |
-| Conditional | *If the book is on the table, the lamp is in the hall.* | conditional | one claim depends on the other | `locative`, with a dependency line | unclaimed |
-| Fragment | *On the table.* | fragment | place with the thing missing | `locative`, theme absent on purpose | unclaimed |
-| Speaker | *I am tired.* | speaker | who the theme is | `copular_state` | unclaimed |
-| Passive | *The book was written.* | passive | acted-on; by-phrase still open | `agent_action` | unclaimed |
-| Quantifier | *Every sky is blue.* | quantifier | how much of the theme | `copular_state` | unclaimed |
-| Exclamative | *What a beautiful day!* | exclamative | force that is not a question | no honest card yet; TRU must not call it a question by default | unclaimed |
-| Action | *The cat chased the mouse.* | action shape, if the form has it | agent, action, patient | `agent_action`; stop calling the result residual if the packet is an action claim | unclaimed |
-
-Current development targets, in order: negation (smallest stretch), then coordination (the *and* join), then bare command (clearest missing force). Do not open a new family for a row whose card already exists.
+Wired means a stand-in replay of `_build_selected_ops`: the op prints when the cue is present, and *The sky is blue.* does not gain it. `modifier_resolution` also prints whenever any cue list is non-empty. That is old behavior.
 
 ## Shut door
 
-**Definition.** S2M. The later hop. Not a coverage list. Not a second name for the meaning hop.
+\(M\), the envelope \(M' = M + \alpha I\), and \(\Delta h\) are shut. A surface is implied and not drawn. A dictionary is not required and not forbidden. Path A short sim does not compute \(M\).
 
-**Authority.** [idob_meaning_lock.md](../architecture/idob_meaning_lock.md). Reserved packet shape, not written by the short sim: `primitives/idob/idob_s2m_packet.yaml`.
+## Next
 
-| Reading | What it is | Status |
-|---|---|---|
-| \(M\) | `meaning_semantics`: a six-axis coordinate, or null. A point, not a card. | shut |
-| Envelope | \(M' = M + \alpha I\). `meaning_semantics_prime`, `meaning_cie_delta`. A shove, not a drawer. | shut |
-| \(\Delta h\) | `meaning_delta_h`. Step size between coordinates. Not Path A `meaning_delta`. | shut |
-
-Research note: a surface is implied and not drawn. A dictionary of named regions is not required and not forbidden. We do not know enough to say a drawer will follow or will not. Do not open a blank catalog that looks like the stamp list.
-
-Product note: Path A short sim does not compute \(M\). Do not add a second YAML drawer in this folder. `identity_geometry` on the packet is not the envelope.
-
-Next door, after this map: define the space those readings sit in, then ask whether any region is worth a name. Not a row on the stamp list.
-
-## How a miss looks
-
-No circle: form hole. Cue present, no line: claim backlog. No card may print the force: stamp-list hole. Shape with no family: family-list hole. Packet complete and you want a coordinate: shut door.
+Full runner replay of the wired rows. Then one imperative card with two lines, if pull request 97 is accepted. Then the three form holes. Not the shut door.
