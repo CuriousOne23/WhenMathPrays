@@ -80,6 +80,10 @@ def _has_fragment(tp: Any) -> bool:
     return _cue_or_rule(tp, "fragment_ellipsis", "fragment_ellipsis_rule")
 
 
+def _has_speaker(tp: Any) -> bool:
+    return _cue_or_rule(tp, "first_person_speaker", "first_person_state_rule")
+
+
 def _build_selected_ops(tp: Any) -> list:
     semantic_operations = []
     constraints_matched = getattr(tp, "constraints_matched", [])
@@ -90,6 +94,8 @@ def _build_selected_ops(tp: Any) -> list:
         semantic_operations.append("theme_state")
     if "negated_state" in semantic_adjacent_cues or "negation_scope_rule" in constraints_matched:
         semantic_operations.append("negated_state")
+    if _has_speaker(tp):
+        semantic_operations.append("first_person_speaker")
     if _has_coordination(tp):
         semantic_operations.append("coordinated_clauses")
     if _has_conditional(tp):
@@ -182,8 +188,13 @@ def _copular_state_apply(tp: Any) -> Dict[str, Any]:
     fragment = {"truth_relation": "declarative", "truth_relation_family_hint": "descriptive_state"}
     cues = getattr(tp, "semantic_adjacent_cues", []) or []
     rules = getattr(tp, "constraints_matched", []) or []
+    ops = []
     if "negated_state" in cues or "negation_scope_rule" in rules:
-        fragment["selected_ops"] = ["negated_state"]
+        ops.append("negated_state")
+    if _has_speaker(tp):
+        ops.append("first_person_speaker")
+    if ops:
+        fragment["selected_ops"] = ops
     return fragment
 
 
