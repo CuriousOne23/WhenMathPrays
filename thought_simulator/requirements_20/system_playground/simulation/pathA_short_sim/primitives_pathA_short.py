@@ -8,6 +8,7 @@ from idob.sum import sum_idob
 from desks.constraints import compute_constraint_fit
 from desks.roles import adapt_roles_from_committed
 from desks.segments import extract_segments
+from desks.smoothing import compute_smoothing_state
 from ie_compat_intake import build_committed_stream
 from tp_substrate import TP
 
@@ -514,76 +515,19 @@ def CnOB(tp: TP) -> TP:
 
 
 def SmOB(tp: TP) -> TP:
-    base_ops, base_cues, _ = apply_smoothing(tp.segment_tokens, tp.struct_roles)
+    smoothing_state = compute_smoothing_state(
+        raw_text=tp.raw_text,
+        struct_segments=tp.struct_segments,
+        struct_roles=tp.struct_roles,
+        segment_tokens=tp.segment_tokens,
+        constraints_matched=tp.constraints_matched,
+        constraints_unmatched=tp.constraints_unmatched,
+        apply_smoothing_fn=apply_smoothing,
+    )
 
-    allowed_ops = {
-        "adjacency_smoothing",
-        "continuity_smoothing",
-        "role_smoothing",
-        "segment_smoothing",
-        "basin_compression_smoothing",
-    }
-    allowed_cues = {
-        "interrogative_scope",
-        "locative_adjacent",
-        "quantified_np",
-        "negated_state",
-        "coordinated_clauses",
-        "conditional_clauses",
-        "fragment_ellipsis",
-        "first_person_speaker",
-        "passive_voice_clause",
-        "imperative_voice_clause",
-        "request_imperative_clause",
-        "exclamative_force_clause",
-        "action_clause",
-    }
-
-    semantic_adjacent_cues = [cue for cue in base_cues if cue in allowed_cues]
-    if ("WQ" in tp.struct_segments or tp.raw_text.strip().endswith("?")) and "interrogative_scope" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("interrogative_scope")
-    if "LOC" in tp.struct_segments and "locative_adjacent" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("locative_adjacent")
-    if "quantifier_scope_rule" in tp.constraints_matched and "quantified_np" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("quantified_np")
-    if "negation_scope_rule" in tp.constraints_matched and "negated_state" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("negated_state")
-    if "coordination_composition_rule" in tp.constraints_matched and "coordinated_clauses" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("coordinated_clauses")
-    if "conditional_composition_rule" in tp.constraints_matched and "conditional_clauses" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("conditional_clauses")
-    if "fragment_ellipsis_rule" in tp.constraints_matched and "fragment_ellipsis" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("fragment_ellipsis")
-    if "first_person_state_rule" in tp.constraints_matched and "first_person_speaker" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("first_person_speaker")
-    if "passive_voice_rule" in tp.constraints_matched and "passive_voice_clause" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("passive_voice_clause")
-    if "imperative_voice_rule" in tp.constraints_matched and "imperative_voice_clause" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("imperative_voice_clause")
-    if "request_imperative_rule" in tp.constraints_matched and "request_imperative_clause" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("request_imperative_clause")
-    if "exclamative_force_rule" in tp.constraints_matched and "exclamative_force_clause" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("exclamative_force_clause")
-    if "action_clause_rule" in tp.constraints_matched and "action_clause" not in semantic_adjacent_cues:
-        semantic_adjacent_cues.append("action_clause")
-
-    smoothing_operations = [op for op in base_ops if op in allowed_ops]
-    if "interrogative_scope" in semantic_adjacent_cues and "adjacency_smoothing" not in smoothing_operations:
-        smoothing_operations.append("adjacency_smoothing")
-    if "locative_adjacent" in semantic_adjacent_cues and "segment_smoothing" not in smoothing_operations:
-        smoothing_operations.append("segment_smoothing")
-    if tp.constraints_unmatched and "continuity_rule" in tp.constraints_unmatched and "continuity_smoothing" not in smoothing_operations:
-        smoothing_operations.append("continuity_smoothing")
-    if any(role == "none" for role in tp.struct_roles) and "role_smoothing" not in smoothing_operations:
-        smoothing_operations.append("role_smoothing")
-    if not smoothing_operations:
-        smoothing_operations.append("basin_compression_smoothing")
-
-    basin_residue: List[str] = []
-
-    tp.smoothing_operations = list(dict.fromkeys(smoothing_operations))
-    tp.semantic_adjacent_cues = list(dict.fromkeys(semantic_adjacent_cues))
-    tp.basin_residue = basin_residue
+    tp.smoothing_operations = smoothing_state["smoothing_operations"]
+    tp.semantic_adjacent_cues = smoothing_state["semantic_adjacent_cues"]
+    tp.basin_residue = smoothing_state["basin_residue"]
 
     tp.smoothed_geometry = True
     if not hasattr(tp, "trace"):
@@ -593,7 +537,7 @@ def SmOB(tp: TP) -> TP:
         "notes": "[Canonical]",
         "smoothing_operations": tp.smoothing_operations,
         "semantic_adjacent_cues": tp.semantic_adjacent_cues,
-        "basin_residue": basin_residue,
+        "basin_residue": tp.basin_residue,
     })
     return tp
 
