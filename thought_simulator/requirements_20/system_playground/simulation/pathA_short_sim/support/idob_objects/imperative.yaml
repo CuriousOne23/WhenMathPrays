@@ -1,11 +1,11 @@
 schema_ref: idob_object.v1
 psc_id: PSC-IdOB-imperative-v1
 name: imperative
-family: imperative
+family: residual_identity
 priority: 15
 identity:
   label: Imperative
-  description: Command and request forces. Two lines, one card. Not a copular state.
+  description: Command and request forces. Two lines, one card. Family filing is residual until the family enum is opened. Not a copular state.
   tags: [imperative, force]
 association:
   geometries: []
