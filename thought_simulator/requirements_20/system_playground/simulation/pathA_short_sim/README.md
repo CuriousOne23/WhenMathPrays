@@ -217,6 +217,8 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 
 # **11. Directory Structure (for new users)**
 
+Step-0 desk split note: desk modules live in `desks/`, and `primitives_pathA_short.py` remains the caller that the runner imports.
+
 ```
 pathA_short_sim/
 |
