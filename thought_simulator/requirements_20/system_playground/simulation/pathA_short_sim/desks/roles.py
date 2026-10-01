@@ -1,0 +1,64 @@
+from typing import Any, Dict, List
+
+
+def adapt_roles_from_committed(
+    committed_stream: Any,
+    segment_tokens: List[List[str]],
+) -> Dict[str, Any]:
+    tokens = committed_stream.get("tokens", []) if isinstance(committed_stream, dict) else []
+
+    if not tokens:
+        return {
+            "used": False,
+            "struct_roles": [],
+            "role_segments": {},
+            "legacy_fallback_used": False,
+        }
+
+    def _token_role(tok: Dict[str, Any]) -> str:
+        role_obj = tok.get("role", {})
+        chosen = str(role_obj.get("chosen", "none"))
+        if chosen and chosen != "none":
+            return chosen
+
+        candidates = role_obj.get("candidates", [])
+        if candidates:
+            candidate_role = str(candidates[0].get("role_name", "none"))
+            if candidate_role:
+                return candidate_role
+        return "none"
+
+    # Map committed token roles onto SOB-produced segment token chunks.
+    # Use only committed-stream role fields; no YAML role fallback.
+    stream_tokens: List[tuple[str, str]] = []
+    for tok in tokens:
+        if str(tok.get("token_class", "")) == "PUNCT":
+            continue
+        token_text = str(tok.get("normalized", tok.get("surface", "")))
+        stream_tokens.append((token_text, _token_role(tok)))
+
+    struct_roles: List[str] = []
+    role_segments: Dict[str, List[str]] = {}
+
+    cursor = 0
+    for seg_chunk in segment_tokens:
+        chunk_roles: List[str] = []
+        for _ in seg_chunk:
+            if cursor < len(stream_tokens):
+                token_text, role = stream_tokens[cursor]
+                cursor += 1
+            else:
+                token_text, role = "", "none"
+            chunk_roles.append(role)
+            if role != "none" and token_text:
+                role_segments.setdefault(role, []).append(token_text)
+
+        seg_role = next((r for r in chunk_roles if r != "none"), "none")
+        struct_roles.append(seg_role)
+
+    return {
+        "used": True,
+        "struct_roles": struct_roles,
+        "role_segments": role_segments,
+        "legacy_fallback_used": False,
+    }
