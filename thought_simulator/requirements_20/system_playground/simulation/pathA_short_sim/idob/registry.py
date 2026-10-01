@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Tuple
 
 import yaml
 
-from idob import imperative, legacy
+from idob import exclamative, imperative, legacy
 from idob.legacy import legacy_monolith
 from idob.object import IdOBObject
 from idob.psc import evaluate_psc, load_psc_defaults
@@ -26,6 +26,7 @@ APPLY_LOOKUP = {
     "idob.legacy:_modifier_resolution_apply": legacy._modifier_resolution_apply,
     "idob.legacy:_residual_identity_apply": legacy._residual_identity_apply,
     "idob.imperative:_imperative_apply": imperative._imperative_apply,
+    "idob.exclamative:_exclamative_apply": exclamative._exclamative_apply,
 }
 
 def _load_schema(path: Path) -> Dict[str, Any]:
@@ -65,6 +66,7 @@ def _activation_for_name(name: str):
         "modifier_resolution": legacy.modifier_resolution.activate,
         "residual_identity": legacy.residual_identity.activate,
         "imperative": imperative._imperative_activate,
+        "exclamative": exclamative._exclamative_activate,
     }
     if name not in mapping:
         raise ValueError(f"No activation binding available for IdOB object {name}")
