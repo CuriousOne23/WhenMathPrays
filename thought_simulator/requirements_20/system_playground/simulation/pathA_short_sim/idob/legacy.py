@@ -92,6 +92,21 @@ def _has_fragment(tp: Any) -> bool:
     return _cue_or_rule(tp, "fragment_ellipsis", "fragment_ellipsis_rule")
 
 
+def _force_ops(tp: Any) -> list:
+    cues = getattr(tp, "semantic_adjacent_cues", []) or []
+    rules = getattr(tp, "constraints_matched", []) or []
+    ops = []
+    if "imperative_voice_clause" in cues or "imperative_voice_rule" in rules:
+        ops.append("bare_command")
+    if "request_imperative_clause" in cues or "request_imperative_rule" in rules:
+        ops.append("polite_request")
+    if "exclamative_force_clause" in cues or "exclamative_force_rule" in rules:
+        ops.append("exclamative_force")
+    if "action_clause" in cues or "action_clause_rule" in rules:
+        ops.append("agent_action")
+    return ops
+
+
 def _build_selected_ops(tp: Any) -> list:
     semantic_operations = []
     constraints_matched = getattr(tp, "constraints_matched", [])
@@ -113,6 +128,7 @@ def _build_selected_ops(tp: Any) -> list:
         semantic_operations.append("conditional_clauses")
     if _has_fragment(tp):
         semantic_operations.append("fragment_ellipsis")
+    semantic_operations.extend(_force_ops(tp))
     if "state-location" in constraints_matched:
         semantic_operations.append("state_location")
     if "query-focus-predicate" in constraints_matched:
