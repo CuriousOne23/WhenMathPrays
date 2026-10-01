@@ -1,7 +1,7 @@
 schema_ref: idob_object.v1
 psc_id: PSC-IdOB-exclamative-v1
 name: exclamative
-family: residual_identity
+family: exclamative
 priority: 16
 identity:
   label: Exclamative
