@@ -91,6 +91,24 @@ def _committed_stream_view(committed_stream: object) -> dict:
     }
 
 
+def _print_schema_families() -> None:
+    import json
+    from pathlib import Path
+    import yaml
+    base = Path(__file__).resolve().parent
+    schema = json.loads((base / "support/idob_schemas/idob_object.v1.schema.json").read_text())
+    allowed = schema.get("properties", {}).get("family", {}).get("enum", [])
+    cards = []
+    for path in sorted((base / "support/idob_objects").glob("*.yaml")):
+        spec = yaml.safe_load(path.read_text()) or {}
+        cards.append((str(spec.get("name")), str(spec.get("family"))))
+    missing = sorted({family for _name, family in cards if family not in allowed})
+    print("schema families: " + ", ".join(allowed))
+    print("card families: " + ", ".join(f"{name}={family}" for name, family in cards))
+    print("missing from schema: " + (", ".join(missing) if missing else "none"))
+    print("schema families: matched" if not missing else "schema families: not matched")
+
+
 def main() -> None:
     # sentence = "The quick brown fox jumps over the lazy dog."
     # PA-CSE-005 / mixed_desc
@@ -187,6 +205,7 @@ def main() -> None:
         "semantic_core": semantic_core,
     }
 
+    _print_schema_families()
     print("=== Final TP ===")
     final_tp_ie = _committed_stream_view(final_tp.get("committed_stream", {}))
     print(f"tp_ie_tokens: {final_tp_ie['tokens']}")
