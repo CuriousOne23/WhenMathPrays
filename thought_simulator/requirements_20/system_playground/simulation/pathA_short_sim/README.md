@@ -7,6 +7,7 @@ The simulator is intentionally small, inspectable, and modifiable.
 
 Start here for Identity Observation Block (IdOB) names and the walk from ordinary talk into Path‑A language:
 
+- [notes/bench_walk/00_how_to_walk.md](notes/bench_walk/00_how_to_walk.md) — new-reader track: false image, stamp card, empty hook, shut S2M door  
 - [architecture/idob_seam.md](architecture/idob_seam.md) — names, adjacency, do-not-mix table  
 - [user_guide.md](user_guide.md) — run two utterances; structure vs packet  
 - [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md) — eight catalog families  
@@ -145,6 +146,8 @@ Full details and canonical TP traces are in:
 5. Extend OB‑Set outputs into explicit structural graph objects.  
 6. Add richer truth‑relation logic referencing provenance and semantic cues.
 
+IdOB coverage and resolution rungs (stamp card, not S2M): [notes/bench_walk/10_extend.md](notes/bench_walk/10_extend.md).
+
 ---
 
 # **8. What This Simulator Does NOT Do**
@@ -173,6 +176,9 @@ For more information see debug directory [README.md](debug/README.md).
 IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](debug/primitives/IdOB.md).
 
 # **10. Related Documents**
+
+- Bench walk (new reader, false image to shut door):  
+  [notes/bench_walk/00_how_to_walk.md](notes/bench_walk/00_how_to_walk.md)
 
 - IdOB seam (start here for names):  
   [architecture/idob_seam.md](architecture/idob_seam.md)
@@ -247,6 +253,7 @@ pathA_short_sim/
 |   `-- setup/
 |
 |-- notes/
+|   |-- bench_walk/00_how_to_walk.md
 |   |-- idob_object_space/idob_object_space.md
 |   |-- pathA_supported_sentences.md
 |   |-- pathA_relational_geometry.md
