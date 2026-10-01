@@ -217,7 +217,7 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 
 # **11. Directory Structure (for new users)**
 
-Step-0 desk split note: desk modules live in `desks/`, and `primitives_pathA_short.py` remains the caller that the runner imports.
+Desk modules live in `desks/`: `segments.py` for Structural Observation Block, `roles.py` for Structural Refinement, `constraints.py` for Constraint Observation Block, and `smoothing.py` for Semantic-adjacent Smoothing. `primitives_pathA_short.py` remains the caller that the runner imports. Intake and the IdOB call stay in that caller.
 
 ```
 pathA_short_sim/
