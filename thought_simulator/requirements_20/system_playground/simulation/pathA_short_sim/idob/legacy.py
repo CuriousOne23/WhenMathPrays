@@ -15,7 +15,6 @@ from idob.predicates import (
 
 
 def _legacy_apply(tp: Any) -> Dict[str, Any]:
-    # Lazy import avoids a module cycle with primitives_pathA_short.
     from primitives_pathA_short import _build_idob_packet
 
     packet = _build_idob_packet(tp)
@@ -63,53 +62,51 @@ def _legacy_semantic_core_tokens(tp: Any) -> list:
     return semantic_core
 
 
+def _has_coordination(tp: Any) -> bool:
+    cues = getattr(tp, "semantic_adjacent_cues", []) or []
+    rules = getattr(tp, "constraints_matched", []) or []
+    return "coordinated_clauses" in cues or "coordination_composition_rule" in rules
+
+
 def _build_selected_ops(tp: Any) -> list:
     semantic_operations = []
-
     constraints_matched = getattr(tp, "constraints_matched", [])
     struct_roles = getattr(tp, "struct_roles", [])
     semantic_adjacent_cues = getattr(tp, "semantic_adjacent_cues", [])
 
     if "theme-state" in constraints_matched:
         semantic_operations.append("theme_state")
-
+    if "negated_state" in semantic_adjacent_cues or "negation_scope_rule" in constraints_matched:
+        semantic_operations.append("negated_state")
+    if _has_coordination(tp):
+        semantic_operations.append("coordinated_clauses")
     if "state-location" in constraints_matched:
         semantic_operations.append("state_location")
-
     if "query-focus-predicate" in constraints_matched:
         semantic_operations.append("query_resolution")
-
         has_location_role = "location" in struct_roles
         has_state_role = "state" in struct_roles
         query_focus = query_focus_text(tp)
-
         if query_focus in ("where", "where?") or has_location_role:
             semantic_operations.append("interrogative_relation_request")
         elif query_focus in ("why", "why?") or has_state_role:
             semantic_operations.append("interrogative_property_request")
         else:
             semantic_operations.append("interrogative_identity_request")
-
     if "modifier_chain" in semantic_adjacent_cues or "relation" in struct_roles:
         semantic_operations.append("nested_modifier_resolution")
-
     if "nested_state_link" in semantic_adjacent_cues or "nested_locative_link" in semantic_adjacent_cues or (
         "state" in struct_roles and "location" in struct_roles
     ):
         semantic_operations.append("nested_state_location_resolution")
-
     if "agent-action" in constraints_matched:
         semantic_operations.append("agent_action")
-
     if "action-relation" in constraints_matched:
         semantic_operations.append("action_patient")
-
     if "relation-patient" in constraints_matched:
         semantic_operations.append("relation_modifier")
-
     if semantic_adjacent_cues:
         semantic_operations.append("modifier_resolution")
-
     return semantic_operations
 
 
@@ -119,15 +116,12 @@ def _build_semantic_core_dict(tp: Any, selected_ops: list) -> Dict[str, Any]:
     struct_roles = getattr(tp, "struct_roles", [])
     segment_tokens = getattr(tp, "segment_tokens", [])
     semantic_adjacent_cues = getattr(tp, "semantic_adjacent_cues", [])
-
     query_focus = " ".join(role_segments.get("query_focus", []))
     predicate = " ".join(role_segments.get("predicate", []))
     theme = " ".join(role_segments.get("theme", role_segments.get("agent", [])))
     relation_modifiers = " ".join(role_segments.get("relation", []))
-
     location_tokens = role_segments.get("location", [])
     has_location_tokens = bool(location_tokens)
-
     state_tokens = []
     if has_location_tokens:
         for seg, role, seg_tokens in zip(struct_segments, struct_roles, segment_tokens):
@@ -137,10 +131,8 @@ def _build_semantic_core_dict(tp: Any, selected_ops: list) -> Dict[str, Any]:
         for seg, role, seg_tokens in zip(struct_segments, struct_roles, segment_tokens):
             if role == "state" and seg != "CP":
                 state_tokens.extend(seg_tokens)
-
     if not state_tokens:
         state_tokens = role_segments.get("state", [])
-
     return {
         "selected_ops": selected_ops,
         "query_focus": query_focus,
@@ -170,15 +162,23 @@ def build_semantic_profile(tp: Any) -> Dict[str, Any]:
     }
 
 
-def _copular_state_apply(_: Any) -> Dict[str, Any]:
-    return {"truth_relation": "declarative", "truth_relation_family_hint": "descriptive_state"}
+def _copular_state_apply(tp: Any) -> Dict[str, Any]:
+    fragment = {"truth_relation": "declarative", "truth_relation_family_hint": "descriptive_state"}
+    cues = getattr(tp, "semantic_adjacent_cues", []) or []
+    rules = getattr(tp, "constraints_matched", []) or []
+    if "negated_state" in cues or "negation_scope_rule" in rules:
+        fragment["selected_ops"] = ["negated_state"]
+    return fragment
 
 
-def _locative_apply(_: Any) -> Dict[str, Any]:
-    return {
+def _locative_apply(tp: Any) -> Dict[str, Any]:
+    fragment = {
         "semantic_core_tokens": ["locative_modifier"],
         "truth_relation_family_hint": "descriptive_locative",
     }
+    if _has_coordination(tp):
+        fragment["selected_ops"] = ["coordinated_clauses"]
+    return fragment
 
 
 def _mixed_descriptive_apply(tp: Any) -> Dict[str, Any]:
@@ -191,17 +191,11 @@ def _mixed_descriptive_apply(tp: Any) -> Dict[str, Any]:
 
 
 def _interrogative_wh_apply(_: Any) -> Dict[str, Any]:
-    return {
-        "truth_relation": "interrogative",
-        "truth_relation_family_hint": "interrogative_wh",
-    }
+    return {"truth_relation": "interrogative", "truth_relation_family_hint": "interrogative_wh"}
 
 
 def _interrogative_polar_apply(_: Any) -> Dict[str, Any]:
-    return {
-        "truth_relation": "interrogative",
-        "truth_relation_family_hint": "interrogative_polar",
-    }
+    return {"truth_relation": "interrogative", "truth_relation_family_hint": "interrogative_polar"}
 
 
 def _agent_action_apply(tp: Any) -> Dict[str, Any]:
@@ -229,13 +223,8 @@ def _residual_identity_apply(tp: Any) -> Dict[str, Any]:
 
 
 legacy_monolith = IdOBObject(
-    name="legacy_monolith",
-    family="residual_identity",
-    priority=999,
-    activate=always_active,
-    apply=_legacy_apply,
+    name="legacy_monolith", family="residual_identity", priority=999, activate=always_active, apply=_legacy_apply
 )
-
 copular_state = IdOBObject(
     name="copular_state",
     family="copular_state",
@@ -243,31 +232,13 @@ copular_state = IdOBObject(
     activate=lambda tp: (not is_interrogative(tp)) and has_constraints(tp),
     apply=_copular_state_apply,
 )
-
-locative = IdOBObject(
-    name="locative",
-    family="locative",
-    priority=30,
-    activate=has_locative,
-    apply=_locative_apply,
-)
-
+locative = IdOBObject(name="locative", family="locative", priority=30, activate=has_locative, apply=_locative_apply)
 mixed_descriptive = IdOBObject(
-    name="mixed_descriptive",
-    family="mixed_descriptive",
-    priority=40,
-    activate=has_entity_role,
-    apply=_mixed_descriptive_apply,
+    name="mixed_descriptive", family="mixed_descriptive", priority=40, activate=has_entity_role, apply=_mixed_descriptive_apply
 )
-
 interrogative_wh = IdOBObject(
-    name="interrogative_wh",
-    family="interrogative_wh",
-    priority=10,
-    activate=is_interrogative_wh,
-    apply=_interrogative_wh_apply,
+    name="interrogative_wh", family="interrogative_wh", priority=10, activate=is_interrogative_wh, apply=_interrogative_wh_apply
 )
-
 interrogative_polar = IdOBObject(
     name="interrogative_polar",
     family="interrogative_polar",
@@ -275,27 +246,12 @@ interrogative_polar = IdOBObject(
     activate=is_interrogative_polar,
     apply=_interrogative_polar_apply,
 )
-
 agent_action = IdOBObject(
-    name="agent_action",
-    family="residual_identity",
-    priority=50,
-    activate=has_constraints,
-    apply=_agent_action_apply,
+    name="agent_action", family="residual_identity", priority=50, activate=has_constraints, apply=_agent_action_apply
 )
-
 modifier_resolution = IdOBObject(
-    name="modifier_resolution",
-    family="mixed_descriptive",
-    priority=60,
-    activate=has_roles,
-    apply=_modifier_resolution_apply,
+    name="modifier_resolution", family="mixed_descriptive", priority=60, activate=has_roles, apply=_modifier_resolution_apply
 )
-
 residual_identity = IdOBObject(
-    name="residual_identity",
-    family="residual_identity",
-    priority=90,
-    activate=always_active,
-    apply=_residual_identity_apply,
+    name="residual_identity", family="residual_identity", priority=90, activate=always_active, apply=_residual_identity_apply
 )
