@@ -407,10 +407,17 @@ def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
     current_block: Dict[str, Any] | None = None
     raw_tokens: List[Any] = []
     final_tp_lines: List[str] = []
+    schema_family_lines: List[str] = []
     in_final_tp = False
 
     for line in run_log_lines:
         stripped = line.strip()
+        if (
+            stripped.startswith("schema families:")
+            or stripped.startswith("card families:")
+            or stripped.startswith("missing from schema:")
+        ):
+            schema_family_lines.append(stripped)
         if stripped == "=== Final TP ===":
             in_final_tp = True
             continue
@@ -448,6 +455,7 @@ def parse_run_log(run_log_lines: List[str]) -> Dict[str, Any]:
         "blocks": blocks,
         "raw_tokens": raw_tokens,
         "final_tp_lines": final_tp_lines,
+        "schema_family_lines": schema_family_lines,
         "final_tp_intake": _parse_final_tp_intake(final_tp_lines),
     }
 
@@ -1126,7 +1134,16 @@ def main() -> None:
         if args.verbose:
             print("Generated explanations.")
 
-        output_text = generate_output(
+        schema_family_lines = parsed_log.get("schema_family_lines", [])
+        schema_family_block_lines = ["# Schema families", ""]
+        if schema_family_lines:
+            for line in schema_family_lines:
+                schema_family_block_lines.append(f"- {line}")
+        else:
+            schema_family_block_lines.append("- schema families: not in log")
+        schema_family_block = "\n".join(schema_family_block_lines) + "\n\n"
+
+        output_text = schema_family_block + generate_output(
             dimensions_explanations,
             field_explanations,
             primitive_explanations,
