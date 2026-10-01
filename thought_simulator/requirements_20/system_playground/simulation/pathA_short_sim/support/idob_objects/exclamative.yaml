@@ -1,0 +1,29 @@
+schema_ref: idob_object.v1
+psc_id: PSC-IdOB-exclamative-v1
+name: exclamative
+family: residual_identity
+priority: 16
+identity:
+  label: Exclamative
+  description: Force that is not a question. Not owned by interrogative_wh.
+  tags: [exclamative, force]
+association:
+  geometries: []
+  roles: []
+activation: {}
+contribution_schema:
+  semantic_core:
+    type: dict
+    keys: [theme, state, location, agent, action, patient, query_focus, predicate, complement, relation_modifiers, modifiers, selected_ops]
+  selected_ops:
+    type: list
+    items: [exclamative_force]
+  truth_relation_family:
+    type: str
+    default: exclamative
+overlap:
+  near: []
+  far: [interrogative_wh, interrogative_polar]
+psc_invariants: []
+behavior:
+  apply: idob.exclamative:_exclamative_apply
