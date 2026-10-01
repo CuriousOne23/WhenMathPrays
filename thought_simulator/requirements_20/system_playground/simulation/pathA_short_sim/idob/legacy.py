@@ -62,10 +62,18 @@ def _legacy_semantic_core_tokens(tp: Any) -> list:
     return semantic_core
 
 
-def _has_coordination(tp: Any) -> bool:
+def _cue_or_rule(tp: Any, cue: str, rule: str) -> bool:
     cues = getattr(tp, "semantic_adjacent_cues", []) or []
     rules = getattr(tp, "constraints_matched", []) or []
-    return "coordinated_clauses" in cues or "coordination_composition_rule" in rules
+    return cue in cues or rule in rules
+
+
+def _has_coordination(tp: Any) -> bool:
+    return _cue_or_rule(tp, "coordinated_clauses", "coordination_composition_rule")
+
+
+def _has_conditional(tp: Any) -> bool:
+    return _cue_or_rule(tp, "conditional_clauses", "conditional_composition_rule")
 
 
 def _build_selected_ops(tp: Any) -> list:
@@ -80,6 +88,8 @@ def _build_selected_ops(tp: Any) -> list:
         semantic_operations.append("negated_state")
     if _has_coordination(tp):
         semantic_operations.append("coordinated_clauses")
+    if _has_conditional(tp):
+        semantic_operations.append("conditional_clauses")
     if "state-location" in constraints_matched:
         semantic_operations.append("state_location")
     if "query-focus-predicate" in constraints_matched:
@@ -176,8 +186,13 @@ def _locative_apply(tp: Any) -> Dict[str, Any]:
         "semantic_core_tokens": ["locative_modifier"],
         "truth_relation_family_hint": "descriptive_locative",
     }
+    ops = []
     if _has_coordination(tp):
-        fragment["selected_ops"] = ["coordinated_clauses"]
+        ops.append("coordinated_clauses")
+    if _has_conditional(tp):
+        ops.append("conditional_clauses")
+    if ops:
+        fragment["selected_ops"] = ops
     return fragment
 
 
