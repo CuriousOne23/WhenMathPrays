@@ -76,6 +76,10 @@ def _has_conditional(tp: Any) -> bool:
     return _cue_or_rule(tp, "conditional_clauses", "conditional_composition_rule")
 
 
+def _has_fragment(tp: Any) -> bool:
+    return _cue_or_rule(tp, "fragment_ellipsis", "fragment_ellipsis_rule")
+
+
 def _build_selected_ops(tp: Any) -> list:
     semantic_operations = []
     constraints_matched = getattr(tp, "constraints_matched", [])
@@ -90,6 +94,8 @@ def _build_selected_ops(tp: Any) -> list:
         semantic_operations.append("coordinated_clauses")
     if _has_conditional(tp):
         semantic_operations.append("conditional_clauses")
+    if _has_fragment(tp):
+        semantic_operations.append("fragment_ellipsis")
     if "state-location" in constraints_matched:
         semantic_operations.append("state_location")
     if "query-focus-predicate" in constraints_matched:
@@ -191,6 +197,8 @@ def _locative_apply(tp: Any) -> Dict[str, Any]:
         ops.append("coordinated_clauses")
     if _has_conditional(tp):
         ops.append("conditional_clauses")
+    if _has_fragment(tp):
+        ops.append("fragment_ellipsis")
     if ops:
         fragment["selected_ops"] = ops
     return fragment
