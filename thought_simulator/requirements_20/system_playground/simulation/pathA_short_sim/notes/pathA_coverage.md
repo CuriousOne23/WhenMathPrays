@@ -31,12 +31,28 @@ Used only here.
 |---|---|
 | developed | The row exists and a replay can show it. |
 | unclaimed | The form already has the cue. No stamp prints the line. |
+| in progress | A stretch is open. The row has not left the backlog. |
 | form hole | The signed form has no circle, hat, fit, or cue for the shape. |
 | shut | Named, empty, not a coverage hole in the four lists. |
+| not started | Listed so the account can say the row was seen and not opened. |
 
 "Coverage is good" means the family list replays and the claim-backlog row you care about is no longer unclaimed. "Not good" names the list and the row.
 
 New facts get a row on the list that owns them. They do not become a sixth list because a sentence felt new. A new list requires a sentence on this page saying why the four could not hold it.
+
+## Step log
+
+Gauge for this development run. One step is one pull request you merge. Startup cost is re-reading the map and the card. Finishing cost is the replay note on this page. Later steps stay on this branch's successor and do not restate the lists.
+
+Token note is filled from the reading you paste. Depth of the next step is chosen from that reading, not from a fixed batch.
+
+| Step | Target | Status | Token note |
+|---|---|---|---|
+| 0 | This log. No behavior change. | in progress, awaiting merge of pull request 81 | not yet read |
+| 1 | Claim backlog, negation. *The sky is not blue.* Line: denied. Card: `copular_state`. *The sky is blue.* must not gain the line. | not started | |
+| 2 | Claim backlog, coordination. Two place-claims, join recorded. Single locative must not grow a second picture. | not started | |
+| 3 | Meter stop. You paste use. Next is bare command only if 1 and 2 were cheap. Else stop. | not started | |
+| later | Remaining backlog, form holes, shut door. | not started | |
 
 ## Family list
 
