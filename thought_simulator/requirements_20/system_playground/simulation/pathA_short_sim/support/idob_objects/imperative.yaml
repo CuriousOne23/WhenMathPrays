@@ -1,0 +1,29 @@
+schema_ref: idob_object.v1
+psc_id: PSC-IdOB-imperative-v1
+name: imperative
+family: imperative
+priority: 15
+identity:
+  label: Imperative
+  description: Command and request forces. Two lines, one card. Not a copular state.
+  tags: [imperative, force]
+association:
+  geometries: []
+  roles: []
+activation: {}
+contribution_schema:
+  semantic_core:
+    type: dict
+    keys: [theme, state, location, agent, action, patient, query_focus, predicate, complement, relation_modifiers, modifiers, selected_ops]
+  selected_ops:
+    type: list
+    items: [bare_command, polite_request]
+  truth_relation_family:
+    type: str
+    default: imperative
+overlap:
+  near: []
+  far: [copular_state, interrogative_wh, interrogative_polar]
+psc_invariants: []
+behavior:
+  apply: idob.imperative:_imperative_apply
