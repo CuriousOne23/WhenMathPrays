@@ -37,11 +37,12 @@ The Path‑A Thought Simulator (TS) short simulator does **not** start there. It
 ## 2. Reader roadmap
 
 1. [README.md](../README.md) — what this folder is; five sentence families.  
-2. **This seam** — names and do-not-mix table.  
-3. [user_guide.md](../user_guide.md) — run two utterances; structure column vs packet column.  
-4. [idob_object_space.md](../notes/idob_object_space/idob_object_space.md) — the eight catalog families (structure of the space).  
-5. [IdOB_unified_plan.md](IdOB_unified_plan.md) — meaning as the packet the sum writes; engine and debugger gates.  
-6. [path_a_realization_charter.md](path_a_realization_charter.md) — lineup vs reserved 20.40 capability.
+2. [notes/bench_walk/00_how_to_walk.md](../notes/bench_walk/00_how_to_walk.md) — false image, stamp card, empty hook, shut Structure-to-Meaning (S2M) door. Teaching track. Does not define tokens.  
+3. **This seam** — names and do-not-mix table.  
+4. [user_guide.md](../user_guide.md) — run two utterances; structure column vs packet column.  
+5. [idob_object_space.md](../notes/idob_object_space/idob_object_space.md) — the eight catalog families (structure of the space).  
+6. [IdOB_unified_plan.md](IdOB_unified_plan.md) — meaning as the packet the sum writes; engine and debugger gates.  
+7. [path_a_realization_charter.md](path_a_realization_charter.md) — lineup vs reserved 20.40 capability.
 
 Older snapshot of the ladder (tokens → segments → roles → constraints → basin → identity): [pathA_routing_to_meaning.md](../notes/pathA_routing_to_meaning.md). Treat it as teaching voice. It must not override the packet schema in the unified plan or in `idob/sum.py`.
 
