@@ -5,6 +5,7 @@ import hashlib
 import yaml
 from idob.registry import registry
 from idob.sum import sum_idob
+from desks.constraints import compute_constraint_fit
 from desks.roles import adapt_roles_from_committed
 from desks.segments import extract_segments
 from ie_compat_intake import build_committed_stream
@@ -482,95 +483,18 @@ def SROB(tp: TP) -> TP:
 
 
 def CnOB(tp: TP) -> TP:
-    _ = check_constraints(tp.struct_roles)
+    fit = compute_constraint_fit(
+        raw_text=tp.raw_text,
+        tokens=tp.tokens,
+        struct_segments=tp.struct_segments,
+        struct_roles=tp.struct_roles,
+        segment_tokens=tp.segment_tokens,
+        check_constraints_fn=check_constraints,
+    )
 
-    quantifier_heads = {"every", "all", "each"}
-    first_token = tp.tokens[0].strip().lower() if tp.tokens else ""
-    has_quantified_np = first_token in quantifier_heads
-    has_negation_marker = any(tok in {"not", "n't", "never"} for tok in tp.tokens)
-    has_coordination = "and" in tp.tokens and tp.struct_segments.count("CP") >= 2 and tp.struct_segments.count("LOC") >= 2
-    has_conditional_composition = first_token == "if" and tp.struct_segments.count("CP") >= 2 and tp.struct_segments.count("LOC") >= 2
-    has_locative_fragment = len(tp.struct_segments) == 1 and tp.struct_segments[0] == "LOC"
-    has_first_person_state = first_token == "i" and "am" in tp.tokens
-    passive_auxiliaries = {"was", "were", "is", "are", "been", "be"}
-    passive_participles = {"written", "known", "seen", "given", "taken", "done", "made", "closed"}
-    has_passive_voice = any(tok in passive_auxiliaries for tok in tp.tokens) and any(tok.endswith("ed") or tok in passive_participles for tok in tp.tokens)
-    imperative_heads = {"close", "open", "stop", "go", "put", "take"}
-    has_imperative_voice = first_token in imperative_heads and not tp.raw_text.strip().endswith("?")
-    has_request_imperative = first_token == "please" and len(tp.tokens) > 1 and tp.tokens[1] in imperative_heads
-    has_exclamative_force = tp.raw_text.strip().endswith("!") and first_token in {"what", "how"}
-
-    canonical_rules = [
-        "adjacency_rule",
-        "compatibility_rule",
-        "structural_rule",
-        "continuity_rule",
-    ]
-    if has_quantified_np:
-        canonical_rules.append("quantifier_scope_rule")
-    if has_negation_marker:
-        canonical_rules.append("negation_scope_rule")
-    if has_coordination:
-        canonical_rules.append("coordination_composition_rule")
-    if has_conditional_composition:
-        canonical_rules.append("conditional_composition_rule")
-    if has_locative_fragment:
-        canonical_rules.append("fragment_ellipsis_rule")
-    if has_first_person_state:
-        canonical_rules.append("first_person_state_rule")
-    if has_passive_voice:
-        canonical_rules.append("passive_voice_rule")
-    if has_imperative_voice:
-        canonical_rules.append("imperative_voice_rule")
-    if has_request_imperative:
-        canonical_rules.append("request_imperative_rule")
-    if has_exclamative_force:
-        canonical_rules.append("exclamative_force_rule")
-    action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write"}
-    has_action_clause = "VP" in tp.struct_segments and any(tok in action_verbs for tok in tp.tokens) and not has_imperative_voice and not has_request_imperative
-    if has_action_clause:
-        canonical_rules.append("action_clause_rule")
-
-    constraints_matched: List[str] = []
-    if tp.struct_segments and tp.segment_tokens:
-        constraints_matched.append("structural_rule")
-    if tp.struct_roles and any(role != "none" for role in tp.struct_roles):
-        constraints_matched.append("compatibility_rule")
-    if "WQ" in tp.struct_segments or "LOC" in tp.struct_segments:
-        constraints_matched.append("adjacency_rule")
-    if tp.struct_roles and all(role != "none" for role in tp.struct_roles):
-        constraints_matched.append("continuity_rule")
-    if has_quantified_np and "NP" in tp.struct_segments:
-        constraints_matched.append("quantifier_scope_rule")
-    if has_negation_marker and "CP" in tp.struct_segments:
-        constraints_matched.append("negation_scope_rule")
-    if has_coordination:
-        constraints_matched.append("coordination_composition_rule")
-    if has_conditional_composition:
-        constraints_matched.append("conditional_composition_rule")
-    if has_locative_fragment:
-        constraints_matched.append("fragment_ellipsis_rule")
-    if has_first_person_state and "NP" in tp.struct_segments:
-        constraints_matched.append("first_person_state_rule")
-    if has_passive_voice and "CP" in tp.struct_segments:
-        constraints_matched.append("passive_voice_rule")
-    if has_imperative_voice and "NP" in tp.struct_segments:
-        constraints_matched.append("imperative_voice_rule")
-    if has_request_imperative and "NP" in tp.struct_segments:
-        constraints_matched.append("request_imperative_rule")
-    if has_exclamative_force:
-        constraints_matched.append("exclamative_force_rule")
-    if has_action_clause:
-        constraints_matched.append("action_clause_rule")
-
-    constraints_matched = list(dict.fromkeys(constraints_matched))
-    constraints_unmatched = [rule for rule in canonical_rules if rule not in constraints_matched]
-
-    constraint_residue: List[str] = []
-    if ("WQ" in tp.struct_segments or tp.raw_text.strip().endswith("?")) and "continuity_rule" in constraints_unmatched:
-        constraint_residue.append("interrogative_scope")
-    if "LOC" in tp.struct_segments and "adjacency_rule" in constraints_matched:
-        constraint_residue.append("locative_adjacent")
+    constraints_matched = fit["constraints_matched"]
+    constraints_unmatched = fit["constraints_unmatched"]
+    constraint_residue = fit["constraint_residue"]
 
     tp.constraints_matched = constraints_matched
     tp.constraints_unmatched = constraints_unmatched
