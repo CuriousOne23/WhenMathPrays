@@ -356,7 +356,7 @@ def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: L
             nxt = seg_tokens[j]
             if nxt in punctuation:
                 break
-            if j > i and (nxt in wh_words or nxt in aux_q or nxt in copular or nxt in state_verbs or nxt in preps or nxt in rel_markers):
+            if j > i and (nxt in wh_words or nxt in aux_q or nxt in copular or nxt in state_verbs or nxt in preps or nxt in rel_markers or nxt in {"chased", "chase", "chases", "bought", "buy", "wrote", "write"}):
                 break
             phrase_chunk.append(nxt)
             j += 1
