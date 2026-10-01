@@ -1,11 +1,11 @@
 schema_ref: idob_object.v1
 psc_id: PSC-IdOB-agent_action-v1
 name: agent_action
-family: residual_identity
+family: agent_action
 priority: 50
 identity:
   label: Agent Action
-  description: Agent/action selected-op helper contribution from existing R3 behavior.
+  description: Agent, action, and patient claim. Not the leftover card.
   tags: [agent, action]
 association:
   geometries: []
