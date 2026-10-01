@@ -42,6 +42,8 @@
         "interrogative_wh",
         "interrogative_polar",
         "agent_action",
+        "imperative",
+        "exclamative",
         "modifier_resolution",
         "residual_identity"
       ]
