@@ -321,6 +321,13 @@ def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: L
             i += 1
             continue
 
+        action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write"}
+        if tok in action_verbs:
+            labels.append("VP")
+            chunks.append([tok])
+            i += 1
+            continue
+
         if tok in state_verbs:
             labels.append("ST")
             chunks.append([tok])
@@ -636,6 +643,10 @@ def CnOB(tp: TP) -> TP:
         canonical_rules.append("request_imperative_rule")
     if has_exclamative_force:
         canonical_rules.append("exclamative_force_rule")
+    action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write"}
+    has_action_clause = "VP" in tp.struct_segments and any(tok in action_verbs for tok in tp.tokens) and not has_imperative_voice and not has_request_imperative
+    if has_action_clause:
+        canonical_rules.append("action_clause_rule")
 
     constraints_matched: List[str] = []
     if tp.struct_segments and tp.segment_tokens:
@@ -666,6 +677,8 @@ def CnOB(tp: TP) -> TP:
         constraints_matched.append("request_imperative_rule")
     if has_exclamative_force:
         constraints_matched.append("exclamative_force_rule")
+    if has_action_clause:
+        constraints_matched.append("action_clause_rule")
 
     constraints_matched = list(dict.fromkeys(constraints_matched))
     constraints_unmatched = [rule for rule in canonical_rules if rule not in constraints_matched]
@@ -716,6 +729,7 @@ def SmOB(tp: TP) -> TP:
         "imperative_voice_clause",
         "request_imperative_clause",
         "exclamative_force_clause",
+        "action_clause",
     }
 
     semantic_adjacent_cues = [cue for cue in base_cues if cue in allowed_cues]
@@ -743,6 +757,8 @@ def SmOB(tp: TP) -> TP:
         semantic_adjacent_cues.append("request_imperative_clause")
     if "exclamative_force_rule" in tp.constraints_matched and "exclamative_force_clause" not in semantic_adjacent_cues:
         semantic_adjacent_cues.append("exclamative_force_clause")
+    if "action_clause_rule" in tp.constraints_matched and "action_clause" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("action_clause")
 
     smoothing_operations = [op for op in base_ops if op in allowed_ops]
     if "interrogative_scope" in semantic_adjacent_cues and "adjacency_smoothing" not in smoothing_operations:
