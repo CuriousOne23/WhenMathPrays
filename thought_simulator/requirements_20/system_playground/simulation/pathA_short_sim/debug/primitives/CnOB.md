@@ -9,7 +9,7 @@
 ## 2. Inputs
 - Geometry source: `constraint_geometry` from `../dimensions/constraint_geometry.md`.
 - Canonical fields consumed:
-- `struct_segments`
+- `struct_segments`, [see ../fields/struct_segments.md](../fields/struct_segments.md)
 - `struct_roles`
 
 ## 3. Outputs
