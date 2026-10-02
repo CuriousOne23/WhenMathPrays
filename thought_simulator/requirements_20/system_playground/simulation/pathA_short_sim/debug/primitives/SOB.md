@@ -35,7 +35,7 @@ SOB activates segment_geometry = composite
 ```
 - output fields:
 ```text
-struct_segments = ["WQ", "NP", "LOC"]
+struct_segments = ["WQ", "NP", "LOC"], [see ../fields/struct_segments.md](../fields/struct_segments.md)
 segment_tokens = {
   "WQ": ["Where"],
   "NP": ["the", "book"],
