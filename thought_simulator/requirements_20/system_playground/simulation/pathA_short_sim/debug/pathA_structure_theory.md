@@ -33,23 +33,27 @@ Non-claims:
 
 ## 2. The human skip
 
-You already heard the sentence. That is the difficulty. This section does not explain how you heard it. It asks you to notice what your hearing will not show, because that hidden part is what the machine does not get.
+Your own hearing is in the way. An English sentence arrives already heard, so the work is invisible. An unknown string does not give you that gift. Start there. This section does not explain how you hear. It puts you where the machine already is.
 
-### 2.1 What arrives, and what does not show
+### 2.1 What you can do with a string you cannot hear
 
-Hear *The sky is blue.* A claim is already there: something, a way it is, and that you were told. Hear *Where is the book on the table?* A claim is already there: a thing, a place, and that you were asked. Where the pieces are, what sits with what, and whether it was told or asked arrive as one act.
+Take `LLhfds pw Ppen qqoubx&`. You do not know what it says. You cannot tell whether it was told or asked. You cannot point to a thing, a place, or a way something is.
 
-You cannot watch that act. Talking and hearing do not display their steps. We do not know how the claim was perceived, and the perception will not answer if you ask it. That is not a failure of attention. The work is not in the experience to be found. We do not know what we do not know here, and this note will not pretend to recover it.
+You can still do identifiable work. There are four pieces. They have an order. `pw` sits between `LLhfds` and `Ppen`. The last piece carries a mark, `&`, that the others do not. You can write those facts down without knowing a claim. That writing is not a translation into your language. It is a cut: pieces, coverage, what sits with what, what remains odd.
 
-### 2.2 What the machine does not get
+If someone later hands you a packet and says it came from this string, you can check the packet against that cut. You cannot check it against a hearing you never had.
 
-The machine is handed a token stream. The stream does not contain the claim you already hear. It does not contain where the pieces are, what sits with what, or whether it was told or asked. Those are not hiding in the string, waiting to be noticed.
+### 2.2 The same string, after your hearing interferes
 
-This is not a claim that a machine can never be given a way to cut a sentence. The dictionaries in this simulator are a supplied substitute for the skip. The deficit is narrower, and harder to feel: the machine cannot use your invisible hearing as an input. If the simulator treats the heard sentence as an already-legal claim, it has imported your answer and called it data.
+Now read *Why is the sky blue?* A claim is already there. The pieces, what sits with what, and that you were asked arrive as one act. You cannot watch that act. Talking and hearing do not display their steps. We do not know how the claim was perceived, and the perception will not answer if you ask it. We do not know what we do not know here, and this note will not pretend to recover it.
+
+The machine was not handed that claim. It was handed a token stream, the same kind of object as `LLhfds pw Ppen qqoubx&`. The English does not contain the claim you already hear. The claim is what your hearing added, and you cannot see the adding. If the simulator treats the heard sentence as an already-legal claim, it has imported your answer and called it data.
+
+The dictionaries in this simulator are a supplied substitute for the skip. They are not a recovered human mechanism. They let the machine do, for a known family, the identifiable work you could already do on the unknown string.
 
 ### 2.3 Why that matters to you
 
-When a packet is wrong, you cannot settle the argument by hearing the sentence again. The hearing will give you the same finished claim. The machine cannot settle it either, unless something was written down that neither of you can see in the hearing.
+When a packet is wrong, hearing *Why is the sky blue?* again will not settle it. The hearing gives you the same finished claim. The unknown string makes the same fact obvious: there is nothing to re-hear. Something has to have been written that neither of you can see in the hearing.
 
 What has to be written is not a picture of how a person perceives. We do not have that picture. What has to be written is the skipped work, in an order where a later step cannot invent the earlier one. That written work is what this path calls structure. It is a substitute you can check. It is not a recovered human mechanism, and it is not a mental object from the other bench.
 
@@ -57,7 +61,7 @@ What has to be written is not a picture of how a person perceives. We do not hav
 
 Before a packet is legal, four questions have to have written answers: where the pieces are, what place each piece holds, what holds together and what does not, and what unresolved neighborhood remains. Told-versus-asked is read off that finished writing. It is not a reason to cut the sentence again.
 
-Section 3 names the writers allowed to produce that writing. They are not a claim about how you perceive. They are the legal way this path makes the invisible skip inspectable.
+Section 3 names the writers allowed to produce that writing. They are not a claim about how you perceive. They are the legal way this path makes the invisible skip inspectable. On the unknown string, that work is all you have. On the English sentence, it is the same work, with your hearing no longer allowed to stand in for it.
 
 ## 3. What structure is here
 
