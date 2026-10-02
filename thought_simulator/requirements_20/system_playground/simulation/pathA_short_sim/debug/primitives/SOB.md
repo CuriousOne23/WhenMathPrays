@@ -35,13 +35,14 @@ SOB activates segment_geometry = composite
 ```
 - output fields:
 ```text
-struct_segments = ["WQ", "NP", "LOC"], [see ../fields/struct_segments.md](../fields/struct_segments.md)
+struct_segments = ["WQ", "NP", "LOC"]
 segment_tokens = {
   "WQ": ["Where"],
   "NP": ["the", "book"],
   "LOC": ["on", "the", "table"]
 }
 ```
+[see ../fields/struct_segments.md](../fields/struct_segments.md)
 
 ## 7. Cross-Primitive Interaction
 - Preceding primitive: none in Path-A pipeline.
