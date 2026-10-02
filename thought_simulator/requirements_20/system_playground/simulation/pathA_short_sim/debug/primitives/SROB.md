@@ -35,6 +35,8 @@ segment_tokens = {
   "LOC": ["on", "the", "table"]
 }
 ```
+[see ../fields/struct_segments.md](../fields/struct_segments.md)
+
 - primitive activation:
 ```text
 SROB activates role_geometry = modifier
