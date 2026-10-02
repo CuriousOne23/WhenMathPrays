@@ -2,38 +2,45 @@
 
 Scope: `pathA_short_sim` only. Teaching note for the debug set. Not a primitive card.
 
-This note governs the short simulator. It does not govern `testbenches/idob_structure_to_meaning/`.
+Start with a string you cannot hear.
 
-`ts_patha_theory.md` governs that other bench. It is not a parent of this note, and it is not a contradiction to repair in this pass. Neither pipeline is imported into the other. Short-sim meaning is the `idob_packet`. Structure-to-meaning geometry, the Cognitive Identity Envelope, and the Meaning Signal Layer stay on that bench. This note is not an authority for those files, and those files are not an authority for the five cards below.
+```
+LLhfds pw Ppen qqoubx&
+```
 
-Official names, taken from the primitive headers:
+The machine does not understand that utterance. It can only bind portions of the token stream to a framework the designers fixed before the string arrived. That framework is meaningless to the utterance and meaningful to them. Structure is that written binding, not a recovered hearing.
+
+## 1. Status and non-claims
+
+This note governs the short simulator. It gives the necessity argument the cards assume. It does not restate their algorithms, and it does not add a stage.
+
+The non-claims follow from the spine.
+
+- No recovered claim. A binding is not an understanding of the utterance.
+- No other-bench arc. Do not import structure, then meaning, then identity, then freeze.
+- A packet is not understanding. Short-sim meaning, when earned, is the `idob_packet`.
+- Semantic Observation Block (SmOB) is the name of the stage. Smoothing is an operation of Job 1, not the name.
+- Identity Observation Block (IdOB) delivers a packet. It is not an object.
+
+Only after that: `ts_patha_theory.md` governs `testbenches/idob_structure_to_meaning/`. It is not a parent of this note, and not a contradiction to repair here. Neither pipeline is imported into the other. Structure-to-meaning geometry, the Cognitive Identity Envelope, and the Meaning Signal Layer stay on that bench. This note is not an authority for those files, and those files are not an authority for the five cards below.
+
+Official names, taken from the primitive headers, are the designers' labels for jobs already described above:
 
 - Structural Observation Block (SOB) — 20.40.010. Realized job: segment cut.
 - Structural Refinement Observation Block (SROB) — 20.40.020. Realized job: pre-semantic structural labels. Not semantic role labeling.
 - Constraint Observation Block (CnOB) — 20.40.030. Realized job: constraint residue on the walk. C1–C7 reserved.
-- Semantic Observation Block (SmOB) — 20.40.040. Realized job: adjacent cues. Smoothing is an operation of Job 1, not the name of the stage. Job 2 hash reserved.
-- Identity Observation Block (IdOB) — 20.40.050. Realized job: IdOB-sum / `idob_packet`. IdOB is not an object. Structure-to-meaning, the Cognitive Identity Envelope, and `meaning_delta_h` are reserved.
+- Semantic Observation Block (SmOB) — 20.40.040. Realized job: adjacent cues. Job 2 hash reserved.
+- Identity Observation Block (IdOB) — 20.40.050. Realized job: IdOB-sum / `idob_packet`. Structure-to-meaning, the Cognitive Identity Envelope, and `meaning_delta_h` are reserved.
 
 Eight catalog families live in [../notes/idob_object_space/idob_object_space.md](../notes/idob_object_space/idob_object_space.md). This note does not re-derive them.
 
 Seam, packet contract, and charter: [../architecture/idob_seam.md](../architecture/idob_seam.md), [../architecture/idob_meaning_lock.md](../architecture/idob_meaning_lock.md), [../architecture/path_a_realization_charter.md](../architecture/path_a_realization_charter.md).
 
-## 1. Status and non-claims
-
 Path-A-short is a dictionary-driven teaching simulator. Field names on the cards are teaching aliases. 20.40 remains the richer surface. Realized functions are the ones named on each card.
-
-This note gives the necessity argument those cards assume. It does not restate their algorithms, and it does not add a stage.
-
-Non-claims:
-
-- No Meaning Composition Block on this path.
-- No structure-to-meaning vector, no Cognitive Identity Envelope, no Meaning Signal Layer inside IdOB.
-- No inference, no reasoning, no cross-sentence memory.
-- No import of the other bench's arc (structure, then meaning, then identity, then freeze).
 
 ## 2. The human skip
 
-Your own hearing is in the way. An English sentence arrives already heard, so the work is invisible. An unknown string does not give you that gift. Start there. This section does not explain how you hear. It puts you where the machine already is.
+Your own hearing is in the way. An English sentence arrives already heard, so the work is invisible. An unknown string does not give you that gift. This section does not explain how you hear. It puts you where the machine already is.
 
 ### 2.1 What you can do with a string you cannot hear
 
@@ -41,15 +48,17 @@ Take `LLhfds pw Ppen qqoubx&`. You do not know what it says. You cannot tell whe
 
 You can still do identifiable work. There are four pieces. They have an order. `pw` sits between `LLhfds` and `Ppen`. The last piece carries a mark, `&`, that the others do not. You can write those facts down without knowing a claim. That writing is not a translation into your language. It is a cut: pieces, coverage, what sits with what, what remains odd.
 
+The framework you would use for that cut is meaningless to the utterance. `LLhfds` does not contain it. The framework is meaningful to the designers who fixed, before any string arrived, which distinctions would count. A hit uses their framework. A miss uses it too. Nothing bound is a result, not an error, and not a hidden claim.
+
 If someone later hands you a packet and says it came from this string, you can check the packet against that cut. You cannot check it against a hearing you never had.
 
 ### 2.2 The same string, after your hearing interferes
 
-Now read *Why is the sky blue?* A claim is already there. The pieces, what sits with what, and that you were asked arrive as one act. You cannot watch that act. Talking and hearing do not display their steps. We do not know how the claim was perceived, and the perception will not answer if you ask it. We do not know what we do not know here, and this note will not pretend to recover it.
+Now read *Why is the sky blue?* A claim is already there. The pieces, what sits with what, and that you were asked arrive as one act. You cannot watch that act. Talking and hearing do not display their steps. We do not know how the claim was perceived, and the perception will not answer if you ask it. We do not know what we do not know here, and this note will not recover it.
 
 The machine was not handed that claim. It was handed a token stream, the same kind of object as `LLhfds pw Ppen qqoubx&`. The English does not contain the claim you already hear. The claim is what your hearing added, and you cannot see the adding. If the simulator treats the heard sentence as an already-legal claim, it has imported your answer and called it data.
 
-The dictionaries in this simulator are a supplied substitute for the skip. They are not a recovered human mechanism. They let the machine do, for a known family, the identifiable work you could already do on the unknown string.
+The dictionaries in this simulator are a supplied substitute for the skip. They are the designers' framework, not a recovered human mechanism. They let the machine do, for a family the designers already allowed, the identifiable work you could already do on the unknown string.
 
 ### 2.3 Why that matters to you
 
@@ -61,70 +70,90 @@ What has to be written is not a picture of how a person perceives. We do not hav
 
 Before a packet is legal, four questions have to have written answers: where the pieces are, what place each piece holds, what holds together and what does not, and what unresolved neighborhood remains. Told-versus-asked is read off that finished writing. It is not a reason to cut the sentence again.
 
-Section 3 names the writers allowed to produce that writing. They are not a claim about how you perceive. They are the legal way this path makes the invisible skip inspectable. On the unknown string, that work is all you have. On the English sentence, it is the same work, with your hearing no longer allowed to stand in for it.
+Section 3 names the writers allowed to record those associations. They are not a claim about how you perceive. They are the legal way this path makes the invisible skip inspectable. On the unknown string, that work is all you have. On the English sentence, it is the same work, with your hearing no longer allowed to stand in for it.
 
 ## 3. What structure is here
 
-The requirement in 2.4 is answered here, and only here, by naming the writers. Structure, in this simulator, is the meaning-blind cut the observation-block set is allowed to write. It is not a metaphysical kind, and it is not the packet. It is not an account of human perception.
+Structure, in this simulator, is the meaning-blind binding the designers allowed the machine to write. It is not a metaphysical kind, and it is not the packet. It is not an account of human perception. It is meaningless to the utterance. It is meaningful to the designers who chose the distinctions.
 
-Four writers, four cuts:
+Apply those distinctions to `LLhfds pw Ppen qqoubx&` before any stage name:
+
+- Where are the pieces, and do they cover the stream? Four tokens, in order. That is an association the designers precommitted. It is not a claim about what `LLhfds` means.
+- What place does each piece hold? Only if a precommitted label binds. If none binds, the place stays unbound.
+- What holds together, and what does not? Only the rules the designers already wrote can answer. A rule that does not fire is a miss, not an invitation to invent a neighbor.
+- What remains odd? The mark on the last piece, and any token that bound to nothing. Odd is a written residue, not an understanding.
+
+Only then the designers' names for the recorders of those associations:
 
 - SOB writes spans and token coverage. A span that does not cover its tokens is not a segment.
-- SROB writes a positional label on each span. Those labels are not `semantic_core`.
+- SROB writes a positional label on each span that bound. Those labels are not `semantic_core`.
 - CnOB writes which rules hold, which fail, and what residue remains.
-- SmOB writes which unresolved signals stabilize into adjacent cues, which smoothing operations were applied, and what basin residue remains.
+- SmOB writes which unresolved signals stabilize into adjacent cues, which smoothing operations were applied, and what basin residue remains. Smoothing is an operation, not the name of the stage.
 
-IdOB does not add a fifth structural cut. It sums a frozen catalog over cuts someone else already wrote, and it writes one packet.
+On *Why is the sky blue?* the same writers apply. Hearing is not allowed to stand in for a binding the dictionaries did not make.
+
+IdOB does not add a fifth structural cut. It sums a frozen catalog over bindings someone else already wrote, and it writes one packet. If nothing bound, as on the unknown string when no dictionary entry hits, there is no sum.
 
 ## 4. Questions structure must answer before a packet is legal
 
-Each question is a field that already exists. If the field is missing or illegal, the packet is not yet earned.
+Each question is ordinary first. The field is the designers' label for the written answer. If the answer is missing or illegal, the packet is not yet earned.
 
-- What are the spans, and do they cover the tokens? `struct_segments`, `segment_tokens`.
-- What positional label does each span carry, without becoming the packet dict? `struct_roles`.
-- Which rules hold, which fail, what residue remains? `constraints_matched`, `constraints_unmatched`, `constraint_residue`.
-- Which unresolved signals stabilize into adjacent cues, and what basin residue remains? `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue`.
+- Where are the pieces, and do they cover the stream? `struct_segments`, `segment_tokens`.
+- What place does each piece hold, without becoming the packet dict? `struct_roles`.
+- What holds together, what does not, and what residue remains? `constraints_matched`, `constraints_unmatched`, `constraint_residue`.
+- What unresolved neighborhood remains after a smoothing operation, and what basin residue remains? `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue`.
 - Only then: which catalog families activate, what truth-relation, what dict `semantic_core`? `idob_packet`.
+
+On `LLhfds pw Ppen qqoubx&`, the last question has no legal answer unless a precommitted family actually bound. No binding, no packet.
 
 A list `semantic_core` after IdOB is not a legal answer. The book is not an IdOB object. Adjacency in `overlap_events` is catalog-object adjacency, not word neighbors.
 
 ## 5. Why this order, and what "irreversible" means
 
-The order is a prohibition on reopening the cut. It is not a claim that information is destroyed. Residue is forwarded. Compatibility aliases exist. Later stages may consume, label, constrain, cue, or sum. They may not invent the prior cut.
+A later binding may not invent an earlier one the designers did not make legal, and may not reopen a binding already written. That is the order rule. It is not a claim that information is destroyed. Residue is forwarded. Compatibility aliases exist. Later stages may consume, label, constrain, cue, or sum. They may not invent the prior cut.
+
+Instances of the rule:
 
 - A role without a span is a free-floating name. SROB may not cut segments SOB did not write.
 - A rule needs something to bind. CnOB may not treat `struct_roles` as `semantic_core`, and it may not invent a span in order to satisfy a rule.
 - A cue taken before the unmatched set is an invented adjacency. SmOB may apply a smoothing operation to residue CnOB wrote. It may not re-segment, and it may not write the packet.
 - IdOB may activate catalog families over the frozen cut. It may not re-segment, re-label, or re-open constraints to make a packet come out clean.
+- A later stage may not invent a claim for `LLhfds` because an earlier stage found nothing to bind.
 
-That is the sense in which the pipeline is irreversible. The cut, once written, is not reopened by a later stage.
+That is the sense in which the pipeline is irreversible. The cut, once written, is not reopened by a later stage. A miss stays a miss.
 
 ## 6. What this architecture delivers
 
-One deterministic packet for a supported family: activation set, truth-relation, and a dict `semantic_core`, plus the contributors and overlap events the sum already computed. The debugger must not sum again.
+Two legal outcomes.
 
-Supported families and traces live in [../notes/pathA_supported_sentences.md](../notes/pathA_supported_sentences.md). This note does not catalog them.
+For a family the designers already allowed, one deterministic packet: activation set, truth-relation, and a dict `semantic_core`, plus the contributors and overlap events the sum already computed. The debugger must not sum again. Supported families and traces live in [../notes/pathA_supported_sentences.md](../notes/pathA_supported_sentences.md). This note does not catalog them.
 
-The deliverable is the packet. It is not an IdOB object, and it is not a reconstructed mental object from the other bench.
+For `LLhfds pw Ppen qqoubx&`, if no precommitted entry binds, the legal outcome is no packet. The written miss is the deliverable. Inventing a packet would be pretending the machine understood the utterance.
+
+In both cases the deliverable is not an understanding. The packet, when earned, is a sum over the designers' catalog. It is not an IdOB object, and it is not a reconstructed mental object from the other bench.
 
 ## 7. What it explicitly does not deliver
 
-- Inference and reasoning.
-- Cross-sentence memory, latent priors, routing entropy.
-- Meaning Composition Block.
-- Structure-to-meaning geometry, Cognitive Identity Envelope, Meaning Signal Layer.
-- Reserved C1–C7 tables and SmOB Job 2.
-- A warrant to rewrite the cut because a later layer wishes the packet were different.
+Each item is a way of pretending the machine understood something the designers did not precommit.
 
-Later semantic layers in the broader arc may consume the packet. They may not reach back and reopen the cut. Those layers are not specified here.
+- Inference and reasoning. Not in the framework.
+- Cross-sentence memory, latent priors, routing entropy. Not in the framework.
+- Meaning Composition Block. Not on this path.
+- Structure-to-meaning geometry, Cognitive Identity Envelope, Meaning Signal Layer. The other bench.
+- Reserved C1–C7 tables and SmOB Job 2. Not realized here.
+- A warrant to rewrite the cut because a later layer wishes the packet were different. That reopens a binding already written.
+
+Later semantic layers in the broader arc may consume a packet this path actually wrote. They may not reach back and reopen the cut, and they may not treat a miss as a claim. Those layers are not specified here.
 
 ## 8. How to read the debug set after this note
 
 Read this note when the question is why a stage is here. Read the cards when the question is what a stage wrote on a log line.
 
+The cards are the designers' labels for the written answers. They are not the entrance. The entrance is this note. The string `LLhfds pw Ppen qqoubx&` should still be visible when you open a card: a card that only makes sense for a sentence you can already hear has left the spine.
+
 - Dimensions are the vocabularies (`segment_geometry`, `role_geometry`, `constraint_geometry`, `identity_geometry`, `semantic_core`, `truth_relation`).
 - Fields are the written answers.
-- Primitives are the writers. SOB, SROB, CnOB, and SmOB write the cut. IdOB writes the packet.
+- Primitives are the writers. SOB, SROB, CnOB, and SmOB write the cut. IdOB writes the packet, or writes nothing if nothing bound.
 - Examples are traces of the prohibition, not a second printing of the cards. Start with [examples/why_this_cut.md](examples/why_this_cut.md). `placeholder.md` remains a debugger stub.
 
 The cards are usable alone for a log inspection. They are not sufficient alone for an architectural change. This note is prior reading for that change. It is not a sixth primitive.
