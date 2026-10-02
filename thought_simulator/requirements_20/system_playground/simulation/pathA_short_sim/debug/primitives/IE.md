@@ -10,7 +10,7 @@ IE (Input Expansion) normalizes token-level intake fields derived from the commi
 - normalized_tokens
 - token_classes
 - roles
-- segments
+- segments, [see ../fields/struct_segments.md](../fields/struct_segments.md)
 - segment_tokens
 
 ## Notes
