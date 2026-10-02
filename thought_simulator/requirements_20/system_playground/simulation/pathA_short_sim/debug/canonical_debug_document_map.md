@@ -13,34 +13,34 @@ Execution status for this update:
 ## 1. Canonical Document List (Authoritative Target)
 
 ### Canonical Dimensions
-- debug/dimensions/segment_geometry.md
-- debug/dimensions/role_geometry.md
-- debug/dimensions/identity_geometry.md
-- debug/dimensions/constraint_geometry.md
-- debug/dimensions/semantic_core.md
-- debug/dimensions/truth_relation.md
+- [debug/dimensions/segment_geometry.md](dimensions/segment_geometry.md)
+- [debug/dimensions/role_geometry.md](dimensions/role_geometry.md)
+- [debug/dimensions/identity_geometry.md](dimensions/identity_geometry.md)
+- [debug/dimensions/constraint_geometry.md](dimensions/constraint_geometry.md)
+- [debug/dimensions/semantic_core.md](dimensions/semantic_core.md)
+- [debug/dimensions/truth_relation.md](dimensions/truth_relation.md)
 
 ### Canonical Primitives
-- debug/primitives/SOB.md
-- debug/primitives/SROB.md
-- debug/primitives/CnOB.md
-- debug/primitives/SmOB.md
-- debug/primitives/IdOB.md
+- [debug/primitives/SOB.md](primitives/SOB.md)
+- [debug/primitives/SROB.md](primitives/SROB.md)
+- [debug/primitives/CnOB.md](primitives/CnOB.md)
+- [debug/primitives/SmOB.md](primitives/SmOB.md)
+- [debug/primitives/IdOB.md](rimitives/IdOB.md)
 
 ### Canonical Fields
-- debug/fields/struct_segments.md
-- debug/fields/segment_tokens.md
-- debug/fields/struct_roles.md
-- debug/fields/constraints_matched.md
-- debug/fields/constraints_unmatched.md
-- debug/fields/constraint_residue.md
-- debug/fields/smoothing_operations.md
-- debug/fields/semantic_adjacent_cues.md
-- debug/fields/basin_residue.md
-- debug/fields/idob_packet.md
+- [debug/fields/struct_segments.md](fields/struct_segments.md)
+- [debug/fields/segment_tokens.md](fields/segment_tokens.md)
+- [debug/fields/struct_roles.md](fields/struct_roles.md)
+- [debug/fields/constraints_matched.md](fields/constraints_matched.md)
+- [debug/fields/constraints_unmatched.md](fields/constraints_unmatched.md)
+- [debug/fields/constraint_residue.md](fields/constraint_residue.md)
+- [debug/fields/smoothing_operations.md](fields/smoothing_operations.md)
+- [debug/fields/semantic_adjacent_cues.md](fields/semantic_adjacent_cues.md)
+- [debug/fields/basin_residue.md](fields/basin_residue.md)
+- [debug/fields/idob_packet.md](fields/idob_packet.md)
 
 ### Canonical Bridge
-- debug/primitives/appendix_x_token_to_structure_bridge.md
+- [debug/primitives/appendix_x_token_to_structure_bridge.md](primitives/appendix_x_token_to_structure_bridge.md)
 
 ## 2. Existing Documents Detected
 
@@ -60,31 +60,31 @@ Execution status for this update:
 ## 3. Missing Canonical Documents
 
 ### Missing canonical dimensions
-- debug/dimensions/segment_geometry.md
-- debug/dimensions/role_geometry.md
-- debug/dimensions/identity_geometry.md
-- debug/dimensions/constraint_geometry.md
-- debug/dimensions/semantic_core.md
-- debug/dimensions/truth_relation.md
+- [debug/dimensions/segment_geometry.md](dimensions/segment_geometry.md)
+- [debug/dimensions/role_geometry.md](dimensions/role_geometry.md)
+- [debug/dimensions/identity_geometry.md](dimensions/identity_geometry.md)
+- [debug/dimensions/constraint_geometry.md](dimensions/constraint_geometry.md)
+- [debug/dimensions/semantic_core.md](dimensions/semantic_core.md)
+- [debug/dimensions/truth_relation.md](dimensions/truth_relation.md)
 
 ### Missing canonical primitives
-- debug/primitives/SOB.md
-- debug/primitives/SROB.md
-- debug/primitives/CnOB.md
-- debug/primitives/SmOB.md
-- debug/primitives/IdOB.md
+- [debug/primitives/SOB.md](primitives/SOB.md])
+- [debug/primitives/SROB.md](primitives/SROB.md)
+- [debug/primitives/CnOB.md](primitives/CnOB.md)
+- [debug/primitives/SmOB.md](primitives/SmOB.md)
+- [debug/primitives/IdOB.md](primitives/IdOB.md)
 
 ### Missing canonical fields
-- debug/fields/struct_segments.md
-- debug/fields/segment_tokens.md
-- debug/fields/struct_roles.md
-- debug/fields/constraints_matched.md
-- debug/fields/constraints_unmatched.md
-- debug/fields/constraint_residue.md
-- debug/fields/smoothing_operations.md
-- debug/fields/semantic_adjacent_cues.md
-- debug/fields/basin_residue.md
-- debug/fields/idob_packet.md
+- [debug/fields/struct_segments.md](fields/struct_segments.md)
+- [debug/fields/segment_tokens.md](fields/segment_tokens.m)
+- [debug/fields/struct_roles.md](fields/struct_roles.md)
+- [debug/fields/constraints_matched.md](fields/constraints_matched.m)
+- [debug/fields/constraints_unmatched.md](fields/constraints_unmatched.md)
+- [debug/fields/constraint_residue.md](fields/constraint_residue.md)
+- [debug/fields/smoothing_operations.md](fields/smoothing_operations.md)
+- [debug/fields/semantic_adjacent_cues.md](fields/semantic_adjacent_cues.md)
+- [debug/fields/basin_residue.md](fields/basin_residue.md)
+- [debug/fields/idob_packet.md](fields/idob_packet.md)
 
 ### Missing canonical bridge
 - None
