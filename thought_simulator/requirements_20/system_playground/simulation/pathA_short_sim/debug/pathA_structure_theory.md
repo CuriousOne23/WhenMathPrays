@@ -1,20 +1,22 @@
 # Path A structure theory
 
-The theoretical goal of Path A is to encode the structure of language. The theory is that language has a socially agreed-upon structure. That structure is prior to any one utterance, whether or not speakers state it.
+Language has a socially agreed‑upon structure, prior to any one utterance, whether or not speakers state it.
 
 A speaker offers an utterance. A hearer of a known language takes a claim, including whether it was told or asked. The marks do not display that claim. The hearing does not show the work. If the claim must be checked without that hearing, the check cannot be the hearing. Something else has to be written, and it has to be fixed before this utterance.
 
-The structure makes four questions askable of any offered utterance. What hangs together. What place each portion holds. What fits. What remains odd.
+The structure makes four questions askable of any offered utterance: what hangs together, what place each portion holds, what fits, and what remains odd.
 
-Path A is the attempt to encode that structure explicitly. Saussure, *Course in General Linguistics* (1916), and Lewis, *Convention* (1969), already treat language as a social system of conventions speakers need not state. They do not state this encoding.
-
-Scope of what follows: `pathA_short_sim` only. Teaching note for the debug set. Not a primitive card. The sections below are the present realization, not the goal.
+Path A is the attempt to encode that structure explicitly. The sections below are how far that encoding has been written, not the theory.
 
 ```
 LLhfds pw Ppen qqoubx&
 ```
 
+Scope of what follows: pathA_short_sim only. Teaching note for the debug set. Not a primitive card.
+
 That string is an utterance under the same structure as a sentence you can hear.
+
+---
 
 ## 1. Status and non-claims
 
