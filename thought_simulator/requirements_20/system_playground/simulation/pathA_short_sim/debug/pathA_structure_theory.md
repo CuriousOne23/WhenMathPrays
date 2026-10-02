@@ -2,13 +2,13 @@
 
 Scope: `pathA_short_sim` only. Teaching note for the debug set. Not a primitive card.
 
-The theoretical goal of Path A is to encode the structure of language. The theory is that language carries a social agreement about utterances, fixed before any one utterance, whether or not speakers state it. Structure is that agreement. Path A is the attempt to encode it explicitly.
+The theoretical goal of Path A is to encode the structure of language. The theory is that language has a socially agreed-upon structure. That structure is prior to any one utterance, whether or not speakers state it. It is not the claim that language is a social agreement. Path A is the attempt to encode that structure explicitly.
 
-The agreement is not found in the marks. A hearer takes a claim, including whether it was told or asked, and the hearing does not show the work. We do not recover that hearing. If the utterance must be checked without the hearing, the check cannot be the hearing. The encoding is meaningless to the utterance and is the explicit form of the prior agreement, available to anyone who must check the utterance without the hearing. Today's dictionaries are how far the encoding has been written, not the goal.
+The structure is not found in the marks. A hearer takes a claim, including whether it was told or asked, and the hearing does not show the work. We do not recover that hearing. If the utterance must be checked without the hearing, the check cannot be the hearing. The encoding is meaningless to the utterance and is the explicit form of the prior structure, available to anyone who must check the utterance without the hearing. Today's dictionaries are how far the encoding has been written, not the goal.
 
-The agreement makes four questions askable of any offered utterance. What portions of the marks hang together, and do they cover the stream. What place each portion holds. Which bindings fit the rules fixed before this utterance. What remains odd. Structure is the written answer, or the written miss.
+The structure makes four questions askable of any offered utterance. What portions of the marks hang together, and do they cover the stream. What place each portion holds. Which bindings fit the rules fixed before this utterance. What remains odd. Structure, as encoded, is the written answer, or the written miss.
 
-Those writings are what this path realizes as SOB, SROB, CnOB, and SmOB. Smoothing is an operation of Semantic Observation Block, not the name of the stage. IdOB is not a fifth item. It sums a catalog when a family under the agreement bound, and it may emit a packet. No binding, no packet. A miss on a family this path claims to support is a defect. A later writing may not invent an earlier fact the agreement did not allow. The cards are labels for the writings. They are not the theory.
+Those writings are what this path realizes as SOB, SROB, CnOB, and SmOB. Smoothing is an operation of Semantic Observation Block, not the name of the stage. IdOB is not a fifth item. It sums a catalog when a family under the structure bound, and it may emit a packet. No binding, no packet. A miss on a family this path claims to support is a defect. A later writing may not invent an earlier fact the structure did not allow. The cards are labels for the writings. They are not the theory.
 
 What follows is the present realization under that goal, not a substitute for it.
 
@@ -16,7 +16,7 @@ What follows is the present realization under that goal, not a substitute for it
 LLhfds pw Ppen qqoubx&
 ```
 
-That string is an utterance under the same agreement as a sentence you can hear. It is here so the agreement stays visible when the names begin.
+That string is an utterance under the same structure as a sentence you can hear. It is here so the structure stays visible when the names begin.
 
 ## 1. Status and non-claims
 
@@ -56,7 +56,7 @@ Take `LLhfds pw Ppen qqoubx&`. You do not know what it says. You cannot tell whe
 
 You can still do identifiable work. There are four pieces. They have an order. `pw` sits between `LLhfds` and `Ppen`. The last piece carries a mark, `&`, that the others do not. You can write those facts down without knowing a claim. That writing is not a translation into your language. It is a cut: pieces, coverage, what sits with what, what remains odd.
 
-The framework for that cut is not in the utterance. `LLhfds` does not contain it. It is the prior agreement, available to anyone who must check the utterance without the hearing. A hit uses that agreement. A miss uses it too. Nothing bound is a result, not an error, and not a hidden claim.
+The framework for that cut is not in the utterance. `LLhfds` does not contain it. It is the socially agreed-upon structure, available to anyone who must check the utterance without the hearing. A hit uses that structure. A miss uses it too. Nothing bound is a result, not an error, and not a hidden claim.
 
 If someone later hands you a packet and says it came from this string, you can check the packet against that cut. You cannot check it against a hearing you never had.
 
@@ -66,27 +66,27 @@ Now read *Why is the sky blue?* A claim is already there. The pieces, what sits 
 
 A machine was not handed that claim. It was handed a token stream, the same kind of object as `LLhfds pw Ppen qqoubx&`. The English does not contain the claim you already hear. The claim is what your hearing added, and you cannot see the adding. If the simulator treats the heard sentence as an already-legal claim, it has imported your answer and called it data.
 
-The dictionaries in this simulator are how far the prior agreement has been encoded. They are not a recovered human mechanism. They let the machine do, for a family already allowed, the identifiable work you could already do on the unknown string.
+The dictionaries in this simulator are how far that socially agreed-upon structure has been encoded. They are not a recovered human mechanism. They let the machine do, for a family already allowed, the identifiable work you could already do on the unknown string.
 
 ### 2.3 Why that matters to you
 
 When a packet is wrong, hearing *Why is the sky blue?* again will not settle it. The hearing gives you the same finished claim. The unknown string makes the same fact obvious: there is nothing to re-hear. Something has to have been written that neither of you can see in the hearing.
 
-What has to be written is not a picture of how a person perceives. We do not have that picture. What has to be written is the prior agreement, applied to the stream, in an order where a later step cannot invent the earlier one. That writing is what this path calls structure. It is a substitute you can check. It is not a recovered human mechanism, and it is not a mental object from the other bench.
+What has to be written is not a picture of how a person perceives. We do not have that picture. What has to be written is the socially agreed-upon structure, applied to the stream, in an order where a later step cannot invent the earlier one. That writing is what this path calls structure. It is a substitute you can check. It is not a recovered human mechanism, and it is not a mental object from the other bench.
 
 ### 2.4 The requirement Section 3 answers
 
 Before a packet is legal, four questions have to have written answers: where the pieces are, what place each piece holds, what holds together and what does not, and what unresolved neighborhood remains. Told-versus-asked is read off that finished writing. It is not a reason to cut the sentence again.
 
-Section 3 names the present writers allowed to record those answers. They are not a claim about how you perceive. They are how far this path has encoded the agreement. On the unknown string, that work is all you have. On the English sentence, it is the same work, with your hearing no longer allowed to stand in for it.
+Section 3 names the present writers allowed to record those answers. They are not a claim about how you perceive. They are how far this path has encoded the structure. On the unknown string, that work is all you have. On the English sentence, it is the same work, with your hearing no longer allowed to stand in for it.
 
 ## 3. What structure is here
 
-In this simulator, structure is the present encoding of the prior agreement: the meaning-blind writing the machine is allowed to make. It is not a metaphysical kind, and it is not the packet. It is not an account of human perception. It is meaningless to the utterance. It is the explicit form of the agreement, available to anyone who must check without the hearing.
+In this simulator, structure is the present encoding of the socially agreed-upon structure: the meaning-blind writing the machine is allowed to make. It is not a metaphysical kind, and it is not the packet. It is not an account of human perception. It is meaningless to the utterance. It is the explicit form of that structure, available to anyone who must check without the hearing.
 
 Apply the four questions to `LLhfds pw Ppen qqoubx&` before any stage name:
 
-- Where are the pieces, and do they cover the stream? Four tokens, in order. That is a question the agreement makes askable. It is not a claim about what `LLhfds` means.
+- Where are the pieces, and do they cover the stream? Four tokens, in order. That is a question the structure makes askable. It is not a claim about what `LLhfds` means.
 - What place does each piece hold? Only if a precommitted label binds. If none binds, the place stays unbound.
 - What holds together, and what does not? Only the rules already written can answer. A rule that does not fire is a miss, not an invitation to invent a neighbor.
 - What remains odd? The mark on the last piece, and any token that bound to nothing. Odd is a written residue, not an understanding.
@@ -118,7 +118,7 @@ A list `semantic_core` after IdOB is not a legal answer. The book is not an IdOB
 
 ## 5. Why this order, and what "irreversible" means
 
-A later binding may not invent an earlier one the agreement did not allow, and may not reopen a binding already written. That is the order rule. It is not a claim that information is destroyed. Residue is forwarded. Compatibility aliases exist. Later stages may consume, label, constrain, cue, or sum. They may not invent the prior cut.
+A later binding may not invent an earlier one the structure did not allow, and may not reopen a binding already written. That is the order rule. It is not a claim that information is destroyed. Residue is forwarded. Compatibility aliases exist. Later stages may consume, label, constrain, cue, or sum. They may not invent the prior cut.
 
 Instances of the rule, in the present encoding:
 
@@ -138,11 +138,11 @@ For a family already allowed, one deterministic packet: activation set, truth-re
 
 For `LLhfds pw Ppen qqoubx&`, if no precommitted entry binds, the legal outcome is no packet. The written miss is the deliverable. Inventing a packet would be pretending the machine understood the utterance.
 
-In both cases the deliverable is not an understanding. The packet, when earned, is a sum over the catalog. It is not an IdOB object, and it is not a reconstructed mental object from the other bench. The goal remains the encoding of the agreement. A packet is not that goal.
+In both cases the deliverable is not an understanding. The packet, when earned, is a sum over the catalog. It is not an IdOB object, and it is not a reconstructed mental object from the other bench. The goal remains the encoding of the socially agreed-upon structure. A packet is not that goal.
 
 ## 7. What it explicitly does not deliver
 
-Each item is a way of pretending the machine understood something the agreement, as encoded here, did not allow.
+Each item is a way of pretending the machine understood something the structure, as encoded here, did not allow.
 
 - Inference and reasoning. Not in the encoding.
 - Cross-sentence memory, latent priors, routing entropy. Not in the encoding.
@@ -157,7 +157,7 @@ Later semantic layers in the broader arc may consume a packet this path actually
 
 Read the entrance when the question is what Path A is for. Read the sections below when the question is how far the encoding has been written. Read the cards when the question is what a stage wrote on a log line.
 
-The cards are labels for the written answers. They are not the entrance. The entrance is the theory at the top of this note. The string `LLhfds pw Ppen qqoubx&` should still be visible when you open a card: a card that only makes sense for a sentence you can already hear has left the agreement.
+The cards are labels for the written answers. They are not the entrance. The entrance is the theory at the top of this note. The string `LLhfds pw Ppen qqoubx&` should still be visible when you open a card: a card that only makes sense for a sentence you can already hear has left the structure.
 
 - Dimensions are the vocabularies (`segment_geometry`, `role_geometry`, `constraint_geometry`, `identity_geometry`, `semantic_core`, `truth_relation`).
 - Fields are the written answers.
