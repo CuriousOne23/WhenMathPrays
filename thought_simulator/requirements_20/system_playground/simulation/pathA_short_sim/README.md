@@ -180,6 +180,8 @@ python run_examples.py > run.log
 
 For more information see debug directory [README.md](debug/README.md).
 
+Structure theory (why the cut exists; read before an architectural change): [debug/pathA_structure_theory.md](debug/pathA_structure_theory.md).
+
 IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](debug/primitives/IdOB.md).
 
 # **10. Related Documents**
@@ -258,6 +260,7 @@ pathA_short_sim/
 |
 |-- debug/
 |   |-- README.md
+|   |-- pathA_structure_theory.md
 |   |-- dimensions/
 |   |-- fields/
 |   |-- primitives/
