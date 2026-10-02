@@ -1,137 +1,66 @@
 # Path-A Canonical Debug Document Map
 
-Date: 2026-09-22
+Date: 2026-10-02
 Scope root: thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/debug
 
-This document is the authoritative Path-A canonical debug document map for dimensions, fields, primitives, and bridge coverage.
+Status: corrected inventory for the short-sim debug tree. This file is not an execution log. The 2026-09-22 "missing" list is retired. Those cards now exist. Do not archive this map; correct it when the tree changes.
 
-Execution status for this update:
-- NOT executed: no file create/rename/delete/rewrite actions outside this map
-- NOT executed: no edits to links.yaml
-- NOT executed: no edits to debug/primitives/appendix_x_token_to_structure_bridge.md
+Theory note, prior reading for an architectural question: [pathA_structure_theory.md](pathA_structure_theory.md). It governs this debug set. It does not govern the structure-to-meaning bench.
 
-## 1. Canonical Document List (Authoritative Target)
+## 1. Live tree
 
-### Canonical Dimensions
-- [debug/dimensions/segment_geometry.md](dimensions/segment_geometry.md)
-- [debug/dimensions/role_geometry.md](dimensions/role_geometry.md)
-- [debug/dimensions/identity_geometry.md](dimensions/identity_geometry.md)
-- [debug/dimensions/constraint_geometry.md](dimensions/constraint_geometry.md)
-- [debug/dimensions/semantic_core.md](dimensions/semantic_core.md)
-- [debug/dimensions/truth_relation.md](dimensions/truth_relation.md)
+### Theory
+- [pathA_structure_theory.md](pathA_structure_theory.md)
 
-### Canonical Primitives
-- [debug/primitives/SOB.md](primitives/SOB.md)
-- [debug/primitives/SROB.md](primitives/SROB.md)
-- [debug/primitives/CnOB.md](primitives/CnOB.md)
-- [debug/primitives/SmOB.md](primitives/SmOB.md)
-- [debug/primitives/IdOB.md](rimitives/IdOB.md)
+### Dimensions
+- [dimensions/segment_geometry.md](dimensions/segment_geometry.md)
+- [dimensions/role_geometry.md](dimensions/role_geometry.md)
+- [dimensions/constraint_geometry.md](dimensions/constraint_geometry.md)
+- [dimensions/identity_geometry.md](dimensions/identity_geometry.md)
+- [dimensions/semantic_core.md](dimensions/semantic_core.md)
+- [dimensions/truth_relation.md](dimensions/truth_relation.md)
 
-### Canonical Fields
-- [debug/fields/struct_segments.md](fields/struct_segments.md)
-- [debug/fields/segment_tokens.md](fields/segment_tokens.md)
-- [debug/fields/struct_roles.md](fields/struct_roles.md)
-- [debug/fields/constraints_matched.md](fields/constraints_matched.md)
-- [debug/fields/constraints_unmatched.md](fields/constraints_unmatched.md)
-- [debug/fields/constraint_residue.md](fields/constraint_residue.md)
-- [debug/fields/smoothing_operations.md](fields/smoothing_operations.md)
-- [debug/fields/semantic_adjacent_cues.md](fields/semantic_adjacent_cues.md)
-- [debug/fields/basin_residue.md](fields/basin_residue.md)
-- [debug/fields/idob_packet.md](fields/idob_packet.md)
+Not in the tree, and not legal names: `smoothing_geometry.md`, `meaning_geometry.md`.
 
-### Canonical Bridge
-- [debug/primitives/appendix_x_token_to_structure_bridge.md](primitives/appendix_x_token_to_structure_bridge.md)
+### Primitives
+- [primitives/IE.md](primitives/IE.md)
+- [primitives/SOB.md](primitives/SOB.md) — Structural Observation Block
+- [primitives/SROB.md](primitives/SROB.md) — Structural Refinement Observation Block
+- [primitives/CnOB.md](primitives/CnOB.md) — Constraint Observation Block
+- [primitives/SmOB.md](primitives/SmOB.md) — Semantic Observation Block
+- [primitives/IdOB.md](primitives/IdOB.md) — Identity Observation Block
+- [primitives/appendix_x_token_to_structure_bridge.md](primitives/appendix_x_token_to_structure_bridge.md)
 
-## 2. Existing Documents Detected
+### Fields
+- [fields/struct_segments.md](fields/struct_segments.md)
+- [fields/segment_tokens.md](fields/segment_tokens.md)
+- [fields/struct_roles.md](fields/struct_roles.md)
+- [fields/constraints_matched.md](fields/constraints_matched.md)
+- [fields/constraints_unmatched.md](fields/constraints_unmatched.md)
+- [fields/constraint_residue.md](fields/constraint_residue.md)
+- [fields/smoothing_operations.md](fields/smoothing_operations.md)
+- [fields/semantic_adjacent_cues.md](fields/semantic_adjacent_cues.md)
+- [fields/basin_residue.md](fields/basin_residue.md)
+- [fields/idob_packet.md](fields/idob_packet.md)
+- [fields/residue.md](fields/residue.md) — compatibility alias
+- [fields/smob_smoothing_residue.md](fields/smob_smoothing_residue.md) — compatibility alias
 
-### Existing primitives documents
-- debug/primitives/README.md
-- debug/primitives/primitives.md
-- debug/primitives/appendix_x_token_to_structure_bridge.md
+### Examples
+- [examples/why_this_cut.md](examples/why_this_cut.md) — prohibition argument
+- [examples/placeholder.md](examples/placeholder.md) — debugger stub
 
-### Existing dimensions documents
-- debug/dimensions/README.md
-- debug/dimensions/dimensions.md
+### Setup
+- [setup/debug_setup.yaml](setup/debug_setup.yaml)
+- [setup/links.yaml](setup/links.yaml)
 
-### Existing fields documents
-- debug/fields/README.md
-- debug/fields/fields.md
+## 2. Vocabulary check
 
-## 3. Missing Canonical Documents
+- Segments: `struct_segments`, `segment_tokens`, `segment_geometry`
+- Roles: `struct_roles`, `role_geometry` — positional labels, not `semantic_core`
+- Constraints: `constraints_matched`, `constraints_unmatched`, `constraint_residue`, `constraint_geometry`
+- SmOB Job 1: `smoothing_operations` is an operation list, not the stage name; `semantic_adjacent_cues`, `basin_residue`
+- Identity: `idob_packet`, dict `semantic_core`, `identity_geometry`, `truth_relation`
 
-### Missing canonical dimensions
-- [debug/dimensions/segment_geometry.md](dimensions/segment_geometry.md)
-- [debug/dimensions/role_geometry.md](dimensions/role_geometry.md)
-- [debug/dimensions/identity_geometry.md](dimensions/identity_geometry.md)
-- [debug/dimensions/constraint_geometry.md](dimensions/constraint_geometry.md)
-- [debug/dimensions/semantic_core.md](dimensions/semantic_core.md)
-- [debug/dimensions/truth_relation.md](dimensions/truth_relation.md)
+## 3. Retired claims
 
-### Missing canonical primitives
-- [debug/primitives/SOB.md](primitives/SOB.md])
-- [debug/primitives/SROB.md](primitives/SROB.md)
-- [debug/primitives/CnOB.md](primitives/CnOB.md)
-- [debug/primitives/SmOB.md](primitives/SmOB.md)
-- [debug/primitives/IdOB.md](primitives/IdOB.md)
-
-### Missing canonical fields
-- [debug/fields/struct_segments.md](fields/struct_segments.md)
-- [debug/fields/segment_tokens.md](fields/segment_tokens.m)
-- [debug/fields/struct_roles.md](fields/struct_roles.md)
-- [debug/fields/constraints_matched.md](fields/constraints_matched.m)
-- [debug/fields/constraints_unmatched.md](fields/constraints_unmatched.md)
-- [debug/fields/constraint_residue.md](fields/constraint_residue.md)
-- [debug/fields/smoothing_operations.md](fields/smoothing_operations.md)
-- [debug/fields/semantic_adjacent_cues.md](fields/semantic_adjacent_cues.md)
-- [debug/fields/basin_residue.md](fields/basin_residue.md)
-- [debug/fields/idob_packet.md](fields/idob_packet.md)
-
-### Missing canonical bridge
-- None
-
-## 4. Legacy Umbrella Documents
-
-The following umbrella files exist and should be transitioned away from as canonical per-concept documents are introduced:
-- debug/primitives/primitives.md
-- debug/dimensions/dimensions.md
-- debug/fields/fields.md
-
-## 5. Recommended Actions (NOT Executed)
-
-### Create (NOT executed)
-- Create all missing canonical dimensions listed in Section 3.
-- Create all missing canonical primitives listed in Section 3.
-- Create all missing canonical fields listed in Section 3.
-
-### Rename (NOT executed)
-- Rename debug/primitives/primitives.md to debug/primitives/_legacy_primitives_overview.md if historical retention is required.
-- Rename debug/dimensions/dimensions.md to debug/dimensions/_legacy_dimensions_overview.md if historical retention is required.
-- Rename debug/fields/fields.md to debug/fields/_legacy_fields_overview.md if historical retention is required.
-
-### Delete (NOT executed)
-- Delete legacy umbrella docs only after canonical replacements exist and links are migrated:
-- debug/primitives/primitives.md
-- debug/dimensions/dimensions.md
-- debug/fields/fields.md
-
-### Rewrite (NOT executed)
-- Rewrite README index pages to point first to canonical per-concept docs once they are created:
-- debug/primitives/README.md
-- debug/dimensions/README.md
-- debug/fields/README.md
-
-### Remain As-Is (NOT executed)
-- Keep debug/primitives/appendix_x_token_to_structure_bridge.md unchanged as the canonical bridge document.
-- Keep links.yaml unchanged in this batch.
-
-## 6. Consistency Coverage Check
-
-Canonical vocabulary represented by this map:
-- Segments: struct_segments, segment_tokens, segment_geometry
-- Roles: struct_roles, role_geometry
-- Constraints (CnOB): constraints_matched, constraints_unmatched, constraint_residue, constraint_geometry
-- Smoothing/Basin (SmOB): smoothing_operations, semantic_adjacent_cues, basin_residue
-- Identity (IdOB): identity_geometry, truth_relation, semantic_core, idob_packet
-
-Validation note:
-- This file is structured as valid markdown with complete canonical listings and explicit NOT executed action labels.
+The 2026-09-22 map listed the dimension, primitive, and field cards as missing, and it mistyped the IdOB link as `rimitives/IdOB.md` under a broken relative path. Those claims are withdrawn. Umbrella files named in that map (`primitives.md`, `dimensions.md`, `fields.md`) are not in the current tree. This inventory does not recreate them.

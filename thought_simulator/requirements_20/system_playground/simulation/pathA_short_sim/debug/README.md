@@ -1,8 +1,18 @@
 # Debugger Documentation (pathA_short_sim/debug)
 
-The `debug/` directory contains all human‑readable documentation and reference materials used by the `pathA_dbug.py` debugger. These files support **debugging**, **training**, and **teaching** by providing structured explanations of the simulator’s geometry, fields, primitives, and example outputs.
+The `debug/` directory contains human-readable documentation and reference materials used by the `pathA_dbug.py` debugger. These files support debugging, training, and teaching by explaining the simulator's geometry, fields, primitives, and example outputs.
 
-This directory is intentionally modular and mirrors the internal structure of the simulator’s reasoning pipeline.
+The theory note governs architecture: why the cut exists. The cards govern writers and fields: what a stage wrote. A log inspection can start at a card. An architectural change should start at the theory note.
+
+---
+
+## 0. Read this first
+
+[pathA_structure_theory.md](pathA_structure_theory.md) is the conceptual foundation for this directory. It states why structure is computed before a packet is legal, and what later stages may not reopen.
+
+It is not a primitive card, not a geometry, and not loaded by the debugger in this pass. The cards remain the reference for a log line. They are not sufficient alone for an architectural change.
+
+Prohibition example: [examples/why_this_cut.md](examples/why_this_cut.md).
 
 ---
 
@@ -10,29 +20,28 @@ This directory is intentionally modular and mirrors the internal structure of th
 
 The debugger and its documentation serve three main purposes:
 
-### **Debugging**
+### Debugging
 - Provide clear, structured insight into how primitives (SOB, SROB, CnOB, SmOB, IdOB) fired.
-- Show segment, role, constraint, smoothing, identity, and meaning geometries.
+- Show segment, role, constraint, identity, semantic-core, and truth-relation vocabularies.
 - Surface interpreted blocks in a readable Markdown format.
 
-### **Training**
-- Help developers understand how the simulator processes structural and semantic information.
+### Training
+- Help developers understand how the simulator processes structural information and assembles a packet.
 - Provide consistent reference definitions for geometry dimensions and fields.
-- Enable new contributors to learn the simulator’s architecture quickly.
+- Enable new contributors to learn the simulator's architecture quickly.
 
-### **Teaching**
-- Offer symbolic examples of how primitives interact.
-- Demonstrate how structural and semantic cues propagate.
-- Provide a conceptual map of the simulator’s reasoning pipeline.
+### Teaching
+- Offer a prohibition example of what a later stage may not reopen.
+- Demonstrate how structural cues propagate into a packet.
+- Provide a conceptual map of the simulator's pipeline.
 
 ---
 
 ## 2. Directory Structure
 
-The `debug/` directory is organized into four main subdirectories:
-
 ```
 debug/
+  pathA_structure_theory.md
   dimensions/
   fields/
   primitives/
@@ -40,99 +49,77 @@ debug/
   setup/
 ```
 
-### **dimensions/**
-Contains documentation for geometry dimensions used by the simulator:
+### Theory
+- `pathA_structure_theory.md` — why the cut exists; prior reading for an architectural change
 
-- `segment_geometry.md` — structural form and segment class membership  
-- `role_geometry.md` — functional roles (head, modifier, predicate, argument)  
-- `constraint_geometry.md` — adjacency, compatibility, structural rules  
-- `smoothing_geometry.md` — continuity and reconciliation of partial matches  
-- `identity_geometry.md` — referential and structural identity  
-- `meaning_geometry.md` — semantic cue propagation and meaning-bearing structures  
+### dimensions/
+Live set only:
 
-Each file includes:
-- definition  
-- allowed_values  
-- effects  
-- debugger-style examples  
+- `segment_geometry.md` — structural form and segment class membership
+- `role_geometry.md` — positional labels (head, modifier, predicate, argument)
+- `constraint_geometry.md` — adjacency, compatibility, structural rules
+- `identity_geometry.md` — structural, referential, and semantic identity labels on the packet
+- `semantic_core.md` — packet dict vocabulary
+- `truth_relation.md` — declarative, interrogative, unknown
 
----
+Not in the tree: `smoothing_geometry.md`, `meaning_geometry.md`. Smoothing is an operation of Semantic Observation Block Job 1, not a dimension file.
 
-### **fields/**
-Contains documentation for fields produced during interpretation:
+### fields/
+- `struct_segments.md` — recognized segment structures
+- `segment_tokens.md` — token coverage of those segments
+- `struct_roles.md` — positional labels
+- `constraints_matched.md` — satisfied constraints
+- `constraints_unmatched.md` — unresolved constraints
+- `constraint_residue.md` — unresolved rule-level signals
+- `smoothing_operations.md` — named Job 1 operations
+- `semantic_adjacent_cues.md` — stabilized adjacent cues
+- `basin_residue.md` — unresolved basin output
+- `idob_packet.md` — the sum
+- `residue.md`, `smob_smoothing_residue.md` — compatibility aliases
 
-- `struct_segments.md` — recognized segment structures  
-- `struct_roles.md` — assigned functional roles  
-- `constraints_matched.md` — satisfied structural/adjacency constraints  
-- `semantic_adjacent_cues.md` — meaning-bearing adjacency cues  
-- `idob_packet.md` — identity packet formation  
-- `residue.md` — leftover structural/semantic material  
+### primitives/
+Official names:
 
-Each file mirrors the same structure as dimensions.
+- `SOB.md` — Structural Observation Block
+- `SROB.md` — Structural Refinement Observation Block
+- `CnOB.md` — Constraint Observation Block
+- `SmOB.md` — Semantic Observation Block
+- `IdOB.md` — Identity Observation Block
+- `IE.md` — intake compatibility card
 
----
+Each primitive file explains what the primitive does, what it may emit, and a symbolic example. IdOB writes a packet. It is not an object.
 
-### **primitives/**
-Documentation for the five core primitives:
+### examples/
+- `why_this_cut.md` — what becomes illegal if a later stage reopens the cut
+- `placeholder.md` — debugger stub
 
-- `SOB.md` — Segment Observation Block  
-- `SROB.md` — Segment Role Observation Block  
-- `CnOB.md` — Constraint Observation Block  
-- `SmOB.md` — Smoothing Observation Block  
-- `IdOB.md` — Identity Observation Block  
+### setup/
+- `debug_setup.yaml` — documentation names the debugger may load
+- `links.yaml` — maps those names to relative paths
 
-Each primitive file explains:
-- what the primitive does  
-- what values it may produce  
-- how it affects interpretation  
-- symbolic debugger-style examples  
-
----
-
-### **examples/**
-Contains symbolic examples of interpreted output:
-
-- `placeholder.md` — debugger-style examples showing interactions between geometry, fields, and primitives  
-
----
-
-### **setup/**
-Contains configuration files used by the debugger:
-
-- `debug_setup.yaml` — lists all documentation files to load  
-- `links.yaml` — maps documentation names to relative paths  
-
-These files allow the debugger to generate clickable links in `debug_out.md`.
+These files allow the debugger to generate clickable links in `debug_out.md`. The theory note is intentionally absent from both, so a log report does not treat it as a geometry.
 
 ---
 
 ## 3. How to Use the Debugger
 
-### **Running the debugger**
+### Running the debugger
 
 From the simulator root:
-
-First you need to run pathA_short_sim executable and pipe the results into a log file, e.g., run.log.
 
 ```
 python run_examples.py > run.log
 ```
 
-Then run the debugger on run.log:
+Then:
 
 ```bash
 python pathA_dbug.py path/to/run.log --base-dir .
 ```
 
-This produces:
+This produces `debug_out.md` in the base directory.
 
-```
-debug_out.md
-```
-
-in the base directory.
-
-### **What the debugger does**
+### What the debugger does
 
 - Loads `debug_setup.yaml` to determine which documentation files to include.
 - Loads `links.yaml` to generate clickable links in the output.
@@ -140,7 +127,7 @@ in the base directory.
 - Interprets each block using semantic placeholders.
 - Generates a structured Markdown report.
 
-### **Example output snippet**
+### Example output snippet
 
 ```
 ## Interpreted Blocks
@@ -149,74 +136,35 @@ in the base directory.
 - CnOB: Primitive CnOB fired with 1 line.
 ```
 
-### **Use cases**
+### Use cases
 
-#### **Debugging**
+#### Debugging
 - Inspect why a primitive fired.
-- Understand segment/role/constraint interactions.
-- Diagnose structural or semantic residue.
+- Understand segment, role, and constraint interactions.
+- Diagnose residue.
 
-#### **Training**
+#### Training
 - Learn how primitives interact.
 - Understand geometry and field definitions.
-- Explore symbolic examples.
+- Read the prohibition example before changing a stage.
 
-#### **Teaching**
-- Demonstrate the simulator’s reasoning pipeline.
-- Show how structural and semantic cues propagate.
-- Provide conceptual explanations for each primitive.
+#### Teaching
+- Demonstrate the pipeline.
+- Show how structural cues propagate into a packet.
+- Point architectural questions at the theory note, not at a card.
 
 ### 3.1 Links Provided Inside `debug_out.md`
 
-The debugger automatically embeds clickable links inside `debug_out.md` to help you navigate the documentation for each geometry dimension, field, and primitive. These links are generated from `links.yaml` and point to the Markdown files located in the `debug/` directory.
+The debugger embeds clickable links from `links.yaml`. It does not link the theory note.
 
-Each link serves as a quick reference, allowing you to jump directly to the relevant explanation for any structure the debugger reports.
+#### Types of Links Included
 
-#### **Types of Links Included**
+- Dimension links under `debug/dimensions/`: segment, role, constraint, identity, semantic core, truth-relation.
+- Field links under `debug/fields/`: segments, tokens, roles, matched and unmatched constraints, constraint residue, smoothing operations, adjacent cues, basin residue, packet.
+- Primitive links under `debug/primitives/`: SOB, SROB, CnOB, SmOB, IdOB.
+- Example links under `debug/examples/`. The prohibition file is not in `links.yaml` in this pass. Open it from this README.
 
-The following categories of links appear in `debug_out.log`:
-
-- **Dimension links**  
-  These point to files under `debug/dimensions/` and explain:
-  - segment geometry  
-  - role geometry  
-  - constraint geometry  
-  - smoothing geometry  
-  - identity geometry  
-  - meaning geometry  
-
-- **Field links**  
-  These point to files under `debug/fields/` and explain:
-  - struct_segments  
-  - struct_roles  
-  - constraints_matched  
-  - semantic_adjacent_cues  
-  - idob_packet  
-  - residue  
-
-- **Primitive links**  
-  These point to files under `debug/primitives/` and explain:
-  - SOB  
-  - SROB  
-  - CnOB  
-  - SmOB  
-  - IdOB  
-
-- **Example links**  
-  These point to symbolic examples under `debug/examples/`.
-
-#### **How These Links Help**
-
-- They provide **instant access** to definitions, allowed values, effects, and symbolic examples.
-- They help you **interpret each primitive block** reported in the log.
-- They allow you to **cross‑reference geometry and fields** without searching manually.
-- They make the debugger output **self‑documenting**, ideal for:
-  - debugging  
-  - training  
-  - teaching  
-  - onboarding new contributors  
-
-#### **VS Code Compatibility**
+#### VS Code Compatibility
 
 This debugger writes Markdown output to `debug_out.md` so links are active as Markdown hyperlinks in VS Code preview and Markdown-aware viewers.
 
@@ -224,13 +172,12 @@ This debugger writes Markdown output to `debug_out.md` so links are active as Ma
 
 ## 4. Notes
 
-- All documentation files are symbolic and conceptual.
+- Card files describe writers and fields. They do not contain the necessity argument.
 - They do not contain runtime values or simulator logic.
-- They are designed to support human understanding of the system.
+- Inventory of the live tree: [canonical_debug_document_map.md](canonical_debug_document_map.md).
 
 ---
 
 ## 5. Contact
 
 For questions or contributions, see the main project repository.
-
