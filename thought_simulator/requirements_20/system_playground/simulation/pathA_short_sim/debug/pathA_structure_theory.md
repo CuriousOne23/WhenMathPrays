@@ -1,24 +1,20 @@
 # Path A structure theory
 
-Scope: `pathA_short_sim` only. Teaching note for the debug set. Not a primitive card.
+The theoretical goal of Path A is to encode the structure of language. The theory is that language has a socially agreed-upon structure. That structure is prior to any one utterance, whether or not speakers state it.
 
-The theoretical goal of Path A is to encode the structure of language. The theory is that language has a socially agreed-upon structure. That structure is prior to any one utterance, whether or not speakers state it. It is not the claim that language is a social agreement. Path A is the attempt to encode that structure explicitly.
+A speaker offers an utterance. A hearer of a known language takes a claim, including whether it was told or asked. The marks do not display that claim. The hearing does not show the work. If the claim must be checked without that hearing, the check cannot be the hearing. Something else has to be written, and it has to be fixed before this utterance.
 
-That sentence is not original to this note. Saussure treats language (*langue*) as a social product and a body of conventions adopted by a community, distinct from the individual act of speaking (*parole*), and as a system rather than a heap of speech facts (*Course in General Linguistics*, 1916). Lewis treats language as an activity governed by conventions the speakers did not create by explicit mutual agreement and often cannot state (*Convention*, 1969). Those results support the goal sentence. They do not state the four questions, the legal empty result, or the packet as a sum. Those remain this path's commitment about how to encode the structure when the input is only the stream.
+The structure makes four questions askable of any offered utterance. What hangs together. What place each portion holds. What fits. What remains odd.
 
-The structure is not found in the marks. A hearer takes a claim, including whether it was told or asked, and the hearing does not show the work. We do not recover that hearing. If the utterance must be checked without the hearing, the check cannot be the hearing. The encoding is meaningless to the utterance and is the explicit form of the prior structure, available to anyone who must check the utterance without the hearing. Today's dictionaries are how far the encoding has been written, not the goal.
+Path A is the attempt to encode that structure explicitly. Saussure, *Course in General Linguistics* (1916), and Lewis, *Convention* (1969), already treat language as a social system of conventions speakers need not state. They do not state this encoding.
 
-The structure makes four questions askable of any offered utterance. What portions of the marks hang together, and do they cover the stream. What place each portion holds. Which bindings fit the rules fixed before this utterance. What remains odd. Structure, as encoded, is the written answer, or the written miss.
-
-Those writings are what this path realizes as SOB, SROB, CnOB, and SmOB. Smoothing is an operation of Semantic Observation Block, not the name of the stage. IdOB is not a fifth item. It sums a catalog when a family under the structure bound, and it may emit a packet. No binding, no packet. A miss on a family this path claims to support is a defect. A later writing may not invent an earlier fact the structure did not allow. The cards are labels for the writings. They are not the theory.
-
-What follows is the present realization under that goal, not a substitute for it.
+Scope of what follows: `pathA_short_sim` only. Teaching note for the debug set. Not a primitive card. The sections below are the present realization, not the goal.
 
 ```
 LLhfds pw Ppen qqoubx&
 ```
 
-That string is an utterance under the same structure as a sentence you can hear. It is here so the structure stays visible when the names begin.
+That string is an utterance under the same structure as a sentence you can hear.
 
 ## 1. Status and non-claims
 
@@ -50,7 +46,7 @@ Path-A-short is a dictionary-driven teaching simulator. Field names on the cards
 
 ## 2. The human skip
 
-Your own hearing is in the way. An English sentence arrives already heard, so the work is invisible. An unknown string does not give you that gift. This section does not explain how you hear. It puts you where a check without the hearing already is.
+Given the theory above, the hearing is in the way. An English sentence arrives already heard, so the work is invisible. An unknown string does not give you that gift. This section does not explain how you hear. It puts you where a check without the hearing already is.
 
 ### 2.1 What you can do with a string you cannot hear
 
@@ -84,7 +80,7 @@ Section 3 names the present writers allowed to record those answers. They are no
 
 ## 3. What structure is here
 
-In this simulator, structure is the present encoding of the socially agreed-upon structure: the meaning-blind writing the machine is allowed to make. It is not a metaphysical kind, and it is not the packet. It is not an account of human perception. It is meaningless to the utterance. It is the explicit form of that structure, available to anyone who must check without the hearing.
+The structure makes four questions askable of any offered utterance. In this simulator, the encoding is the meaning-blind writing that answers them. It is not a metaphysical kind, and it is not the packet. It is not an account of human perception. It is meaningless to the utterance.
 
 Apply the four questions to `LLhfds pw Ppen qqoubx&` before any stage name:
 
