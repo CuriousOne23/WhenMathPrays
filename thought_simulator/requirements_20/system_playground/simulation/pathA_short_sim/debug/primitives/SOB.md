@@ -11,7 +11,7 @@
 - Upstream state: token stream context required for segmentation.
 
 ## 3. Outputs
-- `struct_segments`, , [see ../fields/struct_segments.md](../fields/struct_segments.md)
+- `struct_segments`, [see ../fields/struct_segments.md](../fields/struct_segments.md)
 - `segment_tokens`
 
 ## 4. Structural Function
