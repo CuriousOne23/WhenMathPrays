@@ -7,7 +7,7 @@
 `SOB` performs deterministic segmentation of structured input into canonical segment fields.
 
 ## 2. Inputs
-- Geometry source: `segment_geometry` from `../dimensions/segment_geometry.md`.
+- Geometry source: `segment_geometry` from [../dimensions/segment_geometry.md](../dimensions/segment_geometry.md).
 - Upstream state: token stream context required for segmentation.
 
 ## 3. Outputs
