@@ -33,15 +33,35 @@ Non-claims:
 
 ## 2. The human skip
 
-A reader hears *The sky is blue.* and already has a theme, a state, and a claim that was told. A reader hears *Where is the book on the table?* and already has a thing, a place, and a claim that was asked.
+You already heard the sentence. That is the difficulty. This section does not explain how you heard it. It asks you to notice what your hearing will not show, because that hidden part is what the machine does not get.
 
-That perception is the skip. The chunks, the labels, the legal adjacencies, and the told-versus-asked cut arrive together. A human does not experience them as questions that had to be answered in order.
+### 2.1 What arrives, and what does not show
 
-A machine does not get that skip. If the simulator treats the heard sentence as an already-structured claim, it has imported the human answer and called it input. Path A exists so those questions are computed, written, and inspectable before a packet is legal.
+Hear *The sky is blue.* A claim is already there: something, a way it is, and that you were told. Hear *Where is the book on the table?* A claim is already there: a thing, a place, and that you were asked. Where the pieces are, what sits with what, and whether it was told or asked arrive as one act.
+
+You cannot watch that act. Talking and hearing do not display their steps. We do not know how the claim was perceived, and the perception will not answer if you ask it. That is not a failure of attention. The work is not in the experience to be found. We do not know what we do not know here, and this note will not pretend to recover it.
+
+### 2.2 What the machine does not get
+
+The machine is handed a token stream. The stream does not contain the claim you already hear. It does not contain where the pieces are, what sits with what, or whether it was told or asked. Those are not hiding in the string, waiting to be noticed.
+
+This is not a claim that a machine can never be given a way to cut a sentence. The dictionaries in this simulator are a supplied substitute for the skip. The deficit is narrower, and harder to feel: the machine cannot use your invisible hearing as an input. If the simulator treats the heard sentence as an already-legal claim, it has imported your answer and called it data.
+
+### 2.3 Why that matters to you
+
+When a packet is wrong, you cannot settle the argument by hearing the sentence again. The hearing will give you the same finished claim. The machine cannot settle it either, unless something was written down that neither of you can see in the hearing.
+
+What has to be written is not a picture of how a person perceives. We do not have that picture. What has to be written is the skipped work, in an order where a later step cannot invent the earlier one. That written work is what this path calls structure. It is a substitute you can check. It is not a recovered human mechanism, and it is not a mental object from the other bench.
+
+### 2.4 The requirement Section 3 answers
+
+Before a packet is legal, four questions have to have written answers: where the pieces are, what place each piece holds, what holds together and what does not, and what unresolved neighborhood remains. Told-versus-asked is read off that finished writing. It is not a reason to cut the sentence again.
+
+Section 3 names the writers allowed to produce that writing. They are not a claim about how you perceive. They are the legal way this path makes the invisible skip inspectable.
 
 ## 3. What structure is here
 
-Structure, in this simulator, is the meaning-blind cut the observation-block set is allowed to write. It is not a metaphysical kind, and it is not the packet.
+The requirement in 2.4 is answered here, and only here, by naming the writers. Structure, in this simulator, is the meaning-blind cut the observation-block set is allowed to write. It is not a metaphysical kind, and it is not the packet. It is not an account of human perception.
 
 Four writers, four cuts:
 
