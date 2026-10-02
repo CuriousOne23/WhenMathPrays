@@ -5,9 +5,9 @@ dimensions:
   - segment_geometry
   - role_geometry
   - constraint_geometry
-  - smoothing_geometry
   - identity_geometry
-  - meaning_geometry
+  - semantic_core
+  - truth_relation
 
 fields:
   - struct_segments
