@@ -26,9 +26,9 @@ Geometry sources:
 Canonical fields consumed (not rewritten as OB-set):
 
 - `struct_segments`, `segment_tokens` — SOB, [SOB.md](SOB.md)
-- `struct_roles` — SROB  
-- `constraints_matched`, `constraints_unmatched`, `constraint_residue` — CnOB  
-- `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue` — SmOB  
+- `struct_roles` — SROB, [SROB.md](SROB.md) 
+- `constraints_matched`, `constraints_unmatched`, `constraint_residue` — CnOB, [CnOB.md](CnOB.md)
+- `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue` — SmOB, [SmOB.md](SmOB.md)
 - `tru_hint` — Truth-Relation Update (TRU)
 
 ## 3. Outputs (the packet)
