@@ -147,22 +147,22 @@ Each paper below supplies the detailed specification for one part of the pipelin
 2. **[Manifold Geometry & Shapes Specification](manifold_geometry_shapes_spec.md)**  
    Defines the geometric primitives, spline constructions, and constraint rules that give the manifold its semantic-encoding shapes and basins.
 
-3. **[Shapes Meanings — SSR, OuBB, Mapping](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/shapes_meanings_ssr_oubb_mapping.md)**  
+3. **[Shapes Meanings — SSR, OuBB, Mapping](shapes_meanings_ssr_oubb_mapping.md)**  
    Details how specific manifold shapes correspond to interpretable meanings across the SSR input layer, the manifold geometry itself, and the OuBB expression layer.
 
-4. **[Routing & Projection](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/manifold_routing_projection.md)**  
+4. **[Routing & Projection](manifold_routing_projection.md)**  
    Specifies the internal routing mechanisms and projection operations that move meaning along trajectories inside the manifold.
 
-5. **[Manifold → OuBB / RG Projection & Reverse](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/manifold_to_oubb_projection_reverse.md)**  
+5. **[Manifold → OuBB / RG Projection & Reverse](manifold_to_oubb_projection_reverse.md)**  
    Defines the forward projection operator (Π) that maps manifold meaning signatures to expressive outputs, together with the reverse path (Π⁻¹) required for full traceability and debugging.
 
-6. **[Pre‑work Checklist, Tuning & Validation](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/prework_checklist_tuning_validation.md)**  
+6. **[Pre‑work Checklist, Tuning & Validation](manifold_white_papers/prework_checklist_tuning_validation.md)**  
    Supplies the step-by-step checklist, tuning parameters, and validation tests that confirm each stage of manifold construction meets stability and correctness criteria.
 
-7. **[Dictionary Projection Specification](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/dictionary_projection_spec.md)**  
+7. **[Dictionary Projection Specification](manifold_white_papers/dictionary_projection_spec.md)**  
    Details how meaning signatures are linked to modular expression rules (tone, lexicon, syntax, hedging, rhythm, etc.) and how the dictionary is grown iteratively and testably.
 
-8. **[Pre‑work Overview](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/prework_manifold_and_back.md)**  
+8. **[Pre‑work Overview](prework_manifold_and_back.md)**  
    Provides the architectural context and rationale for the entire pre-work phase, positioning the manifold as the central deterministic constraint surface that makes controlled meaning-to-expression mapping possible.
 
 ---
