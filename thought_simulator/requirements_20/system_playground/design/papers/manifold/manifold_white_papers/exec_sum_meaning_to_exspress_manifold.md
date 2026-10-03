@@ -141,10 +141,10 @@ Present-day statistical approaches have achieved real utility through scaling, b
 
 Each paper below supplies the detailed specification for one part of the pipeline. Together they form a complete, traceable engineering path.
 
-1. **[SSR → Manifold Transfer Guide](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/ssr_to_manifold_transfer_guide.md)**  
+1. **[SSR → Manifold Transfer Guide](ssr_to_manifold_transfer_guide.md)**  
    Explains how to convert structured semantic representations (SSR) into stable numeric coordinates while preserving semantic intensity, alignment, and monotonicity.
 
-2. **[Manifold Geometry & Shapes Specification](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/manifold_geometry_shapes_spec.md)**  
+2. **[Manifold Geometry & Shapes Specification](manifold_geometry_shapes_spec.md)**  
    Defines the geometric primitives, spline constructions, and constraint rules that give the manifold its semantic-encoding shapes and basins.
 
 3. **[Shapes Meanings — SSR, OuBB, Mapping](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/shapes_meanings_ssr_oubb_mapping.md)**  
