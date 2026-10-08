@@ -40,7 +40,8 @@ def main() -> None:
         after = list(tp.get("struct_segments") or [])
         print(raw, len(record["connections"]), len(record["holes"]))
         assert before == after
-        assert set(record) == {"utterance", "connections", "holes"}
+        assert set(record) == {"utterance", "connections", "holes", "notices"}
+        assert "ambiguous" not in record["notices"]
         for item in record["connections"] + record["holes"]:
             assert item["status"] in status_enum
             assert "likelihood" not in item

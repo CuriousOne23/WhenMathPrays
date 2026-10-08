@@ -3,7 +3,7 @@
   "$id": "s2m_connection.v1",
   "title": "S2M connection composition",
   "type": "object",
-  "required": ["utterance", "connections", "holes"],
+  "required": ["utterance", "connections", "holes", "notices"],
   "additionalProperties": false,
   "properties": {
     "utterance": {"type": "string"},
@@ -14,6 +14,10 @@
     "holes": {
       "type": "array",
       "items": {"$ref": "#/$defs/connection"}
+    },
+    "notices": {
+      "type": "array",
+      "items": {"type": "string", "enum": ["underspecified"]}
     }
   },
   "$defs": {
