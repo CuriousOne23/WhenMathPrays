@@ -96,3 +96,5 @@ The experiment stops at the failing bound. The report names which bound failed a
 4. [holes.md](holes.md)
 5. [pressure.md](pressure.md)
 6. [utterances.md](utterances.md)
+
+Writer: `idob/connections.py`. Replay: `PYTHONPATH=. python3 support/tools/s2m_connection_replay.py`. The writer records supported fields and a neighborhood hole when no connection is supported. It does not rank.
