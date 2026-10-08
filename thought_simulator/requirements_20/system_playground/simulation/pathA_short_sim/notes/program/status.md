@@ -11,6 +11,10 @@ The shell exists. Copied fields are the same values. Six structure IDs, `structu
 
 This effort does not birth \(M\) and does not apply CIE.
 
+## Six-ID falsification
+
+The six IDs are not filled. The pass reports unsupported, missing_dimension, and unplaced. Detail: [packet_sync/id_eval.md](packet_sync/id_eval.md).
+
 ## Narrow S2M realization
 
 A finished packet can support accountable connections and holes. That is evidence for the Path A claim that structure can be mapped without inventing links. It is not \(M\), not history, and not the geometry conjecture.
