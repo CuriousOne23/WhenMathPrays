@@ -109,6 +109,8 @@ def _force_ops(tp: Any) -> list:
     roles = getattr(tp, "struct_roles", []) or []
     if "query_focus" in roles:
         ops.append("query_focus")
+    if "location" in roles:
+        ops.append("location")
     return ops
 
 
