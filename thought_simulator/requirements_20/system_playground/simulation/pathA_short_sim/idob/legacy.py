@@ -270,7 +270,12 @@ def _modifier_resolution_apply(tp: Any) -> Dict[str, Any]:
 
 def _residual_identity_apply(tp: Any) -> Dict[str, Any]:
     truth_relation = _legacy_truth_relation(tp)
-    return {"identity_geometry": _legacy_identity_geometry(tp, truth_relation), "truth_relation": truth_relation}
+    profile = build_semantic_profile(tp)
+    return {
+        "identity_geometry": _legacy_identity_geometry(tp, truth_relation),
+        "truth_relation": truth_relation,
+        "semantic_core": profile["semantic_core_dict"],
+    }
 
 
 legacy_monolith = IdOBObject(name="legacy_monolith", family="residual_identity", priority=999, activate=always_active, apply=_legacy_apply)
