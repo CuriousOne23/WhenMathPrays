@@ -100,6 +100,9 @@ def adapt_roles_from_committed(
         elif words and words[0] in known_prep and words[-1] in known_noun:
             struct_roles[idx] = "location"
             role_segments.setdefault("location", []).extend(words)
+        elif len(words) == 1 and words[0] in {"she", "he", "i", "we", "they"}:
+            struct_roles[idx] = "speaker"
+            role_segments.setdefault("speaker", []).extend(words)
         elif len(words) == 1 and words[0] in known_wh:
             nxt = segment_tokens[idx + 1] if idx + 1 < len(segment_tokens) else []
             nxt_words = [tok.lower().strip("?.!") for tok in nxt]
