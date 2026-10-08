@@ -263,7 +263,7 @@ def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: L
             i += 1
             continue
 
-        action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give", "jumps", "jump", "jumped"}
+        action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give", "jumps", "jump", "jumped", "close", "open", "stop", "go", "put", "take"}
         reporting_verbs = {"said", "says", "say"}
         recipient_pronouns = {"me"}
         if tok in action_verbs:
@@ -311,7 +311,7 @@ def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: L
             nxt = seg_tokens[j]
             if nxt in punctuation:
                 break
-            if j > i and (nxt in wh_words or nxt in aux_q or nxt in copular or nxt in state_verbs or nxt in preps or nxt in rel_markers or nxt in {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give", "jumps", "jump", "jumped", "said", "says", "say", "me"}):
+            if j > i and (nxt in wh_words or nxt in aux_q or nxt in copular or nxt in state_verbs or nxt in preps or nxt in rel_markers or nxt in {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give", "jumps", "jump", "jumped", "close", "open", "stop", "go", "put", "take", "said", "says", "say", "me"}):
                 break
             bare = nxt.lower().strip("?.!")
             known_noun = {"sky", "book", "rain", "table", "plain", "city", "fox", "dog", "cat", "mouse", "door", "lamp", "hall", "desk"}
