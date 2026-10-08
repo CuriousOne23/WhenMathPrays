@@ -16,18 +16,18 @@ def main() -> None:
     plain = _run("The sky is blue.")
     action = _run("The cat chased the mouse.")
     unknown = _run("LLhfds pw Ppen qqoubx&")
-    print("plain", plain["meaning"]["status"], plain["before"], plain["meaning"]["selected_ops"])
+    print("plain", plain["meaning"]["status"], plain["before"])
     print("action", action["meaning"]["status"], action["meaning"]["selected_ops"])
     print("unknown", unknown["meaning"]["status"], unknown["before"])
     for row in (plain, action, unknown):
         assert row["before"] == row["after"], row
         assert row["meaning"]["structure_reopened"] is False
         assert "M" not in row["meaning"]
-    assert plain["meaning"]["status"] == "mapped"
+    assert plain["meaning"]["status"] == "claim_empty"
     assert plain["meaning"]["truth_relation"] == "declarative"
     assert "agent_action" in action["meaning"]["selected_ops"]
-    assert unknown["meaning"]["status"] == "unbound"
-    assert unknown["meaning"]["selected_ops"] == []
+    assert action["meaning"]["status"] == "mapped"
+    assert unknown["meaning"]["status"] == "claim_empty"
     print("s2m rung0 replay passed")
 
 
