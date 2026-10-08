@@ -10,6 +10,9 @@ The theory note governs architecture: why the cut exists. The cards govern write
 
 [pathA_structure_theory.md](pathA_structure_theory.md) is the conceptual foundation for this directory. It states why structure is computed before a packet is legal, and what later stages may not reopen.
 
+Program status for the whole short sim, including what is not done yet: [../notes/program/README.md](../notes/program/README.md). Grammar against structure: [../notes/program/grammar_and_structure.md](../notes/program/grammar_and_structure.md).
+
+
 It is not a primitive card, not a geometry, and not loaded by the debugger in this pass. The cards remain the reference for a log line. They are not sufficient alone for an architectural change.
 
 Prohibition example: [examples/why_this_cut.md](examples/why_this_cut.md).

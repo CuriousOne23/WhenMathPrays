@@ -8,6 +8,9 @@ The structure makes four questions askable of any offered utterance: what hangs 
 
 Path A is the attempt to encode that structure explicitly. The sections below are how far that encoding has been written, not the theory.
 
+**Phase (2026-10-08):** those sections remain how far the encoding has been written. Identity Observation Block (IdOB) currently sums that encoding into `idob_packet`. The intended job, not written here, is for IdOB to map that composition. That mapping is not a parent of this note, and this note does not implement it. Account: [../notes/program/pathA_program.md](../notes/program/pathA_program.md).
+
+
 ```
 LLhfds pw Ppen qqoubx&
 ```

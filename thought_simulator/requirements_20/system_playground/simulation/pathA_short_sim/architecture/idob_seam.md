@@ -4,6 +4,9 @@
 **Date:** 2026-09-28  
 **Status:** lock. Read this before `idob_object_space.md`, `IdOB_unified_plan.md`, or the Identity Observation Block (IdOB) sections of `user_guide.md`.
 
+**Program pointer (2026-10-08):** [../notes/program/README.md](../notes/program/README.md). This seam still locks names for the current sum. "Shut S2M door" in the teaching track means not this realization, not a ban on IdOB's intended mapping. The mapping does not run in the short sim yet.
+
+
 This page is the join. It does not define the catalog and it does not define the packet writer. It stops names from trading places.
 
 **Official expansions** (20.700.010 / 20.40): Structural Observation Block (SOB); Structural Refinement Observation Block (SROB); Constraint Observation Block (CnOB); Semantic Observation Block (SmOB); Identity Observation Block (IdOB).  

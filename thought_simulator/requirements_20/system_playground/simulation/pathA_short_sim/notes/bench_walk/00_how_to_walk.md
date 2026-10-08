@@ -2,7 +2,10 @@
 
 **Track:** `notes/bench_walk/`  
 **Date:** 2026-10-01  
-**Status:** teaching. Does not define tokens.  
+**Status:** teaching. Does not define tokens.
+
+Grammar against structure: [../program/grammar_and_structure.md](../program/grammar_and_structure.md). Step 11, the shut door, means not this phase. It is not a ban on IdOB's intended mapping. Program: [../program/pathA_program.md](../program/pathA_program.md).
+  
 **Authorities:** [idob_seam.md](../../architecture/idob_seam.md), [idob_object_space.md](../idob_object_space/idob_object_space.md), [IdOB_unified_plan.md](../../architecture/IdOB_unified_plan.md), [idob_meaning_lock.md](../../architecture/idob_meaning_lock.md)
 
 You are not missing a detail. You are looking at a workshop and naming it with kitchen words. The first name is usually the wrong room.

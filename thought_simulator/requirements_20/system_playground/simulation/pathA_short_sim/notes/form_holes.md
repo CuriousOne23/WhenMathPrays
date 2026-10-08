@@ -1,6 +1,9 @@
 # Form holes — three rows, one note
 
-**Status:** specified, not implemented.  
+**Status:** specified, not implemented.
+
+**Correction (2026-10-08):** the three rows in the table remain the form holes. The closing claim that bare command, request, and exclamative stay stamp-list holes is superseded. Those cues print; their cards exist. They are not on this page. Status: [program/ready_line.md](program/ready_line.md).
+  
 **List:** form list.  
 **Meter:** 39% used when this note was written.  
 A claim cannot own a note the signed form does not have. These three are missing circles or hats. No stamp edit belongs here. `legacy.py` is not touched.

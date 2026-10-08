@@ -3,6 +3,9 @@
 **Meter:** 39% used when this page was written.  
 **Does not implement.** `legacy.py` is not touched. Structure-to-Meaning (S2M) stays shut.
 
+**Restatement (2026-10-08):** S2M stays out of this sequence because the floor is not the ready line, not because IdOB is forbidden to map later. The seven wired ops are not the next step if they already print. Next account: [program/ready_line.md](program/ready_line.md). Order 1 below is retained as history of the sequence when it was written.
+
+
 Rows may be batched when they share a desk. They must not be batched across desks.
 
 | Order | Desk | Rows | Done when |

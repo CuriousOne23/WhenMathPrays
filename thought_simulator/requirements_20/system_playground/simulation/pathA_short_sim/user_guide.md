@@ -2,6 +2,9 @@
 
 This guide starts with a sentence you already know, then shows how the Path‑A Thought Simulator (TS) short simulator writes **structure** first and an Identity Observation Block (IdOB) **packet** last.
 
+Program status, current face versus intended mapping, and the ready line: [notes/program/README.md](notes/program/README.md). This guide still teaches the current sum. It does not teach a running Structure-to-Meaning pass.
+
+
 Names and hard words (object, adjacency, meaning, packet): [architecture/idob_seam.md](architecture/idob_seam.md).  
 Catalog (eight families only): [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md).  
 Packet contract: [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md).  
