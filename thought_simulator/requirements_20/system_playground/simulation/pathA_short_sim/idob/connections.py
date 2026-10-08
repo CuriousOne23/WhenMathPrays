@@ -44,4 +44,5 @@ def connections_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
         holes.append({"left": "", "relation": "neighborhood", "right": "", "status": "missing"})
     if list(tp.get("struct_segments") or []) != segments_before:
         holes.append({"left": "", "relation": "cut", "right": "", "status": "missing"})
-    return {"utterance": str(tp.get("raw_text") or ""), "connections": connections, "holes": holes}
+    notices = ["underspecified"] if len(connections) >= 2 else []
+    return {"utterance": str(tp.get("raw_text") or ""), "connections": connections, "holes": holes, "notices": notices}

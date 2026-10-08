@@ -13,3 +13,5 @@ These edges are expected. Meeting one does not authorize this pass to solve it.
 4. A connection that wants an earlier utterance. History is not an input. The absence is stated.
 
 The geometry conjecture is a fifth outside item. It is linked from the front door and not imported. A successful connection record is not evidence that meaning is a geometry. A failed record is not a refutation of that note. It is evidence that the packet or the floor is not yet sufficient.
+
+The writer now records `underspecified` in `notices` when two or more connections are supported. That notice is not a status and not a ranking. Replay: `PYTHONPATH=. python3 support/tools/s2m_notice_replay.py`.
