@@ -11,11 +11,11 @@ Not computed: \(M\), the envelope \(M' = M + \alpha I\), \(\Delta h\).
 
 The other bench remains evidence: `testbenches/idob_structure_to_meaning/`. This rung does not import it.
 
-A mood with an empty core is not a mapped claim. The current sum still activates the same cards for `LLhfds pw Ppen qqoubx&` as for *The sky is blue.* This rung does not repair that. It reports `claim_empty` for both, and `mapped` only when the packet already wrote a claim op or a non-empty core value. `modifier_resolution` is ignored; it is the old helper.
+A mood with an empty core is not a mapped claim. Known copular hats now fill theme and state for *The sky is blue.* The unknown string still has no known noun or adjective, so it stays `claim_empty`. This rung maps only a claim the packet already wrote. `modifier_resolution` is ignored; it is the old helper.
 
 Replay: `PYTHONPATH=. python3 support/tools/s2m_rung0_replay.py`
 
-- *The sky is blue.* stays `claim_empty`. Segments unchanged. Mood is declarative.
+- *The sky is blue.* maps from the packet core: theme `the sky`, state `blue`. Segments unchanged.
 - *The cat chased the mouse.* maps, carrying `agent_action`. Segments unchanged.
 - `LLhfds pw Ppen qqoubx&` stays `claim_empty`. No invented claim.
 

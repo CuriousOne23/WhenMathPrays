@@ -23,7 +23,9 @@ def main() -> None:
         assert row["before"] == row["after"], row
         assert row["meaning"]["structure_reopened"] is False
         assert "M" not in row["meaning"]
-    assert plain["meaning"]["status"] == "claim_empty"
+    assert plain["meaning"]["status"] == "mapped"
+    assert plain["meaning"]["semantic_core"].get("theme") == "the sky"
+    assert plain["meaning"]["semantic_core"].get("state") == "blue"
     assert plain["meaning"]["truth_relation"] == "declarative"
     assert "agent_action" in action["meaning"]["selected_ops"]
     assert action["meaning"]["status"] == "mapped"
