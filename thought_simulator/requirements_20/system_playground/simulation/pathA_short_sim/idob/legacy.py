@@ -106,6 +106,9 @@ def _force_ops(tp: Any) -> list:
         ops.append("agent_action")
     if "polar_question" in cues or "polar_question_rule" in rules:
         ops.append("polar_question")
+    roles = getattr(tp, "struct_roles", []) or []
+    if "query_focus" in roles:
+        ops.append("query_focus")
     return ops
 
 
