@@ -23,6 +23,7 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     speaker = _clean(core.get("speaker"))
     recipient = _clean(core.get("recipient"))
     relative_subject = _clean(core.get("relative_subject"))
+    adverb = _clean(core.get("adverb"))
     ops = list(mapped.get("selected_ops") or [])
     parts = []
     if query and theme and state:
@@ -39,6 +40,8 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
         parts.append(f"{theme} {action} {location}")
     elif action and recipient and theme:
         parts.append(f"{action} {recipient} {theme}")
+    elif theme and state and location and adverb:
+        parts.append(f"{theme} {state} {adverb} {location}")
     elif theme and state and location:
         parts.append(f"{theme} {state} {location}")
     elif theme and state:

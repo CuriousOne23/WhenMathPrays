@@ -18,7 +18,7 @@ def main() -> None:
     print("why", why)
     print("plain", plain)
     assert fox == "the quick brown fox jumps over the lazy dog", fox
-    assert rain == "the rain stays in spain in the plain", rain
+    assert rain == "the rain stays mainly in spain in the plain", rain
     assert why == "why is the sky blue", why
     assert plain == "the sky is blue"
     print("claim-join replay passed")

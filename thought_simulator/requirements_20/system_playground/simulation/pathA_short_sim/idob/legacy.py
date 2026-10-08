@@ -200,6 +200,7 @@ def _build_semantic_core_dict(tp: Any, selected_ops: list) -> Dict[str, Any]:
         "speaker": " ".join(role_segments.get("speaker", [])),
         "recipient": " ".join(role_segments.get("recipient", [])),
         "relative_subject": " ".join(role_segments.get("relative_subject", [])),
+        "adverb": " ".join(role_segments.get("adverb", [])),
         "predicate": " ".join(role_segments.get("predicate", [])),
         "theme": theme,
         "copula": copula,

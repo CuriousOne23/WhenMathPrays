@@ -97,6 +97,9 @@ def adapt_roles_from_committed(
         elif len(words) == 1 and words[0] in known_state:
             struct_roles[idx] = "state"
             role_segments.setdefault("state", []).extend(words)
+        elif len(words) == 1 and words[0] in {"mainly", "quickly", "quietly"}:
+            struct_roles[idx] = "adverb"
+            role_segments.setdefault("adverb", []).extend(words)
         elif words and words[0] in known_prep and words[-1] in known_noun:
             struct_roles[idx] = "location"
             role_segments.setdefault("location", []).extend(words)
