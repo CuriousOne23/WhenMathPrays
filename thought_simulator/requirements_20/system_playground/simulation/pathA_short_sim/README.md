@@ -6,13 +6,13 @@ This directory is the Path A short simulator. A new person, or a new AI session,
 
 Read these in order. Do not start from the reference lists further down.
 
-1. [notes/program/status.md](notes/program/status.md) — what is implemented, what is absent, and why.
+1. [notes/program/status.md](notes/program/status.md) — current effort, narrow S2M realization, what is implemented, and what is absent.
 2. [notes/program/grammar_and_structure.md](notes/program/grammar_and_structure.md) and [notes/program/four_writers.md](notes/program/four_writers.md) — how to think. The cut is pieces, place, fit, and residue. Ordinary grammar is not the repair.
 3. [notes/program/claim_ledger.md](notes/program/claim_ledger.md) — what prints now.
 4. [notes/program/s2m_structure/result.md](notes/program/s2m_structure/result.md) and [notes/program/known_words.md](notes/program/known_words.md) — the connection record, the open holes, and words that are not invented.
 5. [notes/program/packet_sync/README.md](notes/program/packet_sync/README.md) — teaching names against `tp.idob`. Present fields and absent fields. Not \(M\).
 
-Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums that floor into `idob_packet`, a teaching view over `tp.idob`. The `tp.idob` shell is present. Six IDs, rank, \(M\), CIE, and `meaning_delta_h` are null, not zero. A readable claim and a connection record are written from that packet. They do not compute \(M\). RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
+Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums that floor into `idob_packet`, a teaching view over `tp.idob`. Current effort: the `tp.idob` shell is present. Six IDs, rank, \(M\), CIE, and `meaning_delta_h` are null, not zero. The narrow S2M record is connections and holes, not \(M\). Both are accounted on the status page. A readable claim and a connection record are written from that packet. They do not compute \(M\). RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
 
 Force ops such as polar, command, request, and exclamative are open holes. They are not object connections. History, likelihood, and the geometry conjecture are not inputs.
 
