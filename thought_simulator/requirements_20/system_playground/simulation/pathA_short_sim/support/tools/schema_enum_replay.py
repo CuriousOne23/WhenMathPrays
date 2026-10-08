@@ -1,11 +1,22 @@
 """The loader rejects a family the schema does not name."""
 
-from idob.registry import _ensure_valid_object_schema_shape, _load_schema, SCHEMA_PATH
+from idob.registry import SCHEMA_PATH, _ensure_valid_object_schema_shape, _load_schema
 
 
 def main() -> None:
     schema = _load_schema(SCHEMA_PATH)
-    bad = {"name": "not_a_card", "schema_ref": "idob_object.v1", "family": "not_a_family"}
+    bad = {
+        "schema_ref": "idob_object.v1",
+        "psc_id": "PSC-IdOB-not_a_card-v1",
+        "name": "not_a_card",
+        "family": "not_a_family",
+        "priority": 1,
+        "identity": {},
+        "association": {},
+        "contribution_schema": {},
+        "overlap": {},
+        "behavior": {},
+    }
     try:
         _ensure_valid_object_schema_shape(bad, schema)
     except ValueError as exc:
