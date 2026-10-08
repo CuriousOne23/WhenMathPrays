@@ -61,7 +61,7 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     elif action and "polite_request" in ops:
         parts.append(f"please {action}")
     elif theme and "exclamative_force" in ops:
-        parts.append(f"exclamative {theme}")
+        parts.append(f"what {theme}")
     elif action and theme:
         parts.append(f"{action} {theme}")
     elif action:
