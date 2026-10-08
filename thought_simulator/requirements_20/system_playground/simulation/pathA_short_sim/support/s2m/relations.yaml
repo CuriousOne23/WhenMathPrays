@@ -1,0 +1,20 @@
+schema_ref: s2m_relations.v1
+status: closed list for the S2M structure pass
+relations:
+  - speaker
+  - reporting
+  - theme
+  - state
+  - location
+  - copula
+  - action
+  - patient
+  - recipient
+  - relative_subject
+  - query_focus
+  - adverb
+not_in_this_pass:
+  - likelihood
+  - history
+  - ambiguous
+  - M
