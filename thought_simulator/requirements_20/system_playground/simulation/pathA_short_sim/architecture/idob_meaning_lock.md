@@ -7,6 +7,9 @@
 **Charter:** [path_a_realization_charter.md](path_a_realization_charter.md)  
 **Requirements:** `20.40.050` IdOB-sum face; S2M/CIE reserved
 
+**Phase (2026-10-08):** this page is the current sum contract. It is not a law that IdOB can never map. The intended mapping is recorded in [../notes/program/packet_and_mapping.md](../notes/program/packet_and_mapping.md) and does not run here. Live YAML files `agent_action` as family `agent_action`. The older caveat below that it declares `residual_identity` is superseded by that YAML; empty `activation: {}` is still true.
+
+
 This page is the Path‑A short-sim **meaning contract** in teaching voice. Engine gates stay in the unified plan. Do not import Structure-to-Meaning (S2M), Cognitive Identity Envelope (CIE), or Meaning Signal Layer (MSL) into Identity Observation Block (IdOB).
 
 ---
@@ -56,7 +59,7 @@ The debugger observes this packet. It does not perform a second sum.
 
 Eight YAML **names**. Two helpers do not set `family = name`:
 
-- `agent_action` declares `family: residual_identity`
+- `agent_action` now declares `family: agent_action` (earlier drafts said `residual_identity`; that filing is superseded)
 - `modifier_resolution` declares `family: mixed_descriptive`
 
 Activation trees in v1 YAML are `{}`. Apply still points at `idob.legacy`. See object-space.

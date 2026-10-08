@@ -5,6 +5,11 @@ Its purpose is **educational**: provide an architectural feel for major Path‑A
 
 The simulator is intentionally small, inspectable, and modifiable.
 
+**Program account (2026-10-08):** start at [notes/program/README.md](notes/program/README.md). That folder is the comprehensive status: what the floor is, what IdOB does today, what it is intended to do later, and the ready line. It does not replace this README.
+
+Current face: SOB → SROB → CnOB → SmOB write the structure floor; IdOB sums that floor into `idob_packet`; that packet is the meaning this path can claim today. Intended face, not running: IdOB maps that composition. RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
+
+
 Consult this page first. It is enough to find files and run checks. It is not enough to decide a new cue, a new card, a family name, or a sentence that does not already print. For those, open the four pages below before editing.
 
 - [notes/pathA_coverage.md](notes/pathA_coverage.md) — what prints, what is a hole, what is shut  
@@ -145,6 +150,9 @@ Full details and canonical TP traces are in:
 ---
 
 # **7. Future Extension Plan**
+
+The list below is a later machine. It is not the ready line. Structure-to-Meaning waits on [notes/program/ready_line.md](notes/program/ready_line.md). This pass does not implement it.
+
 
 1. Implement STPX and DCB for richer routing behavior.  
 2. Replace TR placeholder with full Thought Router logic.  

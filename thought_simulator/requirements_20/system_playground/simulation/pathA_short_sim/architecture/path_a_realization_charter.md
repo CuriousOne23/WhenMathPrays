@@ -5,6 +5,9 @@
 **Scope:** Path-A short simulator + first-class requirements (`20.700.010`, `20.40.010`–`20.40.050`)  
 **Does not update:** playground primitive testbenches
 
+**Program (2026-10-08):** [../notes/program/pathA_program.md](../notes/program/pathA_program.md). Current face remains IdOB-sum. Intended face, not running, is IdOB mapping the composed floor. The reserved IdOB-S2M row is that unrealized job, not a second block and not a ban. Mechanics (RBU, RB, TR, RTU, CTP) sit beside the structure floor.
+
+
 ## Goal
 
 Path A Thought Simulator (TS) lineup visibility: world → intake → structure (SOB → SROB → CnOB → SmOB) → identity packet.

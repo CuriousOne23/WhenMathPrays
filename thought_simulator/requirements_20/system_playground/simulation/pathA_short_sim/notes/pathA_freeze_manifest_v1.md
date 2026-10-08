@@ -1,6 +1,9 @@
 # Path-A Short Simulator - Version 1.0 (Frozen)
 
 Freeze Gate: R9
+
+**Snapshot, not the live ledger (2026-10-08).** Current status is [program/ready_line.md](program/ready_line.md). The file list below names `support/idob_objects.yaml` and `support/idob_packet.v1.schema.json`. In this layout those are `support/idob_objects/*.yaml` and `support/idob_schemas/`. The list is kept as the freeze reference.
+
 Date: 2026-09-23
 
 ## Frozen Pipeline

@@ -1,6 +1,9 @@
 # Cutover Readiness Report
 
 Generated: 2026-09-21T15:00:10.754754+00:00
+
+**Snapshot, not the live ledger (2026-10-08).** This report scores the committed token bridge on that date. It does not score IdOB or the ready line. Current status: [program/ready_line.md](program/ready_line.md).
+
 Sentences analyzed: 12
 Primitives per run: 20
 

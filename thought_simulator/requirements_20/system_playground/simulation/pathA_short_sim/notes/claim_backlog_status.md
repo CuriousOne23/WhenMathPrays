@@ -1,6 +1,9 @@
 # Claim backlog status
 
-**Date:** 2026-10-01  
+**Date:** 2026-10-01
+
+**Pointer (2026-10-08):** this table matches the closer branch account. Action has no cue on `main`. Comprehensive status: [program/ready_line.md](program/ready_line.md).
+  
 **Call:** `run_pathA_short` on current `main`. Debugger `pathA_dbug.py` also rendered the request line from a runner log.
 
 The table is not fully implemented. Ten rows print an op. One does not.

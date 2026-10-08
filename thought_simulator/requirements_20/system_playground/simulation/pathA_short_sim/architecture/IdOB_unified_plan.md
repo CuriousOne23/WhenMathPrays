@@ -21,6 +21,9 @@ Meaning on this path is the packet. Teaching contract and instrument aliases: [i
 
 Path-A-short realizes the **IdOB-sum** face of 20.40.050. The S2M / CIE face stays in 20.40.050 as reserved capability. This file does not add HLRs.
 
+**Phase pointer (2026-10-08):** [../notes/program/pathA_program.md](../notes/program/pathA_program.md). The reserved S2M face is the unrealized job of this block, not a separate component and not a ban. This plan still describes the sum. It does not implement the mapping. The helper-family sentence in §3.1 that files `agent_action` as `residual_identity` is superseded by live YAML `family: agent_action`; empty activation remains true.
+
+
 ---
 
 ## 0. Four layers, one fog

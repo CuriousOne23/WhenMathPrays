@@ -1,3 +1,5 @@
+**Pointer (2026-10-08):** this snapshot is not the parent of SOB. Mechanical routing (RBU, RB, TR, RTU, CTP) sits beside the structure floor. Program: [program/pathA_program.md](program/pathA_program.md).
+
 # pathA_routing_to_meaning.md
 
 ## 1. Purpose

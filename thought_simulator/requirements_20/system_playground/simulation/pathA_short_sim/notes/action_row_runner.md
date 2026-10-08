@@ -1,5 +1,8 @@
 # Action row — runner result, code not on this branch
 
+**Branch fact (still).** Comprehensive status: [program/ready_line.md](program/ready_line.md). Coverage claims that this row already prints on `main` are superseded by this page.
+
+
 Local runner after a form split:
 
 *The cat chased the mouse.* segments `NP VP NP`, cue `action_clause`, op `agent_action`.  

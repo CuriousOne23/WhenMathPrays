@@ -5,6 +5,9 @@
 **Map:** [pathA_coverage.md](pathA_coverage.md). That map's claim table is stale until this account is read beside it.  
 **Replay:** not run. A wired op is not yet developed.
 
+**Correction (2026-10-08):** this account is older than the YAML. Bare command, request, and exclamative are not unbuilt cards; see [stamp_families.md](stamp_families.md) and `support/idob_objects/imperative.yaml`, `exclamative.yaml`. `agent_action` is family `agent_action`, not `residual_identity`. The unfinished form is the verb circle, not the rename: [action_row_runner.md](action_row_runner.md). Status account: [program/ready_line.md](program/ready_line.md).
+
+
 ## Wired, replay not run
 
 These print a `selected_ops` line only when the named cue or rule is already on the form. The plain sentence must not gain the line.

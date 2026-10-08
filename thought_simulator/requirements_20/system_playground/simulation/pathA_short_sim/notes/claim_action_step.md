@@ -5,6 +5,9 @@
 **Sentence:** *The cat chased the mouse.*  
 **Card:** `agent_action`. Family on the card: `residual_identity`.
 
+**Correction (2026-10-08):** live YAML now declares `family: agent_action`. The residual filing in the sentence above is superseded. The hole that remains is the verb circle on `main`, recorded in [action_row_runner.md](action_row_runner.md), not the rename.
+
+
 ## What is already true
 
 If the form has an `agent-action` fit, `_build_selected_ops` already appends `agent_action`. The line can print. That is not the hole.
