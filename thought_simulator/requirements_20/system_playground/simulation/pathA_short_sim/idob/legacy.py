@@ -270,15 +270,31 @@ def _modifier_resolution_apply(tp: Any) -> Dict[str, Any]:
 
 def _residual_identity_apply(tp: Any) -> Dict[str, Any]:
     truth_relation = _legacy_truth_relation(tp)
-    return {"identity_geometry": _legacy_identity_geometry(tp, truth_relation), "truth_relation": truth_relation}
+    profile = build_semantic_profile(tp)
+    return {
+        "identity_geometry": _legacy_identity_geometry(tp, truth_relation),
+        "truth_relation": truth_relation,
+        "semantic_core": profile["semantic_core_dict"],
+        "selected_ops": profile["selected_ops"],
+    }
 
 
 legacy_monolith = IdOBObject(name="legacy_monolith", family="residual_identity", priority=999, activate=always_active, apply=_legacy_apply)
-copular_state = IdOBObject(name="copular_state", family="copular_state", priority=20, activate=lambda tp: (not is_interrogative(tp)) and has_constraints(tp), apply=_copular_state_apply)
+def _has_copular_circle(tp: Any) -> bool:
+    return "CP" in (getattr(tp, "struct_segments", []) or [])
+
+
+def _has_action_circle(tp: Any) -> bool:
+    cues = getattr(tp, "semantic_adjacent_cues", []) or []
+    segments = getattr(tp, "struct_segments", []) or []
+    return "action_clause" in cues or "VP" in segments
+
+
+copular_state = IdOBObject(name="copular_state", family="copular_state", priority=20, activate=lambda tp: (not is_interrogative(tp)) and _has_copular_circle(tp), apply=_copular_state_apply)
 locative = IdOBObject(name="locative", family="locative", priority=30, activate=has_locative, apply=_locative_apply)
 mixed_descriptive = IdOBObject(name="mixed_descriptive", family="mixed_descriptive", priority=40, activate=has_entity_role, apply=_mixed_descriptive_apply)
 interrogative_wh = IdOBObject(name="interrogative_wh", family="interrogative_wh", priority=10, activate=is_interrogative_wh, apply=_interrogative_wh_apply)
 interrogative_polar = IdOBObject(name="interrogative_polar", family="interrogative_polar", priority=11, activate=is_interrogative_polar, apply=_interrogative_polar_apply)
-agent_action = IdOBObject(name="agent_action", family="residual_identity", priority=50, activate=has_constraints, apply=_agent_action_apply)
-modifier_resolution = IdOBObject(name="modifier_resolution", family="mixed_descriptive", priority=60, activate=has_roles, apply=_modifier_resolution_apply)
+agent_action = IdOBObject(name="agent_action", family="residual_identity", priority=50, activate=_has_action_circle, apply=_agent_action_apply)
+modifier_resolution = IdOBObject(name="modifier_resolution", family="mixed_descriptive", priority=60, activate=lambda tp: "modifier_chain" in (getattr(tp, "semantic_adjacent_cues", []) or []), apply=_modifier_resolution_apply)
 residual_identity = IdOBObject(name="residual_identity", family="residual_identity", priority=90, activate=always_active, apply=_residual_identity_apply)
