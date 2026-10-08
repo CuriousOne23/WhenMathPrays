@@ -115,6 +115,8 @@ def _force_ops(tp: Any) -> list:
         ops.append("state")
     if "recipient" in roles:
         ops.append("recipient")
+    if "reporting" in roles:
+        ops.append("reporting")
     return ops
 
 
