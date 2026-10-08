@@ -1,31 +1,33 @@
 # **PathA Short Simulation — README**
 
-This directory contains the **Path‑A Short Simulator**, a lightweight, dictionary‑driven Thought Simulator (TS).  
-Its purpose is **educational**: provide an architectural feel for major Path‑A blocks, show Thought Packet (TP) evolution across primitives, and demonstrate how segmentation, structural labels, constraints, adjacent-cue handling, packet assembly, and truth‑relations interact.
+This directory is the Path A short simulator. A new person, or a new AI session, should use this page as the door. It does not carry the whole account. It points to the pages that do.
 
-The simulator is intentionally small, inspectable, and modifiable.
+## Onboarding
 
-**Program account (2026-10-08):** start at [notes/program/README.md](notes/program/README.md). That folder is the comprehensive status: what the floor is, what IdOB does today, what it is intended to do later, and the ready line. It does not replace this README.
+Read these in order. Do not start from the reference lists further down.
 
-Current face: SOB → SROB → CnOB → SmOB write the structure floor; IdOB sums that floor into `idob_packet`; that packet is the meaning this path can claim today. Intended face, not running: IdOB maps that composition. RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
+1. [notes/program/README.md](notes/program/README.md) — present status, what has been done, what is not done.
+2. [notes/program/grammar_and_structure.md](notes/program/grammar_and_structure.md) and [notes/program/four_writers.md](notes/program/four_writers.md) — how to think. The cut is pieces, place, fit, and residue. Ordinary grammar is not the repair.
+3. [notes/program/claim_ledger.md](notes/program/claim_ledger.md) — what prints now.
+4. [notes/program/s2m_structure/result.md](notes/program/s2m_structure/result.md) and [notes/program/known_words.md](notes/program/known_words.md) — the connection record, the open holes, and words that are not invented.
 
+Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums that floor into `idob_packet`. A readable claim and a connection record are written from that packet. They do not compute \(M\). RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
 
-Consult this page first. It is enough to find files and run checks. It is not enough to decide a new cue, a new card, a family name, or a sentence that does not already print. For those, open the four pages below before editing.
+Force ops such as polar, command, request, and exclamative are open holes. They are not object connections. History, likelihood, and the geometry conjecture are not inputs.
 
-- [notes/pathA_coverage.md](notes/pathA_coverage.md) — what prints, what is a hole, what is shut  
-- [architecture/idob_seam.md](architecture/idob_seam.md) — names, adjacency, do-not-mix table  
-- [architecture/idob_meaning_lock.md](architecture/idob_meaning_lock.md) — packet contract; no Structure-to-Meaning geometry inside IdOB  
-- [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md) — stamp families  
+## Simulation directories
 
-Start here for Identity Observation Block (IdOB) names and the walk from ordinary talk into Path‑A language:
+- `desks/` — SOB, SROB, CnOB, SmOB.
+- `idob/` — sum, packet, claim, and connection record.
+- `support/` — YAML cards, schemas, relation list, replays.
+- `notes/program/` — status and onboarding pages.
+- `architecture/` — names and the packet contract. Reference, not the first reading.
 
-- [notes/bench_walk/00_how_to_walk.md](notes/bench_walk/00_how_to_walk.md) — new-reader track: false image, stamp card, empty hook, shut S2M door  
-- [architecture/idob_seam.md](architecture/idob_seam.md) — names, adjacency, do-not-mix table  
-- [user_guide.md](user_guide.md) — run two utterances; structure vs packet  
-- [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md) — eight catalog families  
-- [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md) — meaning on this path is the `idob_packet`
-- [architecture/path_a_realization_charter.md](architecture/path_a_realization_charter.md) — lineup vs reserved 20.40 capability
-- [architecture/idob_meaning_lock.md](architecture/idob_meaning_lock.md) — packet contract
+Run checks from [user_guide.md](user_guide.md). The claim check is `PYTHONPATH=. python3 support/tools/claim_ledger_replay.py`.
+
+## References
+
+The lists below are references. They are not a second onboarding.
 
 Official expansions (20.700.010): Structural Observation Block (SOB), Structural Refinement Observation Block (SROB), Constraint Observation Block (CnOB), Semantic Observation Block (SmOB), Identity Observation Block (IdOB). Short-sim field names are teaching aliases. 20.40 remains richer; realized functions are listed in each prim’s Path-A-short section.
 
