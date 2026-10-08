@@ -111,6 +111,8 @@ def _force_ops(tp: Any) -> list:
         ops.append("query_focus")
     if "location" in roles:
         ops.append("location")
+    if "state" in roles:
+        ops.append("state")
     return ops
 
 
