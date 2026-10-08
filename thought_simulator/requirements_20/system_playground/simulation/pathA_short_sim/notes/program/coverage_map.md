@@ -9,7 +9,7 @@ Door: [../../README.md](../../README.md). Status: [status.md](status.md).
 
 Path A will be criticized because this work has no settled outside result. The answer is not that the theory is finished. The answer is a map. A critic can point at a hole. The hole is already named.
 
-Human conversation space is the territory. Path A coverage space is the owner and the evidence. Roadmap completeness means every currently recognized conversational form has a named row and an explicit status. It does not mean human conversation space is exhaustively known.
+Human conversation space is the territory. Path A coverage space records the realization path, status, and evidence. Roadmap completeness means every currently recognized conversational form has a named row and an explicit status. It does not mean human conversation space is exhaustively known.
 
 The rows form a proposed and extensible inventory. They are informed by established conversational classifications, but they are not a closed or universally accepted ontology. A newly recognized conversational form is added as a named row rather than silently absorbed into an existing row.
 
