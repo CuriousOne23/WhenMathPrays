@@ -1,4 +1,4 @@
-"""YAML activation trees are read. Empty trees still fall back.
+"""YAML activation trees are read. Empty trees still fall back."""
 
 from pathA_short_simulator import run_pathA_short
 
