@@ -16,6 +16,7 @@ This folder is the comprehensive view of `pathA_short_sim`. A later reader, huma
 6. [s2m_rung0.md](s2m_rung0.md) — first mapping rung. Packet in, cut not reopened. Not \(M\).
 7. [s2m_rung1.md](s2m_rung1.md) — readable claim from the packet. Not \(M\).
 8. [claim_ledger.md](claim_ledger.md) — claims that print now.
+9. [known_words.md](known_words.md) — closed list. Unknown content words are not invented.
 
 ## What this pass does not do
 
