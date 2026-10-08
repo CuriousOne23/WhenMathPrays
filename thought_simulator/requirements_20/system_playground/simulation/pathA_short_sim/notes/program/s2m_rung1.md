@@ -18,3 +18,5 @@ Replay: `PYTHONPATH=. python3 support/tools/s2m_rung1_replay.py`
 - `LLhfds pw Ppen qqoubx&` stays empty.
 
 Program: [pathA_program.md](pathA_program.md). Previous rung: [s2m_rung0.md](s2m_rung0.md).
+
+The readable claim is not the connection record. The structure definition is [s2m_structure/README.md](s2m_structure/README.md).
