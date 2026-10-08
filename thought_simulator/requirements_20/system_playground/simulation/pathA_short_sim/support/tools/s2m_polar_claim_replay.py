@@ -13,7 +13,7 @@ def main() -> None:
     plain = _claim("The book is on the table.")
     print("polar", polar)
     print("plain", plain)
-    assert polar == "is the book is on the table", polar
+    assert polar == "is the book on the table", polar
     assert plain == "the book is on the table"
     print("polar-claim replay passed")
 
