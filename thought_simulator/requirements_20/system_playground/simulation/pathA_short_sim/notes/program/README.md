@@ -13,6 +13,7 @@ This folder is the comprehensive view of `pathA_short_sim`. A later reader, huma
 3. [four_writers.md](four_writers.md) — SOB, SROB, CnOB, SmOB: what each may record, what each may not reopen.
 4. [packet_and_mapping.md](packet_and_mapping.md) — the packet today, and the mapping that is not running.
 5. [ready_line.md](ready_line.md) — what is done, what is still a hole, and what counts as moving too soon.
+6. [s2m_rung0.md](s2m_rung0.md) — first mapping rung. Packet in, cut not reopened. Not \(M\).
 
 ## What this pass does not do
 
