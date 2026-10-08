@@ -74,11 +74,12 @@ def adapt_roles_from_committed(
     known_adj = {"blue", "bright", "cold", "lazy", "quick", "brown", "beautiful", "tired"}
     known_verb = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give"}
     known_prep = {"on", "in", "under", "over", "near"}
+    known_wh = {"where", "why", "what", "who", "when", "how", "where?", "why?"}
     theme_seen = "theme" in struct_roles
     for idx, seg_chunk in enumerate(segment_tokens):
         if struct_roles[idx] != "none":
             continue
-        words = [tok.lower() for tok in seg_chunk]
+        words = [tok.lower().strip("?.!") for tok in seg_chunk]
         if words and words[0] in known_det and words[-1] in known_noun:
             if not theme_seen:
                 struct_roles[idx] = "theme"
@@ -95,6 +96,9 @@ def adapt_roles_from_committed(
         elif words and words[0] in known_prep and words[-1] in known_noun:
             struct_roles[idx] = "location"
             role_segments.setdefault("location", []).extend(words)
+        elif len(words) == 1 and words[0] in known_wh:
+            struct_roles[idx] = "query_focus"
+            role_segments.setdefault("query_focus", []).extend(words)
 
     return {
         "used": True,
