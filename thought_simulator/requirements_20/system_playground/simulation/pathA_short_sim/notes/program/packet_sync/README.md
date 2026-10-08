@@ -38,3 +38,5 @@ It does not add `crossing.py`. It does not invent an ID. It does not birth \(M\)
 ## Next
 
 Phase 2 is the shell, after this page is on `main`. Phase 3 is the six IDs, and only if the floor already emits them.
+
+Phase 3: the six IDs are named and absent. No key is formed. [structure_ids.md](structure_ids.md).

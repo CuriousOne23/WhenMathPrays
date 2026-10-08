@@ -8,6 +8,7 @@ This folder is the comprehensive view of `pathA_short_sim`. A later reader, huma
 
 ## Reading order
 
+0. [status.md](status.md) — implemented, absent, and the requirement account.
 1. [pathA_program.md](pathA_program.md) — current face, intended face, mechanics beside the floor.
 2. [grammar_and_structure.md](grammar_and_structure.md) — ordinary grammar against the structural cut.
 3. [four_writers.md](four_writers.md) — SOB, SROB, CnOB, SmOB: what each may record, what each may not reopen.

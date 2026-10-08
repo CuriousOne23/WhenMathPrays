@@ -6,7 +6,7 @@ This directory is the Path A short simulator. A new person, or a new AI session,
 
 Read these in order. Do not start from the reference lists further down.
 
-1. [notes/program/README.md](notes/program/README.md) — present status, what has been done, what is not done.
+1. [notes/program/status.md](notes/program/status.md) — what is implemented, what is absent, and why.
 2. [notes/program/grammar_and_structure.md](notes/program/grammar_and_structure.md) and [notes/program/four_writers.md](notes/program/four_writers.md) — how to think. The cut is pieces, place, fit, and residue. Ordinary grammar is not the repair.
 3. [notes/program/claim_ledger.md](notes/program/claim_ledger.md) — what prints now.
 4. [notes/program/s2m_structure/result.md](notes/program/s2m_structure/result.md) and [notes/program/known_words.md](notes/program/known_words.md) — the connection record, the open holes, and words that are not invented.
