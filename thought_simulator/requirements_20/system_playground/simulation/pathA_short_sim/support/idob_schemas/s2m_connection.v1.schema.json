@@ -17,7 +17,7 @@
     },
     "notices": {
       "type": "array",
-      "items": {"type": "string", "enum": ["underspecified"]}
+      "items": {"type": "string", "enum": ["underspecified", "unlisted_op"]}
     }
   },
   "$defs": {
