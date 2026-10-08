@@ -9,7 +9,7 @@ The six-ID pass found two differences the floor already makes and the six names 
 
 | Difference | Floor evidence | Why it is not an ID yet |
 |---|---|---|
-| speaker against theme | *She said the book is on the table.* has a speaker hat. *The book is on the table.* does not. | No requirement name, and no decision that this is a seventh ID. |
-| query against statement | *Where is the book?* has a query focus. *The book is on the table.* does not. | Force or pose, not an object tie. The force field was left open. |
+| speaker against theme | `struct_roles` contains `speaker` on the reporting sentence only. Replay: `support/tools/unplaced_source_replay.py`. | Source exists. Not an ID. |
+| query against statement | `struct_roles` contains `query_focus` on the question only. | Source exists. Pose, not an ID. Force field still open. |
 
 These are holes in the six-ID claim. They are not a license to invent `speaker_id` or `query_id`. A later pass may place one of them only after a question, a source, and a verdict are written. Until then they stay unplaced.
