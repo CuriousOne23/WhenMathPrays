@@ -17,6 +17,8 @@ def main() -> None:
     assert plain["cie_id"] is None
     assert plain["final_rank_order"] is None
     assert plain["structure_ids"] is None
+    for name in ("semantic_field_id", "semantic_role_id", "semantic_object_id", "gradient_id", "universe_id", "subfield_id", "structural_key"):
+        assert plain[name] is None
     assert plain["semantic_core"]
     assert unknown["connections"] if False else unknown["connection_witness"]["connections"] == []
     assert unknown["connection_witness"]["holes"]

@@ -29,6 +29,12 @@ def crossing_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
         "semantic_core": packet.get("semantic_core"),
         "selected_ops": list(packet.get("selected_ops") or []),
         "structure_ids": None,
+        "semantic_field_id": None,
+        "semantic_role_id": None,
+        "semantic_object_id": None,
+        "gradient_id": None,
+        "universe_id": None,
+        "subfield_id": None,
         "connection_witness": connections_from_packet(tp),
     }
     for name in ABSENT:
