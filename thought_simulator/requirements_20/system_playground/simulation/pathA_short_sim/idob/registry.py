@@ -59,15 +59,19 @@ def _activation_from_spec(spec, fallback):
     activation = spec.get("activation") or {}
     cues = list(activation.get("cues") or [])
     segments = list(activation.get("segments") or [])
-    if not cues and not segments:
+    roles = list(activation.get("roles") or [])
+    if not cues and not segments and not roles:
         return fallback
 
     def _activate(tp):
         present_cues = set(getattr(tp, "semantic_adjacent_cues", []) or [])
         present_segments = set(getattr(tp, "struct_segments", []) or [])
+        present_roles = set(getattr(tp, "struct_roles", []) or [])
         if cues and present_cues.intersection(cues):
             return True
         if segments and present_segments.intersection(segments):
+            return True
+        if roles and present_roles.intersection(roles):
             return True
         return False
 

@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: [query_focus, predicate]
-activation: {}
+activation:
+  roles: [query_focus]
 contribution_schema:
   semantic_core:
     type: dict
