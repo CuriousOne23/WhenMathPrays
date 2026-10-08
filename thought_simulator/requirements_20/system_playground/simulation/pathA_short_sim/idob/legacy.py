@@ -193,6 +193,8 @@ def _build_semantic_core_dict(tp: Any, selected_ops: list) -> Dict[str, Any]:
         "selected_ops": selected_ops,
         "query_focus": " ".join(role_segments.get("query_focus", [])),
         "speaker": " ".join(role_segments.get("speaker", [])),
+        "recipient": " ".join(role_segments.get("recipient", [])),
+        "relative_subject": " ".join(role_segments.get("relative_subject", [])),
         "predicate": " ".join(role_segments.get("predicate", [])),
         "theme": theme,
         "relation_modifiers": " ".join(role_segments.get("relation", [])),
