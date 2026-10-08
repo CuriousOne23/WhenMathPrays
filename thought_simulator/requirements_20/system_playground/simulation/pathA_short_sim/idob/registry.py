@@ -60,6 +60,9 @@ def _activation_from_spec(spec, fallback):
     cues = list(activation.get("cues") or [])
     segments = list(activation.get("segments") or [])
     roles = list(activation.get("roles") or [])
+    always = bool(activation.get("always"))
+    if always:
+        return lambda tp: True
     if not cues and not segments and not roles:
         return fallback
 
