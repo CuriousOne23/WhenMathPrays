@@ -3,6 +3,10 @@
 **Date:** 2026-10-08
 **Door:** [../../README.md](../../README.md). This page is the account. The door points here and does not carry it.
 
+## Coverage map
+
+Human conversation space against Path A owners. Present forms are covered or absent. History is on the map and out of the sim. [coverage_map.md](coverage_map.md).
+
 ## Current effort
 
 Bring the short-sim packet into name and shape agreement with `20.40.050` and `20.105`. The concept already agreed. The packet did not.
@@ -59,3 +63,4 @@ A short dated log. Detail stays in the linked pages. This list does not grow int
 - 2026-10-08 — Packet shell. Six IDs absent. No key. [packet_sync/structure_ids.md](packet_sync/structure_ids.md)
 - 2026-10-08 — Six-ID falsification. No ID written. Two floor differences unplaced. [packet_sync/id_eval.md](packet_sync/id_eval.md)
 - 2026-10-08 — Unplaced differences have floor sources and are not IDs. [packet_sync/unplaced.md](packet_sync/unplaced.md)
+- 2026-10-08 — Coverage map. Present forms covered or absent. History owned by COB, CST, CIL, CEx. [coverage_map.md](coverage_map.md)
