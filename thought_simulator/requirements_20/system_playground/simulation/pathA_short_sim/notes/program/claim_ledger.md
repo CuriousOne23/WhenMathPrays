@@ -3,7 +3,7 @@
 **Date:** 2026-10-08
 **Status:** what the readable claim prints now. Not \(M\). Not the other bench.
 
-Replay the rows with `PYTHONPATH=. python3 support/tools/s2m_rung1_replay.py` and the smaller claim replays beside it. An empty claim is a miss that stayed a miss.
+Replay the rows with `PYTHONPATH=. python3 support/tools/claim_ledger_replay.py`. An empty claim is a miss that stayed a miss.
 
 | Sentence | Claim |
 |---|---|
