@@ -13,7 +13,7 @@ This effort does not birth \(M\) and does not apply CIE.
 
 ## Six-ID falsification
 
-The six IDs are not filled. The first run found three `unsupported`, three `missing_dimension`, and two `unplaced` floor differences: speaker against theme, and query against statement. The six-ID set does not account for distinctions the floor already makes. Detail: [packet_sync/id_eval.md](packet_sync/id_eval.md).
+The six IDs are not filled. The first run found three `unsupported`, three `missing_dimension`, and two `unplaced` floor differences: speaker against theme, and query against statement. The six-ID set does not account for distinctions the floor already makes. Detail: [packet_sync/id_eval.md](packet_sync/id_eval.md). Candidates, not new IDs: [packet_sync/unplaced.md](packet_sync/unplaced.md).
 
 
 ## Narrow S2M realization
