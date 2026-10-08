@@ -275,6 +275,7 @@ def _residual_identity_apply(tp: Any) -> Dict[str, Any]:
         "identity_geometry": _legacy_identity_geometry(tp, truth_relation),
         "truth_relation": truth_relation,
         "semantic_core": profile["semantic_core_dict"],
+        "selected_ops": profile["selected_ops"],
     }
 
 
