@@ -7,6 +7,17 @@ Front door: [README.md](README.md).
 
 Prework is the cut and the sum that already exist. SOB, SROB, CnOB, and SmOB cut the utterance. IdOB sums the packet. This pass does not redo that work and does not repair it.
 
+
+## Dictionary sources
+
+The dictionaries are not in `idob/`. The Python there calls them.
+
+- Card dictionaries: `support/idob_objects/*.yaml`. `idob/registry.py` loads them and checks `support/idob_schemas/idob_object.v1.schema.json`. A fired card is the activation set on the packet.
+- Relation names: `support/s2m/relations.yaml`. This is the closed list the connection writer may use. It is not a meaning dictionary.
+- Known words: [../known_words.md](../known_words.md). A word not on that list is not invented into a card.
+
+`idob/claim.py`, `idob/connections.py`, and `idob/crossing.py` are functions over the finished packet. They do not look up a meaning entry. A dictionary mapping would be a later card from a sourced structure key to a meaning entry. That card does not exist.
+
 ## Legal input
 
 - `struct_segments` and `segment_tokens`
