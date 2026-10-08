@@ -13,7 +13,7 @@ This effort does not birth \(M\) and does not apply CIE.
 
 ## Six-ID falsification
 
-The six IDs are not filled. The first run found three `unsupported`, three `missing_dimension`, and two `unplaced` floor differences: speaker against theme, and query against statement. The six-ID set does not account for distinctions the floor already makes. Detail: [packet_sync/id_eval.md](packet_sync/id_eval.md). Candidates, not new IDs: [packet_sync/unplaced.md](packet_sync/unplaced.md).
+The six IDs are not filled. The first run found three `unsupported`, three `missing_dimension`, and two `unplaced` floor differences: speaker against theme, and query against statement. The six-ID set does not account for distinctions the floor already makes. Detail: [packet_sync/id_eval.md](packet_sync/id_eval.md). Candidates, not new IDs: [packet_sync/unplaced.md](packet_sync/unplaced.md). Both already have floor sources. They stay outside the six.
 
 
 ## Narrow S2M realization
@@ -58,3 +58,4 @@ A short dated log. Detail stays in the linked pages. This list does not grow int
 - 2026-10-08 — Narrow S2M record: connections and holes. [s2m_structure/result.md](s2m_structure/result.md)
 - 2026-10-08 — Packet shell. Six IDs absent. No key. [packet_sync/structure_ids.md](packet_sync/structure_ids.md)
 - 2026-10-08 — Six-ID falsification. No ID written. Two floor differences unplaced. [packet_sync/id_eval.md](packet_sync/id_eval.md)
+- 2026-10-08 — Unplaced differences have floor sources and are not IDs. [packet_sync/unplaced.md](packet_sync/unplaced.md)
