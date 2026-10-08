@@ -27,6 +27,8 @@ Activation trees are filled for every card. Residual is `always`. Modifier reads
 
 First mapping rung, not \(M\): [s2m_rung0.md](s2m_rung0.md). Replay `support/tools/s2m_rung0_replay.py`. The cut is not reopened. The other bench is not imported.
 
+Readable claims that print now: [claim_ledger.md](claim_ledger.md). Not \(M\).
+
 ## Not this phase
 
 - Implementing S2M, \(M\), the envelope \(M' = M + \alpha I\), or \(\Delta h\) inside IdOB.
