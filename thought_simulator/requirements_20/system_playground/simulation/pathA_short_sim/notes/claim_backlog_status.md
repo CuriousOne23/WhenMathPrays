@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-01
 
-**Pointer (2026-10-08):** this table matches the closer branch account. Action has no cue on `main`. Comprehensive status: [program/ready_line.md](program/ready_line.md).
+**Pointer (2026-10-08):** this table matches the closer branch account. Action now has cue `action_clause` and op `agent_action` when the verb circle is present. Replay: `support/tools/action_row_replay.py`. Comprehensive status: [program/ready_line.md](program/ready_line.md).
   
 **Call:** `run_pathA_short` on current `main`. Debugger `pathA_dbug.py` also rendered the request line from a runner log.
 

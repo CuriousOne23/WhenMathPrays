@@ -20,7 +20,7 @@ These stay named until the form can show the circle or hat, and a replay of *The
 | Recipient hat | *Give me the book.* | A hat for the recipient, distinct from patient |
 | Relative subject that is not the head | *The book that John bought* | A circle whose subject is John, not the book |
 
-Action verb circle is not on `main`. Local runner evidence is recorded in [../action_row_runner.md](../action_row_runner.md). *The cat chased the mouse.* is not a printed row on this branch until that form is uploaded and replayed. *The sky is blue.* must still print no extra op.
+Action verb circle is replayed by `support/tools/action_row_replay.py`. *The cat chased the mouse.* segments `NP VP NP`, cue `action_clause`, op `agent_action`. *The sky is blue.* prints no op. *Close the door.* still prints `bare_command`. Note: [../action_row_runner.md](../action_row_runner.md).
 
 Activation trees in the YAML are still empty. Apply still points at legacy or at the small imperative and exclamative modules. Empty activation is a named limit, not a silent success.
 
