@@ -16,7 +16,7 @@ def main() -> None:
     print("rel", rel)
     print("command", command)
     assert give == "give me the book", give
-    assert rel == "john bought the book", rel
+    assert rel == "the book that john bought", rel
     assert command == "close the door"
     print("recipient-relative claim replay passed")
 
