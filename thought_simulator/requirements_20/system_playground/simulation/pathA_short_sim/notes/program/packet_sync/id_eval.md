@@ -45,3 +45,7 @@ If no ID question names those differences, they are `unplaced`. That challenges 
 - `support/tools/structure_id_check_replay.py` fails if an ID is non-null, a key is formed, or a verdict is missing.
 
 Replay: `PYTHONPATH=. python3 support/tools/structure_id_check_replay.py`
+
+## First result
+
+The guardrail passed. Field, role, and object are `unsupported`. Gradient, universe, and subfield are `missing_dimension`. Speaker against theme, and query against statement, are `unplaced`. No key was formed. No ID was written. The requirement is ahead of the cut on those two differences.
