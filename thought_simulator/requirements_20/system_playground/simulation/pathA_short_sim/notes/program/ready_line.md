@@ -8,7 +8,7 @@
 - Five sentence families print across the lineup: copular, locative, mixed descriptive, interrogative, mixed interrogative. Authority: [../pathA_supported_sentences.md](../pathA_supported_sentences.md).
 - Claim cues print on the runner for negation, coordination, conditional, fragment, speaker, passive, quantifier, bare command, request, and exclamative. Ledger: [../claim_backlog_status.md](../claim_backlog_status.md).
 - `imperative`, `exclamative`, and `agent_action` are their own YAML families. The schema enum does not yet name `imperative` or `exclamative`; the loader does not enforce that enum. Note: [../stamp_families.md](../stamp_families.md).
-- Meaning today is the `idob_packet` from the sum. Copular core for *The sky is blue.* is theme `the sky`, state `blue`, replayed by `support/tools/copular_core_replay.py`. The unknown string stays claim-empty. S2M geometry does not print.
+- Meaning today is the `idob_packet` from the sum. Copular core for *The sky is blue.* is theme `the sky`, state `blue`, replayed by `support/tools/copular_core_replay.py`. Locative core for *The book is on the table.* is theme `the book`, location `on the table`, replayed by `support/tools/locative_core_replay.py`. The unknown string stays claim-empty. S2M geometry does not print.
 
 ## Not done — structure floor
 
