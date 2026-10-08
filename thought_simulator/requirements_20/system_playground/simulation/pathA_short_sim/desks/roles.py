@@ -101,8 +101,12 @@ def adapt_roles_from_committed(
             struct_roles[idx] = "location"
             role_segments.setdefault("location", []).extend(words)
         elif len(words) == 1 and words[0] in known_wh:
-            struct_roles[idx] = "query_focus"
-            role_segments.setdefault("query_focus", []).extend(words)
+            nxt = segment_tokens[idx + 1] if idx + 1 < len(segment_tokens) else []
+            nxt_words = [tok.lower().strip("?.!") for tok in nxt]
+            exclamative_what = words[0] in {"what", "how"} and nxt_words[:1] == ["a"]
+            if not exclamative_what:
+                struct_roles[idx] = "query_focus"
+                role_segments.setdefault("query_focus", []).extend(words)
 
     return {
         "used": True,
