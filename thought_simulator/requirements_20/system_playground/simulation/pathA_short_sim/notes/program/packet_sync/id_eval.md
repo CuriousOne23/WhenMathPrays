@@ -49,3 +49,5 @@ Replay: `PYTHONPATH=. python3 support/tools/structure_id_check_replay.py`
 ## First result
 
 The guardrail passed. Field, role, and object are `unsupported`. Gradient, universe, and subfield are `missing_dimension`. Speaker against theme, and query against statement, are `unplaced`. No key was formed. No ID was written. The requirement is ahead of the cut on those two differences.
+
+The two unplaced differences are named as candidates, not as new IDs: [unplaced.md](unplaced.md).
