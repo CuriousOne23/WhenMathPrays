@@ -53,7 +53,7 @@ def compute_constraint_fit(
         canonical_rules.append("request_imperative_rule")
     if has_exclamative_force:
         canonical_rules.append("exclamative_force_rule")
-    action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write"}
+    action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "jumps", "jump", "jumped"}
     has_action_clause = "VP" in struct_segments and any(tok in action_verbs for tok in tokens) and not has_imperative_voice and not has_request_imperative
     if has_action_clause:
         canonical_rules.append("action_clause_rule")
