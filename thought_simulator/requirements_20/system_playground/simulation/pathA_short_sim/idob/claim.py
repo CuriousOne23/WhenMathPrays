@@ -37,10 +37,14 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
         parts.append(f"{head} {theme} {location}")
     elif theme and location:
         parts.append(f"{theme} {location}")
+    elif action and theme and "polite_request" in ops:
+        parts.append(f"please {action} {theme}")
     elif action and "polite_request" in ops:
         parts.append(f"please {action}")
     elif theme and "exclamative_force" in ops:
         parts.append(f"exclamative {theme}")
+    elif action and theme:
+        parts.append(f"{action} {theme}")
     elif action:
         parts.append(action)
     claim = "; ".join(parts)
