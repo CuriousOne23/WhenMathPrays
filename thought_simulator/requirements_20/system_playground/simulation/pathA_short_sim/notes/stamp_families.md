@@ -7,4 +7,4 @@ Status account: [program/ready_line.md](program/ready_line.md). This page remain
 
 `imperative` is now family `imperative`. `exclamative` is now family `exclamative`. `agent_action` is now family `agent_action`. `residual_identity` remains the leftover card.
 
-The schema enum in `idob_object.v1.schema.json` now names `imperative` and `exclamative`. The loader does not enforce that enum. Activation trees remain empty. A later validator would. Do not treat this pull request as an enum edit.
+The schema enum in `idob_object.v1.schema.json` now names `imperative` and `exclamative`. The loader rejects a family that is not in that enum. Replay: `support/tools/schema_enum_replay.py`. Activation trees remain empty. A later validator would. Do not treat this pull request as an enum edit.

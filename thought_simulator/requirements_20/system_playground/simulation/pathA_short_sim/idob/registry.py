@@ -40,6 +40,10 @@ def _ensure_valid_object_schema_shape(spec: Dict[str, Any], schema: Dict[str, An
         raise ValueError(f"Invalid IdOB object spec {spec.get('name', '<unknown>')}: missing required keys {missing}")
     if spec.get("schema_ref") != "idob_object.v1":
         raise ValueError(f"Invalid IdOB object spec {spec.get('name', '<unknown>')}: schema_ref must be idob_object.v1")
+    families = ((schema.get("properties") or {}).get("family") or {}).get("enum") or []
+    family = spec.get("family")
+    if families and family not in families:
+        raise ValueError(f"Invalid IdOB object spec {spec.get('name', '<unknown>')}: family {family} is not in the schema enum")
     apply_symbol = spec.get("behavior", {}).get("apply")
     if apply_symbol not in APPLY_LOOKUP:
         raise ValueError(f"Unknown behavior.apply symbol {apply_symbol} for IdOB object {spec.get('name', '<unknown>')}")
