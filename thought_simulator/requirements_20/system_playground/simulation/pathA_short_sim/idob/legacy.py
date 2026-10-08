@@ -286,6 +286,8 @@ def _has_copular_circle(tp: Any) -> bool:
 
 def _has_action_circle(tp: Any) -> bool:
     cues = getattr(tp, "semantic_adjacent_cues", []) or []
+    if "imperative_voice_clause" in cues or "request_imperative_clause" in cues:
+        return False
     segments = getattr(tp, "struct_segments", []) or []
     return "action_clause" in cues or "VP" in segments
 

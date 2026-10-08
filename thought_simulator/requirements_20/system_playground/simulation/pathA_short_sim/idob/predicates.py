@@ -28,7 +28,10 @@ def is_interrogative_wh(tp: Any) -> bool:
 
 
 def is_interrogative_polar(tp: Any) -> bool:
-    return is_interrogative(tp) and not is_interrogative_wh(tp)
+    cues = getattr(tp, "semantic_adjacent_cues", []) or []
+    if "exclamative_force_clause" in cues:
+        return False
+    return "polar_question" in cues
 
 
 def has_locative(tp: Any) -> bool:
