@@ -18,12 +18,13 @@ This folder is the comprehensive view of `pathA_short_sim`. A later reader, huma
 8. [claim_ledger.md](claim_ledger.md) — claims that print now.
 9. [known_words.md](known_words.md) — closed list. Unknown content words are not invented.
 10. [s2m_structure/README.md](s2m_structure/README.md) — S2M structure definition. Connections and holes. Not \(M\).
+11. [s2m_structure/result.md](s2m_structure/result.md) — what the first connection writer showed.
 
 ## What this pass does not do
 
 - It does not edit Python, YAML, or evidence JSON.
-- It does not land the action verb circle.
-- It does not implement Structure-to-Meaning (S2M).
+- The action verb circle has landed. See [ready_line.md](ready_line.md).
+- A first S2M structure record now writes connections and holes. It is not \(M\). See [s2m_structure/result.md](s2m_structure/result.md).
 - It does not treat the current sum as the forever role of Identity Observation Block (IdOB).
 - It does not treat the shut door as a ban on the later mapping.
 
