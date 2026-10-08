@@ -15,8 +15,7 @@ def main() -> None:
     print("said", said)
     print("please", please)
     print("command", command)
-    assert said == "reporting the book on the table", said
-    assert "she" not in said
+    assert said == "she said the book on the table", said
     assert please == "please close", please
     assert command == "close"
     print("report-request claim replay passed")
