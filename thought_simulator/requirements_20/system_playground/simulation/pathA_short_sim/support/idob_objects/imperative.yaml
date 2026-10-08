@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: []
-activation: {}
+activation:
+  cues: [imperative_voice_clause, request_imperative_clause]
 contribution_schema:
   semantic_core:
     type: dict

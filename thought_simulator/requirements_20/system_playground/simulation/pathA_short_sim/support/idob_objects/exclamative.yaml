@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: []
-activation: {}
+activation:
+  cues: [exclamative_force_clause]
 contribution_schema:
   semantic_core:
     type: dict

@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: [theme, state]
-activation: {}
+activation:
+  segments: [CP]
 contribution_schema:
   semantic_core:
     type: dict
