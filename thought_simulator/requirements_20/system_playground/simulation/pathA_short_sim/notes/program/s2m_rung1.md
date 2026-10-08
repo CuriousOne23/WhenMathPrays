@@ -14,6 +14,7 @@ Replay: `PYTHONPATH=. python3 support/tools/s2m_rung1_replay.py`
 - *The sky is blue.* claims `the sky is blue`.
 - *The book is on the table.* claims `the book on the table`.
 - *The cat chased the mouse.* claims `the cat chased the mouse`.
+- *Where is the book?* claims `where is the book`.
 - `LLhfds pw Ppen qqoubx&` stays empty.
 
 Program: [pathA_program.md](pathA_program.md). Previous rung: [s2m_rung0.md](s2m_rung0.md).

@@ -20,7 +20,9 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     patient = _clean(core.get("patient"))
     query = _clean(core.get("query_focus"))
     parts = []
-    if query:
+    if query and theme:
+        parts.append(f"{query} is {theme}")
+    elif query:
         parts.append(f"query {query}")
     if theme and action and patient:
         parts.append(f"{theme} {action} {patient}")
