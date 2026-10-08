@@ -47,4 +47,11 @@ def connections_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     if list(tp.get("struct_segments") or []) != segments_before:
         holes.append({"left": "", "relation": "cut", "right": "", "status": "missing"})
     notices = ["underspecified"] if len(connections) >= 2 else []
+    written = {item["relation"] for item in connections}
+    for op in ops:
+        if op in relations or op in written:
+            continue
+        holes.append({"left": "", "relation": op, "right": theme or "utterance", "status": "missing"})
+        if "unlisted_op" not in notices:
+            notices.append("unlisted_op")
     return {"utterance": str(tp.get("raw_text") or ""), "connections": connections, "holes": holes, "notices": notices}
