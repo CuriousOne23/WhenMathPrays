@@ -263,7 +263,7 @@ def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: L
             i += 1
             continue
 
-        action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give"}
+        action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give", "jumps", "jump", "jumped"}
         reporting_verbs = {"said", "says", "say"}
         recipient_pronouns = {"me"}
         if tok in action_verbs:
