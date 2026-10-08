@@ -16,9 +16,9 @@ def main() -> None:
     print("said", said)
     print("plain", plain["speaker"], plain["claim"])
     assert said["speaker"] == "she", said
-    assert said["claim"] == "she said the book on the table", said
+    assert said["claim"] == "she said the book is on the table", said
     assert not str(plain["speaker"]).strip()
-    assert plain["claim"] == "the book on the table"
+    assert plain["claim"] == "the book is on the table"
     print("speaker-hat replay passed")
 
 

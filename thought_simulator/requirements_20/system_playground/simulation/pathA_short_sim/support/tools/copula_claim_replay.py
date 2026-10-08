@@ -1,4 +1,4 @@
-"""A polar question claims its question. The declarative does not."""
+"""A locative claim keeps the copula the packet already wrote."""
 
 from idob.claim import claim_from_packet
 from pathA_short_simulator import run_pathA_short
@@ -9,13 +9,16 @@ def _claim(raw: str) -> str:
 
 
 def main() -> None:
+    loc = _claim("The book is on the table.")
     polar = _claim("Is the book on the table?")
-    plain = _claim("The book is on the table.")
+    plain = _claim("The sky is blue.")
+    print("loc", loc)
     print("polar", polar)
     print("plain", plain)
-    assert polar == "is the book on the table", polar
-    assert plain == "the book is on the table"
-    print("polar-claim replay passed")
+    assert loc == "the book is on the table", loc
+    assert polar == "is the book on the table"
+    assert plain == "the sky is blue"
+    print("copula-claim replay passed")
 
 
 if __name__ == "__main__":
