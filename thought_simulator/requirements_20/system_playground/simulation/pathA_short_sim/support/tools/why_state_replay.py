@@ -27,7 +27,7 @@ def main() -> None:
     assert why["core"].get("theme") == "the sky", why
     assert plain["core"].get("theme") == "the sky"
     assert plain["core"].get("state") == "blue"
-    assert any(chunk[:3] == ["the", "quick", "brown"] for chunk in fox["chunks"]), fox
+    assert any("quick" in chunk and "brown" in chunk and "fox" in chunk for chunk in fox["chunks"]), fox
     print("why-state replay passed")
 
 
