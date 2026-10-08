@@ -68,6 +68,30 @@ def adapt_roles_from_committed(
         if seg_role in {"recipient", "reporting", "relative_subject", "relative"} and seg_chunk:
             role_segments.setdefault(seg_role, []).extend(tok.lower() for tok in seg_chunk)
 
+
+    known_det = {"the", "a", "an"}
+    known_noun = {"sky", "book", "rain", "table", "plain", "city", "fox", "dog", "cat", "mouse", "door", "lamp", "hall", "desk"}
+    known_adj = {"blue", "bright", "cold", "lazy", "quick", "brown", "beautiful", "tired"}
+    known_verb = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give"}
+    theme_seen = "theme" in struct_roles
+    for idx, seg_chunk in enumerate(segment_tokens):
+        if struct_roles[idx] != "none":
+            continue
+        words = [tok.lower() for tok in seg_chunk]
+        if words and words[0] in known_det and words[-1] in known_noun:
+            if not theme_seen:
+                struct_roles[idx] = "theme"
+                theme_seen = True
+            else:
+                struct_roles[idx] = "patient"
+            role_segments.setdefault(struct_roles[idx], []).extend(words)
+        elif len(words) == 1 and words[0] in known_adj:
+            struct_roles[idx] = "state"
+            role_segments.setdefault("state", []).extend(words)
+        elif len(words) == 1 and words[0] in known_verb:
+            struct_roles[idx] = "action"
+            role_segments.setdefault("action", []).extend(words)
+
     return {
         "used": True,
         "struct_roles": struct_roles,
