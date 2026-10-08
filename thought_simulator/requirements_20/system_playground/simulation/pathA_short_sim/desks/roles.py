@@ -72,7 +72,7 @@ def adapt_roles_from_committed(
     known_det = {"the", "a", "an"}
     known_noun = {"sky", "book", "rain", "table", "plain", "city", "fox", "dog", "cat", "mouse", "door", "lamp", "hall", "desk"}
     known_adj = {"blue", "bright", "cold", "lazy", "quick", "brown", "beautiful", "tired"}
-    known_verb = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give"}
+    known_verb = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give", "jumps", "jump", "jumped"}
     known_prep = {"on", "in", "under", "over", "near"}
     known_wh = {"where", "why", "what", "who", "when", "how", "where?", "why?"}
     theme_seen = "theme" in struct_roles
