@@ -1,4 +1,4 @@
-"""Reporting and request claims use packet ops. They do not invent a speaker."""
+"""A command claims its theme when the packet has one."""
 
 from idob.claim import claim_from_packet
 from pathA_short_simulator import run_pathA_short
@@ -9,16 +9,16 @@ def _claim(raw: str) -> str:
 
 
 def main() -> None:
-    said = _claim("She said the book is on the table.")
-    please = _claim("Please close the door.")
     command = _claim("Close the door.")
-    print("said", said)
-    print("please", please)
+    please = _claim("Please close the door.")
+    plain = _claim("The sky is blue.")
     print("command", command)
-    assert said == "she said the book on the table", said
+    print("please", please)
+    print("plain", plain)
+    assert command == "close the door", command
     assert please == "please close the door", please
-    assert command == "close the door"
-    print("report-request claim replay passed")
+    assert plain == "the sky is blue"
+    print("command-theme claim replay passed")
 
 
 if __name__ == "__main__":
