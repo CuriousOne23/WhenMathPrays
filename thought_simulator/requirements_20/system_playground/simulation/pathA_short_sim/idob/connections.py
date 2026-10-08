@@ -35,7 +35,9 @@ def connections_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
             continue
         right = theme if relation != "theme" and theme else "utterance"
         connections.append({"left": value, "relation": relation, "right": right, "status": "supported"})
-    if "reporting" in ops and not _clean(core.get("speaker")):
+    if "reporting" in ops and _clean(core.get("speaker")):
+        connections.append({"left": _clean(core.get("speaker")), "relation": "reporting", "right": theme or "utterance", "status": "supported"})
+    elif "reporting" in ops:
         holes.append({"left": "", "relation": "speaker", "right": theme or "utterance", "status": "missing"})
     copula = _clean(core.get("copula"))
     if copula and not _clean(core.get("state")) and not _clean(core.get("location")):
