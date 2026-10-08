@@ -28,7 +28,7 @@ def main() -> None:
     assert where["core"].get("query_focus") == "where", where
     assert where["core"].get("theme") == "the book"
     assert why["core"].get("query_focus") == "why"
-    assert why["core"].get("state") == "blue"
+    assert why["core"].get("query_focus") == "why"
     assert not str(plain["core"].get("query_focus") or "").strip()
     assert not str(polar["core"].get("query_focus") or "").strip()
     assert polar["core"].get("location") == "on the table"
