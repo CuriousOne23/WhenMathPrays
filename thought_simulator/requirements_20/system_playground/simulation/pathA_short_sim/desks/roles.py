@@ -79,7 +79,7 @@ def adapt_roles_from_committed(
     for idx, seg_chunk in enumerate(segment_tokens):
         if struct_roles[idx] != "none":
             continue
-        words = [tok.lower() for tok in seg_chunk]
+        words = [tok.lower().strip("?.!") for tok in seg_chunk]
         if words and words[0] in known_det and words[-1] in known_noun:
             if not theme_seen:
                 struct_roles[idx] = "theme"
