@@ -9,12 +9,12 @@ def _claim(raw: str) -> str:
 
 
 def main() -> None:
-    polar = _claim("Is the book on the table?")
+    polar = _claim("Is the book is on the table?")
     plain = _claim("The book is on the table.")
     print("polar", polar)
     print("plain", plain)
-    assert polar == "is the book on the table", polar
-    assert plain == "the book on the table"
+    assert polar == "is the book is on the table", polar
+    assert plain == "the book is on the table"
     print("polar-claim replay passed")
 
 

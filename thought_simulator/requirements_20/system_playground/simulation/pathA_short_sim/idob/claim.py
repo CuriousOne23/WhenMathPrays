@@ -14,6 +14,7 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     mapped = map_packet(tp)
     core = mapped.get("semantic_core") or {}
     theme = _clean(core.get("theme"))
+    copula = _clean(core.get("copula"))
     state = _clean(core.get("state"))
     location = _clean(core.get("location"))
     action = _clean(core.get("action"))
@@ -47,6 +48,8 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     elif theme and location and "reporting" in ops:
         head = f"{speaker} said" if speaker else "reporting"
         parts.append(f"{head} {theme} {location}")
+    elif theme and location and copula:
+        parts.append(f"{theme} {copula} {location}")
     elif theme and location:
         parts.append(f"{theme} {location}")
     elif action and theme and "polite_request" in ops:

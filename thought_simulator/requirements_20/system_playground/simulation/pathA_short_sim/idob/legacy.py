@@ -189,6 +189,11 @@ def _build_semantic_core_dict(tp: Any, selected_ops: list) -> Dict[str, Any]:
     if not state_tokens:
         state_tokens = role_segments.get("state", [])
     theme = " ".join(role_segments.get("theme", role_segments.get("agent", [])))
+    copula = ""
+    for seg, seg_tokens in zip(struct_segments, segment_tokens):
+        if seg == "CP" and seg_tokens:
+            copula = " ".join(tok.lower().strip("?.!") for tok in seg_tokens)
+            break
     return {
         "selected_ops": selected_ops,
         "query_focus": " ".join(role_segments.get("query_focus", [])),
@@ -197,6 +202,7 @@ def _build_semantic_core_dict(tp: Any, selected_ops: list) -> Dict[str, Any]:
         "relative_subject": " ".join(role_segments.get("relative_subject", [])),
         "predicate": " ".join(role_segments.get("predicate", [])),
         "theme": theme,
+        "copula": copula,
         "relation_modifiers": " ".join(role_segments.get("relation", [])),
         "complement": " ".join(location_tokens if location_tokens else state_tokens),
         "agent": theme,
