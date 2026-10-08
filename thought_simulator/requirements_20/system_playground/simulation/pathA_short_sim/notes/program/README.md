@@ -19,6 +19,7 @@ This folder is the comprehensive view of `pathA_short_sim`. A later reader, huma
 9. [known_words.md](known_words.md) — closed list. Unknown content words are not invented.
 10. [s2m_structure/README.md](s2m_structure/README.md) — S2M structure definition. Connections and holes. Not \(M\).
 11. [s2m_structure/result.md](s2m_structure/result.md) — what the first connection writer showed.
+12. [packet_sync/README.md](packet_sync/README.md) — name map. `idob_packet` is a view over `tp.idob`. Crossing fields are absent.
 
 ## What this pass does not do
 
