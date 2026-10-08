@@ -306,11 +306,17 @@ def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: L
 
         j = i
         phrase_chunk: List[str] = []
+        known_adj = {"blue", "bright", "cold", "lazy", "quick", "brown", "beautiful", "tired"}
         while j < len(seg_tokens):
             nxt = seg_tokens[j]
             if nxt in punctuation:
                 break
             if j > i and (nxt in wh_words or nxt in aux_q or nxt in copular or nxt in state_verbs or nxt in preps or nxt in rel_markers or nxt in {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give", "said", "says", "say", "me"}):
+                break
+            bare = nxt.lower().strip("?.!")
+            known_noun = {"sky", "book", "rain", "table", "plain", "city", "fox", "dog", "cat", "mouse", "door", "lamp", "hall", "desk"}
+            noun_seen = any(tok.lower().strip("?.!") in known_noun for tok in phrase_chunk)
+            if phrase_chunk and bare in known_adj and noun_seen:
                 break
             phrase_chunk.append(nxt)
             j += 1
@@ -319,6 +325,8 @@ def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: L
         if inferred == "NP" and labels and labels[-1] in ("CP", "IQ", "ST"):
             if phrase_chunk and phrase_chunk[0] not in determiners:
                 inferred = "AP"
+        if len(phrase_chunk) == 1 and phrase_chunk[0].lower().strip("?.!") in {"blue", "bright", "cold", "lazy", "quick", "brown", "beautiful", "tired"}:
+            inferred = "AP"
 
         labels.append(inferred)
         chunks.append(phrase_chunk)
