@@ -70,9 +70,10 @@ def adapt_roles_from_committed(
 
 
     known_det = {"the", "a", "an"}
-    known_noun = {"sky", "book", "rain", "table", "plain", "city", "fox", "dog", "cat", "mouse", "door", "lamp", "hall", "desk"}
+    known_noun = {"sky", "book", "rain", "table", "plain", "city", "fox", "dog", "cat", "mouse", "door", "lamp", "hall", "desk", "spain"}
     known_adj = {"blue", "bright", "cold", "lazy", "quick", "brown", "beautiful", "tired"}
     known_verb = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "give", "jumps", "jump", "jumped"}
+    known_state = {"stay", "stays", "stayed", "remain", "remains", "seem", "seems"}
     known_prep = {"on", "in", "under", "over", "near"}
     known_wh = {"where", "why", "what", "who", "when", "how", "where?", "why?"}
     theme_seen = "theme" in struct_roles
@@ -93,6 +94,9 @@ def adapt_roles_from_committed(
         elif len(words) == 1 and words[0] in known_verb:
             struct_roles[idx] = "action"
             role_segments.setdefault("action", []).extend(words)
+        elif len(words) == 1 and words[0] in known_state:
+            struct_roles[idx] = "state"
+            role_segments.setdefault("state", []).extend(words)
         elif words and words[0] in known_prep and words[-1] in known_noun:
             struct_roles[idx] = "location"
             role_segments.setdefault("location", []).extend(words)
