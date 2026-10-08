@@ -24,6 +24,9 @@ Action verb circle is replayed by `support/tools/action_row_replay.py`. *The cat
 
 Activation trees in the YAML are still empty. Apply still points at legacy or at the small imperative and exclamative modules. Empty activation is a named limit, not a silent success.
 
+
+First mapping rung, not \(M\): [s2m_rung0.md](s2m_rung0.md). Replay `support/tools/s2m_rung0_replay.py`. The cut is not reopened. The other bench is not imported.
+
 ## Not this phase
 
 - Implementing S2M, \(M\), the envelope \(M' = M + \alpha I\), or \(\Delta h\) inside IdOB.
