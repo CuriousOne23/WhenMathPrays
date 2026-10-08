@@ -4,7 +4,7 @@
 **Date:** 2026-10-01  
 **Status:** claim backlog prints on the runner. Form holes remain.
 
-**Program (2026-10-08):** [program/README.md](program/README.md) is the status account. The action row below that says *The cat chased the mouse.* already prints `agent_action` on `main` is superseded by [action_row_runner.md](action_row_runner.md): that verb circle was seen locally and was not uploaded. Do not treat that row as landed. Next structural write remains the three form holes, then the ready line, not S2M.
+**Program (2026-10-08):** [program/README.md](program/README.md) is the status account. The action row is now replayed on this branch. See [action_row_runner.md](action_row_runner.md). The earlier claim that the verb circle was not uploaded is superseded by that replay. Next structural write remains the three form holes, then the ready line, not S2M.
   
 **Does not define tokens.** Authorities: [idob_seam.md](../architecture/idob_seam.md), [idob_object_space.md](idob_object_space/idob_object_space.md), [IdOB_unified_plan.md](../architecture/IdOB_unified_plan.md), [idob_meaning_lock.md](../architecture/idob_meaning_lock.md).
 

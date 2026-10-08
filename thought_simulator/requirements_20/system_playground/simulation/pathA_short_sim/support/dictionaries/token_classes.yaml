@@ -51,3 +51,12 @@ token_classes:
   dog: NOUN
   paris: PROPN
   spain: PROPN
+  cat: NOUN
+  mouse: NOUN
+  chased: VERB
+  chase: VERB
+  chases: VERB
+  bought: VERB
+  buy: VERB
+  wrote: VERB
+  write: VERB
