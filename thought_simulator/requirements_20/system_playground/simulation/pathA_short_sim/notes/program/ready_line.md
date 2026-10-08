@@ -12,13 +12,13 @@
 
 ## Not done — structure floor
 
-These stay named until the form can show the circle or hat, and a replay of *The book is on the table.* does not grow that circle.
+Replayed by `support/tools/form_hole_replay.py`. *The book is on the table.* does not grow these circles or hats.
 
-| Hole | Sentence | Missing write |
+| Hole | Sentence | Write now present |
 |---|---|---|
-| Reporting circle | *She said the book is on the table.* | A circle for the reporting clause, distinct from the book-clause |
-| Recipient hat | *Give me the book.* | A hat for the recipient, distinct from patient |
-| Relative subject that is not the head | *The book that John bought* | A circle whose subject is John, not the book |
+| Reporting circle | *She said the book is on the table.* | `REPORT` on `said`, distinct from the book circle |
+| Recipient hat | *Give me the book.* | `RECIP` with hat `recipient`; the book circle is not that hat |
+| Relative subject that is not the head | *The book that John bought* | circle `john` with hat `relative_subject`; the book circle is not that hat |
 
 Action verb circle is replayed by `support/tools/action_row_replay.py`. *The cat chased the mouse.* segments `NP VP NP`, cue `action_clause`, op `agent_action`. *The sky is blue.* prints no op. *Close the door.* still prints `bare_command`. Note: [../action_row_runner.md](../action_row_runner.md).
 

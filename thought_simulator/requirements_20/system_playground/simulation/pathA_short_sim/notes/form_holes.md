@@ -1,6 +1,14 @@
 # Form holes — three rows, one note
 
-**Status:** specified, not implemented.
+**Status:** replayed on this branch. The three rows below are the forms that now print.
+
+**Replay (2026-10-08):** `PYTHONPATH=. python3 support/tools/form_hole_replay.py` passed.
+
+*She said the book is on the table.* writes `REPORT` on `said`, distinct from the book circle. *Give me the book.* writes `RECIP` with hat `recipient`, and the book circle is not that hat. *The book that John bought.* writes a circle for `john` with hat `relative_subject`; the book circle is not that hat. *The book is on the table.* does not grow any of those circles or hats.
+
+No IdOB object was added. `legacy.py` was not edited.
+
+
 
 **Correction (2026-10-08):** the three rows in the table remain the form holes. The closing claim that bare command, request, and exclamative stay stamp-list holes is superseded. Those cues print; their cards exist. They are not on this page. Status: [program/ready_line.md](program/ready_line.md).
   

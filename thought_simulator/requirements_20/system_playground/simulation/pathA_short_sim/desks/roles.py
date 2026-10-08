@@ -54,7 +54,19 @@ def adapt_roles_from_committed(
                 role_segments.setdefault(role, []).append(token_text)
 
         seg_role = next((r for r in chunk_roles if r != "none"), "none")
+        chunk_text = [tok.lower() for tok in seg_chunk]
+        if chunk_text == ["me"]:
+            seg_role = "recipient"
+        elif chunk_text == ["said"]:
+            seg_role = "reporting"
+        elif chunk_text == ["john"] and struct_roles and struct_roles[-1] in {"none", "relative"}:
+            # Hat for the relative subject. The head noun is an earlier circle.
+            seg_role = "relative_subject"
+        elif seg_chunk == ["that"]:
+            seg_role = "relative"
         struct_roles.append(seg_role)
+        if seg_role in {"recipient", "reporting", "relative_subject", "relative"} and seg_chunk:
+            role_segments.setdefault(seg_role, []).extend(tok.lower() for tok in seg_chunk)
 
     return {
         "used": True,

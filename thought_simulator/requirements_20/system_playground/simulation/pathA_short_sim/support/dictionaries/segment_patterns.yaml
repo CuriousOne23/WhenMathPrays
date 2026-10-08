@@ -25,3 +25,9 @@ segment_patterns:
     - ADJ
   RELC:
     - REL
+  REPORT:
+    - VERB_REPORT
+  RECIP:
+    - PRON_RECIP
+  SP:
+    - PRON

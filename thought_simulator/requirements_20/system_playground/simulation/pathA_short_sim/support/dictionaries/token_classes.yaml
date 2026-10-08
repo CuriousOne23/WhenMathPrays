@@ -60,3 +60,8 @@ token_classes:
   buy: VERB
   wrote: VERB
   write: VERB
+  she: PRON
+  said: VERB_REPORT
+  me: PRON_RECIP
+  give: VERB
+  john: PROPN
