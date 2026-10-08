@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: []
-activation: {}
+activation:
+  always: true
 contribution_schema:
   semantic_core:
     type: dict

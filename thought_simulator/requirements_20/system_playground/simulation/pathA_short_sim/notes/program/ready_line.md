@@ -22,7 +22,7 @@ Replayed by `support/tools/form_hole_replay.py`. *The book is on the table.* doe
 
 Action verb circle is replayed by `support/tools/action_row_replay.py`. *The cat chased the mouse.* segments `NP VP NP`, cue `action_clause`, op `agent_action`. *The sky is blue.* prints no op. *Close the door.* still prints `bare_command`. Note: [../action_row_runner.md](../action_row_runner.md).
 
-Activation trees are filled for copular, action, imperative, exclamative, polar, locative, and wh. The registry reads `cues`, `segments`, and `roles`. Residual, mixed, and modifier trees remain empty. Replay: `support/tools/activation_tree_replay.py` and `support/tools/activation_tree_2_replay.py`.
+Activation trees are filled for every card. Residual is `always`. Modifier reads `modifier_chain`. Mixed reads the `entity` role. The registry reads `cues`, `segments`, `roles`, and `always`. Replay: `support/tools/activation_tree_3_replay.py`.
 
 
 First mapping rung, not \(M\): [s2m_rung0.md](s2m_rung0.md). Replay `support/tools/s2m_rung0_replay.py`. The cut is not reopened. The other bench is not imported.

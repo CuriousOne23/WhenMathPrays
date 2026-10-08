@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: [theme, state, location, relation, action, patient]
-activation: {}
+activation:
+  cues: [modifier_chain]
 contribution_schema:
   semantic_core:
     type: dict
