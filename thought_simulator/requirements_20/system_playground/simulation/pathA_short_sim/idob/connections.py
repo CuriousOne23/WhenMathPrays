@@ -37,6 +37,9 @@ def connections_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
         connections.append({"left": value, "relation": relation, "right": right, "status": "supported"})
     if "reporting" in ops and not _clean(core.get("speaker")):
         holes.append({"left": "", "relation": "speaker", "right": theme or "utterance", "status": "missing"})
+    copula = _clean(core.get("copula"))
+    if copula and not _clean(core.get("state")) and not _clean(core.get("location")):
+        holes.append({"left": "", "relation": "state", "right": theme or "utterance", "status": "missing"})
     if not connections:
         holes.append({"left": "", "relation": "neighborhood", "right": "", "status": "missing"})
     if list(tp.get("struct_segments") or []) != segments_before:
