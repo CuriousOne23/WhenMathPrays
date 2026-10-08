@@ -22,7 +22,7 @@ Replayed by `support/tools/form_hole_replay.py`. *The book is on the table.* doe
 
 Action verb circle is replayed by `support/tools/action_row_replay.py`. *The cat chased the mouse.* segments `NP VP NP`, cue `action_clause`, op `agent_action`. *The sky is blue.* prints no op. *Close the door.* still prints `bare_command`. Note: [../action_row_runner.md](../action_row_runner.md).
 
-Activation trees in the YAML are still empty. Apply still points at legacy or at the small imperative and exclamative modules. Empty activation is a named limit, not a silent success.
+Activation trees are filled for copular, action, imperative, exclamative, and polar. The registry reads `cues` and `segments`. Other trees remain empty and still use code predicates. Replay: `support/tools/activation_tree_replay.py`.
 
 
 First mapping rung, not \(M\): [s2m_rung0.md](s2m_rung0.md). Replay `support/tools/s2m_rung0_replay.py`. The cut is not reopened. The other bench is not imported.

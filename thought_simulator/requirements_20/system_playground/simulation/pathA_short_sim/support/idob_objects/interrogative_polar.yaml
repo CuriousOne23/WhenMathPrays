@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: [query_focus, predicate]
-activation: {}
+activation:
+  cues: [polar_question]
 contribution_schema:
   semantic_core:
     type: dict

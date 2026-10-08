@@ -55,6 +55,25 @@ def _load_object_specs(objects_dir: Path, schema: Dict[str, Any]) -> List[Tuple[
         specs.append((path, spec))
     return specs
 
+def _activation_from_spec(spec, fallback):
+    activation = spec.get("activation") or {}
+    cues = list(activation.get("cues") or [])
+    segments = list(activation.get("segments") or [])
+    if not cues and not segments:
+        return fallback
+
+    def _activate(tp):
+        present_cues = set(getattr(tp, "semantic_adjacent_cues", []) or [])
+        present_segments = set(getattr(tp, "struct_segments", []) or [])
+        if cues and present_cues.intersection(cues):
+            return True
+        if segments and present_segments.intersection(segments):
+            return True
+        return False
+
+    return _activate
+
+
 def _activation_for_name(name: str):
     mapping = {
         "copular_state": legacy.copular_state.activate,
@@ -76,7 +95,7 @@ def _build_registry_from_specs(specs: List[Tuple[Path, Dict[str, Any]]]) -> List
     registry_items: List[IdOBObject] = []
     for _path, spec in specs:
         apply_symbol = str(spec["behavior"]["apply"])
-        registry_items.append(IdOBObject(name=str(spec["name"]), family=str(spec["family"]), priority=int(spec["priority"]), activate=_activation_for_name(str(spec["name"])), apply=APPLY_LOOKUP[apply_symbol]))
+        registry_items.append(IdOBObject(name=str(spec["name"]), family=str(spec["family"]), priority=int(spec["priority"]), activate=_activation_from_spec(spec, _activation_for_name(str(spec["name"]))), apply=APPLY_LOOKUP[apply_symbol]))
     return sorted(registry_items, key=lambda obj: (obj.priority, obj.name))
 
 def build_r2_registry() -> List[IdOBObject]:

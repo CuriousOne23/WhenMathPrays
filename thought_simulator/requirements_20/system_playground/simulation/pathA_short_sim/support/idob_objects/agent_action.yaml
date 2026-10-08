@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: [agent, action, patient]
-activation: {}
+activation:
+  cues: [action_clause]
 contribution_schema:
   semantic_core:
     type: dict
