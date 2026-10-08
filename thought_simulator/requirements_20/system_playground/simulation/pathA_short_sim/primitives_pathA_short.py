@@ -337,11 +337,14 @@ def _split_and_label_committed_segment(seg_tokens: List[str], previous_labels: L
         i = j
 
     if not labels:
-        fallback_label = _rule_based_segment_label(seg_tokens, previous_labels)
-        return {
-            "labels": [fallback_label],
-            "chunks": [seg_tokens],
-        }
+        known = {"the", "a", "an", "sky", "book", "rain", "table", "plain", "city", "fox", "dog", "cat", "mouse", "door", "lamp", "hall", "desk", "spain", "blue", "bright", "cold", "lazy", "quick", "brown", "beautiful", "tired", "she", "me", "john", "is", "are", "was", "were", "said", "give", "jumps", "jump", "jumped", "chased", "chase", "chases", "bought", "buy", "wrote", "write", "stays", "stay", "mainly"}
+        if any(tok.lower().strip("?.!") in known for tok in seg_tokens):
+            fallback_label = _rule_based_segment_label(seg_tokens, previous_labels)
+            return {
+                "labels": [fallback_label],
+                "chunks": [seg_tokens],
+            }
+        return {"labels": [], "chunks": []}
 
     return {
         "labels": labels,
