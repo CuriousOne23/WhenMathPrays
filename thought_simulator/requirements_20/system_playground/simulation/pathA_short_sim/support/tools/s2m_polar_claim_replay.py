@@ -9,7 +9,7 @@ def _claim(raw: str) -> str:
 
 
 def main() -> None:
-    polar = _claim("Is the book is on the table?")
+    polar = _claim("Is the book on the table?")
     plain = _claim("The book is on the table.")
     print("polar", polar)
     print("plain", plain)

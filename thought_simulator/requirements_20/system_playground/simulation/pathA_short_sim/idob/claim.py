@@ -47,7 +47,8 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
         parts.append(f"is {theme} {location}")
     elif theme and location and "reporting" in ops:
         head = f"{speaker} said" if speaker else "reporting"
-        parts.append(f"{head} {theme} {location}")
+        middle = f"{theme} {copula} {location}" if copula else f"{theme} {location}"
+        parts.append(f"{head} {middle}")
     elif theme and location and copula:
         parts.append(f"{theme} {copula} {location}")
     elif theme and location:
