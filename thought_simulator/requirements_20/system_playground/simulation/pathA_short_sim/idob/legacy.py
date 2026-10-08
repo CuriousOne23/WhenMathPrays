@@ -104,6 +104,8 @@ def _force_ops(tp: Any) -> list:
         ops.append("exclamative_force")
     if "action_clause" in cues or "action_clause_rule" in rules:
         ops.append("agent_action")
+    if "polar_question" in cues or "polar_question_rule" in rules:
+        ops.append("polar_question")
     return ops
 
 

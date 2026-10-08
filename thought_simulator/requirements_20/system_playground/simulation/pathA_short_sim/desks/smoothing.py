@@ -32,6 +32,7 @@ def compute_smoothing_state(
         "imperative_voice_clause",
         "request_imperative_clause",
         "exclamative_force_clause",
+        "polar_question",
         "action_clause",
     }
 
@@ -60,6 +61,8 @@ def compute_smoothing_state(
         semantic_adjacent_cues.append("request_imperative_clause")
     if "exclamative_force_rule" in constraints_matched and "exclamative_force_clause" not in semantic_adjacent_cues:
         semantic_adjacent_cues.append("exclamative_force_clause")
+    if "polar_question_rule" in constraints_matched and "polar_question" not in semantic_adjacent_cues:
+        semantic_adjacent_cues.append("polar_question")
     if "action_clause_rule" in constraints_matched and "action_clause" not in semantic_adjacent_cues:
         semantic_adjacent_cues.append("action_clause")
 

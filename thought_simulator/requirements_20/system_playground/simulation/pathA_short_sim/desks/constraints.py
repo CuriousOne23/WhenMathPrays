@@ -26,6 +26,9 @@ def compute_constraint_fit(
     has_imperative_voice = first_token in imperative_heads and not raw_text.strip().endswith("?")
     has_request_imperative = first_token == "please" and len(tokens) > 1 and tokens[1] in imperative_heads
     has_exclamative_force = raw_text.strip().endswith("!") and first_token in {"what", "how"}
+    wh_words = {"who", "what", "where", "when", "why", "how"}
+    aux_heads = {"is", "are", "was", "were", "do", "does", "did"}
+    has_polar_question = raw_text.strip().endswith("?") and first_token in aux_heads and not any(tok in wh_words for tok in tokens)
 
     canonical_rules = [
         "adjacency_rule",
@@ -53,6 +56,8 @@ def compute_constraint_fit(
         canonical_rules.append("request_imperative_rule")
     if has_exclamative_force:
         canonical_rules.append("exclamative_force_rule")
+    if has_polar_question:
+        canonical_rules.append("polar_question_rule")
     action_verbs = {"chased", "chase", "chases", "bought", "buy", "wrote", "write", "jumps", "jump", "jumped"}
     has_action_clause = "VP" in struct_segments and any(tok in action_verbs for tok in tokens) and not has_imperative_voice and not has_request_imperative
     if has_action_clause:
@@ -87,6 +92,8 @@ def compute_constraint_fit(
         constraints_matched.append("request_imperative_rule")
     if has_exclamative_force:
         constraints_matched.append("exclamative_force_rule")
+    if has_polar_question:
+        constraints_matched.append("polar_question_rule")
     if has_action_clause:
         constraints_matched.append("action_clause_rule")
 
