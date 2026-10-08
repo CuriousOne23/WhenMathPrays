@@ -13,7 +13,7 @@ def main() -> None:
     what = _claim("What is the book?")
     print("excl", excl)
     print("what", what)
-    assert excl == "exclamative a beautiful lamp", excl
+    assert excl == "what a beautiful lamp", excl
     assert what == "what is the book"
     print("exclamative-claim replay passed")
 
