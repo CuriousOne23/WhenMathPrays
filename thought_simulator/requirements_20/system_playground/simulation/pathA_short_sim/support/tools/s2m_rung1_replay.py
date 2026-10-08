@@ -25,7 +25,7 @@ def main() -> None:
         assert row["before"] == row["after"]
         assert "M" not in row["claim"]
     assert plain["claim"]["claim"] == "the sky is blue"
-    assert loc["claim"]["claim"] == "the book at on the table"
+    assert loc["claim"]["claim"] == "the book on the table"
     assert action["claim"]["claim"] == "the cat chased the mouse"
     assert unknown["claim"]["status"] == "claim_empty"
     assert unknown["claim"]["claim"] == ""

@@ -12,7 +12,7 @@ Not computed: \(M\), the envelope, \(\Delta h\).
 Replay: `PYTHONPATH=. python3 support/tools/s2m_rung1_replay.py`
 
 - *The sky is blue.* claims `the sky is blue`.
-- *The book is on the table.* claims `the book at on the table`.
+- *The book is on the table.* claims `the book on the table`.
 - *The cat chased the mouse.* claims `the cat chased the mouse`.
 - `LLhfds pw Ppen qqoubx&` stays empty.
 

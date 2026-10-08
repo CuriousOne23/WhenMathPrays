@@ -27,7 +27,7 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     elif theme and state:
         parts.append(f"{theme} is {state}")
     elif theme and location:
-        parts.append(f"{theme} at {location}")
+        parts.append(f"{theme} {location}")
     elif action:
         parts.append(action)
     claim = "; ".join(parts)
