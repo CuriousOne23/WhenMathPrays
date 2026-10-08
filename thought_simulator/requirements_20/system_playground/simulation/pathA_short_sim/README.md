@@ -12,7 +12,7 @@ Read these in order. Do not start from the reference lists further down.
 4. [notes/program/s2m_structure/result.md](notes/program/s2m_structure/result.md) and [notes/program/known_words.md](notes/program/known_words.md) — the connection record, the open holes, and words that are not invented.
 5. [notes/program/packet_sync/README.md](notes/program/packet_sync/README.md) — teaching names against `tp.idob`. Present fields and absent fields. Not \(M\).
 
-Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums that floor into `idob_packet`, a teaching view over `tp.idob`. The requirement fields for six IDs, rank, \(M\), CIE, and `meaning_delta_h` are absent, not zero. A readable claim and a connection record are written from that packet. They do not compute \(M\). RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
+Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums that floor into `idob_packet`, a teaching view over `tp.idob`. The `tp.idob` shell is present. Six IDs, rank, \(M\), CIE, and `meaning_delta_h` are null, not zero. A readable claim and a connection record are written from that packet. They do not compute \(M\). RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
 
 Force ops such as polar, command, request, and exclamative are open holes. They are not object connections. History, likelihood, and the geometry conjecture are not inputs.
 

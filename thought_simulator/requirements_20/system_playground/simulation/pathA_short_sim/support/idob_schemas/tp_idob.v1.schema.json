@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tp_idob.v1",
+  "title": "tp.idob shell",
+  "type": "object",
+  "required": ["utterance", "semantic_core", "structure_ids", "structural_key", "candidate_group_ids", "final_rank_order", "selected_group_id", "cie_id", "meaning_semantics", "meaning_semantics_prime", "meaning_delta_h", "ready_for_ouba", "path_b_eligible", "idob_complete", "routing_filter_mutated"],
+  "additionalProperties": true,
+  "properties": {
+    "utterance": {"type": ["string", "null"]},
+    "semantic_core": {"type": ["object", "null"]},
+    "structure_ids": {"type": ["array", "null"], "maxItems": 6},
+    "structural_key": {"type": "null"},
+    "candidate_group_ids": {"type": "null"},
+    "final_rank_order": {"type": "null"},
+    "selected_group_id": {"type": "null"},
+    "cie_id": {"type": "null"},
+    "meaning_semantics": {"type": "null"},
+    "meaning_semantics_prime": {"type": "null"},
+    "meaning_delta_h": {"type": "null"},
+    "ready_for_ouba": {"type": "null"},
+    "path_b_eligible": {"type": "null"},
+    "idob_complete": {"type": "null"},
+    "routing_filter_mutated": {"type": "null"}
+  }
+}
