@@ -154,8 +154,6 @@ def _build_selected_ops(tp: Any) -> list:
         semantic_operations.append("action_patient")
     if "relation-patient" in constraints_matched:
         semantic_operations.append("relation_modifier")
-    if semantic_adjacent_cues:
-        semantic_operations.append("modifier_resolution")
     return semantic_operations
 
 
