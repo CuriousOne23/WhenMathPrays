@@ -9,7 +9,9 @@ Door: [../../README.md](../../README.md). Status: [status.md](status.md).
 
 Path A will be criticized because this work has no settled outside result. The answer is not that the theory is finished. The answer is a map. A critic can point at a hole. The hole is already named.
 
-Human conversation space is the territory. Path A coverage space is the owner and the evidence. Roadmap completeness means the recognized forms are named, assigned a status, and open to revision. It does not mean human conversation space is exhaustively known. The rows are a proposed, extensible inventory, not a closed ontology.
+Human conversation space is the territory. Path A coverage space is the owner and the evidence. Roadmap completeness means every currently recognized conversational form has a named row and an explicit status. It does not mean human conversation space is exhaustively known.
+
+The rows form a proposed and extensible inventory. They are informed by established conversational classifications, but they are not a closed or universally accepted ontology. A newly recognized conversational form is added as a named row rather than silently absorbed into an existing row.
 
 ## Status words
 
@@ -20,13 +22,13 @@ Human conversation space is the territory. Path A coverage space is the owner an
 | `unsupported` | Tested, and the packet could not account for it without invention. |
 | `unknown` | No realization yet. Historical rows stay here until a later owner is exercised. |
 
-A check without a replay is not `covered`. Every covered row names the executable evidence that earns that status.
+A check without a replay is not `covered`. Every covered row must identify the replay or ledger row that demonstrates its coverage.
 
 ## Present-only
 
 These forms use the current utterance only. History is not an input.
 
-| Form | Pipeline | Status | Evidence |
+| Form | Realization path | Status | Evidence |
 |---|---|---|---|
 | Assertion / state | SOB, SROB, CnOB, SmOB, IdOB | covered | `claim_ledger_replay.py`: *The sky is blue.* |
 | Location | SOB, SROB, CnOB, SmOB, IdOB | covered | `claim_ledger_replay.py`: *The book is on the table.* |
@@ -60,4 +62,4 @@ History is on the map and out of the present sim. Owners are COB, CST, CIL, and 
 
 An extension is a new row, or a status change after a replay. `absent` becomes `covered` only when a replay exists. One absent form is the next development, chosen explicitly. This page does not add that sentence.
 
-Pipeline means the form passes through those writers. The decisive writer for each form is unassigned. A later pass may name it. Partial support is not a status. A narrower form, such as simple predicate negation, gets its own row.
+Realization path means the form passes through those writers. It is not a claim that each writer owns the distinctive capability. The decisive writer is unassigned. A later pass may name it. Partial support is not a status. A narrower form, such as simple predicate negation, gets its own row.
