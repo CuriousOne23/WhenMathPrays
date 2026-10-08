@@ -17,6 +17,7 @@ This folder is the comprehensive view of `pathA_short_sim`. A later reader, huma
 7. [s2m_rung1.md](s2m_rung1.md) — readable claim from the packet. Not \(M\).
 8. [claim_ledger.md](claim_ledger.md) — claims that print now.
 9. [known_words.md](known_words.md) — closed list. Unknown content words are not invented.
+10. [s2m_structure/README.md](s2m_structure/README.md) — S2M structure definition. Connections and holes. Not \(M\).
 
 ## What this pass does not do
 

@@ -18,3 +18,5 @@ The intended job of IdOB is to map the composed floor to meaning. The packet is 
 The mapping may not reopen `struct_segments`, `struct_roles`, or constraints. CIE, MSL, and \(M\) stay out of the sum until a later pass says otherwise, and that pass is after the ready line.
 
 Program: [pathA_program.md](pathA_program.md). Ready line: [ready_line.md](ready_line.md).
+
+The present S2M definition, with success and failure bounded before a writer exists: [s2m_structure/README.md](s2m_structure/README.md). The geometry note is not imported there.
