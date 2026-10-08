@@ -19,6 +19,7 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     action = _clean(core.get("action"))
     patient = _clean(core.get("patient"))
     query = _clean(core.get("query_focus"))
+    ops = list(mapped.get("selected_ops") or [])
     parts = []
     if query and theme:
         parts.append(f"{query} is {theme}")
@@ -28,6 +29,8 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
         parts.append(f"{theme} {action} {patient}")
     elif theme and state:
         parts.append(f"{theme} is {state}")
+    elif theme and location and "polar_question" in ops:
+        parts.append(f"is {theme} {location}")
     elif theme and location:
         parts.append(f"{theme} {location}")
     elif action:
