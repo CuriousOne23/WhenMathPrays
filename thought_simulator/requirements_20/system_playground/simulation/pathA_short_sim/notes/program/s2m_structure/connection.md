@@ -20,3 +20,5 @@ left, relation, right, status
 A relation not on that list is a pressure point. It is not added inside a composition.
 
 A composition is the utterance, the supported connections, and the holes. The readable claim in [../s2m_rung1.md](../s2m_rung1.md) is a separate projection. If the claim and the connections disagree, the disagreement is reported. It is not repaired here.
+
+Record format: [../../../support/idob_schemas/s2m_connection.v1.schema.json](../../../support/idob_schemas/s2m_connection.v1.schema.json). Closed relations: [../../../support/s2m/relations.yaml](../../../support/s2m/relations.yaml). Replay: `PYTHONPATH=. python3 support/tools/s2m_schema_replay.py`.
