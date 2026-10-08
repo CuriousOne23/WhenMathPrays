@@ -19,8 +19,8 @@ Replay the rows with `PYTHONPATH=. python3 support/tools/claim_ledger_replay.py`
 | *Please close the door.* | `please close the door` |
 | *Give me the book.* | `give me the book` |
 | *She said the book is on the table.* | `she said the book is on the table` |
-| *The book that John bought.* | `john bought the book` |
-| *What a beautiful lamp!* | `exclamative a beautiful lamp` |
+| *The book that John bought.* | `the book that john bought` |
+| *What a beautiful lamp!* | `what a beautiful lamp` |
 | `LLhfds pw Ppen qqoubx&` | empty |
 
 Not computed: \(M\), the envelope, \(\Delta h\).
