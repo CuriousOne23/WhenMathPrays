@@ -10,7 +10,8 @@ identity:
 association:
   geometries: []
   roles: [location]
-activation: {}
+activation:
+  cues: [locative_adjacent]
 contribution_schema:
   semantic_core:
     type: dict
