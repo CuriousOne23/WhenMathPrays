@@ -33,7 +33,7 @@ def claim_from_packet(tp: Dict[str, Any]) -> Dict[str, Any]:
     elif query:
         parts.append(f"query {query}")
     elif relative_subject and action and theme:
-        parts.append(f"{relative_subject} {action} {theme}")
+        parts.append(f"{theme} that {relative_subject} {action}")
     elif theme and action and patient:
         parts.append(f"{theme} {action} {patient}")
     elif theme and action and location:

@@ -17,7 +17,7 @@ ROWS = [
     ("Please close the door.", "please close the door"),
     ("Give me the book.", "give me the book"),
     ("She said the book is on the table.", "she said the book is on the table"),
-    ("The book that John bought.", "john bought the book"),
+    ("The book that John bought.", "the book that john bought"),
     ("What a beautiful lamp!", "exclamative a beautiful lamp"),
     ("LLhfds pw Ppen qqoubx&", ""),
 ]
