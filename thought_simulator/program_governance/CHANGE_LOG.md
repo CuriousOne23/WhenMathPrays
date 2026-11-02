@@ -153,3 +153,4 @@
 2026-10-19 | Catalog weekly safety net | C-000 | none | write=no
 2026-10-19 | Flow weekly safety net | F-000 | none | write=no
 2026-10-19 | Inventory weekly safety net | not run (box down); INVENTORY.md unchanged from 2026-10-12 | write=no
+2026-10-26 | Terms weekly safety net | T-000 | none | write=no
