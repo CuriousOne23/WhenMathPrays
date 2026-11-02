@@ -157,3 +157,4 @@
 2026-10-26 | Catalog weekly safety net | C-000 | none | write=no
 2026-10-26 | Flow weekly safety net | F-000 | none | write=no
 2026-10-26 | Inventory weekly safety net | unchanged since 2026-10-12 (same sha 9bafeed); fresh scan pending box recovery; INVENTORY.md and pointer unchanged; unverified, for human: root debug_query_log.txt (13,475 bytes) gitignore candidate; zero-byte root file `$null` likely accidental redirect | owner=human | write=no
+2026-11-02 | Terms weekly safety net | T-000 | none | write=no
