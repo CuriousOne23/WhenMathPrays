@@ -160,3 +160,4 @@
 2026-11-02 | Terms weekly safety net | T-000 | none | write=no
 2026-11-02 | Flow weekly safety net | F-000 | none | write=no
 2026-11-02 | Catalog weekly safety net | C-000 | none | write=no
+2026-11-02 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 (unchanged vs 2026-10-12, sha 9bafeed) | write=no
