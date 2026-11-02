@@ -149,3 +149,15 @@
 2026-10-12 | Flow weekly safety net | F-000 | none | write=no
 2026-10-12 | Catalog weekly safety net | C-000 | none | write=no
 2026-10-12 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 | write=no
+2026-10-19 | Terms weekly safety net | T-000 | none | write=no
+2026-10-19 | Catalog weekly safety net | C-000 | none | write=no
+2026-10-19 | Flow weekly safety net | F-000 | none | write=no
+2026-10-19 | Inventory weekly safety net | not run (box down); INVENTORY.md unchanged from 2026-10-12 | write=no
+2026-10-26 | Terms weekly safety net | T-000 | none | write=no
+2026-10-26 | Catalog weekly safety net | C-000 | none | write=no
+2026-10-26 | Flow weekly safety net | F-000 | none | write=no
+2026-10-26 | Inventory weekly safety net | unchanged since 2026-10-12 (same sha 9bafeed); fresh scan pending box recovery; INVENTORY.md and pointer unchanged; unverified, for human: root debug_query_log.txt (13,475 bytes) gitignore candidate; zero-byte root file `$null` likely accidental redirect | owner=human | write=no
+2026-11-02 | Terms weekly safety net | T-000 | none | write=no
+2026-11-02 | Flow weekly safety net | F-000 | none | write=no
+2026-11-02 | Catalog weekly safety net | C-000 | none | write=no
+2026-11-02 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 (unchanged vs 2026-10-12, sha 9bafeed) | write=no
