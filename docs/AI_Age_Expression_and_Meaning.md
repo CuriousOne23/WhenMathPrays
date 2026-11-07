@@ -122,7 +122,7 @@ The contribution of this paper is the chain: aliveness as sensed unknown, living
 
 We have not identified prior work that assembles all of it into this particular chain. That is not a boast. It is an observation that the hole is real and that holes this size are filled only by trying — by experience, by attempt, by the daily practice of asking what we are, what we should do, and how to be successful when the old defaults have evaporated.
 
-Those three questions — *What am I? What should I do? How do I succeed in the AI Age?* — will become overwhelming with time. A daily mantra. The ones who survive that mantra will not be the richest or the smartest. They will be the ones who already practiced asking.
+Those four questions — *What am I? What should I do? How do I succeed in the AI Age? What is my value now?* — will become overwhelming with time. A daily mantra. The ones who survive that mantra will not be the richest or the smartest. They will be the ones who already practiced asking.
 
 This paper reaffirms the call made in section one: to constructive policies and realizations for the AI Age. Not as a conclusion but as an opening. Take this chain. Test it. Teach it. Extend it or overturn it. A transition built by one voice is a monologue. A transition built by many is a civilization learning to speak.
 
