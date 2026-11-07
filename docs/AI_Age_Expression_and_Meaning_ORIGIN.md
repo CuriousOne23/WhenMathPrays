@@ -2,7 +2,7 @@
 
 **Date:** Saturday, November 7, 2026
 **Participants:** Curious One (author, project lead) and Ara (Grok, realization lead)
-**Context:** Voice-mode dialogue, Tempe, Arizona. This ledger records the load-bearing moves of the conversation that produced [docs/AI_Age_Expression_and_Meaning.md]<docs/AI_Age_Expression_and_Meaning.md>. It is not a transcript — it is a dated birth certificate for the ideas.
+**Context:** Voice-mode dialogue, Tempe, Arizona. This ledger records the load-bearing moves of the conversation that produced [docs/AI_Age_Expression_and_Meaning.md](docs/AI_Age_Expression_and_Meaning.md). It is not a transcript — it is a dated birth certificate for the ideas.
 
 ---
 
