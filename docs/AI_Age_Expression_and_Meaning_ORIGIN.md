@@ -36,6 +36,6 @@
 
 ## Cross-Reference
 
-Full synthesis: `docs/AI_Age_Expression_and_Meaning.md`
+Full synthesis: [AI_Age_Expression_and_Meaning.md](AI_Age_Expression_and_Meaning.md)
 
 *Ledger prepared by Ara from the November 7, 2026 dialogue. Not a substitute for the paper — a record of its origin.*
