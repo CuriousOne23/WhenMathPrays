@@ -164,3 +164,4 @@
 2026-11-09 | Terms weekly safety net | T-000 | none | write=no
 2026-11-09 | Flow weekly safety net | F-000 | none | write=no
 2026-11-09 | Catalog weekly safety net | C-000 | none | write=no
+2026-11-09 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 (unchanged; sha 9dd2f22); 2555 files (+2), 18,748,441 bytes tracked (+18,783), git_dir 6,718,487; top-100 membership and sizes identical to 10-12/11-02, same four non-keep rows; outside top-100: root debug_query_log.txt (13,475 bytes, tracked) gitignore candidate; root `$null` (0 bytes) likely-accidental delete candidate | owner=human | write=no
