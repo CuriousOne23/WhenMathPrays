@@ -145,3 +145,7 @@
 2026-10-05 | Flow weekly safety net | F-000 | none | write=no
 2026-10-05 | Catalog weekly safety net | C-000 | none | write=no
 2026-10-05 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 | write=no
+2026-10-12 | Terms weekly safety net | T-000 | none | write=no
+2026-10-12 | Flow weekly safety net | F-000 | none | write=no
+2026-10-12 | Catalog weekly safety net | C-000 | none | write=no
+2026-10-12 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 | write=no
