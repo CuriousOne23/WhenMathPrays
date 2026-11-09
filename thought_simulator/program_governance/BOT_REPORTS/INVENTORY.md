@@ -1,10 +1,10 @@
 repo: CuriousOne23/WhenMathPrays
-as_of: 2026-11-02
-sha: 9bafeedc
-working_tree_bytes: 18729658
-git_dir_bytes: 6709876
-tracked_bytes: 18729658
-file_count: 2553
+as_of: 2026-11-09
+sha: 9dd2f22
+working_tree_bytes: 18748441
+git_dir_bytes: 6718487
+tracked_bytes: 18748441
+file_count: 2555
 top_n: 100
 
 Inventory agent suggest-only report: a human decides keep/delete/gitignore; nothing was changed in the repo.
@@ -28,9 +28,9 @@ Inventory agent suggest-only report: a human decides keep/delete/gitignore; noth
 | 15 | tools/editor/views/primitive_panel_pyqtgraph.py | primitive_panel_pyqtgraph.py | 74661 | other | yes | keep |  |
 | 16 | thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/conversion_pipeline/wordnet_raw/sentidx.vrb | sentidx.vrb | 73371 | playground | yes | keep | third-party WordNet data file (small; full dump files already gitignored); under requirements_20 so keep |
 | 17 | docs/architecture_of_dynamic_thought.md | architecture_of_dynamic_thought.md | 71121 | other | yes | keep |  |
-| 18 | thought_simulator/program_governance/BOT_REPORTS/2026-10-05.md | 2026-10-05.md | 70995 | bot-report | yes | keep | prior Inventory report (2026-10-05); new in top-100 |
-| 19 | thought_simulator/program_governance/BOT_REPORTS/LATEST.md | LATEST.md | 70995 | bot-report | yes | keep | identical to 2026-09-28.md by design (LATEST pointer copy) |
-| 20 | thought_simulator/program_governance/BOT_REPORTS/2026-09-28.md | 2026-09-28.md | 69332 | bot-report | yes | keep | LATEST.md is an identical copy (intended) |
+| 18 | thought_simulator/program_governance/BOT_REPORTS/2026-10-05.md | 2026-10-05.md | 70995 | bot-report | yes | keep | prior Inventory report (2026-10-05); LATEST.md is an identical copy (intended) |
+| 19 | thought_simulator/program_governance/BOT_REPORTS/LATEST.md | LATEST.md | 70995 | bot-report | yes | keep | identical to 2026-10-05.md by design (LATEST pointer copy) |
+| 20 | thought_simulator/program_governance/BOT_REPORTS/2026-09-28.md | 2026-09-28.md | 69332 | bot-report | yes | keep |  |
 | 21 | thought_simulator/program_governance/BOT_REPORTS/2026-09-21.md | 2026-09-21.md | 69009 | bot-report | yes | keep |  |
 | 22 | thought_simulator/requirements_20/20.700.010_primitives_glossary.md | 20.700.010_primitives_glossary.md | 66697 | glossary | yes | keep |  |
 | 23 | tools/interactive_editor.py | interactive_editor.py | 66001 | other | yes | keep |  |
@@ -112,17 +112,25 @@ Inventory agent suggest-only report: a human decides keep/delete/gitignore; noth
 | 99 | docs/IDENTITY_SUPPRESSION_LOADING.md | IDENTITY_SUPPRESSION_LOADING.md | 23061 | other | yes | keep |  |
 | 100 | thought_simulator/requirements_20/system_playground/primitives/tr/tr_py_struc_pgm.md | tr_py_struc_pgm.md | 23022 | playground | yes | keep |  |
 
-## Delta vs 2026-10-05
+## Delta vs 2026-10-12 / 2026-11-02
 
-- sha: b650f956 -> 9bafeedc
-- working_tree_bytes: 18504361 -> 18729658 (+225297)
-- git_dir_bytes: 6630248 -> 6709876 (+79628)
-- tracked_bytes: 18504361 -> 18729658 (+225297)
-- file_count: 2469 -> 2553 (+84)
+- sha: 9bafeedc -> 9dd2f22
+- working_tree_bytes: 18729658 -> 18748441 (+18783)
+- git_dir_bytes: 6709876 -> 6718487 (+8611)
+- tracked_bytes: 18729658 -> 18748441 (+18783)
+- file_count: 2553 -> 2555 (+2)
 - suggested counts unchanged: keep=96, delete=2, gitignore=2; same four non-keep paths
-- top-100 membership: entered thought_simulator/program_governance/BOT_REPORTS/2026-10-05.md (keep); dropped out tools/editor/baseline_protocol.py
+- top-100 membership: unchanged (no entries/exits); all top-100 byte sizes unchanged
+- tracked file_count +2: root `debug_query_log.txt` (13475 bytes) and root `$null` (0 bytes); both outside top-100
+
+## Other observations
+
+- `debug_query_log.txt` (root, 13475 bytes, tracked, not matched by .gitignore): likely a local debug dump; candidate for gitignore (human decides).
+- `$null` (root, 0 bytes, tracked): likely an accidental shell redirect artifact; candidate for delete (human decides).
 
 ## Issues/notes
 
 - Shallow clone (--depth 1); git_dir_bytes reflects shallow .git.
 - Suggest-only: no files deleted, .gitignore untouched, nothing pushed.
+- LATEST pointer line (for Helm to fold into LATEST.md / digest): `inventory: INVENTORY.md | agent=Inventory | top-100 by size | human keep/delete/gitignore | stamp=2026-11-09`
+- Intended repo paths (not committed here): thought_simulator/program_governance/BOT_REPORTS/INVENTORY.md and thought_simulator/program_governance/BOT_REPORTS/inventory/2026-11-09.md
