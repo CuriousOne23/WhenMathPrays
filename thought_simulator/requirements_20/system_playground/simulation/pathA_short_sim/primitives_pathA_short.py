@@ -714,6 +714,12 @@ def _build_idob_packet(tp: TP) -> Dict[str, Any]:
 def IdOB(tp: TP) -> TP:
     packet = sum_idob(tp, registry)
     tp.idob = packet
+    if getattr(tp, "enable_s2m_seed", False):
+        from idob.experimental_seed import apply_seed
+        from idob.experimental_meaning import apply_meaning
+
+        tp.s2m_seed = apply_seed(tp, packet)
+        tp.s2m_meaning = apply_meaning(tp, tp.s2m_seed)
     semantic_core = packet.get("semantic_core", {})
     if not isinstance(semantic_core, dict):
         semantic_core = {}

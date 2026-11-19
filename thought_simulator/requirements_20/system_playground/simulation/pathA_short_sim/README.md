@@ -18,6 +18,46 @@ Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums tha
 
 Force ops such as polar, command, request, and exclamative are open holes. They are not object connections. History, likelihood, and the geometry conjecture are not inputs.
 
+## S2M mapping (experimental, branch `s2m-seed-experiment`)
+
+S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teaching packet.
+
+- **Enabled by default:**
+  ```bash
+  python run_examples.py
+  ```
+  IdOB writes the normal `tp.idob` packet, then attaches:
+  - `tp.s2m_seed` (Part I accountability trail)
+  - `tp.s2m_meaning` (Part II interpretive transfer)
+
+  The runner prints labeled blocks:
+  ```
+  --- S2M Accountability (IdOB) ---
+  s2m_seed: {
+    "utterance": "...",
+    "written_relations": [...],
+    "null_relations": [...],
+    "crossing_fields": {...},
+    "seed_complete": true
+  }
+
+  --- S2M Meaning (IdOB) ---
+  s2m_meaning: {
+    "meaning_relations": [...],
+    "active_space": [...],
+    "story_id": "...",
+    "extendable": true
+  }
+  ```
+
+- **Disabled:**
+  ```bash
+  python run_examples.py --no-s2m-seed
+  ```
+  Both blocks are disabled and do not appear in the log. Existing floor and claim behavior is unchanged.
+
+The primitive that performs the mapping is IdOB. Details and acceptance criteria: [notes/program/s2m_program_reference.md](notes/program/s2m_program_reference.md).
+
 ## Simulation directories
 
 - `desks/` — SOB, SROB, CnOB, SmOB.
@@ -76,6 +116,8 @@ It explains:
 - how to run `run_examples.py`  
 - how to add your own sentences  
 - how to inspect TP evolution as two columns (OB-set vs packet)
+
+S2M mapping (experimental): enabled by default; disable with `--no-s2m-seed`. See the S2M mapping section above. The mapping is performed by IdOB.
 
 ---
 
@@ -242,6 +284,9 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 
 - Emerging S2M relational proposal:  
   [notes/program/s2m_relational_proposal.md](notes/program/s2m_relational_proposal.md)
+
+- S2M program reference (implementation contract):  
+  [notes/program/s2m_program_reference.md](notes/program/s2m_program_reference.md)
 
 ---
 

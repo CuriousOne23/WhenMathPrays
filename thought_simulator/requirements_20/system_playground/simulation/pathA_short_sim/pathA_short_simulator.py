@@ -73,9 +73,10 @@ def primitive_notes(name: str, tp: TP) -> str:
     return f"[{macro}]"
 
 
-def run_pathA_short(raw_text: str) -> Dict[str, Any]:
+def run_pathA_short(raw_text: str, enable_s2m_seed: bool = False) -> Dict[str, Any]:
     """Run the short Path-A flow on a sentence and return TP + trace."""
     tp = init_tp(raw_text)
+    tp.enable_s2m_seed = enable_s2m_seed
     trace: List[Dict[str, Any]] = []
 
     for fn in PRIMITIVES:
@@ -119,7 +120,12 @@ def run_pathA_short(raw_text: str) -> Dict[str, Any]:
 
         trace.append(primitive_trace_entry)
 
-    return {
+    result: Dict[str, Any] = {
         "final_tp": asdict(tp),
         "trace": trace,
     }
+    if hasattr(tp, "s2m_seed"):
+        result["s2m_seed"] = tp.s2m_seed
+    if hasattr(tp, "s2m_meaning"):
+        result["s2m_meaning"] = tp.s2m_meaning
+    return result

@@ -2,162 +2,128 @@
 
 **Date:** 2026-11-19
 **Branch:** `s2m-seed-experiment`
-**Purpose:** Together with `s2m_relational_proposal.md`, this document supplies the concrete contracts an AI needs to implement the seed without destroying existing short-sim behavior.
+**Purpose:** Concrete contracts for the two-part S2M realization: (I) accountability trail, (II) interpretive transfer to meaning.
 **Status:** Implementation contract for the experimental branch. Not a requirements change.
+
+## Intent
+
+S2M is realized in two separable parts.
+
+- **Part I — Accountability trail**  
+  Establishes an inspectable record of what the floor wrote and what remains open. This is the seed already implemented. It does not yet claim interpreted meaning.
+
+- **Part II — Interpretive transfer to meaning**  
+  Selects a finite association from a bounded, extensible pool and writes it as a meaning relation against the trail. Meaning appears as that finite, legitimized composite (the customized story).
+
+Both parts run under `python run_examples.py` (enabled by default). Output is clearly labeled so each part can be found in a log file. Disable with `--no-s2m-seed`.
 
 ## Non-mutation rule
 
-Do not modify:
-- `idob/sum.py`
-- `primitives_pathA_short.py` (the IdOB call that does `tp.idob = packet`)
-- existing claim ledger or connection writers
-- any desk (`desks/`)
-- existing tests or replays
+Do not modify `idob/sum.py`, the core IdOB assignment that writes `tp.idob`, desks, or existing claim/connection writers. All new behavior is additive.
 
-All new code is additive and optional. The original teaching packet written to `tp.idob` must remain byte-for-byte identical when the seed is not requested.
+## CLI
 
-## Attachment point
-
-After the existing line in `primitives_pathA_short.py`:
-
-```python
-packet = sum_idob(tp, registry)
-tp.idob = packet
+```bash
+python run_examples.py                  # Part I + Part II enabled
+python run_examples.py --no-s2m-seed    # both disabled
+python run_examples.py > run.log        # pipeline to log; labels remain findable
 ```
 
-add an optional call that does **not** replace `tp.idob`:
+The primitive that attaches both parts is **IdOB**.
 
-```python
-if getattr(tp, "enable_s2m_seed", False):
-    from idob.experimental_seed import apply_seed
-    tp.s2m_seed = apply_seed(tp, packet)
+---
+
+# Part I — Accountability trail
+
+## Output label (easily found in log)
+```
+--- S2M Accountability (IdOB) ---
 ```
 
-The seed lives in a new attribute `tp.s2m_seed`. It never overwrites `tp.idob`.
+## Accounting output (`tp.s2m_seed`)
+- `utterance`: raw sentence
+- `written_relations`: relations the floor established  
+  Example: `{"from": "sky", "relation": "is", "to": "blue", "source": "floor"}`
+- `null_relations`: explicit markers for relations left open  
+  Example: `{"from": null, "relation": null, "to": null, "reason": "no_floor_source"}`
+- `crossing_fields`: reserved meaning slots, all null  
+  (`structure_ids`, `structural_key`, `rank`, `meaning_semantics`, `cie_id`, `meaning_delta_h`)
+- `seed_complete`: true
 
-## Data shapes
+## How it is used
+The accountability record is the inspectable starting point. Part II reads it and appends finite meaning relations beside it. It remains visible even if no interpretive selection is made.
 
-### Existing teaching packet (`tp.idob`)
-Dict produced by `sum_idob`. Key fields used by the seed:
-- `semantic_core`: dict
-- `selected_ops`: list
-- `truth_relation`: str
-- `identity_geometry`: str
-- `contributors`, `claimed_fields`, etc.
-
-Crossing fields (six IDs, rank, M, CIE, `meaning_delta_h`) are absent from this packet. They are not zero; they are missing.
-
-### Seed view (`tp.s2m_seed`)
-New dict. Must contain:
-
-```python
-{
-    "utterance": str,                    # tp.raw_text
-    "written_relations": [               # only relations the floor established
-        {
-            "from": str,                 # endpoint, e.g. "sky"
-            "relation": str,             # e.g. "is"
-            "to": str,                   # e.g. "blue"
-            "source": "floor"            # always "floor" for the seed
-        }
-    ],
-    "null_relations": [                  # explicit markers, not missing keys
-        {
-            "from": str | None,
-            "relation": str | None,
-            "to": str | None,
-            "reason": "unlegitimized"    # or "no_floor_source"
-        }
-    ],
-    "crossing_fields": {                 # all None
-        "structure_ids": None,
-        "structural_key": None,
-        "rank": None,
-        "meaning_semantics": None,
-        "cie_id": None,
-        "meaning_delta_h": None
-    },
-    "seed_complete": True
+## Example (The sky is blue.)
+```
+--- S2M Accountability (IdOB) ---
+s2m_seed: {
+  "utterance": "The sky is blue.",
+  "written_relations": [{"from": "sky", "relation": "is", "to": "blue", "source": "floor"}],
+  "null_relations": [{"from": null, "relation": null, "to": null, "reason": "no_floor_source"}],
+  "crossing_fields": {"structure_ids": null, "structural_key": null, "rank": null, "meaning_semantics": null, "cie_id": null, "meaning_delta_h": null},
+  "seed_complete": true
 }
 ```
 
-Null markers must be present as list entries or dict values set to `None`. Absence of a key is not a null.
+---
 
-## First seed implementation (`idob/experimental_seed.py`)
+# Part II — Interpretive transfer to meaning
 
-```python
-from typing import Any, Dict, List
-
-def apply_seed(tp: Any, packet: Dict[str, Any]) -> Dict[str, Any]:
-    """Additive seed. Does not mutate packet or tp.idob."""
-    utterance = getattr(tp, "raw_text", "") or ""
-    # Hard-coded first case for visibility. Later replace with floor extraction.
-    written = []
-    if "sky" in utterance.lower() and "blue" in utterance.lower():
-        written.append({
-            "from": "sky",
-            "relation": "is",
-            "to": "blue",
-            "source": "floor"
-        })
-
-    nulls = [
-        {"from": None, "relation": None, "to": None, "reason": "no_floor_source"}
-    ]
-
-    return {
-        "utterance": utterance,
-        "written_relations": written,
-        "null_relations": nulls,
-        "crossing_fields": {
-            "structure_ids": None,
-            "structural_key": None,
-            "rank": None,
-            "meaning_semantics": None,
-            "cie_id": None,
-            "meaning_delta_h": None
-        },
-        "seed_complete": True
-    }
+## Output label (easily found in log)
+```
+--- S2M Meaning (IdOB) ---
 ```
 
-## Replay (`support/tools/seed_replay.py`)
+## Meaning output (`tp.s2m_meaning`)
+- `meaning_relations`: finite, legitimized associations  
+  Example: `{"from": "blue", "relation": "evokes", "to": "cold", "major": "affective", "legitimized": true}`
+- `active_space`: majors that were live for this selection
+- `story_id`: identifier for the composite
+- `extendable`: true
 
-Must:
-1. Construct a TP with `raw_text = "The sky is blue."`
-2. Run the normal floor + IdOB so `tp.idob` is populated exactly as today.
-3. Set `tp.enable_s2m_seed = True` and call the optional path.
-4. Assert `tp.idob` is unchanged from a control run without the flag.
-5. Print `tp.s2m_seed` showing the one written relation and the null markers.
-6. Exit 0 on success.
+## How it is used
+Part II loads only the active majors from YAML, proposes associations for the seed endpoints, legitimates those inside the space of use, and writes the accepted ones as meaning relations. The result is appended to the trail so the customized story is inspectable.
 
-## Category stores (stubs only for first slice)
+## Data files (YAML)
+- `s2m/data/majors.yaml` — open list of classifications
+- `s2m/data/associations/<endpoint>.yaml` — tagged associations for each word
+- `s2m/data/spaces/default.yaml` — active majors for the default space
 
-Create `stores/` with one file per category. Each exports:
+New associations or majors are added by editing YAML; Python loop code does not change.
 
-```python
-def propose(active_context: Dict[str, Any]) -> List[Dict[str, Any]]:
-    return []  # empty until trained
+## Example meaning record
+```
+--- S2M Meaning (IdOB) ---
+s2m_meaning: {
+  "meaning_relations": [
+    {"from": "blue", "relation": "evokes", "to": "cold", "major": "affective", "legitimized": true},
+    {"from": "sky", "relation": "affords", "to": "openness", "major": "mental", "legitimized": true}
+  ],
+  "active_space": ["affective", "perceptual", "mental", "spiritual"],
+  "story_id": "sky-blue-001",
+  "extendable": true
+}
 ```
 
-The runtime loop (`mapping/loop.py`) may call them but must tolerate empty returns. No store is required to function for the first seed to be correct.
+## Realized sentences (examples)
+1. "The sky is blue." → accountability writes sky–is–blue; meaning may add blue→cold, sky→openness.
+2. "The book is on the table." → accountability writes book–is–on–table; meaning may add table→support, book→object.
+3. "Where is the book?" → accountability writes query relation; meaning may add book→sought, location→unknown.
 
-## What “correct” means for the first commit
+## Expandability
+- Add a major: one line in `majors.yaml`.
+- Add an association: one entry in the endpoint YAML.
+- Add a space: new file under `spaces/`.
+- The select–legitimate–write loop and both output labels stay unchanged.
+- The structure is one workable accounting organization, not claimed to be the only or optimal one. It is sufficient to demonstrate the concept and can be refined or extended without breaking the trail.
 
-- Existing `run_examples.py` and claim-ledger replay still pass with no flag set.
-- `seed_replay.py` prints a seed containing exactly one written relation for “The sky is blue.” and explicit nulls for everything else.
-- `tp.idob` is identical whether the seed flag is on or off.
-- No new import errors on the normal path.
+## First implementation slice for Part II
+- YAML files for sky and blue with the rudimentary associations.
+- Loader, active-space, propose, legitimate, write, and record modules.
+- Loop called from IdOB when the seed flag is on.
+- Clear `--- S2M Meaning (IdOB) ---` block in `run_examples.py` output.
 
-## Later slices (not required for first correctness)
-
-- Replace the hard-coded relation with extraction from floor fields (`struct_segments`, roles, constraints).
-- Implement `mapping/activate.py`, `deviate.py`, `legitimate.py`.
-- Fill category stores.
-- Add audit.
-
-Until those exist, the seed view is the only required new behavior.
+Until Part II is filled, only the Accountability block appears. Both blocks are labeled and pipeline cleanly to a log file.
 
 ## Traceability
-
-Linked from `s2m_relational_proposal.md`. All work stays on branch `s2m-seed-experiment`. `main` is the recovery point.
+Linked from the short-sim README and from `s2m_relational_proposal.md`. All work remains on `s2m-seed-experiment`. `main` is the recovery point.

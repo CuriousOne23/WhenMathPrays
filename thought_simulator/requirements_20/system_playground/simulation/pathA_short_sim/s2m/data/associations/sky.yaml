@@ -1,0 +1,5 @@
+associations:
+  - relation: affords
+    to: openness
+    major: mental
+
