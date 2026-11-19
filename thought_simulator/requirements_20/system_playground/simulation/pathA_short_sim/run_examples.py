@@ -1,3 +1,6 @@
+import argparse
+import json
+
 from pathA_short_simulator import run_pathA_short
 from mcb.seam import copy_from_idob
 from ouba.assembly import build_ouba
@@ -109,14 +112,24 @@ def _print_schema_families() -> None:
     print("schema families: matched" if not missing else "schema families: not matched")
 
 
-def main() -> None:
+def build_arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run PathA short simulation examples")
+    parser.add_argument(
+        "--no-s2m-seed",
+        action="store_true",
+        help="Disable the optional S2M seed mapping output.",
+    )
+    return parser
+
+
+def main(enable_s2m_seed: bool = True) -> None:
     # sentence = "The quick brown fox jumps over the lazy dog."
     # PA-CSE-005 / mixed_desc
     # sentence = "The rain in Spain stays mainly in the plain."
     # PA-CSE-008 / interrogative
     # sentence = "Why is the sky blue?"
     # PA-CSE-001 / copular
-    # sentence = "The sky is blue."
+    sentence = "The sky is blue."
     # PA-CSE-006 / interrogative
     # sentence = "Where is the book?"
     # PA-CSE-002 / copular
@@ -148,7 +161,7 @@ def main() -> None:
     # PA-CSE-021 / interrogative / HOLE-09
     # sentence = "What a beautiful day!"
     # PA-CSE-012 / copular / HOLE-09
-    sentence = "Please close the door."
+    # sentence = "Please close the door."
 
     # Grouped rollout queue (Not yet implemented) -- keep commented until promoted.
     # Mandatory status-change metadata for each promotion:
@@ -184,7 +197,7 @@ def main() -> None:
     # sentence = "I am tired."
     # PA-CSE-018 / copular / HOLE-14 -- capability: passive voice mapping and by-phrase roles
     # sentence = "The book was written."
-    simulation_result = run_pathA_short(sentence)
+    simulation_result = run_pathA_short(sentence, enable_s2m_seed=enable_s2m_seed)
     final_tp = simulation_result["final_tp"]
 
     idob_packet = final_tp.get("idob_packet", final_tp.get("idob", {}))
@@ -216,6 +229,11 @@ def main() -> None:
     print(f"tp_ie_segment_tokens: {final_tp_ie['segment_tokens']}")
     for k, v in canonical_final_tp.items():
         print(f"{k}: {v}")
+
+    s2m_seed = simulation_result.get("s2m_seed")
+    if isinstance(s2m_seed, dict):
+        print("\n--- S2M seed (IdOB) ---")
+        print(f"s2m_seed: {json.dumps(s2m_seed, indent=2)}")
 
     print("\n=== Trace ===")
 
@@ -291,4 +309,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    args = build_arg_parser().parse_args()
+    main(enable_s2m_seed=not args.no_s2m_seed)

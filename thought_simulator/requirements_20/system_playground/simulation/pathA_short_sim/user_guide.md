@@ -22,6 +22,12 @@ From this directory:
 python run_examples.py
 ```
 
+S2M seed is enabled by default in this run. To disable it:
+
+```
+python run_examples.py --no-s2m-seed
+```
+
 Or log output:
 
 ```
