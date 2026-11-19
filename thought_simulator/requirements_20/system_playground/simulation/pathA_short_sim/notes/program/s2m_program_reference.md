@@ -16,6 +16,22 @@ Do not modify:
 
 All new code is additive and optional. The original teaching packet written to `tp.idob` must remain byte-for-byte identical when the seed is not requested.
 
+## CLI control of the seed
+
+The meaning seed (`enable_s2m_seed`) is **enabled by default** when running:
+
+```bash
+python run_examples.py
+```
+
+To disable it, use the CLI flag:
+
+```bash
+python run_examples.py --no-s2m-seed
+```
+
+When enabled, IdOB (after writing the normal teaching packet to `tp.idob`) also attaches the seed view to `tp.s2m_seed` and the runner prints it in a readable block. When disabled, the seed is not computed and does not appear in the log. The primitive that performs the mapping is **IdOB**.
+
 ## Attachment point
 
 After the existing line in `primitives_pathA_short.py`:
