@@ -3,6 +3,7 @@
 **Date:** 2026-11-19
 **Status:** Proposal. Independent of current requirements definitions of meaning. Not a definitive account.
 **Door:** This page is linked from the short-sim README so a Frontier AI or new session can find it.
+**Implementation contract:** [s2m_program_reference.md](s2m_program_reference.md) — concrete data shapes, attachment point, non-mutation rules, and first-seed acceptance criteria. Read both before coding.
 
 ## Why
 
@@ -141,3 +142,5 @@ Further examples:
 ## Traceability
 
 This proposal is the emerging S2M mapping. It is not yet implemented. The short-sim door points here so the process can be found. Current goal in status.md remains the first visible seed (one relation + nulls).
+
+Implementation details sufficient for correct coding live in [s2m_program_reference.md](s2m_program_reference.md).
