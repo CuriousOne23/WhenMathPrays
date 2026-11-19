@@ -1,22 +1,27 @@
 # Path A short-sim status
 
-**Date:** 2026-10-08 (goal stated 2026-11-19)
+**Date:** 2026-11-19  
 **Door:** [../../README.md](../../README.md). This page is the account. The door points here and does not carry it.
 
 ## Current goal
 
-One minimum S2M path that makes the structure-to-meaning transition visible.
+Controlled category selection (sentence-internal cue or prior-CEx cue) so a non-default category can be chosen without mutating the floor.
 
-What counts as that path:
+Detail and constraints: [category_selection_proposal.md](category_selection_proposal.md).
+
+The bots ShortSim Status and ShortSim Docs hold the account accountable to this goal. They report distance from it; they do not invent the next path or fill fields.
+
+## Historical / accomplished
+
+**Narrow S2M seed (accomplished 2026-11-19)**  
+One minimum S2M path that makes the structure-to-meaning transition visible was realized. IdOB attaches an accountability trail (`tp.s2m_seed`) and an interpretive transfer (`tp.s2m_meaning`). Both are additive, non-mutating, and CLI-controlled. Crossing fields remain null. The seed is visible and re-runnable.
+
+Prior wording (kept for trace):
 - One existing floor distinction written from a real floor source (or explicitly left outside and recorded as such).
 - The connection/hole record surfaced as a limited, still-not-\(M\) signal so a run shows which floor fields participated and which holes stayed holes.
 - Every other crossing field (six IDs, structural key, rank, CIE, `meaning_delta_h`) remains null unless a floor source for that exact field already exists and the write is mechanical.
 
-Why this is next: it is the smallest step that is substantial to \(M\). Further expansion of S2M paths waits until this path exists, can be re-run, and can be pointed at.
-
-What is not the goal yet: full six-ID population, rank, CIE, `meaning_delta_h`, or treating force ops as relations.
-
-The bots ShortSim Status and ShortSim Docs hold the account accountable to this goal. They report distance from it; they do not invent the next path or fill fields.
+That goal is closed. Further expansion of S2M paths is not the current aim; category selection is.
 
 ## Independent views (not definitive)
 
@@ -43,7 +48,6 @@ This effort does not birth \(M\) and does not apply CIE.
 
 The six IDs are not filled. The first run found three `unsupported`, three `missing_dimension`, and two `unplaced` floor differences: speaker against theme, and query against statement. The six-ID set does not account for distinctions the floor already makes. Detail: [packet_sync/id_eval.md](packet_sync/id_eval.md). Candidates, not new IDs: [packet_sync/unplaced.md](packet_sync/unplaced.md). Both already have floor sources. They stay outside the six.
 
-
 ## Narrow S2M realization
 
 A finished packet can support accountable connections and holes. That is evidence for the Path A claim that structure can be mapped without inventing links. It is not \(M\), not history, and not the geometry conjecture.
@@ -60,12 +64,14 @@ A finished packet can support accountable connections and holes. That is evidenc
 - IdOB sum. Teaching packet written into `tp.idob`. `idob_packet` is that same sum, not a second packet.
 - Readable claim and connection record. No ranking.
 - Constructable shell view (`crossing_from_packet`) that sets crossing fields to null. Not the default `tp.idob` value.
+- Narrow S2M seed (accountability + interpretive transfer) attached by IdOB (see Historical / accomplished).
 
 ## What is absent
 
 - Six structure IDs, structural key, rank, selected group.
 - \(M\), CIE, `meaning_delta_h`.
 - Force ops as relations. Polar, command, request, and exclamative stay holes.
+- Controlled category selection (next realization).
 
 ## Requirement account
 
@@ -91,3 +97,4 @@ A short dated log. Detail stays in the linked pages. This list does not grow int
 - 2026-11-19 — tp.idob description aligned with code: main run writes teaching packet; shell is constructable view via crossing_from_packet.
 - 2026-11-19 — Current goal stated: one minimum visible S2M path. ShortSim Status and ShortSim Docs hold the account accountable to it.
 - 2026-11-19 — Independent views added: ShortSim Trajectory (speculative quality) and Path A Account (larger door). Both labeled non-definitive.
+- 2026-11-19 — Narrow S2M seed marked accomplished (historical). Current goal moved to controlled category selection. [category_selection_proposal.md](category_selection_proposal.md)
