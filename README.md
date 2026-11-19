@@ -17,6 +17,7 @@ Three documents serve as your entry points, each at a different level of depth:
 | [`STARTHERE.md`](STARTHERE.md) | **Front door** — a gentle, hands-on introduction | You are new to the project |
 | [`README.md`](README.md) *(this file)* | **Foyer** — a conceptual map of the territory | You want a structured overview before diving in |
 | [`CONTENTS.md`](CONTENTS.md) | **Library catalog** — a complete index of every document | You are looking for a specific file or reference |
+| [pathA_short_sim/README.md](thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/README.md) | **Current Path A door** — short-sim status and account | You want the live structure-to-meaning realization |
 
 **Recommended reading order for evaluators and researchers:**
 1. This README (conceptual framing)
@@ -24,6 +25,18 @@ Three documents serve as your entry points, each at a different level of depth:
 3. [`docs/Verb Mind Epistemology for Relational Physics.md`](docs/Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md) (epistemic foundation)
 4. [`docs/GRP_rev3.5.md`](docs/GRP_rev3.5.md) (the mathematics)
 5. [`STARTHERE.md`](STARTHERE.md) (hands-on engagement with the system)
+
+---
+
+## Current research surface
+
+The active Path A realization work lives in the short simulator:
+
+**[pathA_short_sim](thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/README.md)**
+
+Start there. The short-sim README is the door. It states the current face (structure floor written, teaching packet in `tp.idob`, crossing fields absent, narrow S2M as connections and holes) and points to the status, packet-sync, claim, and coverage pages that carry the account.
+
+A Frontier AI or new session that needs the present state of the structure-to-meaning work should read that door first. The GRP framing above remains the larger context; the short-sim door is the current realization surface.
 
 ---
 
@@ -172,6 +185,7 @@ All code contributions must meet the **MVT standard**:
 | `thought_simulator/program_governance/` | Bot/EVENT home |
 | `thought_simulator/requirements_20/` | Collaborative 20-series requirement layer |
 | `thought_simulator/requirements_20/system_playground/simulation/` | Path A machine (landed 2026-08-28): `ts_kernel/` plus `pipelines/lineup_idob_mcb` |
+| [pathA_short_sim](thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/README.md) | Current Path A short simulator door and status account |
 
 ---
 
@@ -253,6 +267,7 @@ Open `tools/GRP_SpreadSheet.xlsm`, enter your values, and press **Run GRP**.
 | The human story of the project | [`THE_STORY_OF_GRP.md`](docs/THE_STORY_OF_GRP.md) |
 | Conversations that shaped the system | [`docs/Reality in Motion, Conversations.md`](docs/Reality%20in%20Motion,%20Conversations.md) |
 | Everything, indexed | [`CONTENTS.md`](CONTENTS.md) |
+| Current Path A short-sim status | [pathA_short_sim/README.md](thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/README.md) |
 
 ---
 
