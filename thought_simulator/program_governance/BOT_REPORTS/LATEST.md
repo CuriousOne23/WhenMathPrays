@@ -1,5 +1,5 @@
-date: 2026-11-16
-events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human); Terms charter 2026-09-02 (stamp=human); EVENT policy Terms charter amend 2026-09-02 (stamp=human); Terms re-run cadence#4 2026-09-02 (stamp=human); EVENT policy Flow create+run 2026-09-03 (stamp=human); EVENT policy Catalog create+run 2026-09-03 (stamp=human); EVENT policy Terms once 2026-09-03 (stamp=human, kind=view); EVENT doc-change F-001–F-003 applied 2026-09-03 (stamp=human); EVENT policy Inventory create+run 2026-09-03 (stamp=human, kind=view); Flow weekly safety net F-000 2026-09-07; Terms weekly safety net T-050–T-051 2026-09-07; Catalog weekly safety net C-000 2026-09-14; Terms weekly safety net T-052–T-054 2026-09-14; Flow weekly safety net F-000 2026-09-21; Terms weekly safety net T-055–T-056 2026-09-21; Catalog weekly safety net C-000 2026-09-21; Flow weekly safety net F-000 2026-09-28; Terms weekly safety net T-000 2026-09-28; Catalog weekly safety net C-000 2026-09-28; Terms weekly safety net T-057 2026-10-05; Flow weekly safety net F-000 2026-10-05; Catalog weekly safety net C-000 2026-10-05; Inventory weekly safety net 2026-10-05; Terms weekly safety net T-000 2026-10-12; Flow weekly safety net F-000 2026-10-12; Catalog weekly safety net C-000 2026-10-12; Inventory weekly safety net 2026-10-12; Terms weekly safety net T-000 2026-10-19; Catalog weekly safety net C-000 2026-10-19; Flow weekly safety net F-000 2026-10-19; Inventory weekly safety net 2026-10-19 pending (not run); Terms weekly safety net T-000 2026-10-26; Catalog weekly safety net C-000 2026-10-26; Flow weekly safety net F-000 2026-10-26; Inventory weekly safety net 2026-10-26 unchanged since 2026-10-12 (same sha 9bafeed); fresh scan pending box recovery; unverified, for human: root debug_query_log.txt (13,475 bytes) gitignore candidate; zero-byte root file `$null` likely accidental redirect; Terms weekly safety net T-000 2026-11-02; Flow weekly safety net F-000 2026-11-02; Catalog weekly safety net C-000 2026-11-02; Inventory weekly safety net 2026-11-02; Terms weekly safety net T-000 2026-11-09; Flow weekly safety net F-000 2026-11-09; Catalog weekly safety net C-000 2026-11-09; Inventory weekly safety net 2026-11-09; Flow weekly safety net F-000 2026-11-16; Terms weekly safety net T-000 2026-11-16; Catalog weekly safety net C-000 2026-11-16; Inventory weekly safety net 2026-11-16
+date: 2026-11-19
+events processed: EVENT policy 2026-08-30; EVENT decision 2026-08-30 (stamp=human); EVENT doc-change field-name authority 20.116 2026-08-30 (stamp=human); EVENT decision Cluster 1 IdOB invoke 2026-08-30 (stamp=human); EVENT decision Cluster 2 meaning-write 2026-08-30 (stamp=human); EVENT decision Cluster 3 OuBA door 2026-08-30 (stamp=human); EVENT doc-change 20.40 v1.3 2026-08-30 (stamp=human); EVENT decision TP.semantic.importance IdOB-prm 2026-08-31 (stamp=human); EVENT doc-change Path-A wording alignment 2026-08-31 (stamp=human, kind=view); Harness charter 2026-09-02 (stamp=human); Terms charter 2026-09-02 (stamp=human); EVENT policy Terms charter amend 2026-09-02 (stamp=human); Terms re-run cadence#4 2026-09-02 (stamp=human); EVENT policy Flow create+run 2026-09-03 (stamp=human); EVENT policy Catalog create+run 2026-09-03 (stamp=human); EVENT policy Terms once 2026-09-03 (stamp=human, kind=view); EVENT doc-change F-001–F-003 applied 2026-09-03 (stamp=human); EVENT policy Inventory create+run 2026-09-03 (stamp=human, kind=view); Flow weekly safety net F-000 2026-09-07; Terms weekly safety net T-050–T-051 2026-09-07; Catalog weekly safety net C-000 2026-09-14; Terms weekly safety net T-052–T-054 2026-09-14; Flow weekly safety net F-000 2026-09-21; Terms weekly safety net T-055–T-056 2026-09-21; Catalog weekly safety net C-000 2026-09-21; Flow weekly safety net F-000 2026-09-28; Terms weekly safety net T-000 2026-09-28; Catalog weekly safety net C-000 2026-09-28; Terms weekly safety net T-057 2026-10-05; Flow weekly safety net F-000 2026-10-05; Catalog weekly safety net C-000 2026-10-05; Inventory weekly safety net 2026-10-05; Terms weekly safety net T-000 2026-10-12; Flow weekly safety net F-000 2026-10-12; Catalog weekly safety net C-000 2026-10-12; Inventory weekly safety net 2026-10-12; Terms weekly safety net T-000 2026-10-19; Catalog weekly safety net C-000 2026-10-19; Flow weekly safety net F-000 2026-10-19; Inventory weekly safety net 2026-10-19 pending (not run); Terms weekly safety net T-000 2026-10-26; Catalog weekly safety net C-000 2026-10-26; Flow weekly safety net F-000 2026-10-26; Inventory weekly safety net 2026-10-26 unchanged since 2026-10-12 (same sha 9bafeed); fresh scan pending box recovery; unverified, for human: root debug_query_log.txt (13,475 bytes) gitignore candidate; zero-byte root file `$null` likely accidental redirect; Terms weekly safety net T-000 2026-11-02; Flow weekly safety net F-000 2026-11-02; Catalog weekly safety net C-000 2026-11-02; Inventory weekly safety net 2026-11-02; Terms weekly safety net T-000 2026-11-09; Flow weekly safety net F-000 2026-11-09; Catalog weekly safety net C-000 2026-11-09; Inventory weekly safety net 2026-11-09; Flow weekly safety net F-000 2026-11-16; Terms weekly safety net T-000 2026-11-16; Catalog weekly safety net C-000 2026-11-16; Inventory weekly safety net 2026-11-16; ShortSim Docs baseline drift report 2026-11-19; ShortSim Status baseline 2026-11-19; ShortSim Docs scheduled drift watch 2026-11-19; ShortSim Trajectory 2026-11-19; Path A Account first-pass 2026-11-19; Path A Account new drift 2026-11-19; ShortSim Status goal-distance 2026-11-19; ShortSim Trajectory ADVANCES 2026-11-19; main tip moved to 1e48373e
 flow-tracker = 20.705 §2 and §3.6
 field-name authority = 20.116 series
 20.40 v1.3; freeze = HLR-20.40-019; 003/007/008 = SOB–SmOB only.
@@ -387,6 +387,104 @@ T-000 | none | — | none | no new glossary distance this week (tip_sha 9dd2f22b
 
 inventory: INVENTORY.md | agent=Inventory | top-100 by size | human keep/delete/gitignore | stamp=2026-11-16
 
+shortsim:
+
+agent=ShortSim Docs | label=ShortSim Docs | root=thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/ | main=8202fb5 (2026-11-19 5:10 AM MST) | read-only; no PR yet from ShortSim Docs
+status: baseline drift report 2026-11-19 — 9 drift findings; MATCHES recorded; doc-only PR pending human go-ahead
+Repo CuriousOne23/WhenMathPrays, main @ 8202fb5 (2026-11-19 5:10 AM MST)
+Root: thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/
+Read-only; no PR yet from ShortSim Docs
+main tip moved to 1e48373e
+MATCHES: updated door README, notes/program/status.md, and notes/program/packet_sync/README.md consistent with code (IdOB writes teaching packet to tp.idob; idob_packet is the same sum; crossing fields only on constructable shell from idob/crossing.py). claim_ledger.md (15 rows) and s2m_structure/result.md match their replays. Door links resolve.
+DRIFT (9):
+1 | s2m_structure/README.md L4-14, L85 and packet_and_mapping.md L22 | class=stale | issue=still say 'not a writer / before a writer exists'; writer idob/connections.py exists. Stale. | owner=human | write=no
+2 | pathA_supported_sentences.md L195 and pathA_cse/00_header.md L199 | class=wrong | issue=name the wrong live run_examples.py sentence; code (L151) is 'Please close the door.' Wrong. | owner=human | write=no
+3 | Door README §1 L38-52/126-152 and supported_sentences §1 | class=stale | issue=say 'five families'; ledger/idob also cover action, command, request, reporting, relative, exclamative. Stale. | owner=human | write=no
+4 | Door README L40 and supported_sentences L6-11 | class=wrong | issue=give order SOB→SROB→CnOB→SmOB→IdOB→TRU; code order is ...SmOB→SSG→RBU→RB→TR→TRU→RTU→CTP→IdOB→OuBA. Wrong. | owner=human | write=no
+5 | Door README L216, user_guide L9/L233, and idob_object_space.md §3 | class=wrong | issue=say 'eight families'; there are 10 cards plus a 10-value enum (imperative, exclamative); agent_action family is agent_action, not residual_identity. Wrong. | owner=human | write=no
+6 | Door README L108/120/162-174 and user_guide L167 | class=stale | issue=say 'MCB omitted / add copy-only seam first'; mcb/seam.py copy_from_idob exists and run_examples prints it. Stale. | owner=human | write=no
+7 | Door README tree (L246-291) | class=missing | issue=omits desks/, mcb/, ouba/, support/s2m/, support/tools/, notes/program/, and three entry scripts. Missing. | owner=human | write=no
+8 | user_guide L61/L114 | class=wrong | issue=lists final TP field basin_residue; dataclass field is smoothing_residue, and SmOB sets a non-field attr (possible code bug). Wrong. | owner=human | write=no
+9 | user_guide L61/L123-124 | class=stale | issue=lists idob_packet as a TP field; the field is idob. Stale. | owner=human | write=no
+undocumented: replay_parity_harness.py CLI, generate_cutover_readiness_report.py, ie_compat_inplace.py, pathA_dbug.py --verbose
+note: desks/idob/ doesn't exist; desks/ and idob/ are siblings. Exact replacement text held by ShortSim Docs; doc-only PR pending human go-ahead.
+
+watch 2026-11-19 (scheduled drift watch):
+main 8202fb5 → 6e1a8d5 (2026-11-19 8:05 AM MST). Docs-only; no Python/YAML changed.
+WHAT CHANGED: fccfea9 + 00ee3aa (root README links), 4a1ee2e (status.md Current goal), 19019f6 (new path_a_status.md), ae9b061 (Independent views), 1a536a7 (s2m_relational_proposal.md), 6e1a8d5 (door README links proposal).
+MATCHES: no code drift; door Current face matches code; path_a_status.md quotes goal accurately.
+NEW GOAL DRIFT (2):
+1 | pathA_short_sim/README.md Onboarding item 1 | issue=points to status.md without naming the goal. Proposed text held by ShortSim Docs. | owner=human | write=no
+2 | pathA_short_sim/README.md Onboarding item 7 | issue=lists the relational proposal without saying it isn't current / not implemented. Proposed addition held by ShortSim Docs. | owner=human | write=no
+KNOWN 9 BASELINE ITEMS: all still open and unchanged.
+PR: branch shortsim-docs/20261119-6e1a8d5, commit 273a602 (README only). Create-PR form waiting on human Submit; not open yet. Never merge.
+standing job FYI: holds short-sim door to status.md goal; routine checks goal drift and code drift; never invents path; never edits requirements; holding baseline doc PR (the original 9) until human says yes.
+
+shortsim-status:
+
+agent=ShortSim Status | label=ShortSim Status | read-only | main=fccfea9 (root README pointer only; short-sim same as 8202fb5)
+status: baseline row 2026-11-19
+ShortSim Status baseline row. Read-only. Commit fccfea9 on main (root README pointer only; short-sim same as 8202fb5).
+Counts (100 rows): implemented 25, absent 33, drifted 16, unplaced 23, not found 3.
+- 20.705 §2: implemented intake/CEx-CE/TPU/SOB→SROB→CnOB→SmOB/SSG/OuBA; absent WrdNm, STPX, DCB, MCB, repeat loop; drifted ISc position, routing order (sim RB→TR→TRU→RTU→CTP), IdOB not after RB; unplaced TRU.
+- 20.105: implemented 003, 005, 111, 118; drifted 006, 094, 116, 117; absent 007–012, 090–093, 095, 112–115; unplaced 001, 002, 004, 096–110, 119; not found 100.
+- 20.105.010: absent 001–006, 027–033; drifted 025, 026 (live tp.idob fails schema: missing 'utterance'); unplaced 018–024; not found 007–009, 010–017 ID-only.
+- 20.40.050: implemented 001–003, 005–009, 013, 023, 025, 030, 042, 050, 063; drifted 011, 012, 018/019, 021/022, 029, 060, 062; absent 004, 014–016, 020, 024, 032–036, 043–059 range; unplaced 010/017, 026–028, 031, 037–039, 061.
+HOLES:
+1 | issue=idob_complete and path_b_eligible are True on every input, including an unknown string that still gets a packet marked complete:true (contradicts 'No binding, no packet' in program notes). | owner=human | write=no
+2 | issue=Floor differences with no clause home: speaker vs theme, query vs statement; 'He said…' drops 'he' from the segments. | owner=human | write=no
+3 | issue=Force ops polar_question, bare_command, polite_request, exclamative_force are still holes (unlisted_op). | owner=human | write=no
+4 | issue=Crossing fields null with no source: the six IDs, structural_key, candidate_group_ids, final_rank_order, selected_group_id, cie_id, meaning_semantics(_prime), meaning_delta_h, and shell flags ready_for_ouba/routing_filter_mutated. The shell is reachable only through replay. Missing entirely: resolution_status, residue_code, card_id, expand_target. | owner=human | write=no
+5 | issue=Dead code: _idob_structural_key hashes the floor, not the six IDs. | owner=human | write=no
+Root README pointer (README.md:37): its claims match the code literally, but it omits holes 1 and 2 above. Branch helm/event-policy-flow-tracker has no pathA_short_sim, so it can't be checked.
+
+goal-distance 2026-11-19:
+Read-only. Latest checked: 1e48373e (2026-11-19). Triggering: 12e6184d (status.md), 1e48373e (README), plus 20.105 and 20.40.050 edits (f4159667, ac6ab75b, da9655a7) and category-selection proposal note.
+STATUS.MD GOAL CHANGED. Current goal (status.md L6-12): "Controlled category selection (sentence-internal cue or prior-CEx cue) so a non-default category can be chosen without mutating the floor." Prior G1-G3 minimum S2M path under Historical / accomplished (L14-24), marked accomplished 2026-11-19 and closed. Standing ShortSim Status routine still pointed at G1-G3 → stale; asked human whether to retarget; did not invent/retarget alone.
+Distance from now-historical G1-G3 (file-level only; code not executed; line-level sources not confirmed):
+- G1: status.md L16-17, 20 mark accomplished; seed/meaning code present in pathA_short_simulator.py, primitives_pathA_short.py, run_examples.py, support/tools/seed_replay.py. Which floor distinction and floor source not confirmed at line level. Not found at line level.
+- G2: status.md L16-17, 21 mark accomplished; tp.s2m_seed and tp.s2m_meaning present in those files and s2m_program_reference.md / user_guide.md.
+- G3: no drift found in notes. status.md L17 crossing fields remain null; L43 absent from tp.idob packet. Code not verified; no line-level non-null findings.
+HOLES still open (status.md L43-49):
+- six structure IDs not filled | owner=human | write=no
+- first falsification: 3 unsupported, 3 missing_dimension, 2 unplaced floor differences (speaker vs theme, query vs statement — have floor sources, stay outside six IDs) | owner=human | write=no
+- Crossing fields null with no source (six IDs, structural_key, rank, M, CIE, meaning_delta_h) | owner=human | write=no
+- Force ops: not checked this run | owner=human | write=no
+Clause context (secondary): 20.105 now has TP.semantic.isc_category_result envelope; 20.40.050 adds IdOB read permission for that field. Whether sim implements new category-result fields not checked. 20.705 §2 did not change.
+
+shortsim-trajectory:
+
+agent=ShortSim Trajectory | independent, speculative, not definitive
+status: 2026-11-19 — Verdict: NEUTRAL
+Verdict: NEUTRAL. Last change ae9b061 (2026-11-19 6:24 AM MST), status.md only +10, labels trajectory and Path A views as independent not definitive. Neither moves toward nor drifts from minimum visible S2M path. Not a distance report (that stays with ShortSim Status).
+
+status: 2026-11-19 — Verdict: ADVANCES, modestly (queued)
+Verdict: ADVANCES, modestly. Reason: 5653458 adds s2m_program_reference.md — concrete contract for first seed (one written relation for "The sky is blue." + explicit nulls, all crossing fields None, tp.idob unchanged). Docs only; no code/run yet. Latest c604aeb links reference from proposal. Also 1a536a7, 6e1a8d5. Caveats: seed relation hard-coded keyword matching on sky/blue, not real floor source; doesn't surface connection/hole record. Confidence low-medium. Drifting if seed grows past one relation or fills crossing fields; firmer advance once re-runnable seed replay uses real floor source. Not a distance report.
+
+path-a-account:
+
+agent=Path A Account | independent view, not definitive; no requirements edits proposed | first-pass main @ 00ee3aa; new drift main @ 6e1a8d5
+status: first-pass + new drift 2026-11-19
+Independent view, not definitive; no requirements edits proposed. Door path_a_status.md accurately summarizes short-sim account overall.
+Flags (first-pass, main @ 00ee3aa):
+1 | path_a_status.md L18 | issue="Requirements changes go through explicit human PR" doesn't trace to any rule in requirements_20 or short-sim notes. | owner=human | write=no
+2 | path_a_status.md L17 | issue="Force ops remain holes" listed as locked; status.md L17 says "not the goal yet"; s2m_structure/result.md L37–39 leaves relation decision open. | owner=human | write=no
+3 | path_a_status.md L14 | issue="Routing beside the floor" listed as locked, but partial toy (short-sim README L119: TR placeholder, STPX/DCB omitted). | owner=human | write=no
+4 | path_a_status.md L8 | issue="structure-to-meaning string" isn't repo vocabulary; 20.705 §2 is full InB→OuBA flow. | owner=human | write=no
+5 | path_a_status.md L32 | issue="requirements_20/20.705*.md" pointer broken because door already lives in requirements_20/. | owner=human | write=no
+Surrounding:
+(a) | pathA_short_sim/notes/program/status.md L26 | issue=links ../../../../path_a_status.md — one level too shallow. | owner=human | write=no
+(b) | issue=Conflicting "next" statements dated 2026-10-08: packet_sync L42–46, ready_line L41, result.md L39 vs status L8/L15. | owner=human | write=no
+(c) | issue=short-sim README L122 marks toy OuBA Implemented; status L74 says intake→OuBA stretch unrealized. | owner=human | write=no
+New drift (main @ 6e1a8d5): Door unchanged since 19019f6; flags 1–5 and (a)–(c) still open.
+1 | issue=Commits 1a536a7 and 6e1a8d5 add s2m_relational_proposal.md (143 lines), linked from short-sim README; door Links and status.md don't point to it — pointer gap. | owner=human | write=no
+2 | issue=Proposal is parallel S2M direction; independent of current meaning defs; not implemented; status.md goal still holds; door doesn't say how the two relate; vocabulary not traced to requirements_20. | owner=human | write=no
+3 | issue=Proposal category 4 'Linguistic context' includes force/scope while door L17 lists force ops as locked holes — clarify whether proposal is meant to touch force. | owner=human | write=no
+
 needs human:
 S1 S2 S3 S4 E1 E2 M-001–M-017 M-705-001–M-705-012 R-001–R-017 MX-001–MX-046 (no stamp; owner=human; write=no)
+whether to retarget ShortSim Status routine from G1-G3 to the new category-selection goal | owner=human | write=no
+Submit ShortSim Docs create-PR for 2 goal-drift README fixes | owner=human | write=no
+still decide on original 9 baseline doc PR | owner=human | write=no
+Inventory keep/delete/gitignore still open from prior digests | owner=human | write=no
 next recommendation: not yet
