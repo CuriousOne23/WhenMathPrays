@@ -174,3 +174,5 @@
 2026-11-19 | ShortSim Docs scheduled drift watch | main 8202fb5 → 6e1a8d5; docs-only; 2 new goal-drift findings; known 9 baseline items still open; PR form waiting on human Submit (branch shortsim-docs/20261119-6e1a8d5, commit 273a602) | write=no
 2026-11-19 | ShortSim Trajectory | Verdict: NEUTRAL; last change ae9b061 (status.md only +10); independent, speculative, not definitive | write=no
 2026-11-19 | Path A Account first-pass + new drift | first-pass main @ 00ee3aa (flags 1–5, surrounding a–c); new drift main @ 6e1a8d5 (pointer gap / proposal relation / force); independent view, not definitive | write=no
+2026-11-19 | ShortSim Status goal-distance | latest checked 1e48373e; status.md goal changed to controlled category selection; prior G1-G3 marked accomplished/closed; standing routine still pointed at G1-G3 (stale); holes still open; asked whether to retarget | write=no
+2026-11-19 | ShortSim Trajectory | Verdict: ADVANCES, modestly; 5653458 adds s2m_program_reference.md (docs only); latest c604aeb; independent, speculative, not definitive | write=no
