@@ -6,13 +6,14 @@ This directory is the Path A short simulator. A new person, or a new AI session,
 
 Read these in order. Do not start from the reference lists further down.
 
-1. [notes/program/status.md](notes/program/status.md) — current effort, narrow S2M realization, what is implemented, and what is absent.
+1. [notes/program/status.md](notes/program/status.md) — current goal (category selection), historical S2M seed, what is implemented, and what is absent.
 2. [notes/program/grammar_and_structure.md](notes/program/grammar_and_structure.md) and [notes/program/four_writers.md](notes/program/four_writers.md) — how to think. The cut is pieces, place, fit, and residue. Ordinary grammar is not the repair.
 3. [notes/program/claim_ledger.md](notes/program/claim_ledger.md) — what prints now.
 4. [notes/program/s2m_structure/result.md](notes/program/s2m_structure/result.md) and [notes/program/known_words.md](notes/program/known_words.md) — the connection record, the open holes, and words that are not invented.
 5. [notes/program/packet_sync/README.md](notes/program/packet_sync/README.md) — teaching names against `tp.idob`. Present fields and absent fields. Not \(M\).
 6. [notes/program/coverage_map.md](notes/program/coverage_map.md) — conversational coverage roadmap. History is on the map and out of the sim.
 7. [notes/program/s2m_relational_proposal.md](notes/program/s2m_relational_proposal.md) — emerging S2M relational mapping proposal (seed, categories, plasticity, audit). Independent of current requirements definitions.
+8. [notes/program/category_selection_proposal.md](notes/program/category_selection_proposal.md) — next realization proposal (sentence-internal or prior-CEx category choice).
 
 Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums that floor and writes the teaching packet into `tp.idob`. `idob_packet` is that same sum (teaching name). Crossing fields (six structure IDs, rank, \(M\), CIE, `meaning_delta_h`) are not present on the packet written by IdOB; they are absent, not zero. A constructable shell view that copies the sum and sets those fields explicitly to null is available via `idob/crossing.py` (`crossing_from_packet`). It is not what the main simulator writes into `tp.idob`. The narrow S2M record is connections and holes, not \(M\). Both are accounted on the status page. A readable claim and a connection record are written from that packet. They do not compute \(M\). RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
 
@@ -20,7 +21,7 @@ Force ops such as polar, command, request, and exclamative are open holes. They 
 
 ## S2M mapping (experimental, branch `s2m-seed-experiment`)
 
-S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teaching packet.
+S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teaching packet. This is now historical / accomplished; the current goal is category selection (see status and the proposal above).
 
 - **Enabled by default:**
   ```bash
@@ -117,7 +118,7 @@ It explains:
 - how to add your own sentences  
 - how to inspect TP evolution as two columns (OB-set vs packet)
 
-S2M mapping (experimental): enabled by default; disable with `--no-s2m-seed`. See the S2M mapping section above. The mapping is performed by IdOB.
+S2M mapping (experimental, now historical): enabled by default; disable with `--no-s2m-seed`. See the S2M mapping section above. The mapping is performed by IdOB.
 
 ---
 
@@ -212,6 +213,8 @@ IdOB coverage and resolution rungs (stamp card, not S2M): [notes/bench_walk/10_e
 
 Emerging relational S2M proposal (seed, categories, plasticity): [notes/program/s2m_relational_proposal.md](notes/program/s2m_relational_proposal.md).
 
+Next realization proposal (category selection): [notes/program/category_selection_proposal.md](notes/program/category_selection_proposal.md).
+
 ---
 
 # **8. What This Simulator Does NOT Do**
@@ -287,6 +290,9 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 
 - S2M program reference (implementation contract):  
   [notes/program/s2m_program_reference.md](notes/program/s2m_program_reference.md)
+
+- Category selection proposal (next realization):  
+  [notes/program/category_selection_proposal.md](notes/program/category_selection_proposal.md)
 
 ---
 
