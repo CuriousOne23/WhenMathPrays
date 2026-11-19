@@ -18,6 +18,7 @@ Three documents serve as your entry points, each at a different level of depth:
 | [`README.md`](README.md) *(this file)* | **Foyer** — a conceptual map of the territory | You want a structured overview before diving in |
 | [`CONTENTS.md`](CONTENTS.md) | **Library catalog** — a complete index of every document | You are looking for a specific file or reference |
 | [pathA_short_sim/README.md](thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/README.md) | **Current Path A door** — short-sim status and account | You want the live structure-to-meaning realization |
+| [path_a_status.md](thought_simulator/requirements_20/path_a_status.md) | **Path A independent view** — larger account (not definitive) | You want a summary of where Path A stands |
 
 **Recommended reading order for evaluators and researchers:**
 1. This README (conceptual framing)
@@ -37,6 +38,8 @@ The active Path A realization work lives in the short simulator:
 Start there. The short-sim README is the door. It states the current face (structure floor written, teaching packet in `tp.idob`, crossing fields absent, narrow S2M as connections and holes) and points to the status, packet-sync, claim, and coverage pages that carry the account.
 
 A Frontier AI or new session that needs the present state of the structure-to-meaning work should read that door first. The GRP framing above remains the larger context; the short-sim door is the current realization surface.
+
+An independent (non-definitive) larger Path A summary is at [path_a_status.md](thought_simulator/requirements_20/path_a_status.md). Speculative trajectory-quality notes relative to the short-sim goal are emitted by the ShortSim Trajectory bot to Helm; they are not the account.
 
 ---
 
@@ -186,6 +189,7 @@ All code contributions must meet the **MVT standard**:
 | `thought_simulator/requirements_20/` | Collaborative 20-series requirement layer |
 | `thought_simulator/requirements_20/system_playground/simulation/` | Path A machine (landed 2026-08-28): `ts_kernel/` plus `pipelines/lineup_idob_mcb` |
 | [pathA_short_sim](thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/README.md) | Current Path A short simulator door and status account |
+| [path_a_status.md](thought_simulator/requirements_20/path_a_status.md) | Independent Path A summary view (not definitive) |
 
 ---
 
@@ -268,6 +272,7 @@ Open `tools/GRP_SpreadSheet.xlsm`, enter your values, and press **Run GRP**.
 | Conversations that shaped the system | [`docs/Reality in Motion, Conversations.md`](docs/Reality%20in%20Motion,%20Conversations.md) |
 | Everything, indexed | [`CONTENTS.md`](CONTENTS.md) |
 | Current Path A short-sim status | [pathA_short_sim/README.md](thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/README.md) |
+| Larger Path A independent view | [path_a_status.md](thought_simulator/requirements_20/path_a_status.md) |
 
 ---
 
