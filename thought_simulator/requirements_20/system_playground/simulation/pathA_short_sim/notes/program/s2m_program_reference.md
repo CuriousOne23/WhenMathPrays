@@ -1,18 +1,18 @@
 # S2M Program Reference
 
-**Date: 2026-11-19**  
-**Branch: s2m-seed-experiment**  
-**Purpose: Concrete contracts for the two-part S2M realization: (I) accountability trail, (II) interpretive transfer to meaning.**  
-**Status: Implementation contract for the experimental branch. Not a requirements change.**  
+**Date:** 2026-11-19  
+**Branch:** s2m-seed-experiment  
+**Purpose:** Concrete contracts for the two-part S2M realization: (I) accountability trail, (II) interpretive transfer to meaning.  
+**Status:** Implementation contract for the experimental branch. Not a requirements change.  
 
 ## Intent
 S2M is realized in two separable parts.
 
-  - **Part I — Accountability trail**
+  * **Part I — Accountability trail**
     Establishes an inspectable record of what the floor wrote and what remains open. This is the seed
     already implemented. It does not yet claim interpreted meaning.
 
-  - **Part II — Interpretive transfer to meaning**
+  * **Part II — Interpretive transfer to meaning**
     Exposes a bounded, extensible set of possible word associations, selects finite associations
     appropriate to the current utterance and active space, legitimates them, and writes the accepted
     relations against the accountability trail. The resulting composite is specific to the utterance.
@@ -209,43 +209,3 @@ Until Part II is filled, only the Accountability block appears. Both blocks are 
 Linked from the short-sim README and from s2m_relational_proposal.md. The relational proposal carries the broader conceptual account; this page records the programming contract required to make that account executable.
 
 All work remains on s2m-seed-experiment. main is the recovery point.
-
-One thing I would change from even this version
-
-I wouldn't ultimately leave all of that taxonomy in Paper 2.
-
-The current document's virtue is that a coding agent can rapidly answer: What do I load? What do I write? Where does it attach? What must I not mutate? What should the output look like? That's exactly what an implementation contract should do.
-
-So for the final repository structure, my preference would be:
-
-Paper 1: conceptual ownership
-
-Put the full material there:
-
-The word interpretation list is where meaning slips in.
-
-Then show:
-
-blue = {...}
- sky = {...}
-
-followed by the eight-major taxonomy and the explanation:
-
-candidate interpretation space→utterance-specific selection→finite customized composite\text{candidate interpretation space} \rightarrow \text{utterance-specific selection} \rightarrow \text{finite customized composite}
-
-And make the epistemic boundary explicit:
-
-The candidate list is not the meaning of the sentence. The finite composite is where meaning is represented for that occurrence. Neither claim entails that the system knows or understands the meaning of the sentence.
-
-Paper 2: implementation ownership
-
-I'd retain only a short “Interpretation-space contract” section, perhaps 2–4 paragraphs plus one example, and point back to Paper 1 for the conceptual justification and complete taxonomy.
-
-That's cleaner architecturally too:
-
-Paper 1 explains what you think you've found.
- Paper 2 tells the agent how to implement and inspect it.
-
-That separation will also help prevent your implementation reference from slowly turning into another theory document, which I know is exactly the kind of document bloat you've been trying to avoid.
-
-Main writing change: I made the candidate space explicit, separated candidate possibilities from the selected composite and from “understanding,” and preserved your strongest formulation,“The word interpretation list is where meaning slips in,” without turning it into a larger claim than you intend.
