@@ -1,7 +1,22 @@
 # Path A short-sim status
 
-**Date:** 2026-10-08
+**Date:** 2026-10-08 (goal stated 2026-11-19)
 **Door:** [../../README.md](../../README.md). This page is the account. The door points here and does not carry it.
+
+## Current goal
+
+One minimum S2M path that makes the structure-to-meaning transition visible.
+
+What counts as that path:
+- One existing floor distinction written from a real floor source (or explicitly left outside and recorded as such).
+- The connection/hole record surfaced as a limited, still-not-\(M\) signal so a run shows which floor fields participated and which holes stayed holes.
+- Every other crossing field (six IDs, structural key, rank, CIE, `meaning_delta_h`) remains null unless a floor source for that exact field already exists and the write is mechanical.
+
+Why this is next: it is the smallest step that is substantial to \(M\). Further expansion of S2M paths waits until this path exists, can be re-run, and can be pointed at.
+
+What is not the goal yet: full six-ID population, rank, CIE, `meaning_delta_h`, or treating force ops as relations.
+
+The bots ShortSim Status and ShortSim Docs hold the account accountable to this goal. They report distance from it; they do not invent the next path or fill fields.
 
 ## Coverage map
 
@@ -65,3 +80,4 @@ A short dated log. Detail stays in the linked pages. This list does not grow int
 - 2026-10-08 — Unplaced differences have floor sources and are not IDs. [packet_sync/unplaced.md](packet_sync/unplaced.md)
 - 2026-10-08 — Coverage map. Present forms covered or absent. History owned by COB, CST, CIL, CEx. [coverage_map.md](coverage_map.md)
 - 2026-11-19 — tp.idob description aligned with code: main run writes teaching packet; shell is constructable view via crossing_from_packet.
+- 2026-11-19 — Current goal stated: one minimum visible S2M path. ShortSim Status and ShortSim Docs hold the account accountable to it.
