@@ -170,3 +170,4 @@
 2026-11-16 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 (unchanged from 11-09; sha 9dd2f22); 2555 files, 18,748,441 bytes tracked; same four non-keep rows; outside top-100: root debug_query_log.txt (gitignore candidate); root `$null` (delete candidate) | owner=human | write=no
 2026-11-16 | Terms weekly safety net | T-000 | none | write=no
 2026-11-19 | ShortSim Docs baseline drift report | main @ 8202fb5; 9 drift findings; MATCHES recorded; doc-only PR pending human go-ahead | write=no
+2026-11-19 | ShortSim Status baseline | main @ fccfea9 (root README pointer only; short-sim same as 8202fb5); 100 rows (implemented 25, absent 33, drifted 16, unplaced 23, not found 3); 5 holes | write=no
