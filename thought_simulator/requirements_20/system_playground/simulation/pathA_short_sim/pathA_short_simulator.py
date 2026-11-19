@@ -126,4 +126,6 @@ def run_pathA_short(raw_text: str, enable_s2m_seed: bool = False) -> Dict[str, A
     }
     if hasattr(tp, "s2m_seed"):
         result["s2m_seed"] = tp.s2m_seed
+    if hasattr(tp, "s2m_meaning"):
+        result["s2m_meaning"] = tp.s2m_meaning
     return result

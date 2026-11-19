@@ -18,17 +18,21 @@ Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums tha
 
 Force ops such as polar, command, request, and exclamative are open holes. They are not object connections. History, likelihood, and the geometry conjecture are not inputs.
 
-## S2M seed (experimental, branch `s2m-seed-experiment`)
+## S2M mapping (experimental, branch `s2m-seed-experiment`)
 
-The first visible S2M mapping is an optional seed attached by **IdOB**. It does not replace the teaching packet.
+S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teaching packet.
 
 - **Enabled by default:**
   ```bash
   python run_examples.py
   ```
-  IdOB writes the normal `tp.idob` packet, then attaches `tp.s2m_seed`. The runner prints a readable block:
+  IdOB writes the normal `tp.idob` packet, then attaches:
+  - `tp.s2m_seed` (Part I accountability trail)
+  - `tp.s2m_meaning` (Part II interpretive transfer)
+
+  The runner prints labeled blocks:
   ```
-  --- S2M seed (IdOB) ---
+  --- S2M Accountability (IdOB) ---
   s2m_seed: {
     "utterance": "...",
     "written_relations": [...],
@@ -36,13 +40,21 @@ The first visible S2M mapping is an optional seed attached by **IdOB**. It does 
     "crossing_fields": {...},
     "seed_complete": true
   }
+
+  --- S2M Meaning (IdOB) ---
+  s2m_meaning: {
+    "meaning_relations": [...],
+    "active_space": [...],
+    "story_id": "...",
+    "extendable": true
+  }
   ```
 
 - **Disabled:**
   ```bash
   python run_examples.py --no-s2m-seed
   ```
-  The seed is not computed and does not appear in the log. Existing floor and claim behavior is unchanged.
+  Both blocks are disabled and do not appear in the log. Existing floor and claim behavior is unchanged.
 
 The primitive that performs the mapping is IdOB. Details and acceptance criteria: [notes/program/s2m_program_reference.md](notes/program/s2m_program_reference.md).
 
@@ -105,7 +117,7 @@ It explains:
 - how to add your own sentences  
 - how to inspect TP evolution as two columns (OB-set vs packet)
 
-S2M seed (experimental): enabled by default; disable with `--no-s2m-seed`. See the S2M seed section above. The mapping is performed by IdOB.
+S2M mapping (experimental): enabled by default; disable with `--no-s2m-seed`. See the S2M mapping section above. The mapping is performed by IdOB.
 
 ---
 

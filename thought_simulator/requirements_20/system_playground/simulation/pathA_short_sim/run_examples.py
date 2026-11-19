@@ -117,7 +117,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--no-s2m-seed",
         action="store_true",
-        help="Disable the optional S2M seed mapping output.",
+        help="Disable optional S2M accountability and meaning output.",
     )
     return parser
 
@@ -232,8 +232,13 @@ def main(enable_s2m_seed: bool = True) -> None:
 
     s2m_seed = simulation_result.get("s2m_seed")
     if isinstance(s2m_seed, dict):
-        print("\n--- S2M seed (IdOB) ---")
+        print("\n--- S2M Accountability (IdOB) ---")
         print(f"s2m_seed: {json.dumps(s2m_seed, indent=2)}")
+
+    s2m_meaning = simulation_result.get("s2m_meaning")
+    if isinstance(s2m_meaning, dict):
+        print("\n--- S2M Meaning (IdOB) ---")
+        print(f"s2m_meaning: {json.dumps(s2m_meaning, indent=2)}")
 
     print("\n=== Trace ===")
 

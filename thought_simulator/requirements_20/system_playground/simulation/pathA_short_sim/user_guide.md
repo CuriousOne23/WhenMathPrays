@@ -22,11 +22,15 @@ From this directory:
 python run_examples.py
 ```
 
-S2M seed is enabled by default in this run. To disable it:
+S2M accountability + meaning blocks are enabled by default in this run. To disable both:
 
 ```
 python run_examples.py --no-s2m-seed
 ```
+
+When enabled, `run_examples.py` prints:
+- `--- S2M Accountability (IdOB) ---` (`s2m_seed`)
+- `--- S2M Meaning (IdOB) ---` (`s2m_meaning`)
 
 Or log output:
 
