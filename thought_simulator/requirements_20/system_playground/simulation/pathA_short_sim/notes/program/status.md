@@ -18,6 +18,15 @@ What is not the goal yet: full six-ID population, rank, CIE, `meaning_delta_h`, 
 
 The bots ShortSim Status and ShortSim Docs hold the account accountable to this goal. They report distance from it; they do not invent the next path or fill fields.
 
+## Independent views (not definitive)
+
+Two additional views exist. Both are independent and speculative or summary; neither is a definitive conclusion and neither updates this account or the requirements.
+
+- **ShortSim Trajectory** — speculative trajectory quality relative to the goal above (advances / neutral / drifts, with reason). Emitted to Helm. Does not replace the ShortSim Status distance report.
+- **Path A Account** — larger Path A status door at [../../../../path_a_status.md](../../../../path_a_status.md). Readable summary of where Path A is, what is locked, next step, and why. Kept from drifting by its bot; does not author requirements.
+
+Read them as second views, not as the account.
+
 ## Coverage map
 
 Human conversation space against Path A owners. Present forms are covered or absent. History is on the map and out of the sim. [coverage_map.md](coverage_map.md).
@@ -81,3 +90,4 @@ A short dated log. Detail stays in the linked pages. This list does not grow int
 - 2026-10-08 — Coverage map. Present forms covered or absent. History owned by COB, CST, CIL, CEx. [coverage_map.md](coverage_map.md)
 - 2026-11-19 — tp.idob description aligned with code: main run writes teaching packet; shell is constructable view via crossing_from_packet.
 - 2026-11-19 — Current goal stated: one minimum visible S2M path. ShortSim Status and ShortSim Docs hold the account accountable to it.
+- 2026-11-19 — Independent views added: ShortSim Trajectory (speculative quality) and Path A Account (larger door). Both labeled non-definitive.
