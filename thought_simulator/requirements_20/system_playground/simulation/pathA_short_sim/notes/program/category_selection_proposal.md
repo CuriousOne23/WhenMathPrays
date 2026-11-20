@@ -120,6 +120,8 @@ Successful category scoring does not guarantee an interpretive extension. Legiti
 
 Category-selection realization remains inspectable through the Phase IV — Category Structure Observation framework in s2m_program_reference.md. The category-specific phenomena of interest include: no-cue baseline; cue and provenance; candidate state before category influence; category evidence and scoring/result; top_category, confidence, and rationale; selected versus unselected candidates; S2M legitimation or refusal; default meaning versus category-extended meaning; sentence-internal versus prior-context cue paths; deterministic replay.
 
+The bounded three-experiment Phase IV program that uses this realization as its instrument is recorded in [category_structure_observation.md](category_structure_observation.md). That paper is an experimental/observational record of controlled observations; it does not establish new requirements or architectural claims.
+
 This proposal does not duplicate the detailed nine-window methodology. An observation characterizes behavior of the current realization. It does not independently establish a new requirement, semantic truth, or architectural claim. Observed behavior can motivate later review; it does not automatically modify architecture or requirements.
 
 ## Boundaries
