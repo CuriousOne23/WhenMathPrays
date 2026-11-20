@@ -129,4 +129,4 @@ Until Part II is filled, only the Accountability block appears. Both blocks are 
 Linked from the short-sim README and from `s2m_relational_proposal.md`. All work remains on `s2m-seed-experiment`. `main` is the recovery point.
 
 ## Commentary of S2M
-For commentary on S2M see [observations_of_s2m.md](../../observations_of_s2m.md).
+For commentary on S2M see [observations_of_s2m.md](../observations_of_s2m.md).
