@@ -6,6 +6,8 @@
 **Status:** Implementation contract for the experimental branch. Not a requirements change.  
 **Conceptual authority:** s2m_relational_proposal.md (five-stage model). Read both before coding.
 
+For how to run the short simulator and correctly interpret normal `run_examples.py` output (including S2M layers and category observations), see [user_guide.md](../../user_guide.md).
+
 ## Intent
 
 S2M realizes the five-stage model established in the relational proposal:
