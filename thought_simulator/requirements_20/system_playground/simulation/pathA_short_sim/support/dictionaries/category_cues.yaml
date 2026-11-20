@@ -1,0 +1,19 @@
+category_cues:
+  sentence_internal:
+    blue:
+      - perceptual
+    cold:
+      - affective
+    support:
+      - physical
+    where:
+      - perspectival
+  prior_context:
+    cold:
+      - affective
+    object:
+      - physical
+    support:
+      - physical
+    location:
+      - perspectival

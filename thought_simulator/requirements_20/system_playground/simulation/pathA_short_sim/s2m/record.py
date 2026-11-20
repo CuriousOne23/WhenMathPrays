@@ -63,13 +63,23 @@ def build_record(
     candidate_interpretations: List[Dict[str, Any]],
     meaning_relations: List[Dict[str, Any]],
     active_space: List[str],
+    category_result: Dict[str, Any],
 ) -> Dict[str, Any]:
+    cue_values = category_result.get("category_cue", []) if isinstance(category_result, dict) else []
+    if not isinstance(cue_values, list):
+        cue_values = []
     return {
         "default_meaning": _default_meaning(seed),
         "candidate_interpretations": candidate_interpretations,
         "meaning_relations": meaning_relations,
         "active_space": active_space,
         "active_context_stores": seed.get("active_context_stores", []),
+        "cue_state": {
+            "category_cue": cue_values,
+            "cue_active": bool(cue_values),
+            "provenance": category_result.get("provenance", {}) if isinstance(category_result, dict) else {},
+        },
+        "category_result": category_result if isinstance(category_result, dict) else {},
         "story_id": _build_story_id(seed),
         "extendable": True,
     }

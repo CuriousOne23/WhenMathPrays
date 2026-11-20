@@ -1,0 +1,6 @@
+isc_weights:
+  w_s: 0.35
+  w_b: 0.25
+  w_e: 0.2
+  w_i: 0.2
+  w_cat: 0.6

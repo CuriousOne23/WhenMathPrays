@@ -497,6 +497,9 @@ def CEx(tp: TP) -> TP:
             "prior_context_used": bool(prior_context),
         },
     }
+    if not hasattr(tp, "trace"):
+        tp.trace = []
+    tp.trace.append({"primitive": "CEx", "cex_output": tp.cex_output})
     return tp
 
 
@@ -543,6 +546,9 @@ def CE(tp: TP) -> TP:
         "cue_provenance": cue_sources,
         "category_candidate_set": candidate_set,
     }
+    if not hasattr(tp, "trace"):
+        tp.trace = []
+    tp.trace.append({"primitive": "CE", "ce_output": tp.ce_output})
     return tp
 
 
@@ -598,6 +604,9 @@ def ISc(tp: TP) -> TP:
             },
         }
         tp.correction_score = 0.0
+        if not hasattr(tp, "trace"):
+            tp.trace = []
+        tp.trace.append({"primitive": "ISc", "isc_output": tp.isc_output})
         return tp
 
     max_score = max(raw_scores)
@@ -635,6 +644,9 @@ def ISc(tp: TP) -> TP:
         },
     }
     tp.correction_score = float(top.get("probability", 0.0))
+    if not hasattr(tp, "trace"):
+        tp.trace = []
+    tp.trace.append({"primitive": "ISc", "isc_output": tp.isc_output})
     return tp
 
 
@@ -656,6 +668,15 @@ def TPU(tp: TP) -> TP:
         tp.semantic = semantic_block
 
     tp.commit_flags["correction"] = True
+    if not hasattr(tp, "trace"):
+        tp.trace = []
+    tp.trace.append(
+        {
+            "primitive": "TPU",
+            "merge_output": tp.merge_output,
+            "isc_category_result": tp.semantic.get("isc_category_result", {}) if isinstance(tp.semantic, dict) else {},
+        }
+    )
     return tp
 
 

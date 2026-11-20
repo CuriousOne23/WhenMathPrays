@@ -111,6 +111,11 @@ def run_pathA_short(
             latest = tp.trace[-1]
             if latest.get("primitive") == fn.__name__:
                 for key in (
+                    "cex_output",
+                    "ce_output",
+                    "isc_output",
+                    "merge_output",
+                    "isc_category_result",
                     "constraints_matched",
                     "constraints_unmatched",
                     "constraint_residue",
