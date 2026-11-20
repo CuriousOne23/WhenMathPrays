@@ -1,50 +1,129 @@
 # Category selection proposal
 
 **Document:** notes/program/category_selection_proposal.md  
-**Status:** Draft / discussion  
-**Date:** 2026-11-19  
-**Points from:** short-sim status (prior S2M seed goal is now historical)
+**Status:** Draft / discussion — aligned with stabilized S2M and normative ISc/TP/IdOB path  
+**Date:** 2026-11-20  
+**Points from:** short-sim status (prior S2M seed goal is now historical); s2m_relational_proposal.md; s2m_program_reference.md (Phase III/IV); 20.45, 20.105, 20.116.010, 20.40.050
 
-## Why this is next
+## Purpose
 
-The narrow S2M seed (accountability trail + interpretive transfer) is now attached by IdOB and visible. The next controlled step is to let a category be chosen instead of always taking the default. Two distinct sources of information can drive that choice. Both stay recoverable and do not mutate the floor.
+Category selection answers: how can available information cause a non-default interpretive category to become relevant to S2M while preserving the structurally licensed default meaning?
 
-## Two realization paths
+It is additive. It does not replace the five-stage S2M model (structural relation → default meaning → candidate interpretation space → selected interpretive extension(s) → finite customized composite). When no usable category cue is active, the structurally licensed default meaning remains the S2M result and candidates remain unselected (no-cue = default meaning only).
 
-### 1. Sentence-internal modification (information is in the sentence)
+A category result is not itself meaning. A category cue, score, top_category, or matching candidate is not automatically a written meaning relation.
 
-- The utterance itself carries a cue that selects a non-default category.
-- Example shape: a modifier, an adverb, or a structural marker already written by the floor (SOB/SROB/CnOB/SmOB) is read as a category cue.
-- IdOB reads the cue, proposes the category, and records the choice in the seed/meaning packet.
-- No prior context is required. The default remains the floor path when the cue is absent.
+## Baseline
 
-### 2. CEx from prior CIL (prior conversation supplies the information)
+When no usable category cue is active:
+- Structural relation is established by the floor.
+- Default meaning is derived from that relation.
+- Candidate interpretations remain available but unselected.
+- No interpretive extension is written.
 
-- A prior utterance (held in CIL) contains the cue.
-- The present utterance is compared against that prior utterance via CEx.
-- When the comparison shows the prior utterance licenses a different category, CEx writes a category-selection packet.
-- IdOB reads that packet (or the CEx result) and chooses the non-default category.
-- The present utterance itself may contain no explicit cue; the history supplies it.
-- Default remains active when no prior cue is present or when the comparison fails.
+Category influence, when present, is additive to this baseline. It does not overwrite default meaning.
 
-## Shared constraints
+## Category-selection distinction
 
-- Category choice is additive and optional (CLI or flag controlled, same pattern as the current seed).
-- Floor writers (SOB–SmOB) are not mutated.
+Stages remain distinct:
+
+cue evidence → category scoring → committed category result → candidate relevance/consideration → S2M legitimation or refusal → selected interpretive extension (if any)
+
+This enters the existing S2M process. It does not replace it. Selection (making a candidate relevant) is distinct from legitimation (writing it as an extension after licensed-region and cue-supported assessment).
+
+## Cue sources
+
+Two origins remain; their provenance stays visible. Downstream they converge on the same committed category-result interface.
+
+### Sentence-internal information
+Sentence-internal evidence → CE supplies optional `category_cue` → ISc category-aware scoring → Merge / TPU → `TP.semantic.isc_category_result` → IdOB (read-only) / S2M
+
+### Prior-conversation / context information
+Prior conversation / CIL → CEx / CE supplies optional `category_cue` → ISc → Merge / TPU → `TP.semantic.isc_category_result` → IdOB (read-only) / S2M
+
+IdOB does not reach backward into raw CIL, CEx internals, or sentence markers as an alternative category-selection mechanism. Absence of a category result does not block ordinary S2M / default meaning.
+
+## Common downstream path
+
+```
+cue source
+  ↓
+CE category_cue
+  ↓
+ISc category-aware scoring
+  ↓
+isc_output{}
+  ↓
+Merge
+  ↓
+TPU commit
+  ↓
+TP.semantic.isc_category_result
+  ↓
+IdOB read-only category cue
+  ↓
+S2M candidate consideration
+  ↓
+licensed-region / legitimation decision
+  ↓
+default meaning + any legitimized extension
+```
+
+Terminology follows the normative requirements for ownership and field names. No parallel category-result mechanism is introduced.
+
+## Category-result interface
+
+The committed category result is the envelope specified by the requirements:
+
+```
+TP.semantic.isc_category_result {
+    category_cue,
+    category_weighted_distribution,
+    top_category,
+    category_confidence,
+    category_rationale,
+    provenance
+}
+```
+
+Only TPU writes this block (from ISc via Merge). IdOB may read it as a read-only cue when performing category-aware meaning selection. It does not write the block. The fields represent scored cue evidence, not meaning.
+
+Default-versus-selected comparison is observable through S2M Phase IV rather than stored as an additional field inside this envelope.
+
+## S2M selection and legitimation
+
+A committed category result may cause some candidate interpretation to become relevant for consideration. That does not mean a candidate tagged with `top_category` is automatically written as a meaning relation.
+
+Progression:
+
+committed category result → candidate becomes relevant → proposed extension → licensed-region / cue-supported assessment → legitimate or refuse → write extension or remain unselected/null
+
+Conceptually:
+
+default meaning + legitimized category-supported extension(s) = finite customized composite
+
+Context stores (sources/regions of contextual information) remain distinct from interpretation majors (taxonomy that tags candidates). “Category” here refers to the scored cue that can influence relevance within that taxonomy, not a collapse of the two.
+
+Successful category scoring does not guarantee an interpretive extension. Legitimate outcomes include: no usable cue, ambiguous evidence, category result but no applicable candidate, candidate available but unselected, proposed but refused, extension remaining null, or default meaning only.
+
+## Observation through S2M Phase IV
+
+Category-selection realization remains inspectable through the Phase IV — Category Structure Observation framework in s2m_program_reference.md. The category-specific phenomena of interest include: no-cue baseline; cue and provenance; candidate state before category influence; category evidence and scoring/result; top_category, confidence, and rationale; selected versus unselected candidates; S2M legitimation or refusal; default meaning versus category-extended meaning; sentence-internal versus prior-context cue paths; deterministic replay.
+
+This proposal does not duplicate the detailed nine-window methodology. An observation characterizes behavior of the current realization. It does not independently establish a new requirement, semantic truth, or architectural claim. Observed behavior can motivate later review; it does not automatically modify architecture or requirements.
+
+## Boundaries
+
+- Category choice is additive and optional. Floor writers (SOB–SmOB) are not mutated.
 - Crossing fields stay null until a later, explicit stage writes them.
-- Both paths produce a readable record: which category was chosen, why (sentence cue vs prior-CEx cue), and what the default would have been.
-- Requirements remain unchanged until the realization is shown to be legitimate.
+- Requirements remain unchanged until realization is shown to be legitimate.
+- No new TP fields, scoring equations, ownership, cue sources, or canonical categories are introduced here.
+- Normative ownership, commit path, and field contents are defined in 20.45 (ISc), 20.105 (TP), 20.116.010 (envelope index), and 20.40.050 (IdOB).
 
-## Expected visible output (sketch)
+## Next realization step
 
-```
---- Category selection (IdOB) ---
-chosen_category: ...
-source: sentence | prior_cex
-default_category: ...
-cue: ...
-```
+After review of this aligned proposal, functional realization of the category path (CE cue → ISc scoring → committed result → IdOB read-only use within S2M legitimation) is ready for the GitHub Agent, bounded by the stabilized S2M documents and the normative requirements.
 
 ## Relation to prior work
 
-This proposal follows the successfully realized narrow S2M seed (accountability trail + interpretive transfer). That prior goal is now historical and recorded as accomplished in the short-sim status page.
+This proposal follows the successfully realized narrow S2M seed (accountability trail + interpretive transfer). That prior goal is historical. The present revision replaces the earlier sketch in which IdOB directly read sentence or CEx information and independently chose a category.
