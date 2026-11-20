@@ -53,7 +53,9 @@ except ImportError:
 
 try:
     from support.dictionaries import (  # type: ignore
+        load_category_cues,
         load_constraint_rules,
+        load_isc_weights,
         load_role_patterns,
         load_segment_patterns,
         load_semantic_rules,
@@ -507,7 +509,10 @@ def CE(tp: TP) -> TP:
     sentence_map = cues_config.get("sentence_internal", {}) if isinstance(cues_config, dict) else {}
     sentence_cue = _extract_category_cues_from_text(tp.raw_text, sentence_map if isinstance(sentence_map, dict) else {})
     prior_cue = tp.cex_output.get("category_cue", []) if isinstance(tp.cex_output, dict) else []
-    cue_values = _ordered_unique([*sentence_cue, *list(prior_cue) if isinstance(prior_cue, list) else []])
+    combined_cues = list(sentence_cue)
+    if isinstance(prior_cue, list):
+        combined_cues.extend([str(value) for value in prior_cue])
+    cue_values = _ordered_unique(combined_cues)
 
     cue_sources: List[str] = []
     if sentence_cue:
