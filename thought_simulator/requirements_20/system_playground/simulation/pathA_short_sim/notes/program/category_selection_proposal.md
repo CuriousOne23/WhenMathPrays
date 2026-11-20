@@ -5,6 +5,8 @@
 **Date:** 2026-11-20  
 **Points from:** short-sim status (prior S2M seed goal is now historical); s2m_relational_proposal.md; s2m_program_reference.md (Phase III/IV); 20.45, 20.105, 20.116.010, 20.40.050
 
+For reader-facing interpretation of displayed category fields and observation scenarios in normal `run_examples.py` output, see [user_guide.md](../../user_guide.md).
+
 ## Purpose
 
 Category selection answers: how can available information cause a non-default interpretive category to become relevant to S2M while preserving the structurally licensed default meaning?
