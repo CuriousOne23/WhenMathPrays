@@ -162,6 +162,43 @@ New associations, subcategories, or majors are data extensions. The selection lo
 - No-cue result: default query meaning only. Locative continuation remains potential/null. No endpoint association selected as the meaning.
 - Possible extensions: none required for the initial testbench. Semantic content arises from the query structure itself.
 
+## Phase III — Realization Characterization
+
+Phase III characterizes the realized S2M mechanism sufficiently that we know what instrument we actually have before using it observationally. The key question is: what have we actually built at the S→M crossing?
+
+The three canonical sentences remain the sole normative testbench and implementation contract. Diagnostic utterances may be used only as observational probes into the current realization. They do not establish additional S2M requirements and do not create required semantic outputs. A diagnostic probe may behave unexpectedly without automatically constituting an implementation failure.
+
+Characterization should help expose, where possible:
+- what is derived from structural relations;
+- what constitutes default meaning;
+- what is supplied by candidate interpretation data;
+- what is generalized structural behavior;
+- what is implementation scaffolding;
+- what remains unresolved or deliberately open;
+- what is deterministic and replayable;
+- what remains invariant when candidate or contextual data changes.
+
+Phase III observations characterize the current realization. They do not independently modify the S2M architecture, program contract, requirements, or theory. If characterization exposes something important, it becomes a subject for review rather than silently becoming a new requirement.
+
+## Phase IV — Category Structure Observation
+
+Phase IV uses the characterized S2M realization to observe the structure, provenance, propagation, and effect of category information across the S→M bridge. It prepares an observational basis for the eventual functional realization of category selection without implementing or redefining that feature. It does not duplicate or replace category_selection_proposal.md.
+
+Observational windows include:
+1. **No-cue baseline** — structural relation, default meaning, unselected candidates, absence of cue and selected extensions (the control condition).
+2. **Cue provenance** — visibility of where category information came from (sentence-internal, prior-context/CEx, or no usable cue).
+3. **Pre-selection candidate state** — distinguish candidate absent, available but unselected, eligible, rejected/refused, or ultimately selected and legitimized.
+4. **Category evidence and decision** — what evidence was present, which interpretation majors received support, what remained unsupported, whether ambiguity existed, and how any decision was reached (scoring fields, when realized, come from their requirements).
+5. **Selection versus legitimation** — category influence making a candidate relevant is distinct from S2M legitimizing it as an extension. Path: category influence → candidate proposal/selection → licensed-region test → legitimation/refusal → extension or null.
+6. **Default-versus-selected comparison** — preserve the default so the effect of category influence can be observed (unchanged default, newly selected extensions, unselected/refused candidates, changed active space, final composite).
+7. **Null, refusal, ambiguity, and non-selection** — informative cases include no cue, ambiguous evidence, candidate unavailable, available but unselected, proposed but refused, extension remaining null, or clarification required.
+8. **Cue-path comparison** — sentence-internal versus prior-conversation/context (CEx/CIL) paths may be compared while retaining different provenance; they need not be internally identical.
+9. **Determinism and replay** — given the same input, structural result, context, cue, candidate inventory, and applicable scoring/configuration state, category-related observations are reproducible.
+
+**Epistemic boundary:** An observation characterizes behavior of the current realization. It does not independently establish a new requirement, semantic truth, or architectural claim. An observation may motivate a later hypothesis, proposal, or requirement change, but does not independently authorize one. The intended flow is: characterized realization → controlled observation → recorded finding → possible hypothesis → review → possible future architectural change.
+
+Phase III asks what instrument was actually built. Phase IV asks what can be observed specifically about category structure through that instrument.
+
 ## Expandability
 
 * Add a major: extend majors.yaml.
