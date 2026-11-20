@@ -1,0 +1,9 @@
+associations:
+  - relation: requests
+    to: information-request
+    major: mental
+    subcategory: cognitive
+  - relation: carries
+    to: unresolved-location
+    major: perspectival
+    subcategory: accessibility

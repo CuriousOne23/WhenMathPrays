@@ -2,4 +2,9 @@ associations:
   - relation: affords
     to: openness
     major: mental
+    subcategory: conceptual
+  - relation: tends_toward
+    to: higher
+    major: perspectival
+    subcategory: orientation
 

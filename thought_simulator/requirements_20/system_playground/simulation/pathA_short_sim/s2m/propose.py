@@ -14,22 +14,26 @@ def _seed_endpoints(seed: Dict[str, Any]) -> List[str]:
             continue
         for key in ("from", "to"):
             endpoint = str(relation.get(key, "")).strip().lower()
-            if endpoint and endpoint not in endpoints:
+            if endpoint in ("", "none", "null"):
+                continue
+            if endpoint not in endpoints:
                 endpoints.append(endpoint)
     return endpoints
 
 
-def propose(seed: Dict[str, Any]) -> List[Dict[str, str]]:
-    proposals: List[Dict[str, str]] = []
+def propose(seed: Dict[str, Any]) -> List[Dict[str, Any]]:
+    proposals: List[Dict[str, Any]] = []
     for endpoint in _seed_endpoints(seed):
         for association in load_endpoint_associations(endpoint):
-            proposals.append(
-                {
-                    "from": endpoint,
-                    "relation": association["relation"],
-                    "to": association["to"],
-                    "major": association["major"],
-                }
-            )
+            proposal: Dict[str, Any] = {
+                "from": endpoint,
+                "relation": association["relation"],
+                "to": association["to"],
+                "major": association["major"],
+            }
+            subcategory = str(association.get("subcategory", "")).strip()
+            if subcategory:
+                proposal["subcategory"] = subcategory
+            proposals.append(proposal)
     return proposals
 

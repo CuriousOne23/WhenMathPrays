@@ -1,0 +1,5 @@
+associations:
+  - relation: is
+    to: object
+    major: physical
+    subcategory: natural-kind

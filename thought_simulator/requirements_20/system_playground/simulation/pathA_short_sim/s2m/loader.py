@@ -43,14 +43,12 @@ def load_endpoint_associations(endpoint: str) -> List[Dict[str, str]]:
         relation = str(entry.get("relation", "")).strip()
         target = str(entry.get("to", "")).strip()
         major = str(entry.get("major", "")).strip()
+        subcategory = str(entry.get("subcategory", "")).strip()
         if not relation or not target or not major:
             continue
-        associations.append(
-            {
-                "relation": relation,
-                "to": target,
-                "major": major,
-            }
-        )
+        association = {"relation": relation, "to": target, "major": major}
+        if subcategory:
+            association["subcategory"] = subcategory
+        associations.append(association)
     return associations
 

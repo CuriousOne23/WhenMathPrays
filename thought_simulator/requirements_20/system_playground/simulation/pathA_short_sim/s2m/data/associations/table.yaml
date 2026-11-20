@@ -1,0 +1,5 @@
+associations:
+  - relation: provides
+    to: support
+    major: physical
+    subcategory: structure

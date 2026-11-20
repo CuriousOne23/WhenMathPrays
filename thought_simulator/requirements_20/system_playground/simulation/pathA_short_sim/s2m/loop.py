@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Any, Dict
 
 from s2m.active_space import resolve_active_space
 from s2m.legitimate import legitimate
@@ -8,9 +8,11 @@ from s2m.write import write_meaning_relations
 
 
 def apply(seed: Dict[str, Any], space_name: str = "default") -> Dict[str, Any]:
-    active_space = resolve_active_space(space_name)
     proposals = propose(seed)
-    legitimized = legitimate(proposals, active_space)
+    cues = seed.get("selection_cues", [])
+    cue_active = isinstance(cues, list) and len(cues) > 0
+    active_space = resolve_active_space(space_name) if cue_active else []
+    legitimized = legitimate(proposals, active_space, cue_active=cue_active)
     meaning_relations = write_meaning_relations(legitimized)
-    return build_record(seed, meaning_relations, active_space)
+    return build_record(seed, proposals, meaning_relations, active_space)
 

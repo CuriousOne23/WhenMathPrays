@@ -44,6 +44,8 @@ S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teac
 
   --- S2M Meaning (IdOB) ---
   s2m_meaning: {
+    "default_meaning": {...},
+    "candidate_interpretations": [...],
     "meaning_relations": [...],
     "active_space": [...],
     "story_id": "...",

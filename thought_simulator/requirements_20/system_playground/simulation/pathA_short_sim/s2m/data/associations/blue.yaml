@@ -2,4 +2,9 @@ associations:
   - relation: evokes
     to: cold
     major: affective
+    subcategory: bodily-felt
+  - relation: denotes
+    to: color
+    major: perceptual
+    subcategory: color
 

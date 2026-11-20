@@ -38,23 +38,31 @@ def main() -> None:
     assert isinstance(meaning, dict), "seed run did not create tp.s2m_meaning"
     assert meaning.get("extendable") is True
     assert meaning.get("story_id") == "sky-blue-001"
-    assert meaning.get("active_space") == ["affective", "perceptual", "mental", "spiritual"]
+    assert meaning.get("active_space") == []
 
     meaning_relations = meaning.get("meaning_relations")
-    assert isinstance(meaning_relations, list)
-    relation_keys = {
+    assert meaning_relations == [], "no-cue run must not auto-select candidate associations"
+
+    default_meaning = meaning.get("default_meaning")
+    assert isinstance(default_meaning, dict)
+    assert default_meaning.get("from") == "sky"
+    assert default_meaning.get("relation") == "is"
+    assert default_meaning.get("to") == "blue"
+
+    candidates = meaning.get("candidate_interpretations")
+    assert isinstance(candidates, list)
+    candidate_keys = {
         (
             str(item.get("from", "")),
             str(item.get("relation", "")),
             str(item.get("to", "")),
             str(item.get("major", "")),
-            bool(item.get("legitimized", False)),
         )
-        for item in meaning_relations
+        for item in candidates
         if isinstance(item, dict)
     }
-    assert ("blue", "evokes", "cold", "affective", True) in relation_keys
-    assert ("sky", "affords", "openness", "mental", True) in relation_keys
+    assert ("sky", "affords", "openness", "mental") in candidate_keys
+    assert ("blue", "evokes", "cold", "affective") in candidate_keys
 
     print("s2m_seed:")
     print(pformat(seed, width=100))
