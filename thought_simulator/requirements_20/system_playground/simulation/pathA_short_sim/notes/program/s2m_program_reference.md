@@ -131,7 +131,7 @@ No cue produces default meaning only.
 **Data files (YAML)**
 
 * s2m/data/majors.yaml — open list of interpretation majors
-* s2m/data/associations/<endpoint>.yaml — tagged candidate associations for each endpoint
+* s2m/data/associations/<endpoint>.yaml — tagged candidate associations for each endpoint, where `<endpoint>` is the lowercase endpoint name (e.g., `sky.yaml`, `blue.yaml`, `book.yaml`)
 * s2m/data/spaces/default.yaml — active majors for the default space
 
 New associations, subcategories, or majors are data extensions. The selection loop does not depend upon a fixed exhaustive inventory.
