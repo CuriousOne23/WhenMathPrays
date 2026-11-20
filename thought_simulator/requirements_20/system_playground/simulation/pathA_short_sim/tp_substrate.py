@@ -16,6 +16,11 @@ class TP:
     defects: List[str] = field(default_factory=list)
     corrections: List[str] = field(default_factory=list)
     correction_score: float = 0.0
+    prior_context: List[str] = field(default_factory=list)
+    cex_output: Dict[str, Any] = field(default_factory=dict)
+    ce_output: Dict[str, Any] = field(default_factory=dict)
+    isc_output: Dict[str, Any] = field(default_factory=dict)
+    merge_output: Dict[str, Any] = field(default_factory=dict)
 
     # OB-set / structural geometry
     struct_segments: List[str] = field(default_factory=list)
@@ -38,6 +43,7 @@ class TP:
     routing_committed: bool = False
 
     # Semantics & truth
+    semantic: Dict[str, Any] = field(default_factory=dict)
     semantic_core: Dict[str, Any] = field(default_factory=dict)
     truth_relation: str = ""
     idob: Dict[str, Any] = field(default_factory=dict)
