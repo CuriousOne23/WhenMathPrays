@@ -38,6 +38,8 @@ Two origins remain; their provenance stays visible. Downstream they converge on 
 ### Sentence-internal information
 Sentence-internal evidence → CE supplies optional `category_cue` → ISc category-aware scoring → Merge / TPU → `TP.semantic.isc_category_result` → IdOB (read-only) / S2M
 
+Ordinary semantic endpoints are not, merely by being endpoints, sentence-internal category cues. Sentence-internal category cues require independently directing evidence such as modifiers, adverbs, structural markers, or equivalent floor-visible information.
+
 ### Prior-conversation / context information
 Prior conversation / CIL → CEx / CE supplies optional `category_cue` → ISc → Merge / TPU → `TP.semantic.isc_category_result` → IdOB (read-only) / S2M
 
@@ -88,6 +90,10 @@ TP.semantic.isc_category_result {
 
 Only TPU writes this block (from ISc via Merge). IdOB may read it as a read-only cue when performing category-aware meaning selection. It does not write the block. The fields represent scored cue evidence, not meaning.
 
+`top_category` is the primary scoring summary (major of the highest-probability candidate, or null). Candidate relevance may use other category evidence contained in the committed result (for example the full weighted distribution or majors present in `category_cue`) according to the bounded realization policy. `top_category` is not itself a final meaning-selection command.
+
+With an empty cue, the short realization should prefer `top_category: null` rather than expose an arbitrary tie-break winner as apparent category evidence.
+
 Default-versus-selected comparison is observable through S2M Phase IV rather than stored as an additional field inside this envelope.
 
 ## S2M selection and legitimation
@@ -101,6 +107,8 @@ committed category result → candidate becomes relevant → proposed extension 
 Conceptually:
 
 default meaning + legitimized category-supported extension(s) = finite customized composite
+
+The initial short-simulator licensed-region table (exact endpoint/relation/target tuples for the canonical examples) is acknowledged as bounded realization scaffolding, not a generalized structural licensing mechanism.
 
 Context stores (sources/regions of contextual information) remain distinct from interpretation majors (taxonomy that tags candidates). “Category” here refers to the scored cue that can influence relevance within that taxonomy, not a collapse of the two.
 
