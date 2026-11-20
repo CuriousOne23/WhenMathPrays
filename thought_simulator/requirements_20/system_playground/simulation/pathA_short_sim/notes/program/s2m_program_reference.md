@@ -186,6 +186,8 @@ Phase III observations characterize the current realization. They do not indepen
 
 Phase IV uses the characterized S2M realization to observe the structure, provenance, propagation, and effect of category information across the S→M bridge. It prepares an observational basis for the eventual functional realization of category selection without implementing or redefining that feature. It does not duplicate or replace [category_selection_proposal.md](category_selection_proposal.md). The functional category-selection architecture, scoring behavior, ownership, TP fields, and other normative details continue to come from that proposal and its associated requirements. Consistent with the five-stage model established in [s2m_relational_proposal.md](s2m_relational_proposal.md).
 
+The bounded three-experiment Phase IV program (protocol, completed Experiment 1, and planned Experiments 2–3) is recorded in [category_structure_observation.md](category_structure_observation.md). That paper is an experimental/observational record; it does not establish new requirements or architectural claims.
+
 Observational windows include:
 1. **No-cue baseline** — structural relation, default meaning, unselected candidates, absence of cue and selected extensions (the control condition).
 2. **Cue provenance** — visibility of where category information came from (sentence-internal, prior-context/CEx, or no usable cue).
