@@ -223,11 +223,7 @@ This does not establish that contextualization of a relation is impossible, nor 
 
 ## Experiment 3 — Relational configuration
 
-**Status:** Conditional / planned
-
-Following the Experiment 2 Gate B result, Experiment 3 remains conditional and requires separate review of whether its interaction/configuration distinction is operationally observable with the present instrument.
-
-This experiment should be performed only if the results and instrumentation of Experiment 2 provide a legitimate basis.
+**Status:** Completed at design/observation gate — Gate B
 
 **Question**  
 When multiple relations participate simultaneously, do they merely coexist in the finite composite, or does their simultaneous relational configuration affect subsequent relational realization?
@@ -238,39 +234,122 @@ Interaction/configuration possibility (provisional, to be operationalized during
 
 Do not describe this as emergence unless an experiment later provides evidence warranting that term.
 
-**Present evidence boundary**  
-Experiment 1 demonstrated co-participation/addition of relations in the final composite. It did not demonstrate that participating relations interact with one another or generate a new relational property. Experiment 3 represents a new experimental question, not an interpretation of Experiment 1.
+**Observed co-participation case**
+- Sentence: `"The book is on the table."`
+- Prior-context condition: `"That location needs support for the object."`
+- Realized co-participating relations include:
+  - `book → is → object`
+  - `table → provides → support`
 
-(Results structure reserved; findings not populated.)
+Current relation objects in this case expose fields equivalent to:
+- `from`
+- `relation`
+- `to`
+- `major`
+- `subcategory`
+- `legitimized`
+
+No relation-level or subsequent-state evidence was observed that one participating relation altered, constrained, enabled, suppressed, transformed, generated, or otherwise had a consequence on another specifically attributable to simultaneous participation.
+
+Context/category provenance remained observable in process-level structures (for example `cue_state` and committed `TP.semantic.isc_category_result`), but that is not relation-to-relation interaction evidence.
+
+**Replay / determinism (tested conditions)**
+- `context_replay_identical: true`
+
+**Observed**
+- Multiple relations participated simultaneously in the final composite.
+- Their individual represented identities remained visible.
+- No interaction-like relation field or observable downstream relational consequence was exposed.
+- Context/category state remained separately observable.
+- The co-participation observation replayed identically under tested conditions.
+
+**Interpretation**
+Within the present TS observation capability, multiple realized relations can coexist in the same finite meaning composite, but the instrument does not expose an additional consequence attributable to their simultaneous participation.
+
+The present realization supports observation of co-participation: $M_t = \{R_1, R_2, \ldots, R_n\}$.
+
+It does not presently provide evidence for an interaction/configuration effect such as $F(R_1, R_2) \rightarrow R'_3$.
+
+**Not established**
+Experiment 3 does not establish:
+- that participating relations are fundamentally independent in all realizations;
+- that relation-to-relation interaction is impossible;
+- that simultaneous relational configurations cannot influence later meaning;
+- that no emergent relational property could exist in a richer realization;
+- that the present relation representation captures every possible interaction;
+- that biological or other artificial meaning operates through independent relations;
+- that coexistence universally characterizes meaning.
+
+**Conjecture / future question**
+Would a future realization expose an operationally measurable consequence of simultaneous relational participation that cannot be explained by independent coexistence alone?
+
+**Scaffolding dependencies**
+This result remains bounded by current candidate inventories, category cue/scoring realization, candidate-relevance policy, `LICENSED_EXTENSIONS`, current relation-record representation, and canonical short-simulator scaffolding.
+
+**Contract violations**
+No contract violation was identified by Experiment 3. Gate B is an observational-capability result, not a defect claim.
+
+**Bounded conclusion**
+Experiment 3 found that the current TS realization observably supports co-participation of multiple relations in the finite meaning composite. The current instrument does not expose an additional relation-to-relation or subsequent relational consequence attributable specifically to their simultaneous participation. Thus, within the present observation capability, coexistence is observed while interaction/configuration beyond coexistence is not established.
+
+This does not establish that participating relations are universally independent or that relational interaction is impossible. It establishes only the limit of what the present characterized TS instrument exposes.
 
 ---
 
-## Phase IV stopping rule
+## Phase IV — Conclusion / Summation
 
-Phase IV is initially bounded to these three experiments:
+### Experiment 1 — Participation
+Question: Can context change whether an available relation participates?
 
-$E_1 \rightarrow$ review $\rightarrow E_2 \rightarrow$ review $\rightarrow E_3$ if warranted $\rightarrow$ Phase IV closeout
+Observed in this bounded realization: $R + C \rightarrow P(R)$. Context changed whether already-available relational possibilities became relevant, passed legitimation, and participated, while structure and default meaning remained unchanged.
 
-No Experiment 4 is added automatically. If these experiments expose another question, propose it separately after Phase IV closeout. The goal is to avoid an indefinitely expanding experimental phase.
+### Experiment 2 — Relation identity
+Question: When context causes $R$ to participate, does the represented relation itself become distinguishably contextualized as $R'$?
 
-## How to record future experiment results
+Observed: $R + C \rightarrow P(R)$, but no distinguishable $R + C \rightarrow R'$ was exposed. Participation status changed; observable identity-bearing relation fields did not.
 
-For Experiment 3 (and any approved follow-on), results will contain:
-- Question  
-- Control condition  
-- Experimental condition  
-- Held-constant variables  
-- Intentionally changed variable  
-- Observable states  
-- Replay/determinism result  
-- Observed  
-- Interpretation  
-- Not established  
-- Conjecture / future question  
-- Contract violations, if any  
-- Bounded conclusion
+### Experiment 3 — Relational configuration
+Question: When multiple relations participate together, is there an observable consequence beyond coexistence?
 
-This structure keeps experiments comparable over time.
+Observed: co-participation $M_t = \{R_1, R_2, \ldots, R_n\}$ is visible in the finite composite. No interaction/configuration consequence beyond coexistence was exposed by the present instrument.
+
+### Combined observational boundary
+Observed progression in this Phase IV cycle:
+
+available relation → relevant relation → legitimation/refusal → participating relation → co-participating relations
+
+The present Phase IV experiments do not observationally extend beyond co-participation into contextualized relation identity or relation-to-relation interaction/configuration effects.
+
+### Combined tractability interpretation (bounded)
+Taken together, the three Phase IV experiments support the feasibility of a tractable local S2M realization in which relational possibilities can remain available without participating, contextual information can change their relevance and participation, legitimation/refusal can remain an explicit boundary, and multiple realized relations can coexist in a finite composite without requiring the present model to posit contextual rewriting of relation identity or unobserved interaction/emergence among participating relations.
+
+This is a result about the current local, bounded TS realization. It does not establish that these mechanisms generalize universally.
+
+### Future generalization strategy (methodological direction)
+A local tractable realization can serve as a candidate general model whose limits are tested through controlled expansion. Generality is not assumed as a conclusion; it can be investigated by progressively widening the relational, structural, and contextual domain and observing where the local model continues to hold, where it fails, and why.
+
+Conceptual path:
+
+local realization → candidate generalization → controlled expansion → boundary/failure → characterize why → revise or reject
+
+This is a future research strategy, not a Phase IV experimental result.
+
+### Relational-meaning closeout statement
+The Phase IV observations reinforce the working S2M view that realized meaning in the current TS realization is associated with relations that actually participate in the realized composite, rather than with candidate relational information merely being available.
+
+The potential methodological contribution of TS is to make at least part of relational meaning formation an observable, stage-separated, controlled, measurable within the realization, and replayable experimental object.
+
+---
+
+## Phase IV closeout (initial bounded cycle)
+
+Completed statuses:
+- Experiment 1 — completed
+- Experiment 2 — completed at Gate B
+- Experiment 3 — completed at Gate B
+- Phase IV initial cycle — closed
+
+No Experiment 4 is authorized by this closeout. Any further experiment must be separately proposed from a new research question after review of the completed Phase IV record.
 
 ## Relationship to existing documents
 
