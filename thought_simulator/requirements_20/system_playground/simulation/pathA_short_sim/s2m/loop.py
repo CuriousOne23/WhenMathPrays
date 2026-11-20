@@ -36,10 +36,15 @@ def apply(seed: Dict[str, Any], tp: Any = None, space_name: str = "default") -> 
     cue_active = bool(cue_values or top_category)
 
     active_space = resolve_active_space(space_name) if cue_active else []
-    if cue_active and top_category and top_category in active_space:
+    proposal_majors = {
+        str(proposal.get("major", "")).strip().lower()
+        for proposal in proposals
+        if isinstance(proposal, dict)
+    }
+    if cue_active and top_category and top_category in active_space and top_category in proposal_majors:
         selected_space = [top_category]
     elif cue_active:
-        selected_space = [major for major in active_space if major in set(cue_values)]
+        selected_space = [major for major in active_space if major in set(cue_values) and major in proposal_majors]
     else:
         selected_space = []
 

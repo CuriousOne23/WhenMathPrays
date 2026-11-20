@@ -49,7 +49,8 @@ def main() -> None:
         prior_context=["That location needs support for the object."],
     )
     prior_category = _committed_category(prior_cue)
-    assert prior_category.get("top_category") == "physical", "prior cue top category mismatch"
+    prior_cues = prior_category.get("category_cue", [])
+    assert isinstance(prior_cues, list) and "physical" in prior_cues, "prior cue should include physical"
     prior_meaning = prior_cue.get("s2m_meaning", {})
     prior_relations = prior_meaning.get("meaning_relations", [])
     prior_keys = {

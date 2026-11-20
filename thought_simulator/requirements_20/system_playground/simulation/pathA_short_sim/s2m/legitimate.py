@@ -25,6 +25,7 @@ def legitimate(
         return []
 
     active_set = set(active_space)
+    relation_is_licensed = structural_relation in LICENSED_EXTENSIONS
     licensed = set(LICENSED_EXTENSIONS.get(structural_relation, []))
     legitimized: List[Dict[str, Any]] = []
     for proposal in proposals:
@@ -34,7 +35,7 @@ def legitimate(
         from_value = str(proposal.get("from", "")).strip()
         relation_value = str(proposal.get("relation", "")).strip()
         to_value = str(proposal.get("to", "")).strip()
-        if licensed and (from_value, relation_value, to_value) not in licensed:
+        if relation_is_licensed and (from_value, relation_value, to_value) not in licensed:
             continue
         relation: Dict[str, Any] = {
             "from": from_value,
