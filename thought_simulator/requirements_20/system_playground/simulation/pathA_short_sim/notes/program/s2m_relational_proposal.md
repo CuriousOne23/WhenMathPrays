@@ -43,11 +43,11 @@ These stages remain distinct. Default meaning exists even when no cue is active 
 - Derive the default meaning from that structural relation.
 - Expose candidate interpretation inventories for relevant endpoints and relations.
 - Organize those candidates descriptively by interpretation major and subcategory.
-- Use the complete utterance and active space to constrain candidates.
-- Propose further relations only from active context stores and interpretation majors.
-- Measure deviation from the licensed region.
-- Legitimate or refuse: write an extension only if it fits the composite; otherwise leave null (or emit clarifying question).
-- Build the finite composite from the default plus legitimized selections.
+- Use the complete utterance and active space to constrain which candidates are available for consideration.
+- Propose further relations only from active context stores and interpretation majors when a cue is present.
+- Measure deviation from the licensed region established by the structural relation and default meaning.
+- Legitimate or refuse: write an extension only if the proposed relation is within the licensed region and is supported by the active cue; otherwise leave null (or emit clarifying question).
+- Build the finite composite from the default plus any relations that have been legitimized.
 - Audit (periodic, continuous, or rest/sleep window) for coherence, deviation size, unlegitimized links, and null stability.
 - Engineering operations: reinforce, create (only after legitimation), or remove.
 
@@ -170,14 +170,14 @@ query about the location of book
 A request/query for the location of the entity book; the requested locative continuation remains unresolved/potential.
 
 **Candidate interpretation inventory:**  
-- book: object (physical), sought (mental)  
-- query structure: information-request, unresolved-location (linguistic context)
+- book: object (physical)  
+- query structure: information-request (mental), unresolved-location (perspectival)
 
 **No-cue behavior:**  
 Default query meaning only. Locative continuation remains potential/null until answered. No endpoint association is selected as the meaning.
 
 **Possible non-default extensions (require cue):**  
-book → is → sought. The semantic content of the query arises from the structure itself, not from looking up associations for book.
+None required for the initial testbench. The semantic content of the query arises from the structure itself, not from looking up associations for book. (Any later characterization such as book being “sought” would be an optional interpretive extension only.)
 
 ## Expected size
 
@@ -271,7 +271,7 @@ The mind is trained (a priori maps) yet plastic. New relations can be built cont
 ```text
 unexpected continuation
 → deviation check
-→ legitimation against composite
+→ legitimation against licensed region
 → write or refuse
 ```
 
