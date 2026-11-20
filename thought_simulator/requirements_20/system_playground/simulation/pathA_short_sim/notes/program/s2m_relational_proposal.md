@@ -1,9 +1,15 @@
 # S2M Relational Mapping Proposal
 
-**Date:** 2026-11-19  
+**Date:** 2026-11-20  
 **Status:** Proposal. Independent of current requirements definitions of meaning. Not a definitive account.  
 **Door:** This page is linked from the short-sim README so a Frontier AI or new session can find it.  
 **Implementation contract:** s2m_program_reference.md — concrete data shapes, attachment point, non-mutation rules, and first-seed acceptance criteria. Read both before coding.
+
+## Organizing principle
+
+When no contextual or category-selection cue is active, S2M shall preserve the utterance's minimal structurally licensed semantic relation as its default meaning. Candidate interpretations remain available but unselected.
+
+This principle is first-class. Default meaning is derived from the structural relation established by the floor. It is not selected from a candidate interpretation inventory.
 
 ## Why
 
@@ -17,37 +23,37 @@ A central observation is:
 
 This does not mean that an interpretation list is *the meaning* of a word or sentence, nor that knowing the list means knowing or understanding the meaning of an utterance. The list exposes possible meaning relations. The complete utterance constrains those possibilities toward a finite composite specific to that occurrence.
 
-The proposal therefore distinguishes the structural relation established by the floor from the possible interpretations made available downstream and from the composite selected for the utterance.
+## The S2M distinction (five stages)
+
+S2M exposes five conceptually distinct stages for every realized utterance:
+
+1. **Structural relation** — what the floor actually established.
+2. **Default meaning** — the minimal semantic relation licensed by that structure, with no special context or category cue.
+3. **Candidate interpretation space** — available possible interpretations for relevant endpoints and relations, tagged by interpretation major and subcategory; unselected by default.
+4. **Selected interpretive extension(s)** — candidates legitimized by an explicit context or category cue.
+5. **Finite customized composite** — the default meaning plus any legitimately selected extensions.
+
+These stages remain distinct. Default meaning exists even when no cue is active and does not depend on the candidate inventory.
 
 ## How
 
-- Pre-train six category stores independently.
+- Pre-train six context stores independently.
 - At runtime activate only the relevant subset for the current exchange.
-- Write the explicit relation the present structure establishes; leave all others null.
-- Expose possible interpretation relations for relevant words/endpoints.
-- Organize those possibilities descriptively by major category and subcategory.
-- Use the complete utterance and active space to constrain the candidate relations.
-- Propose further relations only from active categories.
+- Write the explicit structural relation the present structure establishes; leave all others null.
+- Derive the default meaning from that structural relation.
+- Expose candidate interpretation inventories for relevant endpoints and relations.
+- Organize those candidates descriptively by interpretation major and subcategory.
+- Use the complete utterance and active space to constrain candidates.
+- Propose further relations only from active context stores and interpretation majors.
 - Measure deviation from the licensed region.
-- Legitimate or refuse: write only if it fits the composite world view; otherwise leave null (or emit clarifying question).
-- Build the finite composite from the legitimized selections.
+- Legitimate or refuse: write an extension only if it fits the composite; otherwise leave null (or emit clarifying question).
+- Build the finite composite from the default plus legitimized selections.
 - Audit (periodic, continuous, or rest/sleep window) for coherence, deviation size, unlegitimized links, and null stability.
 - Engineering operations: reinforce, create (only after legitimation), or remove.
 
-## Expected size
+## Context stores
 
-| Scope | Projected relations |
-|-------|---------------------|
-| Rudimentary (seed + core everyday) | ~10⁴ |
-| Single broad culture + common occupations | 10⁵ – 10⁶ |
-| Multiple cultures + specialized domains | 10⁶ – 10⁷ |
-| Open-ended | grows with training |
-
-Runtime memory stays proportional to active categories and legitimized relations, not library size.
-
-These are projected scaling ranges, not demonstrated capacities. The implementation establishes a mechanism through which increasing relation spaces can be tested.
-
-## Categories
+The following six stores describe sources involved in the S2M process. They are distinct from interpretation majors.
 
 1. **Further utterance** — local continuations and clarifying forms.
 2. **World view** — a priori noun–relation map (basic library lives here).
@@ -56,86 +62,13 @@ These are projected scaling ranges, not demonstrated capacities. The implementat
 5. **Legitimation / refusal** — question, correction, agreement/refusal signals.
 6. **Time / sequence** — deviation windows, recency, re-opening.
 
-Each can be loaded or trained separately. Overlap is handled at runtime by activating only relevant categories and materializing composition only for relations under check.
+Each can be loaded or trained separately. Overlap is handled at runtime by activating only relevant stores and materializing composition only for relations under check.
 
-These six stores describe sources involved in the S2M process. They are distinct from the major/subcategory organization below, which describes possible **interpretations**.
+## Interpretation majors and subcategories
 
-## Interpretation space: where meaning slips in
+Candidate associations are organized descriptively under an interpretation major and subcategory. These are distinct from the context stores above.
 
-The structural floor can establish a relation such as:
-
-```text
-sky — is — blue
-```
-
-That relation does not exhaust what the utterance may mean.
-
-Words participating in the relation can expose sets of possible interpretations. For the rudimentary example, candidate lists may include:
-
-```text
-blue = {
-  sadness,
-  depression,
-  cold,
-  dying/dwindling,
-  pristine,
-  expansive,
-  clarity,
-  color,
-  primary color
-}
-```
-
-```text
-sky = {
-  openness,
-  higher,
-  no boundaries,
-  broadening,
-  free,
-  made of gas,
-  surrounds a planet,
-  generally seen from the ground and looking up
-}
-```
-
-These lists make the transition toward meaning visible.
-
-They are **not definitions of the words**. They are not individually the meaning of `"The sky is blue."` They do not establish that a system possessing the lists knows or understands the meaning of the sentence.
-
-Instead, they expose possible meaning relations upon which the complete utterance can operate.
-
-Conceptually:
-
-$$
-\text{structural relation}
-\rightarrow
-\text{candidate interpretation space}
-\rightarrow
-\text{utterance-specific selection}
-\rightarrow
-\text{finite customized composite}
-$$
-
-The phrase **“the word interpretation list is where meaning slips in”** refers to this boundary. Structure has established what is present. The interpretation lists make possible meaning relations available. The entire utterance then constrains which of those possibilities participate in the composite for this occurrence.
-
-Therefore:
-
-$$
-\text{candidate interpretation space}
-\neq
-\text{selected meaning composite}
-\neq
-\text{claim of understanding}
-$$
-
-The proposal concerns the first two transitions. It does not require the stronger claim that producing the resulting composite is equivalent to knowing or understanding what the sentence means.
-
-## Major interpretation categories and subcategories
-
-Candidate associations can be organized descriptively under a major category and subcategory.
-
-| Major | Subcategories |
+| Interpretation major | Subcategories |
 |-------|---------------|
 | **Affective / experiential** | emotional-tone, bodily-felt, mood, valence |
 | **Perceptual / sensory** | color, spatial-extent, visual-quality, sensory-modality |
@@ -146,48 +79,118 @@ Candidate associations can be organized descriptively under a major category and
 | **Social** | shared, collective, interpersonal, cultural-common |
 | **Metaphysical** | ontological-status, essence, categorical-being, ultimate-ground |
 
-**Metaphysical** is included as its own major category.
+**Metaphysical** is included as its own major.
 
-Each association from an interpretation list can sit under one major and one subcategory. The organization remains descriptive and extendable. Subcategories can be added later without requiring the major categories themselves to change.
+Each candidate can sit under one major and one subcategory. The organization remains descriptive and extendable. Subcategories can be added later without requiring the majors themselves to change.
 
-The classification applies to the association, not necessarily to the word as an intrinsic property.
+The classification applies to the association, not necessarily to the endpoint as an intrinsic property. The existence of a candidate does not make it active for every occurrence. Selection remains specific to the utterance and active space.
 
-For example, the candidate associations for `blue` can occupy different regions of the interpretation space:
+## Default meaning
 
-- `sadness` may be represented affectively.
-- `color` may be represented perceptually.
-- `clarity` may be represented mentally.
+Default meaning is the minimal semantic relation licensed by the structural relation. It is derived from structure, not looked up from a candidate inventory. It exists when no contextual or category-selection cue is active. It does not require an associative interpretation to be selected and does not depend on the candidate inventory to establish the basic propositional content.
 
-Likewise, different possible relations associated with `sky` can occupy physical, perspectival, mental, spiritual, or other regions.
+Exact canonical relation vocabulary (for example, has_state, state/property, is_located_on) remains open. The requirement is that the content of the default preserve the structural crossing.
 
-The existence of an association in one of these regions does not make it active for every occurrence of the word. Selection remains specific to the utterance and active space.
+## Candidate interpretation space
 
-## The customized composite
+Relevant endpoints and, where appropriate, structural relations may have candidate interpretation inventories. These are available possibilities, not automatically meaning. They remain visibly unselected until something legitimately activates them.
 
-The meaning-side result is not intended to be the union of every candidate association attached to every word.
+The inventories are associated with endpoints and relations rather than assuming all meaning resides in individual words. This distinction matters for relational structures such as locatives and interrogatives.
 
-For:
+## Selected interpretive extension
 
-> “The sky is blue.”
+A contextual or category cue may subsequently legitimize one or more candidates. An extension is added only after legitimate selection. It does not appear merely because it is present in an inventory. Extensions are additions to the default meaning, not replacements for it.
 
-the system begins with the explicit structural relation:
+## Customized composite
 
-```text
-sky — is — blue
-```
+The final finite customized composite contains:
+- the structurally licensed default meaning; plus
+- any legitimately selected interpretive extensions.
 
-The interpretation lists expose multiple possible relations for `sky` and `blue`. The complete utterance constrains that larger possibility space. Only a finite subset passes through the active space and legitimation process.
+This keeps the default stable while allowing plasticity and context-sensitivity. The composite is specific to the utterance. It is not the union of every candidate.
 
-That resulting finite selection is the **customized composite** for the occurrence.
+Meaning is proposed to appear in that composite without requiring the stronger conclusion that the system therefore knows or understands what the sentence means.
 
-Meaning is proposed to appear in that composite without requiring the stronger conclusion that the system therefore knows what the sentence means.
-
-This gives S2M an inspectable distinction between:
-
+Inspectable distinctions remain:
 1. what structure explicitly established;
-2. what interpretations were possible;
-3. what interpretations were selected;
-4. what remained unavailable, unselected, refused, or null.
+2. the default meaning derived from it;
+3. what interpretations were available as candidates;
+4. what interpretations were selected;
+5. what remained unavailable, unselected, refused, or null.
+
+## Canonical three-sentence testbench
+
+The following three sentences serve as the initial canonical testbench. For each: structural relation, default meaning, relevant candidate interpretation inventory, no-cue behavior, and possible non-default extensions.
+
+### A. “The sky is blue.”
+
+**Structural relation:**  
+`sky — is — blue`
+
+**Default meaning:**  
+The entity sky is characterized by the state/property blue.  
+(Canonical relation name open; content is the minimal licensed crossing.)
+
+**Candidate interpretation inventory (endpoints):**  
+- sky: openness (mental), higher (perspectival), no boundaries (spiritual), broadening (mental), free (affective), made of gas (physical), surrounds a planet (physical), generally seen from the ground and looking up (perspectival)  
+- blue: sadness (affective), depression (affective), cold (affective), dying/dwindling (affective), pristine (perceptual), expansive (mental), clarity (mental), color (perceptual), primary color (perceptual)
+
+**No-cue behavior:**  
+Default meaning only. All candidates remain unselected.
+
+**Possible non-default extensions (require cue):**  
+sky → affords → openness (mental); blue → evokes → cold (affective). These are not part of the default.
+
+### B. “The book is on the table.”
+
+**Structural relation:**  
+book — is — on — table (locative)
+
+**Default meaning:**  
+The entity book is located on the entity table.  
+(Canonical relation name open; content is the locative placement.)
+
+**Candidate interpretation inventory:**  
+- book: object (physical), portable (physical), contains pages (physical)  
+- table: support (physical), surface (physical), furniture (physical)  
+- locative relation itself: placement, containment-adjacent, stable-position (perspectival)
+
+**No-cue behavior:**  
+Default locative meaning only. Candidates remain unselected.
+
+**Possible non-default extensions (require cue):**  
+table → provides → support; book → is → object. These do not constitute the default.
+
+### C. “Where is the book?”
+
+**Structural relation:**  
+query about the location of book
+
+**Default meaning:**  
+A request/query for the location of the entity book; the requested locative continuation remains unresolved/potential.
+
+**Candidate interpretation inventory:**  
+- book: object (physical), sought (mental)  
+- query structure: information-request, unresolved-location (linguistic context)
+
+**No-cue behavior:**  
+Default query meaning only. Locative continuation remains potential/null until answered. No endpoint association is selected as the meaning.
+
+**Possible non-default extensions (require cue):**  
+book → is → sought. The semantic content of the query arises from the structure itself, not from looking up associations for book.
+
+## Expected size
+
+| Scope | Projected relations |
+|-------|---------------------|
+| Rudimentary (seed + core everyday) | ~10⁴ |
+| Single broad culture + common occupations | 10⁵ – 10⁶ |
+| Multiple cultures + specialized domains | 10⁶ – 10⁷ |
+| Open-ended | grows with training |
+
+Runtime memory stays proportional to active stores and legitimized relations, not library size.
+
+These are projected scaling ranges, not demonstrated capacities. The implementation establishes a mechanism through which increasing relation spaces can be tested.
 
 ## Merge / overlap handling (efficient)
 
@@ -199,7 +202,7 @@ This gives S2M an inspectable distinction between:
 
 ## Scale capability
 
-The structure is intended to remain the same as the relation space grows. Growth occurs through additional relations passing through the same selection and legitimation process. No new category or write path should be required merely because more associations, subcategories, or interpretive spaces are available.
+The structure is intended to remain the same as the relation space grows. Growth occurs through additional relations passing through the same selection and legitimation process. No new store or write path should be required merely because more associations, subcategories, or interpretive spaces are available.
 
 Seed state (one written relation + nulls) remains a legal state at any scale.
 
@@ -207,11 +210,11 @@ This is presently an architectural scalability proposition. Increasing relation 
 
 ## What portion is trained / what we train on
 
-- **Trained:** each category store independently (a priori maps).
-- **Train on:** observed or curated relations within that category (everyday objects/events for world view; common continuations for further utterance; etc.).
-- **Interpretation pools:** candidate associations organized by major and subcategory.
+- **Trained:** each context store independently (a priori maps).
+- **Train on:** observed or curated relations within that store (everyday objects/events for world view; common continuations for further utterance; etc.).
+- **Interpretation inventories:** candidate associations organized by interpretation major and subcategory.
 - **Not pre-trained:** every possible path. Plasticity allows new relations to be legitimized later.
-- **Runtime:** only relevant categories and interpretation slices are activated; unused stores stay cold.
+- **Runtime:** only relevant stores and interpretation slices are activated; unused stores stay cold.
 
 An interpretation inventory need not enumerate every meaning in advance. Its purpose is to provide an extendable relational space from which finite selections can be made.
 
@@ -219,9 +222,9 @@ An interpretation inventory need not enumerate every meaning in advance. Its pur
 
 Nouns are only endpoints. Meaning is not reduced to object or attribute collection.
 
-The structural floor establishes present relations between endpoints. Interpretation pools then expose possible relations associated with those endpoints. The complete utterance constrains which possibilities can participate in its customized composite.
+The structural floor establishes present relations between endpoints. Default meaning is derived from that relation. Interpretation inventories then expose possible relations associated with those endpoints and relations. The complete utterance constrains which possibilities can participate in its customized composite.
 
-The process therefore remains relational: write the present connection, expose possible meaning relations, select and legitimate only those appropriate to the occurrence, and leave further connections null or potential.
+The process therefore remains relational: write the present connection, derive the default, expose possible meaning relations, select and legitimate only those appropriate to the occurrence, and leave further connections null or potential.
 
 Object/attribute collection by itself is not the bridge.
 
@@ -230,9 +233,10 @@ Object/attribute collection by itself is not the bridge.
 Observation of the mapping from structure toward meaning includes:
 
 - the relation the floor emits;
+- the default meaning derived from it;
 - the explicit nulls;
 - the candidate interpretation relations made available;
-- the active major/subcategory space;
+- the active interpretation major/subcategory space;
 - the finite selections proposed for the utterance;
 - the deviation of a proposed relation;
 - the legitimation or refusal decision; and
@@ -244,46 +248,20 @@ The visible bridge is that process made inspectable and re-runnable.
 
 ```mermaid
 flowchart TD
-    A[Present utterance] --> B[Write explicit relation]
-    B --> C[Leave all other relations null]
-    C --> D[Activate relevant category stores]
-    D --> E[Propose further relation]
-    E --> F[Measure deviation]
-    F --> G{Legitimate?}
-    G -->|Yes| H[Write new relation]
-    G -->|No| I[Leave null / clarifying question]
-    H --> J[Record in sequence store]
-    I --> J
-    J --> K[Audit / rest window]
-    K --> L[Reinforce / create / remove]
-```
-
-## Block diagram — single category
-
-```mermaid
-flowchart LR
-    S[Category store] --> A[Active slice]
-    A --> P[Propose relations]
-    P --> L[Legitimation check]
-    L --> W[Written or null]
-```
-
-## Block diagram — multiple categories (overlap)
-
-```mermaid
-flowchart TD
-    subgraph Active
-        FU[Further utterance]
-        WV[World view]
-        FR[Frame]
-        LC[Linguistic context]
-    end
-    FU --> C[Compose only active]
-    WV --> C
-    FR --> C
-    LC --> C
-    C --> D[Deviation + legitimation]
-    D --> R[Single written relation or null]
+    A[Present utterance] --> B[Write structural relation]
+    B --> C[Derive default meaning]
+    C --> D[Leave unselected relations null]
+    D --> E[Activate relevant context stores]
+    E --> F[Expose candidate inventories]
+    F --> G[Propose extension if cue present]
+    G --> H[Measure deviation]
+    H --> I{Legitimate?}
+    I -->|Yes| J[Write extension]
+    I -->|No| K[Leave null / clarifying question]
+    J --> L[Record in composite]
+    K --> L
+    L --> M[Audit / rest window]
+    M --> N[Reinforce / create / remove]
 ```
 
 ## Plasticity of the mind
@@ -293,7 +271,7 @@ The mind is trained (a priori maps) yet plastic. New relations can be built cont
 ```text
 unexpected continuation
 → deviation check
-→ legitimation against composite world view
+→ legitimation against composite
 → write or refuse
 ```
 
@@ -309,23 +287,22 @@ Plasticity operates on possible relations while legitimation controls which rela
 - **Safety:** only legitimized relations are written; clarifying question is the response to large deviation; engineering view can remove unwanted links.
 - **Down time / rest / sleep:** protected window for thorough audit and light reorganization without response load.
 
-The availability of an association in an interpretation list does not itself legitimate that association for the current utterance.
+The availability of an association in an interpretation inventory does not itself legitimate that association for the current utterance.
 
 ## Relationships established in conversation
 
 Relations can be written during the exchange itself when a clarifying step legitimizes them. Example:
 
 - Speaker: “The sky is blue.”
-- Packet writes: sky – is – blue. All further null.
-- Interpretation pools expose possible relations for `sky` and `blue`.
-- The complete utterance constrains which possibilities are candidates for the current composite.
+- Structural relation and default meaning written. All further null.
+- Interpretation inventories expose possible relations for sky and blue.
 - Speaker: “meaning it is hot.”
 - Listener / system: “What do you mean by, it is hot?” (deviation; relation not yet written).
-- If subsequent information legitimizes a link, it is written; otherwise it stays null.
+- If subsequent information legitimizes a link, it is written as an extension; otherwise it stays null.
 
 Further examples:
 
-- “Where is the book?” → query relation written; locative continuation remains potential until answered.
+- “Where is the book?” → query default written; locative continuation remains potential until answered.
 - Social frame shift (formal vs casual) activates different frame slice; same sentence can license different continuations.
 
 The conversation can therefore change which relations are available or legitimized without requiring the original word to possess one fixed meaning.
@@ -336,13 +313,13 @@ This proposal makes a deliberately bounded claim.
 
 It proposes that **the word interpretation list is where meaning slips in**: the point at which structural endpoints gain access to possible meaning relations.
 
-It further proposes that the complete utterance can constrain these possibilities into a finite, customized composite.
+It further proposes that the complete utterance can constrain these possibilities into a finite, customized composite consisting of the default meaning plus any legitimized extensions.
 
 It does **not** claim that:
 
 - an interpretation list is itself the meaning of a word;
 - combining all interpretation lists yields the meaning of a sentence;
-- the candidate categories are exhaustive or definitive;
+- the candidate inventories or interpretation majors are exhaustive or definitive;
 - producing a finite composite establishes human-like understanding; or
 - the present taxonomy is the only possible organization of meaning.
 
