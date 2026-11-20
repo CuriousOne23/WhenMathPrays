@@ -131,7 +131,7 @@ Methodological proposition (not a confirmed novelty/priority claim): The potenti
 Does additional information merely cause an unchanged candidate relation $R$ to participate, or can the additional information contribute to a distinguishable realized $R'$?
 
 Alternatives:
-- Selection/participation alternative: $R + C \rightarrow \operatorname{participation}(R)$. The relation was already available and context merely changes its participation status.
+- Selection/participation alternative: $R + C \rightarrow P(R)$, where $P(R)$ means participation of the unchanged relation $R$. The relation was already available and context merely changes its participation status.
 - Contextualization alternative: $R + C \rightarrow R'$. The realized occurrence of the relation is distinguishable because contextual information contributes to the relation as realized in that occurrence.
 
 Experiment 1 did not demonstrate $R'$. Experiment 2 exists specifically to distinguish these possibilities.
