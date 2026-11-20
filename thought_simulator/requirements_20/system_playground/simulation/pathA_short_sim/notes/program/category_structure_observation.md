@@ -125,35 +125,107 @@ Methodological proposition (not a confirmed novelty/priority claim): The potenti
 
 ## Experiment 2 — Contextualization of a realized relation
 
-**Status:** Planned — not yet run
+**Status:** Completed at design/observation gate — Gate B
 
-**Question**  
+**Experimental question**  
 Does additional information merely cause an unchanged candidate relation $R$ to participate, or can the additional information contribute to a distinguishable realized $R'$?
 
 Alternatives:
-- Selection/participation alternative: $R + C \rightarrow P(R)$, where $P(R)$ means participation of the unchanged relation $R$. The relation was already available and context merely changes its participation status.
-- Contextualization alternative: $R + C \rightarrow R'$. The realized occurrence of the relation is distinguishable because contextual information contributes to the relation as realized in that occurrence.
+- Selection/participation alternative: $R + C \rightarrow P(R)$, where $P(R)$ means participation of the unchanged relation $R$.  
+- Contextualization alternative: $R + C \rightarrow R'$, where $R'$ must be observably distinguishable from $R$ at the represented relation level.
 
-Experiment 1 did not demonstrate $R'$. Experiment 2 exists specifically to distinguish these possibilities.
+Experiment 1 established contextual effect on participation. Experiment 2 asked whether the relation itself is observably changed.
 
-**Design requirement before running**  
-Experiment 2 must be designed before execution so that:
-- $R$ is defined operationally  
-- $R'$ is defined operationally  
-- the contextual condition $C$ is explicit  
-- the observable difference between participation of unchanged $R$ and realization of $R'$ is specified  
-- the measurement is available through the observation instrument  
-- the experiment does not simply rename `meaning_relations` as $R'$
+**Operational definitions used**
+- $R = \text{book} \xrightarrow{\text{is}} \text{object}$  
+  - `from = book`  
+  - `relation = is`  
+  - `to = object`  
+  - `major = physical`  
+  - `subcategory = natural-kind`  
+  - Exists pre-activation in `candidate_interpretations`.
+- $C$: prior-context condition `"That location needs support for the object."`
+  - Observable path: prior context → CEx/CE → ISc → Merge/TPU → `TP.semantic.isc_category_result` → IdOB/S2M.
+- $P(R)$: participation of unchanged $R$ in realized meaning.
+  - Operational path observed: `candidate_unselected` → candidate relevance/consideration → `legitimized` → written to `meaning_relations`.
+- $R'$ (experimental alternative): relation observably distinguishable from $R$ because contextual information is represented as part of relation identity or relation-level attributes.
+  - No such relation-level distinguishing field is exposed in the present realization.
 
-If the present realization cannot distinguish $R$ from $R'$, record that as an instrumentation/design limitation rather than modifying the system during the experiment.
+**Controlled comparison**
+- Control: sentence `"The book is on the table."`, no prior context.
+  - Candidate $R$: `selection_state = candidate_unselected`.
+  - $R$ not written to `meaning_relations`.
+- Context condition: same sentence, prior context active.
+  - Candidate $R$: `selection_state = legitimized`.
+  - Written relation: `book → is → object`, `major: physical`, `subcategory: natural-kind`, `legitimized: true`.
 
-(Results structure reserved; findings not populated.)
+**Observed field comparison ($R$ before/after participation)**
+- `from`: unchanged  
+- `relation`: unchanged  
+- `to`: unchanged  
+- `major`: unchanged  
+- `subcategory`: unchanged  
+- No context-, cue-, or provenance-bearing field was added to the written relation object itself.
+
+**Where context remained observable**
+- `cue_state.category_cue`
+- `cue_state.provenance`
+- committed `TP.semantic.isc_category_result`
+- category cue/scoring/rationale/provenance fields in that committed block
+
+Distinction recorded:
+- Observed: context causally affected whether $R$ participated.
+- Not observed: context becoming part of the represented identity of $R$.
+
+**Replay / determinism (tested conditions)**
+- control replay identical: `true`
+- context replay identical: `true`
+
+**Observed**
+- $R$ existed before contextual activation.
+- Context was independently observable through the category path.
+- Context changed the participation path of $R$.
+- $R$ became legitimized in the context condition and entered `meaning_relations`.
+- Identity-bearing relation fields of $R$ remained unchanged.
+- No relation-level context/provenance qualifier was written into $R$.
+- Control/context observations replayed identically under identical tested conditions.
+
+**Interpretation**
+Within the current realization, context changed participation of the relation, not its observably represented relational identity. This supports $R + C \rightarrow P(R)$ within the current observation capability.
+
+**Not established**
+Experiment 2 does not establish:
+- that $R'$ is impossible;
+- that context cannot affect relational identity in another representation/realization;
+- that future contextual/provenance fields would by themselves prove $R'$;
+- that biological contextual meaning behaves this way;
+- that participation exhausts contextual meaning;
+- that the current relation representation contains every property relevant to realized meaning.
+
+**Conjecture / future question**
+Would a future realization expose an operationally meaningful contextual qualification of a relation that is more than participation status or causal history?
+
+**Scaffolding dependencies**
+This result is bounded by the current realization and depends on candidate YAML inventories, category-cue mapping, ISc weights, candidate-relevance policy, bounded `LICENSED_EXTENSIONS`, and canonical seed scaffolding.
+
+**Artifacts**
+Planned Experiment 2 text artifacts were not created because the experiment completed at the design/observation gate (Gate B). No additional run artifacts were required for this record.
+
+**Contract violations**
+No contract violation was identified by Experiment 2. Gate B is a representational-capability observation, not a defect claim.
+
+**Bounded conclusion**
+Experiment 2 found that the current TS realization observably supports $R + C \rightarrow P(R)$. Prior contextual information can change whether an already-available relation participates in realized meaning, while the observable identity-bearing fields of that relation remain unchanged. The current instrument therefore does not provide evidence for a distinguishable contextualized relation $R'$.
+
+This does not establish that contextualization of a relation is impossible, nor that contextual information has no effect beyond participation in a more complete realization. It establishes only that the present TS observation instrument does not expose an $R'$ distinguishable from $R$ at the represented relation level.
 
 ---
 
 ## Experiment 3 — Relational configuration
 
 **Status:** Conditional / planned
+
+Following the Experiment 2 Gate B result, Experiment 3 remains conditional and requires separate review of whether its interaction/configuration distinction is operationally observable with the present instrument.
 
 This experiment should be performed only if the results and instrumentation of Experiment 2 provide a legitimate basis.
 
@@ -183,7 +255,7 @@ No Experiment 4 is added automatically. If these experiments expose another ques
 
 ## How to record future experiment results
 
-For Experiments 2 and 3, results will contain:
+For Experiment 3 (and any approved follow-on), results will contain:
 - Question  
 - Control condition  
 - Experimental condition  
