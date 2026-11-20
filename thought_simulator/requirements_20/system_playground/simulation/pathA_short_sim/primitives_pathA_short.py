@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Any, Dict, List
 import hashlib
+import math
 
 import yaml
 from idob.registry import registry
@@ -63,11 +64,13 @@ except ImportError:
 
     def _load_yaml_dictionary(file_name: str, root_key: str) -> Any:
         file_path = _DICT_DIR / file_name
+        default_map_keys = {"token_classes", "segment_patterns", "role_patterns", "semantic_rules", "category_cues", "isc_weights"}
+        default_value: Any = {} if root_key in default_map_keys else []
         if not file_path.exists():
-            return {} if root_key.endswith("patterns") or root_key.endswith("classes") else []
+            return default_value
         with file_path.open("r", encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
-        return data.get(root_key, {} if root_key.endswith("patterns") or root_key.endswith("classes") else [])
+        return data.get(root_key, default_value)
 
     def load_token_classes() -> Dict[str, str]:
         return _load_yaml_dictionary("token_classes.yaml", "token_classes")
@@ -83,6 +86,14 @@ except ImportError:
 
     def load_semantic_rules() -> Dict[str, str]:
         return _load_yaml_dictionary("semantic_rules.yaml", "semantic_rules")
+
+    def load_category_cues() -> Dict[str, Dict[str, List[str]]]:
+        return _load_yaml_dictionary("category_cues.yaml", "category_cues")
+
+    def load_isc_weights() -> Dict[str, float]:
+        return _load_yaml_dictionary("isc_weights.yaml", "isc_weights")
+
+from s2m.loader import load_majors
 
 
 # ----- helpers (coarse heuristics) -------------------------------------------------
@@ -125,6 +136,32 @@ def _simple_roles(struct_segments: List[str]) -> List[str]:
         else:
             roles.append("none")
     return roles
+
+
+def _ordered_unique(values: List[str]) -> List[str]:
+    ordered: List[str] = []
+    for value in values:
+        v = str(value).strip().lower()
+        if v and v not in ordered:
+            ordered.append(v)
+    return ordered
+
+
+def _extract_category_cues_from_text(text: str, cue_map: Dict[str, List[str]]) -> List[str]:
+    lowered = text.lower()
+    cues: List[str] = []
+    for marker, majors in cue_map.items():
+        marker_text = str(marker).strip().lower()
+        if not marker_text:
+            continue
+        if marker_text in lowered:
+            cues.extend([str(major).strip().lower() for major in majors])
+    return _ordered_unique(cues)
+
+
+def _merge_isc_output(tp: TP) -> Dict[str, Any]:
+    isc_output = tp.isc_output if isinstance(tp.isc_output, dict) else {}
+    return {"isc_output": dict(isc_output)}
 
 
 def _record_bridge(
@@ -444,24 +481,175 @@ def IE(tp: TP) -> TP:
 
 
 def CEx(tp: TP) -> TP:
-    # Stub: no correction needed.
     tp.corrections = ["no_change"]
+    prior_context = getattr(tp, "prior_context", [])
+    cues_config = load_category_cues()
+    prior_map = cues_config.get("prior_context", {}) if isinstance(cues_config, dict) else {}
+    prior_text = " ".join(str(item) for item in prior_context if str(item).strip())
+    prior_cue = _extract_category_cues_from_text(prior_text, prior_map if isinstance(prior_map, dict) else {})
+    tp.cex_output = {
+        "category_cue": prior_cue,
+        "provenance": {
+            "source": "prior_context_cex" if prior_cue else "none",
+            "origin": "prior_context",
+            "prior_context_used": bool(prior_context),
+        },
+    }
     return tp
 
 
 def CE(tp: TP) -> TP:
-    # Choose first candidate.
     if tp.corrections:
-        tp.normalized_text = tp.normalized_text  # no-op for now
+        tp.normalized_text = tp.normalized_text
+
+    majors = [major for major in load_majors() if str(major).strip()]
+    cues_config = load_category_cues()
+    sentence_map = cues_config.get("sentence_internal", {}) if isinstance(cues_config, dict) else {}
+    sentence_cue = _extract_category_cues_from_text(tp.raw_text, sentence_map if isinstance(sentence_map, dict) else {})
+    prior_cue = tp.cex_output.get("category_cue", []) if isinstance(tp.cex_output, dict) else []
+    cue_values = _ordered_unique([*sentence_cue, *list(prior_cue) if isinstance(prior_cue, list) else []])
+
+    cue_sources: List[str] = []
+    if sentence_cue:
+        cue_sources.append("sentence")
+    if isinstance(prior_cue, list) and prior_cue:
+        cue_sources.append("prior_context_cex")
+
+    normalized = tp.normalized_text or " ".join(tp.tokens)
+    candidate_set: List[Dict[str, Any]] = []
+    for major in majors:
+        major_name = str(major).strip().lower()
+        sentence_signal = 1.0 if major_name in sentence_cue else 0.0
+        prior_signal = 1.0 if isinstance(prior_cue, list) and major_name in prior_cue else 0.0
+        punctuation_signal = 1.0 if normalized.endswith("?") and major_name == "perspectival" else 0.0
+        correction_signal = 1.0 if tp.corrections and tp.corrections[0] == "no_change" else 0.0
+        candidate_set.append(
+            {
+                "major": major_name,
+                "f_s": sentence_signal,
+                "f_b": prior_signal,
+                "f_e": punctuation_signal,
+                "f_i": correction_signal,
+            }
+        )
+
+    tp.ce_output = {
+        "category_cue": cue_values,
+        "cue_provenance": cue_sources,
+        "category_candidate_set": candidate_set,
+    }
     return tp
 
 
 def ISc(tp: TP) -> TP:
-    tp.correction_score = 1.0
+    ce_output = tp.ce_output if isinstance(tp.ce_output, dict) else {}
+    candidate_set = ce_output.get("category_candidate_set", [])
+    category_cue = ce_output.get("category_cue", [])
+    if not isinstance(candidate_set, list):
+        candidate_set = []
+    if not isinstance(category_cue, list):
+        category_cue = []
+
+    weights_cfg = load_isc_weights()
+    w_s = float(weights_cfg.get("w_s", 0.2)) if isinstance(weights_cfg, dict) else 0.2
+    w_b = float(weights_cfg.get("w_b", 0.2)) if isinstance(weights_cfg, dict) else 0.2
+    w_e = float(weights_cfg.get("w_e", 0.2)) if isinstance(weights_cfg, dict) else 0.2
+    w_i = float(weights_cfg.get("w_i", 0.2)) if isinstance(weights_cfg, dict) else 0.2
+    w_cat = float(weights_cfg.get("w_cat", 0.6)) if isinstance(weights_cfg, dict) else 0.6
+
+    scored: List[Dict[str, Any]] = []
+    raw_scores: List[float] = []
+    cue_set = set(_ordered_unique([str(value) for value in category_cue]))
+    for candidate in candidate_set:
+        if not isinstance(candidate, dict):
+            continue
+        major = str(candidate.get("major", "")).strip().lower()
+        f_s = float(candidate.get("f_s", 0.0))
+        f_b = float(candidate.get("f_b", 0.0))
+        f_e = float(candidate.get("f_e", 0.0))
+        f_i = float(candidate.get("f_i", 0.0))
+        indicator = 1.0 if major in cue_set else 0.0
+        score = (w_s * f_s) + (w_b * f_b) + (w_e * f_e) + (w_i * f_i) + (w_cat * indicator)
+        raw_scores.append(score)
+        scored.append(
+            {
+                "major": major,
+                "score": score,
+                "category_hit": bool(indicator),
+            }
+        )
+
+    if not scored:
+        tp.isc_output = {
+            "category_cue": [],
+            "category_weighted_distribution": [],
+            "top_category": None,
+            "category_confidence": 0.0,
+            "category_rationale": ["empty_candidate_set"],
+            "provenance": {
+                "source": [],
+                "upstream": "ce",
+                "weights": {"w_s": w_s, "w_b": w_b, "w_e": w_e, "w_i": w_i, "w_cat": w_cat},
+            },
+        }
+        tp.correction_score = 0.0
+        return tp
+
+    max_score = max(raw_scores)
+    exp_scores = [math.exp(score - max_score) for score in raw_scores]
+    denom = sum(exp_scores)
+    distribution: List[Dict[str, Any]] = []
+    for idx, item in enumerate(scored):
+        probability = exp_scores[idx] / denom if denom else 0.0
+        distribution.append(
+            {
+                "major": item["major"],
+                "probability": probability,
+                "category_hit": item["category_hit"],
+            }
+        )
+    distribution.sort(key=lambda item: (-float(item["probability"]), str(item["major"])))
+    top = distribution[0] if distribution else {"major": None, "probability": 0.0}
+    rationale: List[str] = []
+    if cue_set:
+        rationale.append("category_cue_applied")
+    else:
+        rationale.append("empty_category_cue")
+    rationale.append(f"top_category={top.get('major')}")
+
+    tp.isc_output = {
+        "category_cue": sorted(cue_set),
+        "category_weighted_distribution": distribution,
+        "top_category": top.get("major"),
+        "category_confidence": float(top.get("probability", 0.0)),
+        "category_rationale": rationale,
+        "provenance": {
+            "source": ce_output.get("cue_provenance", []),
+            "upstream": "ce",
+            "weights": {"w_s": w_s, "w_b": w_b, "w_e": w_e, "w_i": w_i, "w_cat": w_cat},
+        },
+    }
+    tp.correction_score = float(top.get("probability", 0.0))
     return tp
 
 
 def TPU(tp: TP) -> TP:
+    tp.merge_output = _merge_isc_output(tp)
+    enable_category_selection = bool(getattr(tp, "enable_category_selection", False))
+    merged_isc = tp.merge_output.get("isc_output", {}) if isinstance(tp.merge_output, dict) else {}
+    if enable_category_selection and isinstance(merged_isc, dict):
+        semantic_block = tp.semantic if isinstance(tp.semantic, dict) else {}
+        if "isc_category_result" not in semantic_block:
+            semantic_block["isc_category_result"] = {
+                "category_cue": merged_isc.get("category_cue", []),
+                "category_weighted_distribution": merged_isc.get("category_weighted_distribution", []),
+                "top_category": merged_isc.get("top_category"),
+                "category_confidence": merged_isc.get("category_confidence", 0.0),
+                "category_rationale": merged_isc.get("category_rationale", []),
+                "provenance": merged_isc.get("provenance", {}),
+            }
+        tp.semantic = semantic_block
+
     tp.commit_flags["correction"] = True
     return tp
 
