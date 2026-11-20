@@ -1,6 +1,9 @@
 from typing import Any, Dict, List
 
 
+# Bounded short-simulator scaffolding for licensed-region checks.
+# This table intentionally enumerates only current demonstration tuples and is
+# not a generalized structural licensing mechanism.
 LICENSED_EXTENSIONS: Dict[str, List[tuple[str, str, str]]] = {
     "is": [
         ("sky", "affords", "openness"),

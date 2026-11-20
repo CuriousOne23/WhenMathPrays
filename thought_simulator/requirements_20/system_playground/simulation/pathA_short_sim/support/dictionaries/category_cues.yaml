@@ -1,7 +1,5 @@
 category_cues:
   sentence_internal:
-    blue:
-      - perceptual
     cold:
       - affective
     support:

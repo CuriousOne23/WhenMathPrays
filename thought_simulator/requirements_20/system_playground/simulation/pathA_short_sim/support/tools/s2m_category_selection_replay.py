@@ -22,25 +22,13 @@ def main() -> None:
     baseline_meaning = baseline.get("s2m_meaning", {})
     assert baseline_meaning.get("meaning_relations") == [], "baseline no-cue must keep meaning_relations empty"
 
-    sentence_cue = run_pathA_short("The sky is blue.", enable_s2m_seed=True, enable_category_selection=True)
+    sentence_cue = run_pathA_short("Where is the book?", enable_s2m_seed=True, enable_category_selection=True)
     sentence_category = _committed_category(sentence_cue)
-    assert sentence_category.get("category_cue") == ["perceptual"], "sentence cue should commit perceptual cue"
-    assert sentence_category.get("top_category") == "perceptual", "sentence cue top category mismatch"
+    assert sentence_category.get("category_cue") == ["perspectival"], "sentence cue should commit perspectival cue"
+    assert sentence_category.get("top_category") == "perspectival", "sentence cue top category mismatch"
     sentence_meaning = sentence_cue.get("s2m_meaning", {})
     sentence_relations = sentence_meaning.get("meaning_relations", [])
-    assert isinstance(sentence_relations, list)
-    relation_keys = {
-        (
-            str(item.get("from", "")),
-            str(item.get("relation", "")),
-            str(item.get("to", "")),
-            str(item.get("major", "")),
-        )
-        for item in sentence_relations
-        if isinstance(item, dict)
-    }
-    assert ("blue", "denotes", "color", "perceptual") in relation_keys
-    assert ("blue", "evokes", "cold", "affective") not in relation_keys
+    assert sentence_relations == [], "query cue should not force an extension without legitimation"
 
     prior_cue = run_pathA_short(
         "The book is on the table.",
@@ -74,6 +62,7 @@ def main() -> None:
     )
     no_usable_category = _committed_category(no_usable_prior)
     assert no_usable_category.get("category_cue") == [], "no usable prior cue should commit empty cue"
+    assert no_usable_category.get("top_category") is None, "empty cue should commit top_category null"
     assert no_usable_prior.get("s2m_meaning", {}).get("meaning_relations") == []
 
     refusal_case = run_pathA_short("Where is the book?", enable_s2m_seed=True, enable_category_selection=True)
@@ -86,13 +75,13 @@ def main() -> None:
     ), "refusal state should be visible for category-supported but unlicensed candidates"
 
     deterministic_a = run_pathA_short(
-        "The sky is blue.",
+        "The book is on the table.",
         enable_s2m_seed=True,
         enable_category_selection=True,
         prior_context=["cold signal in prior context"],
     )
     deterministic_b = run_pathA_short(
-        "The sky is blue.",
+        "The book is on the table.",
         enable_s2m_seed=True,
         enable_category_selection=True,
         prior_context=["cold signal in prior context"],

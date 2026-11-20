@@ -1,5 +1,6 @@
 import argparse
 import json
+from typing import List, Optional
 
 from pathA_short_simulator import run_pathA_short
 from mcb.seam import copy_from_idob
@@ -119,10 +120,80 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Disable optional S2M accountability and meaning output.",
     )
+    parser.add_argument(
+        "--no-category-observations",
+        action="store_true",
+        help="Disable category-selection observation scenarios.",
+    )
     return parser
 
 
-def main(enable_s2m_seed: bool = True) -> None:
+def _trace_entry(simulation_result: dict, primitive: str) -> dict:
+    trace = simulation_result.get("trace", [])
+    if not isinstance(trace, list):
+        return {}
+    for entry in trace:
+        if isinstance(entry, dict) and entry.get("primitive") == primitive:
+            return entry
+    return {}
+
+
+def _print_category_observation(
+    label: str,
+    sentence: str,
+    simulation_result: dict,
+    prior_context: Optional[List[str]] = None,
+) -> None:
+    print(f"\n=== Category Observation: {label} ===")
+    print(f"sentence: {sentence}")
+    if prior_context:
+        print(f"prior_context: {prior_context}")
+
+    s2m_seed = simulation_result.get("s2m_seed", {})
+    s2m_meaning = simulation_result.get("s2m_meaning", {})
+    if not isinstance(s2m_seed, dict):
+        s2m_seed = {}
+    if not isinstance(s2m_meaning, dict):
+        s2m_meaning = {}
+
+    written_relations = s2m_seed.get("written_relations", [])
+    print(f"structure/default basis: {written_relations}")
+    print(f"default_meaning: {json.dumps(s2m_meaning.get('default_meaning', {}), indent=2)}")
+
+    cex = _trace_entry(simulation_result, "CEx").get("cex_output", {})
+    ce = _trace_entry(simulation_result, "CE").get("ce_output", {})
+    isc = _trace_entry(simulation_result, "ISc").get("isc_output", {})
+    tpu = _trace_entry(simulation_result, "TPU")
+    merge_output = tpu.get("merge_output", {}) if isinstance(tpu, dict) else {}
+    tpu_commit = tpu.get("isc_category_result", {}) if isinstance(tpu, dict) else {}
+    final_tp = simulation_result.get("final_tp", {})
+    if not isinstance(final_tp, dict):
+        final_tp = {}
+    committed = (final_tp.get("semantic", {}) or {}).get("isc_category_result", {}) if isinstance(final_tp.get("semantic", {}), dict) else {}
+
+    print(f"CEx cue source/provenance: {json.dumps(cex, indent=2)}")
+    print(f"CE category_cue: {json.dumps(ce, indent=2)}")
+    print(f"ISc scoring/result: {json.dumps(isc, indent=2)}")
+    print(f"Merge handoff (TPU input): {json.dumps(merge_output, indent=2)}")
+    print(f"TPU commit payload: {json.dumps(tpu_commit, indent=2)}")
+    print(f"TP.semantic.isc_category_result: {json.dumps(committed, indent=2)}")
+    print(f"IdOB read-only consumption (S2M cue_state): {json.dumps(s2m_meaning.get('cue_state', {}), indent=2)}")
+
+    candidate_interpretations = s2m_meaning.get("candidate_interpretations", [])
+    print(f"S2M candidate consideration: {json.dumps(candidate_interpretations, indent=2)}")
+    print(f"S2M selected extensions (meaning_relations): {json.dumps(s2m_meaning.get('meaning_relations', []), indent=2)}")
+
+    print("default-versus-selected result:")
+    print(json.dumps(
+        {
+            "default_meaning": s2m_meaning.get("default_meaning", {}),
+            "meaning_relations": s2m_meaning.get("meaning_relations", []),
+        },
+        indent=2,
+    ))
+
+
+def main(enable_s2m_seed: bool = True, show_category_observations: bool = True) -> None:
     # sentence = "The quick brown fox jumps over the lazy dog."
     # PA-CSE-005 / mixed_desc
     # sentence = "The rain in Spain stays mainly in the plain."
@@ -312,7 +383,54 @@ def main(enable_s2m_seed: bool = True) -> None:
     print("--- R9 ---")
     print("freeze_version='pathA_v1'")
 
+    if not show_category_observations:
+        return
+
+    print("\n=== Canonical S2M Cases (normative testbench) ===")
+    canonical_sentences = [
+        "The sky is blue.",
+        "The book is on the table.",
+        "Where is the book?",
+    ]
+    for canonical_sentence in canonical_sentences:
+        canonical_result = run_pathA_short(canonical_sentence, enable_s2m_seed=enable_s2m_seed)
+        s2m_meaning = canonical_result.get("s2m_meaning", {})
+        if not isinstance(s2m_meaning, dict):
+            s2m_meaning = {}
+        print(f"\n- {canonical_sentence}")
+        print(f"  default_meaning: {json.dumps(s2m_meaning.get('default_meaning', {}))}")
+        print(f"  meaning_relations: {json.dumps(s2m_meaning.get('meaning_relations', []))}")
+
+    print("\n=== Category Selection Observation Cases (non-normative demos) ===")
+    no_cue_result = run_pathA_short(
+        "The book is on the table.",
+        enable_s2m_seed=enable_s2m_seed,
+        enable_category_selection=True,
+    )
+    _print_category_observation("No-cue baseline", "The book is on the table.", no_cue_result)
+
+    sentence_internal_result = run_pathA_short(
+        "Where is the book?",
+        enable_s2m_seed=enable_s2m_seed,
+        enable_category_selection=True,
+    )
+    _print_category_observation("Sentence-internal cue", "Where is the book?", sentence_internal_result)
+
+    prior_context = ["That location needs support for the object."]
+    prior_context_result = run_pathA_short(
+        "The book is on the table.",
+        enable_s2m_seed=enable_s2m_seed,
+        enable_category_selection=True,
+        prior_context=prior_context,
+    )
+    _print_category_observation("Prior-context cue", "The book is on the table.", prior_context_result, prior_context=prior_context)
+
+    _print_category_observation("Refusal / non-selection", "Where is the book?", sentence_internal_result)
+
 
 if __name__ == "__main__":
     args = build_arg_parser().parse_args()
-    main(enable_s2m_seed=not args.no_s2m_seed)
+    main(
+        enable_s2m_seed=not args.no_s2m_seed,
+        show_category_observations=not args.no_category_observations,
+    )

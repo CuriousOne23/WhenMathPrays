@@ -624,18 +624,25 @@ def ISc(tp: TP) -> TP:
         )
     distribution.sort(key=lambda item: (-float(item["probability"]), str(item["major"])))
     top = distribution[0] if distribution else {"major": None, "probability": 0.0}
+    top_major = top.get("major")
+    top_confidence = float(top.get("probability", 0.0))
+    if not cue_set:
+        top_major = None
+        top_confidence = 0.0
     rationale: List[str] = []
     if cue_set:
         rationale.append("category_cue_applied")
     else:
         rationale.append("empty_category_cue")
-    rationale.append(f"top_category={top.get('major')}")
+        rationale.append("top_category=null")
+    if cue_set:
+        rationale.append(f"top_category={top_major}")
 
     tp.isc_output = {
         "category_cue": sorted(cue_set),
         "category_weighted_distribution": distribution,
-        "top_category": top.get("major"),
-        "category_confidence": float(top.get("probability", 0.0)),
+        "top_category": top_major,
+        "category_confidence": top_confidence,
         "category_rationale": rationale,
         "provenance": {
             "source": ce_output.get("cue_provenance", []),
@@ -643,7 +650,7 @@ def ISc(tp: TP) -> TP:
             "weights": {"w_s": w_s, "w_b": w_b, "w_e": w_e, "w_i": w_i, "w_cat": w_cat},
         },
     }
-    tp.correction_score = float(top.get("probability", 0.0))
+    tp.correction_score = top_confidence
     if not hasattr(tp, "trace"):
         tp.trace = []
     tp.trace.append({"primitive": "ISc", "isc_output": tp.isc_output})
