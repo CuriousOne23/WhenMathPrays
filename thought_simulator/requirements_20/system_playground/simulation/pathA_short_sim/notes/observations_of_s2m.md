@@ -630,3 +630,12 @@ s2m_program_reference.md
 ```
 
 Together they preserve the distinction between **observation**, **proposed architecture**, and **implementation contract** without requiring any one document to carry all three jobs.
+
+## Next controlled realization
+
+The next controlled realization extends the S2M seed by allowing category selection to be driven either by information within the present sentence or by prior conversational information through CEx.
+
+See [category_selection_proposal.md](notes/program/category_selection_proposal.md) for the proposed sentence-internal and prior-CEx category-selection paths.
+
+
+
