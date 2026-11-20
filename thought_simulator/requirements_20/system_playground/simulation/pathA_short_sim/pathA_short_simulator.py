@@ -1,5 +1,5 @@
 from dataclasses import asdict
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from tp_substrate import TP, init_tp, clone_tp
 from primitives_pathA_short import (
@@ -73,10 +73,17 @@ def primitive_notes(name: str, tp: TP) -> str:
     return f"[{macro}]"
 
 
-def run_pathA_short(raw_text: str, enable_s2m_seed: bool = False) -> Dict[str, Any]:
+def run_pathA_short(
+    raw_text: str,
+    enable_s2m_seed: bool = False,
+    enable_category_selection: bool = False,
+    prior_context: Optional[List[str]] = None,
+) -> Dict[str, Any]:
     """Run the short Path-A flow on a sentence and return TP + trace."""
     tp = init_tp(raw_text)
     tp.enable_s2m_seed = enable_s2m_seed
+    tp.enable_category_selection = enable_category_selection
+    tp.prior_context = list(prior_context) if isinstance(prior_context, list) else []
     trace: List[Dict[str, Any]] = []
 
     for fn in PRIMITIVES:
