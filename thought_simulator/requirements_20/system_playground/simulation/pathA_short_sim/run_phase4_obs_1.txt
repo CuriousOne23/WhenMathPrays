@@ -1,0 +1,1822 @@
+schema families: copular_state, locative, mixed_descriptive, interrogative_wh, interrogative_polar, agent_action, imperative, exclamative, modifier_resolution, residual_identity
+card families: agent_action=agent_action, copular_state=copular_state, exclamative=exclamative, imperative=imperative, interrogative_polar=interrogative_polar, interrogative_wh=interrogative_wh, locative=locative, mixed_descriptive=mixed_descriptive, modifier_resolution=mixed_descriptive, residual_identity=residual_identity
+missing from schema: none
+schema families: matched
+=== Final TP ===
+tp_ie_tokens: ['The', 'sky', 'is', 'blue', '.']
+tp_ie_normalized_tokens: ['the', 'sky', 'is', 'blue', '.']
+tp_ie_token_classes: ['WORD', 'WORD', 'WORD', 'WORD', 'PUNCT']
+tp_ie_roles: ['none', 'none', 'none', 'none', 'none']
+tp_ie_segments: [1]
+tp_ie_segment_tokens: [['The', 'sky', 'is', 'blue', '.']]
+struct_segments: ['NP', 'CP', 'AP']
+segment_tokens: [['the', 'sky'], ['is'], ['blue']]
+struct_roles: ['theme', 'none', 'state']
+constraints_matched: ['structural_rule', 'compatibility_rule']
+constraints_unmatched: ['adjacency_rule', 'continuity_rule']
+constraint_residue: []
+smoothing_operations: ['adjacency_smoothing', 'role_smoothing', 'basin_compression_smoothing', 'continuity_smoothing']
+semantic_adjacent_cues: []
+basin_residue: []
+truth_relation: declarative
+semantic_core: {'selected_ops': ['state'], 'query_focus': '', 'speaker': '', 'recipient': '', 'relative_subject': '', 'adverb': '', 'predicate': '', 'theme': 'the sky', 'copula': 'is', 'relation_modifiers': '', 'complement': 'blue', 'agent': 'the sky', 'state': 'blue', 'location': '', 'action': '', 'patient': '', 'modifiers': []}
+
+--- S2M Accountability (IdOB) ---
+s2m_seed: {
+  "utterance": "The sky is blue.",
+  "written_relations": [
+    {
+      "from": "sky",
+      "relation": "is",
+      "to": "blue",
+      "source": "floor"
+    }
+  ],
+  "null_relations": [
+    {
+      "from": null,
+      "relation": null,
+      "to": null,
+      "reason": "no_floor_source"
+    }
+  ],
+  "crossing_fields": {
+    "structure_ids": null,
+    "structural_key": null,
+    "rank": null,
+    "meaning_semantics": null,
+    "cie_id": null,
+    "meaning_delta_h": null
+  },
+  "active_context_stores": [],
+  "selection_cues": [],
+  "seed_complete": true
+}
+
+--- S2M Meaning (IdOB) ---
+s2m_meaning: {
+  "default_meaning": {
+    "from": "sky",
+    "relation": "is",
+    "to": "blue",
+    "description": "The entity sky is characterized by the state/property blue."
+  },
+  "candidate_interpretations": [
+    {
+      "from": "sky",
+      "relation": "affords",
+      "to": "openness",
+      "major": "mental",
+      "subcategory": "conceptual",
+      "selection_state": "candidate_unselected"
+    },
+    {
+      "from": "sky",
+      "relation": "tends_toward",
+      "to": "higher",
+      "major": "perspectival",
+      "subcategory": "orientation",
+      "selection_state": "candidate_unselected"
+    },
+    {
+      "from": "blue",
+      "relation": "evokes",
+      "to": "cold",
+      "major": "affective",
+      "subcategory": "bodily-felt",
+      "selection_state": "candidate_unselected"
+    },
+    {
+      "from": "blue",
+      "relation": "denotes",
+      "to": "color",
+      "major": "perceptual",
+      "subcategory": "color",
+      "selection_state": "candidate_unselected"
+    }
+  ],
+  "meaning_relations": [],
+  "active_space": [],
+  "active_context_stores": [],
+  "cue_state": {
+    "category_cue": [],
+    "cue_active": false,
+    "provenance": {}
+  },
+  "category_result": {},
+  "story_id": "sky-blue-001",
+  "extendable": true
+}
+
+=== Trace ===
+
+--- InB ---
+
+--- IIInB ---
+
+--- IE ---
+ie_tokens: ['The', 'sky', 'is', 'blue', '.']
+ie_normalized_tokens: ['the', 'sky', 'is', 'blue', '.']
+ie_token_classes: ['WORD', 'WORD', 'WORD', 'WORD', 'PUNCT']
+ie_roles: ['none', 'none', 'none', 'none', 'none']
+ie_segments: [1]
+ie_segment_tokens: [['The', 'sky', 'is', 'blue', '.']]
+
+--- CEx ---
+
+--- CE ---
+
+--- ISc ---
+
+--- TPU ---
+
+--- SOB ---
+sob_tokens: ['The', 'sky', 'is', 'blue', '.']
+sob_struct_segments=['NP', 'CP', 'AP']
+sob_segment_tokens=[['the', 'sky'], ['is'], ['blue']]
+
+--- SROB ---
+struct_roles=[]
+
+--- CnOB ---
+constraints_matched=['structural_rule', 'compatibility_rule']
+constraints_unmatched=['adjacency_rule', 'continuity_rule']
+constraint_residue=[]
+
+--- SmOB ---
+smoothing_operations=['adjacency_smoothing', 'role_smoothing', 'basin_compression_smoothing', 'continuity_smoothing']
+semantic_adjacent_cues=[]
+basin_residue=[]
+
+--- SSG ---
+
+--- RBU ---
+
+--- RB ---
+
+--- TR ---
+
+--- TRU ---
+
+--- RTU ---
+
+--- CTP ---
+
+--- IdOB ---
+idob_packet={'identity_geometry': 'structural_identity', 'truth_relation': 'declarative', 'truth_relation_family': 'descriptive_state', 'semantic_core': {'selected_ops': ['state'], 'query_focus': '', 'speaker': '', 'recipient': '', 'relative_subject': '', 'adverb': '', 'predicate': '', 'theme': 'the sky', 'copula': 'is', 'relation_modifiers': '', 'complement': 'blue', 'agent': 'the sky', 'state': 'blue', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'selected_ops': ['state'], 'claimed_fields': ['truth_relation', 'truth_relation_family_hint', 'identity_geometry', 'semantic_core', 'selected_ops'], 'contributors': ['copular_state', 'residual_identity'], 'contributions': [{'name': 'copular_state', 'family': 'copular_state', 'priority': 20, 'fragment': {'truth_relation': 'declarative', 'truth_relation_family_hint': 'descriptive_state'}}, {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'structural_identity', 'truth_relation': 'declarative', 'semantic_core': {'selected_ops': ['state'], 'query_focus': '', 'speaker': '', 'recipient': '', 'relative_subject': '', 'adverb': '', 'predicate': '', 'theme': 'the sky', 'copula': 'is', 'relation_modifiers': '', 'complement': 'blue', 'agent': 'the sky', 'state': 'blue', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'selected_ops': ['state']}}], 'activation_set': ['copular_state', 'residual_identity'], 'inactive_objects': ['interrogative_wh', 'interrogative_polar', 'imperative', 'exclamative', 'locative', 'mixed_descriptive', 'agent_action', 'modifier_resolution'], 'residual_activated': True, 'overlap_events': [{'a': 'residual_identity', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}], 'meaning_delta': {'semantic_core_tokens': {'legacy': ['entity'], 'split': []}}, 'psc_violations': [{'object': 'residual_identity', 'invariant': 'I8', 'field': 'semantic_core', 'rule': 'writes_only_declared_fields', 'detail': "unlisted semantic_core keys: ['adverb', 'copula', 'recipient', 'relative_subject', 'speaker']"}], 'registry_digest': 'ddd6334c681e5278723527c3515d4e87c4455fce6fa6e6e10ec8a6d9457ed1c7', 'complete': True, 'tru_hint': 'declarative'}
+--- MCB ---
+mcb_packet={'mcb_identity_geometry': 'structural_identity', 'mcb_truth_relation': 'declarative', 'mcb_truth_relation_family': 'descriptive_state', 'mcb_semantic_core': {'selected_ops': ['state'], 'query_focus': '', 'speaker': '', 'recipient': '', 'relative_subject': '', 'adverb': '', 'predicate': '', 'theme': 'the sky', 'copula': 'is', 'relation_modifiers': '', 'complement': 'blue', 'agent': 'the sky', 'state': 'blue', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'mcb_claimed_fields': ['truth_relation', 'truth_relation_family_hint', 'identity_geometry', 'semantic_core', 'selected_ops'], 'mcb_contributors': ['copular_state', 'residual_identity'], 'mcb_overlap_events': [{'a': 'residual_identity', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}], 'mcb_registry_digest': 'ddd6334c681e5278723527c3515d4e87c4455fce6fa6e6e10ec8a6d9457ed1c7', 'mcb_complete': True, 'mcb_tru_hint': 'declarative'}
+--- OuBA ---
+ouba_packet={'ouba_identity_geometry': 'structural_identity', 'ouba_truth_relation': 'declarative', 'ouba_truth_relation_family': 'descriptive_state', 'ouba_semantic_core': {'selected_ops': ['state'], 'query_focus': '', 'speaker': '', 'recipient': '', 'relative_subject': '', 'adverb': '', 'predicate': '', 'theme': 'the sky', 'copula': 'is', 'relation_modifiers': '', 'complement': 'blue', 'agent': 'the sky', 'state': 'blue', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'ouba_claimed_fields': ['truth_relation', 'truth_relation_family_hint', 'identity_geometry', 'semantic_core', 'selected_ops'], 'ouba_contributors': ['copular_state', 'residual_identity'], 'ouba_overlap_events': [{'a': 'residual_identity', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}], 'ouba_registry_digest': 'ddd6334c681e5278723527c3515d4e87c4455fce6fa6e6e10ec8a6d9457ed1c7', 'ouba_complete': True, 'ouba_tru_hint': 'declarative'}
+
+--- OuBA ---
+--- R7 ---
+ouba_stable=True
+--- R8 ---
+pipeline_ready=True
+--- R9 ---
+freeze_version='pathA_v1'
+
+=== Canonical S2M Cases (normative testbench) ===
+
+- The sky is blue.
+  default_meaning: {"from": "sky", "relation": "is", "to": "blue", "description": "The entity sky is characterized by the state/property blue."}
+  meaning_relations: []
+
+- The book is on the table.
+  default_meaning: {"from": "book", "relation": "is_on", "to": "table", "description": "The entity book is located on the entity table."}
+  meaning_relations: []
+
+- Where is the book?
+  default_meaning: {"from": "query_location", "relation": "queries_location_of", "to": "book", "description": "A request/query for the location of the entity book; the requested locative continuation remains unresolved/potential."}
+  meaning_relations: []
+
+=== Category Selection Observation Cases (non-normative demos) ===
+
+=== Category Observation: No-cue baseline ===
+sentence: The book is on the table.
+structure/default basis: [{'from': 'book', 'relation': 'is_on', 'to': 'table', 'source': 'floor'}]
+default_meaning: {
+  "from": "book",
+  "relation": "is_on",
+  "to": "table",
+  "description": "The entity book is located on the entity table."
+}
+CEx cue source/provenance: {
+  "category_cue": [],
+  "provenance": {
+    "source": "none",
+    "origin": "prior_context",
+    "prior_context_used": false
+  }
+}
+CE category_cue: {
+  "category_cue": [],
+  "cue_provenance": [],
+  "category_candidate_set": [
+    {
+      "major": "affective",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "perceptual",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "physical",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "perspectival",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "mental",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "spiritual",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "social",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "metaphysical",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    }
+  ]
+}
+ISc scoring/result: {
+  "category_cue": [],
+  "category_weighted_distribution": [
+    {
+      "major": "affective",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "perspectival",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.125,
+      "category_hit": false
+    }
+  ],
+  "top_category": null,
+  "category_confidence": 0.0,
+  "category_rationale": [
+    "empty_category_cue",
+    "top_category=null"
+  ],
+  "provenance": {
+    "source": [],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+Merge handoff (TPU input): {
+  "isc_output": {
+    "category_cue": [],
+    "category_weighted_distribution": [
+      {
+        "major": "affective",
+        "probability": 0.125,
+        "category_hit": false
+      },
+      {
+        "major": "mental",
+        "probability": 0.125,
+        "category_hit": false
+      },
+      {
+        "major": "metaphysical",
+        "probability": 0.125,
+        "category_hit": false
+      },
+      {
+        "major": "perceptual",
+        "probability": 0.125,
+        "category_hit": false
+      },
+      {
+        "major": "perspectival",
+        "probability": 0.125,
+        "category_hit": false
+      },
+      {
+        "major": "physical",
+        "probability": 0.125,
+        "category_hit": false
+      },
+      {
+        "major": "social",
+        "probability": 0.125,
+        "category_hit": false
+      },
+      {
+        "major": "spiritual",
+        "probability": 0.125,
+        "category_hit": false
+      }
+    ],
+    "top_category": null,
+    "category_confidence": 0.0,
+    "category_rationale": [
+      "empty_category_cue",
+      "top_category=null"
+    ],
+    "provenance": {
+      "source": [],
+      "upstream": "ce",
+      "weights": {
+        "w_s": 0.35,
+        "w_b": 0.25,
+        "w_e": 0.2,
+        "w_i": 0.2,
+        "w_cat": 0.6
+      }
+    }
+  }
+}
+TPU commit payload: {
+  "category_cue": [],
+  "category_weighted_distribution": [
+    {
+      "major": "affective",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "perspectival",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.125,
+      "category_hit": false
+    }
+  ],
+  "top_category": null,
+  "category_confidence": 0.0,
+  "category_rationale": [
+    "empty_category_cue",
+    "top_category=null"
+  ],
+  "provenance": {
+    "source": [],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+TP.semantic.isc_category_result: {
+  "category_cue": [],
+  "category_weighted_distribution": [
+    {
+      "major": "affective",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "perspectival",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.125,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.125,
+      "category_hit": false
+    }
+  ],
+  "top_category": null,
+  "category_confidence": 0.0,
+  "category_rationale": [
+    "empty_category_cue",
+    "top_category=null"
+  ],
+  "provenance": {
+    "source": [],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+IdOB read-only consumption (S2M cue_state): {
+  "category_cue": [],
+  "cue_active": false,
+  "provenance": {
+    "source": [],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+S2M candidate consideration: [
+  {
+    "from": "book",
+    "relation": "is",
+    "to": "object",
+    "major": "physical",
+    "subcategory": "natural-kind",
+    "selection_state": "candidate_unselected"
+  },
+  {
+    "from": "table",
+    "relation": "provides",
+    "to": "support",
+    "major": "physical",
+    "subcategory": "structure",
+    "selection_state": "candidate_unselected"
+  }
+]
+S2M selected extensions (meaning_relations): []
+default-versus-selected result:
+{
+  "default_meaning": {
+    "from": "book",
+    "relation": "is_on",
+    "to": "table",
+    "description": "The entity book is located on the entity table."
+  },
+  "meaning_relations": []
+}
+
+=== Category Observation: Sentence-internal cue ===
+sentence: Where is the book?
+structure/default basis: [{'from': 'query_location', 'relation': 'queries_location_of', 'to': 'book', 'source': 'floor'}]
+default_meaning: {
+  "from": "query_location",
+  "relation": "queries_location_of",
+  "to": "book",
+  "description": "A request/query for the location of the entity book; the requested locative continuation remains unresolved/potential."
+}
+CEx cue source/provenance: {
+  "category_cue": [],
+  "provenance": {
+    "source": "none",
+    "origin": "prior_context",
+    "prior_context_used": false
+  }
+}
+CE category_cue: {
+  "category_cue": [
+    "perspectival"
+  ],
+  "cue_provenance": [
+    "sentence"
+  ],
+  "category_candidate_set": [
+    {
+      "major": "affective",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "perceptual",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "physical",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "perspectival",
+      "f_s": 1.0,
+      "f_b": 0.0,
+      "f_e": 1.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "mental",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "spiritual",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "social",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "metaphysical",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    }
+  ]
+}
+ISc scoring/result: {
+  "category_cue": [
+    "perspectival"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.31090105669062545,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.31090105669062545,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "sentence"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+Merge handoff (TPU input): {
+  "isc_output": {
+    "category_cue": [
+      "perspectival"
+    ],
+    "category_weighted_distribution": [
+      {
+        "major": "perspectival",
+        "probability": 0.31090105669062545,
+        "category_hit": true
+      },
+      {
+        "major": "affective",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "mental",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "metaphysical",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "perceptual",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "physical",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "social",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "spiritual",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      }
+    ],
+    "top_category": "perspectival",
+    "category_confidence": 0.31090105669062545,
+    "category_rationale": [
+      "category_cue_applied",
+      "top_category=perspectival"
+    ],
+    "provenance": {
+      "source": [
+        "sentence"
+      ],
+      "upstream": "ce",
+      "weights": {
+        "w_s": 0.35,
+        "w_b": 0.25,
+        "w_e": 0.2,
+        "w_i": 0.2,
+        "w_cat": 0.6
+      }
+    }
+  }
+}
+TPU commit payload: {
+  "category_cue": [
+    "perspectival"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.31090105669062545,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.31090105669062545,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "sentence"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+TP.semantic.isc_category_result: {
+  "category_cue": [
+    "perspectival"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.31090105669062545,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.31090105669062545,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "sentence"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+IdOB read-only consumption (S2M cue_state): {
+  "category_cue": [
+    "perspectival"
+  ],
+  "cue_active": true,
+  "provenance": {
+    "source": [
+      "sentence"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+S2M candidate consideration: [
+  {
+    "from": "query_location",
+    "relation": "requests",
+    "to": "information-request",
+    "major": "mental",
+    "subcategory": "cognitive",
+    "selection_state": "candidate_unselected"
+  },
+  {
+    "from": "query_location",
+    "relation": "carries",
+    "to": "unresolved-location",
+    "major": "perspectival",
+    "subcategory": "accessibility",
+    "selection_state": "refused"
+  },
+  {
+    "from": "book",
+    "relation": "is",
+    "to": "object",
+    "major": "physical",
+    "subcategory": "natural-kind",
+    "selection_state": "candidate_unselected"
+  }
+]
+S2M selected extensions (meaning_relations): []
+default-versus-selected result:
+{
+  "default_meaning": {
+    "from": "query_location",
+    "relation": "queries_location_of",
+    "to": "book",
+    "description": "A request/query for the location of the entity book; the requested locative continuation remains unresolved/potential."
+  },
+  "meaning_relations": []
+}
+
+=== Category Observation: Prior-context cue ===
+sentence: The book is on the table.
+prior_context: ['That location needs support for the object.']
+structure/default basis: [{'from': 'book', 'relation': 'is_on', 'to': 'table', 'source': 'floor'}]
+default_meaning: {
+  "from": "book",
+  "relation": "is_on",
+  "to": "table",
+  "description": "The entity book is located on the entity table."
+}
+CEx cue source/provenance: {
+  "category_cue": [
+    "physical",
+    "perspectival"
+  ],
+  "provenance": {
+    "source": "prior_context_cex",
+    "origin": "prior_context",
+    "prior_context_used": true
+  }
+}
+CE category_cue: {
+  "category_cue": [
+    "physical",
+    "perspectival"
+  ],
+  "cue_provenance": [
+    "prior_context_cex"
+  ],
+  "category_candidate_set": [
+    {
+      "major": "affective",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "perceptual",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "physical",
+      "f_s": 0.0,
+      "f_b": 1.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "perspectival",
+      "f_s": 0.0,
+      "f_b": 1.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "mental",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "spiritual",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "social",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "metaphysical",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    }
+  ]
+}
+ISc scoring/result: {
+  "category_cue": [
+    "perspectival",
+    "physical"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.2190825457943992,
+      "category_hit": true
+    },
+    {
+      "major": "physical",
+      "probability": 0.2190825457943992,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.2190825457943992,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "prior_context_cex"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+Merge handoff (TPU input): {
+  "isc_output": {
+    "category_cue": [
+      "perspectival",
+      "physical"
+    ],
+    "category_weighted_distribution": [
+      {
+        "major": "perspectival",
+        "probability": 0.2190825457943992,
+        "category_hit": true
+      },
+      {
+        "major": "physical",
+        "probability": 0.2190825457943992,
+        "category_hit": true
+      },
+      {
+        "major": "affective",
+        "probability": 0.09363915140186693,
+        "category_hit": false
+      },
+      {
+        "major": "mental",
+        "probability": 0.09363915140186693,
+        "category_hit": false
+      },
+      {
+        "major": "metaphysical",
+        "probability": 0.09363915140186693,
+        "category_hit": false
+      },
+      {
+        "major": "perceptual",
+        "probability": 0.09363915140186693,
+        "category_hit": false
+      },
+      {
+        "major": "social",
+        "probability": 0.09363915140186693,
+        "category_hit": false
+      },
+      {
+        "major": "spiritual",
+        "probability": 0.09363915140186693,
+        "category_hit": false
+      }
+    ],
+    "top_category": "perspectival",
+    "category_confidence": 0.2190825457943992,
+    "category_rationale": [
+      "category_cue_applied",
+      "top_category=perspectival"
+    ],
+    "provenance": {
+      "source": [
+        "prior_context_cex"
+      ],
+      "upstream": "ce",
+      "weights": {
+        "w_s": 0.35,
+        "w_b": 0.25,
+        "w_e": 0.2,
+        "w_i": 0.2,
+        "w_cat": 0.6
+      }
+    }
+  }
+}
+TPU commit payload: {
+  "category_cue": [
+    "perspectival",
+    "physical"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.2190825457943992,
+      "category_hit": true
+    },
+    {
+      "major": "physical",
+      "probability": 0.2190825457943992,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.2190825457943992,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "prior_context_cex"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+TP.semantic.isc_category_result: {
+  "category_cue": [
+    "perspectival",
+    "physical"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.2190825457943992,
+      "category_hit": true
+    },
+    {
+      "major": "physical",
+      "probability": 0.2190825457943992,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09363915140186693,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.2190825457943992,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "prior_context_cex"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+IdOB read-only consumption (S2M cue_state): {
+  "category_cue": [
+    "perspectival",
+    "physical"
+  ],
+  "cue_active": true,
+  "provenance": {
+    "source": [
+      "prior_context_cex"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+S2M candidate consideration: [
+  {
+    "from": "book",
+    "relation": "is",
+    "to": "object",
+    "major": "physical",
+    "subcategory": "natural-kind",
+    "selection_state": "legitimized"
+  },
+  {
+    "from": "table",
+    "relation": "provides",
+    "to": "support",
+    "major": "physical",
+    "subcategory": "structure",
+    "selection_state": "legitimized"
+  }
+]
+S2M selected extensions (meaning_relations): [
+  {
+    "from": "book",
+    "relation": "is",
+    "to": "object",
+    "major": "physical",
+    "legitimized": true,
+    "subcategory": "natural-kind"
+  },
+  {
+    "from": "table",
+    "relation": "provides",
+    "to": "support",
+    "major": "physical",
+    "legitimized": true,
+    "subcategory": "structure"
+  }
+]
+default-versus-selected result:
+{
+  "default_meaning": {
+    "from": "book",
+    "relation": "is_on",
+    "to": "table",
+    "description": "The entity book is located on the entity table."
+  },
+  "meaning_relations": [
+    {
+      "from": "book",
+      "relation": "is",
+      "to": "object",
+      "major": "physical",
+      "legitimized": true,
+      "subcategory": "natural-kind"
+    },
+    {
+      "from": "table",
+      "relation": "provides",
+      "to": "support",
+      "major": "physical",
+      "legitimized": true,
+      "subcategory": "structure"
+    }
+  ]
+}
+
+=== Category Observation: Refusal / non-selection ===
+sentence: Where is the book?
+structure/default basis: [{'from': 'query_location', 'relation': 'queries_location_of', 'to': 'book', 'source': 'floor'}]
+default_meaning: {
+  "from": "query_location",
+  "relation": "queries_location_of",
+  "to": "book",
+  "description": "A request/query for the location of the entity book; the requested locative continuation remains unresolved/potential."
+}
+CEx cue source/provenance: {
+  "category_cue": [],
+  "provenance": {
+    "source": "none",
+    "origin": "prior_context",
+    "prior_context_used": false
+  }
+}
+CE category_cue: {
+  "category_cue": [
+    "perspectival"
+  ],
+  "cue_provenance": [
+    "sentence"
+  ],
+  "category_candidate_set": [
+    {
+      "major": "affective",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "perceptual",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "physical",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "perspectival",
+      "f_s": 1.0,
+      "f_b": 0.0,
+      "f_e": 1.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "mental",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "spiritual",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "social",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    },
+    {
+      "major": "metaphysical",
+      "f_s": 0.0,
+      "f_b": 0.0,
+      "f_e": 0.0,
+      "f_i": 1.0
+    }
+  ]
+}
+ISc scoring/result: {
+  "category_cue": [
+    "perspectival"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.31090105669062545,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.31090105669062545,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "sentence"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+Merge handoff (TPU input): {
+  "isc_output": {
+    "category_cue": [
+      "perspectival"
+    ],
+    "category_weighted_distribution": [
+      {
+        "major": "perspectival",
+        "probability": 0.31090105669062545,
+        "category_hit": true
+      },
+      {
+        "major": "affective",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "mental",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "metaphysical",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "perceptual",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "physical",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "social",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      },
+      {
+        "major": "spiritual",
+        "probability": 0.09844270618705352,
+        "category_hit": false
+      }
+    ],
+    "top_category": "perspectival",
+    "category_confidence": 0.31090105669062545,
+    "category_rationale": [
+      "category_cue_applied",
+      "top_category=perspectival"
+    ],
+    "provenance": {
+      "source": [
+        "sentence"
+      ],
+      "upstream": "ce",
+      "weights": {
+        "w_s": 0.35,
+        "w_b": 0.25,
+        "w_e": 0.2,
+        "w_i": 0.2,
+        "w_cat": 0.6
+      }
+    }
+  }
+}
+TPU commit payload: {
+  "category_cue": [
+    "perspectival"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.31090105669062545,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.31090105669062545,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "sentence"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+TP.semantic.isc_category_result: {
+  "category_cue": [
+    "perspectival"
+  ],
+  "category_weighted_distribution": [
+    {
+      "major": "perspectival",
+      "probability": 0.31090105669062545,
+      "category_hit": true
+    },
+    {
+      "major": "affective",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "mental",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "metaphysical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "perceptual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "physical",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "social",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    },
+    {
+      "major": "spiritual",
+      "probability": 0.09844270618705352,
+      "category_hit": false
+    }
+  ],
+  "top_category": "perspectival",
+  "category_confidence": 0.31090105669062545,
+  "category_rationale": [
+    "category_cue_applied",
+    "top_category=perspectival"
+  ],
+  "provenance": {
+    "source": [
+      "sentence"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+IdOB read-only consumption (S2M cue_state): {
+  "category_cue": [
+    "perspectival"
+  ],
+  "cue_active": true,
+  "provenance": {
+    "source": [
+      "sentence"
+    ],
+    "upstream": "ce",
+    "weights": {
+      "w_s": 0.35,
+      "w_b": 0.25,
+      "w_e": 0.2,
+      "w_i": 0.2,
+      "w_cat": 0.6
+    }
+  }
+}
+S2M candidate consideration: [
+  {
+    "from": "query_location",
+    "relation": "requests",
+    "to": "information-request",
+    "major": "mental",
+    "subcategory": "cognitive",
+    "selection_state": "candidate_unselected"
+  },
+  {
+    "from": "query_location",
+    "relation": "carries",
+    "to": "unresolved-location",
+    "major": "perspectival",
+    "subcategory": "accessibility",
+    "selection_state": "refused"
+  },
+  {
+    "from": "book",
+    "relation": "is",
+    "to": "object",
+    "major": "physical",
+    "subcategory": "natural-kind",
+    "selection_state": "candidate_unselected"
+  }
+]
+S2M selected extensions (meaning_relations): []
+default-versus-selected result:
+{
+  "default_meaning": {
+    "from": "query_location",
+    "relation": "queries_location_of",
+    "to": "book",
+    "description": "A request/query for the location of the entity book; the requested locative continuation remains unresolved/potential."
+  },
+  "meaning_relations": []
+}
