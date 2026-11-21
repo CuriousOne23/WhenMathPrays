@@ -361,6 +361,18 @@ No Experiment 4 is authorized by this closeout. Any further experiment must be s
 
 Large portions of the authorities are not duplicated; links are provided where appropriate.
 
+## Successor documents and next-program flow
+
+Successor category-selection documents:
+
+- [category_selection_research_plan.md](category_selection_research_plan.md): successor research plan defining the next category-selection characterization program, confidence dimensions, architectural-generality experiments, and category-support/unsupported-space characterization.
+- [category_selection_program_reference.md](category_selection_program_reference.md): placeholder for the future bounded software-realization contract; deliberately not yet implementation authority pending Stage-1 current-software modification mapping and review.
+- [category_selection_observation.md](category_selection_observation.md): placeholder for the future empirical record generated from actual category-selection runs; it contains no prewritten experimental conclusions.
+
+Document flow for the successor cycle:
+
+category_structure_observation.md → category_selection_research_plan.md → Stage-1 current-software modification map → category_selection_program_reference.md → GitHub Agent implementation plan → review → bounded implementation → controlled/adversarial/boundary experiments → category_selection_observation.md → confidence/closeout review → next research question selected from observation
+
 ## Claim discipline
 
 Language is limited to: observed within the current TS realization; reinforces the working S2M view; supports further investigation; not established; methodological proposition.
