@@ -126,7 +126,7 @@ This proposal does not duplicate the detailed nine-window methodology. An observ
 
 ## Boundaries
 
-- Category choice is additive and optional. Floor writers (SOB–SmOB) are not mutated.
+- Category choice is additive and optional. Existing structural primitive writers (SOB–SmOB) are not mutated.
 - Crossing fields stay null until a later, explicit stage writes them.
 - Requirements remain unchanged until realization is shown to be legitimate.
 - No new TP fields, scoring equations, ownership, cue sources, or canonical categories are introduced here.
