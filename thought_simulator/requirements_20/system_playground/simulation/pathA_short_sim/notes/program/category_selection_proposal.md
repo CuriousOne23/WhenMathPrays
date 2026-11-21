@@ -18,7 +18,7 @@ A category result is not itself meaning. A category cue, score, top_category, or
 ## Baseline
 
 When no usable category cue is active:
-- Structural relation is established by the floor.
+- Structural relation is established by the structural path.
 - Default meaning is derived from that relation.
 - Candidate interpretations remain available but unselected.
 - No interpretive extension is written.
@@ -40,7 +40,7 @@ Two origins remain; their provenance stays visible. Downstream they converge on 
 ### Sentence-internal information
 Sentence-internal evidence → CE supplies optional `category_cue` → ISc category-aware scoring → Merge / TPU → `TP.semantic.isc_category_result` → IdOB (read-only) / S2M
 
-Ordinary semantic endpoints are not, merely by being endpoints, sentence-internal category cues. Sentence-internal category cues require independently directing evidence such as modifiers, adverbs, structural markers, or equivalent floor-visible information.
+Ordinary semantic endpoints are not, merely by being endpoints, sentence-internal category cues. Sentence-internal category cues require independently directing evidence such as modifiers, adverbs, structural markers, or equivalent structural-path-visible information.
 
 ### Prior-conversation / context information
 Prior conversation / CIL → CEx / CE supplies optional `category_cue` → ISc → Merge / TPU → `TP.semantic.isc_category_result` → IdOB (read-only) / S2M
@@ -134,7 +134,14 @@ This proposal does not duplicate the detailed nine-window methodology. An observ
 
 ## Next realization step
 
-After review of this aligned proposal, functional realization of the category path (CE cue → ISc scoring → committed result → IdOB read-only use within S2M legitimation) is ready for the GitHub Agent, bounded by the stabilized S2M documents and the normative requirements.
+Successor sequence for this proposal:
+
+[category_selection_research_plan.md](category_selection_research_plan.md) → Stage-1 current-software modification map → [category_selection_program_reference.md](category_selection_program_reference.md) → reviewed implementation.
+
+Successor documents:
+- [category_selection_research_plan.md](category_selection_research_plan.md)
+- [category_selection_program_reference.md](category_selection_program_reference.md)
+- [category_selection_observation.md](category_selection_observation.md)
 
 ## Relation to prior work
 
