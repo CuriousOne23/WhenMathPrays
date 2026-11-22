@@ -246,7 +246,7 @@ After Experiment 1 record is prepared, stop and wait for explicit reviewer autho
 - **EXP4G status:** executed and accepted at review gate.
 - **Accepted evidence summary:** under tested EXP4G paired conditions (contextually applicable `"The bridge needs support."` vs contextually inapplicable/metalinguistic `"The word support has seven letters."`), both mapped `support` usages produced the same observed cue/result/confidence/rationale/provenance fields.
 - **Accepted audit limitation note:** non-executing support/dictionary audit found sparse non-cue lexical coverage for both EXP4G utterances; no strong differential static-representation confound was identified for the paired comparison, but this remains a standing design limitation.
-- **Gate decision for next step:** no next experiment is yet specified; one-at-a-time review authorization remains mandatory.
+- **Gate decision for next step:** fully specify EXP4C1 only (within-utterance conflicting mapped category evidence); execution remains explicitly authorization-gated.
 
 ## 15) Experiment 2 — fully specified (smallest useful sentence-internal-cue comparison)
 
@@ -632,11 +632,170 @@ EXP4B has completed review-gate acceptance. Do not auto-advance; later EXP4 work
 
 EXP4B is accepted as bounded evidence for an observable present-utterance representability boundary under tested conditions. This does not establish universal boundaries, thresholds/no-category policy, stability/generalization, or full category-space characterization.
 
-### 17.6 EXP4C1 (proposed, not fully specified) — conflicting category evidence within present utterance
+### 17.6 EXP4C1 (fully specified next candidate) — conflicting category evidence within present utterance
 
-- boundary focus: same-utterance simultaneous cues toward different category directions;
-- relationship: extends single-source references into within-utterance conflict condition;
-- status: retained as boundary candidate, execution details deferred.
+#### 17.6.1 Exact boundary question
+
+What does the current Category Selection mechanism report at the boundary condition where one present utterance contains simultaneously available mapped evidence pointing toward different category directions?
+
+#### 17.6.2 Case reassessment and retained utterance
+
+Previously proposed candidate `"Where support cold?"` is rejected for first-pass EXP4C1 execution because:
+
+- it is close to cue concatenation rather than a cleanly interpretable utterance;
+- it includes three mapped cues when two are sufficient for first conflict-boundary probing;
+- token `support` has sparse token-class/static-role representation coverage in current support surfaces, introducing avoidable coverage asymmetry.
+
+Retained EXP4C1 utterance:
+
+- **Conflict utterance:** `"Where is the cold book?"`
+
+#### 17.6.3 Mapped cues and category directions (conflict definition)
+
+Within the same present utterance:
+
+- `where` maps to `perspectival`
+- `cold` maps to `affective`
+
+Mapping source: [category_cues.yaml](../../support/dictionaries/category_cues.yaml) `sentence_internal.where -> perspectival`, `sentence_internal.cold -> affective`.
+
+This is conflicting evidence because the same utterance simultaneously provides mapped support for at least two different category directions.
+
+#### 17.6.4 Why this case is cleaner than `"Where support cold?"`
+
+- two-category conflict is sufficient for boundary detection and cleaner than three-way conflict for first probe;
+- utterance is interpretable and question-like, not a bare cue list;
+- meaningful tokens are better represented across static token/role support surfaces;
+- no new dictionary entries, mappings, or runtime behavior changes are required.
+
+#### 17.6.5 Mandatory vocabulary/support-coverage audit summary (pre-execution)
+
+Meaningful tokens audited: `where`, `is`, `the`, `cold`, `book` (plus terminal `?` punctuation behavior).
+
+Coverage summary:
+
+- **Category Selection cue mapping**
+  - `where` and `cold` are mapped sentence-internal cues in [category_cues.yaml](../../support/dictionaries/category_cues.yaml).
+  - `is`, `the`, `book` are not category cues (expected).
+- **Token-class coverage**
+  - covered in [token_classes.yaml](../../support/dictionaries/token_classes.yaml): `where` (WH), `is` (AUX), `the` (DET), `cold` (ADJ), `book` (NOUN).
+- **Segment-pattern relevance**
+  - [segment_patterns.yaml](../../support/dictionaries/segment_patterns.yaml) includes patterns relevant to WH/AUX/NP segmentation (`WQ`, `IQ`, `NP`).
+  - desk segmentation uses class-driven matching in [segments.py](../../desks/segments.py); unknown-token drop risk is low for this utterance because all core tokens are class-covered.
+- **Role/static role coverage**
+  - committed-role adaptation path in [roles.py](../../desks/roles.py) includes static sets covering `where`, `the`, `book`, `cold`.
+- **Semantic-rule coverage**
+  - [semantic_rules.yaml](../../support/dictionaries/semantic_rules.yaml) provides generic extraction strategies; no token-specific additions required.
+- **Constraint/static reference coverage**
+  - constraint logic in [constraints.py](../../desks/constraints.py) includes WH/AUX and question checks; no extra static rule additions required.
+- **Other material static inputs**
+  - category majors from [majors.yaml](../../s2m/data/majors.yaml) and scoring weights from [isc_weights.yaml](../../support/dictionaries/isc_weights.yaml) apply uniformly.
+  - punctuation `?` contributes existing perspectival punctuation signal (`f_e`) per current CE implementation.
+
+Confound assessment from audit:
+
+- no strong differential representation-coverage confound was identified for this case;
+- punctuation-derived perspectival signal remains a known implementation confound, but it is already present in accepted interrogative references and does not require runtime changes.
+
+#### 17.6.6 Hidden-cue / substring / punctuation self-check
+
+- utterance contains mapped markers `where` and `cold`;
+- utterance does not contain mapped marker `support`;
+- no prior context is supplied, so prior-context cue markers are fixed absent;
+- substring-based cue extraction (`marker_text in lowered`) remains in force; this case uses exact marker tokens rather than accidental substrings;
+- terminal `?` is intentional and acknowledged as part of current implementation behavior.
+
+#### 17.6.7 Recommended control/comparison structure (minimum clean design)
+
+Primary run:
+
+- one conflict run with `"Where is the cold book?"` under fixed controls.
+
+Comparison strategy:
+
+- compare conflict run fields against accepted single-cue interrogative reference EXP2 (`"Where is the book?"`) where appropriate for bounded context;
+- do **not** require fresh single-cue runs by default for first conflict-boundary probe;
+- if conflict run does not show simultaneous multi-category cue presence in `category_cue`, escalate at review gate before authorizing any additional control run.
+
+#### 17.6.8 Fixed controls
+
+- prior context fixed absent: `prior_context=None`
+- `enable_category_selection=True`
+- `enable_s2m_seed=False`
+- characterization type/version: `infra_smoke` / `1.0`
+- one characterization invocation per run
+
+#### 17.6.9 Characterization identity/run index
+
+Use one session identity for the first conflict-boundary probe:
+
+- session: `exp4c1_within_utterance_conflict`
+- run 1: conflict utterance (`"Where is the cold book?"`)
+
+#### 17.6.10 Exact execution procedure (authorization-gated)
+
+When/if authorized, execute one in-process characterization invocation using existing `run_pathA_short(...)` and `run_characterization_once(...)` with fixed controls:
+
+- sentence `"Where is the cold book?"`
+- `prior_context=None`
+- `session_id=exp4c1_within_utterance_conflict`
+- `run_index=1`
+
+No runtime/category-selection behavior changes are permitted for this experiment.
+
+#### 17.6.11 Required evidence/artifacts
+
+- exact command used and exit code;
+- committed artifact path;
+- artifact identity/schema/status fields;
+- runtime-provided:
+  - `final_tp.semantic.isc_category_result` (including `category_cue`, `top_category`, `category_confidence`, `category_rationale`, provenance fields),
+  - `trace.primitive_sequence`,
+  - `final_tp.truth_relation`;
+- unavailable measurements (`entropy`, `top_vs_second_margin`) explicitly marked unavailable if still not implemented;
+- bounded comparison note vs accepted references where appropriate.
+
+#### 17.6.12 Relationship to accepted EXP1–EXP4G evidence
+
+- extends accepted representability boundaries (EXP4A/EXP4B) into same-utterance multi-direction cue coexistence;
+- remains distinct from EXP4G contextual-applicability boundary (this is mapped multi-direction conflict, not mapped-applicable vs mapped-inapplicable);
+- does not pre-decide EXP4C2 cross-source conflict design.
+
+#### 17.6.13 Legitimate inference scope
+
+Could inform:
+
+- whether current implementation reports simultaneously available mapped multi-direction cue evidence in one utterance, and what bounded category-result fields are produced in that boundary case.
+
+Cannot establish:
+
+- competition curves/crossover points/strength sweeps;
+- threshold/no-category policy;
+- which category “should” win scientifically;
+- universal conflict behavior/generalization from one case;
+- global category-space geometry/curve.
+
+#### 17.6.14 Known confounds/limitations
+
+- lexical substring cue extraction, not contextual semantic interpretation;
+- interrogative punctuation contributes existing perspectival signal (`f_e`);
+- single conflict case cannot characterize full interior competition behavior;
+- currently unavailable measurements (entropy, top-vs-second margin) limit conflict-shape interpretation.
+
+#### 17.6.15 Stop/escalation conditions
+
+Stop and escalate if:
+
+- artifact identity/path does not match requested `(session_id, run_index)`;
+- expected runtime-provided category-result/provenance fields are missing;
+- unavailable measurements are fabricated rather than marked unavailable;
+- hidden mapped cue is detected beyond intended conflict markers;
+- simultaneous multi-category cue presence is not observed and additional controls would be needed before interpretation;
+- runtime/category-selection behavior changes would be required to proceed.
+
+#### 17.6.16 EXP4C1 pre-execution review gate
+
+EXP4C1 remains pending explicit authorization. Do not execute from this specification alone.
 
 ### 17.7 EXP4C2 (proposed, not fully specified) — conflict between prior context and present utterance
 
@@ -796,19 +955,24 @@ Do not presume confidence increase or any specific response shape; treat as late
 
 ### 17.13 Additional boundary conditions discovered
 
-- No additional materially distinct, presently tractable Category Selection boundary condition was confirmed beyond EXP4A/B/C1/C2/D, the deferred EXP4E inventory boundary, and proposed EXP4G contextual-applicability boundary.
+- No additional materially distinct, presently tractable Category Selection boundary condition was confirmed beyond EXP4A/B/G plus retained C1/C2/D candidates and the deferred EXP4E inventory boundary.
 
-### 17.14 Recommended ordering (proposal)
+### 17.14 Recommended ordering (proposal, post-EXP4G acceptance)
 
-1. **EXP4A** — clean prior-context representability edge.
-2. **EXP4B** — clean present-utterance representability edge.
-3. **EXP4G** — contextual-applicability boundary using mapped cue with contrasting contextual use.
+Completed:
+
+1. **EXP4A** — prior-context representability edge.
+2. **EXP4B** — present-utterance representability edge.
+3. **EXP4G** — contextual-applicability boundary.
+
+Next retained boundary sequence (authorization-gated):
+
 4. **EXP4C1** — within-utterance conflict boundary.
 5. **EXP4C2** — cross-source conflict boundary.
 6. **EXP4D** — operational availability boundary control.
 7. **EXP4E** — deferred pending explicit inventory-control approval.
 
-Ordering rationale: begin with minimally confounded representability/applicability boundaries, then move to more complex conflict boundaries, then operational control.
+Ordering rationale: complete minimally confounded representability/applicability references first, then move to conflict boundaries, then operational control.
 
 ### 17.15 EXP4-family mandatory review gate
 
