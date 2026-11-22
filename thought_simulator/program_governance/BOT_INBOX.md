@@ -451,3 +451,59 @@ kind: view
 
 stamp: human
 
+---
+
+EVENT: policy
+
+when: 2026-11-22
+
+files: Flow · Hop tracker / 20.705 (description)
+
+what: On human ask, classify each affected §2 Path A hop as declarative or incremental, flag cross-layer writable-value conflicts, and emit F-rows to Helm.
+
+why: Human asked to give Flow this scalability duty, triggered on human ask.
+
+expect:
+
+  - Flow's description carries the on-ask scalability line.
+
+  - All other Flow scope, cadence defaults, and write=no are unchanged.
+
+  - Helm: record this EVENT in BOT_INBOX, CHANGE_LOG, and LATEST.md.
+
+  - write=no. Do not edit 20.705 or hop primitive files.
+
+kind: policy
+
+stamp: human
+
+status: SUPERSEDED 2026-11-22 10:43 AM America/Phoenix by the following EVENT (auto-trigger).
+
+---
+
+EVENT: policy
+
+when: 2026-11-22
+
+files: Flow · Hop tracker / 20.705 (description); requirements_20/20.705 or a primitive file named by a 20.705 hop
+
+what: Supersedes the prior 2026-11-22 on-ask EVENT. Flow's scalability duty now auto-triggers. Line: "On any update to requirements_20/20.705 or a primitive file named by a 20.705 hop, classify each affected §2 Path A hop as declarative or incremental, flag cross-layer writable-value conflicts, and emit F-rows to Helm. Also run on human ask."
+
+why: Human superseded the on-ask-only trigger at 10:43 AM America/Phoenix so the duty runs on those file updates, while the human-ask trigger stays.
+
+expect:
+
+  - Flow's description now carries this line, which replaced the earlier on-ask line. The human-ask trigger stays.
+
+  - All other Flow scope, cadence defaults, and write=no are unchanged.
+
+  - Helm: record both EVENTs (prior marked SUPERSEDED) in BOT_INBOX, CHANGE_LOG, and LATEST.md / dated 2026-11-22.md.
+
+  - write=no. Do not edit 20.705 or hop primitive files.
+
+kind: policy
+
+stamp: human
+
+supersedes: EVENT policy 2026-11-22 (on-ask scalability duty)
+
