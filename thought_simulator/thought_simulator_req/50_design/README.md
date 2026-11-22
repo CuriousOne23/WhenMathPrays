@@ -4,7 +4,7 @@ Design requirement anchors (`10.50.xx_*.md`) for promotion-governed realization 
 
 Track H W1 anchors (2026-06-08): [10.50.50_inb_design_requirements.md](10.50.50_inb_design_requirements.md), [10.50.60_iiinb_design_requirements.md](10.50.60_iiinb_design_requirements.md), [10.50.70_replay_design_requirements.md](10.50.70_replay_design_requirements.md).
 
-Pairing CI: `../../scripts/validate_30_10_50_pairing.py` (see [30.00](../../30_verification/30.00_verification_user_guide.md) § CI enforcement).
+Pairing CI: `../../scripts/validate_30_10_50_pairing.py` (see [30.00](../../verification/30.00_verification_user_guide.md) § CI enforcement).
 
 ## Directory index (coverage-aligned)
 
