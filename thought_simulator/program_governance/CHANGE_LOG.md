@@ -184,3 +184,8 @@
 2026-11-22 | EVENT policy | Flow scalability duty on human ask | stamp=human | SUPERSEDED 2026-11-22 10:43 AM America/Phoenix
 2026-11-22 | EVENT policy | Flow scalability duty auto-trigger; replaces earlier on-ask line; human-ask trigger stays; all other Flow scope, cadence defaults, and write=no unchanged | stamp=human | supersedes prior 2026-11-22 on-ask EVENT
 2026-11-22 | Flow human-ask scan | F-004–F-008 (incremental / shared-writer); F-001–F-003 not re-emitted; next id F-009; ref main f532e5a; 20.705 byte-identical to 9dd2f22; 23 §2 hop files HTTP 200 | write=no
+2026-11-22 | EVENT directive | 10:49 AM America/Phoenix; address four open items on PR #198 | stamp=human
+2026-11-22 | EVENT directive | (1) ShortSim Status + ShortSim Docs descriptions updated to category-selection goal; G1–G3 historical (accomplished 2026-11-19); each bot asked to retarget its routine; confirmation pending | stamp=human
+2026-11-22 | EVENT directive | (2) ShortSim Docs asked to open N1/N2/N6 doc-only PR on shortsim-docs/20261120-105530c; PR URL pending; shortsim-docs/20261119-6e1a8d5 create-PR form still waiting on human Submit | stamp=human
+2026-11-22 | EVENT directive | (3) EianA12 commits already resolved 2026-11-20 (Jeff <jeff@example.com> via local VS Code/agent workspace; CuriousOne23 pushes); not an anomaly; not a blocker for merging #189–#199; human may re-open | stamp=human
+2026-11-22 | EVENT directive | (4) original 9 baseline doc items still open; needs human: open the baseline doc PR, delete, or defer? | stamp=human

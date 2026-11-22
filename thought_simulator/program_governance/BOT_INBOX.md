@@ -507,3 +507,33 @@ stamp: human
 
 supersedes: EVENT policy 2026-11-22 (on-ask scalability duty)
 
+---
+
+EVENT: directive
+
+when: 2026-11-22 10:49 AM America/Phoenix
+
+files: PR #198 (helm/digest-2026-11-20); ShortSim Status standing routine; ShortSim Docs scheduled drift watch; shortsim-docs/20261120-105530c; shortsim-docs/20261119-6e1a8d5
+
+what: Human directive addressing the four open items on PR #198 (helm/digest-2026-11-20, stacked on #193).
+
+  (1) Retarget the ShortSim Status standing routine and the ShortSim Docs scheduled drift watch from G1–G3 to the current goal in status.md, controlled category selection (sentence-internal cue or prior-CEx cue, no floor mutation). Update both bots' descriptions and routines.
+
+  (2) Open PRs for the clear-cut ShortSim Docs fixes N1, N2 and N6 on branch shortsim-docs/20261120-105530c, citing 0ff78aa, 12e6184, 1e48373 and 105530c. Surface the shortsim-docs/20261119-6e1a8d5 create-PR form that is still waiting on human Submit.
+
+  (3) Flag the EianA12 commits before the #189–#198 merge.
+
+  (4) Flag that the original 9 baseline doc items are still open.
+
+why: Advance the four open items listed on PR #198.
+
+expect:
+
+  - Helm: record this EVENT in BOT_INBOX, LATEST.md, 2026-11-22.md, and CHANGE_LOG.
+
+  - Do not merge any PRs. Do not edit requirements files.
+
+kind: directive
+
+stamp: human
+
