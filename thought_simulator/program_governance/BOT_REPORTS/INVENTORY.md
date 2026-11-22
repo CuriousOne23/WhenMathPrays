@@ -13,11 +13,11 @@ Inventory agent suggest-only report: a human decides keep/delete/gitignore; noth
 |---:|---|---|---:|---|---|---|---|
 | 1 | assets/contributors_icon.png | contributors_icon.png | 444784 | binary | yes | keep | repo asset image |
 | 2 | tools/GRP_SpreadSheet.xlsm | GRP_SpreadSheet.xlsm | 426573 | binary | yes | keep | macro-enabled spreadsheet tool; intentional |
-| 3 | tests/fidelity_asymmetry_sensitivity.png | fidelity_asymmetry_sensitivity.png | 342424 | binary | yes | gitignore | already gitignored (tests/*.png) but still tracked; untrack with `git rm --cached` if you agree |
+| 3 | tests/fidelity_asymmetry_sensitivity.png | fidelity_asymmetry_sensitivity.png | 342424 | binary | yes | gitignore | already gitignored (tests/*.png) but still tracked; untrack with `git rm --cached` if you agree | stamp=human APPROVED UNTRACK / IGNORE 2026-11-22 11:55 AM America/Phoenix (already covered by existing tests/*.png ignore rule). Not untracked in this record; cleanup needs human go-ahead. |
 | 4 | docs/methodology/data/github/2026-04-23-traffic.jpg | 2026-04-23-traffic.jpg | 158131 | binary | yes | keep | methodology evidence screenshot |
 | 5 | thought_simulator/requirements_20/archive/20.190_glossary.md | 20.190_glossary.md | 121514 | archive | yes | keep | archived; keep for history (human may prune) |
 | 6 | docs/Gamma_Self_Character_Map.png | Gamma_Self_Character_Map.png | 110290 | binary | yes | keep |  |
-| 7 | simulations/zombie_love_plot.png | zombie_love_plot.png | 108424 | binary | yes | gitignore | appears to be generated plot output; consider ignoring simulations/*.png if regenerable |
+| 7 | simulations/zombie_love_plot.png | zombie_love_plot.png | 108424 | binary | yes | gitignore | appears to be generated plot output; consider ignoring simulations/*.png if regenerable | stamp=human CONDITIONAL 2026-11-22 11:55 AM America/Phoenix — Verify regenerability first. If generated, untrack it and use the narrowest reasonable ignore rule; do not automatically ignore simulations/*.png. |
 | 8 | tools/editor/controller.py | controller.py | 103816 | other | yes | keep |  |
 | 9 | tools/GRP_AI.xlsm | GRP_AI.xlsm | 97437 | binary | yes | keep | macro-enabled spreadsheet tool; intentional |
 | 10 | docs/methodology/data/ai_systems/instrumentation/co_grok_ent2_div_metric.md | co_grok_ent2_div_metric.md | 87643 | other | yes | keep |  |
@@ -86,7 +86,7 @@ Inventory agent suggest-only report: a human decides keep/delete/gitignore; noth
 | 73 | thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/conversion_pipeline/wordnet_raw/noun.exc | noun.exc | 27644 | playground | yes | keep | third-party WordNet data file (small; full dump files already gitignored); under requirements_20 so keep |
 | 74 | thought_simulator/requirements_20/20.15_ts_architecture_scaffold.md | 20.15_ts_architecture_scaffold.md | 27499 | requirements | yes | keep |  |
 | 75 | thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/primitives_pathA_short.py | primitives_pathA_short.py | 27299 | playground | yes | keep |  |
-| 76 | thought_simulator/thought_simulator_playground/40.50_inb_prototypes/artifacts/inb_verification_run_2026-06-08.json | inb_verification_run_2026-06-08.json | 26959 | playground | yes | delete | duplicate: byte-identical to thought_simulator/verification/30.50_inb_prototypes/inb_verification_run_2026-06-08.json; keep the verification copy |
+| 76 | thought_simulator/thought_simulator_playground/40.50_inb_prototypes/artifacts/inb_verification_run_2026-06-08.json | inb_verification_run_2026-06-08.json | 26959 | playground | yes | delete | duplicate: byte-identical to thought_simulator/verification/30.50_inb_prototypes/inb_verification_run_2026-06-08.json; keep the verification copy | stamp=human APPROVE DELETE 2026-11-22 11:55 AM America/Phoenix (retain verification copy). File not deleted in this record; cleanup needs human go-ahead. |
 | 77 | thought_simulator/verification/30.50_inb_prototypes/inb_verification_run_2026-06-08.json | inb_verification_run_2026-06-08.json | 26959 | other | yes | keep |  |
 | 78 | thought_simulator/requirements_20/20.700.050_ts_level_concepts_glossary.md | 20.700.050_ts_level_concepts_glossary.md | 26912 | glossary | yes | keep |  |
 | 79 | thought_simulator/requirements_20/20.92_ts_parameter_table.md | 20.92_ts_parameter_table.md | 26834 | requirements | yes | keep |  |
@@ -105,7 +105,7 @@ Inventory agent suggest-only report: a human decides keep/delete/gitignore; noth
 | 92 | thought_simulator/thought_simulator_playground/40.250_ib_prototypes/prototype.py | prototype.py | 23873 | playground | yes | keep |  |
 | 93 | docs/methodology/scoring_evidence_and_independence_framework_2b.md | scoring_evidence_and_independence_framework_2b.md | 23842 | other | yes | keep |  |
 | 94 | thought_simulator/thought_simulator_playground/40.50_inb_prototypes/software_description.md | software_description.md | 23769 | playground | yes | keep |  |
-| 95 | docs/bridge-to-realization/path-from-manifold-to-realization_bak.md | path-from-manifold-to-realization_bak.md | 23577 | other | yes | delete | stray _bak backup of path-from-manifold-to-realization.md; git history preserves prior versions |
+| 95 | docs/bridge-to-realization/path-from-manifold-to-realization_bak.md | path-from-manifold-to-realization_bak.md | 23577 | other | yes | delete | stray _bak backup of path-from-manifold-to-realization.md; git history preserves prior versions | stamp=human APPROVE DELETE 2026-11-22 11:55 AM America/Phoenix. File not deleted in this record; cleanup needs human go-ahead. |
 | 96 | thought_simulator/requirements_20/system_playground/design/papers/cognition_and_constraints/func_rep_attn_trns.md | func_rep_attn_trns.md | 23319 | playground | yes | keep |  |
 | 97 | thought_simulator/thought_simulator_design/50.210_scheduler_design_spec.md | 50.210_scheduler_design_spec.md | 23174 | other | yes | keep |  |
 | 98 | thought_simulator/requirements_20/20.35_reference_algorithms.md | 20.35_reference_algorithms.md | 23063 | requirements | yes | keep |  |
@@ -125,12 +125,24 @@ Inventory agent suggest-only report: a human decides keep/delete/gitignore; noth
 
 ## Other observations
 
-- `debug_query_log.txt` (root, 13475 bytes, tracked, not matched by .gitignore): likely a local debug dump; candidate for gitignore (human decides).
-- `$null` (root, 0 bytes, tracked): likely an accidental shell redirect artifact; candidate for delete (human decides).
+- `debug_query_log.txt` (root, 13475 bytes, tracked, not matched by .gitignore): likely a local debug dump; candidate for gitignore (human decides). stamp=human APPROVE remove + gitignore 2026-11-22 11:55 AM America/Phoenix, after confirming it is only generated debug output. File not removed and .gitignore not changed in this record; cleanup needs human go-ahead.
+- `$null` (root, 0 bytes, tracked): likely an accidental shell redirect artifact; candidate for delete (human decides). stamp=human APPROVE delete 2026-11-22 11:55 AM America/Phoenix — zero-byte accidental redirect artifact. Do not add a permanent ignore rule unless recurrence justifies it. File not deleted in this record; cleanup needs human go-ahead.
 
 ## Issues/notes
 
 - Shallow clone (--depth 1); git_dir_bytes reflects shallow .git.
 - Suggest-only: no files deleted, .gitignore untouched, nothing pushed.
-- LATEST pointer line (for Helm to fold into LATEST.md / digest): `inventory: INVENTORY.md | agent=Inventory | top-100 by size | human keep/delete/gitignore | stamp=2026-11-16`
+- LATEST pointer line (for Helm to fold into LATEST.md / digest): `inventory: INVENTORY.md | agent=Inventory | top-100 by size | human keep/delete/gitignore | stamp=2026-11-22`
+
+## Human dispositions 2026-11-22 11:55 AM America/Phoenix (stamp=human)
+
+Recorded only. No files were deleted or untracked, and .gitignore was not changed.
+
+- tests/fidelity_asymmetry_sensitivity.png — APPROVED UNTRACK / IGNORE (already covered by existing tests/*.png ignore rule).
+- simulations/zombie_love_plot.png — CONDITIONAL. Verify regenerability first. If generated, untrack it and use the narrowest reasonable ignore rule; do not automatically ignore simulations/*.png.
+- thought_simulator/thought_simulator_playground/40.50_inb_prototypes/artifacts/inb_verification_run_2026-06-08.json — APPROVE DELETE (retain verification copy at thought_simulator/verification/30.50_inb_prototypes/inb_verification_run_2026-06-08.json).
+- docs/bridge-to-realization/path-from-manifold-to-realization_bak.md — APPROVE DELETE.
+- debug_query_log.txt — APPROVE remove + gitignore, after confirming it is only generated debug output.
+- $null — APPROVE delete. Do not add a permanent ignore rule unless recurrence justifies it.
+
 - Intended repo paths (not committed here): thought_simulator/program_governance/BOT_REPORTS/INVENTORY.md and thought_simulator/program_governance/BOT_REPORTS/inventory/2026-11-16.md
