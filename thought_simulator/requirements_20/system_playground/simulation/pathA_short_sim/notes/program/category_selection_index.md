@@ -86,6 +86,14 @@ Record each finding in the document that owns that information type. Do not dupl
   **Open when:** You need to determine what characterization infrastructure was actually implemented and verified at Milestone 1.  
   **Relationship:** Downstream of the characterization/program references and upstream of substantive category-selection characterization experiments.
 
+### Experiment execution control
+
+- [category_selection_characterization_experiment_plan.md](category_selection_characterization_experiment_plan.md)  
+  **What it is:** Controlled execution plan for characterization experiments with mandatory per-experiment review gates.  
+  **Status/authority:** Non-normative campaign-execution control document.  
+  **Open when:** You need to run characterization experiments sequentially without auto-advancing across experiment boundaries.  
+  **Relationship:** Downstream of Milestone-1 closeout and upstream of experiment execution artifacts and observation reporting.
+
 ### Observation
 
 - [category_selection_observation.md](category_selection_observation.md)  
@@ -149,6 +157,7 @@ Typical progression for a new cycle:
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
 → Milestone-1 characterization implementation  
 → `category_selection_characterization_milestone1_closeout.md`  
+→ `category_selection_characterization_experiment_plan.md`  
 → characterization runs  
 → `category_selection_observation.md`
 
