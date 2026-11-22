@@ -473,7 +473,7 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
     constraints_matched: List[Any] = []
     constraints_unmatched: List[Any] = []
     constraint_residue: List[Any] = []
-    basin_residue: List[Any] = []
+    smoothing_residue: List[Any] = []
     smoothing_operations: List[Any] = []
     semantic_adjacent_cues: List[Any] = []
     semantic_core: Dict[str, Any] = {}
@@ -622,9 +622,13 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         if extracted is not None:
             _merge_list(constraint_residue, extracted, dedup=False)
 
+        extracted = _extract_literal_or_text(line, "smoothing_residue=")
+        if extracted is not None:
+            _merge_list(smoothing_residue, extracted, dedup=False)
+
         extracted = _extract_literal_or_text(line, "basin_residue=")
         if extracted is not None:
-            _merge_list(basin_residue, extracted, dedup=False)
+            _merge_list(smoothing_residue, extracted, dedup=False)
 
         extracted = _extract_literal_or_text(line, "smoothing_operations=")
         if extracted is not None:
@@ -698,7 +702,7 @@ def interpret_block(block: Dict[str, Any]) -> Dict[str, Any]:
         "constraints_matched": constraints_matched,
         "constraints_unmatched": constraints_unmatched,
         "constraint_residue": constraint_residue,
-        "basin_residue": basin_residue,
+        "smoothing_residue": smoothing_residue,
         "smoothing_operations": smoothing_operations,
         "semantic_adjacent_cues": semantic_adjacent_cues,
         "semantic_core": semantic_core,
@@ -744,7 +748,7 @@ def interpret_all_blocks(parsed_log: Dict[str, Any]) -> List[Dict[str, Any]]:
         )
         _merge_list(current["constraint_residue"], interpreted.get("constraint_residue", []), dedup=True)
         _merge_list(
-            current["basin_residue"], interpreted.get("basin_residue", []), dedup=True
+            current["smoothing_residue"], interpreted.get("smoothing_residue", []), dedup=True
         )
         _merge_list(
             current["smoothing_operations"], interpreted.get("smoothing_operations", []), dedup=True
@@ -874,7 +878,7 @@ def generate_output(
         "constraint_residue": "Residual mismatch material from CnOB.",
         "smoothing_operations": "Smoothing transforms applied by SmOB.",
         "semantic_adjacent_cues": "Semantic cues adjacent to structural elements.",
-        "basin_residue": "Residual unresolved basin-level material from SmOB.",
+        "smoothing_residue": "Residual unresolved smoothing-stage material from SmOB.",
         "truth_relation": "Truth relation selected for meaning resolution.",
         "semantic_core": "Identity-conditioned semantic bundle emitted by IdOB.",
         "idob_packet": "The identity packet produced by IdOB.",
@@ -965,7 +969,7 @@ def generate_output(
         "SOB": ["sob_tokens", "sob_struct_segments", "sob_segment_tokens"],
         "SROB": ["struct_roles"],
         "CnOB": ["constraints_matched", "constraints_unmatched", "constraint_residue"],
-        "SmOB": ["smoothing_operations", "semantic_adjacent_cues", "basin_residue"],
+        "SmOB": ["smoothing_operations", "semantic_adjacent_cues", "smoothing_residue"],
         "IdOB": ["idob_packet"],
     }
 
@@ -992,7 +996,7 @@ def generate_output(
         "constraint_residue": "constraint_residue",
         "smoothing_operations": "smoothing_operations",
         "semantic_adjacent_cues": "semantic_adjacent_cues",
-        "basin_residue": "basin_residue",
+        "smoothing_residue": "smoothing_residue",
         "idob_packet": "idob_packet",
         "semantic_core": "semantic_core",
         "truth_relation": "truth_relation",

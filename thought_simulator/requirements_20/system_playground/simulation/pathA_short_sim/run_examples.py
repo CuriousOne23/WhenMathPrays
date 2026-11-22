@@ -370,7 +370,7 @@ def _run_selected_execution(
         "constraint_residue": final_tp.get("constraint_residue", []),
         "smoothing_operations": final_tp.get("smoothing_operations", []),
         "semantic_adjacent_cues": final_tp.get("semantic_adjacent_cues", []),
-        "basin_residue": final_tp.get("basin_residue", final_tp.get("smoothing_residue", [])),
+        "smoothing_residue": final_tp.get("smoothing_residue", final_tp.get("basin_residue", [])),
         "truth_relation": truth_relation,
         "semantic_core": semantic_core,
     }
@@ -444,10 +444,10 @@ def _run_selected_execution(
         if primitive_name == "SmOB":
             smoothing_operations = primitive_trace_entry.get("smoothing_operations", [])
             semantic_adjacent_cues = primitive_trace_entry.get("semantic_adjacent_cues", [])
-            basin_residue = primitive_trace_entry.get("basin_residue", [])
+            smoothing_residue = primitive_trace_entry.get("smoothing_residue", primitive_trace_entry.get("basin_residue", []))
             print(f"smoothing_operations={smoothing_operations}")
             print(f"semantic_adjacent_cues={semantic_adjacent_cues}")
-            print(f"basin_residue={basin_residue}")
+            print(f"smoothing_residue={smoothing_residue}")
 
         if primitive_name == "IdOB":
             idob_packet = primitive_trace_entry.get("idob_packet", {})

@@ -245,7 +245,7 @@ The final TP is the end-state substrate after all primitives run.
 - `struct_segments`, `segment_tokens` — SOB
 - `struct_roles`, `role_segments` — SROB
 - `constraints_matched`, `constraints_unmatched`, `constraint_residue` — CnOB
-- `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue` — SmOB
+- `smoothing_operations`, `semantic_adjacent_cues`, `smoothing_residue` — SmOB
 
 **Routing**
 

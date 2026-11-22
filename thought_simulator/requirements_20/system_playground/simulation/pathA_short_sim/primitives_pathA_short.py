@@ -780,7 +780,7 @@ def SmOB(tp: TP) -> TP:
 
     tp.smoothing_operations = smoothing_state["smoothing_operations"]
     tp.semantic_adjacent_cues = smoothing_state["semantic_adjacent_cues"]
-    tp.basin_residue = smoothing_state["basin_residue"]
+    tp.smoothing_residue = smoothing_state["basin_residue"]
 
     tp.smoothed_geometry = True
     if not hasattr(tp, "trace"):
@@ -790,7 +790,7 @@ def SmOB(tp: TP) -> TP:
         "notes": "[Canonical]",
         "smoothing_operations": tp.smoothing_operations,
         "semantic_adjacent_cues": tp.semantic_adjacent_cues,
-        "basin_residue": tp.basin_residue,
+        "smoothing_residue": tp.smoothing_residue,
     })
     return tp
 

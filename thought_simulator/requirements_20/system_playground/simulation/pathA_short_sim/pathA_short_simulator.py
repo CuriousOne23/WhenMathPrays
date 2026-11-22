@@ -62,7 +62,7 @@ def primitive_notes(name: str, tp: TP) -> str:
         return (
             f"[{macro}] smoothing_operations={tp.smoothing_operations}; "
             f"semantic_adjacent_cues={tp.semantic_adjacent_cues}; "
-            f"basin_residue={tp.smoothing_residue}"
+            f"smoothing_residue={tp.smoothing_residue}"
         )
     if name == "TR":
         return f"[{macro}] Thought Router placeholder: {tp.routing_metadata.get('thought_router_note', 'no note')}"
@@ -121,7 +121,7 @@ def run_pathA_short(
                     "constraint_residue",
                     "smoothing_operations",
                     "semantic_adjacent_cues",
-                    "basin_residue",
+                    "smoothing_residue",
                     "idob_packet",
                     "selected_ops",
                     "semantic_core",
