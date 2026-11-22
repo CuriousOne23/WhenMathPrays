@@ -10,29 +10,29 @@ on:
       - "thought_simulator/scripts/validate_relation_semantics.py"
       - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
       - "thought_simulator/scripts/validate_glossary_alignment.py"
-      - "thought_simulator/30_verification/glossary_term_registry.json"
+      - "thought_simulator/verification/glossary_term_registry.json"
       - "thought_simulator/scripts/validate_requirements_glossary_alignment.py"
       - "thought_simulator/scripts/validate_requirements_glossary_scope.py"
-      - "thought_simulator/20_requirements/glossary_term_registry.json"
-      - "thought_simulator/50_thought_simulator_design/50.01_50_series_glossary.md"
-      - "thought_simulator/50_thought_simulator_design/glossary_term_registry.json"
+      - "thought_simulator/requirements_20/glossary_term_registry.json"
+      - "thought_simulator/thought_simulator_design/50.01_50_series_glossary.md"
+      - "thought_simulator/thought_simulator_design/glossary_term_registry.json"
       - "thought_simulator/scripts/validate_50_glossary_alignment.py"
       - "thought_simulator/scripts/validate_readme_links.py"
       - "thought_simulator/scripts/validate_readme_coverage.py"
       - "thought_simulator/scripts/validate_30_inventory_index.py"
       - "thought_simulator/scripts/validate_30_10_50_pairing.py"
       - "thought_simulator/scripts/validate_50_traceability_index.py"
-      - "thought_simulator/30_verification/30.01_verification_inventory_index.md"
-      - "thought_simulator/10_thought_simulator_req/50_design/**"
+      - "thought_simulator/verification/30.01_verification_inventory_index.md"
+      - "thought_simulator/thought_simulator_req/50_design/**"
       - "thought_simulator/scripts/validate_doc_reference_targets.py"
       - "thought_simulator/scripts/validate_20_traceability_matrix.py"
       - "thought_simulator/scripts/validate_name_tables.py"
       - "thought_simulator/scripts/validate_shorthand_usage.py"
       - "thought_simulator/scripts/shorthand_patterns.py"
-      - "thought_simulator/00_program_governance/00_identity/shorthand_registry.json"
+      - "thought_simulator/program_governance/00_identity/shorthand_registry.json"
       - "thought_simulator/scripts/rename_identity.py"
       - "thought_simulator/scripts/bootstrap_name_tables.py"
-      - "thought_simulator/00_program_governance/00_identity/**"
+      - "thought_simulator/program_governance/00_identity/**"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
   push:
     branches: ["main"]
@@ -44,29 +44,29 @@ on:
       - "thought_simulator/scripts/validate_relation_semantics.py"
       - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
       - "thought_simulator/scripts/validate_glossary_alignment.py"
-      - "thought_simulator/30_verification/glossary_term_registry.json"
+      - "thought_simulator/verification/glossary_term_registry.json"
       - "thought_simulator/scripts/validate_requirements_glossary_alignment.py"
       - "thought_simulator/scripts/validate_requirements_glossary_scope.py"
-      - "thought_simulator/20_requirements/glossary_term_registry.json"
-      - "thought_simulator/50_thought_simulator_design/50.01_50_series_glossary.md"
-      - "thought_simulator/50_thought_simulator_design/glossary_term_registry.json"
+      - "thought_simulator/requirements_20/glossary_term_registry.json"
+      - "thought_simulator/thought_simulator_design/50.01_50_series_glossary.md"
+      - "thought_simulator/thought_simulator_design/glossary_term_registry.json"
       - "thought_simulator/scripts/validate_50_glossary_alignment.py"
       - "thought_simulator/scripts/validate_readme_links.py"
       - "thought_simulator/scripts/validate_readme_coverage.py"
       - "thought_simulator/scripts/validate_30_inventory_index.py"
       - "thought_simulator/scripts/validate_30_10_50_pairing.py"
       - "thought_simulator/scripts/validate_50_traceability_index.py"
-      - "thought_simulator/30_verification/30.01_verification_inventory_index.md"
-      - "thought_simulator/10_thought_simulator_req/50_design/**"
+      - "thought_simulator/verification/30.01_verification_inventory_index.md"
+      - "thought_simulator/thought_simulator_req/50_design/**"
       - "thought_simulator/scripts/validate_doc_reference_targets.py"
       - "thought_simulator/scripts/validate_20_traceability_matrix.py"
       - "thought_simulator/scripts/validate_name_tables.py"
       - "thought_simulator/scripts/validate_shorthand_usage.py"
       - "thought_simulator/scripts/shorthand_patterns.py"
-      - "thought_simulator/00_program_governance/00_identity/shorthand_registry.json"
+      - "thought_simulator/program_governance/00_identity/shorthand_registry.json"
       - "thought_simulator/scripts/rename_identity.py"
       - "thought_simulator/scripts/bootstrap_name_tables.py"
-      - "thought_simulator/00_program_governance/00_identity/**"
+      - "thought_simulator/program_governance/00_identity/**"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
 
 jobs:
@@ -99,19 +99,19 @@ jobs:
                   "No Automatic Propagation From 20 (Mandatory)",
                   "selected direction (`forward` or `backward`)",
               ],
-              "thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md": [
+              "thought_simulator/thought_simulator_req/docs/promotion_protocol.md": [
                   "No-auto-propagation rule:",
                   "selected direction (`forward` or `backward`)",
               ],
-              "thought_simulator/30_verification/README.md": [
+              "thought_simulator/verification/README.md": [
                   "No-auto-propagation from 20-layer edits:",
                   "selected direction (`forward` or `backward`)",
               ],
-              "thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md": [
+              "thought_simulator/thought_simulator_playground/40.05_master_program_guide.md": [
                   "No-auto-propagation from 20-layer edits:",
                   "selected flow direction: `forward` or `backward`",
               ],
-              "thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md": [
+              "thought_simulator/thought_simulator_design/50.05_software_spec_construction_guide.md": [
                   "No-auto-propagation from 20-layer edits:",
                   "chosen direction (`forward` or `backward`)",
               ],
@@ -145,25 +145,25 @@ jobs:
           import subprocess
           import sys
 
-          AUTO_GLOSSARY = "thought_simulator/30_verification/30.30_verification_glossary.md"
-          AUTO_REGISTRY = "thought_simulator/30_verification/glossary_term_registry.json"
-          AUTO_50_INDEX = "thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md"
-          AUTO_30_INDEX = "thought_simulator/30_verification/30.01_verification_inventory_index.md"
+          AUTO_GLOSSARY = "thought_simulator/verification/30.30_verification_glossary.md"
+          AUTO_REGISTRY = "thought_simulator/verification/glossary_term_registry.json"
+          AUTO_50_INDEX = "thought_simulator/thought_simulator_design/50.00_design_traceability_index.md"
+          AUTO_30_INDEX = "thought_simulator/verification/30.01_verification_inventory_index.md"
           IDENTITY_TABLES = (
-              "thought_simulator/00_program_governance/00_identity/40_name_table.json",
-              "thought_simulator/00_program_governance/00_identity/10.50_name_table.json",
-              "thought_simulator/00_program_governance/00_identity/30_name_table.json",
-              "thought_simulator/00_program_governance/00_identity/50_name_table.json",
+              "thought_simulator/program_governance/00_identity/40_name_table.json",
+              "thought_simulator/program_governance/00_identity/10.50_name_table.json",
+              "thought_simulator/program_governance/00_identity/30_name_table.json",
+              "thought_simulator/program_governance/00_identity/50_name_table.json",
           )
 
           SCOPE_PREFIXES = (
-              "thought_simulator/30_verification/",
-              "thought_simulator/40_thought_simulator_playground/",
-              "thought_simulator/50_thought_simulator_design/",
-              "thought_simulator/10_thought_simulator_req/50_design/",
+              "thought_simulator/verification/",
+              "thought_simulator/thought_simulator_playground/",
+              "thought_simulator/thought_simulator_design/",
+              "thought_simulator/thought_simulator_req/50_design/",
           )
-          AUTO_40_INVENTORY = "thought_simulator/40_thought_simulator_playground/40.510_refactor.md"
-          AUTO_40_README = "thought_simulator/40_thought_simulator_playground/README.md"
+          AUTO_40_INVENTORY = "thought_simulator/thought_simulator_playground/40.510_refactor.md"
+          AUTO_40_README = "thought_simulator/thought_simulator_playground/README.md"
           # Note: 40, 20, and 50 have standalone component numbering.
           # 30 numbering is coupled only to 10.50 (see validate_30_10_50_pairing.py).
           # This guard enforces inventory + identity-table maintenance when governed
@@ -181,9 +181,9 @@ jobs:
                   return False
               leaf = parts[-1]
               parent = parts[-2]
-              if parent == "40_thought_simulator_playground" and leaf.startswith("40."):
+              if parent == "thought_simulator_playground" and leaf.startswith("40."):
                   return True
-              if parent == "30_verification" and leaf.startswith("30."):
+              if parent == "verification" and leaf.startswith("30."):
                   return True
               return False
 
@@ -232,23 +232,23 @@ jobs:
           required_paths = {AUTO_GLOSSARY, AUTO_REGISTRY}
           required_paths.update(IDENTITY_TABLES)
           rename_touches_50 = any(
-              old.startswith("thought_simulator/50_thought_simulator_design/")
-              or new.startswith("thought_simulator/50_thought_simulator_design/")
+              old.startswith("thought_simulator/thought_simulator_design/")
+              or new.startswith("thought_simulator/thought_simulator_design/")
               for old, new in renamed_items
           )
           rename_touches_30 = any(
-              old.startswith("thought_simulator/30_verification/")
-              or new.startswith("thought_simulator/30_verification/")
+              old.startswith("thought_simulator/verification/")
+              or new.startswith("thought_simulator/verification/")
               for old, new in renamed_items
           )
           rename_touches_1050 = any(
-              old.startswith("thought_simulator/10_thought_simulator_req/50_design/")
-              or new.startswith("thought_simulator/10_thought_simulator_req/50_design/")
+              old.startswith("thought_simulator/thought_simulator_req/50_design/")
+              or new.startswith("thought_simulator/thought_simulator_req/50_design/")
               for old, new in renamed_items
           )
           rename_touches_40 = any(
-              old.startswith("thought_simulator/40_thought_simulator_playground/")
-              or new.startswith("thought_simulator/40_thought_simulator_playground/")
+              old.startswith("thought_simulator/thought_simulator_playground/")
+              or new.startswith("thought_simulator/thought_simulator_playground/")
               for old, new in renamed_items
           )
           if rename_touches_50:

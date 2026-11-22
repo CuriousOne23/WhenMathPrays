@@ -21,11 +21,11 @@ jobs:
           import re
           import sys
 
-          design_dir = Path("thought_simulator/50_thought_simulator_design")
+          design_dir = Path("thought_simulator/thought_simulator_design")
           index_path = design_dir / "50.00_design_traceability_index.md"
 
           if not index_path.exists():
-              print("ERROR: missing required index file thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md")
+              print("ERROR: missing required index file thought_simulator/thought_simulator_design/50.00_design_traceability_index.md")
               sys.exit(1)
 
           level2 = re.compile(r"^50\.\d+\.\d+_.*\.md$")
