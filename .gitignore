@@ -105,3 +105,8 @@ thought_simulator/requirements_20/system_playground/design/dictionaries/path_a/*
 # Docs images not kept in GitHub
 docs/assets/**
 docs/pictures/**
+
+# Characterization evidence (milestone-1 defense in depth)
+*.tschar.json
+thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/*
+!thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/.gitignore
