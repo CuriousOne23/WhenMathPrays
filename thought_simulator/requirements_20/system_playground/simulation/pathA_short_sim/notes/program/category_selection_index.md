@@ -28,8 +28,8 @@ New characterization documents should be registered in this index rather than re
 
 ### Architectural proposal
 
-- [category_selection_proposal.md](category_selection_proposal.md)
-  *Role:** Defines architectural intent, boundaries, category-selection path, and relationship to S2M.
+- [category_selection_proposal.md](category_selection_proposal.md)  
+  **Role:** Defines architectural intent, boundaries, category-selection path, and relationship to S2M.
 
 ### Research
 
