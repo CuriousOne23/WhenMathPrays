@@ -656,6 +656,113 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: defer EXP4C2 specification pending additional pair/control constraints.
 - Option C: retain EXP4C1 as accepted and reprioritize later retained EXP4 boundary candidates before EXP4C2.
 
+## Experiment record — EXP4C2 cross-source conflicting mapped category evidence (executed, pending review-gate decision)
+
+### 1) What executed (exact command, times/order)
+
+- Order: one-command execution under one session identity (`exp4c2_cross_source_conflict`).
+- Run 1 (cross-source conflict case) command:
+  `python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('The book is cold.', enable_s2m_seed=False, enable_category_selection=True, prior_context=['location']); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp4c2_cross_source_conflict','run_index':1,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'cross_source_conflict_book_cold_location','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':['location']}); print(result['persistence']['committed_final_path'])"`
+- Exit code: `0`.
+
+### 2) Inputs and controls used
+
+- Present utterance: `"The book is cold."`
+- Prior context: `["location"]`
+- Intended mapped cue directions in different sources:
+  - sentence cue `cold -> affective`
+  - prior-context cue `location -> perspectival`
+- Fixed TS-affecting controls:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+- Fixed characterization controls:
+  - type/version: `infra_smoke` / `1.0`
+  - session: `exp4c2_cross_source_conflict`
+  - run index: `1`
+
+### 3) Produced artifacts/logs (exact paths)
+
+- Run 1 committed artifact:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp4c2_cross_source_conflict/runs/000001__infra_smoke__1.0.tschar.json`
+- Accepted bounded comparison references:
+  - EXP2 mapped sentence-source reference:
+    `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp2_sentence_internal/runs/000001__infra_smoke__1.0.tschar.json`
+  - EXP3 mapped prior-context-source reference:
+    `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp3_prior_context/runs/000001__infra_smoke__1.0.tschar.json`
+  - EXP4B mapped sentence representability reference:
+    `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp4b_utterance_repr/runs/000001__infra_smoke__1.0.tschar.json`
+- No additional experiment log file was produced by this in-process command.
+
+### 4) Observed outputs (facts only)
+
+- EXP4C2 artifact reported:
+  - `schema_id=ts.characterization.run`
+  - `schema_version=1.0`
+  - `characterization.type=infra_smoke`
+  - `characterization.version=1.0`
+  - `execution_status=succeeded`
+- Runtime-provided observation shape was present for:
+  - `final_tp.truth_relation`
+  - `trace.primitive_sequence`
+  - `final_tp.semantic.isc_category_result`
+- Unavailable observations were present:
+  - `entropy` (`milestone1_unavailable`)
+  - `top_vs_second_margin` (`milestone1_unavailable`)
+- EXP4C2 category-result facts:
+  - `category_cue=["affective","perspectival"]`
+  - `category_weighted_distribution` includes mapped-category entries:
+    - `affective`: `probability=0.23667050650980903`, `category_hit=true`
+    - `perspectival`: `probability=0.2141483300355984`, `category_hit=true`
+  - `top_category="affective"`
+  - `category_confidence=0.23667050650980903`
+  - `category_rationale=["category_cue_applied","top_category=affective"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+  - `provenance.upstream="ce"`
+  - `provenance.weights={"w_s":0.35,"w_b":0.25,"w_e":0.2,"w_i":0.2,"w_cat":0.6}`
+- Intended cross-source coexistence/provenance check:
+  - both intended mapped directions were represented in `category_cue` (`affective` and `perspectival`);
+  - mixed source provenance remained observable in `provenance.source` (`sentence` and `prior_context_cex`).
+- Trace/truth-relation facts:
+  - `truth_relation="declarative"`
+  - trace primitive sequence present (`InB`→...→`OuBA`, same primitive list shape as accepted references).
+- Bounded reference comparisons (where appropriate):
+  - EXP2/EXP4B mapped sentence references show `provenance.source=["sentence"]`;
+  - EXP3 mapped prior-context reference shows `provenance.source=["prior_context_cex"]`;
+  - EXP4C2 run records both sources together (`["sentence","prior_context_cex"]`).
+
+### 5) Unavailable measurements/deviations
+
+- `entropy` and `top_vs_second_margin` remained unavailable and explicitly marked as unavailable.
+- No deviation from approved EXP4C2 fixed controls/identity structure was introduced.
+
+### 6) Unexpected behavior/anomalies
+
+- None observed in this single-run execution.
+
+### 7) Interpretation (bounded)
+
+- Under tested EXP4C2 conditions, this run records cross-source mapped cue coexistence and observable mixed-source provenance in one run with bounded category-result fields.
+- This record characterizes a cross-source conflict boundary condition for the current implementation.
+
+### 8) Not established
+
+- No claim is made about which category should win in principle.
+- No competition curve, crossover point, or interior strength trajectory is established.
+- No threshold/no-category policy is established.
+- No stability/generalization claim beyond this case is established.
+- No scientific meaning claim is established.
+
+### 9) Questions raised
+
+- Should EXP4C2 be accepted as the current cross-source conflict boundary reference under tested conditions?
+- Which retained EXP4 boundary should be authorized next under one-at-a-time review gating?
+
+### 10) Next-step options (suggestions only, not decisions)
+
+- Option A: accept EXP4C2 and authorize next retained EXP4 boundary candidate selection at review gate.
+- Option B: request one bounded replay of EXP4C2 run 1 (new run index) before next boundary authorization.
+- Option C: accept EXP4C2 and hold further execution pending EXP4 sequence reprioritization.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
