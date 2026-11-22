@@ -1,7 +1,10 @@
 import argparse
 import json
+import re
 from typing import List, Optional
 
+from characterization import CharacterizationError
+from characterization.dispatcher import resolve_characterization
 from pathA_short_simulator import run_pathA_short
 from mcb.seam import copy_from_idob
 from ouba.assembly import build_ouba
@@ -26,6 +29,7 @@ IDOB_PACKET_KEY_ORDER = [
     "complete",
     "tru_hint",
 ]
+SESSION_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 
 
 def _ordered_idob_packet(packet: object) -> dict:
@@ -125,6 +129,47 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Disable category-selection observation scenarios.",
     )
+    parser.add_argument(
+        "--enable-category-selection",
+        action="store_true",
+        help="Enable category-selection behavior for the selected execution case.",
+    )
+    parser.add_argument(
+        "--execution-case",
+        choices=["sky_blue"],
+        default="sky_blue",
+        help="Execution case for the primary TS run (default: sky_blue).",
+    )
+    parser.add_argument(
+        "--characterize",
+        action="store_true",
+        help="Enable characterization mode for one TS execution.",
+    )
+    parser.add_argument(
+        "--char-type",
+        help="Characterization type key (required with --characterize).",
+    )
+    parser.add_argument(
+        "--char-session-id",
+        help="Characterization session identifier (required with --characterize).",
+    )
+    parser.add_argument(
+        "--char-run-index",
+        type=int,
+        help="Characterization run index >= 1 (required with --characterize).",
+    )
+    parser.add_argument(
+        "--char-version",
+        help="Requested characterization version (optional).",
+    )
+    parser.add_argument(
+        "--char-params-json",
+        help="Type-specific characterization parameters as JSON object.",
+    )
+    parser.add_argument(
+        "--char-params-file",
+        help="Path to a JSON file containing type-specific parameters as an object.",
+    )
     return parser
 
 
@@ -193,82 +238,123 @@ def _print_category_observation(
     ))
 
 
-def main(enable_s2m_seed: bool = True, show_category_observations: bool = True) -> None:
-    # sentence = "The quick brown fox jumps over the lazy dog."
-    # PA-CSE-005 / mixed_desc
-    # sentence = "The rain in Spain stays mainly in the plain."
-    # PA-CSE-008 / interrogative
-    # sentence = "Why is the sky blue?"
-    # PA-CSE-001 / copular
-    sentence = "The sky is blue."
-    # PA-CSE-006 / interrogative
-    # sentence = "Where is the book?"
-    # PA-CSE-002 / copular
-    # sentence = "Paris is a city."
-    # PA-CSE-003 / locative
-    # sentence = "The book is on the table."
-    # PA-CSE-004 / locative
-    # sentence = "The rain stays in the plain."
-    # PA-CSE-007 / interrogative
-    # sentence = "Is the book on the table?"
-    # PA-CSE-010 / mixed_inter
-    # sentence = "Where is the book that is on the table?"
-    # PA-CSE-019 / copular / HOLE-15
-    # sentence = "Every sky is blue."
-    # PA-CSE-013 / copular / HOLE-08
-    # sentence = "The sky is not blue."
-    # PA-CSE-014 / locative / HOLE-11
-    # sentence = "The book is on the table and the lamp is on the desk."
-    # PA-CSE-015 / locative / HOLE-10
-    # sentence = "If the book is on the table, the lamp is in the hall."
-    # PA-CSE-016 / locative / HOLE-12
-    # sentence = "On the table."
-    # PA-CSE-017 / copular / HOLE-13
-    # sentence = "I am tired."
-    # PA-CSE-018 / copular / HOLE-14
-    # sentence = "The book was written."
-    # PA-CSE-020 / copular / HOLE-16
-    # sentence = "Close the door."
-    # PA-CSE-021 / interrogative / HOLE-09
-    # sentence = "What a beautiful day!"
-    # PA-CSE-012 / copular / HOLE-09
-    # sentence = "Please close the door."
+def _resolve_execution_case(case_name: str) -> dict:
+    case_key = str(case_name).strip().lower()
+    if case_key == "sky_blue":
+        return {
+            "case": "sky_blue",
+            "sentence": "The sky is blue.",
+            "prior_context": None,
+        }
+    raise ValueError(f"unsupported execution case: {case_name}")
 
-    # Grouped rollout queue (Not yet implemented) -- keep commented until promoted.
-    # Mandatory status-change metadata for each promotion:
-    # - Hole ID: must be recorded in notes/pathA_supported_sentences.md section 10
-    # - Capability note: explicit capability added or frozen object required
 
-    # Group A: speech-act / exclamative
-    # PA-CSE-012 / copular / HOLE-09 -- capability: request-force imperative handling marker
-    # sentence = "Please close the door."
-    # PA-CSE-020 / copular / HOLE-16 -- capability: imperative voice handling marker
-    # sentence = "Close the door."
-    # PA-CSE-021 / interrogative / HOLE-09 -- capability: exclamative-force handling marker
-    # sentence = "What a beautiful day!"
+def _parse_type_parameters(args: argparse.Namespace, parser: argparse.ArgumentParser) -> dict:
+    if args.char_params_json and args.char_params_file:
+        parser.error("characterization parameters require exactly one of --char-params-json or --char-params-file")
 
-    # Group B: negation + quantification
-    # PA-CSE-013 / copular / HOLE-08 -- capability: negation cue + polarity constraint
-    # sentence = "The sky is not blue."
-    # PA-CSE-019 / copular / HOLE-15 -- capability: quantified NP cue + universal constraint
-    # sentence = "Every sky is blue."
+    if args.char_params_json:
+        raw = args.char_params_json
+    elif args.char_params_file:
+        try:
+            with open(args.char_params_file, "r", encoding="utf-8") as handle:
+                raw = handle.read()
+        except OSError as exc:
+            parser.error(f"unable to read --char-params-file: {exc}")
+    else:
+        return {}
 
-    # Group C: coordination + conditional
-    # PA-CSE-014 / locative / HOLE-11 -- capability: clause coordination composition
-    # sentence = "The book is on the table and the lamp is on the desk."
-    # PA-CSE-015 / locative / HOLE-10 -- capability: conditional connective + TRU support
-    # sentence = "If the book is on the table, the lamp is in the hall."
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        parser.error(f"characterization parameters must be valid JSON: {exc}")
+    if not isinstance(payload, dict):
+        parser.error("characterization parameters must decode to a JSON object")
+    return payload
 
-    # Group D: fragment / ellipsis
-    # PA-CSE-016 / locative / HOLE-12 -- capability: fragment handling and residual completion policy
-    # sentence = "On the table."
 
-    # Group E: person + passive voice
-    # PA-CSE-017 / copular / HOLE-13 -- capability: first-person speaker role handling
-    # sentence = "I am tired."
-    # PA-CSE-018 / copular / HOLE-14 -- capability: passive voice mapping and by-phrase roles
-    # sentence = "The book was written."
-    simulation_result = run_pathA_short(sentence, enable_s2m_seed=enable_s2m_seed)
+def _resolve_characterization_request(args: argparse.Namespace, parser: argparse.ArgumentParser) -> Optional[dict]:
+    char_args_supplied = any(
+        value is not None
+        for value in [
+            args.char_type,
+            args.char_session_id,
+            args.char_run_index,
+            args.char_version,
+            args.char_params_json,
+            args.char_params_file,
+        ]
+    )
+
+    if not args.characterize:
+        if char_args_supplied:
+            parser.error("characterization arguments require --characterize")
+        return None
+
+    if not args.char_type:
+        parser.error("--characterize requires --char-type")
+    if not args.char_session_id:
+        parser.error("--characterize requires --char-session-id")
+    if args.char_run_index is None:
+        parser.error("--characterize requires --char-run-index")
+
+    session_id = str(args.char_session_id)
+    if not SESSION_ID_PATTERN.match(session_id):
+        parser.error("invalid --char-session-id; expected ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
+    run_index = int(args.char_run_index)
+    if run_index < 1:
+        parser.error("--char-run-index must be >= 1")
+
+    raw_type_params = _parse_type_parameters(args, parser)
+
+    try:
+        resolved = resolve_characterization(args.char_type, args.char_version)
+        resolved_type_params = resolved["params_resolver"](raw_type_params)
+    except ValueError as exc:
+        parser.error(str(exc))
+
+    return {
+        "type": resolved["type"],
+        "version": resolved["version"],
+        "session_id": session_id,
+        "run_index": run_index,
+        "resolved_type_parameters": resolved_type_params,
+        "runner": resolved["runner"],
+    }
+
+
+def run_characterization_once(
+    characterization_request: dict,
+    simulation_result: dict,
+) -> dict:
+    """Run one TS execution and collect in-memory characterization result."""
+    type_result = characterization_request["runner"](simulation_result)
+    return {
+        "identity": {
+            "session_id": characterization_request["session_id"],
+            "run_index": characterization_request["run_index"],
+        },
+        "characterization": {
+            "type": characterization_request["type"],
+            "version": characterization_request["version"],
+        },
+        "resolved_type_parameters": characterization_request["resolved_type_parameters"],
+        "result": type_result,
+    }
+
+
+def _run_selected_execution(
+    sentence: str,
+    enable_s2m_seed: bool,
+    enable_category_selection: bool,
+    prior_context: Optional[List[str]] = None,
+) -> dict:
+    simulation_result = run_pathA_short(
+        sentence,
+        enable_s2m_seed=enable_s2m_seed,
+        enable_category_selection=enable_category_selection,
+        prior_context=prior_context,
+    )
     final_tp = simulation_result["final_tp"]
 
     idob_packet = final_tp.get("idob_packet", final_tp.get("idob", {}))
@@ -382,9 +468,28 @@ def main(enable_s2m_seed: bool = True, show_category_observations: bool = True) 
     print("pipeline_ready=True")
     print("--- R9 ---")
     print("freeze_version='pathA_v1'")
+    return simulation_result
+
+
+def main(
+    enable_s2m_seed: bool = True,
+    show_category_observations: bool = True,
+    execution_case: str = "sky_blue",
+    enable_category_selection: bool = False,
+) -> dict:
+    selected = _resolve_execution_case(execution_case)
+    sentence = selected["sentence"]
+    prior_context = selected["prior_context"]
+
+    simulation_result = _run_selected_execution(
+        sentence=sentence,
+        enable_s2m_seed=enable_s2m_seed,
+        enable_category_selection=enable_category_selection,
+        prior_context=prior_context,
+    )
 
     if not show_category_observations:
-        return
+        return simulation_result
 
     print("\n=== Canonical S2M Cases (normative testbench) ===")
     canonical_sentences = [
@@ -426,11 +531,27 @@ def main(enable_s2m_seed: bool = True, show_category_observations: bool = True) 
     _print_category_observation("Prior-context cue", "The book is on the table.", prior_context_result, prior_context=prior_context)
 
     _print_category_observation("Refusal / non-selection", "Where is the book?", sentence_internal_result)
+    return simulation_result
 
 
 if __name__ == "__main__":
-    args = build_arg_parser().parse_args()
-    main(
+    parser = build_arg_parser()
+    args = parser.parse_args()
+
+    characterization_request = _resolve_characterization_request(args, parser)
+    simulation_result = main(
         enable_s2m_seed=not args.no_s2m_seed,
-        show_category_observations=not args.no_category_observations,
+        show_category_observations=False if characterization_request is not None else (not args.no_category_observations),
+        execution_case=args.execution_case,
+        enable_category_selection=args.enable_category_selection,
     )
+    if characterization_request is not None:
+        try:
+            run_characterization_once(
+                characterization_request=characterization_request,
+                simulation_result=simulation_result,
+            )
+        except CharacterizationError as exc:
+            raise SystemExit(f"{exc.code}: {exc.message}")
+        except Exception as exc:
+            raise SystemExit(f"char_processing_failed: {exc}")

@@ -1,6 +1,16 @@
-"""Milestone-1 characterization package scaffold.
+"""Characterization package for milestone-1 integration."""
 
-Batch 1 establishes module ownership boundaries only.
-No characterization execution is implemented in this batch.
-"""
+from dataclasses import dataclass
+
+
+@dataclass
+class CharacterizationError(Exception):
+    """Raised when characterization processing fails after CLI validation."""
+
+    code: str
+    message: str
+
+    def __str__(self) -> str:
+        return f"{self.code}: {self.message}"
+
 
