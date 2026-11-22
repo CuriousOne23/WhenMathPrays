@@ -1,7 +1,8 @@
 import argparse
 import json
 import re
-from typing import List, Optional
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from characterization import CharacterizationError
 from characterization.artifacts import (
@@ -36,6 +37,93 @@ IDOB_PACKET_KEY_ORDER = [
     "tru_hint",
 ]
 SESSION_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
+CHAR_TRACE_HEADER = "=== CHAR TRACE ==="
+CHAR_FAILURE_CODES = {
+    "char_cli_invalid",
+    "char_identity_conflict",
+    "char_ts_execution_failed",
+    "char_observation_missing",
+    "char_processing_failed",
+    "char_persist_failed",
+    "char_interrupted",
+}
+
+
+def _find_repo_root(start: Path) -> Optional[Path]:
+    current = start.resolve()
+    for candidate in [current] + list(current.parents):
+        if (candidate / ".git").exists():
+            return candidate
+    return None
+
+
+def _repo_relative_posix(path: str) -> str:
+    repo_root = _find_repo_root(Path(__file__).resolve().parent)
+    if repo_root is None:
+        raise CharacterizationError("char_processing_failed", "unable to locate repository root for CHAR TRACE")
+    resolved = Path(path).resolve()
+    try:
+        relative = resolved.relative_to(repo_root)
+    except ValueError:
+        raise CharacterizationError("char_processing_failed", "committed artifact path is outside repository root")
+    return relative.as_posix()
+
+
+def _trace_context_from_args(args: argparse.Namespace, characterization_request: Optional[dict]) -> Dict[str, str]:
+    if characterization_request is not None:
+        return {
+            "type": str(characterization_request.get("type", "unknown")),
+            "version": str(characterization_request.get("version", "unknown")),
+            "session_id": str(characterization_request.get("session_id", "unknown")),
+            "run_index": str(characterization_request.get("run_index", "unknown")),
+        }
+
+    type_name = str(args.char_type) if getattr(args, "char_type", None) else "unknown"
+    version = str(args.char_version) if getattr(args, "char_version", None) else "unknown"
+    session_id = str(args.char_session_id) if getattr(args, "char_session_id", None) else "unknown"
+    run_index_raw = getattr(args, "char_run_index", None)
+    run_index = str(run_index_raw) if run_index_raw is not None else "unknown"
+    return {
+        "type": type_name,
+        "version": version,
+        "session_id": session_id,
+        "run_index": run_index,
+    }
+
+
+def _emit_char_trace_success(context: Dict[str, str], committed_artifact_path: str) -> None:
+    print(CHAR_TRACE_HEADER)
+    print(
+        "char_trace status=success type={type} version={version} session_id={session_id} run_index={run_index}".format(
+            type=context["type"],
+            version=context["version"],
+            session_id=context["session_id"],
+            run_index=context["run_index"],
+        )
+    )
+    print("char_trace artifact={}".format(_repo_relative_posix(committed_artifact_path)))
+
+
+def _emit_char_trace_failure(code: str, context: Dict[str, str]) -> None:
+    print(CHAR_TRACE_HEADER)
+    print(
+        "char_trace status=failure code={code} type={type} version={version} session_id={session_id} run_index={run_index}".format(
+            code=code,
+            type=context["type"],
+            version=context["version"],
+            session_id=context["session_id"],
+            run_index=context["run_index"],
+        )
+    )
+    print("char_trace artifact=none")
+
+
+def _extract_failure_code(message: str) -> str:
+    text = str(message)
+    head = text.split(":", 1)[0].strip()
+    if head in CHAR_FAILURE_CODES:
+        return head
+    return "char_processing_failed"
 
 
 def _ordered_idob_packet(packet: object) -> dict:
@@ -595,38 +683,71 @@ def main(
 if __name__ == "__main__":
     parser = build_arg_parser()
     args = parser.parse_args()
-
-    characterization_request = _resolve_characterization_request(args, parser)
-    enable_s2m_seed = not args.no_s2m_seed
-    show_category_observations = False if characterization_request is not None else (not args.no_category_observations)
-    source_runtime_flags = {
-        "execution_case": args.execution_case,
-        "enable_category_selection": bool(args.enable_category_selection),
-        "enable_s2m_seed": bool(enable_s2m_seed),
-        "show_category_observations": bool(show_category_observations),
-    }
-    selected_case = _resolve_execution_case(args.execution_case)
-    if "prior_context" in selected_case:
-        source_runtime_flags["prior_context"] = selected_case.get("prior_context")
+    characterization_request: Optional[dict] = None
+    char_trace_context = _trace_context_from_args(args, characterization_request)
+    char_args_supplied = any(
+        value is not None
+        for value in [
+            args.char_type,
+            args.char_session_id,
+            args.char_run_index,
+            args.char_version,
+            args.char_params_json,
+            args.char_params_file,
+        ]
+    )
+    should_emit_char_trace = bool(args.characterize or char_args_supplied)
     try:
-        simulation_result = main(
-            enable_s2m_seed=enable_s2m_seed,
-            show_category_observations=show_category_observations,
-            execution_case=args.execution_case,
-            enable_category_selection=args.enable_category_selection,
-        )
-    except Exception as exc:
-        if characterization_request is not None:
-            raise SystemExit(f"char_ts_execution_failed: {exc}")
-        raise
-    if characterization_request is not None:
+        characterization_request = _resolve_characterization_request(args, parser)
+        char_trace_context = _trace_context_from_args(args, characterization_request)
+        enable_s2m_seed = not args.no_s2m_seed
+        show_category_observations = False if characterization_request is not None else (not args.no_category_observations)
+        source_runtime_flags = {
+            "execution_case": args.execution_case,
+            "enable_category_selection": bool(args.enable_category_selection),
+            "enable_s2m_seed": bool(enable_s2m_seed),
+            "show_category_observations": bool(show_category_observations),
+        }
+        selected_case = _resolve_execution_case(args.execution_case)
+        if "prior_context" in selected_case:
+            source_runtime_flags["prior_context"] = selected_case.get("prior_context")
         try:
-            run_characterization_once(
+            simulation_result = main(
+                enable_s2m_seed=enable_s2m_seed,
+                show_category_observations=show_category_observations,
+                execution_case=args.execution_case,
+                enable_category_selection=args.enable_category_selection,
+            )
+        except Exception as exc:
+            if characterization_request is not None:
+                raise CharacterizationError("char_ts_execution_failed", str(exc))
+            raise
+        if characterization_request is not None:
+            characterization_result = run_characterization_once(
                 characterization_request=characterization_request,
                 simulation_result=simulation_result,
                 source_runtime_flags=source_runtime_flags,
             )
-        except CharacterizationError as exc:
-            raise SystemExit(f"{exc.code}: {exc.message}")
-        except Exception as exc:
-            raise SystemExit(f"char_processing_failed: {exc}")
+            persist_result = characterization_result.get("persistence", {})
+            committed_path = persist_result.get("committed_final_path")
+            if not committed_path:
+                raise CharacterizationError("char_persist_failed", "persistence succeeded without committed path")
+            _emit_char_trace_success(char_trace_context, str(committed_path))
+    except CharacterizationError as exc:
+        if should_emit_char_trace:
+            _emit_char_trace_failure(exc.code, char_trace_context)
+        raise SystemExit(f"{exc.code}: {exc.message}")
+    except SystemExit as exc:
+        message = str(exc)
+        failure_code = _extract_failure_code(message)
+        if should_emit_char_trace and failure_code in CHAR_FAILURE_CODES:
+            _emit_char_trace_failure(failure_code, char_trace_context)
+        raise
+    except KeyboardInterrupt:
+        if should_emit_char_trace:
+            _emit_char_trace_failure("char_interrupted", char_trace_context)
+        raise SystemExit("char_interrupted: interrupted")
+    except Exception as exc:
+        if should_emit_char_trace:
+            _emit_char_trace_failure("char_processing_failed", char_trace_context)
+        raise SystemExit(f"char_processing_failed: {exc}")
