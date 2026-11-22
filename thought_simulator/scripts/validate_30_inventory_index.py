@@ -10,7 +10,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TIER_DIR = ROOT / "30_verification"
+TIER_DIR = ROOT / "verification"
 INDEX_PATH = TIER_DIR / "30.01_verification_inventory_index.md"
 
 MODULE_DIR_PATTERN = re.compile(r"^30\.\d+_.+")
@@ -94,7 +94,7 @@ def main() -> int:
             )
         for name in sorted(indexed - on_disk):
             warnings.append(
-                f"30.01: table row '{name}' has no matching directory under 30_verification/"
+                f"30.01: table row '{name}' has no matching directory under verification/"
             )
 
     if warnings:

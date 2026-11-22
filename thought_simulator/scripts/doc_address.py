@@ -15,20 +15,20 @@ DOCUMENT_ID_RE = re.compile(
 )
 
 TIER_ROOTS = {
-    "00": "00_program_governance",
-    "10": "10_thought_simulator_req",
-    "20": "20_requirements",
-    "30": "30_verification",
-    "40": "40_thought_simulator_playground",
-    "50": "50_thought_simulator_design",
+    "00": "program_governance",
+    "10": "thought_simulator_req",
+    "20": "requirements_20",
+    "30": "verification",
+    "40": "thought_simulator_playground",
+    "50": "thought_simulator_design",
 }
 
 # Organizational folders — not module bands (00.00.42 addressing applies inside them, not to folder name).
 ORGANIZATIONAL_DIRS: dict[str, frozenset[str]] = {
-    "00_program_governance": frozenset(
+    "program_governance": frozenset(
         {"00_foundations", "00_identity", "10_architecture", "30_philosophical"}
     ),
-    "10_thought_simulator_req": frozenset(
+    "thought_simulator_req": frozenset(
         {
             "10_system_architecture",
             "50_design",
@@ -43,7 +43,7 @@ ORGANIZATIONAL_DIRS: dict[str, frozenset[str]] = {
             "adrs",
         }
     ),
-    "40_thought_simulator_playground": frozenset({"archive", "shared"}),
+    "thought_simulator_playground": frozenset({"archive", "shared"}),
 }
 
 # 10_thought_simulator_req subsystem → expected file band prefix (startswith).
@@ -68,9 +68,9 @@ FRONTMATTER_EXEMPT_SUFFIXES = (
 
 FRONTMATTER_EXEMPT_PREFIXES = (
     "20_requirements/20.190_",
-    "20_requirements/20.200_",
-    "20_requirements/20.500_",
-    "20_requirements/20.510_",
+    "requirements_20/20.200_",
+    "requirements_20/20.500_",
+    "requirements_20/20.510_",
 )
 
 ID_BAND_IN_TOKEN_RE = re.compile(
@@ -96,9 +96,9 @@ def is_normative_spec_path(rel_path: str) -> bool:
     """Normative docs where YAML frontmatter is expected (warning if absent)."""
     if is_frontmatter_exempt(rel_path):
         return False
-    if rel_path.startswith("20_requirements/") and FILE_ADDRESS_RE.match(rel_path.rsplit("/", 1)[-1]):
+    if rel_path.startswith("requirements_20/") and FILE_ADDRESS_RE.match(rel_path.rsplit("/", 1)[-1]):
         return True
-    if rel_path.startswith("50_thought_simulator_design/"):
+    if rel_path.startswith("thought_simulator_design/"):
         name = rel_path.rsplit("/", 1)[-1]
         match = FILE_ADDRESS_RE.match(name)
         if match and not match.group(1).startswith("50.0") and int(match.group(1).split(".")[1]) >= 10:
@@ -113,7 +113,7 @@ def is_normative_spec_path(rel_path: str) -> bool:
                     return False
         if match:
             return True
-    if rel_path.startswith("30_verification/"):
+    if rel_path.startswith("verification/"):
         parts = rel_path.split("/")
         if len(parts) >= 2:
             module_match = MODULE_DIR_RE.match(parts[1])
@@ -128,17 +128,17 @@ def is_normative_spec_path(rel_path: str) -> bool:
 
 def canonical_address_from_path(rel_path: str) -> str | None:
     """Return dotted canonical address for alignment checks (warnings only)."""
-    if rel_path.startswith("40_thought_simulator_playground/"):
+    if rel_path.startswith("thought_simulator_playground/"):
         return _address_40_subdirectory(rel_path)
-    if rel_path.startswith("00_program_governance/"):
+    if rel_path.startswith("program_governance/"):
         return _address_from_filename(rel_path.rsplit("/", 1)[-1])
-    if rel_path.startswith("10_thought_simulator_req/50_design/"):
+    if rel_path.startswith("thought_simulator_req/50_design/"):
         return _address_from_filename(rel_path.rsplit("/", 1)[-1])
-    if rel_path.startswith("20_requirements/"):
+    if rel_path.startswith("requirements_20/"):
         return _address_from_filename(rel_path.rsplit("/", 1)[-1])
-    if rel_path.startswith("50_thought_simulator_design/"):
+    if rel_path.startswith("thought_simulator_design/"):
         return _address_from_filename(rel_path.rsplit("/", 1)[-1])
-    if rel_path.startswith("30_verification/"):
+    if rel_path.startswith("verification/"):
         return _address_30(rel_path)
     return None
 
@@ -149,7 +149,7 @@ def _address_40_subdirectory(rel_path: str) -> str | None:
     if len(parts) < 2:
         return None
     for part in parts[1:]:
-        if part in ORGANIZATIONAL_DIRS.get("40_thought_simulator_playground", frozenset()):
+        if part in ORGANIZATIONAL_DIRS.get("thought_simulator_playground", frozenset()):
             continue
         match = MODULE_DIR_RE.match(part)
         if match and match.group(1).startswith("40."):
@@ -218,12 +218,12 @@ def address_bands_related(canonical: str, band: str) -> bool:
 
 
 def is_tier40_path(rel_path: str) -> bool:
-    return rel_path.startswith("40_thought_simulator_playground/")
+    return rel_path.startswith("thought_simulator_playground/")
 
 
 def is_alignment_only_path(rel_path: str) -> bool:
     """Paths where only path/Document-ID alignment applies (not strict inline ID shape)."""
-    return is_tier40_path(rel_path) or rel_path.startswith("00_program_governance/")
+    return is_tier40_path(rel_path) or rel_path.startswith("program_governance/")
 
 
 def id_token_band(token: str) -> str | None:
@@ -245,14 +245,14 @@ def id_band_aligns_with_address(token: str, canonical: str | None) -> bool:
 
 
 def expected_id_families(rel_path: str) -> frozenset[str]:
-    if rel_path.startswith("20_requirements/"):
+    if rel_path.startswith("requirements_20/"):
         return frozenset({"HLR-20"})
-    if rel_path.startswith("10_thought_simulator_req/50_design/"):
+    if rel_path.startswith("thought_simulator_req/50_design/"):
         return frozenset({"HLR-10.50"})
-    if rel_path.startswith("30_verification/"):
+    if rel_path.startswith("verification/"):
         return frozenset({"LLR-30"})
-    if rel_path.startswith("50_thought_simulator_design/"):
+    if rel_path.startswith("thought_simulator_design/"):
         return frozenset({"LLR-50", "HLR-10.50", "HLR-20"})
-    if rel_path.startswith("40_thought_simulator_playground/"):
+    if rel_path.startswith("thought_simulator_playground/"):
         return frozenset()
     return frozenset()

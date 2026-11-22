@@ -42,9 +42,9 @@ SCAN_EXTENSIONS = {".md", ".py", ".json"}
 IGNORE_FILES = frozenset({"rename_request.template.json"})
 
 MANDATORY_INVENTORY_PATHS = [
-    "30_verification/30.01_verification_inventory_index.md",
-    "50_thought_simulator_design/50.00_design_traceability_index.md",
-    "40_thought_simulator_playground/40.510_refactor.md",
+    "verification/30.01_verification_inventory_index.md",
+    "thought_simulator_design/50.00_design_traceability_index.md",
+    "thought_simulator_playground/40.510_refactor.md",
     "CONTRIBUTING_CHANGE_WORKFLOW.md",
 ]
 

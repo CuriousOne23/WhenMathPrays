@@ -19,8 +19,8 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
-GLOSSARY_PATH = ROOT / "50_thought_simulator_design" / "50.01_50_series_glossary.md"
-REGISTRY_PATH = ROOT / "50_thought_simulator_design" / "glossary_term_registry.json"
+GLOSSARY_PATH = ROOT / "thought_simulator_design" / "50.01_50_series_glossary.md"
+REGISTRY_PATH = ROOT / "thought_simulator_design" / "glossary_term_registry.json"
 IGNORED_TERMS = {
     "last updated",
     "version",
@@ -83,7 +83,7 @@ def _scan_50_design_candidates() -> set[str]:
     This is advisory only (warnings) to surface potential new terms introduced when .md files are added or modified.
     The team decides whether to promote a candidate into the glossary."""
     candidates: set[str] = set()
-    design_dir = ROOT / "50_thought_simulator_design"
+    design_dir = ROOT / "thought_simulator_design"
     if not design_dir.exists():
         return candidates
     for md_file in design_dir.rglob("*.md"):
@@ -118,14 +118,14 @@ def main() -> int:
     warnings: list[str] = []
 
     for group_name, required_terms in required_by_module.items():
-        group_path = ROOT / "50_thought_simulator_design" / group_name
+        group_path = ROOT / "thought_simulator_design" / group_name
         if not group_path.exists():
             continue
 
         for term in required_terms:
             if term not in glossary_terms:
                 warnings.append(
-                    f"50_thought_simulator_design/{group_name}: glossary term '{term}' missing in 50.01_50_series_glossary.md"
+                    f"thought_simulator_design/{group_name}: glossary term '{term}' missing in 50.01_50_series_glossary.md"
                 )
 
     expected = _expected_terms(required_by_module, protected_terms)
@@ -133,13 +133,13 @@ def main() -> int:
     missing_global = sorted(expected - glossary_terms)
     for term in missing_global:
         warnings.append(
-            f"50_thought_simulator_design/50.01_50_series_glossary.md: required term '{term}' is missing"
+            f"thought_simulator_design/50.01_50_series_glossary.md: required term '{term}' is missing"
         )
 
     extra_global = sorted(glossary_terms - expected)
     for term in extra_global:
         warnings.append(
-            f"50_thought_simulator_design/50.01_50_series_glossary.md: term '{term}' is not required by glossary_term_registry.json"
+            f"thought_simulator_design/50.01_50_series_glossary.md: term '{term}' is not required by glossary_term_registry.json"
         )
 
     if warnings:
