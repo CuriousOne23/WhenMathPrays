@@ -15,7 +15,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 GLOSSARY_PATH = ROOT / "20_requirements" / "20.190_glossary.md"
-REGISTRY_PATH = ROOT / "20_requirements" / "glossary_term_registry.json"
+REGISTRY_PATH = ROOT / "requirements_20" / "glossary_term_registry.json"
 IGNORED_TERMS = {
     "last updated",
     "version",
@@ -159,14 +159,14 @@ def main() -> int:
     warnings: list[str] = []
 
     for group_name, required_terms in required_by_module.items():
-        group_path = ROOT / "20_requirements" / group_name
+        group_path = ROOT / "requirements_20" / group_name
         if not group_path.exists():
             continue
 
         for term in required_terms:
             if not _registry_term_present(term, glossary_terms):
                 warnings.append(
-                    f"20_requirements/{group_name}: glossary term '{term}' missing in 20.190_glossary.md"
+                    f"requirements_20/{group_name}: glossary term '{term}' missing in 20.190_glossary.md"
                 )
 
     expected = _expected_terms(required_by_module, protected_terms)

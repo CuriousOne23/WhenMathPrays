@@ -19,11 +19,11 @@ class Rule:
 
 RULES: tuple[Rule, ...] = (
     Rule(
-        scope_prefix="50_thought_simulator_design/",
-        forbidden_tokens=("40_thought_simulator_playground/",),
+        scope_prefix="thought_simulator_design/",
+        forbidden_tokens=("thought_simulator_playground/",),
         reason="Design docs must not reference playground paths.",
         exempt_paths=(
-            "50_thought_simulator_design/50.05_software_spec_construction_guide.md",
+            "thought_simulator_design/50.05_software_spec_construction_guide.md",
         ),
     ),
 )

@@ -19,9 +19,9 @@ import re
 
 
 TARGET_TIERS = (
-    "20_requirements/",
-    "30_verification/",
-    "50_thought_simulator_design/",
+    "requirements_20/",
+    "verification/",
+    "thought_simulator_design/",
 )
 
 RELATION_KEYS = ("satisfies", "proves", "derived-from", "supersedes")

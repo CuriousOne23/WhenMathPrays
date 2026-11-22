@@ -13,7 +13,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DESIGN_DIR = ROOT / "50_thought_simulator_design"
+DESIGN_DIR = ROOT / "thought_simulator_design"
 INDEX_PATH = DESIGN_DIR / "50.00_design_traceability_index.md"
 INDEX_NAME = "50.00_design_traceability_index.md"
 LEVEL2_PATTERN = re.compile(r"^50\.\d+\.\d+_.*\.md$")
@@ -56,7 +56,7 @@ def main() -> int:
 
     if not INDEX_PATH.is_file():
         warnings.append(
-            "missing required index file thought_simulator/50_thought_simulator_design/"
+            "missing required index file thought_simulator/thought_simulator_design/"
             "50.00_design_traceability_index.md"
         )
         _emit(warnings)

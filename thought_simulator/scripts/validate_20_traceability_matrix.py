@@ -17,7 +17,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-REQ_DIR = ROOT / "20_requirements"
+REQ_DIR = ROOT / "requirements_20"
 MATRIX_PATH = REQ_DIR / "20.200_traceability_matrix.md"
 
 REQ_DOC_RE = re.compile(r"^20\.(\d+)_.*\.md$")
@@ -72,7 +72,7 @@ def _resolve_anchor(anchor: str) -> Path:
 
 def main() -> int:
     if not MATRIX_PATH.exists():
-        print("ERROR: missing required matrix file thought_simulator/20_requirements/20.200_traceability_matrix.md")
+        print("ERROR: missing required matrix file thought_simulator/requirements_20/20.200_traceability_matrix.md")
         return 1
 
     parse_errors, rows = _parse_matrix_rows(MATRIX_PATH.read_text(encoding="utf-8"))

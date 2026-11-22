@@ -14,8 +14,8 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
-GLOSSARY_PATH = ROOT / "30_verification" / "30.30_verification_glossary.md"
-REGISTRY_PATH = ROOT / "30_verification" / "glossary_term_registry.json"
+GLOSSARY_PATH = ROOT / "verification" / "30.30_verification_glossary.md"
+REGISTRY_PATH = ROOT / "verification" / "glossary_term_registry.json"
 
 
 def _extract_glossary_terms(glossary_text: str) -> set[str]:
@@ -76,14 +76,14 @@ def main() -> int:
     warnings: list[str] = []
 
     for module_dir, required_terms in required_by_module.items():
-        module_path = ROOT / "30_verification" / module_dir
+        module_path = ROOT / "verification" / module_dir
         if not module_path.exists():
             continue
 
         for term in required_terms:
             if term not in glossary_terms:
                 warnings.append(
-                    f"30_verification/{module_dir}: glossary term '{term}' missing in 30.30_verification_glossary.md"
+                    f"verification/{module_dir}: glossary term '{term}' missing in 30.30_verification_glossary.md"
                 )
 
     expected = _expected_terms(required_by_module, protected_terms)
@@ -91,13 +91,13 @@ def main() -> int:
     missing_global = sorted(expected - glossary_terms)
     for term in missing_global:
         warnings.append(
-            f"30_verification/30.30_verification_glossary.md: required term '{term}' is missing"
+            f"verification/30.30_verification_glossary.md: required term '{term}' is missing"
         )
 
     extra_global = sorted(glossary_terms - expected)
     for term in extra_global:
         warnings.append(
-            f"30_verification/30.30_verification_glossary.md: term '{term}' is not required by glossary_term_registry.json"
+            f"verification/30.30_verification_glossary.md: term '{term}' is not required by glossary_term_registry.json"
         )
 
     if warnings:
