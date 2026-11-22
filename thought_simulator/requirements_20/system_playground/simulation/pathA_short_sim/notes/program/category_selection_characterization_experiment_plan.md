@@ -87,13 +87,13 @@ For each experiment:
 
 ## 7) Campaign-level queue / roadmap (provisional beyond Experiment 1)
 
-- **Experiment 1 (fully specified):** smallest no-cue/baseline characterization.
-- **Experiment 2 (provisional):** sentence-internal cue case(s) with controlled comparison to baseline.
+- **Experiment 1 (accepted):** smallest no-cue/baseline characterization (completed and accepted at review gate).
+- **Experiment 2 (fully specified):** smallest sentence-internal-cue comparison against Experiment 1 baseline.
 - **Experiment 3 (provisional):** prior-context cue case(s) with provenance-focused comparison.
 - **Experiment 4 (provisional):** ambiguity/competing-evidence cases from research-plan families.
 - **Experiment 5 (provisional):** boundary/weak-evidence probes (only after prior review decisions).
 
-Only Experiment 1 is execution-authorized by this plan text. Later experiments require post-experiment review decisions and may be changed, deferred, replaced, or canceled.
+Only one experiment is execution-authorized at a time by explicit review-gate approval. Provisional roadmap items may be changed, deferred, replaced, or canceled after each review.
 
 ## 8) Standardized per-experiment specification template
 
@@ -214,3 +214,76 @@ python run_examples.py --execution-case sky_blue --enable-category-selection --n
 ### 13.6 Mandatory stop
 
 After Experiment 1 record is prepared, stop and wait for explicit reviewer authorization before running any additional experiment.
+
+## 14) Experiment review ledger
+
+- **EXP1 status:** executed and accepted at review gate.
+- **Accepted evidence summary:** one successful characterized baseline run (`exp1_baseline`, run 1) with committed artifact and expected no-cue baseline fields.
+- **Gate decision for next step:** proceed to design/execute EXP2 only under explicit authorization.
+
+## 15) Experiment 2 — fully specified (smallest useful sentence-internal-cue comparison)
+
+### 15.1 Objective
+
+Produce the smallest sentence-internal-cue characterization record that can be compared to EXP1 baseline while preserving identical TS-affecting controls where applicable.
+
+### 15.2 Capability boundary used
+
+Current `run_examples.py` characterization CLI exposes `--execution-case sky_blue` only. Therefore sentence-internal-cue comparison for `"Where is the book?"` is executed through currently implemented in-process APIs (no simulator behavior edits):
+
+- `run_pathA_short(...)` for selected sentence execution,
+- `run_examples.run_characterization_once(...)` for `infra_smoke` evidence capture/persistence.
+
+### 15.3 Cases and controls
+
+- Baseline reference: EXP1 artifact (`exp1_baseline`, run 1).
+- Sentence-under-test: `"Where is the book?"` (sentence-internal cue path).
+- TS-affecting controls for EXP2 execution:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+  - `prior_context=None`
+- Characterization controls:
+  - type/version: `infra_smoke` / `1.0`
+  - identity: `session_id=exp2_sentence_internal`, `run_index=1`
+
+### 15.4 Command (implementation-aligned in-process execution)
+
+Run in repository environment:
+
+```
+python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('Where is the book?', enable_s2m_seed=False, enable_category_selection=True, prior_context=None); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp2_sentence_internal','run_index':1,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'sentence_internal_where_book','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':None}); print(result['persistence']['committed_final_path'])"
+```
+
+### 15.5 Required evidence to capture
+
+- exact command used;
+- exit code;
+- committed artifact path for `exp2_sentence_internal` run 1;
+- artifact identity/type/version/schema/execution status;
+- runtime-provided observations (including `final_tp.semantic.isc_category_result`);
+- unavailable observations (`entropy`, `top_vs_second_margin`);
+- bounded comparison notes versus EXP1 baseline artifact (fact-level differences only).
+
+### 15.6 Planned baseline comparison focus (bounded)
+
+Compare EXP2 artifact against EXP1 on:
+
+- presence/shape of runtime and unavailable provenance sections;
+- `final_tp.semantic.isc_category_result` cue/result fields;
+- trace primitive sequence presence.
+
+Do not infer threshold/policy conclusions from this single comparison.
+
+### 15.7 Stop/escalation triggers (EXP2-specific)
+
+Stop and escalate if:
+
+- in-process execution cannot persist a valid artifact for the requested identity;
+- produced artifact identity/path does not match requested `(session_id, run_index)`;
+- expected runtime-provided observation fields are missing;
+- unavailable observations are fabricated rather than marked unavailable;
+- behavior suggests more than one TS execution for one characterization invocation.
+
+### 15.8 Mandatory stop
+
+After EXP2 execution record is prepared, stop at review gate and wait for explicit authorization before any EXP3 work.
