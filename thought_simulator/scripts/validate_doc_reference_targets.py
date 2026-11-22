@@ -18,12 +18,12 @@ import unicodedata
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = ROOT / "scripts"
 SCOPES = (
-    "00_program_governance",
-    "10_thought_simulator_req",
-    "20_requirements",
-    "30_verification",
-    "40_thought_simulator_playground",
-    "50_thought_simulator_design",
+    "program_governance",
+    "thought_simulator_req",
+    "requirements_20",
+    "verification",
+    "thought_simulator_playground",
+    "thought_simulator_design",
 )
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "file://")
 ALLOWED_EXTENSIONS = ("md", "json", "yaml", "yml", "py", "csv", "txt", "npz")
@@ -109,7 +109,7 @@ def _candidate_to_path(referrer: Path, token: str, basename_index: dict[str, lis
     if design_50 is not None:
         return design_50
 
-    if normalized.startswith("10_thought_simulator_req/"):
+    if normalized.startswith("thought_simulator_req/"):
         candidate = ROOT / normalized
         if candidate.exists():
             return candidate
@@ -196,14 +196,14 @@ def _resolve_repo_root_path(token: str) -> Path | None:
 
 def _resolve_50_inventory_path(token: str) -> Path | None:
     if re.match(r"^50\.\d+_.+\.md$", token):
-        candidate = ROOT / "50_thought_simulator_design" / token
+        candidate = ROOT / "thought_simulator_design" / token
         if candidate.exists():
             return candidate
     return None
 
 
 def _is_governance_hypothetical(referrer_rel: str, token: str) -> bool:
-    if not referrer_rel.startswith("00_program_governance/"):
+    if not referrer_rel.startswith("program_governance/"):
         return False
     if _looks_like_template(token):
         return True
@@ -218,20 +218,20 @@ def _is_governance_hypothetical(referrer_rel: str, token: str) -> bool:
 
 def _resolve_module_inventory_path(token: str) -> Path | None:
     if re.match(r"^30\.\d", token):
-        candidate = ROOT / "30_verification" / token
+        candidate = ROOT / "verification" / token
         if candidate.exists():
             return candidate
     if re.match(r"^40\.\d", token):
-        candidate = ROOT / "40_thought_simulator_playground" / token
+        candidate = ROOT / "thought_simulator_playground" / token
         if candidate.exists():
             return candidate
     if token == "glossary_term_registry.json":
-        candidate = ROOT / "30_verification" / token
+        candidate = ROOT / "verification" / token
         if candidate.exists():
             return candidate
     if token.startswith("archive/"):
         for prefix in (
-            ROOT / "40_thought_simulator_playground",
+            ROOT / "thought_simulator_playground",
             ROOT,
         ):
             candidate = prefix / token
@@ -310,7 +310,7 @@ def main() -> int:
                     continue
                 if normalized and _is_governance_hypothetical(rel_path, normalized):
                     continue
-                if rel_path.startswith("20_requirements/archive/"):
+                if rel_path.startswith("requirements_20/archive/"):
                     continue
                 if normalized and not _has_allowed_extension(normalized):
                     continue

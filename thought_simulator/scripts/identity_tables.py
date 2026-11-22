@@ -11,17 +11,17 @@ from typing import Any
 
 SCHEMA_VERSION = "identity_name_table_v1"
 ROOT = Path(__file__).resolve().parents[1]
-IDENTITY_DIR = ROOT / "00_program_governance" / "00_identity"
+IDENTITY_DIR = ROOT / "program_governance" / "00_identity"
 
 TABLE_40 = IDENTITY_DIR / "40_name_table.json"
 TABLE_10_50 = IDENTITY_DIR / "10.50_name_table.json"
 TABLE_30 = IDENTITY_DIR / "30_name_table.json"
 TABLE_50 = IDENTITY_DIR / "50_name_table.json"
 
-TIER_40_BASE = "40_thought_simulator_playground"
-TIER_10_50_BASE = "10_thought_simulator_req/50_design"
-TIER_30_BASE = "30_verification"
-TIER_50_BASE = "50_thought_simulator_design"
+TIER_40_BASE = "thought_simulator_playground"
+TIER_10_50_BASE = "thought_simulator_req/50_design"
+TIER_30_BASE = "verification"
+TIER_50_BASE = "thought_simulator_design"
 
 GOVERNANCE_BAND_50 = frozenset(range(0, 10))  # 50.00–50.270
 

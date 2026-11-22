@@ -28,12 +28,12 @@ from doc_address import (
 
 
 TARGET_TIERS = (
-    "00_program_governance/",
-    "10_thought_simulator_req/50_design/",
-    "20_requirements/",
-    "30_verification/",
-    "40_thought_simulator_playground/",
-    "50_thought_simulator_design/",
+    "program_governance/",
+    "thought_simulator_req/50_design/",
+    "requirements_20/",
+    "verification/",
+    "thought_simulator_playground/",
+    "thought_simulator_design/",
 )
 
 ALLOWED_STATUS = {

@@ -29,7 +29,7 @@ def main() -> int:
         return 0
 
     write_bootstrap_tables()
-    print("Wrote name tables to 00_program_governance/00_identity/")
+    print("Wrote name tables to program_governance/00_identity/")
     return 0
 
 

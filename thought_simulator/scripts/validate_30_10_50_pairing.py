@@ -14,9 +14,9 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TIER_DIR = ROOT / "30_verification"
+TIER_DIR = ROOT / "verification"
 INDEX_PATH = TIER_DIR / "30.01_verification_inventory_index.md"
-TEN_FIFTY_DIR = ROOT / "10_thought_simulator_req" / "50_design"
+TEN_FIFTY_DIR = ROOT / "thought_simulator_req" / "50_design"
 
 PAIRING_STATUSES = frozenset({"promoted", "approved"})
 MODULE_NUM_PATTERN = re.compile(r"^30\.(\d+)_")
@@ -98,7 +98,7 @@ def main() -> int:
                 expected = f"10.50.{band}_*.md"
                 warnings.append(
                     f"30/10.50 pairing: '{module_name}' (status={status}) has no peer "
-                    f"under 10_thought_simulator_req/50_design/ matching '{expected}'"
+                    f"under thought_simulator_req/50_design/ matching '{expected}'"
                 )
 
     if warnings:

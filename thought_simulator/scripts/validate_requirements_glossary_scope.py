@@ -12,18 +12,18 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 SCOPES = (
-    "00_program_governance",
-    "10_thought_simulator_req",
-    "30_verification",
-    "40_thought_simulator_playground",
-    "50_thought_simulator_design",
+    "program_governance",
+    "thought_simulator_req",
+    "verification",
+    "thought_simulator_playground",
+    "thought_simulator_design",
 )
 
 # Tier guides may cite the authoritative 20.190 glossary as primitive SSOT.
 GLOSSARY_REFERENCE_ALLOWLIST = {
-    "40_thought_simulator_playground/40.05_master_program_guide.md",
-    "40_thought_simulator_playground/40.510_refactor.md",
-    "40_thought_simulator_playground/README.md",
+    "thought_simulator_playground/40.05_master_program_guide.md",
+    "thought_simulator_playground/40.510_refactor.md",
+    "thought_simulator_playground/README.md",
 }
 
 PATTERNS = (
