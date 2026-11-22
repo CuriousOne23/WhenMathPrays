@@ -21,7 +21,7 @@ CIE in this bench:
 Program: `run_05_modulate.py` + `modulate.py`
 Table: `cie.examples.yaml`
 
-    M' = clip_[0,1](M + alpha * I)
+    M' = clip_{[0,1]}(M + alpha * I)
 
 Clip is on by default (`clip_to_unit=True`). Neutral envelope has alpha = 0, so M' = M.
 

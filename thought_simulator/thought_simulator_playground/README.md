@@ -172,7 +172,8 @@ Why the exception exists:
 ### External vocabulary
 
 - [../verification/30.30_verification_glossary.md](../verification/30.30_verification_glossary.md) — verification terms
-- [../requirements_20/20.190_glossary.md](../requirements_20/20.190_glossary.md) — primitive intent catalog
+- [../requirements_20/20.700_master_glossary.md](../requirements_20/20.700_master_glossary.md) — live glossary authority (20.700 series)
+- [../requirements_20/archive/20.190_glossary.md](../requirements_20/archive/20.190_glossary.md) — archived primitive intent catalog (20.190; not live authority)
 
 ## Directory index (coverage-aligned)
 

@@ -47,8 +47,8 @@ These documents explain **how the theories become a working machine**.
 
 | File | Summary |
 |------|---------|
-| [tp_architecture.md](tp_architecture.md) | The architectural bridge between theory and primitives; explains TP layers, commit boundaries, identity/continuity propagation, SSR freeze |
-| [tp_architecture_appendix.md](tp_architecture_appendix.md) | Diagrams, lineage maps, commit maps, and mermaid flows that visualize the TP architecture |
+| [tp_architecture.md](../ts_patha_architecture/tp_architecture.md) | The architectural bridge between theory and primitives; explains TP layers, commit boundaries, identity/continuity propagation, SSR freeze |
+| [tp_architecture_appendix.md](../ts_patha_architecture/tp_architecture_appendix.md) | Diagrams, lineage maps, commit maps, and mermaid flows that visualize the TP architecture |
 
 These should be read **after** the core theories and **before** the primitives.
 
@@ -61,15 +61,15 @@ Each primitive isolates one conceptual responsibility.
 
 | File | Summary |
 |------|---------|
-| [tp_state.md](tp_state.md) | Defines the TS notion of state; the foundation for all transitions |
-| [tp_description.md](tp_description.md)| Describes how states and meaning are represented and transformed through the TP |
-| [tp_context_layer.md](tp_context_layer.md)| Defines the context layer and how context shapes meaning and identity |
-| [tp_identity_basin.md](tp_identity_basin.md)| Introduces identity basins — attractor regions that stabilize identity |
-| [tp_commit.md](tp_commit.md)| Defines commit semantics — how meaning becomes fixed, replay‑safe, and immutable |
-| [tp_coordination.md](tp_coordination.md)| Explains multi-agent coordination and alignment across identity/meaning spaces |
-| [tp_routing.md](tp_routing.md)| Defines routing — how meaning moves through the TP deterministically |
-| [tp_routing_matrix.md](tp_routing_matrix.md)| The formal routing topology; reference document for routing decisions |
-| [tp_path_a_map.md](tp_path_a_map.md)| A map of Path‑A (meaning construction) showing how primitives compose into a deterministic pipeline |
+| [tp_state.md](../ts_patha_architecture/tp_state.md) | Defines the TS notion of state; the foundation for all transitions |
+| [tp_description2.md](../ts_patha_architecture/tp_description2.md)| Describes how states and meaning are represented and transformed through the TP |
+| [tp_context_layer.md](../ts_patha_architecture/tp_context_layer.md)| Defines the context layer and how context shapes meaning and identity |
+| [tp_identity_basin.md](../ts_patha_architecture/tp_identity_basin.md)| Introduces identity basins — attractor regions that stabilize identity |
+| [tp_commit.md](../ts_patha_architecture/tp_commit.md)| Defines commit semantics — how meaning becomes fixed, replay‑safe, and immutable |
+| [tp_coordination.md](../ts_patha_architecture/tp_coordination.md)| Explains multi-agent coordination and alignment across identity/meaning spaces |
+| [tp_routing.md](../ts_patha_architecture/tp_routing.md)| Defines routing — how meaning moves through the TP deterministically |
+| [tp_routing_matrix.md](../ts_patha_architecture/tp_routing_matrix.md)| The formal routing topology; reference document for routing decisions |
+| [tp_path_a_map.md](../ts_patha_architecture/tp_path_a_map.md)| A map of Path‑A (meaning construction) showing how primitives compose into a deterministic pipeline |
 
 These documents are the **operational vocabulary** of TS.
 
@@ -101,23 +101,23 @@ These three papers define the *what* and *why* of TS.
 ---
 
 ## **Phase 2 — Architecture (The Bridge)**  
-4. [tp_architecture.md](tp_architecture.md)  
-5. [tp_architecture_appendix.md](tp_architecture_appendix.md)
+4. [tp_architecture.md](../ts_patha_architecture/tp_architecture.md)  
+5. [tp_architecture_appendix.md](../ts_patha_architecture/tp_architecture_appendix.md)
 
 These explain *how* the theories become a working cognitive pipeline.
 
 ---
 
 ## **Phase 3 — Primitives (The Machinery)**  
-6. [tp_state.md](tp_state.md)  
-7. [tp_description.md](tp_description.md)  
-8. [tp_context_layer.md](tp_context_layer.md)  
-9. [tp_identity_basin.md](tp_identity_basin.md)  
-10. [tp_commit.md](tp_commit.md)  
-11. [tp_coordination.md](tp_coordination.md)  
-12. [tp_routing.md](tp_routing.md)  
-13. [tp_routing_matrix.md](tp_routing_matrix.md) 
-14. [tp_path_a_map.md](tp_path_a_map.md)
+6. [tp_state.md](../ts_patha_architecture/tp_state.md)  
+7. [tp_description2.md](../ts_patha_architecture/tp_description2.md)  
+8. [tp_context_layer.md](../ts_patha_architecture/tp_context_layer.md)  
+9. [tp_identity_basin.md](../ts_patha_architecture/tp_identity_basin.md)  
+10. [tp_commit.md](../ts_patha_architecture/tp_commit.md)  
+11. [tp_coordination.md](../ts_patha_architecture/tp_coordination.md)  
+12. [tp_routing.md](../ts_patha_architecture/tp_routing.md)  
+13. [tp_routing_matrix.md](../ts_patha_architecture/tp_routing_matrix.md) 
+14. [tp_path_a_map.md](../ts_patha_architecture/tp_path_a_map.md)
 
 These documents show how TS actually works internally.
 
