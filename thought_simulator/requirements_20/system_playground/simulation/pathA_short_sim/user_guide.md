@@ -54,6 +54,103 @@ python pathA_dbug.py run.log --base-dir .
 
 That writes `debug_out.md`.
 
+### Characterization (Milestone 1 operator guidance)
+
+Characterization observes a normal selected TS execution. It does not create an alternate category-selection or S2M path, and it does not own TS input/case or TS-affecting controls. One characterization invocation performs one TS execution.
+
+Milestone-1 characterization type:
+
+- `infra_smoke`: infrastructure/sanity characterization that proves the characterization pipeline can observe and preserve evidence. It is not itself a substantive category-selection experiment or scientific conclusion.
+
+**Invocation controls (implemented)**
+
+Execution controls used together with characterization:
+
+- `--execution-case`
+- `--enable-category-selection`
+- `--no-s2m-seed`
+- `--no-category-observations`
+
+Characterization controls:
+
+- `--characterize`
+- `--char-type`
+- `--char-session-id`
+- `--char-run-index`
+- `--char-version`
+- `--char-params-json`
+- `--char-params-file`
+
+Example (`sky_blue`, redirecting stdout to `run.log`):
+
+```
+python run_examples.py --execution-case sky_blue --enable-category-selection --no-category-observations --no-s2m-seed --characterize --char-type infra_smoke --char-session-id demo_m1 --char-run-index 1 > run.log
+```
+
+`session_id` groups related characterization runs. `run_index` identifies/orders a run within the session. Canonical identity is `(session_id, run_index)`. Reusing an identity that already has successful evidence is rejected; successful evidence is not silently overwritten.
+
+**Generated evidence**
+
+Successful characterization writes machine-readable evidence under:
+
+```
+local_characterization/
+  sessions/
+    <session_id>/
+      runs/
+        <run_index>__<type>__<version>.tschar.json
+```
+
+Run index is zero-padded in filenames for readability. Valid `.tschar.json` is success-only evidence. Failed characterization does not produce a normal success artifact. Measurements unavailable under the current contract are recorded as `unavailable` rather than fabricated.
+
+**Local-only / Git-ignore boundary**
+
+Generated characterization output is intentionally local and excluded from commits:
+
+- generated contents under `local_characterization/` are local-only/ignored;
+- generated session/run directories are local-only/ignored;
+- generated `*.tschar.json` evidence is ignored;
+- characterization temporary persistence files under local characterization (for example `.tmp__char__*`) are local-only/ignored;
+- `local_characterization/.gitignore` is intentionally committed to define the local-output boundary;
+- repository `.gitignore` also defends characterization artifact classes (including `*.tschar.json`).
+
+Do not move generated evidence into tracked repository locations just to preserve it. If long-term archival is needed, use an explicitly approved archival policy.
+
+**run.log, CHAR TRACE, and debug output**
+
+With characterization enabled, redirected `run.log` still contains normal TS output and one final `=== CHAR TRACE ===` block.
+
+- Success CHAR TRACE identifies type/version/session/run and points to the actual committed `.tschar.json`.
+- Handled failure reports failure status/code and `artifact=none` when no valid artifact was committed.
+- Raw argparse rejection may occur before CHAR TRACE handling (normal argparse error without CHAR TRACE).
+
+Debugger workflow remains:
+
+`run_examples.py -> run.log -> pathA_dbug.py -> debug_out.md`
+
+`pathA_dbug.py` interprets `run.log`; it does not interpret `.tschar.json`. `debug_out.md` remains debugger-oriented TS output, while `.tschar.json` remains characterization evidence.
+
+**Evidence interpretation and routing**
+
+Characterization evidence provenance values:
+
+- `runtime_provided`: observed from TS runtime/result.
+- `unavailable`: recognized measurement not available in the current contract; not fabricated.
+- Future `characterization_derived` measurements (when added) must remain explicitly distinguishable.
+
+For Milestone-1 `infra_smoke`, entropy and top-vs-second margin are currently unavailable. `unavailable` does not mean zero, false, absent significance, or failed category selection.
+
+Evidence and findings routing:
+
+- Raw machine-readable run evidence: local `.tschar.json`
+- Empirical category-selection findings: [notes/program/category_selection_observation.md](notes/program/category_selection_observation.md)
+- New research questions: [notes/program/category_selection_research_plan.md](notes/program/category_selection_research_plan.md)
+- Characterization method/verification contract lessons: [notes/program/category_selection_characterization_reference.md](notes/program/category_selection_characterization_reference.md)
+- Milestone-1 implementation/verification closeout: [notes/program/category_selection_characterization_milestone1_closeout.md](notes/program/category_selection_characterization_milestone1_closeout.md)
+- Navigation/context routing: [notes/program/category_selection_index.md](notes/program/category_selection_index.md)
+
+Milestone-1 infrastructure success does not establish no-category policy, thresholds (including entropy/margin), hysteresis, persistence policy, unsupported/inadequate-inventory policy, support-boundary conclusions, or empirical category-selection conclusions.
+
 Supported sentences: [notes/pathA_supported_sentences.md](notes/pathA_supported_sentences.md).
 
 ---
