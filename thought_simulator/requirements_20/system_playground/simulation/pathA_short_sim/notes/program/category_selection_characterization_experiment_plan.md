@@ -89,9 +89,9 @@ For each experiment:
 
 - **Experiment 1 (accepted):** smallest no-cue/baseline characterization (completed and accepted at review gate).
 - **Experiment 2 (accepted):** smallest sentence-internal-cue comparison against Experiment 1 baseline (completed and accepted at review gate).
-- **Experiment 3 (fully specified):** smallest prior-context cue/provenance comparison against accepted EXP1/EXP2 references.
-- **Experiment 4 (proposed boundary family):** EXP4A–EXP4D initial boundary-characterization set (proposal/review only; not execution-authorized by default).
-- **Experiment 5 (provisional):** interior characterization families (ambiguity/competition/weakening trajectories) after boundary-family review.
+- **Experiment 3 (accepted):** smallest prior-context cue/provenance comparison against accepted EXP1/EXP2 references (completed and accepted at review gate).
+- **Experiment 4 (proposed boundary family):** EXP4A, EXP4B, EXP4C1, EXP4C2, EXP4D initial boundary-characterization set (proposal/review only; not execution-authorized by default).
+- **Experiment 5 (provisional):** interior characterization families (including supporting-evidence, ambiguity/competition, and weakening trajectories) after boundary-family review.
 
 Only one experiment is execution-authorized at a time by explicit review-gate approval. Provisional roadmap items may be changed, deferred, replaced, or canceled after each review.
 
@@ -395,15 +395,15 @@ After EXP3 execution record is prepared, stop at review gate and wait for explic
 
 Next-phase priority is boundary characterization of the currently tractable system before interior-shape characterization (curve/geometry/gradients/competition trajectories).
 
-Boundary characterization here asks where the currently observable mechanism encounters materially different edge conditions. It does not introduce threshold/no-category policy design.
+Boundary characterization asks where currently observable Category Selection behavior/capability reaches materially distinct edges or limiting conditions. It does not introduce threshold/no-category policy design.
 
 ### 17.2 Execution authority constraint
 
-EXP4A–EXP4D below are proposed boundary subexperiments. Fully describing them does not authorize execution.
+EXP4A, EXP4B, EXP4C1, EXP4C2, and EXP4D below are proposed boundary subexperiments. Fully describing them does not authorize execution.
 
 - Execute at most one authorized subexperiment at a time.
 - After each execution, stop at review gate.
-- EXP4B–EXP4D may be modified/reordered/replaced/deferred based on accepted findings from earlier EXP4 runs.
+- Later EXP4 items may be modified/reordered/replaced/deferred based on accepted earlier EXP4 evidence.
 
 ### 17.3 Common control discipline for EXP4 family
 
@@ -416,73 +416,114 @@ Unless a specific subexperiment explicitly states otherwise, hold fixed:
 
 Do not change runtime/category-selection implementation to make EXP4 convenient.
 
-### 17.4 EXP4A (proposed) — prior-context representability edge
+### 17.4 EXP4A (proposed) — prior-context representability boundary
 
-1. **Boundary question:** Does prior context move from usable to non-usable when the prior token changes from currently mapped to currently unmapped while sentence/control settings remain fixed?
-2. **Why boundary:** This tests the edge between representable prior-context evidence and present-but-unrepresented prior-context input in the current cue map.
-3. **Relationship to EXP1–EXP3:** Anchors against EXP3 (mapped prior-context source) and EXP1 (no-cue baseline reference).
-4. **Changed variable/condition:** Prior-context token content (for example `["location"]` vs `["place"]`) with sentence fixed.
-5. **Controls fixed:** same sentence (recommended: `"The sky is blue."`), `enable_category_selection=True`, `enable_s2m_seed=False`.
-6. **Current capability enabling test:** `run_pathA_short(..., prior_context=[...])` and existing prior-context cue map in [category_cues.yaml](../../support/dictionaries/category_cues.yaml) where `location` is mapped and `place` is not mapped.
-7. **Expected evidence surfaces (no outcome prediction):** `.tschar.json` artifact identity/status; `final_tp.semantic.isc_category_result`; provenance source fields; unavailable observation block.
-8. **Known confounds/limitations:** lexical-token mapping is exact and dictionary-bound; this does not evaluate broader semantic synonym handling.
-9. **What it could legitimately tell us:** whether current prior-context representability boundary is observable under controlled token changes.
-10. **What it could not establish:** global boundary shape, confidence/no-category policy, or generalization beyond tested tokens.
+1. **Boundary question:** Does prior-context evidence move from representable/usable to non-represented/non-usable when prior-context marker content is changed while the utterance and controls remain fixed?
+2. **Why boundary:** This isolates the edge between mappable and unmappable prior-context evidence in current implementation.
+3. **Relationship to EXP1–EXP3:** Anchors against accepted EXP3 prior-context source reference and EXP1 no-cue baseline.
+4. **Variable/condition changed:** prior-context marker content only.
+5. **Controls fixed:** same utterance (recommended: `"The sky is blue."`), `enable_category_selection=True`, `enable_s2m_seed=False`.
+6. **Current capability:** `run_pathA_short(..., prior_context=[...])` plus current prior-context cue mappings in [category_cues.yaml](../../support/dictionaries/category_cues.yaml) (for example mapped `location` vs currently unmapped `place`).
+7. **Evidence surfaces:** `.tschar.json` identity/status; `final_tp.semantic.isc_category_result`; provenance/source fields; unavailable block.
+8. **Known confounds/limitations:** marker matching is substring-based lexical matching; does not test synonym handling beyond current dictionary.
+9. **Could legitimately inform:** observable prior-context representability boundary under controlled inputs.
+10. **Cannot establish:** global boundary geometry, thresholds, no-category policy, or broad generalization.
 
-### 17.5 EXP4B (proposed) — sentence-internal representability edge
+### 17.5 EXP4B (proposed) — present-utterance representability boundary
 
-1. **Boundary question:** Does sentence-internal cue usability change when the sentence token is currently mapped vs currently unmapped under comparable sentence form?
-2. **Why boundary:** This tests the edge between representable and unrepresented sentence-derived evidence in the current sentence cue map.
-3. **Relationship to EXP1–EXP3:** Extends EXP2 sentence-source reference by adding an unmapped sentence-token comparison; compares no-cue-like outcomes to EXP1 baseline where relevant.
-4. **Changed variable/condition:** sentence token content (for example mapped `"Where is the book?"` vs unmapped `"How is the book?"`) with prior context fixed as none.
+1. **Boundary question:** Does present-utterance evidence move from representable/usable to non-represented/non-usable when utterance marker content is changed while prior context is fixed absent?
+2. **Why boundary:** This isolates the representability edge for sentence-internal cues.
+3. **Relationship to EXP1–EXP3:** Extends accepted EXP2 sentence-source reference and compares no-cue-like edge behavior with EXP1 where appropriate.
+4. **Variable/condition changed:** sentence marker content only.
 5. **Controls fixed:** no prior context, `enable_category_selection=True`, `enable_s2m_seed=False`.
-6. **Current capability enabling test:** in-process sentence execution via `run_pathA_short(...)` plus sentence cue extraction from [category_cues.yaml](../../support/dictionaries/category_cues.yaml), where `where` is mapped and `how` is not mapped.
-7. **Expected evidence surfaces (no outcome prediction):** `.tschar.json` identity/status; `isc_category_result` cue/result/provenance fields; unavailable block.
-8. **Known confounds/limitations:** sentence lexical changes can influence other runtime fields; comparison targets representability edge, not full semantic equivalence.
-9. **What it could legitimately tell us:** whether sentence token mapping boundaries are experimentally observable with current controls.
-10. **What it could not establish:** interior competition geometry, thresholds, or meaning-policy conclusions.
+6. **Current capability:** in-process sentence execution via `run_pathA_short(...)` and sentence cue mappings in [category_cues.yaml](../../support/dictionaries/category_cues.yaml) (for example mapped `where` vs currently unmapped `how`).
+7. **Evidence surfaces:** `.tschar.json` identity/status; `isc_category_result` cue/result/provenance fields; unavailable block.
+8. **Known confounds/limitations:** lexical sentence changes may affect non-category fields; boundary target is representability, not full semantic equivalence.
+9. **Could legitimately inform:** observable present-utterance representability boundary in current mapping.
+10. **Cannot establish:** interior competition curves, thresholds, or meaning-policy conclusions.
 
-### 17.6 EXP4C (proposed) — source-combination boundary (single-source vs dual-source provenance)
+### 17.6 EXP4C1 (proposed) — conflicting category evidence within present utterance
 
-1. **Boundary question:** What changes when both sentence and prior-context evidence are simultaneously supplied for currently mappable cues, compared with single-source references?
-2. **Why boundary:** This probes the edge between single-source and dual-source evidence availability/provenance within current mechanism capabilities.
-3. **Relationship to EXP1–EXP3:** Builds directly on EXP2 (sentence source) and EXP3 (prior-context source) as single-source references.
-4. **Changed variable/condition:** prior context added to sentence-source case (for example `"Where is the book?"` with `prior_context=None` vs `prior_context=["location"]`).
-5. **Controls fixed:** sentence text, `enable_category_selection=True`, `enable_s2m_seed=False`.
-6. **Current capability enabling test:** CE combines sentence + prior cues and emits cue provenance source list; persisted through characterization artifact.
-7. **Expected evidence surfaces (no outcome prediction):** `.tschar.json` fields for `isc_category_result`, especially provenance source list and cue/result payload; trace primitive presence.
-8. **Known confounds/limitations:** shared-category cues from both sources may not produce large score differences; provenance-source contrast is primary signal.
-9. **What it could legitimately tell us:** whether dual-source provenance is distinctly observable from single-source references under controlled inputs.
-10. **What it could not establish:** final boundary geometry, policy thresholds, or multi-step competition dynamics.
+1. **Boundary question:** What does the mechanism report when one utterance simultaneously contains markers for different category directions?
+2. **Why boundary:** This probes the conflicting-evidence condition itself (an edge condition), not an interior strength sweep.
+3. **Relationship to EXP1–EXP3:** Extends accepted single-source references (EXP2 sentence-only, EXP3 prior-only) into same-utterance conflict condition.
+4. **Variable/condition changed:** sentence content changed from single-direction cue to multi-direction conflicting cues.
+5. **Controls fixed:** no prior context, `enable_category_selection=True`, `enable_s2m_seed=False`.
+6. **Current capability:** sentence cue extraction supports multiple markers per utterance through substring marker matching and ordered-unique cue merge in CE/ISc.
+7. **Evidence surfaces:** `.tschar.json`; `isc_category_result.category_cue`, weighted distribution, top category/confidence, rationale, provenance source, trace primitive sequence.
+8. **Known confounds/limitations:** marker matching is lexical; conflict realization depends on currently mapped markers and fixed weights; no strength variation in this experiment.
+9. **Could legitimately inform:** whether conflicting sentence evidence is observably represented and how outputs are reported at that conflict condition.
+10. **Cannot establish:** crossover points, dominance curves, thresholds, or generalized competition geometry.
 
-### 17.7 EXP4D (proposed) — category-selection availability boundary (enabled vs disabled)
+**Supported concrete condition (current mappings):**
+- sentence candidate: `"Where support cold?"`
+  - currently mapped sentence markers present: `where -> perspectival`, `support -> physical`, `cold -> affective`
+  - prior context fixed: `None`
 
-1. **Boundary question:** How does evidence recording differ when category-selection commitment is enabled versus disabled under otherwise comparable cue-bearing inputs?
-2. **Why boundary:** This tests an operational edge condition where the category-selection commit path is available vs unavailable by control configuration.
-3. **Relationship to EXP1–EXP3:** Complements accepted enabled-path references (EXP1–EXP3) with a controlled disabled-path boundary check.
-4. **Changed variable/condition:** `enable_category_selection=True` vs `False` with cue-bearing sentence/context fixed.
-5. **Controls fixed:** same sentence/prior-context input, `enable_s2m_seed=False`, same characterization type/version.
-6. **Current capability enabling test:** `run_pathA_short(..., enable_category_selection=...)` and milestone-1 `infra_smoke` behavior that records `isc_category_result` only when present.
-7. **Expected evidence surfaces (no outcome prediction):** artifact identity/status, presence/absence shape of `final_tp.semantic.isc_category_result` runtime-provided observation, unchanged unavailable block.
-8. **Known confounds/limitations:** this is a mechanism-availability boundary, not a cue-strength boundary; absence/presence comparison is structural.
-9. **What it could legitimately tell us:** whether enabled-vs-disabled commit-path boundary is observable and consistently recorded.
-10. **What it could not establish:** no-category policy, confidence threshold, or scientific interpretation of category outcomes.
+### 17.7 EXP4C2 (proposed) — conflict between prior context and present utterance
 
-### 17.8 Additional boundary cases discovered during review
+1. **Boundary question:** What does the mechanism report when prior-context evidence points in a different category direction than present-utterance evidence?
+2. **Why boundary:** This probes cross-source disagreement as a boundary condition without introducing cue-strength/crossover sweeps.
+3. **Relationship to EXP1–EXP3:** Uses accepted EXP2 (sentence source observable) and EXP3 (prior source observable) as reference points, then tests disagreement condition.
+4. **Variable/condition changed:** source-direction alignment changed from aligned/single-source references to cross-source conflicting directions.
+5. **Controls fixed:** same utterance, explicit prior-context list, `enable_category_selection=True`, `enable_s2m_seed=False`.
+6. **Current capability:** CE combines sentence and prior cues; provenance source list can include both `sentence` and `prior_context_cex`; persisted by infra_smoke.
+7. **Evidence surfaces:** `.tschar.json`; `isc_category_result` cue/provenance/distribution fields; runtime flags capturing prior context; unavailable block.
+8. **Known confounds/limitations:** lexical matching and fixed weights govern conflict behavior; this experiment does not vary strength ratios.
+9. **Could legitimately inform:** whether cross-source conflict is observably represented and how the mechanism reports the disagreement condition.
+10. **Cannot establish:** crossover thresholds, gradient response surfaces, or no-category policy.
 
-- **Potential EXP4E (future, conditional):** category inventory withholding/addition boundary from the research plan (availability of category representation via inventory composition changes).
-  - Current limitation: no dedicated, review-approved runtime mechanism exists yet for controlled inventory switching/versioning within this campaign plan.
-  - Therefore EXP4E is not part of the initial executable EXP4A–EXP4D set at this stage.
+**Supported concrete condition (current mappings):**
+- sentence candidate: `"Where is the book?"` (`where -> perspectival`)
+- prior context candidate: `["cold"]` (`cold -> affective`)
 
-### 17.9 Recommended ordering (proposal)
+### 17.8 EXP4D (proposed, retained) — Category Selection availability boundary (operational/structural control)
 
-1. **EXP4A** — cleanest representability edge with minimal confound.
-2. **EXP4B** — sentence representability edge, still relatively clean.
-3. **EXP4C** — source-combination boundary, informed by A/B reference behavior.
-4. **EXP4D** — mechanism-availability boundary, useful but more structural/configurational than evidence-source boundary.
+1. **Boundary question:** What changes in observable category-result surfaces when Category Selection commitment is enabled versus disabled under otherwise comparable cue-bearing inputs?
+2. **Why boundary:** This is an operational/structural boundary control (availability of commit path), not an interior evidence-strength experiment.
+3. **Relationship to EXP1–EXP3:** Complements accepted enabled-path references with an explicit disabled-path boundary control.
+4. **Variable/condition changed:** `enable_category_selection=True` vs `False`.
+5. **Controls fixed:** same cue-bearing sentence/prior-context input, `enable_s2m_seed=False`, same characterization type/version.
+6. **Current capability:** runtime flag `enable_category_selection` controls TPU commit behavior; infra_smoke captures `isc_category_result` only when present.
+7. **Evidence surfaces:** artifact identity/status; presence/absence shape of runtime-provided `final_tp.semantic.isc_category_result`; unchanged unavailable block.
+8. **Known confounds/limitations:** operational control boundary does not itself characterize support-space content boundaries.
+9. **Could legitimately inform:** whether commit-path availability boundary is observable and recorded cleanly.
+10. **Cannot establish:** confidence thresholds, no-category rules, or interior category-response behavior.
 
-Ordering rationale: prioritize highest cleanliness and direct boundary-information value before more structural boundary checks.
+### 17.9 EXP4E (deferred) — category-inventory boundary
 
-### 17.10 EXP4-family mandatory review gate
+1. **Boundary question:** How do outputs change when category inventory itself is withheld/added?
+2. **Status:** retained as important boundary direction from governing research documents, but deferred.
+3. **Current limitation:** no clean, review-approved campaign mechanism currently exists for controlled inventory switching/versioning without broadening scope.
+4. **Decision rule:** do not implement new inventory-switch mechanism in this stage; revisit after explicit approval.
+
+### 17.10 Additional boundary proposals discovered
+
+- **Potential EXP4F (presently tractable):** category-result versus downstream-meaning boundary.
+  - **Question:** category result present, but no legitimized meaning extension written (or vice versa under controls).
+  - **Why distinct:** tests the boundary between category evidence and meaning legitimation stage (proposal/research documents explicitly separate these).
+  - **Status:** optional addition; not execution-authorized by default.
+
+### 17.11 Deferred interior-characterization marker (supporting/reinforcing evidence)
+
+After boundary characterization, investigate supporting/reinforcing evidence conditions as interior characterization, including:
+
+1. multiple supporting cues in the same present utterance toward the same category direction;
+2. prior-context and present-utterance evidence jointly supporting the same category direction.
+
+Do not presume confidence increase or any specific response shape; treat as later interior characterization, not EXP4 boundary work.
+
+### 17.12 Recommended ordering (proposal)
+
+1. **EXP4A** — clean prior-context representability edge.
+2. **EXP4B** — clean present-utterance representability edge.
+3. **EXP4C1** — same-source (utterance) conflict boundary.
+4. **EXP4C2** — cross-source (prior vs utterance) conflict boundary.
+5. **EXP4D** — operational availability boundary control.
+6. **EXP4F (optional, if retained)** — category-result vs meaning boundary.
+
+Ordering rationale: move from clean lexical representability edges to conflict edges, then structural control, while preserving one-at-a-time review-gated execution.
+
+### 17.13 EXP4-family mandatory review gate
 
 After any authorized EXP4 subexperiment, stop and report evidence at review gate. Do not auto-advance to the next subexperiment.

@@ -253,13 +253,13 @@ This synthesis is bounded: these accepted runs support tractable observation and
 
 ### 9) Questions raised
 
-- Which bounded EXP4 proposal should be reviewed next (ambiguity-family first vs boundary-family first), given accepted EXP1/EXP2/EXP3 evidence?
+- Which bounded EXP4 boundary proposal should be reviewed first, given accepted EXP1–EXP3 tractability/reference evidence?
 
 ### 10) Next-step options (suggestions only, not decisions)
 
-- Option A: propose (but do not yet fully commit) the smallest useful EXP4 ambiguity-family experiment for review.
+- Option A: propose (but do not yet fully commit) the first EXP4 boundary subexperiment for review.
 - Option B: request one bounded off-plan verification run focused on provenance replay before EXP4 direction.
-- Option C: defer EXP4 proposal pending reviewer prioritization among provisional roadmap families.
+- Option C: defer EXP4 boundary proposal pending reviewer prioritization.
 
 ## Linked program context
 
