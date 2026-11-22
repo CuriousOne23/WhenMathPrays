@@ -261,7 +261,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: request one bounded off-plan verification run focused on provenance replay before EXP4 direction.
 - Option C: defer EXP4 boundary proposal pending reviewer prioritization.
 
-## Experiment record — EXP4A prior-context representability boundary (executed, pending review-gate decision)
+## Experiment record — EXP4A prior-context representability boundary (accepted)
 
 ### 1) What executed (exact command, times/order)
 
@@ -338,6 +338,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 
 - This paired run set provides an observable mapped-versus-unmapped prior-context representability reference under fixed utterance and fixed controls.
 - The mapped side is consistent with accepted EXP3 mapped reference on the documented fact-level fields.
+- Under the tested conditions, this accepted record provides evidence for an observable prior-context representability boundary: mapped prior-context information produced category evidence and a category result, while the selected unmapped comparator did not.
 
 ### 8) Not established
 
@@ -348,14 +349,14 @@ This synthesis is bounded: these accepted runs support tractable observation and
 
 ### 9) Questions raised
 
-- Should EXP4A be accepted as the current mapped-versus-unmapped prior-context representability boundary reference?
-- Which retained EXP4 boundary should be authorized next under one-at-a-time review gating?
+- What is the cleanest mapped-versus-unmapped present-utterance representability pair for EXP4B under fixed controls?
+- Which specific EXP4B pair should be approved for one-at-a-time execution authorization?
 
 ### 10) Next-step options (suggestions only, not decisions)
 
-- Option A: accept EXP4A and authorize next EXP4 boundary candidate selection at review gate.
-- Option B: request one bounded replay of EXP4A pair (new run indices) before next boundary authorization.
-- Option C: accept EXP4A and hold further execution pending EXP4 sequence reprioritization.
+- Option A: fully specify EXP4B only (present-utterance representability boundary), then stop at pre-execution review gate.
+- Option B: defer EXP4B specification pending additional pair-selection constraints.
+- Option C: retain EXP4A as accepted and reprioritize later EXP4 boundary candidates before EXP4B.
 
 ## Linked program context
 

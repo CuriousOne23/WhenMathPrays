@@ -237,7 +237,9 @@ After Experiment 1 record is prepared, stop and wait for explicit reviewer autho
 - **Accepted evidence summary:** one successful sentence-internal-cue characterization run (`exp2_sentence_internal`, run 1) with committed artifact, available runtime observations, explicit unavailable measurements, and bounded fact-level differences versus EXP1.
 - **EXP3 status:** executed and accepted at review gate.
 - **Accepted evidence summary:** one successful prior-context cue/provenance characterization run (`exp3_prior_context`, run 1) with committed artifact and bounded provenance-source contrast versus accepted EXP1 (`[]`) and EXP2 (`["sentence"]`) references.
-- **Gate decision for next step:** propose EXP4 for review (do not fully commit/execute EXP4 until explicitly authorized).
+- **EXP4A status:** executed and accepted at review gate.
+- **Accepted evidence summary:** under tested EXP4A paired conditions (`location` mapped vs `position` unmapped prior context, fixed utterance/controls), mapped prior-context information produced category evidence/category result while the selected unmapped comparator did not.
+- **Gate decision for next step:** fully specify EXP4B only; execution remains explicitly authorization-gated.
 
 ## 15) Experiment 2 — fully specified (smallest useful sentence-internal-cue comparison)
 
@@ -416,7 +418,7 @@ Unless a specific subexperiment explicitly states otherwise, hold fixed:
 
 Do not change runtime/category-selection implementation to make EXP4 convenient.
 
-### 17.4 EXP4A (fully specified next candidate) — prior-context representability boundary
+### 17.4 EXP4A (accepted) — prior-context representability boundary
 
 #### 17.4.1 Boundary question
 
@@ -494,15 +496,134 @@ Cannot establish:
 - stability/generalization beyond the tested pair;
 - scientific meaning conclusions.
 
-#### 17.4.11 EXP4A pre-execution review gate
+#### 17.4.11 EXP4A acceptance boundary
 
-EXP4A remains pending explicit authorization. Do not execute from this specification alone.
+EXP4A is accepted as bounded evidence for an observable prior-context representability boundary under tested conditions. This does not establish universal boundaries, thresholds/no-category policy, stability/generalization, or full category-space characterization.
 
-### 17.5 EXP4B (proposed, not fully specified) — present-utterance representability boundary
+### 17.5 EXP4B (fully specified next candidate) — present-utterance representability boundary
 
-- boundary focus: mapped-vs-unmapped representability in sentence markers with prior context fixed absent;
-- relationship: extends EXP2 sentence-source reference;
-- status: retained as boundary candidate, execution details deferred.
+#### 17.5.1 Precise research question
+
+Under fixed controls, is a mapped-versus-unmapped present-utterance representability difference observable in the Category Selection result?
+
+#### 17.5.2 Mapped and unmapped utterance pair
+
+- **Mapped utterance:** `"Where is the book?"`
+- **Unmapped comparison utterance:** `"When is the book?"`
+
+#### 17.5.3 Mapped cue and category
+
+- mapped sentence cue token: `where`
+- mapped category direction: `perspectival`
+- mapping source: [category_cues.yaml](../../support/dictionaries/category_cues.yaml) `sentence_internal.where -> perspectival`
+
+#### 17.5.4 Unmapped comparator verification
+
+- comparator token: `when`
+- `when` is not present in current sentence-internal cue map keys (`cold`, `support`, `where`)
+- substring/self-check against mapped sentence keys:
+  - `when` does not equal any mapped key;
+  - `"when is the book?"` does not contain `cold`, `support`, or `where` as substrings;
+  - no prior context is supplied, so prior-context cue markers are fixed absent.
+
+#### 17.5.5 Why this pair is experimentally clean
+
+- minimal lexical change at same structural position (`where` → `when`);
+- question punctuation retained in both utterances to keep punctuation-derived signal constant;
+- same utterance scaffold (`__ is the book?`) limits unnecessary grammatical/structural confounds;
+- intended independent variable remains mapped-vs-unmapped present-utterance representability.
+
+#### 17.5.6 Controls held fixed
+
+- prior context fixed absent: `prior_context=None`
+- `enable_category_selection=True`
+- `enable_s2m_seed=False`
+- characterization type/version: `infra_smoke` / `1.0`
+- one characterization invocation per run
+
+#### 17.5.7 Relationship to EXP4A and accepted references
+
+- EXP4B is the present-utterance representability counterpart to accepted EXP4A prior-context representability.
+- mapped EXP4B side is anchored to accepted EXP2 evidence (`"Where is the book?"`, no prior context, fixed controls).
+
+#### 17.5.8 Characterization identities/run indices
+
+Use one paired session:
+
+- session: `exp4b_utterance_repr`
+- run 1: mapped case (`"Where is the book?"`)
+- run 2: unmapped case (`"When is the book?"`)
+
+#### 17.5.9 Exact planned execution procedure (authorization-gated)
+
+When/if authorized, execute two in-process characterization invocations using existing `run_pathA_short(...)` and `run_characterization_once(...)` with fixed controls:
+
+- run 1: sentence `"Where is the book?"`, `prior_context=None`, `run_index=1`
+- run 2: sentence `"When is the book?"`, `prior_context=None`, `run_index=2`
+
+No runtime/category-selection behavior changes are permitted for this experiment.
+
+#### 17.5.10 Artifacts and evidence to capture
+
+- exact commands used and exit codes for both runs;
+- committed artifact paths for both runs;
+- artifact identity/schema/status fields;
+- `final_tp.semantic.isc_category_result` cue/result fields;
+- provenance source fields;
+- unavailable measurements (`entropy`, `top_vs_second_margin`);
+- bounded comparison against accepted EXP2 mapped reference where applicable.
+
+#### 17.5.11 Paired comparison fields
+
+Compare run 1 vs run 2 on:
+
+- `isc_category_result.value.category_cue`
+- `isc_category_result.value.top_category`
+- `isc_category_result.value.category_confidence`
+- `isc_category_result.value.category_rationale`
+- `isc_category_result.value.provenance.source`
+- runtime/unavailable observation section presence/shape
+- trace primitive sequence presence
+
+#### 17.5.12 Known confounds/limitations
+
+- cue extraction is lexical substring matching rather than contextual semantic parsing;
+- punctuation contributes a fixed signal for interrogatives in current implementation; retained constant across pair;
+- this test isolates representability under one paired utterance pattern only.
+
+#### 17.5.13 Legitimate inference scope
+
+Could inform:
+
+- whether mapped-vs-unmapped present-utterance representability difference is observable under fixed controls in this paired case.
+
+Cannot establish:
+
+- universal present-utterance boundary behavior;
+- threshold/no-category policy;
+- stability/generalization beyond this pair;
+- global category-space geometry/curve;
+- scientific meaning conclusions.
+
+#### 17.5.14 Stop/escalation conditions
+
+Stop and escalate if:
+
+- either run cannot persist a valid artifact for the requested identity;
+- artifact identity/path does not match requested `(session_id, run_index)`;
+- expected runtime-provided observation fields are missing;
+- unavailable measurements are fabricated rather than marked unavailable;
+- mapped/unmapped lexical self-check fails (for example unexpected mapped substring hit in comparator);
+- behavior suggests more than one TS execution for one characterization invocation;
+- runtime/category-selection behavior changes would be required to proceed.
+
+#### 17.5.15 Mandatory review gate
+
+After EXP4B paired execution record is prepared, stop at review gate and wait for explicit authorization before any later EXP4 experiment.
+
+#### 17.5.16 EXP4B pre-execution review gate
+
+EXP4B remains pending explicit authorization. Do not execute from this specification alone.
 
 ### 17.6 EXP4C1 (proposed, not fully specified) — conflicting category evidence within present utterance
 
