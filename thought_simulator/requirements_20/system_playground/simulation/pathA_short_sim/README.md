@@ -92,7 +92,7 @@ Official expansions (20.700.010): Structural Observation Block (SOB), Structural
 
 # **1. What the Simulator Does**
 
-The Path‑A short simulator supports **five full sentence families**, each implemented across the entire pipeline (SOB → SROB → CnOB → SmOB → IdOB → TRU):
+The Path‑A short simulator's original five sentence families are still listed below. The claim ledger and CSE also cover action, command, request, reporting, relative, and exclamative sentences. Implemented utterances run across this pipeline (SOB → SROB → CnOB → SmOB → SSG → RBU → RB → TR → TRU → RTU → CTP → IdOB → OuBA):
 
 ### **Supported Families**
 1. **Copular / State Descriptive**  
@@ -162,7 +162,7 @@ For reference, the full Path‑A system contains:
 - Truth‑Relation Macro (TRU)  
 - Final Commit Macro (OuBA)
 
-The short simulator implements a **subset** of these with simplified behavior. Meaning Composition Block (MCB) is omitted.
+The short simulator implements a **subset** of these with simplified behavior. A copy-only MCB seam exists at `mcb/seam.py` (`copy_from_idob`); it copies the IdOB packet and does not compose new meaning. `run_examples.py` prints that seam after IdOB.
 
 ---
 
@@ -174,7 +174,7 @@ The short simulator implements a **subset** of these with simplified behavior. M
 | Correction | CEx, CE, ISc, TPU | CEx, CE, ISc, TPU | Implemented (simplified) |
 | Structural Interpretation (OB‑Set) | SOB, SROB, CnOB, SmOB, SSG | SOB, SROB, CnOB, SmOB, SSG | Implemented (dictionary‑driven) |
 | Routing | RBU, RB, STPX, DCB, TR | RBU, RB, TR, RTU, CTP | Partial: TR placeholder; STPX/DCB omitted |
-| Identity & Meaning | IdOB, MCB | IdOB | Partial: MCB omitted |
+| Identity & Meaning | IdOB, MCB | IdOB, MCB (copy-only seam) | Partial: copy-only seam in `mcb/seam.py`; no composition |
 | Truth‑Relation | TRU | TRU | Implemented (stub → extended for supported families) |
 | Final Commit | OuBA | OuBA | Implemented |
 
@@ -217,7 +217,7 @@ The list below is a later machine. It is not the ready line. Structure-to-Meanin
 
 1. Implement STPX and DCB for richer routing behavior.  
 2. Replace TR placeholder with full Thought Router logic.  
-3. Add MCB after IdOB for deeper identity/meaning composition (copy-only seam first).  
+3. Add deeper identity/meaning composition after the existing copy-only MCB seam (`mcb/seam.py`).  
 4. Expand correction logic with scored candidates and provenance.  
 5. Extend OB‑Set outputs into explicit structural graph objects.  
 6. Add richer truth‑relation logic referencing provenance and semantic cues.
@@ -232,7 +232,7 @@ Next realization proposal (category selection): [notes/program/category_selectio
 
 # **8. What This Simulator Does NOT Do**
 
-- No STPX, DCB, or MCB.  
+- No STPX or DCB. MCB is a copy-only seam (`mcb/seam.py`), not full composition.  
 - TR is simplified (not full Thought Router).  
 - No full provenance chains.  
 - No structural graph objects (list‑based only).  
@@ -274,7 +274,7 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 - Meaning-as-packet lock:  
   [architecture/idob_meaning_lock.md](architecture/idob_meaning_lock.md)
 
-- IdOB object space (eight families):  
+- IdOB object space (ten catalog cards; `agent_action` family is `agent_action`):  
   [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md)
 
 - IdOB meaning contract / gates:  
@@ -321,6 +321,10 @@ pathA_short_sim/
 |-- primitives_pathA_short.py
 |-- tp_substrate.py
 |-- pathA_dbug.py
+|-- replay_parity_harness.py
+|-- generate_cutover_readiness_report.py
+|-- ie_compat_intake.py
+|-- requirements.txt
 |
 |-- architecture/
 |   |-- idob_seam.md
@@ -328,17 +332,27 @@ pathA_short_sim/
 |   |-- path_a_realization_charter.md
 |   `-- IdOB_unified_plan.md
 |
-|-- support/
-|   |-- dictionaries/
-|   |-- idob_objects/
-|   |-- idob_schemas/
-|   `-- docs/
-|
+|-- desks/
 |-- idob/
 |   |-- sum.py
 |   |-- packets.py
 |   |-- registry.py
+|   |-- connections.py
 |   `-- ...
+|-- mcb/
+|   `-- seam.py
+|-- ouba/
+|-- s2m/
+|-- mapping/
+|-- stores/
+|
+|-- support/
+|   |-- dictionaries/
+|   |-- idob_objects/
+|   |-- idob_schemas/
+|   |-- docs/
+|   |-- s2m/
+|   `-- tools/
 |
 |-- debug/
 |   |-- README.md
@@ -350,6 +364,7 @@ pathA_short_sim/
 |   `-- setup/
 |
 |-- notes/
+|   |-- program/
 |   |-- pathA_coverage.md
 |   |-- bench_walk/00_how_to_walk.md
 |   |-- idob_object_space/idob_object_space.md

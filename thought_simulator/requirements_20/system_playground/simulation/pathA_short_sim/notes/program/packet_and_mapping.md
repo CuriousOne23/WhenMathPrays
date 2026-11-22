@@ -19,4 +19,4 @@ The mapping may not reopen `struct_segments`, `struct_roles`, or constraints. CI
 
 Program: [pathA_program.md](pathA_program.md). Ready line: [ready_line.md](ready_line.md).
 
-The present S2M definition, with success and failure bounded before a writer exists: [s2m_structure/README.md](s2m_structure/README.md). The geometry note is not imported there.
+The present S2M definition, and the connection writer at `idob/connections.py`: [s2m_structure/README.md](s2m_structure/README.md). The geometry note is not imported there.
