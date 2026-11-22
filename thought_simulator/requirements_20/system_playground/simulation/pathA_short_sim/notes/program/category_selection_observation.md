@@ -63,7 +63,7 @@ Each experiment record preserves:
 
 - What differences are observed between this no-cue baseline and the smallest controlled sentence-internal-cue case under the same TS-affecting controls, using currently implemented capabilities?
 
-## Experiment record — EXP2 sentence-internal-cue characterization (executed, pending review-gate decision)
+## Experiment record — EXP2 sentence-internal-cue characterization (accepted)
 
 ### 1) What executed (exact command, times/order)
 
@@ -144,14 +144,13 @@ Each experiment record preserves:
 
 ### 9) Questions raised
 
-- Should EXP2 be accepted as recorded evidence for progressing to an EXP3 design decision?
-- Should the next experiment prioritize prior-context cue comparison or ambiguity-family comparison, given the current EXP1/EXP2 observed contrast?
+- What is the smallest controlled prior-context cue/provenance experiment that can serve as a clean reference point against EXP1 baseline and EXP2 sentence-internal cue observations?
 
 ### 10) Next-step options (suggestions only, not decisions)
 
-- Option A: accept EXP2 and authorize design/specification of EXP3 with the smallest prior-context cue case.
-- Option B: request one controlled EXP2 replay (new run index) before deciding EXP3 design direction.
-- Option C: accept EXP2 but defer EXP3 pending reviewer interpretation alignment.
+- Option A: design/specify EXP3 as the smallest prior-context cue/provenance experiment using current implementation controls.
+- Option B: run one bounded off-plan verification replay (new run index) before EXP3 execution authorization.
+- Option C: defer EXP3 until additional reviewer constraints are provided.
 
 ## Linked program context
 
