@@ -12,6 +12,8 @@ This reference is a coordinated sibling of [category_selection_program_reference
 - [category_selection_program_reference.md](category_selection_program_reference.md): bounded category-selection realization contract.
 - This document: bounded characterization instrumentation and experimentation support contract.
 
+Milestone-1 characterization infrastructure implementation/verification closeout evidence is recorded in [category_selection_characterization_milestone1_closeout.md](category_selection_characterization_milestone1_closeout.md). This document remains the method/contract reference.
+
 ## 2) Authority and boundaries
 
 This reference is implementation-facing for characterization infrastructure only.  
@@ -78,6 +80,8 @@ The characterization interface shall include parameterized controls covering:
 - optional parameter payload for type-specific sweeps.
 
 Exact flag spelling may be finalized in implementation, but semantics are fixed by this reference.
+
+Milestone 1 currently establishes the bounded single-run `infra_smoke` subset of this interface; broader multi-run/session orchestration capabilities remain future work.
 
 ## 6.3 Milestone-1 shared-execution and non-interference contract
 

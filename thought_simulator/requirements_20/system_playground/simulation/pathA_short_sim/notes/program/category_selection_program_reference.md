@@ -32,6 +32,7 @@ Program/research context:
 - [category_selection_research_plan.md](category_selection_research_plan.md)
 - [category_selection_stage1_modification_map.md](category_selection_stage1_modification_map.md)
 - [category_selection_characterization_reference.md](category_selection_characterization_reference.md)
+- [category_selection_characterization_milestone1_closeout.md](category_selection_characterization_milestone1_closeout.md)
 - [category_selection_observation.md](category_selection_observation.md)
 - [category_structure_observation.md](category_structure_observation.md)
 - [user_guide.md](../../user_guide.md)
@@ -68,6 +69,7 @@ The category-selection realization must not own:
 Those responsibilities are defined by [category_selection_characterization_reference.md](category_selection_characterization_reference.md).
 
 Characterization observes and exercises the category-selection realization; characterization does not become part of the category-selection or meaning-selection mechanism.
+Milestone-1 characterization infrastructure completion status is recorded in [category_selection_characterization_milestone1_closeout.md](category_selection_characterization_milestone1_closeout.md).
 
 Characterization must observe a caller-selected TS execution and must not own or alter sentence/input selection, prior context, category-selection control, S2M control, or other TS-affecting execution controls.
 

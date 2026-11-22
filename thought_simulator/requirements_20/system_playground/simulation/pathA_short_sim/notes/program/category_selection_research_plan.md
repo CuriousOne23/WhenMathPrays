@@ -218,7 +218,7 @@ This Stage-1 map is the next task after this plan. It is not created in this doc
 
 ## 15) Relationship to the later program reference
 
-After Stage-1 mapping/review, two coordinated placeholder software references carry distinct responsibilities:
+After Stage-1 mapping/review, two coordinated software references carry distinct responsibilities:
 
 - [category_selection_program_reference.md](category_selection_program_reference.md): bounded category-selection realization contract.
 - [category_selection_characterization_reference.md](category_selection_characterization_reference.md): bounded characterization instrumentation/framework contract for experiments and characterization support.
@@ -229,9 +229,10 @@ After confidence/closeout review, the next research question must be selected fr
 
 ## 17) Required future documents
 
-- [category_selection_program_reference.md](category_selection_program_reference.md) (placeholder now; later bounded realization contract)
-- [category_selection_characterization_reference.md](category_selection_characterization_reference.md) (placeholder now; later characterization instrumentation/framework contract)
+- [category_selection_program_reference.md](category_selection_program_reference.md) (bounded realization contract; update as implementation evolves)
+- [category_selection_characterization_reference.md](category_selection_characterization_reference.md) (bounded characterization instrumentation/framework contract; update as implementation evolves)
 - [category_selection_observation.md](category_selection_observation.md) (placeholder now; later empirical record from actual runs)
+- [category_selection_characterization_milestone1_closeout.md](category_selection_characterization_milestone1_closeout.md) (Milestone-1 infrastructure closeout evidence)
 - GitHub Agent implementation plan (after Stage-1 map and review)
 
 ## Category-selection document family

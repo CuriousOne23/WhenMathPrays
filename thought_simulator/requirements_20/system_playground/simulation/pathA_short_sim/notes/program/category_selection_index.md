@@ -78,6 +78,14 @@ Record each finding in the document that owns that information type. Do not dupl
   **Open when:** You are implementing/reviewing characterization invocation, dispatch, sessions, or artifact discipline.  
   **Relationship:** Coordinated sibling of program reference; observes/exercises realization, does not define meaning policy.
 
+### Milestone closeout
+
+- [category_selection_characterization_milestone1_closeout.md](category_selection_characterization_milestone1_closeout.md)  
+  **What it is:** Verification/closeout record for Characterization Infrastructure Milestone 1.  
+  **Status/authority:** Non-normative implementation evidence and milestone closeout.  
+  **Open when:** You need to determine what characterization infrastructure was actually implemented and verified at Milestone 1.  
+  **Relationship:** Downstream of the characterization/program references and upstream of substantive category-selection characterization experiments.
+
 ### Observation
 
 - [category_selection_observation.md](category_selection_observation.md)  
@@ -139,7 +147,9 @@ Typical progression for a new cycle:
 → `category_selection_stage1_modification_map.md`  
 → coordinated software references  
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
-→ implementation and characterization runs  
+→ Milestone-1 characterization implementation  
+→ `category_selection_characterization_milestone1_closeout.md`  
+→ characterization runs  
 → `category_selection_observation.md`
 
 At any step, open normative requirements for authoritative behavior/path/ownership questions.
