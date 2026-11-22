@@ -358,6 +358,104 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: defer EXP4B specification pending additional pair-selection constraints.
 - Option C: retain EXP4A as accepted and reprioritize later EXP4 boundary candidates before EXP4B.
 
+## Experiment record — EXP4B present-utterance representability boundary (executed, pending review-gate decision)
+
+### 1) What executed (exact command, times/order)
+
+- Order: two-command paired execution under one session identity (`exp4b_utterance_repr`).
+- Run 1 (mapped `where`) command:
+  `python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('Where is the book?', enable_s2m_seed=False, enable_category_selection=True, prior_context=None); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp4b_utterance_repr','run_index':1,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'where_is_book_mapped','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':None}); print(result['persistence']['committed_final_path'])"`
+- Run 2 (unmapped `when`) command:
+  `python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('When is the book?', enable_s2m_seed=False, enable_category_selection=True, prior_context=None); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp4b_utterance_repr','run_index':2,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'when_is_book_unmapped','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':None}); print(result['persistence']['committed_final_path'])"`
+- Exit codes: run 1 `0`; run 2 `0`.
+
+### 2) Inputs and controls used
+
+- Present utterances:
+  - run 1 mapped: `"Where is the book?"`
+  - run 2 unmapped: `"When is the book?"`
+- Prior context fixed absent for both runs: `prior_context=None`.
+- Fixed TS-affecting controls:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+- Fixed characterization controls:
+  - type/version: `infra_smoke` / `1.0`
+  - session: `exp4b_utterance_repr`
+  - run indices: `1`, `2`
+
+### 3) Produced artifacts/logs (exact paths)
+
+- Run 1 committed artifact:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp4b_utterance_repr/runs/000001__infra_smoke__1.0.tschar.json`
+- Run 2 committed artifact:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp4b_utterance_repr/runs/000002__infra_smoke__1.0.tschar.json`
+- Accepted mapped reference artifact (EXP2):
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp2_sentence_internal/runs/000001__infra_smoke__1.0.tschar.json`
+- No additional experiment log file was produced by these in-process commands.
+
+### 4) Observed outputs (facts only)
+
+- Both EXP4B artifacts reported:
+  - `schema_id=ts.characterization.run`
+  - `schema_version=1.0`
+  - `characterization.type=infra_smoke`
+  - `characterization.version=1.0`
+  - `execution_status=succeeded`
+- Runtime-provided observation shape was present in both runs for:
+  - `final_tp.truth_relation`
+  - `trace.primitive_sequence`
+  - `final_tp.semantic.isc_category_result`
+- Unavailable observations were present in both runs for:
+  - `entropy` (`milestone1_unavailable`)
+  - `top_vs_second_margin` (`milestone1_unavailable`)
+- Fact-level mapped vs unmapped comparison (`where` vs `when`):
+  - run 1 mapped:
+    - `category_cue=["perspectival"]`
+    - `top_category="perspectival"`
+    - `category_confidence=0.31090105669062545`
+    - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+    - `provenance.source=["sentence"]`
+  - run 2 unmapped:
+    - `category_cue=[]`
+    - `top_category=null`
+    - `category_confidence=0.0`
+    - `category_rationale=["empty_category_cue","top_category=null"]`
+    - `provenance.source=[]`
+- Relevant mapped-reference comparison to accepted EXP2:
+  - EXP4B run 1 and EXP2 mapped artifact align on truth relation (`interrogative`), mapped cue/result/confidence/rationale/provenance fields listed above.
+
+### 5) Unavailable measurements/deviations
+
+- `entropy` and `top_vs_second_margin` remained unavailable and explicitly marked as unavailable in both runs.
+- No deviation from approved EXP4B paired controls/identity structure was introduced.
+
+### 6) Unexpected behavior/anomalies
+
+- None observed in this paired execution.
+
+### 7) Interpretation (bounded)
+
+- This paired run set provides an observable mapped-versus-unmapped present-utterance representability reference under fixed controls.
+- The mapped side is consistent with accepted EXP2 mapped reference on documented fact-level fields.
+
+### 8) Not established
+
+- No threshold/no-category policy is established.
+- No global category-space boundary geometry/curve is established.
+- No stability/generalization claim beyond this paired case is established.
+- No scientific meaning claim is established.
+
+### 9) Questions raised
+
+- Should EXP4B be accepted as the current mapped-versus-unmapped present-utterance representability boundary reference?
+- Which retained EXP4 boundary should be authorized next under one-at-a-time review gating?
+
+### 10) Next-step options (suggestions only, not decisions)
+
+- Option A: accept EXP4B and authorize next EXP4 boundary candidate selection at review gate.
+- Option B: request one bounded replay of EXP4B pair (new run indices) before next boundary authorization.
+- Option C: accept EXP4B and hold further execution pending EXP4 sequence reprioritization.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
