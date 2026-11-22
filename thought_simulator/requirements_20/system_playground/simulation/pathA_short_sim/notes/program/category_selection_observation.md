@@ -18,6 +18,18 @@ Each experiment record preserves:
 4. **Anomaly or unexpected observation** — deviations, failures, or architecture-limiting findings.
 5. **Future question** — follow-on question motivated by the record.
 
+## Accepted synthesis — EXP1 to EXP3 (tractability evidence, bounded)
+
+Accepted EXP1–EXP3 records provide initial empirical evidence that the current Category Selection mechanism is a tractable experimental system under the present Milestone-1 characterization method.
+
+Current accepted reference points are:
+
+- **EXP1:** no supplied category cue reference (`category_cue=[]`, no cue provenance source).
+- **EXP2:** sentence-derived category evidence/provenance reference (source includes `"sentence"`).
+- **EXP3:** prior-context-derived category evidence/provenance reference (source includes `"prior_context_cex"`).
+
+This synthesis is bounded: these accepted runs support tractable observation and controlled comparison reference points; they do not establish the full Category Selection space, its boundaries, its internal geometry/curve, a confidence threshold/no-category policy, stability/generalization, or scientific meaning conclusions.
+
 ## Experiment record — EXP1 baseline characterization (accepted)
 
 ### Observed
