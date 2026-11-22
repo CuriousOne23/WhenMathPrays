@@ -88,8 +88,8 @@ For each experiment:
 ## 7) Campaign-level queue / roadmap (provisional beyond Experiment 1)
 
 - **Experiment 1 (accepted):** smallest no-cue/baseline characterization (completed and accepted at review gate).
-- **Experiment 2 (fully specified):** smallest sentence-internal-cue comparison against Experiment 1 baseline.
-- **Experiment 3 (provisional):** prior-context cue case(s) with provenance-focused comparison.
+- **Experiment 2 (accepted):** smallest sentence-internal-cue comparison against Experiment 1 baseline (completed and accepted at review gate).
+- **Experiment 3 (fully specified):** smallest prior-context cue/provenance comparison against accepted EXP1/EXP2 references.
 - **Experiment 4 (provisional):** ambiguity/competing-evidence cases from research-plan families.
 - **Experiment 5 (provisional):** boundary/weak-evidence probes (only after prior review decisions).
 
@@ -150,6 +150,20 @@ After review, the next experiment may be:
 - **deferred/canceled** (if no longer relevant).
 
 Any such decision must be tied to observed evidence from prior experiments, not prewritten campaign momentum.
+
+## 11A) Verification-run flexibility (off-plan, bounded)
+
+The formal campaign plan does not require every bounded diagnostic/verification run to be preplanned as a numbered experiment.
+
+When explicitly requested during review, bounded off-plan verification runs may be executed to investigate a specific observation while preserving stated controls and stopping at review.
+
+Rules:
+
+- off-plan verification runs must remain narrow and evidence-driven;
+- off-plan verification runs must preserve applicable control discipline and identity reporting;
+- off-plan verification runs must stop at review (no automatic continuation);
+- if an off-plan verification result materially changes interpretation, continuity, or next-step direction, record the accepted finding in [category_selection_observation.md](category_selection_observation.md) and add a concise retrospective note here as directed;
+- routine verification that does not materially affect the research record does not by itself require campaign-plan expansion.
 
 ## 12) Stop/escalation conditions
 
@@ -219,7 +233,9 @@ After Experiment 1 record is prepared, stop and wait for explicit reviewer autho
 
 - **EXP1 status:** executed and accepted at review gate.
 - **Accepted evidence summary:** one successful characterized baseline run (`exp1_baseline`, run 1) with committed artifact and expected no-cue baseline fields.
-- **Gate decision for next step:** proceed to design/execute EXP2 only under explicit authorization.
+- **EXP2 status:** executed and accepted at review gate.
+- **Accepted evidence summary:** one successful sentence-internal-cue characterization run (`exp2_sentence_internal`, run 1) with committed artifact, available runtime observations, explicit unavailable measurements, and bounded fact-level differences versus EXP1.
+- **Gate decision for next step:** proceed to design/execute EXP3 only under explicit authorization.
 
 ## 15) Experiment 2 — fully specified (smallest useful sentence-internal-cue comparison)
 
@@ -287,3 +303,84 @@ Stop and escalate if:
 ### 15.8 Mandatory stop
 
 After EXP2 execution record is prepared, stop at review gate and wait for explicit authorization before any EXP3 work.
+
+## 16) Experiment 3 — fully specified (smallest useful prior-context cue/provenance reference)
+
+### 16.1 Objective
+
+Produce the smallest prior-context-driven characterization record that establishes a clean prior-context provenance reference point for bounded comparison with accepted EXP1 (no-cue baseline) and EXP2 (sentence-internal cue).
+
+### 16.2 Capability boundary used
+
+Current `run_examples.py` characterization CLI exposes `--execution-case sky_blue` only and does not expose a CLI flag for custom prior context. Therefore EXP3 uses currently implemented in-process APIs (no simulator behavior edits):
+
+- `run_pathA_short(...)` for selected sentence execution with explicit `prior_context`,
+- `run_examples.run_characterization_once(...)` for `infra_smoke` evidence capture/persistence.
+
+### 16.3 Cases and controls
+
+- Baseline references:
+  - EXP1 artifact (`exp1_baseline`, run 1)
+  - EXP2 artifact (`exp2_sentence_internal`, run 1)
+- Sentence-under-test for EXP3: `"The sky is blue."`
+- Prior context for EXP3: `["location"]`
+- TS-affecting controls for EXP3 execution:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+  - `prior_context=["location"]`
+- Characterization controls:
+  - type/version: `infra_smoke` / `1.0`
+  - identity: `session_id=exp3_prior_context`, `run_index=1`
+
+### 16.4 Command (implementation-aligned in-process execution)
+
+Run in repository environment:
+
+```
+python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('The sky is blue.', enable_s2m_seed=False, enable_category_selection=True, prior_context=['location']); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp3_prior_context','run_index':1,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'sky_blue_prior_context_location','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':['location']}); print(result['persistence']['committed_final_path'])"
+```
+
+### 16.5 Required evidence to capture
+
+- exact command used;
+- exit code;
+- committed artifact path for `exp3_prior_context` run 1;
+- artifact identity/type/version/schema/execution status;
+- runtime-provided observations (including `final_tp.semantic.isc_category_result`);
+- provenance observations from `final_tp.semantic.isc_category_result.value.provenance`, including `source` and upstream/weights fields;
+- unavailable observations (`entropy`, `top_vs_second_margin`);
+- bounded fact-level comparison notes versus accepted EXP1 and EXP2 artifacts.
+
+### 16.6 Planned comparison focus (bounded)
+
+Compare EXP3 against accepted references on:
+
+- runtime/unavailable observation section presence/shape;
+- `final_tp.semantic.isc_category_result` cue/result fields;
+- provenance source distinctions:
+  - EXP1 expected no cue source (`[]`) baseline;
+  - EXP2 observed sentence-driven source (includes `"sentence"`);
+  - EXP3 prior-context reference (expected prior-context-driven source path);
+- trace primitive sequence presence.
+
+Do not infer threshold/no-category policy, support-boundary conclusions, or scientific meaning conclusions from this single EXP3 run.
+
+### 16.7 Unavailable measurements
+
+Treat `entropy` and `top_vs_second_margin` as expected unavailable Milestone-1 measurements unless implementation authority changes.
+
+### 16.8 Stop/escalation triggers (EXP3-specific)
+
+Stop and escalate if:
+
+- in-process execution cannot persist a valid artifact for `(session_id=exp3_prior_context, run_index=1)`;
+- produced artifact identity/path does not match requested identity;
+- expected runtime-provided observation fields are missing;
+- unavailable measurements are fabricated instead of marked unavailable;
+- `isc_category_result` provenance fields required for source comparison are missing;
+- behavior suggests more than one TS execution for one characterization invocation;
+- execution would require runtime/category-selection behavior modification to proceed.
+
+### 16.9 Mandatory review gate
+
+After EXP3 execution record is prepared, stop at review gate and wait for explicit authorization before any EXP4 or off-plan follow-up run.
