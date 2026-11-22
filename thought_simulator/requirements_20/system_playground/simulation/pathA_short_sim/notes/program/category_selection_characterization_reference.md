@@ -111,7 +111,7 @@ A characterization session is a bounded execution context grouping one or more r
 
 Required session properties:
 
-- globally unique `session_id`,
+- unique `session_id` within the characterization artifact/session namespace,
 - monotonic `run_index` within session,
 - immutable creation metadata,
 - stable provenance fields copied into every artifact,
@@ -121,9 +121,13 @@ Required session properties:
 
 Session/run identity allocation must prevent filename collision:
 
-- unique `session_id`,
+- unique `session_id` within the characterization artifact/session namespace,
 - deterministic zero-padded `run_index`,
 - allocation logic that refuses to reuse an existing artifact path.
+
+If a collision is detected, the program must fail the write and must not overwrite an existing artifact.
+Artifact metadata is authoritative for session/run identity; filenames are informative and are not the sole identity authority.
+UUID-style global uniqueness is not required by this reference unless a separate normative authority later requires it.
 
 ### 8.2 Hard non-overwrite requirement
 
@@ -144,6 +148,12 @@ Use one TS-wide characterization artifact extension:
 - `.tschar.json`
 
 All characterization types use this extension for per-run records to keep downstream tooling stable.
+Within this extension:
+
+- `.tschar` identifies the artifact class as TS characterization evidence.
+- `.json` identifies the internal serialization format.
+
+Generated characterization artifacts are intended to be excluded from Git using the dedicated pattern `*.tschar.json` (implementation to add this rule later; no `.gitignore` edit is performed in this document).
 
 ### 9.3 Informative filenames
 
@@ -153,6 +163,8 @@ Filenames must be informative and include at minimum:
 - session id,
 - run index,
 - UTC timestamp or equivalent stable temporal marker.
+
+Temporal markers are useful for readability/order but are not the authoritative uniqueness mechanism.
 
 ### 9.4 Internal provenance/identity payload
 
@@ -183,9 +195,15 @@ At minimum, each characterization run must preserve category-selection measureme
 
 If a required measurement is unavailable from current runtime output, the run must explicitly mark it unavailable rather than fabricating a value.
 
-## 11) Multi-run no-category characterization
+## 11) Multi-run category-support / unsupported-space characterization
 
-A dedicated no-category characterization type is required to support repeated controlled runs where no-category behavior can be observed under varied evidence/category-space conditions.
+A dedicated support-boundary characterization capability is required to support repeated controlled runs where category support behavior can be observed under varied evidence/category-space conditions.
+
+Research sequence remains:
+
+observe -> characterize -> design
+
+This characterization exists to gather evidence for possible later design of a robust no-category function; it does not presuppose that such a function is already defined.
 
 This characterization must:
 
@@ -193,6 +211,16 @@ This characterization must:
 - preserve per-run identity and measurement outputs,
 - emit artifacts for each run without overwrite,
 - avoid introducing a no-category decision rule.
+
+It does not assume beforehand:
+
+- that a single no-category region exists,
+- that the boundary is sharp,
+- that the boundary is a threshold,
+- that weak support within available inventory and poor representation by the inventory are already separable,
+- that hysteresis is required.
+
+Characterization may reveal a threshold-like transition, gradient behavior, ambiguity region, overlapping conditions, inventory-sensitive behavior, sequential instability, or another pattern.
 
 ## 12) Campaign orchestration (optional higher-level layer)
 
