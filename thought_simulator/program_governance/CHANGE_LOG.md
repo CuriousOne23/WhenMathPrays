@@ -145,3 +145,50 @@
 2026-10-05 | Flow weekly safety net | F-000 | none | write=no
 2026-10-05 | Catalog weekly safety net | C-000 | none | write=no
 2026-10-05 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 | write=no
+2026-10-12 | Terms weekly safety net | T-000 | none | write=no
+2026-10-12 | Flow weekly safety net | F-000 | none | write=no
+2026-10-12 | Catalog weekly safety net | C-000 | none | write=no
+2026-10-12 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 | write=no
+2026-10-19 | Terms weekly safety net | T-000 | none | write=no
+2026-10-19 | Catalog weekly safety net | C-000 | none | write=no
+2026-10-19 | Flow weekly safety net | F-000 | none | write=no
+2026-10-19 | Inventory weekly safety net | not run (box down); INVENTORY.md unchanged from 2026-10-12 | write=no
+2026-10-26 | Terms weekly safety net | T-000 | none | write=no
+2026-10-26 | Catalog weekly safety net | C-000 | none | write=no
+2026-10-26 | Flow weekly safety net | F-000 | none | write=no
+2026-10-26 | Inventory weekly safety net | unchanged since 2026-10-12 (same sha 9bafeed); fresh scan pending box recovery; INVENTORY.md and pointer unchanged; unverified, for human: root debug_query_log.txt (13,475 bytes) gitignore candidate; zero-byte root file `$null` likely accidental redirect | owner=human | write=no
+2026-11-02 | Terms weekly safety net | T-000 | none | write=no
+2026-11-02 | Flow weekly safety net | F-000 | none | write=no
+2026-11-02 | Catalog weekly safety net | C-000 | none | write=no
+2026-11-02 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 (unchanged vs 2026-10-12, sha 9bafeed) | write=no
+2026-11-09 | Terms weekly safety net | T-000 | none | write=no
+2026-11-09 | Flow weekly safety net | F-000 | none | write=no
+2026-11-09 | Catalog weekly safety net | C-000 | none | write=no
+2026-11-09 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 (unchanged; sha 9dd2f22); 2555 files (+2), 18,748,441 bytes tracked (+18,783), git_dir 6,718,487; top-100 membership and sizes identical to 10-12/11-02, same four non-keep rows; outside top-100: root debug_query_log.txt (13,475 bytes, tracked) gitignore candidate; root `$null` (0 bytes) likely-accidental delete candidate | owner=human | write=no
+2026-11-16 | Flow weekly safety net | F-000 | none | write=no
+2026-11-16 | Catalog weekly safety net | C-000 | none | write=no
+2026-11-16 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 (unchanged from 11-09; sha 9dd2f22); 2555 files, 18,748,441 bytes tracked; same four non-keep rows; outside top-100: root debug_query_log.txt (gitignore candidate); root `$null` (delete candidate) | owner=human | write=no
+2026-11-16 | Terms weekly safety net | T-000 | none | write=no
+2026-11-19 | ShortSim Docs baseline drift report | main @ 8202fb5; 9 drift findings; MATCHES recorded; doc-only PR pending human go-ahead | write=no
+2026-11-19 | ShortSim Status baseline | main @ fccfea9 (root README pointer only; short-sim same as 8202fb5); 100 rows (implemented 25, absent 33, drifted 16, unplaced 23, not found 3); 5 holes | write=no
+2026-11-19 | ShortSim Docs scheduled drift watch | main 8202fb5 → 6e1a8d5; docs-only; 2 new goal-drift findings; known 9 baseline items still open; PR form waiting on human Submit (branch shortsim-docs/20261119-6e1a8d5, commit 273a602) | write=no
+2026-11-19 | ShortSim Trajectory | Verdict: NEUTRAL; last change ae9b061 (status.md only +10); independent, speculative, not definitive | write=no
+2026-11-19 | Path A Account first-pass + new drift | first-pass main @ 00ee3aa (flags 1–5, surrounding a–c); new drift main @ 6e1a8d5 (pointer gap / proposal relation / force); independent view, not definitive | write=no
+2026-11-19 | ShortSim Status goal-distance | latest checked 1e48373e; status.md goal changed to controlled category selection; prior G1-G3 marked accomplished/closed; standing routine still pointed at G1-G3 (stale); holes still open; asked whether to retarget | write=no
+2026-11-19 | ShortSim Trajectory | Verdict: ADVANCES, modestly; 5653458 adds s2m_program_reference.md (docs only); latest c604aeb; independent, speculative, not definitive | write=no
+2026-11-20 | Path A Account | main @ d1ce474; door unchanged since 19019f6; 3 flags (stale next step, narrow S2M out of date, new S2M docs unlinked); still open broken 20.705 link / status.md door link / wording L17–18; independent view, not definitive | write=no
+2026-11-20 | ShortSim Trajectory | Verdict: ADVANCES, modestly, measured against the goal as restated in status.md; 12e6184 goal change; 267e837 category_selection_proposal.md (docs only); latest 1e48373; independent, speculative, not definitive | write=no
+2026-11-20 | ShortSim Docs scheduled drift watch | main 8202fb5 → 105530c (41 commits); GOAL CHANGE is the main finding; NEW DRIFT N1–N7 (N1/N2/N6 clear-cut if human wants PR on shortsim-docs/20261120-105530c); known 9 baseline still open; no PR opened because the goal is in flux; yesterday's create-PR form still waiting | write=no
+2026-11-20 | ShortSim Status goal-distance | latest 7be4931; row against G1–G3 with line-level evidence (G1/G2/G3 implemented); standing routine still pointed at G1–G3 awaiting retarget; category selection not checked; holes still open per status.md | write=no
+2026-11-20 | ShortSim Status goal-distance | ~9:55 AM America/Phoenix; latest relevant ce3d092; scored G1–G3 against status.md account (code not re-verified line by line); G1 implemented per status.md (floor distinction/source not confirmed this run); G2/G3 no drift in changed files; category selection in progress, not scored as implemented; holes from status.md; standing routine still at G1–G3 | write=no
+2026-11-22 | EVENT policy | Flow scalability duty on human ask | stamp=human | SUPERSEDED 2026-11-22 10:43 AM America/Phoenix
+2026-11-22 | EVENT policy | Flow scalability duty auto-trigger; replaces earlier on-ask line; human-ask trigger stays; all other Flow scope, cadence defaults, and write=no unchanged | stamp=human | supersedes prior 2026-11-22 on-ask EVENT
+2026-11-22 | Flow human-ask scan | F-004–F-008 (incremental / shared-writer); F-001–F-003 not re-emitted; next id F-009; ref main f532e5a; 20.705 byte-identical to 9dd2f22; 23 §2 hop files HTTP 200 | write=no
+2026-11-22 | EVENT directive | 10:49 AM America/Phoenix; address four open items on PR #198 | stamp=human
+2026-11-22 | EVENT directive | (1) ShortSim Status + ShortSim Docs descriptions updated to category-selection goal; G1–G3 historical (accomplished 2026-11-19); each bot asked to retarget its routine; confirmation pending | stamp=human
+2026-11-22 | EVENT directive | (2) ShortSim Docs asked to open N1/N2/N6 doc-only PR on shortsim-docs/20261120-105530c; PR URL pending; shortsim-docs/20261119-6e1a8d5 create-PR form still waiting on human Submit | stamp=human
+2026-11-22 | EVENT directive | (3) EianA12 commits already resolved 2026-11-20 (Jeff <jeff@example.com> via local VS Code/agent workspace; CuriousOne23 pushes); not an anomaly; not a blocker for merging #189–#199; human may re-open | stamp=human
+2026-11-22 | EVENT directive | (4) original 9 baseline doc items still open; needs human: open the baseline doc PR, delete, or defer? | stamp=human
+2026-11-22 | ShortSim Status + ShortSim Docs | retargets confirmed to category-selection goal; Status routine 'Short-sim goal distance: category selection' (short-sim-realization-status-on-change) scored C1 cue source / C2 non-default category chosen / C3 no floor mutation; G1–G3 historical, regression only; Docs watch desks/, idob/, s2m/, mapping/, stores/ and support/; tracks 9 baseline + N1–N7; next run Mon 11/23 8 AM MST
+2026-11-22 | ShortSim Docs | N1/N2/N6 doc-only PR #200 opened by Helm on human directive; branch shortsim-docs/20261120-105530c @ 57eec61, base main; pathA_short_sim/README.md and notes/program/s2m_structure/result.md; cites 0ff78aa, 12e6184, 1e48373 and 105530c; N2 sample also reflects cue_state/category_result from 52440fb; not merged | write=no
+2026-11-22 | ShortSim Docs | correction: shortsim-docs/20261119-6e1a8d5 form is NOT waiting on Submit; PR #195 closed unmerged 2026-11-19 8:52 AM MST; branch ahead 1 and behind 82, would conflict; not reopened; goal wording superseded; removed from needs human
