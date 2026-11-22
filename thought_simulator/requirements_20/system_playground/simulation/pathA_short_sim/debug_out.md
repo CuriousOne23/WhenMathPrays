@@ -12,6 +12,8 @@
 - [role_geometry:](debug/dimensions/role_geometry.md) How functional roles attach to segments.
 - [constraint_geometry:](debug/dimensions/constraint_geometry.md) How structural and semantic constraints are evaluated.
 - [identity_geometry:](debug/dimensions/identity_geometry.md) How identity and referential structure propagate.
+- [semantic_core:](debug/dimensions/semantic_core.md) How IdOB stabilizes canonical semantic_core.
+- [truth_relation:](debug/dimensions/truth_relation.md) How IdOB stabilizes canonical truth_relation.
 
 ## Fields
 - [struct_segments:](debug/fields/struct_segments.md) The segments detected during structural parsing.
@@ -22,7 +24,7 @@
 - [constraint_residue:](debug/fields/constraint_residue.md) Residual mismatch material from CnOB.
 - [smoothing_operations:](debug/fields/smoothing_operations.md) Smoothing transforms applied by SmOB.
 - [semantic_adjacent_cues:](debug/fields/semantic_adjacent_cues.md) Semantic cues adjacent to structural elements.
-- [basin_residue:](debug/fields/basin_residue.md) Residual unresolved basin-level material from SmOB.
+- [smoothing_residue:](debug/fields/smob_smoothing_residue.md) Residual unresolved smoothing-stage material from SmOB.
 - [truth_relation:](debug/dimensions/truth_relation.md) Truth relation selected for meaning resolution.
 - [semantic_core:](debug/dimensions/semantic_core.md) Identity-conditioned semantic bundle emitted by IdOB.
 - [idob_packet:](debug/fields/idob_packet.md) The identity packet produced by IdOB.
@@ -45,16 +47,16 @@
 
 ## Final TP Intake Geometry
 - tp_ie_tokens:
-  - Please
-  - close
-  - the
-  - door
+  - The
+  - sky
+  - is
+  - blue
   - .
 - tp_ie_normalized_tokens:
-  - please
-  - close
   - the
-  - door
+  - sky
+  - is
+  - blue
   - .
 - tp_ie_token_classes:
   - WORD
@@ -71,22 +73,22 @@
 - tp_ie_segments:
   - 1
 - tp_ie_segment_tokens:
-  - ['Please', 'close', 'the', 'door', '.']
+  - ['The', 'sky', 'is', 'blue', '.']
 
 ## Stage Interpretations
 ### IE
 - ie_tokens:
-  - Please
-  - close
-  - the
-  - door
+  - The
+  - sky
+  - is
+  - blue
   - .
 
 - ie_normalized_tokens:
-  - please
-  - close
   - the
-  - door
+  - sky
+  - is
+  - blue
   - .
 
 - ie_token_classes:
@@ -107,24 +109,28 @@
   - 1
 
 - ie_segment_tokens:
-  - ['Please', 'close', 'the', 'door', '.']
+  - ['The', 'sky', 'is', 'blue', '.']
 
 
 See: [IE](debug/primitives/IE.md)
 
 ### SOB
 - sob_tokens:
-  - Please
-  - close
-  - the
-  - door
+  - The
+  - sky
+  - is
+  - blue
   - .
 
 - sob_struct_segments:
   - NP
+  - CP
+  - AP
 
 - sob_segment_tokens:
-  - ['please', 'close', 'the', 'door']
+  - ['the', 'sky']
+  - ['is']
+  - ['blue']
 
 
 See: [SOB](debug/primitives/SOB.md)
@@ -139,11 +145,10 @@ See: [SROB](debug/primitives/SROB.md)
 ### CnOB
 - constraints_matched:
   - structural_rule
-  - request_imperative_rule
+  - compatibility_rule
 
 - constraints_unmatched:
   - adjacency_rule
-  - compatibility_rule
   - continuity_rule
 
 - constraint_residue:
@@ -154,14 +159,15 @@ See: [CnOB](debug/primitives/CnOB.md)
 
 ### SmOB
 - smoothing_operations:
+  - adjacency_smoothing
   - role_smoothing
   - basin_compression_smoothing
   - continuity_smoothing
 
 - semantic_adjacent_cues:
-  - request_imperative_clause
+  - []
 
-- basin_residue:
+- smoothing_residue:
   - []
 
 
@@ -173,60 +179,57 @@ See: [SmOB](debug/primitives/SmOB.md)
   truth_relation: declarative
   truth_relation_family: descriptive_state
   semantic_core:
-    selected_ops: ['polite_request', 'modifier_resolution']
+    selected_ops: ['state']
     query_focus: 
+    speaker: 
+    recipient: 
+    relative_subject: 
+    adverb: 
     predicate: 
-    theme: 
+    theme: the sky
+    copula: is
     relation_modifiers: 
-    complement: 
-    agent: 
-    state: 
+    complement: blue
+    agent: the sky
+    state: blue
     location: 
     action: 
     patient: 
-    modifiers: ['request_imperative_clause']
+    modifiers: []
   selected_ops:
-    - polite_request
-    - modifier_resolution
+    - state
   claimed_fields:
-    - selected_ops
-    - truth_relation_family_hint
     - truth_relation
-    - semantic_core
-    - semantic_core_tokens
+    - truth_relation_family_hint
     - identity_geometry
+    - semantic_core
+    - selected_ops
   contributors:
-    - imperative
     - copular_state
-    - agent_action
-    - modifier_resolution
     - residual_identity
   contributions:
-    - {'name': 'imperative', 'family': 'imperative', 'priority': 15, 'fragment': {'selected_ops': ['polite_request'], 'truth_relation_family_hint': 'imperative'}}
     - {'name': 'copular_state', 'family': 'copular_state', 'priority': 20, 'fragment': {'truth_relation': 'declarative', 'truth_relation_family_hint': 'descriptive_state'}}
-    - {'name': 'agent_action', 'family': 'agent_action', 'priority': 50, 'fragment': {}}
-    - {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['polite_request', 'modifier_resolution'], 'semantic_core': {'selected_ops': ['polite_request', 'modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['request_imperative_clause']}, 'semantic_core_tokens': ['entity']}}
-    - {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'structural_identity', 'truth_relation': 'declarative'}}
+    - {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'structural_identity', 'truth_relation': 'declarative', 'semantic_core': {'selected_ops': ['state'], 'query_focus': '', 'speaker': '', 'recipient': '', 'relative_subject': '', 'adverb': '', 'predicate': '', 'theme': 'the sky', 'copula': 'is', 'relation_modifiers': '', 'complement': 'blue', 'agent': 'the sky', 'state': 'blue', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'selected_ops': ['state']}}
   activation_set:
-    - imperative
     - copular_state
-    - agent_action
-    - modifier_resolution
     - residual_identity
   inactive_objects:
     - interrogative_wh
     - interrogative_polar
+    - imperative
     - exclamative
     - locative
     - mixed_descriptive
+    - agent_action
+    - modifier_resolution
   residual_activated: True
   overlap_events:
-    - {'a': 'imperative', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}
     - {'a': 'residual_identity', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}
   meaning_delta:
+    semantic_core_tokens: {'legacy': ['entity'], 'split': []}
   psc_violations:
-    - []
-  registry_digest: c5d9dc4ac4ed70e42e976601cd2ad286f606f92b8fd2d3d1738ddf4074c4d746
+    - {'object': 'residual_identity', 'invariant': 'I8', 'field': 'semantic_core', 'rule': 'writes_only_declared_fields', 'detail': "unlisted semantic_core keys: ['adverb', 'copula', 'recipient', 'relative_subject', 'speaker']"}
+  registry_digest: ddd6334c681e5278723527c3515d4e87c4455fce6fa6e6e10ec8a6d9457ed1c7
   complete: True
   tru_hint: declarative
 
@@ -236,7 +239,7 @@ See: [IdOB](debug/primitives/IdOB.md)
 ## Meaning Bundle Summary
 - truth_relation: declarative
 - semantic_adjacent_cues:
-  - request_imperative_clause
+  - []
 - semantic_core:
   - []
 - idob_packet:
@@ -244,75 +247,72 @@ See: [IdOB](debug/primitives/IdOB.md)
   truth_relation: declarative
   truth_relation_family: descriptive_state
   semantic_core:
-    selected_ops: ['polite_request', 'modifier_resolution']
+    selected_ops: ['state']
     query_focus: 
+    speaker: 
+    recipient: 
+    relative_subject: 
+    adverb: 
     predicate: 
-    theme: 
+    theme: the sky
+    copula: is
     relation_modifiers: 
-    complement: 
-    agent: 
-    state: 
+    complement: blue
+    agent: the sky
+    state: blue
     location: 
     action: 
     patient: 
-    modifiers: ['request_imperative_clause']
+    modifiers: []
   selected_ops:
-    - polite_request
-    - modifier_resolution
+    - state
   claimed_fields:
-    - selected_ops
-    - truth_relation_family_hint
     - truth_relation
-    - semantic_core
-    - semantic_core_tokens
+    - truth_relation_family_hint
     - identity_geometry
+    - semantic_core
+    - selected_ops
   contributors:
-    - imperative
     - copular_state
-    - agent_action
-    - modifier_resolution
     - residual_identity
   contributions:
-    - {'name': 'imperative', 'family': 'imperative', 'priority': 15, 'fragment': {'selected_ops': ['polite_request'], 'truth_relation_family_hint': 'imperative'}}
     - {'name': 'copular_state', 'family': 'copular_state', 'priority': 20, 'fragment': {'truth_relation': 'declarative', 'truth_relation_family_hint': 'descriptive_state'}}
-    - {'name': 'agent_action', 'family': 'agent_action', 'priority': 50, 'fragment': {}}
-    - {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['polite_request', 'modifier_resolution'], 'semantic_core': {'selected_ops': ['polite_request', 'modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['request_imperative_clause']}, 'semantic_core_tokens': ['entity']}}
-    - {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'structural_identity', 'truth_relation': 'declarative'}}
+    - {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'structural_identity', 'truth_relation': 'declarative', 'semantic_core': {'selected_ops': ['state'], 'query_focus': '', 'speaker': '', 'recipient': '', 'relative_subject': '', 'adverb': '', 'predicate': '', 'theme': 'the sky', 'copula': 'is', 'relation_modifiers': '', 'complement': 'blue', 'agent': 'the sky', 'state': 'blue', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'selected_ops': ['state']}}
   activation_set:
-    - imperative
     - copular_state
-    - agent_action
-    - modifier_resolution
     - residual_identity
   inactive_objects:
     - interrogative_wh
     - interrogative_polar
+    - imperative
     - exclamative
     - locative
     - mixed_descriptive
+    - agent_action
+    - modifier_resolution
   residual_activated: True
   overlap_events:
-    - {'a': 'imperative', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}
     - {'a': 'residual_identity', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}
   meaning_delta:
+    semantic_core_tokens: {'legacy': ['entity'], 'split': []}
   psc_violations:
-    - []
-  registry_digest: c5d9dc4ac4ed70e42e976601cd2ad286f606f92b8fd2d3d1738ddf4074c4d746
+    - {'object': 'residual_identity', 'invariant': 'I8', 'field': 'semantic_core', 'rule': 'writes_only_declared_fields', 'detail': "unlisted semantic_core keys: ['adverb', 'copula', 'recipient', 'relative_subject', 'speaker']"}
+  registry_digest: ddd6334c681e5278723527c3515d4e87c4455fce6fa6e6e10ec8a6d9457ed1c7
   complete: True
   tru_hint: declarative
 
 ## IdOB Space Summary
-- contributors: ['imperative', 'copular_state', 'agent_action', 'modifier_resolution', 'residual_identity']
-- contributor_labels: ['imperative -> Imperative', 'copular_state -> Copular State', 'agent_action -> Agent Action', 'modifier_resolution -> Modifier Resolution', 'residual_identity -> Residual Identity']
-- contributions: [{'name': 'imperative', 'family': 'imperative', 'priority': 15, 'fragment': {'selected_ops': ['polite_request'], 'truth_relation_family_hint': 'imperative'}}, {'name': 'copular_state', 'family': 'copular_state', 'priority': 20, 'fragment': {'truth_relation': 'declarative', 'truth_relation_family_hint': 'descriptive_state'}}, {'name': 'agent_action', 'family': 'agent_action', 'priority': 50, 'fragment': {}}, {'name': 'modifier_resolution', 'family': 'mixed_descriptive', 'priority': 60, 'fragment': {'selected_ops': ['polite_request', 'modifier_resolution'], 'semantic_core': {'selected_ops': ['polite_request', 'modifier_resolution'], 'query_focus': '', 'predicate': '', 'theme': '', 'relation_modifiers': '', 'complement': '', 'agent': '', 'state': '', 'location': '', 'action': '', 'patient': '', 'modifiers': ['request_imperative_clause']}, 'semantic_core_tokens': ['entity']}}, {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'structural_identity', 'truth_relation': 'declarative'}}]
-- activation_set: ['imperative', 'copular_state', 'agent_action', 'modifier_resolution', 'residual_identity']
-- inactive_objects: ['interrogative_wh', 'interrogative_polar', 'exclamative', 'locative', 'mixed_descriptive']
+- contributors: ['copular_state', 'residual_identity']
+- contributor_labels: ['copular_state -> Copular State', 'residual_identity -> Residual Identity']
+- contributions: [{'name': 'copular_state', 'family': 'copular_state', 'priority': 20, 'fragment': {'truth_relation': 'declarative', 'truth_relation_family_hint': 'descriptive_state'}}, {'name': 'residual_identity', 'family': 'residual_identity', 'priority': 90, 'fragment': {'identity_geometry': 'structural_identity', 'truth_relation': 'declarative', 'semantic_core': {'selected_ops': ['state'], 'query_focus': '', 'speaker': '', 'recipient': '', 'relative_subject': '', 'adverb': '', 'predicate': '', 'theme': 'the sky', 'copula': 'is', 'relation_modifiers': '', 'complement': 'blue', 'agent': 'the sky', 'state': 'blue', 'location': '', 'action': '', 'patient': '', 'modifiers': []}, 'selected_ops': ['state']}}]
+- activation_set: ['copular_state', 'residual_identity']
+- inactive_objects: ['interrogative_wh', 'interrogative_polar', 'imperative', 'exclamative', 'locative', 'mixed_descriptive', 'agent_action', 'modifier_resolution']
 - residual_activated: True
-- overlap_events: [{'a': 'imperative', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}, {'a': 'residual_identity', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}]
-- meaning_delta: {}
-- psc_violation_count: 0
-- psc_violations: []
-- registry_digest: c5d9dc4ac4ed70e42e976601cd2ad286f606f92b8fd2d3d1738ddf4074c4d746
+- overlap_events: [{'a': 'residual_identity', 'b': 'copular_state', 'mode': 'coexist', 'fields': []}]
+- meaning_delta: {'semantic_core_tokens': {'legacy': ['entity'], 'split': []}}
+- psc_violation_count: 1
+- psc_violations: ["residual_identity (Residual Identity) | invariant=I8 field=semantic_core rule=writes_only_declared_fields detail=unlisted semantic_core keys: ['adverb', 'copula', 'recipient', 'relative_subject', 'speaker']"]
+- registry_digest: ddd6334c681e5278723527c3515d4e87c4455fce6fa6e6e10ec8a6d9457ed1c7
 - truth_relation_family: descriptive_state
 - tru_hint: declarative
 - complete: True
