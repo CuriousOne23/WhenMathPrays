@@ -1,14 +1,16 @@
 # **Path‑A Supported Sentences**  
 ### *Coverage, Definitions, and Canonical Examples for `run_examples.py`*
 
-This document describes the full set of sentence families supported by the **Path‑A short simulator** (`run_examples.py`). It defines each family, the segment/role geometry used internally, and provides canonical examples that exercise the complete Path‑A pipeline:
+This document describes the sentence families supported by the **Path‑A short simulator** (`run_examples.py`). It defines each family, the segment/role geometry used internally, and provides canonical examples that exercise the complete Path‑A pipeline (SOB → SROB → CnOB → SmOB → SSG → RBU → RB → TR → TRU → RTU → CTP → IdOB → OuBA):
 
 - **SOB** — segmentation  
 - **SROB** — role assignment  
 - **CnOB** — constraint matching  
 - **SmOB** — smoothing  
+- **SSG** — structural freeze  
+- **RBU**, **RB**, **TR**, **TRU**, **RTU**, **CTP** — routing, including truth‑relation classification  
 - **IdOB** — semantic‑core operator selection  
-- **TRU** — truth‑relation classification  
+- **OuBA** — final commit  
 
 This paper is updated as new families are added.
 
@@ -23,7 +25,7 @@ This file does not invent utterances. It records family definitions and CSE stat
 
 ## **1. Overview of Supported Families**
 
-Path‑A currently supports five major families:
+Path‑A's original five major families are listed below. The claim ledger and CSE also cover action, command, request, reporting, relative, and exclamative sentences:
 
 1. **Copular / State Descriptive**  
 2. **Locative Descriptive**  
@@ -192,7 +194,7 @@ WQ → IQ → NP → RELC → IQ → AP → AP
 
 The examples above are canonical and can be added directly to `run_examples.py` for regression testing.
 
-As of 2026-09-23 the committed live runner sentence is *Where is the book that is on the table?* (PA-CSE-010). Passing seeds are left commented in `run_examples.py`.
+The committed live runner sentence is whatever the default `--execution-case` in `run_examples.py` currently selects. Read that file for the live sentence; do not treat a sentence named in this file as the runner default.
 
 ---
 

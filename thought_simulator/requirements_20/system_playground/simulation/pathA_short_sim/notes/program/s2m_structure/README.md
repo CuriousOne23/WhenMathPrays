@@ -1,9 +1,9 @@
 # S2M structure pass
 
 **Date:** 2026-10-08
-**Status:** definition. Not a writer. Not \(M\). Not the geometry conjecture.
+**Status:** definition, with a connection writer at `idob/connections.py`. Not \(M\). Not the geometry conjecture.
 
-This directory defines the present Structure-to-Meaning (S2M) experiment for Path A. Read it before any connection writer is added.
+This directory defines the present Structure-to-Meaning (S2M) experiment for Path A. The connection writer is `idob/connections.py`.
 
 Program entrance: [../README.md](../README.md). Geometry note, not imported: [../../conjectures/meaning_geometry_conjecture.md](../../conjectures/meaning_geometry_conjecture.md).
 
@@ -11,7 +11,7 @@ Program entrance: [../README.md](../README.md). Geometry note, not imported: [..
 
 The structural floor can cut an utterance and IdOB can sum a packet. The readable claim is one string from that packet. Neither of those is an accountable mapping. S2M is still foggy if a missing link can be inferred by silence.
 
-This pass defines the structure of the mapping before a writer exists. It names the terms, the legal input, the connection, the hole, the pressure points, and the utterance set. It also bounds success and failure in advance.
+This pass defined the structure of the mapping. A writer now exists at `idob/connections.py`. It names the terms, the legal input, the connection, the hole, the pressure points, and the utterance set. It also bounds success and failure in advance.
 
 ## Theme
 
@@ -82,7 +82,7 @@ A failure of that kind means Path A, as realized, cannot yet support accountable
 
 ## If this succeeds
 
-The next step is the record format, then the writer, in later requests. After those hold on the fifteen utterances, the next step is one pressure point at a time. The first expected pressure is underspecification: two supported relations and no preference. History and likelihood stay behind that.
+The writer is `idob/connections.py`. What it showed and did not show is in [result.md](result.md). The writer records supported fields and a neighborhood hole when no connection is supported. It does not rank. The first expected pressure remains underspecification: two supported relations and no preference. History and likelihood stay behind that.
 
 ## If this fails
 

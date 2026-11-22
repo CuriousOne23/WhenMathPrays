@@ -196,7 +196,7 @@ Status reflects runner reality, not markdown optimism.
 
 Notes must name the frozen object that would need to change, when that is the reason.
 
-As of 2026-09-23, the only committed live runner sentence is *Why is the sky blue?*
+The committed live runner sentence is whatever the default `--execution-case` in `run_examples.py` currently selects. Read that file for the live sentence; do not treat a sentence named in this header as the runner default.
 
 ---
 
@@ -265,7 +265,7 @@ The first rows must be the canonical catalog examples, in this order:
 
 - Where is the book?
 - Is the book on the table?
-- Why is the sky blue? *(only runnable in committed `run_examples.py` today)*
+- Why is the sky blue?
 
 **Mixed Interrogative**
 

@@ -5,7 +5,7 @@ This guide starts with a sentence you already know, then shows how the Path‑A 
 Program status, current face versus intended mapping, and the ready line: [notes/program/README.md](notes/program/README.md). This guide teaches how to run the simulator and correctly read its output as an inspectable observation surface for structure, default meaning, candidate interpretations, and category-influenced extensions.
 
 Names and hard words (object, adjacency, meaning, packet): [architecture/idob_seam.md](architecture/idob_seam.md).  
-Catalog (eight families only): [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md).  
+Catalog (ten cards; the family enum has ten values, including `agent_action`, `imperative`, and `exclamative`): [notes/idob_object_space/idob_object_space.md](notes/idob_object_space/idob_object_space.md).  
 Packet contract: [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md).  
 Charter: [architecture/path_a_realization_charter.md](architecture/path_a_realization_charter.md).  
 S2M program contract and Phase III/IV: [notes/program/s2m_program_reference.md](notes/program/s2m_program_reference.md).  
@@ -245,7 +245,7 @@ The final TP is the end-state substrate after all primitives run.
 - `struct_segments`, `segment_tokens` — SOB
 - `struct_roles`, `role_segments` — SROB
 - `constraints_matched`, `constraints_unmatched`, `constraint_residue` — CnOB
-- `smoothing_operations`, `semantic_adjacent_cues`, `basin_residue` — SmOB
+- `smoothing_operations`, `semantic_adjacent_cues`, `smoothing_residue` — SmOB
 
 **Routing**
 
@@ -254,7 +254,7 @@ The final TP is the end-state substrate after all primitives run.
 **Meaning on this path (IdOB + S2M)**
 
 - `semantic_core` — **dict** payload of the sum
-- `idob_packet` — full packet (see unified plan §3.3)
+- `idob` — full packet (teaching name `idob_packet`; see unified plan §3.3)
 - `activation_set`, `contributors`, `contributions`, `overlap_events`, `meaning_delta`, `psc_violations`, `registry_digest`
 - `s2m_seed` — structural relation / accountability
 - `s2m_meaning` — default_meaning, candidate interpretations, meaning_relations (extensions), cue_state
@@ -301,7 +301,7 @@ Read input/output deltas to see exactly what each primitive changed. IdOB should
 ### Final commit
 `OuBA`
 
-Meaning Composition Block (MCB) is omitted in this short sim.
+Meaning Composition Block (MCB) is present as a copy-only seam in `mcb/seam.py` (`copy_from_idob`). It does not compose new meaning.
 
 ---
 
@@ -370,7 +370,7 @@ Registry, sum, packets, PSC, legacy apply stubs. S2M attachment point.
 `support/dictionaries/` — token classes, segments, roles, constraints.
 
 **IdOB catalog**  
-`support/idob_objects/*.yaml` — the eight families.  
+`support/idob_objects/*.yaml` — the ten catalog cards.  
 `support/idob_schemas/idob_object.v1.schema.json` — object bound.  
 `support/idob_schemas/idob_psc_defaults.yaml` — shared PSC defaults.
 

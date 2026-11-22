@@ -56,7 +56,7 @@ Imagine the utterance as a spoken line. Path A then makes three notebooks:
 |---|---|---|---|
 | **U — utterance** | Intake fields on the Thought Packet (TP): the carrier string / tokens | *The book is on the table.* as sounds or letters | Named only |
 | **S — OB-set structure** | TP fields written by SOB, SROB, CnOB, SmOB | Chunks, structural labels, constraints, adjacent cues | Used in examples; owned by those primitives |
-| **C — catalog (§3)** | Eight YAML files under `support/idob_objects/` | Named extractors (`locative`, `copular_state`, …) | **This file owns C** |
+| **C — catalog (§3)** | Ten YAML files under `support/idob_objects/` | Named extractors (`locative`, `copular_state`, `imperative`, …) | **This file owns C** |
 | **K — claim keys (§4)** | Keys an extractor is *allowed to speak* on the packet (`theme`, `location`, …) | Not objects. Not chunks. Vocabulary. | **This file translates K** |
 | **P — packet** | `idob_packet` after IdOB sums whoever fired | Meaning on this path | Unified plan, not this file |
 
@@ -78,7 +78,7 @@ In ordinary talk we name *who*, *what happens*, *where*, *how much*. Those are u
 
 In the Path‑A Thought Simulator (TS) short sim, an **IdOB object (IdOBObject)** is a named catalog entry (layer C) that may write a **fragment** onto a packet. The book in *The book is on the table.* is a referent (usually a `theme` or similar core key on layer K). It is not an IdOBObject.
 
-IdOB space $\mathcal{I}$ is the frozen set of those catalog entries. Eight YAML files. The Identity Observation Block (IdOB) primitive **sums** whatever subset activates. The sum is meaning-side (layer P). This file only says what may exist on C and how entries are allowed to sit next to each other **as declarations**.
+IdOB space $\mathcal{I}$ is the frozen set of those catalog entries. Ten YAML files. The Identity Observation Block (IdOB) primitive **sums** whatever subset activates. The sum is meaning-side (layer P). This file only says what may exist on C and how entries are allowed to sit next to each other **as declarations**.
 
 ---
 
@@ -110,20 +110,22 @@ An IdOBObject is a YAML document validated by `idob_object.v1.schema.json`. Requ
 
 ---
 
-## 3. The eight catalog names (layer C — the tools)
+## 3. The ten catalog cards (layer C — the tools)
 
 These are the live files under `support/idob_objects/`. They do not live inside the utterance. They live in the registry. When an utterance arrives, some subset may *activate* and read layer S.
 
-The JSON Schema `family` enum lists the same eight strings as *legal family values*. Two helper files **declare a shared family** instead of `family = name`. Document the YAML, not the wish.
+The JSON Schema `family` enum lists ten legal family values, including `agent_action`, `imperative`, and `exclamative`. `modifier_resolution` is a helper object that declares shared family `mixed_descriptive` instead of `family = name`. `agent_action` is a helper object whose YAML `family` is `agent_action`. Document the YAML, not the wish.
 
 | `name` | YAML `family` | `priority` | Claimed `association.roles` | Declared `overlap.near` | Declared `overlap.far` | Default `truth_relation_family` |
 |---|---|---|---|---|---|---|
 | `interrogative_wh` | `interrogative_wh` | 10 | query_focus, predicate | interrogative_polar | copular_state | interrogative_wh |
 | `interrogative_polar` | `interrogative_polar` | 11 | query_focus, predicate | — | copular_state | interrogative_polar |
+| `imperative` | `imperative` | 15 | — | — | copular_state, interrogative_wh, interrogative_polar | imperative |
+| `exclamative` | `exclamative` | 16 | — | — | interrogative_wh, interrogative_polar | exclamative |
 | `copular_state` | `copular_state` | 20 | theme, state | locative | — | descriptive_state |
 | `locative` | `locative` | 30 | location | mixed_descriptive | — | descriptive_locative |
 | `mixed_descriptive` | `mixed_descriptive` | 40 | theme, state, location | modifier_resolution | — | descriptive_state |
-| `agent_action` | `residual_identity` | 50 | agent, action, patient | — | — | residual_identity |
+| `agent_action` | `agent_action` | 50 | agent, action, patient | — | — | residual_identity |
 | `modifier_resolution` | `mixed_descriptive` | 60 | theme, state, location, relation, action, patient | — | — | descriptive_mixed |
 | `residual_identity` | `residual_identity` | 90 | — | — | copular_state, locative | residual_identity |
 
@@ -137,7 +139,7 @@ Activation trees are empty in v1 YAML. Which object *actually* fires on an utter
 
 ## 4. Claim-role vocabulary (layer K — not a second drawer of tools)
 
-**Bridge from §3.** Section 3 named eight extractors. Section 4 does not name eight more. It answers: *the old teaching words Actor, Action, Relation, Modifier, Constraint, Context — if they are not tools, what are they?*
+**Bridge from §3.** Section 3 named ten extractors. Section 4 does not name ten more. It answers: *the old teaching words Actor, Action, Relation, Modifier, Constraint, Context — if they are not tools, what are they?*
 
 They are **not** catalog types and **not** families. They map onto keys the schema already locks on `semantic_core` (layer K), except the last two, which never leave layer S:
 
@@ -247,7 +249,7 @@ The composed **result** is `idob_packet` (layer P). That result is not specified
 - No MSL chapter.  
 - No CIE / $M' = M + \alpha I$.  
 - No S2M six-axis stand-in.  
-- No six-type “foundational basis” that rivals the eight files.  
+- No six-type “foundational basis” that rivals the ten files.  
 - No debugger second sum.
 
 If a sentence on this page cannot be pointed at a YAML field or at SOB/SROB/CnOB/SmOB, it belongs somewhere else.
