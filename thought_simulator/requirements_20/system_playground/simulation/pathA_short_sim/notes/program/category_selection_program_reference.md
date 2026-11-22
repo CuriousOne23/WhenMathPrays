@@ -47,6 +47,28 @@ This document does **not** define characterization artifact/session contract det
 
 The characterization reference does **not** define the category-selection meaning path itself.
 
+Boundary requirement:
+
+- The category-selection realization SHALL expose the observation surfaces and measurements required by [category_selection_characterization_reference.md](category_selection_characterization_reference.md).
+- Characterization-specific control and evidence-management responsibilities SHALL NOT be embedded into the category-selection mechanism itself.
+
+The category-selection realization must not own:
+
+- characterization-type dispatch,
+- characterization sweep orchestration,
+- characterization session management,
+- characterization campaign orchestration,
+- characterization artifact creation or naming,
+- `.tschar.json` artifact persistence,
+- characterization run numbering,
+- characterization artifact collision/non-overwrite management,
+- characterization-specific aggregation,
+- characterization experiment sequencing.
+
+Those responsibilities are defined by [category_selection_characterization_reference.md](category_selection_characterization_reference.md).
+
+Characterization observes and exercises the category-selection realization; characterization does not become part of the category-selection or meaning-selection mechanism.
+
 ## 5) Realization scope
 
 In scope for this contract:
@@ -131,6 +153,7 @@ At minimum, that update must reflect:
 - any added/changed observable fields on the category-selection path,
 - any changed relationship between normal run output and debug workflow (`run_examples.py -> run.log -> pathA_dbug.py`),
 - boundaries between realization output and characterization artifacts (if characterization integration is user-visible).
+- terminology alignment with accepted category-selection documents, including removal of obsolete informal "floor" wording when it refers to the structural path (for example, use wording equivalent to "structural path established" and "structural-path-visible information").
 
 If no user-visible behavior changed, the change report must explicitly state why no [user_guide.md](../../user_guide.md) update was required.
 
