@@ -457,6 +457,104 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: defer EXP4G specification pending additional contextual-applicability pair-selection constraints.
 - Option C: retain EXP4B as accepted and reprioritize later retained EXP4 boundary candidates before EXP4G.
 
+## Experiment record — EXP4G contextual-applicability boundary (executed, pending review-gate decision)
+
+### 1) What executed (exact command, times/order)
+
+- Order: two-command paired execution under one session identity (`exp4g_contextual_applicability`).
+- Run 1 (contextually applicable `support`) command:
+  `python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('The bridge needs support.', enable_s2m_seed=False, enable_category_selection=True, prior_context=None); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp4g_contextual_applicability','run_index':1,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'support_context_applicable','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':None}); print(result['persistence']['committed_final_path'])"`
+- Run 2 (contextually inapplicable/metalinguistic `support`) command:
+  `python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('The word support has seven letters.', enable_s2m_seed=False, enable_category_selection=True, prior_context=None); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp4g_contextual_applicability','run_index':2,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'support_context_metalinguistic','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':None}); print(result['persistence']['committed_final_path'])"`
+- Exit codes: paired command execution `0`.
+
+### 2) Inputs and controls used
+
+- Present utterances:
+  - run 1 (contextually applicable): `"The bridge needs support."`
+  - run 2 (contextually inapplicable/metalinguistic): `"The word support has seven letters."`
+- Mapped cue held constant in both utterances: `support -> physical` (sentence-internal mapping).
+- Prior context fixed absent for both runs: `prior_context=None`.
+- Fixed TS-affecting controls:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+- Fixed characterization controls:
+  - type/version: `infra_smoke` / `1.0`
+  - session: `exp4g_contextual_applicability`
+  - run indices: `1`, `2`
+
+### 3) Produced artifacts/logs (exact paths)
+
+- Run 1 committed artifact:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp4g_contextual_applicability/runs/000001__infra_smoke__1.0.tschar.json`
+- Run 2 committed artifact:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp4g_contextual_applicability/runs/000002__infra_smoke__1.0.tschar.json`
+- No additional experiment log file was produced by these in-process commands.
+
+### 4) Observed outputs (facts only)
+
+- Both EXP4G artifacts reported:
+  - `schema_id=ts.characterization.run`
+  - `schema_version=1.0`
+  - `characterization.type=infra_smoke`
+  - `characterization.version=1.0`
+  - `execution_status=succeeded`
+- Runtime-provided observation shape was present in both runs for:
+  - `final_tp.truth_relation`
+  - `trace.primitive_sequence`
+  - `final_tp.semantic.isc_category_result`
+- Unavailable observations were present in both runs for:
+  - `entropy` (`milestone1_unavailable`)
+  - `top_vs_second_margin` (`milestone1_unavailable`)
+- Fact-level comparison (same mapped cue token `support` in both contextual uses):
+  - run 1 (contextually applicable):
+    - `category_cue=["physical"]`
+    - `top_category="physical"`
+    - `category_confidence=0.26974629435004127`
+    - `category_rationale=["category_cue_applied","top_category=physical"]`
+    - `provenance.source=["sentence"]`
+  - run 2 (contextually inapplicable/metalinguistic):
+    - `category_cue=["physical"]`
+    - `top_category="physical"`
+    - `category_confidence=0.26974629435004127`
+    - `category_rationale=["category_cue_applied","top_category=physical"]`
+    - `provenance.source=["sentence"]`
+- Observed paired result for key cue/result/confidence/rationale/provenance fields above: no difference observed between run 1 and run 2.
+
+### 5) Unavailable measurements/deviations
+
+- `entropy` and `top_vs_second_margin` remained unavailable and explicitly marked as unavailable in both runs.
+- No deviation from approved EXP4G paired controls/identity structure was introduced.
+
+### 6) Unexpected behavior/anomalies
+
+- None observed in this paired execution.
+
+### 7) Interpretation (bounded)
+
+- Under tested EXP4G conditions, the two mapped `support` usages produced the same observed Category Selection cue/result/confidence/rationale/provenance fields.
+- This is compatible with the currently implemented lexical cue-recognition behavior and does not by itself constitute failure.
+- This paired record may characterize the current boundary between lexical mapped-cue recognition and contextual applicability discrimination under this implementation.
+
+### 8) Not established
+
+- No claim is established that contextual applicability is never distinguishable in all cases.
+- No threshold/no-category policy is established.
+- No global category-space boundary geometry/curve is established.
+- No stability/generalization claim beyond this paired case is established.
+- No scientific meaning claim is established.
+
+### 9) Questions raised
+
+- Should EXP4G be accepted as the current contextual-applicability boundary reference under tested conditions?
+- Which retained EXP4 boundary should be authorized next under one-at-a-time review gating?
+
+### 10) Next-step options (suggestions only, not decisions)
+
+- Option A: accept EXP4G and authorize next retained EXP4 boundary candidate selection at review gate.
+- Option B: request one bounded replay of EXP4G pair (new run indices) before next boundary authorization.
+- Option C: accept EXP4G and hold further execution pending EXP4 sequence reprioritization.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
