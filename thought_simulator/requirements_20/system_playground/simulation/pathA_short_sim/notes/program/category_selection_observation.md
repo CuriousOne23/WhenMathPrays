@@ -63,6 +63,96 @@ Each experiment record preserves:
 
 - What differences are observed between this no-cue baseline and the smallest controlled sentence-internal-cue case under the same TS-affecting controls, using currently implemented capabilities?
 
+## Experiment record — EXP2 sentence-internal-cue characterization (executed, pending review-gate decision)
+
+### 1) What executed (exact command, times/order)
+
+- Order: single-command experiment execution (no additional experiment commands).
+- Command executed exactly as specified in the experiment plan:
+  `python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('Where is the book?', enable_s2m_seed=False, enable_category_selection=True, prior_context=None); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp2_sentence_internal','run_index':1,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'sentence_internal_where_book','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':None}); print(result['persistence']['committed_final_path'])"`
+- Exit code: `0`.
+
+### 2) Inputs and controls used
+
+- Sentence-under-test: `"Where is the book?"`.
+- TS-affecting controls:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+  - `prior_context=None`
+- Characterization controls:
+  - type/version: `infra_smoke` / `1.0`
+  - identity: `session_id=exp2_sentence_internal`, `run_index=1`
+  - runtime metadata execution_case: `sentence_internal_where_book`
+
+### 3) Produced artifacts/logs (exact paths)
+
+- Committed artifact path returned by execution:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp2_sentence_internal/runs/000001__infra_smoke__1.0.tschar.json`
+- Baseline artifact used for bounded comparison:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp1_baseline/runs/000001__infra_smoke__1.0.tschar.json`
+- No additional experiment log file was produced by this in-process command.
+
+### 4) Observed outputs (facts only)
+
+- EXP2 artifact identity/schema/status:
+  - `schema_id=ts.characterization.run`
+  - `schema_version=1.0`
+  - `characterization.type=infra_smoke`
+  - `characterization.version=1.0`
+  - `identity.session_id=exp2_sentence_internal`
+  - `identity.run_index=1`
+  - `execution_status=succeeded`
+- EXP2 runtime-provided observations were present for:
+  - `final_tp.truth_relation`
+  - `trace.primitive_sequence`
+  - `final_tp.semantic.isc_category_result`
+- EXP2 unavailable observations were present for:
+  - `entropy` (`milestone1_unavailable`)
+  - `top_vs_second_margin` (`milestone1_unavailable`)
+- EXP2 `final_tp.semantic.isc_category_result.value` included:
+  - `category_cue=["perspectival"]`
+  - `top_category="perspectival"`
+  - `category_confidence=0.31090105669062545`
+  - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+  - provenance source including `"sentence"`
+- Bounded EXP1↔EXP2 fact-level comparison:
+  - runtime/unavailable section shape was present in both artifacts;
+  - `trace.primitive_sequence` was present in both artifacts;
+  - `isc_category_result` differed from EXP1 baseline (`[]/null/0.0`) to EXP2 sentence-internal cue result (`["perspectival"]/"perspectival"/0.31090105669062545`);
+  - `final_tp.truth_relation` was `declarative` in EXP1 and `interrogative` in EXP2.
+
+### 5) Unavailable measurements/deviations
+
+- `entropy` and `top_vs_second_margin` remained unavailable and explicitly marked as unavailable in EXP2.
+- No deviation from the approved EXP2 command/controls was introduced.
+
+### 6) Unexpected behavior/anomalies
+
+- None observed for this execution.
+
+### 7) Interpretation (bounded)
+
+- This run establishes one controlled sentence-internal-cue characterization record under currently implemented capabilities and yields a concrete artifact suitable for comparison against EXP1 baseline.
+- The record supports a bounded observational statement that EXP2 and EXP1 differ in the observed `isc_category_result` fields under their respective inputs/controls.
+
+### 8) Not established
+
+- No threshold/no-category policy is established.
+- No support-boundary conclusion is established.
+- No scientific meaning claim is established from the category result.
+- No multi-run stability or generalization claim is established from this single EXP2 run.
+
+### 9) Questions raised
+
+- Should EXP2 be accepted as recorded evidence for progressing to an EXP3 design decision?
+- Should the next experiment prioritize prior-context cue comparison or ambiguity-family comparison, given the current EXP1/EXP2 observed contrast?
+
+### 10) Next-step options (suggestions only, not decisions)
+
+- Option A: accept EXP2 and authorize design/specification of EXP3 with the smallest prior-context cue case.
+- Option B: request one controlled EXP2 replay (new run index) before deciding EXP3 design direction.
+- Option C: accept EXP2 but defer EXP3 pending reviewer interpretation alignment.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
