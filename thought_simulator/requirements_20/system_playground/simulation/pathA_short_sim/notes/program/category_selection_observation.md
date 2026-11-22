@@ -556,7 +556,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: defer next EXP4 specification pending additional pair/control constraints.
 - Option C: hold boundary progression while reprioritizing retained EXP4 sequence with current accepted records.
 
-## Experiment record — EXP4C1 within-utterance conflicting mapped category evidence (executed, pending review-gate decision)
+## Experiment record — EXP4C1 within-utterance conflicting mapped category evidence (accepted)
 
 ### 1) What executed (exact command, times/order)
 
@@ -635,6 +635,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 
 - Under tested EXP4C1 conditions, this run records simultaneous mapped multi-direction cue presence in one utterance and the resulting bounded category-result fields.
 - This record characterizes a within-utterance conflict boundary condition for the current implementation.
+- Under the tested conditions, this accepted record provides evidence for an observable within-utterance conflict boundary: multiple mapped category directions were simultaneously present in `category_cue` and yielded bounded category-result fields.
 
 ### 8) Not established
 
@@ -646,14 +647,14 @@ This synthesis is bounded: these accepted runs support tractable observation and
 
 ### 9) Questions raised
 
-- Should EXP4C1 be accepted as the current within-utterance conflict boundary reference under tested conditions?
-- Which retained EXP4 boundary should be authorized next under one-at-a-time review gating?
+- What is the cleanest first cross-source conflict case for EXP4C2 under fixed controls?
+- Which specific EXP4C2 case should be approved for one-at-a-time execution authorization?
 
 ### 10) Next-step options (suggestions only, not decisions)
 
-- Option A: accept EXP4C1 and authorize next retained EXP4 boundary candidate selection at review gate.
-- Option B: request one bounded replay of EXP4C1 run 1 (new run index) before next boundary authorization.
-- Option C: accept EXP4C1 and hold further execution pending EXP4 sequence reprioritization.
+- Option A: fully specify EXP4C2 only (cross-source conflict boundary), then stop at pre-execution review gate.
+- Option B: defer EXP4C2 specification pending additional pair/control constraints.
+- Option C: retain EXP4C1 as accepted and reprioritize later retained EXP4 boundary candidates before EXP4C2.
 
 ## Linked program context
 
