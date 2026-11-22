@@ -29,8 +29,7 @@ New characterization documents should be registered in this index rather than re
 ### Architectural proposal
 
 - [category_selection_proposal.md](category_selection_proposal.md)
-  * Retrieval URL: https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/notes/program/category_selection_proposal.md
-  * Role: Defines architectural intent, boundaries, category-selection path, and relationship to S2M.
+  *Role:** Defines architectural intent, boundaries, category-selection path, and relationship to S2M.
 
 ### Research
 
