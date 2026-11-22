@@ -218,7 +218,10 @@ This Stage-1 map is the next task after this plan. It is not created in this doc
 
 ## 15) Relationship to the later program reference
 
-The future implementation contract will be [category_selection_program_reference.md](category_selection_program_reference.md), but it remains placeholder-only until Stage-1 mapping and review are complete.
+After Stage-1 mapping/review, two coordinated placeholder software references carry distinct responsibilities:
+
+- [category_selection_program_reference.md](category_selection_program_reference.md): bounded category-selection realization contract.
+- [category_selection_characterization_reference.md](category_selection_characterization_reference.md): bounded characterization instrumentation/framework contract for experiments and characterization support.
 
 ## 16) Post-category research gate
 
@@ -227,8 +230,15 @@ After confidence/closeout review, the next research question must be selected fr
 ## 17) Required future documents
 
 - [category_selection_program_reference.md](category_selection_program_reference.md) (placeholder now; later bounded realization contract)
+- [category_selection_characterization_reference.md](category_selection_characterization_reference.md) (placeholder now; later characterization instrumentation/framework contract)
 - [category_selection_observation.md](category_selection_observation.md) (placeholder now; later empirical record from actual runs)
 - GitHub Agent implementation plan (after Stage-1 map and review)
+
+## Category-selection document family
+
+For the complete category-selection document map, document roles, authority relationships, software references, characterization documents, and observation records, see:
+
+[category_selection_index.md](category_selection_index.md)
 
 ## 18) Explicit non-goals
 

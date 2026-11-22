@@ -363,6 +363,8 @@ Large portions of the authorities are not duplicated; links are provided where a
 
 ## Successor documents and next-program flow
 
+For the evolving successor category-selection document family (complete map, roles, and relationships), see [category_selection_index.md](category_selection_index.md).
+
 Successor category-selection documents:
 
 - [category_selection_research_plan.md](category_selection_research_plan.md): successor research plan defining the next category-selection characterization program, confidence dimensions, architectural-generality experiments, and category-support/unsupported-space characterization.

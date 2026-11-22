@@ -499,9 +499,9 @@ Compared to Stage-1 research-plan measurement needs:
 - It does not establish B-vs-C separability beyond currently exposed fields.
 - It does not authorize implementation or requirements changes.
 
-## Inputs required for the future program reference
+## Inputs required for the future coordinated software references
 
-From this Stage-1 map, future program-reference drafting would need (after review):
+From this Stage-1 map, post-review drafting would need (after review):
 
 1. Agreed list of bounded scaffolding to preserve vs isolate in experiments.
 2. Explicit observability requirements for missing metrics/diagnostics (if any are approved later).
@@ -509,12 +509,32 @@ From this Stage-1 map, future program-reference drafting would need (after revie
 4. Agreed treatment of seed-generation dependence on canonical utterance patterns.
 5. Agreed change-accounting approach for any `K`-variation experiment.
 
+Drafting responsibilities split across:
+
+- [category_selection_program_reference.md](category_selection_program_reference.md): bounded category-selection realization contract.
+- [category_selection_characterization_reference.md](category_selection_characterization_reference.md): bounded characterization instrumentation, invocation, artifact-handling, and experimental-support contract.
+
 ## Review gate
 
-Before expanding [category_selection_program_reference.md](category_selection_program_reference.md), review should explicitly confirm:
+Before expanding [category_selection_program_reference.md](category_selection_program_reference.md) and/or [category_selection_characterization_reference.md](category_selection_characterization_reference.md), review should explicitly confirm:
 
 - Stage-1 findings accepted/rejected with rationale.
 - Scaffolding items classified as intentional baseline versus candidate redesign targets.
 - Observability gaps acknowledged (including entropy/boundary diagnostics) without silently filling them.
 - Normative/current-realization divergences logged and accepted as current baseline facts.
 - No implementation directives are inferred from this Stage-1 map alone.
+
+## Post-review disposition addendum
+
+Post-review disposition: Stage-1 findings feed two coordinated successor software references:
+
+- [category_selection_program_reference.md](category_selection_program_reference.md) for the bounded category-selection realization contract.
+- [category_selection_characterization_reference.md](category_selection_characterization_reference.md) for bounded characterization instrumentation, invocation, artifact handling, and experimental support.
+
+This disposition does not alter any Stage-1 factual findings recorded above.
+
+## Category-selection document family
+
+For the complete category-selection document map, document roles, authority relationships, software references, characterization documents, and observation records, see:
+
+[category_selection_index.md](category_selection_index.md)

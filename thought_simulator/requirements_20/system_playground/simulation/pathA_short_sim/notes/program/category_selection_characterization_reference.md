@@ -7,6 +7,8 @@
 
 Future bounded software reference for the category-selection characterization infrastructure.
 
+This reference is a coordinated sibling of [category_selection_program_reference.md](category_selection_program_reference.md): the program reference covers bounded category-selection realization, while this reference covers characterization infrastructure.
+
 ## Explicit boundary
 
 Characterization observes and exercises the category-selection realization.
@@ -29,6 +31,12 @@ It does **not**:
 - [category_selection_stage1_modification_map.md](category_selection_stage1_modification_map.md)
 - [category_selection_program_reference.md](category_selection_program_reference.md)
 - [category_selection_observation.md](category_selection_observation.md)
+
+## Category-selection document family
+
+For the complete category-selection document map, document roles, authority relationships, software references, characterization documents, and observation records, see:
+
+[category_selection_index.md](category_selection_index.md)
 
 ## Future scope (placeholder note)
 

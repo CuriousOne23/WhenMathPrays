@@ -22,10 +22,20 @@ Future experiment records should preserve:
 
 ## Linked program context
 
+- [category_selection_index.md](category_selection_index.md)
 - [category_selection_research_plan.md](category_selection_research_plan.md)
 - [category_selection_program_reference.md](category_selection_program_reference.md)
+- [category_selection_characterization_reference.md](category_selection_characterization_reference.md)
 - [category_selection_proposal.md](category_selection_proposal.md)
 - [category_structure_observation.md](category_structure_observation.md)
+
+Generated characterization artifacts are evidence inputs to future entries in this observation record; this Markdown document remains the human scientific/observational record.
+
+## Category-selection document family
+
+For the complete category-selection document map, document roles, authority relationships, software references, characterization documents, and observation records, see:
+
+[category_selection_index.md](category_selection_index.md)
 
 ## Explicit boundary
 

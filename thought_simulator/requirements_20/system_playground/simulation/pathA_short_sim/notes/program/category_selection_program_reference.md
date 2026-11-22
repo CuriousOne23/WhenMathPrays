@@ -23,15 +23,25 @@ When authorized for expansion, this document is expected to define:
 - non-mutation boundaries and ownership walls
 - GitHub Agent stop/review gates
 
+Characterization software/instrumentation is specified separately in [category_selection_characterization_reference.md](category_selection_characterization_reference.md).
+
 ## Required linked authorities and context
 
+- [category_selection_index.md](category_selection_index.md)
 - [category_selection_research_plan.md](category_selection_research_plan.md)
 - [category_selection_proposal.md](category_selection_proposal.md)
+- [category_selection_characterization_reference.md](category_selection_characterization_reference.md)
 - [category_structure_observation.md](category_structure_observation.md)
 - [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md)
 - [20.105_tp_requirements.md](../../../20.105_tp_requirements.md)
 - [20.116.010_tp_envelope_index.md](../../../20.116.010_tp_envelope_index.md)
 - [20.40.050_idob_prim.md](../../../20.40.050_idob_prim.md)
+
+## Category-selection document family
+
+For the complete category-selection document map, document roles, authority relationships, software references, characterization documents, and observation records, see:
+
+[category_selection_index.md](category_selection_index.md)
 
 ## Explicit warning
 

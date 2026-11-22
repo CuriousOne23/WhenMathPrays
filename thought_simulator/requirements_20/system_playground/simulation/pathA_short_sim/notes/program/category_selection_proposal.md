@@ -136,12 +136,21 @@ This proposal does not duplicate the detailed nine-window methodology. An observ
 
 Successor sequence for this proposal:
 
-[category_selection_research_plan.md](category_selection_research_plan.md) → Stage-1 current-software modification map → [category_selection_program_reference.md](category_selection_program_reference.md) → reviewed implementation.
+[category_selection_research_plan.md](category_selection_research_plan.md) → Stage-1 current-software modification map → coordinated software references ([category_selection_program_reference.md](category_selection_program_reference.md), [category_selection_characterization_reference.md](category_selection_characterization_reference.md)) → reviewed implementation.
 
 Successor documents:
 - [category_selection_research_plan.md](category_selection_research_plan.md)
 - [category_selection_program_reference.md](category_selection_program_reference.md)
+- [category_selection_characterization_reference.md](category_selection_characterization_reference.md)
 - [category_selection_observation.md](category_selection_observation.md)
+
+For the complete category-selection document map, roles, and authority relationships, see [category_selection_index.md](category_selection_index.md).
+
+## Category-selection document family
+
+For the complete category-selection document map, document roles, authority relationships, software references, characterization documents, and observation records, see:
+
+[category_selection_index.md](category_selection_index.md)
 
 ## Relation to prior work
 
