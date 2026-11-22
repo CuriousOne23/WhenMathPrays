@@ -568,11 +568,15 @@ EVENT directive 2026-11-22 10:49 AM America/Phoenix (stamp=human, kind=directive
 Correction: the shortsim-docs/20261119-6e1a8d5 form is NOT waiting on Submit. Its PR #195 (https://github.com/CuriousOne23/WhenMathPrays/pull/195) was closed unmerged on 2026-11-19 at 8:52 AM MST. The branch is ahead 1 and behind 82 and would conflict. It was not reopened, and its goal wording is superseded. Removed from needs human.
 (4) Needs human: the 9 baseline items (open PR / drop / defer).
 
+closures (2026-11-22, stamp=human):
+C-004 | 20.116.020_ownership_rw.md, 20.116.030_name_separations.md, 20.116.010_tp_envelope_index.md | HLR-20.40.055-018 | status=CLOSED 2026-11-22 (stamp=human) | resolved by 20.116 amendment PR #204, merged bb49aad 2026-11-22 12:15 PM MST: 20.116.020 v0.2 §2 row, 20.116.030 v0.2 alias vs Φ separation, 20.116.010 Notes cell; no 20.40.055 edit; no runtime change | IdOB-prm remains the sole birth writer of TP.semantic.meaning_semantics[]; MCB-prm is not a co-owner | owner=human | write=no
+F-008 | 20.705 §2 | 20.40.050_idob_prim.md, 20.40.055_mcb_prim.md | status=RESOLVED 2026-11-22 (stamp=human): constrained post-birth append | class=post-birth-authorized-append (replaces class=shared-writer) | IdOB-prm alone owns birth of TP.semantic.meaning_semantics[] (HLR-20.40.050-016); MCB-prm may only perform the post-birth append required by HLR-20.40.055-018 and must not birth, replace, reorder, or treat append as ownership; normative home 20.116.020 v0.2 §2 (PR #204, bb49aad) | owner=human | write=no
+
 needs human:
 S1 S2 S3 S4 E1 E2 M-001–M-017 M-705-001–M-705-012 R-001–R-017 MX-001–MX-046 (no stamp; owner=human; write=no)
 the 9 baseline items (open PR / drop / defer) | owner=human | write=no
 review of #200 | owner=human | write=no
-F-004–F-008 (no stamp yet) | owner=human | write=no
+F-004–F-007 (no stamp yet on main; F-008 resolved above) | owner=human | write=no
 Inventory keep/delete/gitignore still open from prior digests | owner=human | write=no
 Path A door refresh | owner=human | write=no
 merging #189–#199 | owner=human | write=no
