@@ -19,7 +19,7 @@ Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums tha
 
 Force ops such as polar, command, request, and exclamative are open holes. They are not object connections. History, likelihood, and the geometry conjecture are not inputs.
 
-## S2M mapping (experimental, branch `s2m-seed-experiment`)
+## S2M mapping (experimental; on main via PR #194/#197; historical)
 
 S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teaching packet. This is now historical / accomplished; the current goal is category selection (see status and the proposal above).
 
@@ -39,6 +39,8 @@ S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teac
     "written_relations": [...],
     "null_relations": [...],
     "crossing_fields": {...},
+    "active_context_stores": [],
+    "selection_cues": [],
     "seed_complete": true
   }
 
@@ -48,10 +50,19 @@ S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teac
     "candidate_interpretations": [...],
     "meaning_relations": [...],
     "active_space": [...],
+    "active_context_stores": [],
+    "cue_state": {
+      "category_cue": [],
+      "cue_active": false,
+      "provenance": {}
+    },
+    "category_result": {},
     "story_id": "...",
     "extendable": true
   }
   ```
+
+  With no selection cue (the seed currently writes `selection_cues: []`), `meaning_relations` and `active_space` are empty: the run reports `default_meaning` and lists `candidate_interpretations` without legitimizing them (`s2m/loop.py`, `s2m/legitimate.py`).
 
 - **Disabled:**
   ```bash

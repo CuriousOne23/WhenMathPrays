@@ -37,3 +37,5 @@ The packet can name the links it has. It cannot yet treat command, request, pola
 ## Next step
 
 One pressure point at a time. The first is whether `polar_question`, `bare_command`, `polite_request`, and `exclamative_force` become relations or stay holes. History and likelihood stay behind that decision.
+
+Status note (2026-11-19): this is not the current program goal. Per [../status.md](../status.md) the current goal is "Controlled category selection (sentence-internal cue or prior-CEx cue) so a non-default category can be chosen without mutating the floor."
