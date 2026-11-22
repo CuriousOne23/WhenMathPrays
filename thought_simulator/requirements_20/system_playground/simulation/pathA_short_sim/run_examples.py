@@ -4,6 +4,12 @@ import re
 from typing import List, Optional
 
 from characterization import CharacterizationError
+from characterization.artifacts import (
+    build_success_envelope,
+    find_existing_canonical_identity_artifact,
+    intended_artifact_path,
+    persist_success_envelope,
+)
 from characterization.dispatcher import resolve_characterization
 from pathA_short_simulator import run_pathA_short
 from mcb.seam import copy_from_idob
@@ -250,8 +256,11 @@ def _resolve_execution_case(case_name: str) -> dict:
 
 
 def _parse_type_parameters(args: argparse.Namespace, parser: argparse.ArgumentParser) -> dict:
+    def cli_invalid(message: str) -> None:
+        raise SystemExit(f"char_cli_invalid: {message}")
+
     if args.char_params_json and args.char_params_file:
-        parser.error("characterization parameters require exactly one of --char-params-json or --char-params-file")
+        cli_invalid("characterization parameters require exactly one of --char-params-json or --char-params-file")
 
     if args.char_params_json:
         raw = args.char_params_json
@@ -260,20 +269,23 @@ def _parse_type_parameters(args: argparse.Namespace, parser: argparse.ArgumentPa
             with open(args.char_params_file, "r", encoding="utf-8") as handle:
                 raw = handle.read()
         except OSError as exc:
-            parser.error(f"unable to read --char-params-file: {exc}")
+            cli_invalid(f"unable to read --char-params-file: {exc}")
     else:
         return {}
 
     try:
         payload = json.loads(raw)
     except json.JSONDecodeError as exc:
-        parser.error(f"characterization parameters must be valid JSON: {exc}")
+        cli_invalid(f"characterization parameters must be valid JSON: {exc}")
     if not isinstance(payload, dict):
-        parser.error("characterization parameters must decode to a JSON object")
+        cli_invalid("characterization parameters must decode to a JSON object")
     return payload
 
 
 def _resolve_characterization_request(args: argparse.Namespace, parser: argparse.ArgumentParser) -> Optional[dict]:
+    def cli_invalid(message: str) -> None:
+        raise SystemExit(f"char_cli_invalid: {message}")
+
     char_args_supplied = any(
         value is not None
         for value in [
@@ -288,22 +300,22 @@ def _resolve_characterization_request(args: argparse.Namespace, parser: argparse
 
     if not args.characterize:
         if char_args_supplied:
-            parser.error("characterization arguments require --characterize")
+            cli_invalid("characterization arguments require --characterize")
         return None
 
     if not args.char_type:
-        parser.error("--characterize requires --char-type")
+        cli_invalid("--characterize requires --char-type")
     if not args.char_session_id:
-        parser.error("--characterize requires --char-session-id")
+        cli_invalid("--characterize requires --char-session-id")
     if args.char_run_index is None:
-        parser.error("--characterize requires --char-run-index")
+        cli_invalid("--characterize requires --char-run-index")
 
     session_id = str(args.char_session_id)
     if not SESSION_ID_PATTERN.match(session_id):
-        parser.error("invalid --char-session-id; expected ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
+        cli_invalid("invalid --char-session-id; expected ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
     run_index = int(args.char_run_index)
     if run_index < 1:
-        parser.error("--char-run-index must be >= 1")
+        cli_invalid("--char-run-index must be >= 1")
 
     raw_type_params = _parse_type_parameters(args, parser)
 
@@ -311,13 +323,31 @@ def _resolve_characterization_request(args: argparse.Namespace, parser: argparse
         resolved = resolve_characterization(args.char_type, args.char_version)
         resolved_type_params = resolved["params_resolver"](raw_type_params)
     except ValueError as exc:
-        parser.error(str(exc))
+        cli_invalid(str(exc))
+
+    canonical_existing = find_existing_canonical_identity_artifact(
+        session_id=session_id,
+        run_index=run_index,
+    )
+    if canonical_existing is not None:
+        raise CharacterizationError(
+            "char_identity_conflict",
+            "canonical identity already exists at {}".format(canonical_existing),
+        )
 
     return {
         "type": resolved["type"],
         "version": resolved["version"],
         "session_id": session_id,
         "run_index": run_index,
+        "intended_artifact_path": str(
+            intended_artifact_path(
+                session_id=session_id,
+                run_index=run_index,
+                char_type=resolved["type"],
+                char_version=resolved["version"],
+            )
+        ),
         "resolved_type_parameters": resolved_type_params,
         "runner": resolved["runner"],
     }
@@ -326,9 +356,36 @@ def _resolve_characterization_request(args: argparse.Namespace, parser: argparse
 def run_characterization_once(
     characterization_request: dict,
     simulation_result: dict,
+    source_runtime_flags: dict,
 ) -> dict:
-    """Run one TS execution and collect in-memory characterization result."""
+    """Run one TS execution characterization and persist success evidence."""
     type_result = characterization_request["runner"](simulation_result)
+    observations = type_result.get("observations", {}) if isinstance(type_result, dict) else {}
+    if not isinstance(observations, dict):
+        raise CharacterizationError("char_processing_failed", "characterization observations payload is invalid")
+    runtime_provided = observations.get("runtime_provided", {})
+    unavailable = observations.get("unavailable", {})
+    if not isinstance(runtime_provided, dict) or not isinstance(unavailable, dict):
+        raise CharacterizationError("char_processing_failed", "characterization observations payload is invalid")
+
+    envelope = build_success_envelope(
+        char_type=characterization_request["type"],
+        char_version=characterization_request["version"],
+        session_id=characterization_request["session_id"],
+        run_index=characterization_request["run_index"],
+        source_runtime_flags=source_runtime_flags,
+        runtime_provided_observations=runtime_provided,
+        unavailable_observations=unavailable,
+        resolved_type_parameters=characterization_request["resolved_type_parameters"],
+        entrypoint="run_examples.py",
+    )
+    persist_result = persist_success_envelope(envelope)
+    if not persist_result.get("ok"):
+        raise CharacterizationError(
+            str(persist_result.get("status_code", "char_persist_failed")),
+            str(persist_result.get("message", "artifact persistence failed")),
+        )
+
     return {
         "identity": {
             "session_id": characterization_request["session_id"],
@@ -340,6 +397,7 @@ def run_characterization_once(
         },
         "resolved_type_parameters": characterization_request["resolved_type_parameters"],
         "result": type_result,
+        "persistence": persist_result,
     }
 
 
@@ -539,17 +597,34 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     characterization_request = _resolve_characterization_request(args, parser)
-    simulation_result = main(
-        enable_s2m_seed=not args.no_s2m_seed,
-        show_category_observations=False if characterization_request is not None else (not args.no_category_observations),
-        execution_case=args.execution_case,
-        enable_category_selection=args.enable_category_selection,
-    )
+    enable_s2m_seed = not args.no_s2m_seed
+    show_category_observations = False if characterization_request is not None else (not args.no_category_observations)
+    source_runtime_flags = {
+        "execution_case": args.execution_case,
+        "enable_category_selection": bool(args.enable_category_selection),
+        "enable_s2m_seed": bool(enable_s2m_seed),
+        "show_category_observations": bool(show_category_observations),
+    }
+    selected_case = _resolve_execution_case(args.execution_case)
+    if "prior_context" in selected_case:
+        source_runtime_flags["prior_context"] = selected_case.get("prior_context")
+    try:
+        simulation_result = main(
+            enable_s2m_seed=enable_s2m_seed,
+            show_category_observations=show_category_observations,
+            execution_case=args.execution_case,
+            enable_category_selection=args.enable_category_selection,
+        )
+    except Exception as exc:
+        if characterization_request is not None:
+            raise SystemExit(f"char_ts_execution_failed: {exc}")
+        raise
     if characterization_request is not None:
         try:
             run_characterization_once(
                 characterization_request=characterization_request,
                 simulation_result=simulation_result,
+                source_runtime_flags=source_runtime_flags,
             )
         except CharacterizationError as exc:
             raise SystemExit(f"{exc.code}: {exc.message}")
