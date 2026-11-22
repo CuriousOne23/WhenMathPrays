@@ -363,6 +363,8 @@ Compare EXP3 against accepted references on:
   - EXP3 prior-context reference (expected prior-context-driven source path);
 - trace primitive sequence presence.
 
+Interpret EXP2↔EXP3 numeric/category differences as potentially confounded by sentence/truth-relation differences (`"Where is the book?"` interrogative vs `"The sky is blue."` declarative); treat provenance-source contrast as the primary controlled comparison target.
+
 Do not infer threshold/no-category policy, support-boundary conclusions, or scientific meaning conclusions from this single EXP3 run.
 
 ### 16.7 Unavailable measurements
