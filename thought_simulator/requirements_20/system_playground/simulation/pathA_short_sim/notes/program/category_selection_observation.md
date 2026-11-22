@@ -358,7 +358,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: defer EXP4B specification pending additional pair-selection constraints.
 - Option C: retain EXP4A as accepted and reprioritize later EXP4 boundary candidates before EXP4B.
 
-## Experiment record — EXP4B present-utterance representability boundary (executed, pending review-gate decision)
+## Experiment record — EXP4B present-utterance representability boundary (accepted)
 
 ### 1) What executed (exact command, times/order)
 
@@ -437,6 +437,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 
 - This paired run set provides an observable mapped-versus-unmapped present-utterance representability reference under fixed controls.
 - The mapped side is consistent with accepted EXP2 mapped reference on documented fact-level fields.
+- Under the tested conditions, this accepted record provides evidence for an observable present-utterance representability boundary: mapped present-utterance information produced category evidence and a category result, while the selected unmapped comparator did not.
 
 ### 8) Not established
 
@@ -447,14 +448,14 @@ This synthesis is bounded: these accepted runs support tractable observation and
 
 ### 9) Questions raised
 
-- Should EXP4B be accepted as the current mapped-versus-unmapped present-utterance representability boundary reference?
-- Which retained EXP4 boundary should be authorized next under one-at-a-time review gating?
+- What is the cleanest contextual-applicability pair for EXP4G where mapped lexical representability is held constant across both sides?
+- Which specific EXP4G pair should be approved for one-at-a-time execution authorization?
 
 ### 10) Next-step options (suggestions only, not decisions)
 
-- Option A: accept EXP4B and authorize next EXP4 boundary candidate selection at review gate.
-- Option B: request one bounded replay of EXP4B pair (new run indices) before next boundary authorization.
-- Option C: accept EXP4B and hold further execution pending EXP4 sequence reprioritization.
+- Option A: fully specify EXP4G only (contextual-applicability boundary), then stop at pre-execution review gate.
+- Option B: defer EXP4G specification pending additional contextual-applicability pair-selection constraints.
+- Option C: retain EXP4B as accepted and reprioritize later retained EXP4 boundary candidates before EXP4G.
 
 ## Linked program context
 

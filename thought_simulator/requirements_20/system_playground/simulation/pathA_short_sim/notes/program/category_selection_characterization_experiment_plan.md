@@ -239,7 +239,9 @@ After Experiment 1 record is prepared, stop and wait for explicit reviewer autho
 - **Accepted evidence summary:** one successful prior-context cue/provenance characterization run (`exp3_prior_context`, run 1) with committed artifact and bounded provenance-source contrast versus accepted EXP1 (`[]`) and EXP2 (`["sentence"]`) references.
 - **EXP4A status:** executed and accepted at review gate.
 - **Accepted evidence summary:** under tested EXP4A paired conditions (`location` mapped vs `position` unmapped prior context, fixed utterance/controls), mapped prior-context information produced category evidence/category result while the selected unmapped comparator did not.
-- **Gate decision for next step:** fully specify EXP4B only; execution remains explicitly authorization-gated.
+- **EXP4B status:** executed and accepted at review gate.
+- **Accepted evidence summary:** under tested EXP4B paired conditions (`"Where is the book?"` mapped vs `"When is the book?"` unmapped utterance, fixed controls), mapped present-utterance information produced category evidence/category result while the selected unmapped comparator did not.
+- **Gate decision for next step:** fully specify EXP4G only; execution remains explicitly authorization-gated.
 
 ## 15) Experiment 2 — fully specified (smallest useful sentence-internal-cue comparison)
 
@@ -500,7 +502,7 @@ Cannot establish:
 
 EXP4A is accepted as bounded evidence for an observable prior-context representability boundary under tested conditions. This does not establish universal boundaries, thresholds/no-category policy, stability/generalization, or full category-space characterization.
 
-### 17.5 EXP4B (fully specified next candidate) — present-utterance representability boundary
+### 17.5 EXP4B (accepted) — present-utterance representability boundary
 
 #### 17.5.1 Precise research question
 
@@ -554,9 +556,9 @@ Use one paired session:
 - run 1: mapped case (`"Where is the book?"`)
 - run 2: unmapped case (`"When is the book?"`)
 
-#### 17.5.9 Exact planned execution procedure (authorization-gated)
+#### 17.5.9 Executed procedure (for accepted paired record)
 
-When/if authorized, execute two in-process characterization invocations using existing `run_pathA_short(...)` and `run_characterization_once(...)` with fixed controls:
+Two in-process characterization invocations were executed using existing `run_pathA_short(...)` and `run_characterization_once(...)` with fixed controls:
 
 - run 1: sentence `"Where is the book?"`, `prior_context=None`, `run_index=1`
 - run 2: sentence `"When is the book?"`, `prior_context=None`, `run_index=2`
@@ -619,11 +621,11 @@ Stop and escalate if:
 
 #### 17.5.15 Mandatory review gate
 
-After EXP4B paired execution record is prepared, stop at review gate and wait for explicit authorization before any later EXP4 experiment.
+EXP4B has completed review-gate acceptance. Do not auto-advance; later EXP4 work remains separately authorization-gated.
 
-#### 17.5.16 EXP4B pre-execution review gate
+#### 17.5.16 Acceptance status (bounded)
 
-EXP4B remains pending explicit authorization. Do not execute from this specification alone.
+EXP4B is accepted as bounded evidence for an observable present-utterance representability boundary under tested conditions. This does not establish universal boundaries, thresholds/no-category policy, stability/generalization, or full category-space characterization.
 
 ### 17.6 EXP4C1 (proposed, not fully specified) — conflicting category evidence within present utterance
 
@@ -650,11 +652,127 @@ EXP4B remains pending explicit authorization. Do not execute from this specifica
 3. **Current limitation:** no clean, review-approved campaign mechanism currently exists for controlled inventory switching/versioning without broadening scope.
 4. **Decision rule:** do not implement new inventory-switch mechanism in this stage; revisit after explicit approval.
 
-### 17.10 EXP4G (proposed, not fully specified) — contextual-applicability boundary
+### 17.10 EXP4G (fully specified next candidate) — contextual-applicability boundary
 
-- boundary focus: mapped cue is lexically recognized, but contextual applicability of that cue use is questionable;
-- relationship: distinct from mapped-vs-unmapped representability;
-- status: retained as boundary candidate, execution details deferred.
+#### 17.10.1 Precise research question
+
+Under fixed controls, when the same mapped cue token is present in both utterances, is any observable Category Selection difference produced between a contextually applicable use and a contextually inapplicable/metalinguistic use?
+
+#### 17.10.2 Applicable and inapplicable utterance pair
+
+- **Contextually applicable utterance:** `"The bridge needs support."`
+- **Contextually inapplicable utterance:** `"The word support has seven letters."`
+
+#### 17.10.3 Mapped cue and category
+
+- mapped sentence cue token: `support`
+- mapped category direction: `physical`
+- mapping source: [category_cues.yaml](../../support/dictionaries/category_cues.yaml) `sentence_internal.support -> physical`
+
+#### 17.10.4 Why the inapplicable case is defensible
+
+- In the inapplicable case, `support` is used metalinguistically as a word-mention object (`"the word support"`), not as evidence that the utterance context is about physical support.
+- Current cue extraction is lexical substring matching (`marker_text in lowered`) and does not implement contextual applicability filtering, so mapped lexical recognition can occur even when contextual category evidence is not semantically warranted.
+- This separates contextual applicability from representability: both sides are representable/mapped; the intended independent variable is contextual applicability of the mapped token use.
+
+#### 17.10.5 Substring and hidden-cue self-check
+
+- `support` appears explicitly in both utterances.
+- Neither utterance contains mapped sentence markers `cold` or `where`.
+- No prior context is supplied, so prior-context cue markers are fixed absent.
+- No additional mapped marker is introduced by punctuation choice.
+
+#### 17.10.6 Controls held fixed
+
+- prior context fixed absent: `prior_context=None`
+- `enable_category_selection=True`
+- `enable_s2m_seed=False`
+- characterization type/version: `infra_smoke` / `1.0`
+- one characterization invocation per run
+
+#### 17.10.7 Characterization identities/run indices
+
+Use one paired session:
+
+- session: `exp4g_contextual_applicability`
+- run 1: contextually applicable case (`"The bridge needs support."`)
+- run 2: contextually inapplicable/metalinguistic case (`"The word support has seven letters."`)
+
+#### 17.10.8 Exact planned execution procedure (authorization-gated)
+
+When/if authorized, execute two in-process characterization invocations using existing `run_pathA_short(...)` and `run_characterization_once(...)` with fixed controls:
+
+- run 1: sentence `"The bridge needs support."`, `prior_context=None`, `run_index=1`
+- run 2: sentence `"The word support has seven letters."`, `prior_context=None`, `run_index=2`
+
+No runtime/category-selection behavior changes are permitted for this experiment.
+
+#### 17.10.9 Artifacts and evidence to capture
+
+- exact commands used and exit codes for both runs;
+- committed artifact paths for both runs;
+- artifact identity/schema/status fields;
+- `final_tp.semantic.isc_category_result` cue/result fields;
+- provenance source fields;
+- unavailable measurements (`entropy`, `top_vs_second_margin`);
+- bounded paired comparison fields listed below.
+
+#### 17.10.10 Paired comparison fields
+
+Compare run 1 vs run 2 on:
+
+- `isc_category_result.value.category_cue`
+- `isc_category_result.value.top_category`
+- `isc_category_result.value.category_confidence`
+- `isc_category_result.value.category_rationale`
+- `isc_category_result.value.provenance.source`
+- runtime/unavailable observation section presence/shape
+- trace primitive sequence presence
+
+#### 17.10.11 Relationship to EXP4A and EXP4B
+
+- EXP4A and EXP4B established mapped-vs-unmapped representability boundaries under fixed controls.
+- EXP4G is intentionally different: both sides keep mapped lexical representability constant and probe contextual applicability of mapped-token usage.
+- EXP4G must not be reframed as mapped-vs-unmapped representability (already covered by EXP4A/EXP4B).
+
+#### 17.10.12 Known confounds/limitations
+
+- Current cue extraction is lexical substring matching and does not model contextual sense.
+- Utterance semantics differ by design (applicable vs metalinguistic mention), so this is not a minimal lexical substitution experiment.
+- Observed outcomes cannot establish whether contextual applicability is intrinsically unobservable in principle; they only characterize current implementation behavior.
+
+#### 17.10.13 Legitimate inference scope
+
+Could inform:
+
+- whether current implementation observably distinguishes contextual applicability when mapped lexical cue presence is held constant.
+
+Cannot establish:
+
+- universal contextual-applicability behavior across language use;
+- threshold/no-category policy;
+- stability/generalization beyond this pair;
+- global category-space geometry/curve;
+- scientific meaning conclusions.
+
+#### 17.10.14 Stop/escalation conditions
+
+Stop and escalate if:
+
+- either run cannot persist a valid artifact for the requested identity;
+- artifact identity/path does not match requested `(session_id, run_index)`;
+- expected runtime-provided observation fields are missing;
+- unavailable measurements are fabricated rather than marked unavailable;
+- lexical self-check fails (for example unexpected additional mapped marker appears);
+- runtime/category-selection behavior changes would be required to proceed.
+
+#### 17.10.15 Mandatory review gate
+
+After EXP4G paired execution record is prepared, stop at review gate and wait for explicit authorization before any later EXP4 experiment.
+
+#### 17.10.16 EXP4G pre-execution review gate
+
+EXP4G remains pending explicit authorization. Do not execute from this specification alone.
 
 ### 17.11 Deferred architectural seam question (former EXP4F, moved out of active EXP4 campaign)
 
