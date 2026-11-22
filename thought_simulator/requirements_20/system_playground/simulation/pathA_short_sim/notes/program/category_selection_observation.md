@@ -152,7 +152,7 @@ Each experiment record preserves:
 - Option B: run one bounded off-plan verification replay (new run index) before EXP3 execution authorization.
 - Option C: defer EXP3 until additional reviewer constraints are provided.
 
-## Experiment record — EXP3 prior-context cue/provenance characterization (executed, pending review-gate decision)
+## Experiment record — EXP3 prior-context cue/provenance characterization (accepted)
 
 ### 1) What executed (exact command, times/order)
 
@@ -241,14 +241,13 @@ Each experiment record preserves:
 
 ### 9) Questions raised
 
-- Should EXP3 be accepted as the prior-context provenance reference point for subsequent experiment design decisions?
-- Should any next step prioritize ambiguity-family comparison, boundary-family comparison, or a bounded off-plan verification run?
+- Which bounded EXP4 proposal should be reviewed next (ambiguity-family first vs boundary-family first), given accepted EXP1/EXP2/EXP3 evidence?
 
 ### 10) Next-step options (suggestions only, not decisions)
 
-- Option A: accept EXP3 and authorize EXP4 design/specification under the existing review-gated process.
+- Option A: propose (but do not yet fully commit) the smallest useful EXP4 ambiguity-family experiment for review.
 - Option B: request one bounded off-plan verification run focused on provenance replay before EXP4 direction.
-- Option C: accept EXP3 and defer EXP4 pending reviewer prioritization among provisional roadmap families.
+- Option C: defer EXP4 proposal pending reviewer prioritization among provisional roadmap families.
 
 ## Linked program context
 

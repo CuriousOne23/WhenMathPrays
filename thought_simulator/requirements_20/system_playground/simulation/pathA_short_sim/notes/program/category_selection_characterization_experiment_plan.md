@@ -235,7 +235,9 @@ After Experiment 1 record is prepared, stop and wait for explicit reviewer autho
 - **Accepted evidence summary:** one successful characterized baseline run (`exp1_baseline`, run 1) with committed artifact and expected no-cue baseline fields.
 - **EXP2 status:** executed and accepted at review gate.
 - **Accepted evidence summary:** one successful sentence-internal-cue characterization run (`exp2_sentence_internal`, run 1) with committed artifact, available runtime observations, explicit unavailable measurements, and bounded fact-level differences versus EXP1.
-- **Gate decision for next step:** proceed to design/execute EXP3 only under explicit authorization.
+- **EXP3 status:** executed and accepted at review gate.
+- **Accepted evidence summary:** one successful prior-context cue/provenance characterization run (`exp3_prior_context`, run 1) with committed artifact and bounded provenance-source contrast versus accepted EXP1 (`[]`) and EXP2 (`["sentence"]`) references.
+- **Gate decision for next step:** propose EXP4 for review (do not fully commit/execute EXP4 until explicitly authorized).
 
 ## 15) Experiment 2 — fully specified (smallest useful sentence-internal-cue comparison)
 
