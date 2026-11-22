@@ -152,6 +152,104 @@ Each experiment record preserves:
 - Option B: run one bounded off-plan verification replay (new run index) before EXP3 execution authorization.
 - Option C: defer EXP3 until additional reviewer constraints are provided.
 
+## Experiment record — EXP3 prior-context cue/provenance characterization (executed, pending review-gate decision)
+
+### 1) What executed (exact command, times/order)
+
+- Order: single-command experiment execution (no additional experiment commands).
+- Command executed exactly as specified in the experiment plan:
+  `python -c "import sys; from pathlib import Path; p=Path('thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim').resolve(); sys.path.insert(0,str(p)); import run_examples as rx; from characterization.dispatcher import resolve_characterization; sim=rx.run_pathA_short('The sky is blue.', enable_s2m_seed=False, enable_category_selection=True, prior_context=['location']); resolved=resolve_characterization('infra_smoke', None); req={'type':resolved['type'],'version':resolved['version'],'session_id':'exp3_prior_context','run_index':1,'resolved_type_parameters':resolved['params_resolver']({}),'runner':resolved['runner']}; result=rx.run_characterization_once(req, sim, {'execution_case':'sky_blue_prior_context_location','enable_category_selection':True,'enable_s2m_seed':False,'show_category_observations':False,'prior_context':['location']}); print(result['persistence']['committed_final_path'])"`
+- Exit code: `0`.
+
+### 2) Inputs and controls used
+
+- Sentence-under-test: `"The sky is blue."`.
+- Prior context: `["location"]`.
+- TS-affecting controls:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+  - `prior_context=["location"]`
+- Characterization controls:
+  - type/version: `infra_smoke` / `1.0`
+  - identity: `session_id=exp3_prior_context`, `run_index=1`
+  - runtime metadata execution_case: `sky_blue_prior_context_location`
+
+### 3) Produced artifacts/logs (exact paths)
+
+- Committed artifact path returned by execution:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp3_prior_context/runs/000001__infra_smoke__1.0.tschar.json`
+- Accepted reference artifacts used for bounded comparison:
+  - `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp1_baseline/runs/000001__infra_smoke__1.0.tschar.json`
+  - `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/exp2_sentence_internal/runs/000001__infra_smoke__1.0.tschar.json`
+- No additional experiment log file was produced by this in-process command.
+
+### 4) Observed outputs (facts only)
+
+- EXP3 artifact identity/schema/status:
+  - `schema_id=ts.characterization.run`
+  - `schema_version=1.0`
+  - `characterization.type=infra_smoke`
+  - `characterization.version=1.0`
+  - `identity.session_id=exp3_prior_context`
+  - `identity.run_index=1`
+  - `execution_status=succeeded`
+- EXP3 runtime-provided observations were present for:
+  - `final_tp.truth_relation`
+  - `trace.primitive_sequence`
+  - `final_tp.semantic.isc_category_result`
+- EXP3 unavailable observations were present for:
+  - `entropy` (`milestone1_unavailable`)
+  - `top_vs_second_margin` (`milestone1_unavailable`)
+- EXP3 `final_tp.semantic.isc_category_result.value` included:
+  - `category_cue=["perspectival"]`
+  - `top_category="perspectival"`
+  - `category_confidence=0.2505069933606234`
+  - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+  - provenance: `source=["prior_context_cex"]`, `upstream="ce"`, and expected weight fields
+- Bounded EXP1↔EXP2↔EXP3 fact-level comparison:
+  - runtime/unavailable section shape present in all three artifacts;
+  - `trace.primitive_sequence` present in all three artifacts;
+  - provenance `source` field distinctions:
+    - EXP1: `[]`
+    - EXP2: `["sentence"]`
+    - EXP3: `["prior_context_cex"]`
+  - `final_tp.truth_relation`:
+    - EXP1: `declarative`
+    - EXP2: `interrogative`
+    - EXP3: `declarative`
+
+### 5) Unavailable measurements/deviations
+
+- `entropy` and `top_vs_second_margin` remained unavailable and explicitly marked as unavailable in EXP3.
+- No deviation from the approved EXP3 command/controls was introduced.
+
+### 6) Unexpected behavior/anomalies
+
+- None observed for this execution.
+
+### 7) Interpretation (bounded)
+
+- This run establishes one controlled prior-context characterization record under currently implemented capabilities and yields a concrete prior-context provenance reference artifact.
+- The run supports bounded observational contrast of provenance-source fields across accepted references: no cue source (EXP1), sentence source (EXP2), and prior-context source (EXP3).
+
+### 8) Not established
+
+- No threshold/no-category policy is established.
+- No support-boundary conclusion is established.
+- No scientific meaning claim is established from category results.
+- No multi-run stability or generalization claim is established from this single EXP3 run.
+
+### 9) Questions raised
+
+- Should EXP3 be accepted as the prior-context provenance reference point for subsequent experiment design decisions?
+- Should any next step prioritize ambiguity-family comparison, boundary-family comparison, or a bounded off-plan verification run?
+
+### 10) Next-step options (suggestions only, not decisions)
+
+- Option A: accept EXP3 and authorize EXP4 design/specification under the existing review-gated process.
+- Option B: request one bounded off-plan verification run focused on provenance replay before EXP4 direction.
+- Option C: accept EXP3 and defer EXP4 pending reviewer prioritization among provisional roadmap families.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
