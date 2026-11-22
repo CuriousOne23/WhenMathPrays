@@ -169,3 +169,10 @@
 2026-11-16 | Catalog weekly safety net | C-000 | none | write=no
 2026-11-16 | Inventory weekly safety net | INVENTORY.md top-100; keep=96 gitignore=2 delete=2 (unchanged from 11-09; sha 9dd2f22); 2555 files, 18,748,441 bytes tracked; same four non-keep rows; outside top-100: root debug_query_log.txt (gitignore candidate); root `$null` (delete candidate) | owner=human | write=no
 2026-11-16 | Terms weekly safety net | T-000 | none | write=no
+2026-11-19 | ShortSim Docs baseline drift report | main @ 8202fb5; 9 drift findings; MATCHES recorded; doc-only PR pending human go-ahead | write=no
+2026-11-19 | ShortSim Status baseline | main @ fccfea9 (root README pointer only; short-sim same as 8202fb5); 100 rows (implemented 25, absent 33, drifted 16, unplaced 23, not found 3); 5 holes | write=no
+2026-11-19 | ShortSim Docs scheduled drift watch | main 8202fb5 → 6e1a8d5; docs-only; 2 new goal-drift findings; known 9 baseline items still open; PR form waiting on human Submit (branch shortsim-docs/20261119-6e1a8d5, commit 273a602) | write=no
+2026-11-19 | ShortSim Trajectory | Verdict: NEUTRAL; last change ae9b061 (status.md only +10); independent, speculative, not definitive | write=no
+2026-11-19 | Path A Account first-pass + new drift | first-pass main @ 00ee3aa (flags 1–5, surrounding a–c); new drift main @ 6e1a8d5 (pointer gap / proposal relation / force); independent view, not definitive | write=no
+2026-11-19 | ShortSim Status goal-distance | latest checked 1e48373e; status.md goal changed to controlled category selection; prior G1-G3 marked accomplished/closed; standing routine still pointed at G1-G3 (stale); holes still open; asked whether to retarget | write=no
+2026-11-19 | ShortSim Trajectory | Verdict: ADVANCES, modestly; 5653458 adds s2m_program_reference.md (docs only); latest c604aeb; independent, speculative, not definitive | write=no
