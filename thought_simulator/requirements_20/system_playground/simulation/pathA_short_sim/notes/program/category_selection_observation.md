@@ -457,7 +457,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: defer EXP4G specification pending additional contextual-applicability pair-selection constraints.
 - Option C: retain EXP4B as accepted and reprioritize later retained EXP4 boundary candidates before EXP4G.
 
-## Experiment record — EXP4G contextual-applicability boundary (executed, pending review-gate decision)
+## Experiment record — EXP4G contextual-applicability boundary (accepted, audit limitation noted)
 
 ### 1) What executed (exact command, times/order)
 
@@ -535,6 +535,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Under tested EXP4G conditions, the two mapped `support` usages produced the same observed Category Selection cue/result/confidence/rationale/provenance fields.
 - This is compatible with the currently implemented lexical cue-recognition behavior and does not by itself constitute failure.
 - This paired record may characterize the current boundary between lexical mapped-cue recognition and contextual applicability discrimination under this implementation.
+- Accepted audit limitation note: non-executing support/dictionary audit found sparse non-cue lexical coverage for both EXP4G utterances; no strong differential static-representation confound was identified for this paired comparison.
 
 ### 8) Not established
 
@@ -546,14 +547,14 @@ This synthesis is bounded: these accepted runs support tractable observation and
 
 ### 9) Questions raised
 
-- Should EXP4G be accepted as the current contextual-applicability boundary reference under tested conditions?
-- Which retained EXP4 boundary should be authorized next under one-at-a-time review gating?
+- Which retained EXP4 boundary candidate should be specified next under one-at-a-time review gating?
+- Should any additional lexical-coverage controls be required for later linguistic boundary pair selection beyond mandatory vocabulary/support-coverage auditing?
 
 ### 10) Next-step options (suggestions only, not decisions)
 
-- Option A: accept EXP4G and authorize next retained EXP4 boundary candidate selection at review gate.
-- Option B: request one bounded replay of EXP4G pair (new run indices) before next boundary authorization.
-- Option C: accept EXP4G and hold further execution pending EXP4 sequence reprioritization.
+- Option A: select one retained EXP4 boundary candidate for full specification only (no execution yet), then stop at pre-execution review gate.
+- Option B: defer next EXP4 specification pending additional pair/control constraints.
+- Option C: hold boundary progression while reprioritizing retained EXP4 sequence with current accepted records.
 
 ## Linked program context
 

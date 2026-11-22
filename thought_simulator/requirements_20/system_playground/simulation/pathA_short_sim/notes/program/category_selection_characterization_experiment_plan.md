@@ -38,6 +38,7 @@ Every experiment in this campaign must preserve:
 - unavailable measurements must remain explicitly unavailable (not fabricated);
 - category-result evidence is not equivalent to meaning selection by itself;
 - Level-A behavior comparison exclusions are limited to approved non-behavioral metadata (`created_at_utc` only unless authority changes).
+- for linguistic boundary experiments, run a non-executing pre-run vocabulary/support-coverage audit and record whether differential static representation coverage could confound the intended variable.
 
 ## 4) Explicit prohibited actions
 
@@ -74,16 +75,17 @@ For each experiment:
 
 1. Define experiment ID, objective, and controlled variables before execution.
 2. Declare exact command(s) and expected artifact identity `(session_id, run_index)`.
-3. Run commands exactly as specified; do not edit runtime code/config as part of experiment execution.
-4. Record:
+3. For linguistic boundary experiments, perform and record a non-executing vocabulary/support-coverage audit of meaningful tokens against relevant static inputs used by active Path A primitives.
+4. Run commands exactly as specified; do not edit runtime code/config as part of experiment execution.
+5. Record:
    - command line(s),
    - exit code(s),
    - run.log path(s) when redirected,
    - CHAR TRACE status/pointer behavior (if applicable),
    - committed `.tschar.json` path(s) when successful.
-5. Parse evidence only from produced runtime outputs/artifacts.
-6. Record unavailable measurements explicitly as unavailable.
-7. Preserve raw evidence long enough for review; clean only test-specific local outputs after review approval.
+6. Parse evidence only from produced runtime outputs/artifacts.
+7. Record unavailable measurements explicitly as unavailable.
+8. Preserve raw evidence long enough for review; clean only test-specific local outputs after review approval.
 
 ## 7) Campaign-level queue / roadmap (provisional beyond Experiment 1)
 
@@ -241,7 +243,10 @@ After Experiment 1 record is prepared, stop and wait for explicit reviewer autho
 - **Accepted evidence summary:** under tested EXP4A paired conditions (`location` mapped vs `position` unmapped prior context, fixed utterance/controls), mapped prior-context information produced category evidence/category result while the selected unmapped comparator did not.
 - **EXP4B status:** executed and accepted at review gate.
 - **Accepted evidence summary:** under tested EXP4B paired conditions (`"Where is the book?"` mapped vs `"When is the book?"` unmapped utterance, fixed controls), mapped present-utterance information produced category evidence/category result while the selected unmapped comparator did not.
-- **Gate decision for next step:** fully specify EXP4G only; execution remains explicitly authorization-gated.
+- **EXP4G status:** executed and accepted at review gate.
+- **Accepted evidence summary:** under tested EXP4G paired conditions (contextually applicable `"The bridge needs support."` vs contextually inapplicable/metalinguistic `"The word support has seven letters."`), both mapped `support` usages produced the same observed cue/result/confidence/rationale/provenance fields.
+- **Accepted audit limitation note:** non-executing support/dictionary audit found sparse non-cue lexical coverage for both EXP4G utterances; no strong differential static-representation confound was identified for the paired comparison, but this remains a standing design limitation.
+- **Gate decision for next step:** no next experiment is yet specified; one-at-a-time review authorization remains mandatory.
 
 ## 15) Experiment 2 — fully specified (smallest useful sentence-internal-cue comparison)
 
@@ -652,7 +657,7 @@ EXP4B is accepted as bounded evidence for an observable present-utterance repres
 3. **Current limitation:** no clean, review-approved campaign mechanism currently exists for controlled inventory switching/versioning without broadening scope.
 4. **Decision rule:** do not implement new inventory-switch mechanism in this stage; revisit after explicit approval.
 
-### 17.10 EXP4G (fully specified next candidate) — contextual-applicability boundary
+### 17.10 EXP4G (accepted) — contextual-applicability boundary
 
 #### 17.10.1 Precise research question
 
@@ -698,9 +703,9 @@ Use one paired session:
 - run 1: contextually applicable case (`"The bridge needs support."`)
 - run 2: contextually inapplicable/metalinguistic case (`"The word support has seven letters."`)
 
-#### 17.10.8 Exact planned execution procedure (authorization-gated)
+#### 17.10.8 Executed procedure (for accepted paired record)
 
-When/if authorized, execute two in-process characterization invocations using existing `run_pathA_short(...)` and `run_characterization_once(...)` with fixed controls:
+Two in-process characterization invocations were executed using existing `run_pathA_short(...)` and `run_characterization_once(...)` with fixed controls:
 
 - run 1: sentence `"The bridge needs support."`, `prior_context=None`, `run_index=1`
 - run 2: sentence `"The word support has seven letters."`, `prior_context=None`, `run_index=2`
@@ -768,11 +773,11 @@ Stop and escalate if:
 
 #### 17.10.15 Mandatory review gate
 
-After EXP4G paired execution record is prepared, stop at review gate and wait for explicit authorization before any later EXP4 experiment.
+EXP4G has completed review-gate acceptance. Do not auto-advance; later EXP4 work remains separately authorization-gated.
 
-#### 17.10.16 EXP4G pre-execution review gate
+#### 17.10.16 Acceptance status (bounded)
 
-EXP4G remains pending explicit authorization. Do not execute from this specification alone.
+EXP4G is accepted as bounded contextual-applicability boundary evidence under tested conditions, including the accepted vocabulary/support-coverage audit limitation note. This does not establish universal contextual-applicability behavior, thresholds/no-category policy, stability/generalization, or full category-space characterization.
 
 ### 17.11 Deferred architectural seam question (former EXP4F, moved out of active EXP4 campaign)
 
