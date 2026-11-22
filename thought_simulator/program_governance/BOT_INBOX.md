@@ -537,3 +537,97 @@ kind: directive
 
 stamp: human
 
+---
+
+EVENT: disposition
+
+when: 2026-11-22 11:55 AM America/Phoenix
+
+files: Flow F-004–F-008; Inventory top-100 non-keep rows and root cleanup candidates; governance reports only
+
+what: Human disposition (verbatim):
+
+FLOW
+F-004 APPROVED — incremental WrdNm behavior.
+Record classification; no route-order change.
+F-005 APPROVED — incremental DCB behavior.
+Record classification; no route-order change.
+F-006 APPROVED — incremental CTP cognitive-history behavior.
+Record classification; no route-order or CTP-role change.
+F-007 APPROVED — incremental MCB behavior.
+Record classification. This approval does not by itself settle
+meaning_semantics field ownership.
+F-008 HOLD — verify against 20.116 ownership law.
+Determine whether MCB is an authorized post-birth append writer to an
+IdOB-owned field or whether meaning_semantics is intentionally
+multi-writer.
+Do not weaken the IdOB-only meaning-birth boundary merely because MCB
+has append authority.
+INVENTORY
+APPROVE DELETE:
+- thought_simulator/thought_simulator_playground/40.50_inb_prototypes/
+  artifacts/inb_verification_run_2026-06-08.json
+  (retain verification copy)
+- docs/bridge-to-realization/path-from-manifold-to-realization_bak.md
+APPROVE UNTRACK / IGNORE:
+- tests/fidelity_asymmetry_sensitivity.png
+  (already covered by existing tests/*.png ignore rule)
+CONDITIONAL:
+- simulations/zombie_love_plot.png
+  Verify regenerability first.
+  If generated, untrack it and use the narrowest reasonable ignore rule;
+  do not automatically ignore simulations/*.png.
+ROOT CLEANUP:
+APPROVE remove + gitignore:
+- debug_query_log.txt
+  after confirming it is only generated debug output.
+APPROVE delete:
+- $null
+  zero-byte accidental redirect artifact.
+  Do not add a permanent ignore rule unless recurrence justifies it.
+Helm may record/stamp these dispositions in governance reports.
+Do not modify normative requirements as part of these closures.
+Do not merge unrelated changes.
+
+why: Stamp these Flow and Inventory dispositions in governance reports. Cleanup is a separate change that needs the human's go-ahead.
+
+expect:
+
+  - Helm may record/stamp these dispositions in governance reports.
+
+  - Do not modify normative requirements as part of these closures.
+
+  - Do not merge unrelated changes.
+
+  - Do not delete or untrack any files, and do not touch .gitignore.
+
+kind: disposition
+
+stamp: human
+
+---
+
+EVENT: decision
+
+when: 2026-11-22 11:59 AM America/Phoenix
+
+files: Catalog C-004; Flow F-008; 20.116 amendment PR (separate, not this dispositions PR)
+
+what: Catalog C-004 approved in principle as the resolution path for F-008. Interpretation: (1) IdOB-prm remains sole birth writer for TP.semantic.meaning_semantics[] / stand-in M / Phi; (2) MCB does not become a general co-owner or independent writer; (3) MCB may perform only the post-birth append already required by HLR-20.40.055-018; (4) MCB must not birth meaning_semantics[], replace the IdOB-born value, reorder IdOB-born entries, or reinterpret append permission as general field ownership. A separate minimal 20.116 amendment PR is to be prepared: reconcile 20.116.020 with 20.40.055 HLR-018, preserve the INV-M0/Cluster-2 IdOB-only birth boundary, MCB as authorized post-birth append writer not shared owner, do not alter 20.40.055 unless a textual contradiction remains, no runtime change. F-008 remains HOLD until the amendment is reviewed and landed. After it lands: close C-004; close F-008 as RESOLVED — constrained post-birth append; replace Flow's class=shared-writer with class=post-birth-authorized-append. F-004–F-007 remain approved. Keep the dispositions PR separate from the amendment. Do not merge either.
+
+why: Approve the C-004 resolution path in principle without editing 20.116 on the dispositions branch.
+
+expect:
+
+  - Helm: record this EVENT in BOT_INBOX, LATEST.md, 2026-11-22.md, and CHANGE_LOG.
+
+  - No 20.116 edits here; the amendment is a separate PR.
+
+  - F-008 remains HOLD until the amendment is reviewed and landed.
+
+  - Do not merge the dispositions PR or the amendment PR.
+
+kind: decision
+
+stamp: human
+
