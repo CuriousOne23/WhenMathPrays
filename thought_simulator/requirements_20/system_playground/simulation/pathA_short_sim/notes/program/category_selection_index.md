@@ -1,113 +1,138 @@
 # Category Selection Document Family Index
 
 **Document:** notes/program/category_selection_index.md  
-**Status:** Navigation/governance index. Non-normative. Not an implementation contract. Not an experimental result.  
-**Purpose:** Canonical navigation and document-governance index for the evolving category-selection document family.
+**Status:** Navigation/governance index (non-normative).  
+**Purpose:** Decide which category-selection document(s) to open for a specific question.
 
-Category-selection research is expected to evolve as characterization exposes new questions. This index organizes the current/planned documents by role and supports controlled growth of the document family.
+## How to use this index
+
+Use this page to route questions by document role and authority.
+
+- Open **normative requirements** for authoritative behavior/ownership/path rules.
+- Open **program/research/reference docs** for category-selection design, implementation scope, and characterization method.
+- Open **observation docs** for empirical records and experiment outcomes.
+
+This index is intentionally brief and does not duplicate technical detail from the linked documents.
 
 ## Governance rule
 
-This index is the authoritative navigation document for the category-selection document family.
+This is the authoritative navigation index for the category-selection document family.
 
-Individual category-selection documents should link here for the complete document family.  
-Individual documents should directly link only to immediate authorities, dependencies, predecessors, successors, or other documents required to understand that document’s specific role.
+Each family document should declare:
 
-Future category-selection documents should declare:
+- what it is (role),
+- authority/status,
+- when it should be consulted,
+- direct dependencies/successors.
 
-- document role
-- status/authority
-- purpose
-- direct dependencies
-- expected outputs or successors
-- relationship to the category-selection document family
-
-New characterization documents should be registered in this index rather than requiring broad cross-link updates throughout the document family.
+New category-selection/characterization documents should be registered here.
 
 ## Document family by role
 
 ### Architectural proposal
 
 - [category_selection_proposal.md](category_selection_proposal.md)  
-  **Role:** Defines architectural intent, boundaries, category-selection path, and relationship to S2M.
+  **What it is:** Category-selection architecture proposal.  
+  **Status/authority:** Draft/discussion design context (non-normative).  
+  **Open when:** You need architectural intent, boundaries, and category-selection path framing.  
+  **Relationship:** Conceptual predecessor to research/reference docs; aligned with S2M context and normative requirements.
 
 ### Research
 
 - [category_selection_research_plan.md](category_selection_research_plan.md)  
-  **Role:** Defines research questions, experimental principles, confidence dimensions, architectural-generality investigation, category-support/unsupported-space characterization, and closeout discipline.
+  **What it is:** Research/experimental plan for the current cycle.  
+  **Status/authority:** Non-normative research discipline.  
+  **Open when:** You need characterization questions, experimental principles, or confidence/closeout criteria.  
+  **Relationship:** Successor to prior observation cycle; upstream of implementation and observation recording.
 
 ### Current-realization mapping
 
 - [category_selection_stage1_modification_map.md](category_selection_stage1_modification_map.md)  
-  **Role:** Factual Stage-1 map of current short-simulator implementation, current scaffolding, data/procedure boundaries, observability, provenance, and potential later modification locations.
+  **What it is:** Stage-1 factual map of current software realization.  
+  **Status/authority:** Non-normative implementation evidence map.  
+  **Open when:** You need current code-path touchpoints, boundaries, or “what exists now” before edits.  
+  **Relationship:** Bridge from research plan to software-reference contracts.
 
 ### Software references
 
 - [category_selection_program_reference.md](category_selection_program_reference.md)  
-  **Role:** Software contract for the bounded category-selection realization itself.  
-  **Current status:** Placeholder pending expansion after Stage-1 review.
+  **What it is:** Bounded software-realization contract for category selection.  
+  **Status/authority:** Draft implementation contract (realization-side).  
+  **Open when:** You are implementing/reviewing category-selection mechanism behavior and realization outputs.  
+  **Relationship:** Coordinated sibling of characterization reference; realization path only.
 
 - [category_selection_characterization_reference.md](category_selection_characterization_reference.md)  
-  **Role:** Software contract for category-selection characterization infrastructure and experimentation support.  
-  **Expected later coverage:** run_examples.py integration, parameterized characterization CLI, characterization-type dispatch, characterization modularity, independent artifacts, non-destructive/session-aware output, common TS characterization artifact extension, .gitignore handling, user_guide.md integration, observability/measurement support, and support for future observation-driven characterization types.  
-  **Boundary:** It does not define the final no-category decision function.
+  **What it is:** Bounded software-reference contract for characterization infrastructure.  
+  **Status/authority:** Draft implementation contract (characterization-side).  
+  **Open when:** You are implementing/reviewing characterization invocation, dispatch, sessions, or artifact discipline.  
+  **Relationship:** Coordinated sibling of program reference; observes/exercises realization, does not define meaning policy.
 
 ### Observation
 
 - [category_selection_observation.md](category_selection_observation.md)  
-  **Role:** Future empirical record populated from actual category-selection and characterization runs.
+  **What it is:** Category-selection empirical observation record (currently placeholder).  
+  **Status/authority:** Observation document; no results recorded yet.  
+  **Open when:** You need recorded category-selection experiment outcomes and observational interpretations.  
+  **Relationship:** Receives evidence from characterization runs/artifacts.
 
 ### Historical predecessor
 
 - [category_structure_observation.md](category_structure_observation.md)  
-  **Role:** Completed preceding observational cycle that motivated the next category-selection research program.
+  **What it is:** Completed prior observational cycle.  
+  **Status/authority:** Historical observational record (non-normative).  
+  **Open when:** You need prior-cycle findings that motivated the current category-selection program.  
+  **Relationship:** Predecessor context for the current research plan.
 
 ### Related S2M authority/context
 
 - [s2m_relational_proposal.md](s2m_relational_proposal.md)  
-  **Role:** Conceptual S2M model authority/context for relationship boundaries and terminology.
+  **What it is:** Conceptual S2M model proposal.  
+  **Status/authority:** Conceptual authority/context (non-normative requirements).  
+  **Open when:** You need S2M conceptual terms/stage boundaries used by category-selection docs.  
+  **Relationship:** Conceptual context for category-selection architecture framing.
+
 - [s2m_program_reference.md](s2m_program_reference.md)  
-  **Role:** Program/realization contract context for S2M execution boundaries and phase framing.
+  **What it is:** S2M implementation contract/context.  
+  **Status/authority:** Program reference for S2M realization boundaries.  
+  **Open when:** You need S2M execution/contract context that category-selection work must respect.  
+  **Relationship:** Program-context companion to the S2M relational proposal.
 
 ### Normative requirements
 
-- [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md) — normative ISc scoring requirements and category-result scoring authority.
-- [20.105_tp_requirements.md](../../../20.105_tp_requirements.md) — normative TP behavior/ownership requirements.
-- [20.116.010_tp_envelope_index.md](../../../20.116.010_tp_envelope_index.md) — canonical TP envelope/index and writer-path authority.
-- [20.40.050_idob_prim.md](../../../20.40.050_idob_prim.md) — normative IdOB behavior authority.
+- [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md)  
+  **Authority:** Normative ISc scoring behavior.  
+  **Open when:** Question is about category-result scoring behavior/rules.  
+  **Relationship:** Scoring authority used by category-selection realization.
 
-## High-level document flow
+- [20.105_tp_requirements.md](../../../20.105_tp_requirements.md)  
+  **Authority:** Normative TP behavior/ownership.  
+  **Open when:** Question is about TP envelope behavior, ownership, or commit boundaries.  
+  **Relationship:** Defines TP behavioral constraints category-selection must follow.
 
-Current flow (conceptual):
+- [20.116.010_tp_envelope_index.md](../../../20.116.010_tp_envelope_index.md)  
+  **Authority:** Normative canonical TP path/index + root writer ownership.  
+  **Open when:** Question is about canonical path spelling or root-writer authority.  
+  **Relationship:** Path/index authority complementary to 20.105 behavior authority.
 
-category_selection_proposal.md  
-        ↓  
-category_selection_research_plan.md  
-        ↓  
-category_selection_stage1_modification_map.md  
-        ↓  
-coordinated software references:  
-    category_selection_program_reference.md  
-    category_selection_characterization_reference.md  
-        ↓  
-reviewed implementation  
-        ↓  
-characterization sessions / campaigns  
-        ↓  
-generated characterization artifacts  
-        ↓  
-category_selection_observation.md  
-        ↓  
-confidence / closeout review  
-        ↓  
-observation determines the next research/design question
+- [20.40.050_idob_prim.md](../../../20.40.050_idob_prim.md)  
+  **Authority:** Normative IdOB behavior.  
+  **Open when:** Question is about IdOB-side behavior and constraints.  
+  **Relationship:** IdOB behavior authority used by downstream consumption boundaries.
 
-The two software references are coordinated siblings with different responsibilities: one for the bounded category-selection realization itself, one for characterization infrastructure that observes/exercises that realization.
+## Conceptual progression (consult sequence)
 
-## Scalability and extensibility
+Typical progression for a new cycle:
 
-This document family is intentionally extensible.
+`category_selection_proposal.md`  
+→ `category_selection_research_plan.md`  
+→ `category_selection_stage1_modification_map.md`  
+→ coordinated software references  
+(`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
+→ implementation and characterization runs  
+→ `category_selection_observation.md`
 
-Future characterization may expose unforeseen questions requiring additional characterization programs or associated documents. This index is the registration point for those additions so growth remains organized and reviewable.
+At any step, open normative requirements for authoritative behavior/path/ownership questions.
 
-Additions registered here do not change the authority/status of existing completed research or observation documents.
+## Extensibility
+
+This family is extensible. Register new category-selection/characterization documents here with role, status, consult trigger, and dependency relationships.
