@@ -27,6 +27,17 @@ Each family document should declare:
 
 New category-selection/characterization documents should be registered here.
 
+## Finding-routing rule
+
+Route findings by information type and document authority:
+
+- Characterization-method or verification lessons → [category_selection_characterization_reference.md](category_selection_characterization_reference.md)
+- Empirical category-selection findings → [category_selection_observation.md](category_selection_observation.md)
+- New research questions or proposed investigations → [category_selection_research_plan.md](category_selection_research_plan.md)
+- Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
+
+Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
+
 ## Document family by role
 
 ### Architectural proposal

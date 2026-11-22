@@ -69,6 +69,8 @@ Those responsibilities are defined by [category_selection_characterization_refer
 
 Characterization observes and exercises the category-selection realization; characterization does not become part of the category-selection or meaning-selection mechanism.
 
+Characterization must observe a caller-selected TS execution and must not own or alter sentence/input selection, prior context, category-selection control, S2M control, or other TS-affecting execution controls.
+
 ## 5) Realization scope
 
 In scope for this contract:

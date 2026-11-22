@@ -79,6 +79,26 @@ The characterization interface shall include parameterized controls covering:
 
 Exact flag spelling may be finalized in implementation, but semantics are fixed by this reference.
 
+## 6.3 Milestone-1 shared-execution and non-interference contract
+
+For milestone-1 characterization:
+
+1. Characterization observes the same caller-selected TS execution available to ordinary execution.
+2. TS case/input selection is an execution responsibility, not a characterization parameter.
+3. Characterization types (including `infra_smoke`) do not own sentence selection, prior context, category-selection enablement, S2M enablement, or other TS-affecting controls.
+4. Characterization observes the completed runtime result and must not mutate that result.
+5. One characterization invocation performs one TS execution.
+6. Characterized-versus-uncharacterized non-interference comparisons must hold TS-affecting controls constant.
+7. Verification has two levels:
+   - **Level A (primary):** TS behavioral verification using runtime/replay/testbench surfaces.
+   - **Level B (supplemental):** characterization-evidence verification for faithful recording of selected runtime observations.
+8. Characterization artifact equality is not sole authority for TS deterministic replay or non-interference.
+9. Full runtime-result equality may differ only for explicitly approved non-behavioral metadata.
+10. The only approved non-behavioral exclusion at this stage is `created_at_utc` timestamp metadata.
+11. Behavioral comparison may exclude only this approved timestamp metadata.
+12. Exclusions must not be expanded merely to make tests pass.
+13. Any future difference outside approved non-behavioral metadata requires investigation before exclusion.
+
 ## 7) Characterization-type variable and dispatcher
 
 Characterization execution is selected by `characterization_type`.
