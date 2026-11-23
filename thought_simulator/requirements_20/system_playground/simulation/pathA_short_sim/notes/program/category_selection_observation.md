@@ -763,7 +763,7 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: request one bounded replay of EXP4C2 run 1 (new run index) before next boundary authorization.
 - Option C: accept EXP4C2 and hold further execution pending EXP4 sequence reprioritization.
 
-## Experiment record — Stage 7 Batch 1 reference ordered response (`cold` / affective) (executed, pending review-gate decision)
+## Experiment record — Stage 7 Batch 1 reference ordered response (`cold` / affective) (accepted)
 
 ### 1) What executed (exact order)
 
