@@ -1,0 +1,15 @@
+proposal_id: proposal_association_add
+items:
+  - item_id: assoc-book-affords-grasp
+    resource_class: association
+    identity:
+      endpoint: book
+      relation: affords
+      to: graspability
+      major: physical
+      subcategory: handling
+    delta:
+      operation: add_association
+    provenance:
+      source: test-fixture
+

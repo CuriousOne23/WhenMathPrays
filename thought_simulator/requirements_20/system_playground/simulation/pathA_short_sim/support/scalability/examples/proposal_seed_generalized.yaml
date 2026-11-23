@@ -1,0 +1,11 @@
+proposal_id: proposal_seed_generalized
+items:
+  - item_id: seed-generalized
+    resource_class: seed
+    identity:
+      seed_key: generalized_seed_expansion
+    delta:
+      operation: generalize_seed
+    provenance:
+      source: test-fixture
+

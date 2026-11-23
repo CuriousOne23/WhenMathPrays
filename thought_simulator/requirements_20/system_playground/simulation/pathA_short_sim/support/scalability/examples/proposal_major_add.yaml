@@ -1,0 +1,12 @@
+proposal_id: proposal_major_add
+items:
+  - item_id: major-technological
+    resource_class: major
+    identity:
+      major: technological
+    delta:
+      operation: add_major
+      add_to_active_space: true
+    provenance:
+      source: test-fixture
+

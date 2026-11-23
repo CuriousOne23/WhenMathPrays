@@ -1,0 +1,13 @@
+proposal_id: proposal_dict_new_mapping
+items:
+  - item_id: dict-frost-affective
+    resource_class: dictionary_entry
+    identity:
+      scope: sentence_internal
+      marker: frost
+      major: affective
+    delta:
+      operation: add_mapping
+    provenance:
+      source: test-fixture
+

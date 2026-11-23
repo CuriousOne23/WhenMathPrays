@@ -110,4 +110,6 @@ docs/pictures/**
 *.tschar.json
 thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/*
 !thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/.gitignore
+thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_scalability/*
+!thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_scalability/.gitignore
 /debug_query_log.txt

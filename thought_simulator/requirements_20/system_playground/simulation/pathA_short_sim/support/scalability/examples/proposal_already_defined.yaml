@@ -1,0 +1,13 @@
+proposal_id: proposal_already_defined
+items:
+  - item_id: dict-cold-affective
+    resource_class: dictionary_entry
+    identity:
+      scope: sentence_internal
+      marker: cold
+      major: affective
+    delta:
+      operation: add_mapping
+    provenance:
+      source: test-fixture
+
