@@ -132,8 +132,8 @@ Record each finding in the document that owns that information type. Do not dupl
 ### Observation
 
 - [category_selection_observation.md](category_selection_observation.md)  
-  **What it is:** Category-selection empirical observation record (currently placeholder).  
-  **Status/authority:** Observation document; no results recorded yet.  
+  **What it is:** Category-selection empirical observation record containing accepted experimental outcomes and bounded observational interpretations.  
+  **Status/authority:** Active observation record (non-normative).  
   **Open when:** You need recorded category-selection experiment outcomes and observational interpretations.  
   **Relationship:** Receives evidence from characterization runs/artifacts.
 
