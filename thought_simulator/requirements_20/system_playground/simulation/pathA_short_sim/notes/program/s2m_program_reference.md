@@ -12,15 +12,16 @@ For how to run the short simulator and correctly interpret normal `run_examples.
 
 S2M realizes the five-stage model established in the relational proposal:
 
-structural relation → default meaning → candidate interpretation space → selected interpretive extension(s) → finite customized composite
+structural relation → default meaning → candidate interpretation space → legitimized interpretive extension(s) → finite customized composite
 
 - **Structural relation** is the floor-established crossing (Part I accountability trail).
 - **Default meaning** is the minimal semantic relation derived from that structure. It exists when no contextual or category-selection cue is active. It is not selected from a candidate inventory.
 - **Candidate interpretation space** exposes available associations for relevant endpoints and relations, tagged by interpretation major and subcategory. Candidates remain unselected unless legitimately activated.
-- **Selected interpretive extension(s)** are candidates written only when a cue is present and the relation is within the licensed region.
+- **Legitimized interpretive extension(s)** are admitted candidates that satisfy applicable structural licensing conditions and are therefore materialized as extensions.
 - **Finite customized composite** is the default meaning plus any legitimized extensions.
 
-No cue means default meaning only. A cue may produce default meaning + legitimately selected extension(s).
+No cue means default meaning only. A cue may produce default meaning + legitimized interpretive extension(s).
+The finite customized composite is a conceptual occurrence-specific result expressed by this S2M result structure (default meaning co-present with legitimized extensions); it does not by itself require a separately constructed runtime composite object or additional processing decision.
 
 A guiding observation remains:
 
@@ -84,7 +85,7 @@ Default meaning is derived from the structural relation. Exact canonical relatio
 
 No-cue behavior: emit the default meaning only. Candidate inventories are available but unselected. No associative extension is written.
 
-## Part II — Candidate interpretation space and selected extensions
+## Part II — Candidate interpretation space and legitimized extensions
 
 **Interpretation space**
 
@@ -194,7 +195,7 @@ Observational windows include:
 3. **Pre-selection candidate state** — distinguish candidate absent, available but unselected, eligible, rejected/refused, or ultimately selected and legitimized.
 4. **Category evidence and decision** — what evidence was present, which interpretation majors received support, what remained unsupported, whether ambiguity existed, and how any decision was reached (scoring fields, when realized, come from their requirements).
 5. **Selection versus legitimation** — category influence making a candidate relevant is distinct from S2M legitimizing it as an extension. Path: category influence → candidate proposal/selection → licensed-region test → legitimation/refusal → extension or null.
-6. **Default-versus-selected comparison** — preserve the default so the effect of category influence can be observed (unchanged default, newly selected extensions, unselected/refused candidates, changed active space, final composite).
+6. **Default-versus-legitimized comparison** — preserve the default so the effect of category influence can be observed (unchanged default, newly legitimized extensions, unselected/refused candidates, changed active space, final composite).
 7. **Null, refusal, ambiguity, and non-selection** — informative cases include no cue, ambiguous evidence, candidate unavailable, available but unselected, proposed but refused, extension remaining null, or clarification required.
 8. **Cue-path comparison** — sentence-internal versus prior-conversation/context (CEx/CIL) paths may be compared while retaining different provenance; they need not be internally identical.
 9. **Determinism and replay** — given the same input, structural result, context, cue, candidate inventory, and applicable scoring/configuration state, category-related observations are reproducible.
