@@ -1,7 +1,7 @@
 # Path A Scalability Implementation Mapping (Proposed / Awaiting Review)
 
 **Document:** notes/program/scalability/scalability_implementation_mapping.md  
-**Status:** Proposed mapping only — **not approved**.  
+**Status:** Approved implementation mapping for first bounded scalability implementation.  
 **Date:** 2026-11-23  
 **Scope:** First implementation-mapping task required by [scalability_implementation_plan.md](scalability_implementation_plan.md). No runtime/tooling/test/schema behavior is implemented by this document.
 
@@ -234,4 +234,4 @@ These are recorded as mapping risks and should be resolved by review decisions, 
 
 ---
 
-**Review gate:** This mapping is intentionally proposed-only and awaits explicit approval before any implementation changes.
+**Review gate:** Mapping review is complete; this document is approved as the first bounded implementation mapping authority.
