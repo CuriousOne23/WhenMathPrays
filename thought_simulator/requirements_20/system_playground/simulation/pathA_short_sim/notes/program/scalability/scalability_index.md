@@ -74,9 +74,9 @@ New scalability documents should be registered here.
 ### Practical guidance
 
 - [scalability_user_guide.md](scalability_user_guide.md)  
-  **What it is:** Practical guide for operators and Agents after an expansion.  
+  **What it is:** Practical guide for operators and Agents for the accepted first bounded scalability implementation.  
   **Status/authority:** Implemented first-pass operator guide (non-normative; report details remain provisional).  
-  **Open when:** You have made a change and need the sequence for checking it.  
+  **Open when:** You need the implemented run procedure and report-interpretation sequence for bounded scalability analysis.  
   **Relationship:** Downstream of program/design/implementation outputs; does not define principles.
 
 ## Extensibility

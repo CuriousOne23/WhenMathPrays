@@ -146,6 +146,12 @@ Disposition labels in current system:
 - `REVISE`
 - `RETURN_TO_CHARACTERIZATION`
 
+Concise operator meanings:
+- `PROCEED`: no blocking incompatibility/dependency/qualification condition was found for this bounded analysis run.
+- `HOLD`: proposal is recognized, but unresolved qualification or another bounded blocking condition prevents acceptance.
+- `REVISE`: proposal conflicts with explicit structure/contract constraints and must be adjusted before re-analysis.
+- `RETURN_TO_CHARACTERIZATION`: at least one obligation is explicitly unqualified and must be routed to characterization work.
+
 Operator guidance:
 - Regression `pass` does **not** by itself establish progression qualification.
 - A run may complete successfully and still correctly return `HOLD` when qualification evidence remains `unresolved`.
