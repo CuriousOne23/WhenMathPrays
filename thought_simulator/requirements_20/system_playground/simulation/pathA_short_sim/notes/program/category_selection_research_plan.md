@@ -231,20 +231,22 @@ Closeout should require explicit review that:
 
 Confidence/closeout remains a review decision, not an automatic score threshold in this plan.
 
-## 14) Stage-1 current-software modification-map procedure
+## 14) Current-software modification-map procedure (historical)
+
+This procedure predates the Characterization-Space Research Roadmap in section 8A. It is retained for historical context. It is not the same as Stage 1 of that roadmap (the Characterization-Readiness Audit).
 
 Before any bounded implementation contract is expanded:
 
-1. Build a Stage-1 current-software modification map over current code/config pathways.  
+1. Build a current-software modification map over current code/config pathways.  
 2. Identify candidate touchpoints, ownership boundaries, and non-mutation walls.  
 3. Map required observability outputs and fixture support needs.  
 4. Identify required stop/review gates before implementation.
 
-This Stage-1 map is the next task after this plan. It is not created in this document.
+This mapping procedure is not created in this document.
 
 ## 15) Relationship to the later program reference
 
-After Stage-1 mapping/review, two coordinated software references carry distinct responsibilities:
+After the current-software mapping/review described in section 14, two coordinated software references carry distinct responsibilities:
 
 - [category_selection_program_reference.md](category_selection_program_reference.md): bounded category-selection realization contract.
 - [category_selection_characterization_reference.md](category_selection_characterization_reference.md): bounded characterization instrumentation/framework contract for experiments and characterization support.
@@ -259,7 +261,7 @@ After confidence/closeout review, the next research question must be selected fr
 - [category_selection_characterization_reference.md](category_selection_characterization_reference.md) (bounded characterization instrumentation/framework contract; update as implementation evolves)
 - [category_selection_observation.md](category_selection_observation.md) (placeholder now; later empirical record from actual runs)
 - [category_selection_characterization_milestone1_closeout.md](category_selection_characterization_milestone1_closeout.md) (Milestone-1 infrastructure closeout evidence)
-- GitHub Agent implementation plan (after Stage-1 map and review)
+- GitHub Agent implementation plan (after the current-software mapping described in section 14 and review)
 
 ## Category-selection document family
 
