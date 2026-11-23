@@ -128,6 +128,10 @@ As repository authority matures, prompts should contract.
 - Research discourse may remain rich; Agent execution contracts should become short as repository authority becomes mature.
 - Spend Agent tokens on execution breadth, verification, and repository-scale work, not on conversational uncertainty that can be resolved more cheaply before authorization.
 
-## 12) Review recommendation
+## 12) Program principle
+
+Progress in TS is measured by demonstrated, identifiable, bounded thinking leverage. See [ts_program_principle.md](ts_program_principle.md) for the full statement, supporting observations, and repercussions. Descriptions earn their place when something downstream can depend on them inside their declared boundaries.
+
+## 13) Review recommendation
 
 Before introducing substantial workflow changes, request a Grok pre-review of failure modes, then run one bounded Agent task to apply approved workflow-document updates and index registration.
