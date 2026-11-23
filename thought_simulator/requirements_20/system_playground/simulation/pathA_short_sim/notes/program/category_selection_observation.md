@@ -909,14 +909,14 @@ Batch-level factual checks from executed artifacts:
 
 ### 9) Questions raised
 
-- Should Stage 7 Batch 1 be accepted at review gate as completed under frozen specification with no triggered stop condition?
+- Review gate accepted Stage 7 Batch 1 as completed under frozen specification with no triggered stop condition.
 - Which (if any) next batch should be authorized separately under one-batch-at-a-time gating?
 
 ### 10) Next-step options (suggestions only, not decisions)
 
-- Option A: accept Stage 7 Batch 1 and hold for separate authorization decision on Batch 2.
-- Option B: request one bounded replay of a selected Batch 1 case using a new run index before Batch 2 authorization.
-- Option C: accept Batch 1 evidence and pause further formal campaign execution pending review prioritization.
+- Option A: authorize Batch 2 under separate one-batch-at-a-time gating.
+- Option B: request one bounded replay of a selected Batch 1 case using a new run index before Batch 2 execution.
+- Option C: hold formal campaign execution after accepted Batch 1 pending review prioritization.
 
 ## Linked program context
 
