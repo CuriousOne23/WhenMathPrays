@@ -12,6 +12,13 @@
 3. [scalability_gap_analysis.md](scalability_gap_analysis.md)  
 4. [scalability_implementation_plan.md](scalability_implementation_plan.md)
 
+## Review-directed mapping decisions (applied)
+
+1. **Deterministic structural identity contracts are recorded below for currently supported proposal classes.**
+2. **If qualification coverage cannot be established from explicit existing evidence, mapping mandates `unresolved` (no invented qualification registry).**
+3. **Category/Major × Licensed Region behavior remains bounded to existing licensed-region scaffold semantics in [legitimate.py](../../../s2m/legitimate.py); no generalization is mapped.**
+4. **Report representation remains provisional, while still satisfying the mandatory evidence contract from the implementation plan.**
+
 ## 1) Existing facilities to reuse
 
 ### Runtime and data surfaces
@@ -65,9 +72,13 @@ Proposed package (new):
 
 ## 3) Proposed proposal-entry/run interface
 
+Runner/interface inconsistency resolution against repository convention:
+- Existing repository convention uses top-level `run_*.py` command runners (for example [run_examples.py](../../../run_examples.py)) with argparse-driven flags and explicit output routing.
+- Mapping therefore proposes a top-level runner name aligned to that convention: `run_scalability.py` (not `scalability_run.py`).
+
 Proposed first-pass interface (new runner script style, analogous to existing command-line style in [run_examples.py](../../../run_examples.py)):
 
-- `python scalability_run.py --proposal-file <path> --session-id <id> --run-index <n> [--report-version <v>] [--run-regression]`
+- `python run_scalability.py --proposal-file <path> --session-id <id> --run-index <n> [--report-version <v>] [--run-regression]`
 
 Required input contract mapping (from implementation plan):
 - Proposal identity.
@@ -89,6 +100,21 @@ Optional but likely useful (if accepted later):
 - `support/scalability/contracts/proposal_input.notes.md`  
   Human-readable contract notes for proposal fields (non-schema, since report/schema freeze is out of scope).
 
+## 4A) Deterministic structural identity contracts (currently supported proposal classes)
+
+These contracts are mapped for first-pass supported proposal-capable classes only. They are deterministic comparison bases for identity-vs-delta handling in proposal analysis.
+
+| Proposal class | Deterministic identity contract | Existing surface used |
+|---|---|---|
+| Dictionary entry mapping | `(scope, marker, major)` where `scope ∈ {sentence_internal, prior_context}` and `marker/major` are normalized lowercase strings | [category_cues.yaml](../../../support/dictionaries/category_cues.yaml) |
+| Association entry | `(endpoint, relation, to, major, subcategory?)` where `endpoint` comes from association file identity and tuple fields are normalized strings; `subcategory` is optional but identity-significant when present | [s2m/data/associations/](../../../s2m/data/associations/), [loader.py](../../../s2m/loader.py) |
+| Major/category membership | `major` normalized lowercase string | [majors.yaml](../../../s2m/data/majors.yaml), [default.yaml](../../../s2m/data/spaces/default.yaml) |
+| Candidate (derived surface, not proposal-capable) | `(from, relation, to, major, subcategory?)` as generated from associations through existing proposal logic | [propose.py](../../../s2m/propose.py), [loop.py](../../../s2m/loop.py) |
+
+Notes:
+- No independent Candidate proposal class is introduced.
+- Seed and generalized Licensed Region identity contracts remain intentionally unresolved/out of scope for first pass.
+
 ## 5) Stage-to-existing-function/module dependency mapping
 
 | Scalability stage (plan) | Existing function/module dependencies to reuse | Notes |
@@ -99,7 +125,7 @@ Optional but likely useful (if accepted later):
 | 4. Classify relationships | Existing data + contract terms from [scalability_design.md](scalability_design.md) | Classification implementation is new, data sources are existing. |
 | 5. Evaluate dependencies | Existing resource relations in loaders + proposal items | Dependency checker is new. |
 | 6. Compute `$O_Δ` | Candidate derivation via [propose.py](../../../s2m/propose.py), active-space constraints via [active_space.py](../../../s2m/active_space.py), licensing gate via [legitimate.py](../../../s2m/legitimate.py) | Progression computation is new but should call existing candidate/licensing surfaces. |
-| 7. Determine qualification state | Existing characterization records under [local_characterization/](../../../local_characterization/) and formal docs (for bounded interpretation) | No current machine-readable qualification-boundary registry; see unresolved mapping below. |
+| 7. Determine qualification state | Existing characterization records under [local_characterization/](../../../local_characterization/) and formal docs (for bounded interpretation) | If explicit coverage evidence is absent or ambiguous, return `unresolved`; no invented qualification registry. |
 | 8. Invoke regression | Existing scripts in [support/tools/](../../../support/tools/), notably [pipeline_readiness_check.py](../../../support/tools/pipeline_readiness_check.py) and [s2m_category_selection_replay.py](../../../support/tools/s2m_category_selection_replay.py) | Use adapter/subprocess orchestration; do not re-implement regressions. |
 | 9. Evaluate boundary + disposition | Decision framework in [scalability_program.md](scalability_program.md) + evidence from stages 4–8 | Disposition assembly is new. |
 | 10. Emit findings/reports | Local artifact/persistence discipline pattern from [artifacts.py](../../../characterization/artifacts.py) and ignore conventions in [.gitignore](../../../../../../../../../.gitignore) | Scalability report writer/session store is new but should mirror proven persistence/identity discipline. |
@@ -136,6 +162,8 @@ Proposed report body groups (from design/plan):
 - findings in ORIGIN→WHERE→WHAT→WHY→EVIDENCE→CONSEQUENCE→ROUTE shape,
 - final disposition.
 
+Report-field naming remains provisional in this mapping; only mandatory evidence content is fixed by [scalability_implementation_plan.md](scalability_implementation_plan.md).
+
 ## 7) Required `.gitignore` changes (proposed only)
 
 No changes applied in this mapping task. Proposed additions:
@@ -170,7 +198,7 @@ Existing test style in this area is replay/check scripts under [support/tools/](
 ## 9) Implementation-plan elements not fully mappable onto existing code
 
 1. **Qualification-boundary lookup is not machine-encoded today.**  
-   Existing qualification evidence is present in docs/artifacts, but there is no code-level registry mapping obligation types to characterization boundaries.
+   Mapping resolution: use explicit existing evidence when present; otherwise emit `unresolved` (no invented qualification registry).
 
 2. **Cross-surface dependency-closure semantics are not currently implemented as one callable.**  
    Existing checks are localized (schema/loader/replay), not unified for scalability dependency closure.
@@ -185,16 +213,13 @@ Existing test style in this area is replay/check scripts under [support/tools/](
 
 If implemented without additional review constraints, the following would risk architectural invention:
 
-1. **Canonical identity contract for each proposal item class**  
-   (especially dictionary-entry and association-entry identity signatures for delta comparison).
-
-2. **Formal machine-readable mapping from obligations to qualification boundaries**  
+1. **Formal machine-readable mapping from obligations to qualification boundaries**  
    (needed for deterministic `qualified` vs `unqualified` vs `deferred_bounded` vs `unresolved`).
 
-3. **Precise rule for deriving valid progression combinations when Licensed Region and Category/Major both change**  
-   beyond current bounded `LICENSED_EXTENSIONS` scaffold.
+2. **Precise generalized rule for deriving valid progression combinations when Licensed Region and Category/Major both change**  
+   beyond current bounded `LICENSED_EXTENSIONS` scaffold. First-pass mapping explicitly does not generalize this.
 
-4. **Normative report-field schema freeze**  
+3. **Normative report-field schema freeze**  
    explicitly out of scope in current authorities.
 
 These are recorded as mapping risks and should be resolved by review decisions, not autonomous invention.
