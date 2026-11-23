@@ -19,6 +19,14 @@ Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums tha
 
 Force ops such as polar, command, request, and exclamative are open holes. They are not object connections. History, likelihood, and the geometry conjecture are not inputs.
 
+## Expanding Path A
+
+Expanding Path A? Start with the scalability program and user guide before treating new YAML/reference coverage as established behavior.
+
+- [notes/program/scalability/scalability_program.md](notes/program/scalability/scalability_program.md) — governing principles, expansion definition, regression versus progression, decision states.
+- [notes/program/scalability/scalability_user_guide.md](notes/program/scalability/scalability_user_guide.md) — practical sequence after an expansion (placeholder until audit).
+- [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — navigation for the scalability document family.
+
 ## S2M mapping (experimental; on main via PR #194/#197; historical)
 
 S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teaching packet. This is now historical / accomplished; the current goal is category selection (see status and the proposal above).
