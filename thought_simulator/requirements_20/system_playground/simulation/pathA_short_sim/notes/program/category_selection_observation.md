@@ -1307,6 +1307,115 @@ Batch-level factual checks from executed artifacts:
 - Option B: request one bounded replay of a selected Batch 3 competition case using a new run index before Batch 4A decision.
 - Option C: hold campaign progression after accepted Batch 3 pending review prioritization.
 
+## Experiment record — Stage 7 Batch 4A clean representability boundary (`cold` mapped baseline; `blue` matched unmapped control) (executed, pending review-gate decision)
+
+### 1) What executed
+
+- Stage 7 Batch 4A executed as one formal characterization session:
+  - `session_id=stage7_batch4a_clean_representability`
+  - `characterization.type=infra_smoke`
+  - `characterization.version=1.0`
+- Run identities:
+  - `B4A-1 -> run_index=1`
+  - `B4A-2 -> run_index=2`
+
+### 2) Inputs and controls
+
+- TS-affecting controls for both runs:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+- Cases:
+  - `B4A-1`: sentence `"The sky is cold."`, prior context `None`
+  - `B4A-2`: sentence `"The sky is blue."`, prior context `None`
+
+### 3) Produced artifacts/logs
+
+- `B4A-1`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch4a_clean_representability/runs/000001__infra_smoke__1.0.tschar.json`
+- `B4A-2`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch4a_clean_representability/runs/000002__infra_smoke__1.0.tschar.json`
+
+### 4) Observed outputs — facts only
+
+- Shared artifact fields (both runs):
+  - `schema_id=ts.characterization.run`
+  - `schema_version=1.0`
+  - `execution_status=succeeded`
+  - `final_tp.truth_relation="declarative"`
+  - `trace.primitive_sequence` present with the standard sequence
+
+- `B4A-1` (mapped baseline):
+  - `category_cue=["affective"]`
+  - full distribution:
+    - `affective=0.26974629435004127`
+    - `mental=0.1043219579499941`
+    - `metaphysical=0.1043219579499941`
+    - `perceptual=0.1043219579499941`
+    - `perspectival=0.1043219579499941`
+    - `physical=0.1043219579499941`
+    - `social=0.1043219579499941`
+    - `spiritual=0.1043219579499941`
+  - `top_category="affective"`
+  - `category_confidence=0.26974629435004127`
+  - `category_rationale=["category_cue_applied","top_category=affective"]`
+  - `provenance.source=["sentence"]`
+  - `provenance.upstream="ce"`
+
+- `B4A-2` (matched unmapped control):
+  - `category_cue=[]`
+  - full distribution:
+    - `affective=0.125`
+    - `mental=0.125`
+    - `metaphysical=0.125`
+    - `perceptual=0.125`
+    - `perspectival=0.125`
+    - `physical=0.125`
+    - `social=0.125`
+    - `spiritual=0.125`
+  - `top_category=null`
+  - `category_confidence=0.0`
+  - `category_rationale=["empty_category_cue","top_category=null"]`
+  - `provenance.source=[]`
+  - `provenance.upstream="ce"`
+
+- Required mapped/unmapped comparison (factual):
+  - cue, full distribution, top category, confidence, rationale, and provenance are distinguishable between `B4A-1` and `B4A-2`.
+
+### 5) Unavailable measurements/deviations
+
+- Unavailable in both runs:
+  - `entropy`
+  - `top_vs_second_margin`
+- No deviation from frozen Batch 4A case identities or run-index mapping was recorded.
+
+### 6) Unexpected behavior/anomalies
+
+- No Batch 4A stop condition was triggered in the formal execution record.
+- As with prior `infra_smoke` artifacts, no additional token-class-level `UNK`, `constraint_residue`, `semantic_adjacent_cues`, or `smoothing_residue` fields are present in these two `.tschar.json` records.
+
+### 7) Interpretation — bounded
+
+- Under tested frozen Palette v1 conditions, Batch 4A produced a clean local mapped/unmapped representability boundary between `cold` (mapped affective cue present) and matched `blue` control (no category cue, null top category).
+
+### 8) Not established
+
+- No global representability boundary is established.
+- No threshold/no-category policy is established beyond the observed local batch cases.
+- No entropy- or margin-based interior geometry is established.
+- No Category Selection structural-confidence closeout is established.
+- Batch 4B authorization is not established by Batch 4A evidence.
+
+### 9) Questions raised
+
+- Should Stage 7 Batch 4A be accepted at review gate under the frozen specification?
+- Should Batch 4B remain deferred pending separate review-gate direction?
+
+### 10) Next-step options — suggestions only, not decisions
+
+- Option A: review and decide Batch 4A acceptance at review gate.
+- Option B: request one bounded replay of a selected Batch 4A case using a new run index before acceptance decision.
+- Option C: hold campaign progression after Batch 4A execution pending review prioritization.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
