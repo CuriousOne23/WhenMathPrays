@@ -1,14 +1,14 @@
 # Category Selection Stage 7: Batch 1–4A Formal Campaign
 
 **Document:** notes/program/category_selection_stage7_batch1_4a_campaign.md  
-**Status:** Frozen execution matrix (non-normative). Batch 1 accepted. Batch 2 accepted. Batch 3 separately authorized for formal execution. Batch 4A not yet authorized.  
+**Status:** Frozen execution matrix (non-normative). Batch 1 accepted. Batch 2 accepted. Batch 3 accepted. Batch 4A separately authorized for formal execution.  
 **Date:** 2026-11-23  
 **Governing context:** [category_selection_controlled_palette_v1.md](category_selection_controlled_palette_v1.md); [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md).  
 **Purpose:** Own the frozen Stage 7 formal characterization campaign (Batches 1–4A) that uses Palette v1. Separates campaign specification from empirical observation records.
 
 ## Authorization rule
 
-Batches are authorized and reviewed one at a time. Batch 1 is accepted (PASS). Batch 2 is accepted (PASS). Batch 3 is separately authorized. Batch 4A remains unauthorized until a separate review-gate decision. Batch 4B and inventory composition remain deferred.
+Batches are authorized and reviewed one at a time. Batch 1 is accepted (PASS). Batch 2 is accepted (PASS). Batch 3 is accepted (PASS). Batch 4A is separately authorized. Batch 4B and inventory composition remain deferred.
 
 ## Measurement limits
 
