@@ -918,7 +918,7 @@ Batch-level factual checks from executed artifacts:
 - Option B: request one bounded replay of a selected Batch 1 case using a new run index before Batch 2 execution.
 - Option C: hold formal campaign execution after accepted Batch 1 pending review prioritization.
 
-## Experiment record — Stage 7 Batch 2 cross-category generality (`table` / physical; `place` / perspectival) (executed, pending review-gate decision)
+## Experiment record — Stage 7 Batch 2 cross-category generality (`table` / physical; `place` / perspectival) (accepted)
 
 ### 1) What executed
 
@@ -1125,14 +1125,14 @@ Batch-level factual checks from executed artifacts:
 
 ### 9) Questions raised
 
-- Should Stage 7 Batch 2 be accepted at review gate under the frozen specification?
-- Should Batch 3 remain unauthorized pending a separate review-gate decision after Batch 2 review?
+- Review gate accepted Stage 7 Batch 2 as completed under frozen specification with no triggered stop condition.
+- Batch 3 is separately authorized; Batch 4A remains unauthorized pending a separate review-gate decision.
 
 ### 10) Next-step options — suggestions only, not decisions
 
-- Option A: review and decide Batch 2 acceptance at review gate.
-- Option B: request bounded replay of selected Batch 2 case(s) under new run indices before acceptance decision.
-- Option C: keep Batch 2 as executed/pending and hold Batch 3 authorization until explicit review outcome.
+- Option A: authorize Batch 3 under separate one-batch-at-a-time gating.
+- Option B: request one bounded replay of a selected Batch 2 case using a new run index before Batch 3 execution.
+- Option C: hold formal campaign execution after accepted Batch 2 pending review prioritization.
 
 ## Linked program context
 
