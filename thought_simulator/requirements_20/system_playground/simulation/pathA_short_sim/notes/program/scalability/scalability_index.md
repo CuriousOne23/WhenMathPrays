@@ -67,8 +67,8 @@ New scalability documents should be registered here.
 
 - [scalability_implementation_mapping.md](scalability_implementation_mapping.md)  
   **What it is:** Proposed first-pass implementation mapping from the envelope to concrete modules, interfaces, output layout, `.gitignore` needs, and acceptance-test coverage.  
-  **Status/authority:** Proposed / awaiting review (not approved).  
-  **Open when:** You need to confirm how the approved envelope maps to existing repository facilities before allowing implementation changes.  
+  **Status/authority:** Approved implementation mapping for first bounded scalability implementation.  
+  **Open when:** You are implementing or reviewing the first bounded scalability pass and need the approved mapping from the envelope to concrete repository surfaces.  
   **Relationship:** Downstream of implementation plan; predecessor to bounded implementation execution.
 
 ### Practical guidance
