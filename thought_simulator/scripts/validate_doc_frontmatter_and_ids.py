@@ -50,10 +50,10 @@ ALLOWED_STATUS = {
 ALLOWED_SOURCE_OF_TRUTH = {"this", "upstream"}
 
 STRICT_ID_PATTERNS = (
-    re.compile(r"^HLR-20\.\d{2,3}-\d{3}$"),
-    re.compile(r"^HLR-20\.\d{2,3}-\d{3}[a-z]$"),
-    re.compile(r"^HLR-20\.\d{2,3}-\d{3}\.\.\d{3}$"),
+    re.compile(r"^HLR-20\.\d{2,3}(?:\.\d{3})*-\d{3}[a-z]?$"),
+    re.compile(r"^HLR-20\.\d{2,3}(?:\.\d{3})*-\d{3}\.\.\d{3}$"),
     re.compile(r"^HLR-20\.\d{2,3}$"),
+    re.compile(r"^HLR-[A-Z][A-Z0-9]*(?:-[A-Z][A-Z0-9]*)*-\d{3}[A-Z]?$"),
     re.compile(r"^HLR-10\.50\.\d{2,3}-\d{3}$"),
     re.compile(r"^HLR-10\.50\.\d{2,3}-\d{3}\.\.\d{3}$"),
     re.compile(r"^HLR-10\.50\.xx$"),
@@ -67,7 +67,7 @@ STRICT_ID_PATTERNS = (
     re.compile(r"^LLR-TR-[A-Z]+-\d{3}$"),
 )
 
-PLACEHOLDER_IDS = {"HLR-?", "LLR-?"}
+PLACEHOLDER_IDS = {"HLR-?", "LLR-?", "HLR-20.xxx.yyy-nnn"}
 
 ID_TOKEN_PATTERN = re.compile(r"\b(?:HLR|LLR)-[A-Za-z0-9?.-]+\b")
 
@@ -125,6 +125,8 @@ def validate_ids(rel_path: str, text: str, strict_ids: bool, canonical: str | No
                         message=f"placeholder ID in use: {token}",
                     )
                 )
+                continue
+            if not any(char.isdigit() or char == "?" for char in token):
                 continue
             if not any(pattern.match(token) for pattern in STRICT_ID_PATTERNS):
                 issues.append(
