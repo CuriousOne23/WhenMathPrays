@@ -1307,7 +1307,7 @@ Batch-level factual checks from executed artifacts:
 - Option B: request one bounded replay of a selected Batch 3 competition case using a new run index before Batch 4A decision.
 - Option C: hold campaign progression after accepted Batch 3 pending review prioritization.
 
-## Experiment record — Stage 7 Batch 4A clean representability boundary (`cold` mapped baseline; `blue` matched unmapped control) (executed, pending review-gate decision)
+## Experiment record — Stage 7 Batch 4A clean representability boundary (`cold` mapped baseline; `blue` matched unmapped control) (accepted)
 
 ### 1) What executed
 
@@ -1407,14 +1407,14 @@ Batch-level factual checks from executed artifacts:
 
 ### 9) Questions raised
 
-- Should Stage 7 Batch 4A be accepted at review gate under the frozen specification?
-- Should Batch 4B remain deferred pending separate review-gate direction?
+- Review gate accepted Stage 7 Batch 4A as completed under frozen specification with no triggered stop condition.
+- Should formal execution pause after accepted Batch 4A while Batch 4B remains deferred?
 
 ### 10) Next-step options — suggestions only, not decisions
 
-- Option A: review and decide Batch 4A acceptance at review gate.
-- Option B: request one bounded replay of a selected Batch 4A case using a new run index before acceptance decision.
-- Option C: hold campaign progression after Batch 4A execution pending review prioritization.
+- Option A: stop formal execution after accepted Batch 4A.
+- Option B: request one bounded replay of a selected Batch 4A case using a new run index.
+- Option C: keep Batch 4B and inventory-composition work deferred pending separate review-gate direction.
 
 ## Linked program context
 
