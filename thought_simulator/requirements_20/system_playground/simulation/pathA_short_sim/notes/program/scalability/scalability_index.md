@@ -33,8 +33,16 @@ New scalability documents should be registered here.
 - [scalability_program.md](scalability_program.md)  
   **What it is:** Governing proposal for Path A scalability and expansion-assurance.  
   **Status/authority:** Proposal (non-normative).  
-  **Open when:** You need the definition of expansion, the regression/progression distinction, progression decisions, output discipline, phased plan, or currently tracked deferred/open scalability concerns (including preconversation/context scaling) pending formal gap-analysis registration.  
+  **Open when:** You need the definition of expansion, the regression/progression distinction, progression decisions, output discipline, or the phased plan.  
   **Relationship:** Receives the handoff from the Category Selection characterization program closeout; owns the Path A scalability concern; does not implement tooling.
+
+### Gap/disposition mapping
+
+- [scalability_gap_analysis.md](scalability_gap_analysis.md)  
+  **What it is:** Audit-derived capability/disposition map for reuse, adaptation, gaps, unresolved items, and deferred concerns.  
+  **Status/authority:** Analysis record (non-normative, decision-support).  
+  **Open when:** You need to determine current capability classification by area, including deferred preconversation/context scaling.  
+  **Relationship:** Downstream of the program document and infrastructure audit; informs later design planning without prescribing implementations.
 
 ### Practical guidance
 

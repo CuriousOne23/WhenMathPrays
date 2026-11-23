@@ -141,26 +141,9 @@ The Category Selection characterization cycle closed with an explicit handoff th
 
 Do not implement tooling or freeze schemas until the proposal is agreed and the audit is complete.
 
-## Deferred/open issue (temporary placement before gap analysis)
+## Deferred/open issues pointer
 
-### Preconversation / contextual scaling
-
-**Status:** Deferred scalability concern.
-
-**Current handling:**  
-Bounded tests requiring preconversation may provide explicit prior context through the existing run-time `prior_context` surface. The supplied context is part of the qualified run condition and should be recorded with run evidence so the observation remains bounded and reproducible.
-
-**Present non-goal:**  
-Do not create a generalized preconversation fixture system, dedicated CIL/CEx scalability framework, or specialized preconversation tooling at this stage.
-
-**Future trigger:**  
-Revisit this issue if repeated, larger, or more complicated scalability work demonstrates that run-specific `prior_context` customization is insufficient to qualify, reproduce, maintain, or consistently evaluate contextual obligations affecting CIL/CEx and downstream Path A/S2M behavior.
-
-**Possible future work if triggered:**  
-Formal reusable preconversation fixtures/support, progression conditions, and CIL/CEx contextual-scaling checks may then be considered. This is a possible future job, not presently authorized work.
-
-**Migration note:**  
-This temporary placement should be migrated into `scalability_gap_analysis.md` once the gap-analysis document is created.
+Deferred and unresolved scalability concerns (including preconversation/context scaling) are tracked in [scalability_gap_analysis.md](scalability_gap_analysis.md). This program document keeps only the governing principles and does not duplicate gap-level issue detail.
 
 ## Stop conditions
 
