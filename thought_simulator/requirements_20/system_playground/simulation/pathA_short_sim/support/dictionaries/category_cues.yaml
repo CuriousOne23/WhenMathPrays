@@ -4,7 +4,11 @@ category_cues:
       - affective
     support:
       - physical
+    table:
+      - physical
     where:
+      - perspectival
+    place:
       - perspectival
   prior_context:
     cold:
@@ -13,5 +17,9 @@ category_cues:
       - physical
     support:
       - physical
+    table:
+      - physical
     location:
+      - perspectival
+    place:
       - perspectival

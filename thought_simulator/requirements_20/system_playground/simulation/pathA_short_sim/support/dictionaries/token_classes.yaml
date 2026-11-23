@@ -15,10 +15,15 @@ token_classes:
   "book?": NOUN
   table: NOUN
   "table?": NOUN
+  desk: NOUN
+  lamp: NOUN
+  hall: NOUN
+  place: NOUN
   plain: NOUN
   city: NOUN
   "book?": NOUN
   jumps: VERB
+  rests: VERB
   is: AUX
   are: AUX
   "plain?": NOUN
