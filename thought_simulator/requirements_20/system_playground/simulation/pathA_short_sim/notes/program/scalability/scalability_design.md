@@ -1,7 +1,7 @@
 # Path A Scalability Design
 
 **Document:** notes/program/scalability/scalability_design.md  
-**Status:** Design draft (non-normative).  
+**Status:** Accepted architecture/design authority for the first bounded scalability implementation.  
 **Date:** 2026-11-23  
 **Purpose:** Establish what the Path A scalability system is, what the user gives it, what questions it answers, and what evidence and reports it returns. This document does not implement tooling or freeze report schemas.
 

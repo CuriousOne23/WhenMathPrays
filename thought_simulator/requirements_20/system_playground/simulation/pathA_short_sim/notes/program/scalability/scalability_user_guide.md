@@ -1,9 +1,9 @@
 # Scalability User Guide
 
 **Document:** notes/program/scalability/scalability_user_guide.md  
-**Status:** Placeholder (non-normative).  
+**Status:** Partial scaffold (non-normative).  
 **Date:** 2026-11-23  
-**Purpose:** Provide the practical sequence an operator or Agent follows after expanding Path A. This document will be completed after the infrastructure audit and gap analysis. It does not yet contain commands or frozen report schemas.
+**Purpose:** Provide the practical sequence an operator or Agent follows after expanding Path A. This document is not yet the final operational guide; it now records implementation-backed command/report facts needed for later completion and still does not freeze report schema or storage format.
 
 ## Intended use
 
@@ -19,6 +19,18 @@ After an expansion (new or modified seed, association, category, candidate, lice
 
 ## Current status
 
-Placeholder only. Do not treat any procedure as authoritative until this guide is completed following agreement on the program proposal and the subsequent audit.
+This document remains non-normative and incomplete. The final step-by-step operational procedure is still pending.
+
+Implementation-backed facts now available for later completion:
+- runner: `python run_scalability.py --proposal-file <path> --session-id <id> --run-index <n> [--report-version <v>] [--run-regression]`
+- output locality: `local_scalability/sessions/<session_id>/runs/`
+- paired report outputs per run: `<run_index>__scalability_check__<version>.json` and `.md`
+- current machine-readable report sections: identity, proposal, relationships, dependencies, progression obligations, qualification, regression, findings, disposition
+- `--run-regression` records reused regression checks in the report and remains distinct from progression/qualification disposition handling
+
+Pending for guide completion:
+- concise operator/Agent sequence for selecting proposal fixtures versus external proposal files;
+- interpretation guidance for each disposition route (`PROCEED`, `HOLD`, `REVISE`, `RETURN_TO_CHARACTERIZATION`);
+- explicit handoff boundaries to future controlled integration/promotion work (outside current scalability implementation scope).
 
 See [scalability_program.md](scalability_program.md) for the governing principles.

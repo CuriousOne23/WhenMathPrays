@@ -1,7 +1,7 @@
 # Path A Scalability Program
 
 **Document:** notes/program/scalability/scalability_program.md  
-**Status:** Proposal (non-normative).  
+**Status:** Accepted program basis with first bounded implementation closeout recorded.  
 **Date:** 2026-11-23  
 **Purpose:** Define the Path A / S2M scalability and expansion-assurance program. Scalability is a Path A concern; Category Selection is one subsystem affected by expansion, not the owner of the program. This document establishes the governing principles, the distinction between regression and progression, the output discipline, and the phased development plan. It does not implement tooling or freeze report schemas.
 
@@ -131,15 +131,44 @@ The Category Selection characterization cycle closed with an explicit handoff th
 
 ## Phased development plan
 
-1. Proposal (this document) → agreement.  
-2. Infrastructure audit of existing Path A test/reference structures.  
-3. Gap analysis.  
-4. Software/reference design.  
-5. Bounded implementation.  
-6. User guide and index completion.  
-7. README integration.
+1. Proposal (this document) → agreement. **Complete.**  
+2. Infrastructure audit of existing Path A test/reference structures. **Complete.**  
+3. Gap analysis. **Complete.**  
+4. Software/reference design. **Complete.**  
+5. Bounded implementation. **Complete and accepted (first pass).**  
+6. User guide and index completion. **In progress (guide not yet finalized).**  
+7. README integration. **Pending.**
 
-Do not implement tooling or freeze schemas until the proposal is agreed and the audit is complete.
+## First bounded implementation closeout (accepted)
+
+The first bounded scalability implementation under the accepted implementation envelope and approved mapping is accepted for this pass.
+
+Verification record for the closeout pass:
+- Reused regression checks passed: `support/tools/pipeline_readiness_check.py`, `support/tools/s2m_category_selection_replay.py`.
+- First-pass scalability replay checks passed: `support/tools/scalability_proposal_replay.py`, `support/tools/scalability_progression_replay.py`, `support/tools/scalability_seed_hold_replay.py`, `support/tools/scalability_output_boundary_replay.py`.
+- `run_scalability.py` proposal run with regression enabled completed successfully and produced reports under `local_scalability/`.
+
+Regression and progression/qualification remain separate:
+- Regression may pass while disposition remains `HOLD`.
+- The exercised association proposal remained `HOLD` because qualification coverage was `unresolved`, which is expected progression/qualification behavior and not a regression failure.
+
+## Open requirement: scalability artifact efficiency at scale
+
+As proposal and obligation counts grow, scalability artifacts must remain efficient while preserving traceability:
+- avoid unnecessary duplication of established resources;
+- prefer identities, deltas, provenance, and references where practical;
+- avoid unnecessary repeated evidence across machine-readable and human-readable outputs;
+- preserve complete traceability.
+
+This requirement is open. It does not freeze a new report schema or storage format in this document.
+
+## Implementation-backed facts now available for future user-guide completion
+
+The following bounded runtime/report facts are now available for completing [scalability_user_guide.md](scalability_user_guide.md):
+- Command interface: `python run_scalability.py --proposal-file <path> --session-id <id> --run-index <n> [--report-version <v>] [--run-regression]`.
+- Output locality: generated JSON/Markdown reports are emitted under `local_scalability/sessions/<session_id>/runs/`.
+- Report evidence groups currently produced: identity/proposal items, relationship classifications, dependency checks, progression obligations, qualification states, regression results, findings, and final disposition.
+- `--run-regression` includes reused regression checks in the report while keeping regression results visibly separate from progression/qualification outcomes.
 
 ## Deferred/open issues pointer
 

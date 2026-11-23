@@ -1,7 +1,7 @@
 # Path A Scalability Gap Analysis
 
 **Document:** notes/program/scalability/scalability_gap_analysis.md  
-**Status:** Audit-derived gap map (non-normative).  
+**Status:** Accepted gap/disposition basis for bounded scalability implementation decisions.  
 **Date:** 2026-11-23  
 **Purpose:** Convert the completed Path A scalability infrastructure audit into a decision-quality classification of reusable capability, adaptation needs, genuine gaps, unresolved items, and deferred concerns. This document does not design implementations.
 

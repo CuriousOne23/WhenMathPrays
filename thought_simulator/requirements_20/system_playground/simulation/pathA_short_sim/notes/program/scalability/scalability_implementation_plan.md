@@ -1,7 +1,7 @@
 # Path A Scalability Implementation Plan
 
 **Document:** notes/program/scalability/scalability_implementation_plan.md  
-**Status:** Implementation envelope (non-normative until accepted).  
+**Status:** Accepted implementation envelope for first bounded scalability pass.  
 **Date:** 2026-11-23  
 **Purpose:** Freeze the physical and software contract for the first bounded implementation of Path A scalability. This document does not re-open architectural questions settled in `scalability_design.md`. It defines what an Agent may implement now and what it must not invent.
 

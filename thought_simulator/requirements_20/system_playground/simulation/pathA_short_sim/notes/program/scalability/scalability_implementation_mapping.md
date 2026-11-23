@@ -1,4 +1,4 @@
-# Path A Scalability Implementation Mapping (Proposed / Awaiting Review)
+# Path A Scalability Implementation Mapping
 
 **Document:** notes/program/scalability/scalability_implementation_mapping.md  
 **Status:** Approved implementation mapping for first bounded scalability implementation.  
@@ -70,13 +70,13 @@ Proposed package (new):
 - `scalability/session_store.py`  
   Local scalability run/session identity and output-path utilities under `local_scalability/`.
 
-## 3) Proposed proposal-entry/run interface
+## 3) Proposal-entry/run interface
 
 Runner/interface inconsistency resolution against repository convention:
 - Existing repository convention uses top-level `run_*.py` command runners (for example [run_examples.py](../../../run_examples.py)) with argparse-driven flags and explicit output routing.
 - Mapping therefore proposes a top-level runner name aligned to that convention: `run_scalability.py` (not `scalability_run.py`).
 
-Proposed first-pass interface (new runner script style, analogous to existing command-line style in [run_examples.py](../../../run_examples.py)):
+First-pass interface (runner style analogous to [run_examples.py](../../../run_examples.py)):
 
 - `python run_scalability.py --proposal-file <path> --session-id <id> --run-index <n> [--report-version <v>] [--run-regression]`
 
@@ -85,7 +85,7 @@ Required input contract mapping (from implementation plan):
 - Items with resource class, resource identity, proposed delta, provenance.
 - Fail-closed on missing identity/structural content.
 
-This interface is proposed only; not implemented in this mapping task.
+This interface has been implemented in the first bounded scalability pass.
 
 ## 4) Proposed support/reference files under `support/scalability/`
 
@@ -164,9 +164,9 @@ Proposed report body groups (from design/plan):
 
 Report-field naming remains provisional in this mapping; only mandatory evidence content is fixed by [scalability_implementation_plan.md](scalability_implementation_plan.md).
 
-## 7) Required `.gitignore` changes (proposed only)
+## 7) Required `.gitignore` changes
 
-No changes applied in this mapping task. Proposed additions:
+Implemented in the first bounded pass:
 
 - `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_scalability/*`
 - `!thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_scalability/.gitignore`
@@ -195,7 +195,7 @@ Existing test style in this area is replay/check scripts under [support/tools/](
 | Generated output under `local_scalability/` and untracked | `scalability_output_boundary_replay.py::case_local_scalability_ignored` |
 | Proposal input never written into established Path A resources | `scalability_output_boundary_replay.py::case_no_write_to_established_resources` |
 
-## 9) Implementation-plan elements not fully mappable onto existing code
+## 9) Implementation-plan elements not fully mappable onto existing code at mapping time
 
 1. **Qualification-boundary lookup is not machine-encoded today.**  
    Mapping resolution: use explicit existing evidence when present; otherwise emit `unresolved` (no invented qualification registry).
@@ -206,7 +206,7 @@ Existing test style in this area is replay/check scripts under [support/tools/](
 3. **Progression obligation computation (`$O_Δ`) is not currently implemented.**  
    Candidate/association/licensing surfaces exist, but obligation-set construction across proposal deltas is new.
 
-4. **No existing scalability session/report writer.**  
+4. **No existing scalability session/report writer at mapping time.**  
    Characterization artifact handling exists and is reusable by pattern, but not directly reusable as-is without adaptation.
 
 ## 10) Items that would require unresolved-contract invention if forced now

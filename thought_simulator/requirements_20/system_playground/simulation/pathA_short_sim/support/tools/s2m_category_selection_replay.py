@@ -54,16 +54,17 @@ def main() -> None:
     assert ("table", "provides", "support", "physical") in prior_keys
     assert ("book", "is", "object", "physical") in prior_keys
 
-    no_usable_prior = run_pathA_short(
-        "The book is on the table.",
+    no_usable_cue = run_pathA_short(
+        "The sky is blue.",
         enable_s2m_seed=True,
         enable_category_selection=True,
         prior_context=["This carries no category marker."],
     )
-    no_usable_category = _committed_category(no_usable_prior)
-    assert no_usable_category.get("category_cue") == [], "no usable prior cue should commit empty cue"
+    no_usable_category = _committed_category(no_usable_cue)
+    assert no_usable_category.get("category_cue") == [], "no usable cue should commit empty cue"
     assert no_usable_category.get("top_category") is None, "empty cue should commit top_category null"
-    assert no_usable_prior.get("s2m_meaning", {}).get("meaning_relations") == []
+    assert no_usable_category.get("provenance", {}).get("source") == [], "no usable cue should preserve empty provenance source"
+    assert no_usable_cue.get("s2m_meaning", {}).get("meaning_relations") == []
 
     refusal_case = run_pathA_short("Where is the book?", enable_s2m_seed=True, enable_category_selection=True)
     refusal_meaning = refusal_case.get("s2m_meaning", {})
