@@ -221,6 +221,22 @@ Anomalies are findings, not silent noise.
 
 ## 13) Category-selection confidence / closeout gate
 
+### Structural-confidence objective
+
+Closeout does not require Category Selection to be complete, globally characterized, or frozen against later refinement.
+
+The research program should establish sufficient controlled evidence that the underlying Category Selection structure is reasonably credible for continued downstream work.
+
+Later revisions to boundaries, parameters, measurements, vocabulary, category inventories, and local behaviors are compatible with successful closeout.
+
+Intended threshold: the accumulated controlled evidence indicates that remaining and reasonably anticipated limitations are more consistent with bounded extension, parameterization, measurement improvement, or local refinement than with the need for wholesale reconstruction of the Category Selection process.
+
+If controlled characterization continues to leave the basic structural model materially in doubt, closeout is deferred and the structural question is investigated further.
+
+This is a research-confidence and progression criterion, not proof that the architecture is correct, complete, or final.
+
+### Closeout review
+
 Closeout should require explicit review that:
 
 - all planned experiment families were executed or explicitly deferred with reason
@@ -228,6 +244,9 @@ Closeout should require explicit review that:
 - B vs C separability was assessed and recorded
 - architectural-generality evidence and mechanism-change accounting were recorded
 - unresolved anomalies and confidence limits were explicitly listed
+- the accumulated evidence does not indicate that the basic Category Selection structure may require fundamental reconstruction rather than bounded refinement
+
+If the basic structural model remains materially in doubt, closeout is deferred. Do not close out Category Selection merely because the planned characterization work has been completed.
 
 Confidence/closeout remains a review decision, not an automatic score threshold in this plan.
 
