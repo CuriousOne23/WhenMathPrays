@@ -59,6 +59,14 @@ Authorized surface (distribution, top category, confidence, rationale, provenanc
 
 Palette v1 was designed, implemented as configuration, calibrated, and successfully exercised without requiring Category Selection mechanism reconstruction. This is relevant evidence that ordinary research growth can proceed by qualifying probes and attaching them to established experimental contracts. It is one successful expansion, not proof of unlimited scalability.
 
+### Content/mechanism separation evidence
+
+Palette v1 provides first-order controlled evidence that Category Selection behavior is not limited to a single convenient lexical probe or category identity. The same local source-composition relationship was observed across the qualified `cold`/affective, `table`/physical, and `place`/perspectival realizations without category-specific changes to the Category Selection mechanism.
+
+This supports treating Category Selection, within the tested Palette v1 region, as a reusable selection structure over qualified category evidence rather than as a collection of probe-specific special cases. It also supports the architectural use of the Category Selection result as a comparatively stable interface for downstream TS work while research content such as probes and categories evolves.
+
+This finding remains bounded. It does not establish arbitrary-category generalization, unlimited scalability, category-independence under all conditions, or that future category expansion will never require mechanism refinement. Each future expansion remains subject to qualification, characterization, and the controlled-evolution / revalidation discipline.
+
 ## Section 13 decision
 
 **B. Proceed with explicit reservations/deferred work**
@@ -67,7 +75,7 @@ The accumulated controlled evidence indicates that remaining and reasonably anti
 
 ## Progression statement
 
-Category Selection may be carried forward into the next stage of TS development as a credible working structure. Later refinement, expansion, remeasurement, or bounded refactoring remains expected and compatible with this progression.
+Category Selection may be carried forward into the next stage of TS development as a credible working structure. Downstream TS components may therefore treat the current Category Selection result structure as a working interface under the explicit reservations and return conditions recorded here. Later refinement, expansion, remeasurement, or bounded refactoring remains expected and compatible with this progression.
 
 ## Return conditions
 
