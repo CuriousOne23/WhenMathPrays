@@ -103,7 +103,8 @@ Recorded cases and artifacts:
 2. **Expected non-admission**  
    Fixture: `"Where is the book?"`  
    Artifact: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/category_supported_admission_baseline_qualified/runs/000002__infra_smoke__1.0.tschar.json`  
-   Recorded facts: structural floor present; candidates available across majors (`mental`, `perspectival`, `physical`); category cue/top category `perspectival`; observable `candidate_unselected` states present for candidates outside selected space.
+   Recorded facts: structural floor present; candidates available across majors (`mental`, `perspectival`, `physical`); category cue/top category `perspectival`; observable `candidate_unselected` states present for candidates outside selected space.  
+   Review status: approved/closed.
 
 3. **Admission followed by refusal**  
    Fixture: `"Where is the book?"`  
