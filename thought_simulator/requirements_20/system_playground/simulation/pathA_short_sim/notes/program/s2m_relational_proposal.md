@@ -97,7 +97,7 @@ Relevant endpoints and, where appropriate, structural relations may have candida
 
 The inventories are associated with endpoints and relations rather than assuming all meaning resides in individual words. This distinction matters for relational structures such as locatives and interrogatives.
 
-## Selected interpretive extension
+## Legitimized interpretive extension
 
 A contextual or category cue may subsequently legitimize one or more candidates. Contextual candidate admission determines which available candidates are considered for structural assessment; structural legitimation determines which admitted candidates are permitted as extensions. An extension is added only after legitimation. It does not appear merely because it is present in an inventory. Extensions are additions to the default meaning, not replacements for it.
 
