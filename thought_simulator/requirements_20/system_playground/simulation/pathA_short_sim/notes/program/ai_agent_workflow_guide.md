@@ -86,6 +86,8 @@ Prefer compact formal reports by default:
 
 Include full distributions or other verbose fields when required by the frozen batch spec or when anomalies appear.
 
+Detailed evidence belongs primarily in formal artifacts and authoritative observation records. Agent chat output should not duplicate artifact detail unless the task explicitly requests it or an anomaly requires immediate review.
+
 ## 7) Combine administrative updates after human review
 
 The Agent should not accept its own evidence.  
@@ -99,6 +101,8 @@ For a mature formal batch, read:
 3. only additional references required for that specific job.
 
 Avoid repository-wide rereads by default.
+
+Within a single Agent task/session, do not repeatedly re-establish already verified context. Once governing authority, authorization, and the relevant implementation surface are confirmed, reuse that context unless a specific inconsistency, missing fact, or changed repository state requires reinspection.
 
 ## 9) Escalation rule
 
