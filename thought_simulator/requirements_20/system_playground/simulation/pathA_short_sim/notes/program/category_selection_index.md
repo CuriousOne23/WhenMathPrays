@@ -37,6 +37,7 @@ Route findings by information type and document authority:
 - Stage 1 readiness / capability map → [category_selection_characterization_readiness_audit.md](category_selection_characterization_readiness_audit.md)
 - Stage 2 axis and coverage decisions → [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md)
 - Controlled experimental palette design → [category_selection_controlled_palette_v1.md](category_selection_controlled_palette_v1.md)
+- Stage 7 formal campaign specification → [category_selection_stage7_batch1_4a_campaign.md](category_selection_stage7_batch1_4a_campaign.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
@@ -73,9 +74,15 @@ Record each finding in the document that owns that information type. Do not dupl
 
 - [category_selection_controlled_palette_v1.md](category_selection_controlled_palette_v1.md)  
   **What it is:** Design record for the first-generation controlled experimental palette (canonical probes, source-composition contract, construction families, controls, and competition cases).  
-  **Status/authority:** Non-normative design record; implementation not yet authorized.  
+  **Status/authority:** Implemented, configuration-verified, and locally calibrated (Stage 6 PASS); not yet formally characterized.  
   **Open when:** You need the approved Palette v1 specification or the distinction between design and current implementation state.  
-  **Relationship:** Downstream of Stage 2; upstream of any Palette v1 implementation batch; does not own empirical observations.
+  **Relationship:** Downstream of Stage 2; upstream of Stage 7 formal campaign; does not own empirical observations.
+
+- [category_selection_stage7_batch1_4a_campaign.md](category_selection_stage7_batch1_4a_campaign.md)  
+  **What it is:** Frozen Stage 7 formal characterization campaign specification (Batches 1–4A execution matrix, stop conditions, measurement limits, and batch-by-batch authorization rule).  
+  **Status/authority:** Non-normative campaign specification. Batch 1 authorized for formal execution; later batches not yet authorized.  
+  **Open when:** You need the exact cases, stop conditions, or authorization status for the first formal Palette v1 characterization campaign.  
+  **Relationship:** Downstream of Palette v1 and Stage 2; upstream of formal Agent execution and observation recording; does not own empirical results.
 
 ### Current-realization mapping
 
@@ -176,6 +183,7 @@ Typical progression for a new cycle:
 → `category_selection_characterization_readiness_audit.md`  
 → `category_selection_stage2_axis_and_coverage_reference.md`  
 → `category_selection_controlled_palette_v1.md`  
+→ `category_selection_stage7_batch1_4a_campaign.md`  
 → `category_selection_stage1_modification_map.md`  
 → coordinated software references  
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  

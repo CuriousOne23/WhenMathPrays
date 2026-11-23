@@ -1,7 +1,7 @@
 # Category Selection Controlled Experimental Palette v1
 
 **Document:** notes/program/category_selection_controlled_palette_v1.md  
-**Status:** Implemented and configuration-verified (non-normative). Not yet experimentally characterized.  
+**Status:** Implemented, configuration-verified, and locally calibrated (Stage 6 PASS). Not yet formally characterized.  
 **Date:** 2026-11-23  
 **Governing context:** [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md); [category_selection_research_plan.md](category_selection_research_plan.md) (8A, 8B, 13).  
 **Purpose:** Own the first-generation controlled experimental palette designed to satisfy the Stage 2 minimum meaningful coverage requirements. Separates approved design from current implementation state.
@@ -124,4 +124,4 @@ This is Palette v1. Future generations may expand or revise research content und
 
 ## Non-claims
 
-This document does not characterize Category Selection space or establish global axes. Palette v1 is implemented and configuration-verified; it is not yet experimentally characterized.
+This document does not characterize Category Selection space or establish global axes. Palette v1 is implemented, configuration-verified, and locally calibrated (Stage 6 PASS); it is not yet formally characterized.
