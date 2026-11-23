@@ -129,11 +129,19 @@ A bounded implementation is acceptable when it can:
 - Root-cause diagnostics beyond the structured finding contract.
 - Any change that grants a proposal standing in the established environment.
 
-## Next step after this plan
+## Historical authorization sequence (completed)
 
-Once this envelope is accepted, the first Agent task is **implementation mapping only (no code changes)**, then stop for review.
+The following sequence was executed as the first bounded-pass authorization lifecycle for this plan:
 
-The first Agent instruction must:
+1. **Implementation mapping only (no code changes).**
+2. **Mapping review and approval.**
+3. **Bounded implementation execution under approved mapping/envelope.**
+4. **Acceptance-test and reused-regression verification.**
+5. **Stop for review before further work.**
+
+Historical first-task authorization record:
+
+The first Agent instruction was required to:
 
 1. read [scalability_program.md](scalability_program.md),
 2. read [scalability_design.md](scalability_design.md),
@@ -141,7 +149,7 @@ The first Agent instruction must:
 4. read this implementation plan,
 5. inspect existing runtime, regression/replay, characterization, dictionary, association, category, Candidate, Licensed Region, and `.gitignore` conventions.
 
-The first task output must report:
+That first task output was required to report:
 - existing facilities to reuse;
 - proposed files/modules under `scalability/`;
 - proposal-entry/run interface;
@@ -153,4 +161,12 @@ The first task output must report:
 - anything in this implementation plan that cannot be mapped onto existing code;
 - anything that would require inventing an unresolved contract.
 
-Then stop for review. Do not implement runtime code, tooling, or tests in that first Agent task.
+## Current implementation state
+
+- The first bounded scalability implementation has been accepted.
+- Bounded scalability acceptance tests pass.
+- Reused regression checks pass.
+- Regression remains distinct from progression/qualification.
+- An analyzed proposal may correctly result in `HOLD` when qualification evidence remains `unresolved`.
+- Further scalability work requires a new bounded authorization.
+- This document remains the accepted implementation envelope and historical authorization record for the first bounded pass.
