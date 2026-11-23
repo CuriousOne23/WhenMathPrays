@@ -34,6 +34,7 @@ Route findings by information type and document authority:
 - Characterization-method or verification lessons → [category_selection_characterization_reference.md](category_selection_characterization_reference.md)
 - Empirical category-selection findings → [category_selection_observation.md](category_selection_observation.md)
 - New research questions or proposed investigations → [category_selection_research_plan.md](category_selection_research_plan.md)
+- Stage 1 readiness / capability map → [category_selection_characterization_readiness_audit.md](category_selection_characterization_readiness_audit.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
@@ -55,6 +56,12 @@ Record each finding in the document that owns that information type. Do not dupl
   **Status/authority:** Non-normative research discipline.  
   **Open when:** You need characterization questions, experimental principles, or confidence/closeout criteria.  
   **Relationship:** Successor to prior observation cycle; upstream of implementation and observation recording.
+
+- [category_selection_characterization_readiness_audit.md](category_selection_characterization_readiness_audit.md)  
+  **What it is:** Factual Stage 1 capability map of the current realization (probe, control, measurement, and controlled-evolution readiness).  
+  **Status/authority:** Non-normative inspection evidence.  
+  **Open when:** You need the Stage 1 readiness verdict, the local source-support axis, or measurement qualification before formalizing experimental axes.  
+  **Relationship:** Downstream of the research plan (8A/8B/13); owns the capability map; upstream of Stage 2 axis formalization.
 
 ### Current-realization mapping
 
@@ -152,6 +159,7 @@ Typical progression for a new cycle:
 
 `category_selection_proposal.md`  
 → `category_selection_research_plan.md`  
+→ `category_selection_characterization_readiness_audit.md`  
 → `category_selection_stage1_modification_map.md`  
 → coordinated software references  
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
