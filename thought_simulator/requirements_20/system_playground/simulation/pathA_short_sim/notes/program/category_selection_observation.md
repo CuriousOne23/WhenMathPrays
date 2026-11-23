@@ -918,6 +918,222 @@ Batch-level factual checks from executed artifacts:
 - Option B: request one bounded replay of a selected Batch 1 case using a new run index before Batch 2 execution.
 - Option C: hold formal campaign execution after accepted Batch 1 pending review prioritization.
 
+## Experiment record — Stage 7 Batch 2 cross-category generality (`table` / physical; `place` / perspectival) (executed, pending review-gate decision)
+
+### 1) What executed
+
+- Stage 7 Batch 2 executed as one formal characterization session:
+  - `session_id=stage7_batch2_cross_category_generality`
+  - `characterization.type=infra_smoke`
+  - `characterization.version=1.0`
+- Run identities:
+  - `B2-1 -> run_index=1`
+  - `B2-2 -> run_index=2`
+  - `B2-3 -> run_index=3`
+  - `B2-4 -> run_index=4`
+  - `B2-5 -> run_index=5`
+  - `B2-6 -> run_index=6`
+
+### 2) Inputs and controls
+
+- TS-affecting controls for all six runs:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+- Physical sequence:
+  - `B2-1`: sentence `"The book is on the desk."`, prior context `["table"]`
+  - `B2-2`: sentence `"The book is on the table."`, prior context `None`
+  - `B2-3`: sentence `"The book is on the table."`, prior context `["table"]`
+- Perspectival sequence:
+  - `B2-4`: sentence `"The lamp is in the hall."`, prior context `["place"]`
+  - `B2-5`: sentence `"The lamp is in the place."`, prior context `None`
+  - `B2-6`: sentence `"The lamp is in the place."`, prior context `["place"]`
+
+### 3) Produced artifacts/logs
+
+- `B2-1`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch2_cross_category_generality/runs/000001__infra_smoke__1.0.tschar.json`
+- `B2-2`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch2_cross_category_generality/runs/000002__infra_smoke__1.0.tschar.json`
+- `B2-3`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch2_cross_category_generality/runs/000003__infra_smoke__1.0.tschar.json`
+- `B2-4`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch2_cross_category_generality/runs/000004__infra_smoke__1.0.tschar.json`
+- `B2-5`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch2_cross_category_generality/runs/000005__infra_smoke__1.0.tschar.json`
+- `B2-6`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch2_cross_category_generality/runs/000006__infra_smoke__1.0.tschar.json`
+
+### 4) Observed outputs — facts only
+
+- Shared artifact fields (all six runs):
+  - `schema_id=ts.characterization.run`
+  - `schema_version=1.0`
+  - `execution_status=succeeded`
+  - runtime-provided observations present for:
+    - `final_tp.truth_relation`
+    - `trace.primitive_sequence`
+    - `final_tp.semantic.isc_category_result`
+  - `final_tp.truth_relation="declarative"` for all six runs
+  - `trace.primitive_sequence` present for all six runs (`InB`→`IIInB`→`IE`→`CEx`→`CE`→`ISc`→`TPU`→`SOB`→`SROB`→`CnOB`→`SmOB`→`SSG`→`RBU`→`RB`→`TR`→`TRU`→`RTU`→`CTP`→`IdOB`→`OuBA`)
+
+- `B2-1` (physical prior-only):
+  - `category_cue=["physical"]`
+  - full distribution:
+    - `physical=0.2505069933606234`
+    - `affective=0.10707042951991096`
+    - `mental=0.10707042951991096`
+    - `metaphysical=0.10707042951991096`
+    - `perceptual=0.10707042951991096`
+    - `perspectival=0.10707042951991096`
+    - `social=0.10707042951991096`
+    - `spiritual=0.10707042951991096`
+  - `top_category="physical"`
+  - `category_confidence=0.2505069933606234`
+  - `category_rationale=["category_cue_applied","top_category=physical"]`
+  - `provenance.source=["prior_context_cex"]`
+  - `provenance.upstream="ce"`
+
+- `B2-2` (physical sentence-only):
+  - `category_cue=["physical"]`
+  - full distribution:
+    - `physical=0.26974629435004127`
+    - `affective=0.1043219579499941`
+    - `mental=0.1043219579499941`
+    - `metaphysical=0.1043219579499941`
+    - `perceptual=0.1043219579499941`
+    - `perspectival=0.1043219579499941`
+    - `social=0.1043219579499941`
+    - `spiritual=0.1043219579499941`
+  - `top_category="physical"`
+  - `category_confidence=0.26974629435004127`
+  - `category_rationale=["category_cue_applied","top_category=physical"]`
+  - `provenance.source=["sentence"]`
+  - `provenance.upstream="ce"`
+
+- `B2-3` (physical both-source):
+  - `category_cue=["physical"]`
+  - full distribution:
+    - `physical=0.32171311115883794`
+    - `affective=0.09689812697730887`
+    - `mental=0.09689812697730887`
+    - `metaphysical=0.09689812697730887`
+    - `perceptual=0.09689812697730887`
+    - `perspectival=0.09689812697730887`
+    - `social=0.09689812697730887`
+    - `spiritual=0.09689812697730887`
+  - `top_category="physical"`
+  - `category_confidence=0.32171311115883794`
+  - `category_rationale=["category_cue_applied","top_category=physical"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+  - `provenance.upstream="ce"`
+
+- Physical ordering facts from artifacts:
+  - target-category distribution/confidence values:
+    `0.2505069933606234 < 0.26974629435004127 < 0.32171311115883794`
+  - corresponding source-state order:
+    `prior-only < sentence-only < both`
+
+- `B2-4` (perspectival prior-only):
+  - `category_cue=["perspectival"]`
+  - full distribution:
+    - `perspectival=0.2505069933606234`
+    - `affective=0.10707042951991096`
+    - `mental=0.10707042951991096`
+    - `metaphysical=0.10707042951991096`
+    - `perceptual=0.10707042951991096`
+    - `physical=0.10707042951991096`
+    - `social=0.10707042951991096`
+    - `spiritual=0.10707042951991096`
+  - `top_category="perspectival"`
+  - `category_confidence=0.2505069933606234`
+  - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+  - `provenance.source=["prior_context_cex"]`
+  - `provenance.upstream="ce"`
+
+- `B2-5` (perspectival sentence-only):
+  - `category_cue=["perspectival"]`
+  - full distribution:
+    - `perspectival=0.26974629435004127`
+    - `affective=0.1043219579499941`
+    - `mental=0.1043219579499941`
+    - `metaphysical=0.1043219579499941`
+    - `perceptual=0.1043219579499941`
+    - `physical=0.1043219579499941`
+    - `social=0.1043219579499941`
+    - `spiritual=0.1043219579499941`
+  - `top_category="perspectival"`
+  - `category_confidence=0.26974629435004127`
+  - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+  - `provenance.source=["sentence"]`
+  - `provenance.upstream="ce"`
+
+- `B2-6` (perspectival both-source):
+  - `category_cue=["perspectival"]`
+  - full distribution:
+    - `perspectival=0.32171311115883794`
+    - `affective=0.09689812697730887`
+    - `mental=0.09689812697730887`
+    - `metaphysical=0.09689812697730887`
+    - `perceptual=0.09689812697730887`
+    - `physical=0.09689812697730887`
+    - `social=0.09689812697730887`
+    - `spiritual=0.09689812697730887`
+  - `top_category="perspectival"`
+  - `category_confidence=0.32171311115883794`
+  - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+  - `provenance.upstream="ce"`
+
+- Perspectival ordering facts from artifacts:
+  - target-category distribution/confidence values:
+    `0.2505069933606234 < 0.26974629435004127 < 0.32171311115883794`
+  - corresponding source-state order:
+    `prior-only < sentence-only < both`
+
+### 5) Unavailable measurements/deviations
+
+- Unavailable in all six runs:
+  - `entropy`
+  - `top_vs_second_margin`
+- No deviation from the frozen Batch 2 case identities, ordering, or run-index mapping was recorded.
+
+### 6) Unexpected behavior/anomalies
+
+- The six formal Batch 2 `.tschar.json` artifacts do not include token-class-level `UNK` flags or `constraint_residue`/`semantic_adjacent_cues`/`smoothing_residue` fields.
+- Therefore, from this artifact-only evidence set, no additional structural anomaly claim is asserted beyond the recorded truth-relation and primitive-sequence facts.
+
+### 7) Interpretation — bounded
+
+- Under the tested Palette v1 conditions, the local weighted source-composition ordering previously observed for affective/`cold` was also observed for physical/`table` and perspectival/`place`.
+- This provides first-order cross-category generality evidence for the tested local source-composition response across the three canonical Palette v1 category realizations when considered together with accepted Batch 1.
+
+### 8) Not established
+
+- No global Category Selection behavior is established.
+- No globally valid evidence-strength axis is established.
+- No continuous gradients are established.
+- No fine interior geometry is established.
+- No entropy-based ambiguity behavior is established.
+- No top-versus-second-margin behavior is established.
+- No broad construction invariance is established.
+- No competition behavior is established.
+- No deeper representability/support-edge behavior is established.
+- No generalization outside the tested canonical Palette v1 category identities is established.
+- No Category Selection structural-confidence closeout is established.
+- No claim is made that Batch 2 alone is sufficient evidence to advance TS.
+- Batch 3 authorization is not established by this record.
+
+### 9) Questions raised
+
+- Should Stage 7 Batch 2 be accepted at review gate under the frozen specification?
+- Should Batch 3 remain unauthorized pending a separate review-gate decision after Batch 2 review?
+
+### 10) Next-step options — suggestions only, not decisions
+
+- Option A: review and decide Batch 2 acceptance at review gate.
+- Option B: request bounded replay of selected Batch 2 case(s) under new run indices before acceptance decision.
+- Option C: keep Batch 2 as executed/pending and hold Batch 3 authorization until explicit review outcome.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
