@@ -33,7 +33,7 @@ New scalability documents should be registered here.
 - [scalability_program.md](scalability_program.md)  
   **What it is:** Governing proposal for Path A scalability and expansion-assurance.  
   **Status/authority:** Proposal (non-normative).  
-  **Open when:** You need the definition of expansion, the regression/progression distinction, progression decisions, output discipline, or the phased plan.  
+  **Open when:** You need the definition of expansion, the regression/progression distinction, progression decisions, output discipline, phased plan, or currently tracked deferred/open scalability concerns (including preconversation/context scaling) pending formal gap-analysis registration.  
   **Relationship:** Receives the handoff from the Category Selection characterization program closeout; owns the Path A scalability concern; does not implement tooling.
 
 ### Practical guidance
