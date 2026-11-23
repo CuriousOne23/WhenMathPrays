@@ -763,6 +763,161 @@ This synthesis is bounded: these accepted runs support tractable observation and
 - Option B: request one bounded replay of EXP4C2 run 1 (new run index) before next boundary authorization.
 - Option C: accept EXP4C2 and hold further execution pending EXP4 sequence reprioritization.
 
+## Experiment record — Stage 7 Batch 1 reference ordered response (`cold` / affective) (executed, pending review-gate decision)
+
+### 1) What executed (exact order)
+
+Batch 1 executed in frozen order under one session identity:
+
+- `B1-1` (`run_index=1`)
+- `B1-2` (`run_index=2`)
+- `B1-3` (`run_index=3`)
+- `B1-4` (`run_index=4`)
+- `B1-5` (`run_index=5`)
+
+Execution identity:
+
+- characterization type/version: `infra_smoke/1.0`
+- session: `stage7_batch1_reference_cold`
+
+### 2) Inputs and controls used
+
+- Global controls held for all five runs:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+- Per-case inputs:
+  - `B1-1`: sentence `"The sky is blue."`, prior context `["cold"]`
+  - `B1-2`: sentence `"The sky is cold."`, prior context `None`
+  - `B1-3`: sentence `"The sky is cold."`, prior context `["cold"]`
+  - `B1-4`: sentence `"The sky stays cold."`, prior context `None`
+  - `B1-5`: sentence `"The sky is blue."`, prior context `None`
+
+### 3) Produced artifacts/logs (exact paths)
+
+- `B1-1`: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch1_reference_cold/runs/000001__infra_smoke__1.0.tschar.json`
+- `B1-2`: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch1_reference_cold/runs/000002__infra_smoke__1.0.tschar.json`
+- `B1-3`: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch1_reference_cold/runs/000003__infra_smoke__1.0.tschar.json`
+- `B1-4`: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch1_reference_cold/runs/000004__infra_smoke__1.0.tschar.json`
+- `B1-5`: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch1_reference_cold/runs/000005__infra_smoke__1.0.tschar.json`
+
+### 4) Observed outputs (facts only)
+
+Shared artifact/measurement shape (all five runs):
+
+- `schema_id=ts.characterization.run`
+- `schema_version=1.0`
+- `characterization.type=infra_smoke`
+- `characterization.version=1.0`
+- `execution_status=succeeded`
+- runtime-provided observations present for:
+  - `final_tp.truth_relation`
+  - `trace.primitive_sequence`
+  - `final_tp.semantic.isc_category_result`
+- unavailable observations present:
+  - `entropy` (`milestone1_unavailable`)
+  - `top_vs_second_margin` (`milestone1_unavailable`)
+
+Case-level observed category-result fields:
+
+- `B1-1` (prior-only):
+  - `category_cue=["affective"]`
+  - `category_weighted_distribution`:
+    - `affective`: `0.2505069933606234`
+    - each of `mental`, `metaphysical`, `perceptual`, `perspectival`, `physical`, `social`, `spiritual`: `0.10707042951991096`
+  - `top_category="affective"`
+  - `category_confidence=0.2505069933606234`
+  - `category_rationale=["category_cue_applied","top_category=affective"]`
+  - `provenance.source=["prior_context_cex"]`
+  - `provenance.upstream="ce"`
+
+- `B1-2` (sentence-only):
+  - `category_cue=["affective"]`
+  - `category_weighted_distribution`:
+    - `affective`: `0.26974629435004127`
+    - each of `mental`, `metaphysical`, `perceptual`, `perspectival`, `physical`, `social`, `spiritual`: `0.1043219579499941`
+  - `top_category="affective"`
+  - `category_confidence=0.26974629435004127`
+  - `category_rationale=["category_cue_applied","top_category=affective"]`
+  - `provenance.source=["sentence"]`
+  - `provenance.upstream="ce"`
+
+- `B1-3` (both sources):
+  - `category_cue=["affective"]`
+  - `category_weighted_distribution`:
+    - `affective`: `0.32171311115883794`
+    - each of `mental`, `metaphysical`, `perceptual`, `perspectival`, `physical`, `social`, `spiritual`: `0.09689812697730887`
+  - `top_category="affective"`
+  - `category_confidence=0.32171311115883794`
+  - `category_rationale=["category_cue_applied","top_category=affective"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+  - `provenance.upstream="ce"`
+
+- `B1-4` (alternate sentence scaffold):
+  - `category_cue=["affective"]`
+  - `category_weighted_distribution`:
+    - `affective`: `0.26974629435004127`
+    - each of `mental`, `metaphysical`, `perceptual`, `perspectival`, `physical`, `social`, `spiritual`: `0.1043219579499941`
+  - `top_category="affective"`
+  - `category_confidence=0.26974629435004127`
+  - `category_rationale=["category_cue_applied","top_category=affective"]`
+  - `provenance.source=["sentence"]`
+  - `provenance.upstream="ce"`
+
+- `B1-5` (clean non-cue baseline):
+  - `category_cue=[]`
+  - `category_weighted_distribution`:
+    - each of `affective`, `mental`, `metaphysical`, `perceptual`, `perspectival`, `physical`, `social`, `spiritual`: `0.125`
+  - `top_category=null`
+  - `category_confidence=0.0`
+  - `category_rationale=["empty_category_cue","top_category=null"]`
+  - `provenance.source=[]`
+  - `provenance.upstream="ce"`
+
+Batch-level factual checks from executed artifacts:
+
+- three-point confidence ordering across B1-1/B1-2/B1-3 was observed:
+  - `0.2505069933606234 < 0.26974629435004127 < 0.32171311115883794`
+- B1-4 relative to B1-2:
+  - same cue (`["affective"]`), same source (`["sentence"]`), same top category (`"affective"`), same confidence/distribution values.
+- B1-5 remained cue-free (`category_cue=[]`).
+
+### 5) Unavailable measurements/deviations
+
+- Unavailable in all five runs:
+  - `entropy`
+  - `top_vs_second_margin`
+- No recorded deviation from the frozen Batch 1 case identities, ordering, or controls.
+
+### 6) Unexpected behavior/anomalies
+
+- None observed in artifact-recorded Category Selection fields for this batch.
+- `trace.primitive_sequence` and `truth_relation` were present in each run (`truth_relation="declarative"` for all five runs).
+
+### 7) Interpretation (bounded)
+
+- Under the tested Stage 7 Batch 1 conditions, recorded artifacts show:
+  - observed local three-point ordered response for the reference `cold` affective source-composition condition;
+  - one limited alternate-scaffold sentence-only case with matching recorded category-result fields to the canonical sentence-only case;
+  - one clean non-cue baseline case with empty cue and null top category.
+
+### 8) Not established
+
+- No entropy- or margin-based interior geometry is established (both unavailable).
+- No threshold/no-category policy is established.
+- No global axis claim or broader generalization beyond this frozen batch is established.
+- No cross-batch authorization or structural-confidence closeout claim is established.
+
+### 9) Questions raised
+
+- Should Stage 7 Batch 1 be accepted at review gate as completed under frozen specification with no triggered stop condition?
+- Which (if any) next batch should be authorized separately under one-batch-at-a-time gating?
+
+### 10) Next-step options (suggestions only, not decisions)
+
+- Option A: accept Stage 7 Batch 1 and hold for separate authorization decision on Batch 2.
+- Option B: request one bounded replay of a selected Batch 1 case using a new run index before Batch 2 authorization.
+- Option C: accept Batch 1 evidence and pause further formal campaign execution pending review prioritization.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
