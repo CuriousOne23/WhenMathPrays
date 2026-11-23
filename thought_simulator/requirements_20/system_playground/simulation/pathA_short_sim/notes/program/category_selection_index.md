@@ -39,6 +39,7 @@ Route findings by information type and document authority:
 - Controlled experimental palette design → [category_selection_controlled_palette_v1.md](category_selection_controlled_palette_v1.md)
 - Stage 7 formal campaign specification → [category_selection_stage7_batch1_4a_campaign.md](category_selection_stage7_batch1_4a_campaign.md)
 - Palette v1 characterization closeout → [category_selection_characterization_palette_v1_closeout.md](category_selection_characterization_palette_v1_closeout.md)
+- Category-supported admission characterization → [category_supported_admission_characterization.md](category_supported_admission_characterization.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
@@ -90,6 +91,12 @@ Record each finding in the document that owns that information type. Do not dupl
   **Status/authority:** Non-normative closeout record.  
   **Open when:** You need the structural-confidence conclusion, deferred-work list, or return conditions for Category Selection after Palette v1 characterization.  
   **Relationship:** Downstream of the Stage 7 campaign and observation record; owns the progression decision; does not alter historical experimental records.
+
+- [category_supported_admission_characterization.md](category_supported_admission_characterization.md)  
+  **What it is:** Agreed working specification for observational characterization of the existing category-supported admission mechanism.  
+  **Status/authority:** Non-normative observational specification.  
+  **Open when:** You need the frozen plan, four baseline observations, or local-versus-S2M adequacy distinction for contextual candidate admission.  
+  **Relationship:** Downstream of Palette v1 closeout and the discovery that category-supported admission already exists in the realization; upstream of baseline observation recording; does not redesign the mechanism.
 
 ### Current-realization mapping
 
@@ -200,6 +207,7 @@ Typical progression for a new cycle:
 → `category_selection_controlled_palette_v1.md`  
 → `category_selection_stage7_batch1_4a_campaign.md`  
 → `category_selection_characterization_palette_v1_closeout.md`  
+→ `category_supported_admission_characterization.md`  
 → `category_selection_stage1_modification_map.md`  
 → coordinated software references  
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
