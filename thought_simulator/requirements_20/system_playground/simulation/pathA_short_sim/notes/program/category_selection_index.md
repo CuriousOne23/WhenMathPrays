@@ -159,6 +159,14 @@ Record each finding in the document that owns that information type. Do not dupl
   **Open when:** You need S2M execution/contract context that category-selection work must respect.  
   **Relationship:** Program-context companion to the S2M relational proposal.
 
+### Cross-program workflow guidance
+
+- [ai_agent_workflow_guide.md](ai_agent_workflow_guide.md)  
+  **What it is:** Reusable TS workflow guidance for dividing exploratory/research work and formal GitHub Agent execution work.  
+  **Status/authority:** Active workflow guide (non-normative).  
+  **Open when:** You need token-efficient execution contracts, escalation discipline, or division-of-labor guidance across TS work beyond Category Selection.  
+  **Relationship:** Cross-program companion document; not a Category Selection empirical or mechanism authority.
+
 ### Normative requirements
 
 - [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md)  
