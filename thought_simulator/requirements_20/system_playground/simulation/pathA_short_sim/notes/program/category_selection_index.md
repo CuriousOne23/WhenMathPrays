@@ -41,6 +41,7 @@ Route findings by information type and document authority:
 - Stage 7 formal campaign specification → [category_selection_stage7_batch1_4a_campaign.md](category_selection_stage7_batch1_4a_campaign.md)
 - Palette v1 characterization closeout → [category_selection_characterization_palette_v1_closeout.md](category_selection_characterization_palette_v1_closeout.md)
 - Category-supported admission characterization → [category_supported_admission_characterization.md](category_supported_admission_characterization.md)
+- Category Selection characterization program closeout → [category_selection_characterization_program_closeout.md](category_selection_characterization_program_closeout.md)
 - Program-level measure of progress / thinking leverage criterion → [ts_program_principle.md](ts_program_principle.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 
@@ -99,6 +100,12 @@ Record each finding in the document that owns that information type. Do not dupl
   **Status/authority:** Non-normative observational specification with recorded qualified four-case baseline execution and bounded local-adequacy closeout claim.  
   **Open when:** You need execution-qualification rules, bound baseline fixtures/artifacts, local-adequacy closeout scope, or the explicit non-claim on broader S2M adequacy.  
   **Relationship:** Downstream of Palette v1 closeout and the discovery that category-supported admission already exists in the realization; owns this baseline's qualification discipline and recorded results; does not redesign the mechanism.
+
+- [category_selection_characterization_program_closeout.md](category_selection_characterization_program_closeout.md)  
+  **What it is:** Program-level synthesis and closeout of the Category Selection characterization cycle.  
+  **Status/authority:** Non-normative program closeout. Present cycle closed to HOLD at the characterized boundary.  
+  **Open when:** You need the single consolidated record of what the characterization program established, what it did not establish, the S2M repercussion, why active work is on hold, and the demand-driven reopening conditions.  
+  **Relationship:** Downstream of Palette v1 closeout and the admission characterization; owns the program-level status and scalability handoff; does not redesign mechanisms or claim global completeness.
 
 ### Current-realization mapping
 
@@ -216,6 +223,7 @@ Typical progression for a new cycle:
 → `category_selection_stage7_batch1_4a_campaign.md`  
 → `category_selection_characterization_palette_v1_closeout.md`  
 → `category_supported_admission_characterization.md`  
+→ `category_selection_characterization_program_closeout.md`  
 → `category_selection_stage1_modification_map.md`  
 → coordinated software references  
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
@@ -225,7 +233,7 @@ Typical progression for a new cycle:
 → characterization runs  
 → `category_selection_observation.md`
 
-At any step, open normative requirements for authoritative behavior/path/ownership questions. Open `ts_program_principle.md` when judging whether a step counts as progress.
+At any step, open normative requirements for authoritative behavior/path/ownership questions. Open `ts_program_principle.md` when judging whether a step counts as progress. Open the program closeout for the consolidated status of the present characterization cycle.
 
 ## Extensibility
 
