@@ -41,6 +41,7 @@ Route findings by information type and document authority:
 - Stage 7 formal campaign specification → [category_selection_stage7_batch1_4a_campaign.md](category_selection_stage7_batch1_4a_campaign.md)
 - Palette v1 characterization closeout → [category_selection_characterization_palette_v1_closeout.md](category_selection_characterization_palette_v1_closeout.md)
 - Category-supported admission characterization → [category_supported_admission_characterization.md](category_supported_admission_characterization.md)
+- Program-level measure of progress / thinking leverage criterion → [ts_program_principle.md](ts_program_principle.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
@@ -175,6 +176,12 @@ Record each finding in the document that owns that information type. Do not dupl
   **Open when:** You need token-efficient execution contracts, escalation discipline, or division-of-labor guidance across TS work beyond Category Selection.  
   **Relationship:** Cross-program companion document; not a Category Selection empirical or mechanism authority.
 
+- [ts_program_principle.md](ts_program_principle.md)  
+  **What it is:** Program-level principle stating that TS progress is measured by demonstrated, identifiable, bounded thinking leverage.  
+  **Status/authority:** Active program-level principle (non-normative).  
+  **Open when:** You need the governing criterion for what counts as progress, how to bound claims, or how to decide whether a next step is justified.  
+  **Relationship:** Cross-program companion; governs the research loop used by Category Selection, S2M, and later work; does not define mechanism behavior.
+
 ### Normative requirements
 
 - [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md)  
@@ -218,7 +225,7 @@ Typical progression for a new cycle:
 → characterization runs  
 → `category_selection_observation.md`
 
-At any step, open normative requirements for authoritative behavior/path/ownership questions.
+At any step, open normative requirements for authoritative behavior/path/ownership questions. Open `ts_program_principle.md` when judging whether a step counts as progress.
 
 ## Extensibility
 
