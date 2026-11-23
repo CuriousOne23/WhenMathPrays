@@ -104,6 +104,32 @@ The architecture distinction remains explicit:
 
 cue evidence -> category scoring -> committed category result -> candidate relevance/consideration -> S2M legitimation or refusal -> selected interpretive extension (if any)
 
+## 8A) Characterization-Space Research Roadmap
+
+This section records the dependency structure required to characterize Category Selection space under the objective already stated in this plan (vary E and K while keeping M stable where architecture permits).
+
+Each stage is gated. Continuation is not automatic merely because a later stage is listed.
+
+**Local-readiness principle:** Local readiness is sufficient. Unknown global extent does not disqualify a bounded, experimentally defensible axis when subsequent controlled experimentation can expose where that local ordering ceases to hold. Local controllability must not be extrapolated into a global property.
+
+Process:
+
+establish local ordering → measure → extend → challenge → find the edge
+
+**Stages:**
+
+1. **Characterization-Readiness Audit** (read-only). Determine what the current realization can vary and measure (probe readiness, control readiness, measurement readiness). Exit with A/B/C/D verdict. No changes to the realization.
+2. **Identify legitimate experimental axes.** Declare only axes the audit shows can move from x_i to x_{i+1} in a known direction while holding other important variables sufficiently constant. Discrete comparisons remain discrete.
+3. **Resolve only demonstrated capability gaps (optional).** Skip if usable ordered controls already exist. Any extension of Category Selection requires independent architectural justification and becomes a new explicitly identified realization. Do not modify the mechanism merely to produce a hoped-for shape.
+4. **Build the role-qualified probe set.** Produce the thin experimental-vocabulary reference for the axes that will actually be manipulated.
+5. **Establish adequate measurement resolution.** Determine which required measurements already exist with useful resolution, which can be derived, and which require instrumentation. Unavailable quantities remain explicitly unavailable.
+6. **Calibrate with small exploratory sweeps.** Discourse-side exploratory probes (not formal observations) on candidate axes. All outcomes are legitimate findings.
+7. **Formal controlled sweeps.** GitHub Agent executes bounded batches on approved ordered sequences, preserves artifacts, stops on predefined anomalies.
+8. **Characterize interactions among axes.** Only after individual axes are understood.
+9. **Characterize interior, boundaries, and limits of Category Selection space.** Including the distinction between adequately supported evidence, weak/ambiguous support among available categories, and evidence poorly represented by the inventory itself. Inability to separate the latter conditions is recorded as an architectural gap.
+
+Stage 1 findings are recorded in a separate document (`category_selection_characterization_readiness_audit.md`) once produced. That document owns the factual capability map; this section owns the roadmap.
+
 ## 9) Category-support boundary and unsupported-space characterization
 
 Research sequence is:
