@@ -130,6 +130,16 @@ establish local ordering → measure → extend → challenge → find the edge
 
 Stage 1 findings are recorded in a separate document (`category_selection_characterization_readiness_audit.md`) once produced. That document owns the factual capability map; this section owns the roadmap.
 
+## 8B) Controlled evolution of the characterization surface
+
+Category Selection characterization should expect the experimental research surface to evolve. Vocabulary, sentences, constructions, controls, categories, probes, measurements, parameters, and experiment sets may expand or be revised as characterization progresses. The characterization foundation should favor scalable extension and bounded refactoring rather than repeated reconstruction of experimental infrastructure.
+
+This principle does not prohibit major refactoring when controlled evidence requires it. When substantial refactoring is necessary, its empirical motivation, architectural scope, affected assumptions or prior evidence, preserved invariants, and required revalidation should be made explicit. Revalidation must identify what prior evidence remains applicable, what needs rechecking, what is superseded, and what invariants are intentionally preserved.
+
+Strategic expansion of the experimental palette (words, sentences, constructions, controls, categories) should be driven by characterization needs. Progressively broader controlled palettes and category inventories are preferred when evidence supports extension, but revision, contraction, or replacement remains legitimate. The present palette and inventory are not treated as final. Conceptual progressions such as P1 ⊂ P2 ⊂ P3 … and K1 ⊂ K2 ⊂ K3 … are illustrative only and non-normative.
+
+This principle applies primarily to research content and characterization infrastructure. It does not require the Category Selection mechanism or underlying architectural structure to remain unchanged; those remain subject to the structural-confidence criterion in Section 13. Evidence that the basic structural model is inadequate is a legitimate research result.
+
 ## 9) Category-support boundary and unsupported-space characterization
 
 Research sequence is:
