@@ -33,6 +33,7 @@ Route findings by information type and document authority:
 
 - Characterization-method or verification lessons → [category_selection_characterization_reference.md](category_selection_characterization_reference.md)
 - Empirical category-selection findings → [category_selection_observation.md](category_selection_observation.md)
+- Category-supported admission baseline findings/qualification outcomes → [category_supported_admission_characterization.md](category_supported_admission_characterization.md)
 - New research questions or proposed investigations → [category_selection_research_plan.md](category_selection_research_plan.md)
 - Stage 1 readiness / capability map → [category_selection_characterization_readiness_audit.md](category_selection_characterization_readiness_audit.md)
 - Stage 2 axis and coverage decisions → [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md)
@@ -94,9 +95,9 @@ Record each finding in the document that owns that information type. Do not dupl
 
 - [category_supported_admission_characterization.md](category_supported_admission_characterization.md)  
   **What it is:** Agreed working specification for observational characterization of the existing category-supported admission mechanism.  
-  **Status/authority:** Non-normative observational specification.  
-  **Open when:** You need the frozen plan, four baseline observations, or local-versus-S2M adequacy distinction for contextual candidate admission.  
-  **Relationship:** Downstream of Palette v1 closeout and the discovery that category-supported admission already exists in the realization; upstream of baseline observation recording; does not redesign the mechanism.
+  **Status/authority:** Non-normative observational specification with recorded qualified four-case baseline execution and bounded local-adequacy closeout claim.  
+  **Open when:** You need execution-qualification rules, bound baseline fixtures/artifacts, local-adequacy closeout scope, or the explicit non-claim on broader S2M adequacy.  
+  **Relationship:** Downstream of Palette v1 closeout and the discovery that category-supported admission already exists in the realization; owns this baseline's qualification discipline and recorded results; does not redesign the mechanism.
 
 ### Current-realization mapping
 

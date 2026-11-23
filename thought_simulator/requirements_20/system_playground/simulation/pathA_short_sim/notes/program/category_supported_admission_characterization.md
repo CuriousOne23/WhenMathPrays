@@ -1,7 +1,7 @@
 # Category-Supported Admission Characterization
 
 **Document:** notes/program/category_supported_admission_characterization.md  
-**Status:** Agreed working specification (non-normative). Observational only.  
+**Status:** Agreed working specification with recorded qualified baseline execution (non-normative). Observational only.  
 **Date:** 2026-11-23  
 **Purpose:** Freeze the narrow observational plan for the existing category-supported admission mechanism already present in the Path A short realization. Establish its basic behavioral geometry before asking whether that geometry is adequate for S2M.
 
@@ -83,6 +83,55 @@ If an executed case fails to instantiate one or more required preconditions, tha
    Empty or absent `isc_category_result`, or a cue that matches nothing in the proposals.  
    Expect: `selected_space` empty; all proposals `candidate_unselected`; default meaning only; no extensions.
 
+## Formal baseline execution record (qualified bindings)
+
+Execution session:
+
+- `session_id=category_supported_admission_baseline_qualified`
+- `characterization.type=infra_smoke`
+- `characterization.version=1.0`
+- `enable_s2m_seed=True`
+- `enable_category_selection=True`
+
+Recorded cases and artifacts:
+
+1. **Expected admission**  
+   Fixture: `"The book is on the table."`  
+   Artifact: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/category_supported_admission_baseline_qualified/runs/000001__infra_smoke__1.0.tschar.json`  
+   Recorded facts: structural floor present; category cue/top category `physical`; candidate interpretations entered legitimation and reached `legitimized`; extensions written.
+
+2. **Expected non-admission**  
+   Fixture: `"Where is the book?"`  
+   Artifact: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/category_supported_admission_baseline_qualified/runs/000002__infra_smoke__1.0.tschar.json`  
+   Recorded facts: structural floor present; candidates available across majors (`mental`, `perspectival`, `physical`); category cue/top category `perspectival`; observable `candidate_unselected` states present for candidates outside selected space.
+
+3. **Admission followed by refusal**  
+   Fixture: `"Where is the book?"`  
+   Artifact: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/category_supported_admission_baseline_qualified/runs/000003__infra_smoke__1.0.tschar.json`  
+   Recorded facts: structural floor present; category cue/top category `perspectival`; admitted intermediate path observable and final `refused` state recorded; no extension written.
+
+4. **No usable category evidence**  
+   Fixture: `"The sky is blue."`  
+   Artifact: `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/category_supported_admission_baseline_qualified/runs/000004__infra_smoke__1.0.tschar.json`  
+   Recorded facts: structural floor present; `category_cue=[]`; `top_category=null`; selected space empty; candidates remained `candidate_unselected`; default-only outcome with no extension.
+
+## Local-adequacy closeout claim (bounded)
+
+Under the recorded qualified bindings above, the existing category-supported admission mechanism demonstrates the intended local baseline behavior across the four baseline conditions.
+
+## Non-claim preserved
+
+This baseline record does **not** establish broader S2M adequacy.
+
+## Deferred Category Selection boundary preserved
+
+No deferred Category Selection condition was forced open by these baseline observations.
+
+## Execution-qualification lesson (from invalid initial Case 2)
+
+The initial attempted Case 2 fixture (`"The sky is cold."`) was non-qualifying because it did not instantiate required preconditions (`written_relations=[]`, no proposals/candidates).  
+This confirms the execution-qualification rule: abstract baseline conditions must be bound to realization-supported fixtures before formal execution evidence is admissible.
+
 ## Hard constraints
 
 - No redesign of admission logic.
@@ -98,4 +147,4 @@ Record the four baseline observations. Then stop and examine only what the recor
 
 ## Next step
 
-Qualify and bind executable fixtures for all four baseline observations against the existing realization, execute only authorized qualified cases, then stop and review the evidence.
+Stop for research review. Do not propose or execute additional characterization from this document without new explicit authorization.
