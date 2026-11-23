@@ -38,6 +38,7 @@ Route findings by information type and document authority:
 - Stage 2 axis and coverage decisions → [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md)
 - Controlled experimental palette design → [category_selection_controlled_palette_v1.md](category_selection_controlled_palette_v1.md)
 - Stage 7 formal campaign specification → [category_selection_stage7_batch1_4a_campaign.md](category_selection_stage7_batch1_4a_campaign.md)
+- Palette v1 characterization closeout → [category_selection_characterization_palette_v1_closeout.md](category_selection_characterization_palette_v1_closeout.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
@@ -80,9 +81,15 @@ Record each finding in the document that owns that information type. Do not dupl
 
 - [category_selection_stage7_batch1_4a_campaign.md](category_selection_stage7_batch1_4a_campaign.md)  
   **What it is:** Frozen Stage 7 formal characterization campaign specification (Batches 1–4A execution matrix, stop conditions, measurement limits, and batch-by-batch authorization rule).  
-  **Status/authority:** Non-normative campaign specification. Batch 1 authorized for formal execution; later batches not yet authorized.  
+  **Status/authority:** Non-normative campaign specification. Batches 1–4A accepted. Batch 4B and inventory composition deferred.  
   **Open when:** You need the exact cases, stop conditions, or authorization status for the first formal Palette v1 characterization campaign.  
   **Relationship:** Downstream of Palette v1 and Stage 2; upstream of formal Agent execution and observation recording; does not own empirical results.
+
+- [category_selection_characterization_palette_v1_closeout.md](category_selection_characterization_palette_v1_closeout.md)  
+  **What it is:** Campaign-level structural-confidence closeout after accepted Stage 7 Batches 1–4A. Records Section 13 decision B and the progression statement for continued downstream TS development.  
+  **Status/authority:** Non-normative closeout record.  
+  **Open when:** You need the structural-confidence conclusion, deferred-work list, or return conditions for Category Selection after Palette v1 characterization.  
+  **Relationship:** Downstream of the Stage 7 campaign and observation record; owns the progression decision; does not alter historical experimental records.
 
 ### Current-realization mapping
 
@@ -184,6 +191,7 @@ Typical progression for a new cycle:
 → `category_selection_stage2_axis_and_coverage_reference.md`  
 → `category_selection_controlled_palette_v1.md`  
 → `category_selection_stage7_batch1_4a_campaign.md`  
+→ `category_selection_characterization_palette_v1_closeout.md`  
 → `category_selection_stage1_modification_map.md`  
 → coordinated software references  
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
