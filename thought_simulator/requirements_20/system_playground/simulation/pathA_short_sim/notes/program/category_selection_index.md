@@ -35,6 +35,7 @@ Route findings by information type and document authority:
 - Empirical category-selection findings → [category_selection_observation.md](category_selection_observation.md)
 - New research questions or proposed investigations → [category_selection_research_plan.md](category_selection_research_plan.md)
 - Stage 1 readiness / capability map → [category_selection_characterization_readiness_audit.md](category_selection_characterization_readiness_audit.md)
+- Stage 2 axis and coverage decisions → [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
@@ -62,6 +63,12 @@ Record each finding in the document that owns that information type. Do not dupl
   **Status/authority:** Non-normative inspection evidence.  
   **Open when:** You need the Stage 1 readiness verdict, the local source-support axis, or measurement qualification before formalizing experimental axes.  
   **Relationship:** Downstream of the research plan (8A/8B/13); owns the capability map; upstream of Stage 2 axis formalization.
+
+- [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md)  
+  **What it is:** Stage 2 research-design record of candidate dimensions, classifications, minimum meaningful coverage, palette requirements, and coverage-gap conclusion.  
+  **Status/authority:** Non-normative research-design record.  
+  **Open when:** You need the minimum coverage set or the rationale for what the Stage 4 palette must express.  
+  **Relationship:** Downstream of the readiness audit; upstream of Stage 4 palette construction; does not own empirical observations.
 
 ### Current-realization mapping
 
@@ -160,6 +167,7 @@ Typical progression for a new cycle:
 `category_selection_proposal.md`  
 → `category_selection_research_plan.md`  
 → `category_selection_characterization_readiness_audit.md`  
+→ `category_selection_stage2_axis_and_coverage_reference.md`  
 → `category_selection_stage1_modification_map.md`  
 → coordinated software references  
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
