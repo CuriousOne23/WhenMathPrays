@@ -1,7 +1,7 @@
 # Category Selection Controlled Experimental Palette v1
 
 **Document:** notes/program/category_selection_controlled_palette_v1.md  
-**Status:** Design record (non-normative). Implementation not yet authorized.  
+**Status:** Implemented and configuration-verified (non-normative). Not yet experimentally characterized.  
 **Date:** 2026-11-23  
 **Governing context:** [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md); [category_selection_research_plan.md](category_selection_research_plan.md) (8A, 8B, 13).  
 **Purpose:** Own the first-generation controlled experimental palette designed to satisfy the Stage 2 minimum meaningful coverage requirements. Separates approved design from current implementation state.
@@ -10,6 +10,30 @@
 
 Provide a strategically varied, role-qualified palette sufficient to challenge Category Selection structure and accumulate meaningful confidence for continued TS development. Exhaustive characterization is not the objective.
 
+## Experimental Palette Space
+
+The controlled palette is not limited to the current canonical probes. The allowable research surface includes qualified variation in:
+
+- category identity
+- lexical cue identity
+- sentence-internal versus prior-context source
+- source composition
+- construction/scaffold
+- matched non-cue controls
+- competing-category combinations
+- deliberately limited or boundary-adjacent probes
+- category inventory composition where separately authorized
+
+A palette member is allowable only when its experimental role, source compatibility, upstream structural treatment, cue mapping, known limitations, and applicable controls are explicitly qualified.
+
+Expansion of this space does not itself authorize changes to Category Selection scoring, weights, thresholds, selection policy, or mechanism behavior. Such changes require independent architectural justification.
+
+Palette v1 occupies a deliberately bounded subset of this allowable space. Future palette versions may expand, revise, contract, or replace portions of that subset as characterization evidence requires.
+
+Relationship:
+
+allowable experimental palette space ⊃ Palette v1 ⊃ particular experiment batch
+
 ## Relationship to Stage 2
 
 Satisfies the core confidence skeleton:
@@ -17,15 +41,15 @@ Satisfies the core confidence skeleton:
 - Structural generality across categories
 - Competition (discrete)
 - Robustness to probe realization
-- Edge pressure (placeholders deferred)
+- Edge pressure (placeholders deferred; clean mapped/unmapped boundary is addressable with existing controls; deeper edge pressure remains separately designed)
 
 ## Canonical categories and lexical probes
 
 | Category | Canonical probe | Qualification status |
 |----------|-----------------|----------------------|
-| Affective | `cold` | Already qualified/available |
-| Physical | `table` | Canonical; Category Selection mapping pending |
-| Perspectival | `place` | Canonical and qualification-approved; token-class and cue configuration pending |
+| Affective | `cold` | Qualified and available |
+| Physical | `table` | Canonical; dual-source mapping implemented |
+| Perspectival | `place` | Canonical; dual-source mapping and token-class support implemented |
 
 ## Source-composition contract
 
@@ -42,17 +66,17 @@ Category-appropriate scaffolds (experimental symmetry, not syntactic identity).
 **Affective / `cold` (adjective)**  
 - Canonical: "The sky is cold." / control "The sky is blue."  
 - Alternate: "The sky stays cold." / control "The sky stays bright."  
-- Status: implementation-ready as-is.
+- Status: implementation-ready.
 
 **Physical / `table` (noun/object)**  
 - Canonical: "The book is on the table." / control "The book is on the desk."  
 - Alternate: "The book rests on the table." / control "The book rests on the desk."  
-- Status: design-qualified; pending `desk` and `rests` token-class support plus `table` cue mapping.
+- Status: configuration-verified (`desk`, `rests`, `table` mapping present).
 
 **Perspectival / `place` (noun/locative)**  
 - Canonical: "The lamp is in the place." / control "The lamp is in the hall."  
 - Alternate: "The lamp stays in the place." / control "The lamp stays in the hall."  
-- Status: design-qualified; pending `lamp`, `place`, and `hall` token-class support plus `place` cue mapping.
+- Status: configuration-verified (`lamp`, `place`, `hall`, `place` mapping present).
 
 ## Matched controls
 
@@ -84,15 +108,15 @@ Residual lexical/structural differences are declared. Single-category versions o
 
 ## Required configuration additions
 
-Ordinary research/configuration content only:
+Completed in the bounded implementation batch:
 - `token_classes.yaml`: `desk: NOUN`, `rests: VERB`, `lamp: NOUN`, `hall: NOUN`, `place: NOUN`
 - `category_cues.yaml`: dual-source mapping of `table` → physical; dual-source mapping of `place` → perspectival
 
-No Category Selection scoring, weight, threshold, or policy changes.
+No Category Selection scoring, weight, threshold, or policy changes were made.
 
 ## Deferred edge-pressure requirements
 
-Unmapped negative controls and inventory-unavailable cases are identified but outside the first implementation batch.
+Clean mapped/unmapped boundary is addressable with existing controls. Deeper edge pressure (weak/ambiguous support, inventory-inadequate cases, deliberately limited probes) remains separately designed and is not claimed as satisfied by ordinary non-cue controls.
 
 ## Palette versioning / controlled evolution
 
@@ -100,4 +124,4 @@ This is Palette v1. Future generations may expand or revise research content und
 
 ## Non-claims
 
-This document does not characterize Category Selection space, establish global axes, or authorize implementation. Design and implementation state remain distinct.
+This document does not characterize Category Selection space or establish global axes. Palette v1 is implemented and configuration-verified; it is not yet experimentally characterized.
