@@ -75,7 +75,7 @@ Record each finding in the document that owns that information type. Do not dupl
 
 - [category_selection_controlled_palette_v1.md](category_selection_controlled_palette_v1.md)  
   **What it is:** Design record for the first-generation controlled experimental palette (canonical probes, source-composition contract, construction families, controls, and competition cases).  
-  **Status/authority:** Implemented, configuration-verified, and locally calibrated (Stage 6 PASS); not yet formally characterized.  
+  **Status/authority:** Implemented, configuration-verified, locally calibrated, and formally characterized through accepted Stage 7 Batches 1–4A; controlled palette design/reference remains non-normative.  
   **Open when:** You need the approved Palette v1 specification or the distinction between design and current implementation state.  
   **Relationship:** Downstream of Stage 2; upstream of Stage 7 formal campaign; does not own empirical observations.
 
