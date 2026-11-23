@@ -131,4 +131,26 @@ A bounded implementation is acceptable when it can:
 
 ## Next step after this plan
 
-Once this envelope is accepted, the first Agent task is a bounded implementation that satisfies the acceptance tests above and reuses the named existing facilities. After that implementation has been exercised, the user guide may be completed from the actual command and file contract that exists rather than from expectation.
+Once this envelope is accepted, the first Agent task is **implementation mapping only (no code changes)**, then stop for review.
+
+The first Agent instruction must:
+
+1. read [scalability_program.md](scalability_program.md),
+2. read [scalability_design.md](scalability_design.md),
+3. read [scalability_gap_analysis.md](scalability_gap_analysis.md),
+4. read this implementation plan,
+5. inspect existing runtime, regression/replay, characterization, dictionary, association, category, Candidate, Licensed Region, and `.gitignore` conventions.
+
+The first task output must report:
+- existing facilities to reuse;
+- proposed files/modules under `scalability/`;
+- proposal-entry/run interface;
+- support files believed necessary;
+- existing functions/modules each scalability stage will call;
+- report/session output structure;
+- `.gitignore` changes;
+- test files and mapping from each acceptance test to its proposed test;
+- anything in this implementation plan that cannot be mapped onto existing code;
+- anything that would require inventing an unresolved contract.
+
+Then stop for review. Do not implement runtime code, tooling, or tests in that first Agent task.
