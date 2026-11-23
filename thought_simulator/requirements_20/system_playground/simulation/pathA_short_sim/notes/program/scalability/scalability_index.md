@@ -13,7 +13,7 @@ Use this page to route questions by document role and authority.
 - Open the gap analysis for current reuse/adapt/gap/deferred classification by capability area.
 - Open the implementation plan for the bounded implementation envelope and acceptance-test scope.
 - Open the implementation mapping for the approved first-pass module/test/output mapping used for bounded implementation.
-- Open the user guide for practical operator or Agent steps once implementation-backed workflow guidance is completed.
+- Open the user guide for practical operator or Agent steps for the accepted first bounded implementation.
 
 This index is intentionally brief and does not duplicate technical detail from the linked documents.
 
@@ -75,7 +75,7 @@ New scalability documents should be registered here.
 
 - [scalability_user_guide.md](scalability_user_guide.md)  
   **What it is:** Practical guide for operators and Agents after an expansion.  
-  **Status/authority:** Partial scaffold (non-normative). Implementation-backed command/report facts are recorded; full operational procedure is pending completion.  
+  **Status/authority:** Implemented first-pass operator guide (non-normative; report details remain provisional).  
   **Open when:** You have made a change and need the sequence for checking it.  
   **Relationship:** Downstream of program/design/implementation outputs; does not define principles.
 
