@@ -1134,6 +1134,179 @@ Batch-level factual checks from executed artifacts:
 - Option B: request one bounded replay of a selected Batch 2 case using a new run index before Batch 3 execution.
 - Option C: hold formal campaign execution after accepted Batch 2 pending review prioritization.
 
+## Experiment record — Stage 7 Batch 3 robustness + competition (`table` / physical; `place` / perspectival; mixed competition pairs) (accepted)
+
+### 1) What executed
+
+- Stage 7 Batch 3 executed as one formal characterization session:
+  - `session_id=stage7_batch3_robustness_competition`
+  - `characterization.type=infra_smoke`
+  - `characterization.version=1.0`
+- Run identities:
+  - `B3-1 -> run_index=1`
+  - `B3-2 -> run_index=2`
+  - `B3-3 -> run_index=3`
+  - `B3-4 -> run_index=4`
+  - `B3-5 -> run_index=5`
+
+### 2) Inputs and controls
+
+- TS-affecting controls for all five runs:
+  - `enable_category_selection=True`
+  - `enable_s2m_seed=False`
+- Robustness cases:
+  - `B3-1`: sentence `"The book rests on the table."`, prior context `["table"]`
+  - `B3-2`: sentence `"The lamp stays in the place."`, prior context `["place"]`
+- Competition cases:
+  - `B3-3`: sentence `"The book is on the table."`, prior context `["cold"]`
+  - `B3-4`: sentence `"The lamp is in the place."`, prior context `["cold"]`
+  - `B3-5`: sentence `"The lamp is in the place."`, prior context `["table"]`
+
+### 3) Produced artifacts/logs
+
+- `B3-1`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch3_robustness_competition/runs/000001__infra_smoke__1.0.tschar.json`
+- `B3-2`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch3_robustness_competition/runs/000002__infra_smoke__1.0.tschar.json`
+- `B3-3`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch3_robustness_competition/runs/000003__infra_smoke__1.0.tschar.json`
+- `B3-4`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch3_robustness_competition/runs/000004__infra_smoke__1.0.tschar.json`
+- `B3-5`:
+  `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/local_characterization/sessions/stage7_batch3_robustness_competition/runs/000005__infra_smoke__1.0.tschar.json`
+
+### 4) Observed outputs — facts only
+
+- Shared artifact fields (all five runs):
+  - `schema_id=ts.characterization.run`
+  - `schema_version=1.0`
+  - `execution_status=succeeded`
+  - `final_tp.truth_relation="declarative"`
+  - `trace.primitive_sequence` present with the same sequence as accepted Batch 2
+
+- `B3-1` (physical alternate scaffold, both-source):
+  - `category_cue=["physical"]`
+  - full distribution:
+    - `physical=0.32171311115883794`
+    - `affective=0.09689812697730887`
+    - `mental=0.09689812697730887`
+    - `metaphysical=0.09689812697730887`
+    - `perceptual=0.09689812697730887`
+    - `perspectival=0.09689812697730887`
+    - `social=0.09689812697730887`
+    - `spiritual=0.09689812697730887`
+  - `top_category="physical"`
+  - `category_confidence=0.32171311115883794`
+  - `category_rationale=["category_cue_applied","top_category=physical"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+
+- `B3-2` (perspectival alternate scaffold, both-source):
+  - `category_cue=["perspectival"]`
+  - full distribution:
+    - `perspectival=0.32171311115883794`
+    - `affective=0.09689812697730887`
+    - `mental=0.09689812697730887`
+    - `metaphysical=0.09689812697730887`
+    - `perceptual=0.09689812697730887`
+    - `physical=0.09689812697730887`
+    - `social=0.09689812697730887`
+    - `spiritual=0.09689812697730887`
+  - `top_category="perspectival"`
+  - `category_confidence=0.32171311115883794`
+  - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+
+- Mandatory robustness gate comparisons (factual):
+  - `B3-1` vs accepted `B2-3`: cue/provenance/top/distribution/confidence matched.
+  - `B3-2` vs accepted `B2-6`: cue/provenance/top/distribution/confidence matched.
+
+- `B3-3` (affective + physical competition):
+  - `category_cue=["affective","physical"]`
+  - full distribution:
+    - `physical=0.23667050650980903`
+    - `affective=0.2141483300355984`
+    - `mental=0.09153019390909874`
+    - `metaphysical=0.09153019390909874`
+    - `perceptual=0.09153019390909874`
+    - `perspectival=0.09153019390909874`
+    - `social=0.09153019390909874`
+    - `spiritual=0.09153019390909874`
+  - `top_category="physical"`
+  - `category_confidence=0.23667050650980903`
+  - `category_rationale=["category_cue_applied","top_category=physical"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+
+- `B3-4` (affective + perspectival competition):
+  - `category_cue=["affective","perspectival"]`
+  - full distribution:
+    - `perspectival=0.23667050650980903`
+    - `affective=0.2141483300355984`
+    - `mental=0.09153019390909874`
+    - `metaphysical=0.09153019390909874`
+    - `perceptual=0.09153019390909874`
+    - `physical=0.09153019390909874`
+    - `social=0.09153019390909874`
+    - `spiritual=0.09153019390909874`
+  - `top_category="perspectival"`
+  - `category_confidence=0.23667050650980903`
+  - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+
+- `B3-5` (physical + perspectival competition):
+  - `category_cue=["perspectival","physical"]`
+  - full distribution:
+    - `perspectival=0.23667050650980903`
+    - `physical=0.2141483300355984`
+    - `affective=0.09153019390909874`
+    - `mental=0.09153019390909874`
+    - `metaphysical=0.09153019390909874`
+    - `perceptual=0.09153019390909874`
+    - `social=0.09153019390909874`
+    - `spiritual=0.09153019390909874`
+  - `top_category="perspectival"`
+  - `category_confidence=0.23667050650980903`
+  - `category_rationale=["category_cue_applied","top_category=perspectival"]`
+  - `provenance.source=["sentence","prior_context_cex"]`
+
+### 5) Unavailable measurements/deviations
+
+- Unavailable in all five runs:
+  - `entropy`
+  - `top_vs_second_margin`
+- No deviation from the frozen Batch 3 case identities, session/run mapping, or artifact identity contract was recorded.
+
+### 6) Unexpected behavior/anomalies
+
+- No Batch 3 predefined stop condition was triggered in the formal execution record.
+- As with Batch 2 `infra_smoke` artifacts, no additional token-class-level `UNK`, `constraint_residue`, `semantic_adjacent_cues`, or `smoothing_residue` fields are present in these five `.tschar.json` records.
+
+### 7) Interpretation — bounded
+
+- Under tested Palette v1 conditions, one alternate scaffold for physical both-source and one alternate scaffold for perspectival both-source produced recorded cue/provenance/top/distribution/confidence values matching accepted canonical both-source references (`B2-3`, `B2-6`).
+- Under tested Palette v1 conditions, the three frozen mixed-source competition cases produced interpretable two-direction outputs with intended cue pairs and mixed-source provenance.
+
+### 8) Not established
+
+- No global competition hierarchy is established.
+- No general sentence-over-prior or prior-over-sentence rule is established.
+- No competition gradient/crossover geometry is established.
+- No entropy-based ambiguity or top-versus-second-margin behavior is established.
+- No global Category Selection behavior is established.
+- No broad robustness/generalization claim outside tested Batch 3 conditions is established.
+- No Category Selection structural-confidence closeout is established.
+- Batch 4A authorization is not established by Batch 3 evidence alone.
+
+### 9) Questions raised
+
+- Review gate accepted Stage 7 Batch 3 as completed under frozen specification with no triggered stop condition.
+- Should Batch 4A be separately authorized under one-batch-at-a-time gating?
+
+### 10) Next-step options — suggestions only, not decisions
+
+- Option A: authorize Batch 4A under separate one-batch-at-a-time gating.
+- Option B: request one bounded replay of a selected Batch 3 competition case using a new run index before Batch 4A decision.
+- Option C: hold campaign progression after accepted Batch 3 pending review prioritization.
+
 ## Linked program context
 
 - [category_selection_index.md](category_selection_index.md)
