@@ -36,6 +36,7 @@ Route findings by information type and document authority:
 - New research questions or proposed investigations → [category_selection_research_plan.md](category_selection_research_plan.md)
 - Stage 1 readiness / capability map → [category_selection_characterization_readiness_audit.md](category_selection_characterization_readiness_audit.md)
 - Stage 2 axis and coverage decisions → [category_selection_stage2_axis_and_coverage_reference.md](category_selection_stage2_axis_and_coverage_reference.md)
+- Controlled experimental palette design → [category_selection_controlled_palette_v1.md](category_selection_controlled_palette_v1.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
@@ -69,6 +70,12 @@ Record each finding in the document that owns that information type. Do not dupl
   **Status/authority:** Non-normative research-design record.  
   **Open when:** You need the minimum coverage set or the rationale for what the Stage 4 palette must express.  
   **Relationship:** Downstream of the readiness audit; upstream of Stage 4 palette construction; does not own empirical observations.
+
+- [category_selection_controlled_palette_v1.md](category_selection_controlled_palette_v1.md)  
+  **What it is:** Design record for the first-generation controlled experimental palette (canonical probes, source-composition contract, construction families, controls, and competition cases).  
+  **Status/authority:** Non-normative design record; implementation not yet authorized.  
+  **Open when:** You need the approved Palette v1 specification or the distinction between design and current implementation state.  
+  **Relationship:** Downstream of Stage 2; upstream of any Palette v1 implementation batch; does not own empirical observations.
 
 ### Current-realization mapping
 
@@ -168,6 +175,7 @@ Typical progression for a new cycle:
 → `category_selection_research_plan.md`  
 → `category_selection_characterization_readiness_audit.md`  
 → `category_selection_stage2_axis_and_coverage_reference.md`  
+→ `category_selection_controlled_palette_v1.md`  
 → `category_selection_stage1_modification_map.md`  
 → coordinated software references  
 (`category_selection_program_reference.md` + `category_selection_characterization_reference.md`)  
