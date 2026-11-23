@@ -30,8 +30,8 @@ S2M exposes five conceptually distinct stages for every realized utterance:
 1. **Structural relation** — what the floor actually established.
 2. **Default meaning** — the minimal semantic relation licensed by that structure, with no special context or category cue.
 3. **Candidate interpretation space** — available possible interpretations for relevant endpoints and relations, tagged by interpretation major and subcategory; unselected by default.
-4. **Selected interpretive extension(s)** — candidates legitimized by an explicit context or category cue.
-5. **Finite customized composite** — the default meaning plus any legitimately selected extensions.
+4. **Legitimized interpretive extension(s)** — admitted candidates that satisfy the applicable structural licensing conditions and are therefore materialized as extensions.
+5. **Finite customized composite** — the default meaning plus any legitimized interpretive extensions.
 
 These stages remain distinct. Default meaning exists even when no cue is active and does not depend on the candidate inventory.
 
@@ -99,13 +99,15 @@ The inventories are associated with endpoints and relations rather than assuming
 
 ## Selected interpretive extension
 
-A contextual or category cue may subsequently legitimize one or more candidates. An extension is added only after legitimate selection. It does not appear merely because it is present in an inventory. Extensions are additions to the default meaning, not replacements for it.
+A contextual or category cue may subsequently legitimize one or more candidates. Contextual candidate admission determines which available candidates are considered for structural assessment; structural legitimation determines which admitted candidates are permitted as extensions. An extension is added only after legitimation. It does not appear merely because it is present in an inventory. Extensions are additions to the default meaning, not replacements for it.
 
 ## Customized composite
 
 The final finite customized composite contains:
 - the structurally licensed default meaning; plus
-- any legitimately selected interpretive extensions.
+- any legitimized interpretive extensions.
+
+This conceptual term denotes the occurrence-specific result expressed by the S2M result structure (default meaning co-present with legitimized extensions). It does not by itself require a separately constructed runtime composite object or an additional processing decision.
 
 This keeps the default stable while allowing plasticity and context-sensitivity. The composite is specific to the utterance. It is not the union of every candidate.
 
@@ -115,7 +117,7 @@ Inspectable distinctions remain:
 1. what structure explicitly established;
 2. the default meaning derived from it;
 3. what interpretations were available as candidates;
-4. what interpretations were selected;
+4. what interpretations were legitimized as extensions;
 5. what remained unavailable, unselected, refused, or null.
 
 ## Canonical three-sentence testbench
