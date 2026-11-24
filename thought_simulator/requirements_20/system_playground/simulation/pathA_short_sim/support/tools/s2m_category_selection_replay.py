@@ -75,6 +75,76 @@ def _assert_qualification_observation(result: dict) -> None:
 
 
 def main() -> None:
+    palette_b1_sentence_control = run_pathA_short(
+        "The sky is blue.",
+        enable_s2m_seed=True,
+        enable_category_selection=True,
+        prior_context=None,
+    )
+    palette_b1_sentence_control_category = _committed_category(palette_b1_sentence_control)
+    palette_b1_sentence_control_cues = palette_b1_sentence_control_category.get("category_cue", [])
+    assert isinstance(palette_b1_sentence_control_cues, list), "sentence control cues must be a list"
+    assert "affective" not in palette_b1_sentence_control_cues, "sentence control must not independently activate affective"
+    _assert_qualification_observation(palette_b1_sentence_control)
+
+    palette_b1_prior_only_a = run_pathA_short(
+        "The sky is blue.",
+        enable_s2m_seed=True,
+        enable_category_selection=True,
+        prior_context=["cold"],
+    )
+    palette_b1_prior_only_b = run_pathA_short(
+        "The sky is blue.",
+        enable_s2m_seed=True,
+        enable_category_selection=True,
+        prior_context=["cold"],
+    )
+    palette_b1_prior_only_category_a = _committed_category(palette_b1_prior_only_a)
+    palette_b1_prior_only_cues = palette_b1_prior_only_category_a.get("category_cue", [])
+    assert isinstance(palette_b1_prior_only_cues, list), "prior-only cues must be a list"
+    assert palette_b1_prior_only_cues == ["affective"], "Palette B1 prior-only should expose affective cue from prior context"
+    palette_b1_prior_only_qobs_a = _trace_entry(palette_b1_prior_only_a, "ISc").get("qualification_observation", {})
+    palette_b1_prior_only_qobs_b = _trace_entry(palette_b1_prior_only_b, "ISc").get("qualification_observation", {})
+    assert palette_b1_prior_only_qobs_a == palette_b1_prior_only_qobs_b, "Palette B1 prior-only qualification observation must be deterministic"
+
+    palette_b1_candidates = palette_b1_prior_only_qobs_a.get("candidates", [])
+    affective_candidate = None
+    non_target_candidate = None
+    for candidate in palette_b1_candidates:
+        if not isinstance(candidate, dict):
+            continue
+        major = str((candidate.get("candidate_identity", {}) or {}).get("major", "")).strip().lower()
+        if major == "affective":
+            affective_candidate = candidate
+        elif major == "perceptual":
+            non_target_candidate = candidate
+
+    assert isinstance(affective_candidate, dict), "affective candidate observation missing in prior-only case"
+    affective_evidence = affective_candidate.get("existing_evidence", {})
+    affective_provenance = affective_candidate.get("existing_evidence_provenance", {})
+    assert isinstance(affective_evidence, dict)
+    assert isinstance(affective_provenance, dict)
+    assert affective_evidence.get("f_s") == 0.0, "prior-only affective must have no sentence contribution"
+    assert affective_evidence.get("f_b") == 1.0, "prior-only affective must have prior contribution"
+    assert affective_evidence.get("in_current_category_cue") is True, "prior-only affective must be in current cue set"
+    assert affective_provenance.get("ce_cue_provenance") == ["prior_context_cex"], "prior-only provenance must be prior-context only"
+    cex_prov = affective_provenance.get("cex_provenance", {})
+    assert isinstance(cex_prov, dict)
+    assert cex_prov.get("source") == "prior_context_cex", "prior-only affective must show prior-context source"
+    assert cex_prov.get("prior_context_used") is True, "prior-only affective must show prior context used"
+    assert affective_candidate.get("qualification_evaluation_status") == "not_evaluated_predicate_open"
+    assert affective_candidate.get("qualification_state") is None
+    assert affective_candidate.get("qualification_rationale") is None
+
+    assert isinstance(non_target_candidate, dict), "non-target candidate observation missing in prior-only case"
+    non_target_evidence = non_target_candidate.get("existing_evidence", {})
+    assert isinstance(non_target_evidence, dict)
+    assert non_target_evidence.get("f_s") == 0.0
+    assert non_target_evidence.get("f_b") == 0.0
+    assert non_target_evidence.get("in_current_category_cue") is False
+
+    _assert_qualification_observation(palette_b1_prior_only_a)
+
     baseline = run_pathA_short("The book is on the table.", enable_s2m_seed=True, enable_category_selection=False)
     baseline_meaning = baseline.get("s2m_meaning", {})
     assert baseline_meaning.get("meaning_relations") == [], "baseline no-cue must keep meaning_relations empty"
