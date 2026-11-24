@@ -23,9 +23,13 @@ Force ops such as polar, command, request, and exclamative are open holes. They 
 
 Expanding Path A? Start with the scalability program and user guide before treating new YAML/reference coverage as established behavior.
 
+Scalability is a sibling program under `pathA_short_sim` (`notes/program/scalability/scalability_program.md`). It is not the current goal. The current goal, per [notes/program/status.md](notes/program/status.md), is "Controlled category selection (sentence-internal cue or prior-CEx cue) so a non-default category can be chosen without mutating the floor."
+
 - [notes/program/scalability/scalability_program.md](notes/program/scalability/scalability_program.md) — governing principles, expansion definition, regression versus progression, decision states.
-- [notes/program/scalability/scalability_user_guide.md](notes/program/scalability/scalability_user_guide.md) — practical sequence after an expansion (placeholder until audit).
+- [notes/program/scalability/scalability_user_guide.md](notes/program/scalability/scalability_user_guide.md) — implemented first-pass operator guide: how to run and read a scalability check (report details provisional).
 - [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — navigation for the scalability document family.
+
+Entry point: `python run_scalability.py --proposal-file <path> --session-id <id> --run-index <n> [--report-version <v>] [--run-regression]` (`run_scalability.py:10-21`). Code is in the `scalability/` package; example proposals are in `support/scalability/examples/` (test fixtures, not established resources); reports are written under `local_scalability/`. Replays: `support/tools/scalability_proposal_replay.py`, `scalability_progression_replay.py`, `scalability_seed_hold_replay.py`, `scalability_output_boundary_replay.py`. A scalability run does not write proposal content into established Path A YAML/reference resources.
 
 ## S2M mapping (experimental; on main via PR #194/#197; historical)
 
@@ -100,7 +104,7 @@ Official expansions (20.700.010): Structural Observation Block (SOB), Structural
 
 # **1. What the Simulator Does**
 
-The Path‑A short simulator's original five sentence families are still listed below. The claim ledger and CSE also cover action, command, request, reporting, relative, and exclamative sentences. Implemented utterances run across this pipeline (SOB → SROB → CnOB → SmOB → SSG → RBU → RB → TR → TRU → RTU → CTP → IdOB → OuBA):
+The Path‑A short simulator's original five sentence families are still listed below. The claim ledger and CSE also cover action, command, request, reporting, relative, and exclamative sentences. Implemented utterances run across this pipeline (InB → IIInB → IE → CEx → CE → ISc → TPU → SOB → SROB → CnOB → SmOB → SSG → RBU → RB → TR → TRU → RTU → CTP → IdOB → OuBA; `pathA_short_simulator.py:17-23`):
 
 ### **Supported Families**
 1. **Copular / State Descriptive**  
@@ -122,6 +126,7 @@ The simulator produces:
 - adjacent cues (`semantic_adjacent_cues`)  
 - IdOB packet (`idob_packet`, dict `semantic_core`)  
 - truth‑relation (`truth_relation`)  
+- ISc qualification observation (`qualification_observation` on the ISc trace entry): one row per CE candidate with its existing evidence and provenance. `qualification_evaluation_status` is `not_evaluated_predicate_open`; `qualification_state` and `qualification_rationale` are null. Nothing is qualified, no selection changes, and no floor field is written (`primitives_pathA_short.py:169-222`, `:612`; `pathA_short_simulator.py:117`). Replay check: `support/tools/s2m_category_selection_replay.py`.  
 
 This gives users a complete view of Path‑A’s factored structure plus the IdOB sum.
 
@@ -325,6 +330,7 @@ Desk modules live in `desks/`: `segments.py` for Structural Observation Block, `
 pathA_short_sim/
 |
 |-- run_examples.py
+|-- run_scalability.py
 |-- pathA_short_simulator.py
 |-- primitives_pathA_short.py
 |-- tp_substrate.py
@@ -351,6 +357,7 @@ pathA_short_sim/
 |   `-- seam.py
 |-- ouba/
 |-- s2m/
+|-- scalability/
 |-- mapping/
 |-- stores/
 |
