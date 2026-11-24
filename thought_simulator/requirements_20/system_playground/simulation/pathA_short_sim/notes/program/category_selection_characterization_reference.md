@@ -33,6 +33,8 @@ Characterization in this document does **not**:
 - define threshold/region/hysteresis policy,
 - prewrite scientific conclusions.
 
+Entropy-related characterization in this document is governed by the Path-A process-level entropy principle in [20.705_patha_pathb_flow.md](../../../20.705_patha_pathb_flow.md) and by normative ISc entropy/ΔH requirements in [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md). Characterization instrumentation does not define entropy ownership, entropy normalization, first-cycle ownership, or entropy carrier design.
+
 ## 3) Category-selection document family
 
 For the complete category-selection document map, document roles, authority relationships, software references, characterization documents, and observation records, see:
