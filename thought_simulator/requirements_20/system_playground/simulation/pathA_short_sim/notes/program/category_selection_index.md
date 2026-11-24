@@ -116,6 +116,12 @@ Record each finding in the document that owns that information type. Do not dupl
   **Open when:** You need current code-path touchpoints, boundaries, or “what exists now” before edits.  
   **Relationship:** Bridge from research plan to software-reference contracts.
 
+- [category_selection_framework_v1_realization_map.md](category_selection_framework_v1_realization_map.md)  
+  **What it is:** Factual mapping of Framework v1 stages onto the current bounded Category Selection implementation.  
+  **Status/authority:** Non-normative implementation evidence map.  
+  **Open when:** You need stage-by-stage realization status (implemented/partial/absent/open) and first framework hole evidence without redefining behavior.  
+  **Relationship:** Companion to the program reference. Program reference defines framework/realization contract boundaries; this map records factual current implementation mapping.
+
 ### Software references
 
 - [category_selection_program_reference.md](category_selection_program_reference.md)  

@@ -134,6 +134,74 @@ Guiding principle: freeze the structure of inquiry before freezing the answer th
 8. **Observability**  
    Preserves reconstructability/characterizability (including uncertainty/competition/unsupported/unresolved behavior) without changing committed selection semantics.
 
+### 6A.3A Qualification Contract v1 (conceptual contract)
+
+Definition:
+
+Qualification determines whether a constructed category candidate has sufficient legitimate support from authorized evidence to remain eligible for evaluation and later selection. Qualification itself does not select a winner.
+
+Ordering boundary:
+
+`candidate construction -> qualification -> evaluation`
+
+Qualification is an eligibility boundary, not a preference mechanism.
+
+Minimum conceptual qualification states:
+- `qualified`: sufficient legitimate support is established for evaluation eligibility.
+- `not qualified`: sufficient basis exists to determine support is not legitimate for evaluation eligibility.
+- `unresolved`: available authorized evidence is insufficient to determine qualification.
+
+`unresolved` is not: partially qualified, low confidence, tied, rejected, no-category, or final non-selection.
+
+Currently authorized conceptual qualification inputs:
+- current-utterance evidence;
+- applicable prior-context/prior-utterance evidence;
+- evidence provenance;
+- category inventory membership;
+- existing cue/category relationships;
+- existing deterministic structural support available to the Category Selection path.
+
+Explicitly excluded from Qualification v1:
+- entropy/information-resolution quantities;
+- downstream S2M legitimation results;
+- quantities produced by candidate evaluation/scoring itself.
+
+Minimum conceptual reconstructability surface for qualification:
+- candidate identity;
+- qualification state;
+- support evidence used;
+- evidence provenance;
+- qualification rationale.
+
+This is a conceptual observability contract only; it does not define TP schema, does not add fields to `TP.semantic.isc_category_result`, and does not make qualification records committed downstream semantic state.
+
+Qualification Contract v1 preserves these open slots (not defined here):
+- qualification predicate/mathematics;
+- binary vs graded internal support model;
+- thresholds;
+- evidence weights and evidence-combination mathematics;
+- mathematical determination of `unresolved`;
+- interaction with entropy;
+- selection mathematics;
+- generalized non-selection behavior.
+
+Entropy boundary at qualification:
+- entropy has no qualification authority;
+- qualification precedes information-resolution influence;
+- an unsupported candidate cannot become qualified because it might reduce entropy;
+- entropy may later be an evaluation observable when measurement semantics are established.
+
+First realization posture (future implementation, separately authorized):
+
+Qualification v1 starts as observability-only and must preserve current behavior unchanged, including:
+- current scores,
+- current softmax distribution,
+- current top_category,
+- current category_confidence,
+- current category_rationale,
+- current committed TP result,
+- current downstream S2M behavior.
+
 ### 6A.4 Framework invariants
 
 - **Qualification ordering:** qualification precedes any potential information-resolution influence on selection.
