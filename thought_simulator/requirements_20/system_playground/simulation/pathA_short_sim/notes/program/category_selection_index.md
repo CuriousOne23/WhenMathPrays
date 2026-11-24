@@ -191,7 +191,7 @@ Record each finding in the document that owns that information type. Do not dupl
 
 ### Normative requirements
 
-- [20.45_ts_isc_scoring.md](../../../../20.45_ts_isc_scoring.md)  
+- [20.45_ts_isc_scoring.md](../../../../../20.45_ts_isc_scoring.md)  
   **Authority:** Normative ISc scoring behavior.  
   **Open when:** Question is about category-result scoring behavior/rules.  
   **Relationship:** Scoring authority used by category-selection realization.
