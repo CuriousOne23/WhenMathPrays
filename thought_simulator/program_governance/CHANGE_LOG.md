@@ -210,3 +210,5 @@
 2026-11-23 | Helm | digest 2026-11-23; recorded Flow F-000, Catalog C-005, Terms T-058–T-059, Inventory 2026-11-23, ShortSim Docs 2026-11-23 (PR #211 not merged), Path A Account 2026-11-23; governance reports only | write=no
 2026-11-23 | ShortSim Status goal-distance | ~3:55 PM Phoenix; category-selection report filed | write=no
 2026-11-24 | Path A Account drift | main @ 9ef6397; door/status.md drift report filed | write=no
+2026-11-24 | ShortSim Docs | 8 AM run; range 27bb926..e4f4740; S1–S5 on branch shortsim-docs/20261124-e4f4740 (PR not open) | write=no
+2026-11-24 | ShortSim Status goal-distance | 8:52 AM Phoenix; category-selection report filed | write=no
