@@ -153,13 +153,49 @@ Minimum conceptual qualification states:
 
 `unresolved` is not: partially qualified, low confidence, tied, rejected, no-category, or final non-selection.
 
-Currently authorized conceptual qualification inputs:
-- current-utterance evidence;
-- applicable prior-context/prior-utterance evidence;
-- evidence provenance;
-- category inventory membership;
-- existing cue/category relationships;
-- existing deterministic structural support available to the Category Selection path.
+### 6A.3B Qualification Evidence Contract v1 (semantic boundary contract)
+
+At the `candidate construction -> qualification` boundary, the architectural evidence contract for each constructed candidate is:
+
+1. **Candidate identity** (which category the candidate represents).
+2. **Zero or more category-relevant evidence items** currently represented for that candidate.
+3. **Authorized source attribution for every evidence item**.
+
+This contract defines what information crosses the boundary, not what qualification does with that information.
+
+Empty evidence collection rule:
+- an empty category-relevant evidence collection means no category-relevant evidence is represented for that candidate at this boundary;
+- it does **not** mean `not qualified`, `unresolved`, rejected, no-category, or any other qualification judgment.
+
+Inventory relationship:
+- candidate construction establishes candidacy (including inventory membership preconditions in the current realization);
+- inventory membership is therefore not duplicated as qualification evidence;
+- keep distinct:
+  - candidate exists via candidate construction,
+  - candidate has zero-or-more category-relevant evidence items.
+
+Authorized-source provenance invariant:
+- every category-relevant evidence item must remain attributable to an authorized source;
+- sentence and prior context are currently realized authorized sources;
+- the architectural contract remains extensible to additional authorized sources.
+
+Current realized qualification observability fields are **not themselves** the Qualification Evidence Contract:
+- `f_s`
+- `f_b`
+- `f_e`
+- `f_i`
+- `in_current_category_cue`
+
+These remain legitimate current realization/diagnostic fields. In the current realization, `f_s`/`f_b` help manifest source contributions, cue-membership helps expose current cue relationship, and other feature fields remain realization/evaluation detail. For current field-level realization mapping, see [category_selection_framework_v1_realization_map.md](category_selection_framework_v1_realization_map.md).
+
+Portability/growth boundary:
+- this evidence contract is semantic, not language-specific;
+- it must support equivalent realization in Python and C++ without requiring today's Python trace-field representation;
+- ordinary growth (new inventory categories, additional authorized evidence sources, evolving evidence representation) should not require redefining the candidate-construction -> qualification boundary.
+
+Relationship to current observability implementation:
+- current Qualification v1 observability already exposes enough information to reconstruct this semantic evidence contract;
+- current trace representation remains realization evidence, not normative architecture.
 
 Explicitly excluded from Qualification v1:
 - entropy/information-resolution quantities;
@@ -176,10 +212,14 @@ Minimum conceptual reconstructability surface for qualification:
 This is a conceptual observability contract only; it does not define TP schema, does not add fields to `TP.semantic.isc_category_result`, and does not make qualification records committed downstream semantic state.
 
 Qualification Contract v1 preserves these open slots (not defined here):
+- presence-of-evidence predicate;
+- qualification-state assignment (`qualified`, `not qualified`, `unresolved`);
 - qualification predicate/mathematics;
 - binary vs graded internal support model;
 - thresholds;
 - evidence weights and evidence-combination mathematics;
+- evidence counting or evidence strength interpretation;
+- source preference policy;
 - mathematical determination of `unresolved`;
 - interaction with entropy;
 - selection mathematics;
