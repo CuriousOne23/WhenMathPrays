@@ -96,6 +96,120 @@ Out of scope:
 - cross-language (Python/C++) equivalence scope decisions,
 - characterization campaign/session management.
 
+## 6A) Category Selection Framework v1 skeleton (structural, non-algorithmic)
+
+### 6A.1 Purpose
+
+Framework v1 records a stable process skeleton for Category Selection development/characterization without freezing final decision mathematics. It separates architectural structure from realization policy and research hypotheses, preserves unresolved behavior as information, keeps deterministic/replayable realization as a boundary condition, and provides a controlled extension boundary so future agents do not fill unresolved architecture by inference.
+
+Guiding principle: freeze the structure of inquiry before freezing the answer that inquiry is intended to discover.
+
+### 6A.2 Stage skeleton
+
+`available authorized evidence -> candidate construction -> qualification -> evaluation -> competition/comparison -> selection policy -> result -> observability`
+
+### 6A.3 Stage responsibilities (bounded)
+
+1. **Available authorized evidence**  
+   Owns the evidence Category Selection is permitted to consider (currently established: current utterance evidence and applicable prior-context/prior-utterance evidence), with reconstructable provenance.
+
+2. **Candidate construction**  
+   Constructs candidates from inventory + authorized evidence. Framework growth is inventory-oriented rather than category-specific procedural branching in the core selection framework.
+
+3. **Qualification**  
+   Determines whether candidate support is sufficient for eligibility in subsequent comparison. Qualification precedes information-resolution/numerical influence on selection.
+
+4. **Evaluation**  
+   Provides a reconstructable per-candidate evaluation surface. Framework v1 does not freeze final evaluator mathematics.
+
+5. **Competition/comparison**  
+   Preserves observable relationships among qualified candidates (clear separation, close competition, weak differentiation, unresolved comparison) rather than hiding them inside an opaque final scalar.
+
+6. **Selection policy**  
+   Consumes the qualified/evaluated set and produces current selection outcome. Framework v1 defines stage boundary/existence only; policy mathematics remain open.
+
+7. **Result**  
+   Keeps committed Category Selection result bounded to downstream Path A operational needs and preserves existing accepted result contract.
+
+8. **Observability**  
+   Preserves reconstructability/characterizability (including uncertainty/competition/unsupported/unresolved behavior) without changing committed selection semantics.
+
+### 6A.4 Framework invariants
+
+- **Qualification ordering:** qualification precedes any potential information-resolution influence on selection.
+- **Unsupported candidates:** unsupported categories cannot become selected solely because of favorable numerical evaluation.
+- **Inventory-oriented growth:** category inventory is the growth mechanism, not category-specific core procedural branching.
+- **Provenance traceability:** evidence used in construction/evaluation remains sufficiently traceable to reconstruct authorized source.
+- **Competition visibility:** ambiguity and competition remain observable.
+- **Characterization separation:** characterization instrumentation/records remain outside committed semantic state.
+- **Determinism:** identical authorized inputs/configuration/inventory/realization policy must yield deterministic/replayable committed result.
+- **Entropy ownership boundary:** entropy characterizes unresolved information in evolving utterance/TP state under the governing Path A entropy principle; Category Selection/ISc do not thereby own entropy architecturally.
+- **Hole preservation:** unresolved conditions must remain observable rather than being erased by forced winner behavior.
+
+### 6A.5 Hole/unresolved-condition boundary
+
+Framework v1 preserves the possibility of observing (illustrative, not a frozen taxonomy): genuine competition, weak differentiation, inadequate evidence, inadequate inventory representation, conflicting evidence, weak information resolution, and unresolved conditions with not-yet-understood cause.
+
+Framework v1 does not require runtime to classify every unresolved condition, does not define a default unresolved category, and does not define final committed non-selection representation/policy.
+
+### 6A.6 Minimum conceptual per-candidate reconstructability surface
+
+Framework v1 per-candidate evaluation must be capable of reconstructing, conceptually: category identity, evidence used, evidence provenance, qualification state, support summary available from current realization, optional information-resolution observations when legitimately available, and competition/separation context where computed.
+
+This is a conceptual/reconstructability requirement, not authorization to add TP fields or force unavailable measurements.
+
+### 6A.7 Entropy boundary in Framework v1
+
+Established boundary preserved here:
+- entropy concerns unresolved information in evolving utterance/TP state;
+- entropy is not owned by Category Selection or ISc;
+- historical Path A interpretation is bounded (`0 <= H <= 1`) with historical complement `1-H`;
+- historical `H <= 0.25` was successful simulation behavior, not frozen architecture.
+
+Framework v1 treatment:
+- entropy is permitted as a characterization observable when properly defined;
+- entropy is permitted as optional candidate-evaluation output once measurement semantics exist;
+- entropy is **not** currently authorized to override qualification;
+- entropy is **not** currently authorized as selection-policy input;
+- entropy is **not** currently a qualification signal.
+
+### 6A.8 Open policy slots (explicitly open)
+
+- qualification mathematics;
+- binary vs graded qualification;
+- evaluation mathematics;
+- entropy’s eventual role in candidate evaluation/selection;
+- candidate-specific entropy semantics;
+- information-resolution measurement semantics;
+- competition mathematics;
+- selection mathematics;
+- thresholds;
+- deterministic tie policy;
+- generalized non-selection policy;
+- representation of “no sufficiently differentiated winner”;
+- additional future evidence sources;
+- final characterization observables;
+- entropy normalization;
+- entropy carrier/state continuity;
+- `H_previous`;
+- `TP.process.first_cycle`.
+
+These are open policy slots, not implementation omissions. Future agents must not choose defaults for them autonomously.
+
+### 6A.9 Agent stop boundary for Framework v1
+
+A future agent must stop and return for research/architecture review (rather than resolve autonomously) when a task would require inventing qualification/evaluation/selection mathematics, deciding entropy selection authority, inventing entropy normalization/carriers/state ownership, inventing `H_previous` or `TP.process.first_cycle`, forcing unresolved competition into a winner, defining generalized non-selection behavior, promoting characterization observations into requirements, adding characterization-only information to committed semantic state, or introducing category-specific procedural branching as the category-growth mechanism.
+
+### 6A.10 Initial characterization questions (for separately authorized implementation stage)
+
+1. Under existing Palette v1 source-composition conditions, does Framework v1 preserve the qualified-candidate set and committed result of the current bounded realization?
+2. When supported candidates are close/near-equal, does observability preserve competition/separation visibility rather than letting the final winner hide it?
+3. If a candidate has favorable numerical behavior but fails legitimate support/qualification, is it prevented from being selected?
+4. When inventory membership and evidence support diverge, does observability preserve the distinction without silently changing committed result?
+5. Can added characterization observation remain behaviorally independent from committed outputs (scores/distribution/selected category/other committed behavior)?
+
+These are characterization questions, not normative equations.
+
 ## 7) Current computational path (reconstructable)
 
 Current bounded path:
