@@ -191,3 +191,32 @@ Current runtime qualification remains observability-only.
 - [category_selection_qualification_v1_checkpoint.md](category_selection_qualification_v1_checkpoint.md): records current research status and restart point.
 - existing characterization/observation documents: remain historical/empirical evidence.
 
+## Continuation: Deliberate edge-pressure probe defined (2026-11-24)
+
+Direction A confirmed. No insufficiency of positive presence yet shown.
+
+Chosen dimension: deliberately limited evidence (qualification-limited probe status).
+
+Probe: `qual_v1_edge_limited_physical_support`
+- Sentence: "The book is on the support."
+- Prior: none
+- Target: physical
+- Expected evidence: sentence-attributed cue if `support` maps
+- Independent limitation: Palette v1 records `support` as historical / qualification-limited (not canonical)
+
+Matched control: "The book is on the table." (canonical physical, sentence-only)
+
+Shadow hypothesis unchanged:
+- evidence present → may_be_qualified
+- evidence absent → positive qualification not established
+
+Outcomes:
+- Survives: both produce authorized evidence; limited status confirmed; shadow labels edge candidate may_be_qualified; no further ineligibility forced.
+- Counterexample: authorized evidence present but limited status independently establishes ineligibility → positive presence insufficient; dimension earned.
+- Invalid: evidence or limitation not established.
+
+Tomorrow's Agent mission: compare "The book is on the support." against "The book is on the table.", first verify that `support` still produces authorized physical evidence and that its qualification-limited status is documented, apply the unchanged positive-presence shadow hypothesis, classify the result as survives / counterexample / invalid, verify zero semantic drift, and stop.
+
+No enforcement. No new predicate. All other dimensions remain open.
+
+The historical label “qualification-limited” does not by itself mean ineligible. The experiment asks whether that independently documented limitation is sufficient grounds to challenge eligibility.
