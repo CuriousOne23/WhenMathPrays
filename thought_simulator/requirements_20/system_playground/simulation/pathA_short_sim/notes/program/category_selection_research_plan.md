@@ -308,3 +308,7 @@ This plan does **not**:
 - prescribe final unsupported-space handling behavior
 - alter executable code, YAML/JSON data, schemas, tests, simulator behavior, or normative requirements
 - fabricate experimental outcomes or expected observations
+
+## 19) Open research question: top-level category structure and simultaneous support
+
+The current bounded Category Selection realization uses a flat major-category inventory and a singular `top_category` summary. Emerging compositional reasoning suggests that top-level categories may represent major relational regions, multiple of which may be simultaneously supported for an utterance/TP state. Meaning may therefore involve structured relations across multiple supported categories and their contained objects, defined basins, and relational structures rather than reduction to a single category. The required category structure, the meaning of top-level non-overlap, inter-category relationships, simultaneous-support semantics, and compatibility with the present Path A/TP/IdOB/S2M realization remain uncharacterized. This is a research hypothesis only; it does not alter Framework v1, Qualification v1, or the current bounded realization.
