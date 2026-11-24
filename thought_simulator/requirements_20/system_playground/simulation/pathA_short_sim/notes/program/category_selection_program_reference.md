@@ -318,6 +318,10 @@ A future agent must stop and return for research/architecture review (rather tha
 
 These are characterization questions, not normative equations.
 
+### 6A.11 Category relational role
+
+In Path A, a category is more than an index or label. It identifies a major relational region within which objects, structures, defined basins, and relational possibilities may become relevant to interpretation. Category Selection determines which such region is supported by the available authorized evidence and current TP/context. Selection of a category does not predefine the relationships that must occur within that region, nor does it determine final meaning or downstream conversational emphasis. Specific relationships remain constrained by the available structure, evidence, context, and applicable downstream processing.
+
 ## 7) Current computational path (reconstructable)
 
 Current bounded path:
@@ -355,92 +359,88 @@ in [pathA_short_simulator.py](../../pathA_short_simulator.py).
 - Category cue mappings (sentence/prior-context)  
   - Source: [category_cues.yaml](../../support/dictionaries/category_cues.yaml)  
   - Used by: `CEx` and `CE`  
-  - Classification: **Realization configuration** for cue evidence mapping.
+  - Classification: **Realization config** (data-driven cue inventory).
 
-- Category/inventory data involved downstream  
-  - Sources: [majors.yaml](../../s2m/data/majors.yaml), [spaces/default.yaml](../../s2m/data/spaces/default.yaml), [associations/](../../s2m/data/associations)  
-  - Used by: `CE`, `s2m.propose`, `s2m.active_space`, `s2m.loop`  
-  - Classification: **Realization configuration/dependencies**.
+- Major inventory  
+  - Source: [majors.yaml](../../s2m/data/majors.yaml)  
+  - Used by: `CE` candidate construction  
+  - Classification: **Realization config** (inventory).
+
+- Active space and associations  
+  - Source: [spaces/default.yaml](../../s2m/data/spaces/default.yaml), [associations/](../../s2m/data/associations/)  
+  - Used by: S2M path  
+  - Classification: **Realization config** (downstream consumption context).
+
+- Licensed-region table  
+  - Source: bounded table in [s2m/legitimate.py](../../s2m/legitimate.py)  
+  - Used by: S2M legitimation  
+  - Classification: **Realization scaffolding** (not generalized licensing).
+
+### 8.2 Runtime flags
 
 - `enable_category_selection`  
-  - Source: runtime call surface (`run_pathA_short`, CLI workflows in [run_examples.py](../../run_examples.py))  
-  - Effect: gates TP commit in `TPU`  
-  - Classification: **Realization runtime control**.
+  - Source: caller of `run_pathA_short`  
+  - Used by: TPU commit gate  
+  - Classification: **Realization control**.
 
-- `prior_context` input  
-  - Source: runtime call surface  
-  - Effect: optional cue evidence source via `CEx`  
-  - Classification: **Realization runtime input/control**.
+## 9) Input / output contract (current bounded realization)
 
-### 8.2 Normative vs realization vs experimental distinction
+### 9.1 Inputs
 
-- **Normative:** scoring law form, output field requirements, commit path ownership rules (20.45/20.116/20.105/20.40.050).
-- **Realization:** specific weight values, cue mappings, bounded inventory content, runtime gating choices in current `pathA_short_sim`.
-- **Experimental:** characterization controls such as `--characterize`, `--char-type`, `--char-session-id`, `--char-run-index` in [run_examples.py](../../run_examples.py); these are not Category Selection mechanism parameters.
+- `raw_text` (sentence)
+- optional `prior_context`
+- `enable_category_selection` flag
+- configuration: cue maps, weights, majors, spaces, associations
 
-## 9) Inputs, outputs, ownership, and invariants
+### 9.2 Outputs (committed)
 
-### 9.1 Inputs (bounded realization)
+- `TP.semantic.isc_category_result` containing:
+  - `category_cue`
+  - `category_weighted_distribution`
+  - `top_category`
+  - `category_confidence`
+  - `category_rationale`
+  - `provenance`
 
-- `raw_text` (sentence under execution)
-- optional `prior_context` list
-- runtime control `enable_category_selection`
-- cue/weight/major/inventory configuration files listed above
+### 9.3 Non-committed observability
 
-### 9.2 Category-result outputs (bounded realization)
+- trace output of intermediate stages
+- characterization artifacts (when characterization is active; owned by characterization reference)
 
-- `category_cue`
-- `category_weighted_distribution`
-- `top_category`
-- `category_confidence`
-- `category_rationale`
-- `provenance`
+## 10) Non-mutation walls
 
-committed at `TP.semantic.isc_category_result` when enabled.
+Implementation under this contract must preserve:
 
-### 9.3 Ownership and commit behavior
+- additive category-selection behavior relative to structural/default meaning path,
+- non-mutation of structural writer responsibilities (SOB/SROB/CnOB/SmOB),
+- read-only S2M consumption of committed category result,
+- separation between candidate relevance and final legitimation/refusal.
 
-- Canonical envelope path and writer authority for `TP.semantic.isc_category_result` are governed by [20.116.010_tp_envelope_index.md](../../../20.116.010_tp_envelope_index.md).
-- Current bounded realization commit is implemented in `TPU` in [primitives_pathA_short.py](../../primitives_pathA_short.py), gated by `enable_category_selection`.
-- Downstream consumption in [s2m/loop.py](../../s2m/loop.py) reads this envelope and does not write it.
+Category support must not be treated as automatic meaning legitimation.
 
-### 9.4 Invariants preserved in current bounded realization
+## 11) Required realization outputs
 
-- Category result is additive and remains distinct from final meaning write.
-- Category-supported relevance is distinct from legitimation/refusal.
-- Structural/default path ownership is not reassigned by Category Selection.
+Category-selection realization must continue to expose inspectable outputs sufficient for bounded review, including:
 
-## 10) Determinism/replay and observable surfaces
+- cue source and cue values (including provenance summary),
+- category distribution and top category result,
+- confidence and rationale outputs,
+- committed `TP.semantic.isc_category_result`,
+- downstream candidate selection states,
+- legitimation/refusal result visibility,
+- final participation/composite relation visibility.
 
-Current replay/check surfaces:
+If an output is unavailable in a run, absence must be explicit rather than silently omitted.
 
-- [support/tools/s2m_category_selection_replay.py](../../support/tools/s2m_category_selection_replay.py)
-- [support/tools/s2m_canonical_sentences_replay.py](../../support/tools/s2m_canonical_sentences_replay.py)
-- [replay_parity_harness.py](../../replay_parity_harness.py)
-- [support/tools/pipeline_readiness_check.py](../../support/tools/pipeline_readiness_check.py)
+## 12) Implementation touchpoint discipline
 
-These verify bounded determinism/replay where implemented.  
-They do not resolve unresolved research-policy questions.
+Any implementation work performed under this contract must:
 
-## 11) Normative conformance gap: entropy / ΔH
-
-Reviewed discrepancy:
-
-1. [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md) HLR-20.45-097 requires category-cue scoring using resulting scores with entropy/ΔH behavior linked to HLR-20.45-089–091.  
-2. Current bounded `pathA_short_sim` Category Selection realization does not perform entropy/ΔH computation on this category-result path.  
-3. Current implementation does provide normalized distribution, `top_category`, `category_confidence`, `category_rationale`, and TP commit path behavior currently used for bounded Category Selection result handling.  
-4. No repository authority identified in the completed audit authorizes omission of entropy/ΔH computation.  
-5. Therefore this is recorded as a **known normative conformance gap**, not an accepted exception.  
-6. This document does not resolve the gap.  
-7. Resolution requires a separately authorized conformance task.
-
-Path-A entropy ownership remains process-level (see [20.705_patha_pathb_flow.md](../../../20.705_patha_pathb_flow.md), §2.1). The fact that ISc performs a defined entropy/ΔH computation does not assign architectural ownership of entropy to ISc or Category Selection. In that governing Path-A interpretation, `H` measures unresolved information in the evolving utterance/TP state, and `1-H` is the historical complementary resolution interpretation. Any future correction of this conformance gap must remain consistent with that Path-A principle and with the normative ISc entropy requirements in [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md). This reference does not define the missing entropy carrier, comparison-state contract, normalization convention, or first-cycle ownership; and historical `H <= 0.25` simulation behavior is not a frozen Category Selection constant here.
-
-## 12) Realization vs empirical characterization boundary
-
-- Characterization artifacts may validate or challenge realization behavior.
-- Empirical observations do not define mechanism equations, constants, or normative policy.
-- Observed numeric outcomes (including confidence behavior in specific runs) are not promoted here into mechanism rules unless independently required by normative authority.
+1. identify touched modules/functions explicitly before edit,
+2. preserve normative ownership and envelope contracts,
+3. keep category-specific knowledge in data where architecture allows,
+4. avoid introducing silent fallback behavior for category-type logic,
+5. preserve deterministic replay behavior for existing baseline fixtures unless explicitly reviewed.
 
 ## 13) Compact conformance/verification map
 
