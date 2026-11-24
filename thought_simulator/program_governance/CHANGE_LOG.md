@@ -209,3 +209,4 @@
 2026-11-23 | Path A Account | main @ 96e888e; door unchanged since 19019f6; 2 new flags (status.md L6–10 / L61–67 omit Stage 6 PASS, Stage 7 campaign matrix, Palette v1; door still says next step is one minimum S2M path); still open loose 20.705 pointer / status.md door link / wording L17–18 / unlinked S2M docs; independent view, not definitive | write=no
 2026-11-23 | Helm | digest 2026-11-23; recorded Flow F-000, Catalog C-005, Terms T-058–T-059, Inventory 2026-11-23, ShortSim Docs 2026-11-23 (PR #211 not merged), Path A Account 2026-11-23; governance reports only | write=no
 2026-11-23 | ShortSim Status goal-distance | ~3:55 PM Phoenix; category-selection report filed | write=no
+2026-11-24 | Path A Account drift | main @ 9ef6397; door/status.md drift report filed | write=no
