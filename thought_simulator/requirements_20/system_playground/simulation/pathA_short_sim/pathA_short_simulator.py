@@ -114,6 +114,7 @@ def run_pathA_short(
                     "cex_output",
                     "ce_output",
                     "isc_output",
+                    "qualification_observation",
                     "merge_output",
                     "isc_category_result",
                     "constraints_matched",

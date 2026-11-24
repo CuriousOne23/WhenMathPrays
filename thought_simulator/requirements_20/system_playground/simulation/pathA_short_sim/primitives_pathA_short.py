@@ -166,6 +166,62 @@ def _merge_isc_output(tp: TP) -> Dict[str, Any]:
     return {"isc_output": dict(isc_output)}
 
 
+def _build_qualification_observation(tp: TP) -> Dict[str, Any]:
+    ce_output = tp.ce_output if isinstance(tp.ce_output, dict) else {}
+    cex_output = tp.cex_output if isinstance(tp.cex_output, dict) else {}
+    candidate_set = ce_output.get("category_candidate_set", [])
+    category_cue = ce_output.get("category_cue", [])
+    cue_provenance = ce_output.get("cue_provenance", [])
+    cex_provenance = cex_output.get("provenance", {})
+
+    if not isinstance(candidate_set, list):
+        candidate_set = []
+    if not isinstance(category_cue, list):
+        category_cue = []
+    if not isinstance(cue_provenance, list):
+        cue_provenance = []
+    if not isinstance(cex_provenance, dict):
+        cex_provenance = {}
+
+    cue_set = set(_ordered_unique([str(value) for value in category_cue]))
+    known_majors = {
+        str(major).strip().lower()
+        for major in load_majors()
+        if str(major).strip()
+    }
+
+    candidates: List[Dict[str, Any]] = []
+    for candidate in candidate_set:
+        if not isinstance(candidate, dict):
+            continue
+        major = str(candidate.get("major", "")).strip().lower()
+        candidates.append(
+            {
+                "candidate_identity": {"major": major},
+                "inventory_membership": bool(major and major in known_majors),
+                "existing_evidence": {
+                    "f_s": float(candidate.get("f_s", 0.0)),
+                    "f_b": float(candidate.get("f_b", 0.0)),
+                    "f_e": float(candidate.get("f_e", 0.0)),
+                    "f_i": float(candidate.get("f_i", 0.0)),
+                    "in_current_category_cue": major in cue_set,
+                },
+                "existing_evidence_provenance": {
+                    "ce_cue_provenance": list(cue_provenance),
+                    "cex_provenance": dict(cex_provenance),
+                },
+                "qualification_evaluation_status": "not_evaluated_predicate_open",
+                "qualification_state": None,
+                "qualification_rationale": None,
+            }
+        )
+
+    return {
+        "qualification_evaluation_status": "not_evaluated_predicate_open",
+        "candidates": candidates,
+    }
+
+
 def _record_bridge(
     tp: TP,
     primitive: str,
@@ -553,6 +609,7 @@ def CE(tp: TP) -> TP:
 
 
 def ISc(tp: TP) -> TP:
+    qualification_observation = _build_qualification_observation(tp)
     ce_output = tp.ce_output if isinstance(tp.ce_output, dict) else {}
     candidate_set = ce_output.get("category_candidate_set", [])
     category_cue = ce_output.get("category_cue", [])
@@ -606,7 +663,13 @@ def ISc(tp: TP) -> TP:
         tp.correction_score = 0.0
         if not hasattr(tp, "trace"):
             tp.trace = []
-        tp.trace.append({"primitive": "ISc", "isc_output": tp.isc_output})
+        tp.trace.append(
+            {
+                "primitive": "ISc",
+                "isc_output": tp.isc_output,
+                "qualification_observation": qualification_observation,
+            }
+        )
         return tp
 
     max_score = max(raw_scores)
@@ -653,7 +716,13 @@ def ISc(tp: TP) -> TP:
     tp.correction_score = top_confidence
     if not hasattr(tp, "trace"):
         tp.trace = []
-    tp.trace.append({"primitive": "ISc", "isc_output": tp.isc_output})
+    tp.trace.append(
+        {
+            "primitive": "ISc",
+            "isc_output": tp.isc_output,
+            "qualification_observation": qualification_observation,
+        }
+    )
     return tp
 
 
