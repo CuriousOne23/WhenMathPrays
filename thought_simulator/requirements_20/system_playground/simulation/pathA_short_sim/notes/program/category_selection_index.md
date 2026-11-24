@@ -66,6 +66,12 @@ Record each finding in the document that owns that information type. Do not dupl
   **Open when:** You need characterization questions, experimental principles, or confidence/closeout criteria.  
   **Relationship:** Successor to prior observation cycle; upstream of implementation and observation recording.
 
+- [category_selection_qualification_v1_checkpoint.md](category_selection_qualification_v1_checkpoint.md)  
+  **What it is:** Qualification v1 research-status checkpoint and restart record.  
+  **Status/authority:** Non-normative research checkpoint (not closeout).  
+  **Open when:** You need the current Qualification v1 stopping point, open items, and exact restart question before further predicate research.  
+  **Relationship:** Downstream of the current qualification mapping/observability sequence; companion to program reference and realization map.
+
 - [category_selection_characterization_readiness_audit.md](category_selection_characterization_readiness_audit.md)  
   **What it is:** Factual Stage 1 capability map of the current realization (probe, control, measurement, and controlled-evolution readiness).  
   **Status/authority:** Non-normative inspection evidence.  
