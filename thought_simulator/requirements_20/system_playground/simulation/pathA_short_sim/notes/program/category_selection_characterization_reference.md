@@ -33,7 +33,7 @@ Characterization in this document does **not**:
 - define threshold/region/hysteresis policy,
 - prewrite scientific conclusions.
 
-Entropy-related characterization in this document is governed by the Path-A process-level entropy principle in [20.705_patha_pathb_flow.md](../../../20.705_patha_pathb_flow.md) and by normative ISc entropy/ΔH requirements in [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md). Characterization instrumentation does not define entropy ownership, entropy normalization, first-cycle ownership, or entropy carrier design.
+Entropy-related characterization in this document is governed by the Path-A process-level entropy principle in [20.705_patha_pathb_flow.md](../../../20.705_patha_pathb_flow.md) and by normative ISc entropy/ΔH requirements in [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md). Characterization instrumentation does not define entropy ownership, entropy normalization, first-cycle ownership, or entropy carrier design. Future characterization may help validate meaningful measurement points, normalization behavior, comparability, and useful completion/sufficiency thresholds, but it must not assume historical `H <= 0.25` is universally correct.
 
 ## 3) Category-selection document family
 

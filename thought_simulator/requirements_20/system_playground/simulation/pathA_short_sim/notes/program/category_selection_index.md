@@ -44,7 +44,7 @@ Route findings by information type and document authority:
 - Category Selection characterization program closeout → [category_selection_characterization_program_closeout.md](category_selection_characterization_program_closeout.md)
 - Program-level measure of progress / thinking leverage criterion → [ts_program_principle.md](ts_program_principle.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
-- Path A entropy ownership/measurement semantics → [20.705_patha_pathb_flow.md](../../../../../20.705_patha_pathb_flow.md) (process-level principle), [20.45_ts_isc_scoring.md](../../../../../20.45_ts_isc_scoring.md) (ISc entropy/ΔH computation), then [category_selection_program_reference.md](category_selection_program_reference.md) (current Category Selection realization status)
+- Path A entropy routing → [20.705_patha_pathb_flow.md](../../../../../20.705_patha_pathb_flow.md) (Path A entropy meaning/base and process-level ownership), [20.45_ts_isc_scoring.md](../../../../../20.45_ts_isc_scoring.md) (ISc entropy/ΔH mathematics), [category_selection_program_reference.md](category_selection_program_reference.md) (Category Selection realization/conformance status), then characterization/observation references in this index for measurement availability and empirical records
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
 

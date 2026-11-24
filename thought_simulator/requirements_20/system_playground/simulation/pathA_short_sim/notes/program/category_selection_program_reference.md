@@ -212,7 +212,7 @@ Reviewed discrepancy:
 6. This document does not resolve the gap.  
 7. Resolution requires a separately authorized conformance task.
 
-Path-A entropy ownership remains process-level (see [20.705_patha_pathb_flow.md](../../../20.705_patha_pathb_flow.md), §2.1). The fact that ISc performs a defined entropy/ΔH computation does not assign architectural ownership of entropy to ISc or Category Selection. Any future correction of this conformance gap must remain consistent with that Path-A principle and with the normative ISc entropy requirements in [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md). This reference does not define the missing entropy carrier, comparison-state contract, normalization convention, or first-cycle ownership.
+Path-A entropy ownership remains process-level (see [20.705_patha_pathb_flow.md](../../../20.705_patha_pathb_flow.md), §2.1). The fact that ISc performs a defined entropy/ΔH computation does not assign architectural ownership of entropy to ISc or Category Selection. In that governing Path-A interpretation, `H` measures unresolved information in the evolving utterance/TP state, and `1-H` is the historical complementary resolution interpretation. Any future correction of this conformance gap must remain consistent with that Path-A principle and with the normative ISc entropy requirements in [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md). This reference does not define the missing entropy carrier, comparison-state contract, normalization convention, or first-cycle ownership; and historical `H <= 0.25` simulation behavior is not a frozen Category Selection constant here.
 
 ## 12) Realization vs empirical characterization boundary
 
