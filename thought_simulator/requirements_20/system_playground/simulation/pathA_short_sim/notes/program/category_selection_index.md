@@ -196,17 +196,17 @@ Record each finding in the document that owns that information type. Do not dupl
   **Open when:** Question is about category-result scoring behavior/rules.  
   **Relationship:** Scoring authority used by category-selection realization.
 
-- [20.105_tp_requirements.md](../../../20.105_tp_requirements.md)  
+- [20.105_tp_requirements.md](../../../../../20.105_tp_requirements.md)  
   **Authority:** Normative TP behavior/ownership.  
   **Open when:** Question is about TP envelope behavior, ownership, or commit boundaries.  
   **Relationship:** Defines TP behavioral constraints category-selection must follow.
 
-- [20.116.010_tp_envelope_index.md](../../../20.116.010_tp_envelope_index.md)  
+- [20.116.010_tp_envelope_index.md](../../../../../20.116.010_tp_envelope_index.md)  
   **Authority:** Normative canonical TP path/index + root writer ownership.  
   **Open when:** Question is about canonical path spelling or root-writer authority.  
   **Relationship:** Path/index authority complementary to 20.105 behavior authority.
 
-- [20.40.050_idob_prim.md](../../../20.40.050_idob_prim.md)  
+- [20.40.050_idob_prim.md](../../../../../20.40.050_idob_prim.md)  
   **Authority:** Normative IdOB behavior.  
   **Open when:** Question is about IdOB-side behavior and constraints.  
   **Relationship:** IdOB behavior authority used by downstream consumption boundaries.
