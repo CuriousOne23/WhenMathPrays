@@ -80,9 +80,15 @@ New S2M documents should be registered here. Category Selection characterization
 
 - [s2m_idob_traversal_correspondence_experiment_plan.md](s2m_idob_traversal_correspondence_experiment_plan.md)  
   **What it is:** Follow-on bounded plan for testing representability of correspondence/provenance/dependency surfaces only.  
-  **Status/authority:** Draft/frozen plan for next-stage representability checks (not executed in this pass).  
+  **Status/authority:** Frozen execution plan for correspondence representability checks.  
   **Open when:** You need planned correspondence representability cases and execution gating conditions.
-  **Relationship:** Downstream of the correspondence contract; upstream of any future correspondence observation record.
+  **Relationship:** Downstream of the correspondence contract; upstream of correspondence observation records.
+
+- [s2m_idob_traversal_correspondence_observation.md](s2m_idob_traversal_correspondence_observation.md)  
+  **What it is:** Executed facts for bounded correspondence/lineage representability, including Unknown/Unresolved/Unavailable outcomes and replay status.  
+  **Status/authority:** Empirical observation record (non-normative).  
+  **Open when:** You need case-level correspondence/dependency evidence and bounded interpretation for the correspondence joint.  
+  **Relationship:** Downstream of the correspondence experiment plan; does not define traversal architecture.
 
 ### Related
 
@@ -103,7 +109,8 @@ Current traversal progression:
 Next bounded traversal joint (post-boundary characterization):
 
 `s2m_idob_traversal_correspondence_contract.md`  
-→ `s2m_idob_traversal_correspondence_experiment_plan.md`
+→ `s2m_idob_traversal_correspondence_experiment_plan.md`  
+→ `s2m_idob_traversal_correspondence_observation.md`
 
 Optional predecessor conceptual context (not a downstream traversal stage):
 
