@@ -26,29 +26,31 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Previous S2M IdOB traversal characterization cycle: **CLOSED** (present-realization boundary).
 - This track: **NEW**.
 - Research skeleton: **FROZEN**.
-- Active gate/phase: **Gate A / Phase 3**.
 - Gate A / Phase 3 executed: **YES**.
 - Gate A classification: **CONTINUE**.
-- Gate A pass condition: **SATISFIED in bounded fixture-relative/oracle-relative characterization**.
+- Gate B design: **FROZEN / READY FOR LATER EXECUTION**.
+- Gate B execution: **NOT PERFORMED**.
+- Gate B observations: **NONE YET**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
 - Final YAML/IdOB representation design authorized: **NO**.
 - Implementation work authorized: **NO**.
+- Gate C: **NOT AUTHORIZED**.
 
 ## Gate navigation (summary only)
 
-- **Gate A:** organizational leverage under oracle/surrogate localization information.
-- **Gate B:** one provisional real HOW, opened only after explicit Gate A pass.
-- **Gate C:** structural-health / representation qualification of what Gate B actually produces.
+- **Gate A:** organizational leverage under oracle/surrogate localization information. Status: CONTINUE (bounded fixture-relative / oracle-relative).
+- **Gate B:** one provisional non-oracle localization HOW. Design frozen; execution not performed.
+- **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 
 ## Current next step
 
-Review the Gate A / Phase 3 observation and then, if approved by human research review, enter conversational development of Gate B (provisional real HOW).  
-Do not proceed automatically into Gate B execution.
+Later bounded execution of the frozen Gate B characterization against the design recorded in the research plan.  
+Do not proceed automatically into Gate B execution or Gate C.
 
 ## Not yet authorized
 
-- Gate B research/design execution;
+- Gate B execution;
 - Gate C qualification work;
 - production selector work;
 - Category integration work;
@@ -61,10 +63,9 @@ Do not proceed automatically into Gate B execution.
   **Role:** navigation / continuity / track status.
 
 - [idob_relational_space_localization_research_plan.md](idob_relational_space_localization_research_plan.md)  
-  **Role:** frozen research proposition, three-gate skeleton, Phase 3 fixture specification, anti-treadmill rules, and present-realization closeout boundary.
+  **Role:** frozen research proposition, three-gate skeleton, Phase 3 fixture specification, Gate B provisional HOW design, anti-treadmill rules, and present-realization closeout boundary.
 
 - [idob_relational_space_localization_observation.md](idob_relational_space_localization_observation.md)  
   **Role:** executed Gate A / Phase 3 characterization evidence, measured observations, and Gate A mechanical classification.
 
 Future observation/realization/characterization/closeout documents should be registered here only when they are actually created.
-
