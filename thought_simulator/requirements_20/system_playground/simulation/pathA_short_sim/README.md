@@ -12,7 +12,7 @@ Read these in order. Do not start from the reference lists further down.
 4. [notes/program/s2m_structure/result.md](notes/program/s2m_structure/result.md) and [notes/program/known_words.md](notes/program/known_words.md) — the connection record, the open holes, and words that are not invented.
 5. [notes/program/packet_sync/README.md](notes/program/packet_sync/README.md) — teaching names against `tp.idob`. Present fields and absent fields. Not \(M\).
 6. [notes/program/coverage_map.md](notes/program/coverage_map.md) — conversational coverage roadmap. History is on the map and out of the sim.
-7. [notes/program/s2m_relational_proposal.md](notes/program/s2m_relational_proposal.md) — emerging S2M relational mapping proposal (seed, categories, plasticity, audit). Independent of current requirements definitions.
+7. [notes/program/s2m_relational_proposal.md](notes/program/s2m_relational_proposal.md) — emerging S2M relational mapping proposal (seed, categories, plasticity, audit). Independent of current requirements definitions. Research proposal (non-normative); not the current goal. Its working formulation of meaning is a research hypothesis, refined by the research-only [notes/program/s2m_idob_traversal_proposal.md](notes/program/s2m_idob_traversal_proposal.md).
 8. [notes/program/category_selection_proposal.md](notes/program/category_selection_proposal.md) — next realization proposal (sentence-internal or prior-CEx category choice).
 
 Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums that floor and writes the teaching packet into `tp.idob`. `idob_packet` is that same sum (teaching name). Crossing fields (six structure IDs, rank, \(M\), CIE, `meaning_delta_h`) are not present on the packet written by IdOB; they are absent, not zero. A constructable shell view that copies the sum and sets those fields explicitly to null is available via `idob/crossing.py` (`crossing_from_packet`). It is not what the main simulator writes into `tp.idob`. The narrow S2M record is connections and holes, not \(M\). Both are accounted on the status page. A readable claim and a connection record are written from that packet. They do not compute \(M\). RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
@@ -21,13 +21,13 @@ Force ops such as polar, command, request, and exclamative are open holes. They 
 
 ## Document indexes under notes/program
 
-Use these navigation indexes to find the right family. They do not duplicate content; they route questions.
+Use these navigation indexes to find the right family. They do not duplicate content; they route questions. They do not set the goal. The current goal, per [notes/program/status.md](notes/program/status.md), is "Controlled category selection (sentence-internal cue or prior-CEx cue) so a non-default category can be chosen without mutating the floor."
 
-- [notes/program/category_selection_index.md](notes/program/category_selection_index.md) — Category Selection document family (characterization, qualification, palette, observations, program closeout). Cue-source and empirical records for category evidence.
-- [notes/program/s2m_index.md](notes/program/s2m_index.md) — S2M document family (relational proposal and IdOB traversal proposal). Owns the mechanical chain from structure through legal candidates, correspondence, and directional discrimination.
-- [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — Scalability document family (expansion principles, user guide, decision states).
+- [notes/program/category_selection_index.md](notes/program/category_selection_index.md) — Category Selection document family (characterization, qualification, palette, observations, program closeout). Cue-source and empirical records for category evidence. This is the family for the current goal (category selection; see status.md).
+- [notes/program/s2m_index.md](notes/program/s2m_index.md) — S2M document family (relational proposal and IdOB traversal proposal). Owns the mechanical chain from structure through legal candidates, correspondence, and directional discrimination. These are research proposals (non-normative). S2M IdOB traversal is a research line, not the current goal; the narrow S2M seed is historical / accomplished.
+- [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — Scalability document family (expansion principles, user guide, decision states). Sibling program; not the current goal.
 
-For IdOB traversal questions open the S2M index. For Category Selection characterization questions open the Category Selection index.
+For IdOB traversal (research) questions open the S2M index. For Category Selection characterization questions open the Category Selection index.
 
 ## Expanding Path A
 
