@@ -5,6 +5,12 @@
 **Door:** This page is linked from the short-sim README so a Frontier AI or new session can find it.  
 **Implementation contract:** s2m_program_reference.md — concrete data shapes, attachment point, non-mutation rules, and first-seed acceptance criteria. Read both before coding.
 
+## Working formulation of meaning (research hypothesis)
+
+Meaning is the contextually resolved relational structure that the current utterance, its qualifiers, available relational knowledge, applicable categories, and context make relevant.
+
+This working formulation treats meaning as a potentially structured relational configuration rather than a single object, category, relation, or reported response. The relational structure that is available or resolved may be deeper than the bounded projection needed for the current conversational goal. The composition mechanism, meaning-projection contract, identity mechanism, and entropy relationship remain open research questions. This is a research hypothesis only; it does not alter the five-stage S2M model, Framework v1, Qualification v1, or the current bounded realization.
+
 ## Organizing principle
 
 When no contextual or category-selection cue is active, S2M shall preserve the utterance's minimal structurally licensed semantic relation as its default meaning. Candidate interpretations remain available but unselected.
