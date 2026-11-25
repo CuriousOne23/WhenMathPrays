@@ -4,6 +4,8 @@
 **Status:** Frozen research/characterization skeleton (non-normative).  
 **Track:** IdOB Relational-Space Organization for Tractable Path A Selection.
 
+**Execution status note:** This document preserves the frozen pre-execution research and characterization authority. Gate A / Phase 3 has subsequently been executed. The bounded fixture-relative and oracle-relative Gate A classification is CONTINUE. See [idob_relational_space_localization_observation.md](idob_relational_space_localization_observation.md) for characterization evidence and [idob_relational_space_localization_index.md](idob_relational_space_localization_index.md) for current track status and navigation.
+
 ## 1) Purpose
 
 This plan defines a bounded research track for evaluating whether a **replaceable organizational/index layer** over stable IdOB relational identities can help Path A identify a tractable active relational surface.
@@ -558,4 +560,3 @@ This track only defines the next research skeleton and execution gate discipline
 
 Execute/review the frozen **Gate A / Phase 3** fixture against Gate A criteria.  
 Do not proceed automatically beyond Gate A.
-
