@@ -27,8 +27,9 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - This track: **NEW**.
 - Research skeleton: **FROZEN**.
 - Active gate/phase: **Gate A / Phase 3**.
-- Gate A / Phase 3 executed: **NO**.
-- Gate A passed: **NO**.
+- Gate A / Phase 3 executed: **YES**.
+- Gate A classification: **CONTINUE**.
+- Gate A pass condition: **SATISFIED in bounded fixture-relative/oracle-relative characterization**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
 - Final YAML/IdOB representation design authorized: **NO**.
@@ -42,8 +43,8 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 
 ## Current next step
 
-Execute/review the frozen Phase 3 fixture against Gate A.  
-Do not proceed automatically beyond Gate A.
+Review the Gate A / Phase 3 observation and then, if approved by human research review, enter conversational development of Gate B (provisional real HOW).  
+Do not proceed automatically into Gate B execution.
 
 ## Not yet authorized
 
@@ -61,6 +62,9 @@ Do not proceed automatically beyond Gate A.
 
 - [idob_relational_space_localization_research_plan.md](idob_relational_space_localization_research_plan.md)  
   **Role:** frozen research proposition, three-gate skeleton, Phase 3 fixture specification, anti-treadmill rules, and present-realization closeout boundary.
+
+- [idob_relational_space_localization_observation.md](idob_relational_space_localization_observation.md)  
+  **Role:** executed Gate A / Phase 3 characterization evidence, measured observations, and Gate A mechanical classification.
 
 Future observation/realization/characterization/closeout documents should be registered here only when they are actually created.
 

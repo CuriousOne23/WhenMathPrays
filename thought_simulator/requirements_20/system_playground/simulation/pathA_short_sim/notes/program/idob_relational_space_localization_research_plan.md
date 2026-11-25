@@ -99,6 +99,23 @@ Group construction MUST:
 - contain no semantic, Category, or meaning-bearing labels;
 - never redefine relation identity.
 
+Deterministic base-group construction (frozen executable rule):
+
+- Use zero-based relation index `j`.
+- Assign:
+  - `base_group(r_j) = G_((j mod 8) + 1)`
+- Therefore:
+  - `r_0 -> G_1`, `r_1 -> G_2`, ..., `r_7 -> G_8`, `r_8 -> G_1`, then cyclic repeat.
+
+For frozen cardinalities this yields exactly balanced base group sizes:
+
+- `n = 32`  -> 4 relations/group
+- `n = 64`  -> 8 relations/group
+- `n = 128` -> 16 relations/group
+- `n = 256` -> 32 relations/group
+
+Do not replace this with randomized allocation.
+
 Use activated-group counts:
 
 k in {1, 2, 3, 4}
@@ -121,17 +138,16 @@ where o is the target fraction of relations receiving at least one additional or
 For each overlap condition:
 
 1. begin with the same base assignment;
-2. select identities using a frozen deterministic sequence or fixed seed;
-3. assign each selected identity to one additional group using a recorded deterministic rule;
-4. do not consult the necessary set;
-5. preserve relation identity and base membership;
-6. record all added memberships.
-
-If rounding is required:
-
-N_overlap = round(o * n)
+2. compute `N_overlap = round(o * n)`;
+3. select the first `N_overlap` relation identities in frozen deterministic relation-ID order;
+4. for each selected relation whose base group is `G_i`, preserve base membership and add exactly one additional membership in the next group cyclically (`G_1 -> G_2`, ..., `G_7 -> G_8`, `G_8 -> G_1`);
+5. do not consult the necessary set;
+6. preserve relation identity and base membership;
+7. record all added memberships.
 
 Report realized overlap count and fraction.
+
+Do not replace this procedure with random sampling.
 
 #### 4. Necessary-set designation
 
@@ -147,9 +163,23 @@ The necessary-set procedure:
 
 - may inspect R_total;
 - MUST NOT inspect group membership;
-- must use a frozen deterministic rule or fixed seed;
+- must use the frozen deterministic index rule below;
 - must record selected identities before activation;
 - must not change after candidate or baseline results are observed.
+
+Frozen deterministic necessary-set construction:
+
+- Let `q(n) = max(4, round(0.125 * n))`.
+- For `j = 0, 1, ..., q(n)-1`, compute:
+  - `p_j = (5*j + 3) mod n`
+- Define:
+  - `R_necessary = { r_(p_j) }`
+
+This procedure may use only `n` and frozen relation ordering, and must never inspect organizational membership.
+
+For all frozen `n` values, resulting required indices are unique.
+
+Do not replace this procedure with a random sample.
 
 R_necessary represents fixture-designated downstream need only.
 
@@ -352,13 +382,43 @@ Do not require crossing the dominance boundary.
 
 ##### C. False exclusion
 
-Create explicit derivative conditions in which a predeclared number of necessary identities are made unreachable from the candidate activation.
+Create explicit derivative conditions in which a predeclared number of necessary identities are made unreachable from the already-established candidate activation.
 
 Use:
 
 f in {0, 1, 2, floor(|R_necessary| / 2)}
 
-Preserve the unchanged base fixture and record the derivative transformation.
+Frozen deterministic false-exclusion derivative (per base fixture condition):
+
+1. First compute the frozen oracle candidate activation `A_candidate` and `R_active(A_candidate)`.
+2. Define:
+   - `C = R_necessary intersection R_active(A_candidate)`
+   - `U = R_total \ R_active(A_candidate)`
+3. For requested `f`, select:
+   - `C_f`: first `f` identities from `C` in frozen deterministic relation-ID order;
+   - `U_f`: first `f` eligible identities from `U` in frozen deterministic relation-ID order that are not already members of `R_necessary`.
+4. Construct derivative necessary set:
+   - `R_necessary^(f) = (R_necessary \ C_f) union U_f`
+
+Preserve unchanged:
+
+- `R_total`;
+- relation identities;
+- organizational groups;
+- memberships;
+- `n`;
+- `o`;
+- `k`;
+- the original base `A_candidate` being stressed.
+
+Critical:
+
+- Do NOT rerun the oracle to choose a different candidate activation before measuring the false-exclusion derivative.
+- If either `|C| < f` or fewer than `f` eligible replacement relations exist in `U`, classify the requested derivative `NOT_CONSTRUCTIBLE`.
+- Do not improvise or modify the fixture to force construction.
+- `NOT_CONSTRUCTIBLE` is not automatically a Gate A failure.
+
+Preserve the unchanged base fixture and record each derivative transformation.
 
 Observe:
 
