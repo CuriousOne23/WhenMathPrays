@@ -184,7 +184,7 @@ Classification levels:
 | explicit correspondence record object (support/opposition/no-relation/unresolved per evidence-candidate pair) | 3 | Requires read-only derived observability emission if generated from existing facts only. |
 | aggregate candidate support status (candidate-level) | 1 | Present on existing cue/candidate/selection surfaces. |
 | evidence-specific support chain reconstruction | 2 / 4 | Derivable only where evidence->cue attachment and cue/property->candidate correspondence are explicitly represented; otherwise unavailable. |
-| evidence->cue/property attachment per evidence observation | 2 / 4 | Derivable in narrow single-source/single-observation conditions; generally unavailable without explicit represented attachment. |
+| evidence->cue/property attachment per evidence observation | 2 / 4 | Uniquely reconstructible in narrow single-source/single-observation conditions, but reconstruction is not an explicit represented attachment; generally unavailable without an explicit attachment fact.|
 | cue/property->candidate correspondence basis | 1 / 2 | Aggregate candidate-level basis is available/derivable; evidence-specific basis depends on evidence attachment. |
 | unresolved correspondence state surface | 2 | Derivable when candidate/evidence prerequisites are missing or evaluation not applicable. |
 | direct duplicate linkage (`duplicate_of_evidence_id` for repeated identical input observation) | 2 | Derivable from repeated identical input observation in the same case configuration. |
