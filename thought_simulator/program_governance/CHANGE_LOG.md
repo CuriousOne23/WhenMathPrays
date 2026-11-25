@@ -215,3 +215,5 @@
 2026-11-25 | Path A Account drift | main @ 7465fcf; door/status.md drift report filed | write=no
 2026-11-25 | ShortSim Trajectory | two notes filed (ADVANCES modestly; NEUTRAL on #211) | write=no
 2026-11-25 | ShortSim Status goal-distance | 12:50 PM Phoenix; category-selection report filed | write=no
+2026-11-25 | ShortSim Docs | 8 AM run; range 94da76c..7465fcf; E1–E2 on branch shortsim-docs/20261125-7465fcf (PR not open) | write=no
+2026-11-25 | ShortSim Trajectory | DRIFTS mildly note filed (8347eeb) | write=no
