@@ -74,3 +74,34 @@ Current observability is insufficient to reconstruct proposal-level `E_t/L_t/D_t
 - no traversal-candidate normalization and entropy fields are produced.
 
 Any future instrumentation must remain behaviorally inert and replay-safe and must not modify candidate construction, scoring semantics, Category Selection policy, IdOB commitments, or OuBA behavior.
+
+## Door->candidate structural seam assessment (bounded closeout)
+
+Reference plan and observation:
+
+- [s2m_idob_door_candidate_structural_experiment_plan.md](s2m_idob_door_candidate_structural_experiment_plan.md)
+- [s2m_idob_door_candidate_structural_observation.md](s2m_idob_door_candidate_structural_observation.md)
+
+### Pre-experiment structural assessment
+
+- Current candidate producer remains surrogate endpoint association expansion ([propose](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/propose.py:21)).
+- Proposal door legality (`structural_key -> meaning_group_candidates`) is not realized; seed `crossing_fields.structural_key` remains null on this path ([apply_seed](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/idob/experimental_seed.py:34)).
+- Candidate consumer seam is proposal-shaped candidate records through [apply](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/loop.py:25), [legitimate](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/legitimate.py:19), [write_meaning_relations](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/write.py:4), and [build_record](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/record.py:58).
+
+### Provisional classification (before C1-C6)
+
+| Question | Provisional class |
+|---|---|
+| Is candidate producer substitution testable at one seam without semantic-policy edits? | **B** (derivable experimentally) |
+| Is full door legality implementable from current realization? | **D** (unresolved architecture) |
+| Is structural_key currently realized on this path? | **A** for observability of null state; **D** for final key contract |
+
+### Final structural verdict after C1-C6
+
+`SAFE_TO_DEFER`
+
+Bounded closeout statement:
+
+1. The present seam supports producer substitution characterization with unchanged downstream consumers when candidate record shape is preserved.
+2. No downstream module required modification for C1-C6 test-only substitutions.
+3. Real door legality and structural_key contract remain unresolved architecture and are intentionally deferred.

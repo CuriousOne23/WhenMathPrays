@@ -70,6 +70,12 @@ New S2M documents should be registered here. Category Selection characterization
   **Open when:** You need the representation contract and implementation-decision classification for correspondence/dependency surfaces.
   **Relationship:** Follows boundary characterization results; predecessor to correspondence representability planning.
 
+- [s2m_idob_door_candidate_structural_experiment_plan.md](s2m_idob_door_candidate_structural_experiment_plan.md)  
+  **What it is:** Frozen bounded plan to characterize whether current downstream candidate consumers remain stable under test-only producer substitution (`C1`-`C6`) before any door implementation choice.  
+  **Status/authority:** Execution-control plan for structural seam characterization.  
+  **Open when:** You need the authorized substitution matrix and structural seam pass/fail criteria.
+  **Relationship:** Bounded structural-joint closeout between traversal program reference and future door-design research.
+
 ### Observation / experiment record
 
 - [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md)  
@@ -89,6 +95,12 @@ New S2M documents should be registered here. Category Selection characterization
   **Status/authority:** Empirical observation record (non-normative).  
   **Open when:** You need case-level correspondence/dependency evidence and bounded interpretation for the correspondence joint.  
   **Relationship:** Downstream of the correspondence experiment plan; does not define traversal architecture.
+
+- [s2m_idob_door_candidate_structural_observation.md](s2m_idob_door_candidate_structural_observation.md)  
+  **What it is:** Executed structural seam characterization facts for test-only producer substitution (`C1`-`C6`) with structural verdict (`SAFE_TO_DEFER` / `STOP_AND_REPAIR` / `INSUFFICIENT_EVIDENCE`).  
+  **Status/authority:** Empirical observation record (non-normative).  
+  **Open when:** You need bounded evidence about producer-origin coupling, candidate-interface stability, and structural_key preservation state.  
+  **Relationship:** Downstream of the door candidate structural experiment plan; does not define door architecture.
 
 ### Related
 
@@ -111,6 +123,12 @@ Next bounded traversal joint (post-boundary characterization):
 `s2m_idob_traversal_correspondence_contract.md`  
 → `s2m_idob_traversal_correspondence_experiment_plan.md`  
 → `s2m_idob_traversal_correspondence_observation.md`
+
+Structural seam closeout (door->candidate pre-architecture check):
+
+`s2m_idob_traversal_program_reference.md`  
+→ `s2m_idob_door_candidate_structural_experiment_plan.md`  
+→ `s2m_idob_door_candidate_structural_observation.md`
 
 Optional predecessor conceptual context (not a downstream traversal stage):
 
