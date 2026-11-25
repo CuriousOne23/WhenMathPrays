@@ -560,3 +560,185 @@ This track only defines the next research skeleton and execution gate discipline
 
 Execute/review the frozen **Gate A / Phase 3** fixture against Gate A criteria.  
 Do not proceed automatically beyond Gate A.
+
+## Gate B — Provisional Non-Oracle Localization HOW and Frozen Characterization Design
+
+### PURPOSE
+
+Gate B tests whether one provisional non-oracle runtime selector can extract useful localization leverage from the organizational layer whose oracle-relative exploitability was established under Gate A.
+
+Gate B does not establish that production Path A can generate the required localization signal.
+
+### ORACLE INFORMATION BOUNDARY
+
+The following Gate A oracle information remains unavailable at Gate B runtime:
+
+- R_necessary;
+- direct necessary-relation identity;
+- group memberships;
+- coverage values;
+- Gate A oracle candidate;
+- oracle group ranking.
+
+### PROVISIONAL HOW
+
+\( X_t \rightarrow S \rightarrow A_t \rightarrow R_{\text{active},t} \)
+
+For each \( G_i \):
+
+\( \text{score}(G_i) = (X_t + i) \bmod 8 \)
+
+Then:
+
+- rank groups by descending score;
+- break remaining ties by ascending group ID;
+- activate the top-k groups;
+- form \( R_{\text{active},t} \) using the same deterministic deduplicated union used by Gate A.
+
+No secondary filtering.  
+No Category.  
+No semantic labels.  
+
+This is one provisional engineering HOW, not established TS architecture.
+
+### FIXTURE-DERIVED BASE SIGNAL
+
+After organizational groups and \( R_{\text{necessary}} \) exist, fixture construction may calculate:
+
+- single-group coverage for every \( G_i \);
+- \( i^* \) = group with highest single-group coverage;
+- ties resolved by lowest group ID;
+- \( X_{\text{base}} = (8 - i^*) \bmod 8 \).
+
+This construction uses fixture-only characterization knowledge and is NOT available to the runtime selector.  
+\( X_{\text{base}} \) does not establish that production Path A can generate an equivalent signal.
+
+### SIGNAL QUALITY SCHEDULE
+
+Signal quality is an INPUT property of the supplied fixture signal. Coverage and reduction remain OUTPUT observations.
+
+- \( q_0 \) (highest-quality characterized fixture signal): \( X_t = X_{\text{base}} \)
+- \( q_1 \): \( X_t = (X_{\text{base}} + 1) \bmod 8 \)
+- \( q_2 \): \( X_t = (X_{\text{base}} + 2) \bmod 8 \)
+- \( q_3 \): \( X_t = (X_{\text{base}} + 3) \bmod 8 \)
+- \( q_4 \): \( X_t = (X_{\text{base}} + 4) \bmod 8 \)
+
+\( q_0 \) is the highest-quality characterized fixture signal. It is not an established production Path A signal.
+
+### RUNTIME INFORMATION CONTRACT
+
+Runtime selector \( S \) may read only:
+
+- \( X_t \);
+- eight group IDs;
+- requested \( k \).
+
+Runtime selector \( S \) may NOT read:
+
+- \( R_{\text{necessary}} \);
+- identities designated necessary;
+- membership lists;
+- coverage;
+- oracle candidate;
+- oracle ranking.
+
+### FIXTURE-CONSTRUCTION INFORMATION CONTRACT
+
+Fixture construction may inspect completed groups and \( R_{\text{necessary}} \) only to derive and record \( X_{\text{base}} \) and its predetermined q-level perturbations.
+
+That knowledge is not passed to runtime \( S \).
+
+Fixture-construction knowledge and runtime-selector knowledge are explicitly separated.
+
+### INHERITED GATE A FIXTURE
+
+The following Gate A mechanisms are reused:
+
+- \( R_{\text{total}} \) cardinality family;
+- eight organizational groups;
+- base grouping;
+- overlap schedule;
+- necessary-set construction;
+- \( k \) activation family;
+- deterministic active-surface construction;
+- exhaustive matched size-k baseline;
+- reduction;
+- coverage;
+- unnecessary inclusion;
+- trace/replay procedures;
+- applicable false-exclusion characterization.
+
+Gate A authority is not rewritten.
+
+### BASELINE
+
+For each \( k \), exhaustively enumerate all size-k activations exactly as in Gate A.
+
+Exclude the Gate B candidate from comparison against itself.
+
+Use the same frozen dominance predicate:
+
+reduction(C) >= reduction(B)  
+AND  
+coverage(C) >= coverage(B)
+
+with at least one strict inequality.
+
+The Gate A oracle is not the Gate B baseline. It may be retained only as a clearly labeled upper-bound reference if useful.
+
+### PRESSURE SCHEDULES
+
+Gate B must characterize:
+
+- \( q_0 \) through \( q_4 \) signal quality;
+- inherited overlap conditions;
+- inherited \( k \) / activation breadth conditions;
+- false-exclusion derivatives where mechanically applicable.
+
+Force each pressure, not an expected result. Non-degradation is valid evidence.
+
+### TRACE AND REPLAY
+
+Require deterministic ordered trace and exact replay from identical frozen inputs.
+
+Record \( X_t \) and q-level in Gate B characterization traces.
+
+### OUTCOME PREDICATES
+
+- **CONTINUE**: At least one nontrivial \( q_0 \) condition satisfies the dominance predicate against every non-identical matched size-k activation, and quality, overlap, and activation-breadth pressures are mechanically distinguishable.
+- **PARTIAL**: Dominance, or strict improvement on at least one axis with no deterioration on the other, appears under \( q_0 \) but fails under one or more predeclared lower-quality levels, while the pressures remain mechanically distinguishable.
+- **NEGATIVE**: No tested \( q_0 \) condition satisfies the frozen dominance predicate.
+- **INSUFFICIENT_EVIDENCE**: Runtime \( X_t \) independence from \( R_{\text{necessary}} \) is broken, quality levels are incompletely applied, exhaustive matched baseline enumeration is incomplete, or required traces/replay cannot be verified.
+
+Do not invent another outcome after execution.
+
+### STOPPING RULE
+
+Once all predeclared Gate B fixture conditions, signal-quality levels, matched baselines, pressure schedules, replay checks, traces, and outcome comparisons are complete, Gate B stops. Observed limitations do not authorize a second selector HOW within this research cycle.
+
+### NON-CLAIMS
+
+Gate B design and any later characterization do not automatically establish:
+
+- a production Path A selector;
+- that Path A can generate \( X_{\text{base}} \);
+- that Path A possesses equivalent signal information;
+- meaning;
+- semantic regions;
+- contextual support;
+- evidence-specific correspondence;
+- traversal legality;
+- final interpretation;
+- Category dependence;
+- final IdOB/YAML organization;
+- globally valid signal thresholds;
+- globally valid localization.
+
+### CURRENT STATUS
+
+- Gate B design: FROZEN / READY FOR LATER EXECUTION
+- Gate B execution: NOT PERFORMED
+- Gate B observations: NONE YET
+- Gate C: NOT AUTHORIZED
+- Production selector implementation: NOT AUTHORIZED
+- CATEGORY/YAML integration: NOT AUTHORIZED
