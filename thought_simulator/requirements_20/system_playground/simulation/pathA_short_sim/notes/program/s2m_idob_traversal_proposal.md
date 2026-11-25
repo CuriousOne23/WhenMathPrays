@@ -17,7 +17,7 @@ S_t → door → C_t → E_t → L_t → (D_t, Q_t) → B_t → P_t → H_t → 
 
 Each stage has a narrowly bounded responsibility:
 
-- **Door**: Structural legality. The existing `structural_key → meaning_group_candidates` map returns the finite set of legal group_ids for the current stabilized structure. Candidate absence from the map is the mechanical expression of structural incompatibility.
+- **Door**: Structural legality. The proposed `structural_key → meaning_group_candidates` map returns the finite set of legal group_ids for the current stabilized structure. Candidate absence from the map is the mechanical expression of structural incompatibility.
 - **C_t**: Finite legal candidate set (meaning-group identifiers returned by the door). Working hypothesis: A_t = C_t. A post-door hard exclusion operator is a reopen condition only; none is presently justified by demonstrated cases.
 - **E_t**: Explicit evidence-to-candidate correspondence results. An explicit declared relation ρ must establish that a property of the evidence bears on a property of the candidate. Corr(e, c, ρ) → {+, -, 0}. Absence of an established relation returns 0 (not opposition). Mismatch is not opposition; an explicit opposing relation is required for -.
 - **L_t**: Provenance- and dependency-preserving organization of correspondence observations into evidence families. Distinguishes Independent / Dependent / Unknown. Preserves internal conflict and cross-family disagreement. Unknown dependency does not earn independent reinforcement and remains visible.
