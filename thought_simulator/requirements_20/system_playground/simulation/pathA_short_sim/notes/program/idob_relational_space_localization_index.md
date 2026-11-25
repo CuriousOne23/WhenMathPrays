@@ -28,7 +28,8 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Research skeleton: **FROZEN**.
 - Gate A / Phase 3 executed: **YES**.
 - Gate A classification: **CONTINUE**.
-- Gate B design: **FROZEN / READY FOR LATER EXECUTION**.
+- Gate B research design: **FROZEN**.
+- Gate B mechanical design: **FROZEN / READY FOR LATER IMPLEMENTATION AND EXECUTION**.
 - Gate B execution: **NOT PERFORMED**.
 - Gate B observations: **NONE YET**.
 - Production selector research authorized: **NO**.
@@ -40,12 +41,12 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 ## Gate navigation (summary only)
 
 - **Gate A:** organizational leverage under oracle/surrogate localization information. Status: CONTINUE (bounded fixture-relative / oracle-relative).
-- **Gate B:** one provisional non-oracle localization HOW. Design frozen; execution not performed.
+- **Gate B:** one provisional non-oracle localization HOW. Research design frozen; mechanical design frozen and ready for later implementation and execution; execution not performed.
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 
 ## Current next step
 
-Later bounded execution of the frozen Gate B characterization against the design recorded in the research plan.  
+Later bounded implementation and execution of the frozen Gate B characterization against the mechanical design.  
 Do not proceed automatically into Gate B execution or Gate C.
 
 ## Not yet authorized
@@ -64,6 +65,9 @@ Do not proceed automatically into Gate B execution or Gate C.
 
 - [idob_relational_space_localization_research_plan.md](idob_relational_space_localization_research_plan.md)  
   **Role:** frozen research proposition, three-gate skeleton, Phase 3 fixture specification, Gate B provisional HOW design, anti-treadmill rules, and present-realization closeout boundary.
+
+- [idob_relational_space_localization_gate_b_design.md](idob_relational_space_localization_gate_b_design.md)  
+  **Role:** Mechanical characterization design for the frozen Gate B provisional non-oracle localization HOW; implementation/execution not yet performed.
 
 - [idob_relational_space_localization_observation.md](idob_relational_space_localization_observation.md)  
   **Role:** executed Gate A / Phase 3 characterization evidence, measured observations, and Gate A mechanical classification.
