@@ -212,3 +212,4 @@
 2026-11-24 | Path A Account drift | main @ 9ef6397; door/status.md drift report filed | write=no
 2026-11-24 | ShortSim Docs | 8 AM run; range 27bb926..e4f4740; S1–S5 on branch shortsim-docs/20261124-e4f4740 (PR not open) | write=no
 2026-11-24 | ShortSim Status goal-distance | 8:52 AM Phoenix; category-selection report filed | write=no
+2026-11-25 | Path A Account drift | main @ 7465fcf; door/status.md drift report filed | write=no
