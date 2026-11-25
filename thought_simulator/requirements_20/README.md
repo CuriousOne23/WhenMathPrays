@@ -168,7 +168,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.725_governance_flows.md](20.725_governance_flows.md)
 - [20.730_ts_concept_flows.md](20.730_ts_concept_flows.md)
 - [20.735_ts_flw_glss_cvrg.md](20.735_ts_flw_glss_cvrg.md)
-
+- [20.740_ts_realization_qualification_guidance.md](20.740_ts_realization_qualification_guidance.md) — TS realization qualification guidance (non-normative) for concept-to-realization qualification, structural-health assessment, bounded utility, validity-boundary characterization, and deferred-work pickup
 
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)

@@ -102,6 +102,12 @@ New S2M documents should be registered here. Category Selection characterization
   **Open when:** You need bounded evidence about producer-origin coupling, candidate-interface stability, and structural_key preservation state.  
   **Relationship:** Downstream of the door candidate structural experiment plan; does not define door architecture.
 
+- [s2m_idob_traversal_characterization_closeout.md](s2m_idob_traversal_characterization_closeout.md)  
+  **What it is:** Consolidated present-realization stopping/restart record for the current IdOB traversal characterization cycle.  
+  **Status/authority:** Characterization closeout record (non-normative).  
+  **Open when:** You need to know how far traversal characterization legitimately progressed, why work stopped, what is safely deferred, what remains unavailable/TBD, and what should trigger reopening.  
+  **Relationship:** Downstream synthesis/closeout of the current traversal characterization family; does not define new architecture.
+
 ### Related
 
 - Category Selection family remains under [category_selection_index.md](category_selection_index.md). Category evidence may participate in traversal correspondence once an explicit relation is declared; it is not itself the traversal mechanism.
@@ -129,6 +135,15 @@ Structural seam closeout (door->candidate pre-architecture check):
 `s2m_idob_traversal_program_reference.md`  
 → `s2m_idob_door_candidate_structural_experiment_plan.md`  
 → `s2m_idob_door_candidate_structural_observation.md`
+
+Current characterization closeout:
+
+`s2m_idob_traversal_proposal.md`  
+→ `s2m_idob_traversal_program_reference.md`  
+→ `s2m_idob_traversal_observation.md`  
+→ `s2m_idob_traversal_correspondence_observation.md`  
+→ `s2m_idob_door_candidate_structural_observation.md`  
+→ `s2m_idob_traversal_characterization_closeout.md`
 
 Optional predecessor conceptual context (not a downstream traversal stage):
 
