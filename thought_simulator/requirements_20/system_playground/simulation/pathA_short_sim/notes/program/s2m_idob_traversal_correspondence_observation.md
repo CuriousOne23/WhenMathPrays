@@ -55,3 +55,65 @@
 
 - No stop condition requiring semantic architecture invention was crossed in this pass.
 - Opposition, lineage identity, and affirmative independence were recorded as unavailable where required by boundary discipline.
+
+---
+
+## Observation — Follow-on run (lineage/opposition refinement, 2026-11-25)
+
+### What executed
+
+- Frozen representability batch (`CR01`..`CR12`) executed after contract/plan refinement.
+- Artifact:
+  - `local_characterization/sessions/s2m_idob_lineage_opposition_exp/runs/20261125_085112__s2m_idob_lineage_opposition_exp.json`
+- Record shape per evidence-candidate result now includes:
+  - `evidence_id`, `candidate_id/reference`, provenance,
+  - correspondence state + basis,
+  - opposition status + basis,
+  - `lineage_id`, lineage basis,
+  - derivation edge + basis,
+  - dependency state + basis,
+  - independence status,
+  - Unknown/Unresolved/Unavailable reason.
+
+### Replay/drift controls
+
+- `python support/tools/s2m_canonical_sentences_replay.py` → passed
+- `python support/tools/s2m_category_selection_replay.py` → passed
+- Per-case semantic-slice duplicate-run equality in artifact: all `true`.
+
+### Case-level facts (compact)
+
+| Case | Core result | Dependency result | Opposition result |
+|---|---|---|---|
+| `CR01_support_record` | supporting + no-established-relation both observed | `Unknown` | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR02_no_relation_record` | no-established-relation only | `Unknown` | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR03_unresolved_record` | unresolved (candidate surface missing) | `Unknown` | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR04_opposition_unavailable` | supporting + no-established-relation observed | `Unknown` | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR05_repeated_observation` | supporting + no-established-relation observed | `Dependent` (narrow duplicate linkage) + `Unknown` remainder | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR06_duplicate_dependency` | supporting + no-established-relation observed | `Dependent` (narrow duplicate linkage) + `Unknown` remainder | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR07_generic_dependency_unavailable` | supporting + no-established-relation observed | `Unknown` | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR08_independence_unavailable` | supporting + no-established-relation observed | `Unknown`; independence unavailable | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR09_unknown_dependency` | supporting + no-established-relation observed | `Unknown` | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR10_provenance_preservation` | supporting observed | `Unknown` | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR11_multi_candidate` | one supporting candidate, others no-established-relation | `Unknown` | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+| `CR12_lineage_derivation_surface` | supporting + no-established-relation observed | duplicate-derived `Dependent` plus derivation edges; no lineage_id assignment | `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS` |
+
+## Bounded interpretation — Follow-on run
+
+1. The three-way distinction `supporting` vs `no_established_relation` vs `unresolved` is now mechanically inspectable in one frozen run set.
+2. Narrow duplicate-derived dependency (`PARTIAL_DUPLICATE_LINK_ONLY`) is mechanically inspectable without promoting to generic lineage architecture.
+3. Lineage fields remain explicit null/unavailable unless affirmative basis exists; no fabricated lineage tokens were introduced.
+4. Explicit opposition remains unavailable without affirmative conflict basis and is recorded as such rather than inferred from absence/negation.
+
+## Not established — Follow-on run
+
+- Generic lineage assignment rule and architecture remain not established.
+- Affirmative independence condition remains not established.
+- Explicit opposing relation primitive remains not established.
+- Door-legal candidate correspondence remains not established.
+
+## Anomaly / stop status — Follow-on run
+
+- No semantic-policy code change was introduced.
+- No stop condition requiring D-class architecture invention was crossed.
+- D-class boundaries were preserved as explicit unavailable/unknown outputs.

@@ -19,7 +19,7 @@ In scope:
 - representability of support/no-established-relation/unresolved correspondence records;
 - provenance retention and source attribution;
 - repeated-observation handling visibility;
-- dependency-state representability (`Independent/Dependent/Unknown`) where legitimately derivable.
+- dependency-state representability (`Dependent/Unknown`) where legitimately derivable.
 
 Out of scope:
 
@@ -38,20 +38,22 @@ Only execute if all required test quantities are either:
 
 If explicit opposition, lineage identity, or dependency typing requires creating new semantics/mechanisms, mark affected cases `UNAVAILABLE` and keep boundary reporting explicit.
 
-## Planned representability cases
+## Planned representability cases (frozen)
 
 | Case ID | Goal | Required state | Current representability expectation |
 |---|---|---|---|
-| `CR01_support_record` | Record explicit supporting correspondence where affirmative basis exists | evidence_id, candidate_id, supporting state, basis, provenance | Executable when category cue membership + candidate relation are represented |
-| `CR02_no_relation_record` | Record no-established-relation without opposition inference | evidence_id, candidate_id, no-established-relation state | Executable where candidate is present but no positive correspondence basis is represented |
-| `CR03_opposition_record` | Record explicit opposition only with positive opposing basis | opposing basis fact | **UNAVAILABLE unless explicit opposing relation is represented** |
-| `CR04_unresolved_correspondence` | Preserve unresolved when correspondence cannot legitimately be determined | unresolved state + reason | Executable where required candidate/evidence surface is unavailable |
-| `CR05_repeated_observation` | Preserve duplicate/repeat visibility | duplicate linkage, no auto-independence | Executable |
-| `CR06_affirmative_dependency` | Preserve dependent only with positive basis | Dependent + dependency basis | Limited execution only for explicit duplicate linkage; lineage-level dependency otherwise unavailable |
-| `CR07_affirmative_independence` | Preserve independent only with positive basis | Independent + basis | **UNAVAILABLE unless affirmative independence basis exists** |
-| `CR08_unknown_dependency` | Preserve Unknown when dependence/independence not established | Unknown + reason | Executable |
-| `CR09_provenance_preservation` | Preserve provenance through correspondence record | provenance fields retained | Executable |
-| `CR10_multi_candidate_targeting` | Distinguish candidate-specific correspondence outcomes | evidence-candidate records across multiple candidates | Executable on surrogate candidate surface |
+| `CR01_support_record` | Affirmative support | evidence_id, candidate_id, supporting, basis, provenance | Executable |
+| `CR02_no_relation_record` | No established correspondence | no-established-relation without opposition inference | Executable |
+| `CR03_unresolved_record` | Unresolved correspondence | unresolved + prerequisite-missing reason | Executable |
+| `CR04_opposition_unavailable` | Opposition unavailable boundary | explicit conflict basis absent | Executable as unavailable finding |
+| `CR05_repeated_observation` | Direct repeated observation visibility | repeated evidence observations preserved | Executable |
+| `CR06_duplicate_dependency` | Narrow duplicate-derived dependency | `Dependent` with duplicate linkage basis | Executable (narrow/local only) |
+| `CR07_generic_dependency_unavailable` | Generic dependency unavailable without lineage basis | no affirmative lineage/derivation fact | Executable as unavailable finding |
+| `CR08_independence_unavailable` | Affirmative independence unavailable | missing affirmative independence basis | Executable as unavailable finding |
+| `CR09_unknown_dependency` | Residual Unknown dependency | Unknown + explicit reason | Executable |
+| `CR10_provenance_preservation` | Provenance retention | provenance fields retained into record | Executable |
+| `CR11_multi_candidate` | Multi-candidate correspondence separation | distinguishable candidate outcomes | Executable |
+| `CR12_lineage_derivation_surface` | Lineage/derivation fields only when justified | lineage/derivation null-or-filled with basis | Executable |
 
 ## Evidence output contract per case
 
@@ -59,13 +61,19 @@ Per case, capture:
 
 - case ID
 - input configuration
+- evidence ID
+- candidate ID/reference
 - candidate(s)
 - available evidence/provenance
-- correspondence state
-- correspondence basis (if available)
-- lineage information (if available)
+- correspondence state (`supporting` / `no_established_relation` / `unresolved`)
+- correspondence basis or missing-basis explanation
+- opposition status and missing-basis explanation
+- lineage ID only if affirmatively justified
+- lineage basis
+- derivation edge only if affirmatively justified
 - dependency state
-- dependency basis (if available)
+- dependency basis
+- independence status
 - provenance fields
 - Unknown/Unresolved/Unavailable reason
 - family/dependency fields
