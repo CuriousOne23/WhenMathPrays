@@ -117,3 +117,54 @@
 - No semantic-policy code change was introduced.
 - No stop condition requiring D-class architecture invention was crossed.
 - D-class boundaries were preserved as explicit unavailable/unknown outputs.
+
+---
+
+## Observation — Evidence-specific correspondence audit correction run (2026-11-25)
+
+### Method correction applied
+
+The prior run established aggregate candidate-level support visibility, but that aggregate support does not by itself establish evidence-specific support for every evidence-candidate pair.  
+This audit reclassifies outcomes by checking each chain link explicitly.
+
+### OBSERVATION
+
+- Audit artifact produced:
+  - `local_characterization/sessions/s2m_idob_evidence_correspondence_audit/runs/20261125_090537__s2m_idob_evidence_correspondence_audit.json`
+- Frozen audit cases executed: `EA01`..`EA08`.
+- Link-level audit dimensions recorded per evidence-candidate record:
+  - aggregate candidate-support status + basis;
+  - evidence->cue/property attachment status + basis;
+  - cue/property->candidate correspondence status + basis;
+  - chain status (`COMPLETE_CHAIN`, `AGGREGATE_SUPPORT_ONLY`, `NO_ESTABLISHED_RELATION`, `UNRESOLVED`, `UNAVAILABLE`);
+  - exact missing link when incomplete.
+- Opposition status in all records:
+  - `UNAVAILABLE_NO_AFFIRMATIVE_CONFLICT_BASIS`.
+- Duplicate handling corrected:
+  - direct repetition is recorded with `duplicate_of_evidence_id` / `duplicate_basis_reference`;
+  - no direct-repetition `derivation_edge` was emitted.
+- Replay controls:
+  - `s2m_canonical_sentences_replay.py` passed;
+  - `s2m_category_selection_replay.py` passed;
+  - per-case semantic-slice duplicate-run equality in audit artifact: `true`.
+
+### BOUNDED INTERPRETATION
+
+1. Aggregate candidate support is observable in current TS.
+2. Evidence-specific support is only reconstructible where a narrow affirmative evidence->cue attachment can be established from existing surfaces.
+3. For many evidence-candidate pairs, the missing link is explicitly:
+   - `missing_link:evidence_to_cue_attachment`.
+4. This is a successful fog-clearing outcome even where evidence-specific support is unavailable.
+5. Opposition remains unavailable due missing affirmative conflict basis and was not inferred from absence/negation/mismatch.
+
+### NOT ESTABLISHED
+
+- Generic evidence->cue attachment mechanism for all evidence observations.
+- Generic evidence-specific correspondence primitive independent of aggregate candidate-support surfaces.
+- Affirmative conflict/opposition representation.
+- Generic lineage architecture and affirmative independence condition.
+
+### Prior-run interpretation correction
+
+Prior correspondence results are preserved as historical evidence.  
+Their `supporting` outcomes should be interpreted as candidate-level aggregate support visibility unless a complete affirmative evidence-specific chain is demonstrated for the specific evidence-candidate pair.

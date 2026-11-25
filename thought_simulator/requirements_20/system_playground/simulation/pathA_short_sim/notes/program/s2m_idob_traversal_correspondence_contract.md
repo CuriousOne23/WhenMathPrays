@@ -53,6 +53,17 @@ correspondence_record:
   notes: string|null
 ```
 
+Critical distinction:
+
+- **aggregate candidate support** is a candidate-level fact on cue/candidate surfaces;
+- **evidence-specific support correspondence** is an evidence-to-candidate fact requiring a complete affirmative chain for a particular evidence observation.
+
+Minimum conceptual evidence-specific chain:
+
+`evidence_observation -> evidence_property_or_cue -> candidate_property_correspondence -> candidate`
+
+Every link requires affirmative represented basis.
+
 State intent:
 
 - `supporting`: explicit represented relation establishes affirmative support.
@@ -61,6 +72,11 @@ State intent:
 - `unresolved`: required evidence/candidate properties are unresolved/unavailable, or correspondence evaluation has not legitimately occurred.
 
 `supporting/opposing/no_established_relation` are conceptual targets for `(+ / - / 0)` without requiring literal symbols in storage.
+
+Evidence-specific boundary:
+
+- candidate cue membership, candidate selection state, category result, or aggregate cue set alone do not establish `supporting(evidence_id, candidate_id)`;
+- if evidence->cue/property attachment is not represented, evidence-specific support is `UNAVAILABLE`, not `no_established_relation`.
 
 ### Opposition boundary (current realization)
 
@@ -124,6 +140,7 @@ Duplicate linkage boundary:
 - Direct repeated identical input observations may support a narrow local dependency fact when duplicate identity is mechanically inspectable.
 - This is recorded narrowly as `PARTIAL_DUPLICATE_LINK_ONLY`.
 - Duplicate linkage is not a generic lineage architecture.
+- Direct duplicate linkage does not populate `derivation_edge` by itself.
 
 ## Engineering representability framing
 
@@ -165,8 +182,12 @@ Classification levels:
 | stable evidence identifier (`evidence_id`) | 2 | Mechanically derivable from run/case + evidence slot without semantic change. |
 | candidate identifier normalization for surrogate candidates | 2 | Derivable from existing candidate tuple fields (`from`, `relation`, `to`, `major`). |
 | explicit correspondence record object (support/opposition/no-relation/unresolved per evidence-candidate pair) | 3 | Requires read-only derived observability emission if generated from existing facts only. |
+| aggregate candidate support status (candidate-level) | 1 | Present on existing cue/candidate/selection surfaces. |
+| evidence-specific support chain reconstruction | 2 / 4 | Derivable only where evidence->cue attachment and cue/property->candidate correspondence are explicitly represented; otherwise unavailable. |
+| evidence->cue/property attachment per evidence observation | 2 / 4 | Derivable in narrow single-source/single-observation conditions; generally unavailable without explicit represented attachment. |
+| cue/property->candidate correspondence basis | 1 / 2 | Aggregate candidate-level basis is available/derivable; evidence-specific basis depends on evidence attachment. |
 | unresolved correspondence state surface | 2 | Derivable when candidate/evidence prerequisites are missing or evaluation not applicable. |
-| direct duplicate linkage (`derivation_edge` for repeated identical input observation) | 2 | Derivable from repeated identical input observation in the same case configuration. |
+| direct duplicate linkage (`duplicate_of_evidence_id` for repeated identical input observation) | 2 | Derivable from repeated identical input observation in the same case configuration. |
 | narrow duplicate-derived dependency state (`Dependent`) | 2 | Derivable only for mechanically inspectable duplicates; record as `PARTIAL_DUPLICATE_LINK_ONLY`. |
 | residual dependency state (`Unknown`) | 2 | Derivable when no affirmative dependency fact exists. |
 | `lineage_id` assignment beyond duplicate linkage | 4 | Requires architecture/research definition of lineage representation and assignment rule. |

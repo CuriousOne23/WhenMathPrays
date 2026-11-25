@@ -3,7 +3,7 @@
 **Date:** 2026-11-25  
 **Status:** Frozen bounded plan for correspondence/lineage representability.  
 **Contract authority:** [s2m_idob_traversal_correspondence_contract.md](s2m_idob_traversal_correspondence_contract.md).  
-**Purpose:** Test representability of correspondence/provenance/dependency surfaces only.
+**Purpose:** Pure audit of evidence-specific support correspondence representability using existing TS represented facts only.
 
 ## Local-utility success criterion
 
@@ -16,7 +16,8 @@ This experiment is successful if it either:
 
 In scope:
 
-- representability of support/no-established-relation/unresolved correspondence records;
+- aggregate candidate-support vs evidence-specific support distinction;
+- representability of support/no-established-relation/unresolved/unavailable correspondence outcomes;
 - provenance retention and source attribution;
 - repeated-observation handling visibility;
 - dependency-state representability (`Dependent/Unknown`) where legitimately derivable.
@@ -38,22 +39,34 @@ Only execute if all required test quantities are either:
 
 If explicit opposition, lineage identity, or dependency typing requires creating new semantics/mechanisms, mark affected cases `UNAVAILABLE` and keep boundary reporting explicit.
 
+Primary audit question:
+
+Can TS reconstruct, for a particular evidence observation and candidate, the full affirmative chain:
+
+`evidence_observation -> evidence_property_or_cue -> candidate_property_correspondence -> candidate`?
+
+If any required link is missing, classify the chain as incomplete and record the exact missing link.
+
+Audit labels (frozen):
+
+- `COMPLETE_CHAIN`
+- `AGGREGATE_SUPPORT_ONLY`
+- `NO_ESTABLISHED_RELATION`
+- `UNRESOLVED`
+- `UNAVAILABLE`
+
 ## Planned representability cases (frozen)
 
 | Case ID | Goal | Required state | Current representability expectation |
 |---|---|---|---|
-| `CR01_support_record` | Affirmative support | evidence_id, candidate_id, supporting, basis, provenance | Executable |
-| `CR02_no_relation_record` | No established correspondence | no-established-relation without opposition inference | Executable |
-| `CR03_unresolved_record` | Unresolved correspondence | unresolved + prerequisite-missing reason | Executable |
-| `CR04_opposition_unavailable` | Opposition unavailable boundary | explicit conflict basis absent | Executable as unavailable finding |
-| `CR05_repeated_observation` | Direct repeated observation visibility | repeated evidence observations preserved | Executable |
-| `CR06_duplicate_dependency` | Narrow duplicate-derived dependency | `Dependent` with duplicate linkage basis | Executable (narrow/local only) |
-| `CR07_generic_dependency_unavailable` | Generic dependency unavailable without lineage basis | no affirmative lineage/derivation fact | Executable as unavailable finding |
-| `CR08_independence_unavailable` | Affirmative independence unavailable | missing affirmative independence basis | Executable as unavailable finding |
-| `CR09_unknown_dependency` | Residual Unknown dependency | Unknown + explicit reason | Executable |
-| `CR10_provenance_preservation` | Provenance retention | provenance fields retained into record | Executable |
-| `CR11_multi_candidate` | Multi-candidate correspondence separation | distinguishable candidate outcomes | Executable |
-| `CR12_lineage_derivation_surface` | Lineage/derivation fields only when justified | lineage/derivation null-or-filled with basis | Executable |
+| `EA01_aggregate_vs_evidence` | Distinguish aggregate candidate support from evidence-specific support | aggregate support basis + per-evidence chain audit | Executable |
+| `EA02_no_relation_audit` | Audit no-established relation on available surfaces | mechanism applicability + no affirmative relation | Executable |
+| `EA03_unresolved_audit` | Audit unresolved where prerequisites missing | missing candidate/evidence prerequisite | Executable |
+| `EA04_opposition_unavailable` | Audit opposition unavailable boundary | no affirmative conflict basis | Executable as unavailable finding |
+| `EA05_duplicate_linkage` | Audit direct duplicate linkage without derivation claim | `duplicate_of_evidence_id` + narrow dependency basis | Executable |
+| `EA06_dependency_unknown` | Audit residual Unknown dependency | no affirmative lineage/independence basis | Executable |
+| `EA07_provenance_preservation` | Audit provenance retention through correspondence record | provenance surfaces retained | Executable |
+| `EA08_multi_candidate_audit` | Audit per-candidate chain status separation | different outcomes across candidates | Executable |
 
 ## Evidence output contract per case
 
@@ -61,16 +74,23 @@ Per case, capture:
 
 - case ID
 - input configuration
+- aggregate candidate-support status
+- aggregate-support basis
 - evidence ID
 - candidate ID/reference
 - candidate(s)
 - available evidence/provenance
 - correspondence state (`supporting` / `no_established_relation` / `unresolved`)
 - correspondence basis or missing-basis explanation
+- evidence->cue/property attachment status + basis
+- cue/property->candidate correspondence status + basis
+- complete-chain audit label
+- exact missing link when chain incomplete
 - opposition status and missing-basis explanation
 - lineage ID only if affirmatively justified
 - lineage basis
-- derivation edge only if affirmatively justified
+- duplicate_of_evidence_id / duplicate_basis_reference (for direct repetition only)
+- derivation edge only if affirmatively justified by explicit derivation fact
 - dependency state
 - dependency basis
 - independence status
