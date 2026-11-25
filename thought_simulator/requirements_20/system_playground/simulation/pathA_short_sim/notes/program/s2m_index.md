@@ -113,6 +113,17 @@ New S2M documents should be registered here. Category Selection characterization
 - Category Selection family remains under [category_selection_index.md](category_selection_index.md). Category evidence may participate in traversal correspondence once an explicit relation is declared; it is not itself the traversal mechanism.
 - Normative Path A / IdOB / ISc requirements remain in the 20-series documents.
 
+#### TS realization qualification guidance
+[20.740_ts_realization_qualification_guidance.md](thought_simulator/requirements_20/20.740_ts_realization_qualification_guidance.md)
+
+What it is: General TS engineering guidance for realization qualification, bounded utility, structural-health assessment, surrogate discipline, validity-boundary characterization, safe deferral, and future pickup.
+
+Status/authority: Reference guidance (non-normative).
+
+Open when: You need to evaluate whether an S2M concept or mechanism should be realized, characterized, extended, safely deferred, stopped for foundation repair, or reopened.
+
+Relationship: General engineering/development guidance used to interpret S2M realization and characterization decisions. It does not define S2M mechanics, traversal architecture, runtime semantics, or normative behavior.
+
 ## Conceptual progression (consult sequence)
 
 For traversal questions:
