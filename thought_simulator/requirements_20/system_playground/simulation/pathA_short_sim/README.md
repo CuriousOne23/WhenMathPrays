@@ -19,6 +19,16 @@ Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums tha
 
 Force ops such as polar, command, request, and exclamative are open holes. They are not object connections. History, likelihood, and the geometry conjecture are not inputs.
 
+## Document indexes under notes/program
+
+Use these navigation indexes to find the right family. They do not duplicate content; they route questions.
+
+- [notes/program/category_selection_index.md](notes/program/category_selection_index.md) — Category Selection document family (characterization, qualification, palette, observations, program closeout). Cue-source and empirical records for category evidence.
+- [notes/program/s2m_index.md](notes/program/s2m_index.md) — S2M document family (relational proposal and IdOB traversal proposal). Owns the mechanical chain from structure through legal candidates, correspondence, and directional discrimination.
+- [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — Scalability document family (expansion principles, user guide, decision states).
+
+For IdOB traversal questions open the S2M index. For Category Selection characterization questions open the Category Selection index.
+
 ## Expanding Path A
 
 Expanding Path A? Start with the scalability program and user guide before treating new YAML/reference coverage as established behavior.
@@ -314,6 +324,15 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 
 - Category selection proposal (next realization):  
   [notes/program/category_selection_proposal.md](notes/program/category_selection_proposal.md)
+
+- Category Selection index:  
+  [notes/program/category_selection_index.md](notes/program/category_selection_index.md)
+
+- S2M index:  
+  [notes/program/s2m_index.md](notes/program/s2m_index.md)
+
+- Scalability index:  
+  [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md)
 
 ---
 
