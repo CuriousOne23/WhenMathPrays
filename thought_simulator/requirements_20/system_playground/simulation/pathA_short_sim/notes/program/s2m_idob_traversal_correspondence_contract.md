@@ -81,7 +81,7 @@ Evidence-specific boundary:
 ### Opposition boundary (current realization)
 
 Current surfaces do not provide a generic explicit opposing relation primitive for traversal candidates.  
-Therefore, proposal-level explicit opposition remains **unresolved** in current realization.
+Therefore, proposal-level explicit opposition is unavailable in the current realization because no generic affirmative conflict representation is present.
 
 Minimum conceptual target for explicit opposition correspondence:
 
