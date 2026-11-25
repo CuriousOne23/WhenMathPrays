@@ -64,6 +64,12 @@ New S2M documents should be registered here. Category Selection characterization
   **Open when:** You need the authorized case matrix, stop conditions, and replay verification protocol for traversal observation runs.
   **Relationship:** Executes against the traversal program reference; predecessor to traversal observation records.
 
+- [s2m_idob_traversal_correspondence_contract.md](s2m_idob_traversal_correspondence_contract.md)  
+  **What it is:** Bounded research/design contract defining minimum representational requirements for evidence-to-candidate correspondence and evidence-family provenance/dependency.  
+  **Status/authority:** Research/design contract for the next traversal joint (non-normative).  
+  **Open when:** You need the representation contract and implementation-decision classification for correspondence/dependency surfaces.
+  **Relationship:** Follows boundary characterization results; predecessor to correspondence representability planning.
+
 ### Observation / experiment record
 
 - [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md)  
@@ -71,6 +77,12 @@ New S2M documents should be registered here. Category Selection characterization
   **Status/authority:** Empirical observation record (non-normative).  
   **Open when:** You need run evidence, case-by-case outputs, replay status, and explicit not-established claims for traversal stages.
   **Relationship:** Downstream of the traversal experiment plan; does not define architecture.
+
+- [s2m_idob_traversal_correspondence_experiment_plan.md](s2m_idob_traversal_correspondence_experiment_plan.md)  
+  **What it is:** Follow-on bounded plan for testing representability of correspondence/provenance/dependency surfaces only.  
+  **Status/authority:** Draft/frozen plan for next-stage representability checks (not executed in this pass).  
+  **Open when:** You need planned correspondence representability cases and execution gating conditions.
+  **Relationship:** Downstream of the correspondence contract; upstream of any future correspondence observation record.
 
 ### Related
 
@@ -81,11 +93,24 @@ New S2M documents should be registered here. Category Selection characterization
 
 For traversal questions:
 
+Current traversal progression:
+
 `s2m_idob_traversal_proposal.md`  
-(then) `s2m_idob_traversal_program_reference.md`  
-(then) `s2m_idob_traversal_experiment_plan.md`  
-(then) `s2m_idob_traversal_observation.md`  
-(if needed for prior conceptual context) `s2m_relational_proposal.md`  
+→ `s2m_idob_traversal_program_reference.md`  
+→ `s2m_idob_traversal_experiment_plan.md`  
+→ `s2m_idob_traversal_observation.md`
+
+Next bounded traversal joint (post-boundary characterization):
+
+`s2m_idob_traversal_correspondence_contract.md`  
+→ `s2m_idob_traversal_correspondence_experiment_plan.md`
+
+Optional predecessor conceptual context (not a downstream traversal stage):
+
+`s2m_relational_proposal.md`  
+
+Then, as needed:
+
 → normative requirements (20.705, 20.45, 20.40.050)  
 → Category Selection index for cue characterization
 

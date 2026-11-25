@@ -18,6 +18,11 @@
 - `python support/tools/s2m_canonical_sentences_replay.py` → passed
 - `python support/tools/s2m_category_selection_replay.py` → passed
 
+Replay interpretation boundary:
+
+- **Full-object duplicate-run equality:** not expected; unequal because runtime-generated timestamp fields change between runs (for example `committed_stream.source.created_at_utc`).
+- **Dedicated semantic replay controls:** passed (`s2m_canonical_sentences_replay.py`, `s2m_category_selection_replay.py`).
+
 ## Case facts (compact)
 
 Legend:
@@ -59,5 +64,5 @@ Legend:
 - Stop conditions were monitored; no architecture-inventing code change was performed.
 - Observed anomalies/boundaries were recorded as evidence and not repaired:
   - negation text (`"not cold"`) still maps to `cold` cue via substring cue extraction;
-  - full-object replay mismatch is attributable to runtime timestamp field churn, while dedicated replay controls passed;
+  - full-object replay inequality is attributable to runtime timestamp field churn; dedicated semantic replay controls passed;
   - some utterances (for example `"The sky is cold."`) do not enter the bounded seed relation set and therefore expose zero S2M candidates in this surface.
