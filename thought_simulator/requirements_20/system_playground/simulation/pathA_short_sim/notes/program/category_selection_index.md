@@ -14,6 +14,8 @@ Use this page to route questions by document role and authority.
 
 This index is intentionally brief and does not duplicate technical detail from the linked documents.
 
+**Downstream S2M traversal:** Questions about IdOB traversal, evidence-to-candidate correspondence, or the mechanical chain from structure through legal candidates to directional discrimination are now owned by the S2M family. Open [s2m_index.md](s2m_index.md) and [s2m_idob_traversal_proposal.md](s2m_idob_traversal_proposal.md). Category Selection remains the characterization and cue-source family; it is not the traversal mechanism.
+
 ## Governance rule
 
 This is the authoritative navigation index for the category-selection document family.
@@ -45,6 +47,7 @@ Route findings by information type and document authority:
 - Program-level measure of progress / thinking leverage criterion → [ts_program_principle.md](ts_program_principle.md)
 - Durable realization/software contract conclusions → applicable program reference (for example [category_selection_program_reference.md](category_selection_program_reference.md))
 - Path A entropy routing → [20.705_patha_pathb_flow.md](../../../../../20.705_patha_pathb_flow.md) (Path A entropy meaning/base and process-level ownership), [20.45_ts_isc_scoring.md](../../../../../20.45_ts_isc_scoring.md) (ISc entropy/ΔH mathematics), [category_selection_program_reference.md](category_selection_program_reference.md) (Category Selection realization/conformance status), then characterization/observation references in this index for measurement availability and empirical records
+- IdOB traversal / evidence-to-candidate correspondence / directional discrimination → [s2m_idob_traversal_proposal.md](s2m_idob_traversal_proposal.md) via [s2m_index.md](s2m_index.md)
 
 Record each finding in the document that owns that information type. Do not duplicate the same finding across the family merely for convenience.
 
@@ -70,7 +73,7 @@ Record each finding in the document that owns that information type. Do not dupl
   **What it is:** Qualification v1 research-status checkpoint and restart record.  
   **Status/authority:** Non-normative research checkpoint (not closeout).  
   **Open when:** You need the current Qualification v1 stopping point, open items, and exact restart question before further predicate research.  
-  **Relationship:** Downstream of the current qualification mapping/observability sequence; companion to program reference and realization map.
+  **Relationship:** Downstream of the current qualification mapping/observability sequence; companion to program reference and realization map. Not an architectural prerequisite for IdOB traversal.
 
 - [category_selection_characterization_readiness_audit.md](category_selection_characterization_readiness_audit.md)  
   **What it is:** Factual Stage 1 capability map of the current realization (probe, control, measurement, and controlled-evolution readiness).  
@@ -176,11 +179,23 @@ Record each finding in the document that owns that information type. Do not dupl
 
 ### Related S2M authority/context
 
+- [s2m_index.md](s2m_index.md)  
+  **What it is:** Navigation index for the S2M document family.  
+  **Status/authority:** Non-normative navigation.  
+  **Open when:** You need to locate S2M conceptual or traversal research documents.  
+  **Relationship:** Sibling index; owns traversal and relational-model navigation.
+
 - [s2m_relational_proposal.md](s2m_relational_proposal.md)  
   **What it is:** Conceptual S2M model proposal. Now also contains the working formulation of meaning (research hypothesis): meaning is the contextually resolved relational structure that the current utterance, its qualifiers, available relational knowledge, applicable categories, and context make relevant.  
   **Status/authority:** Conceptual authority/context (non-normative requirements).  
   **Open when:** You need S2M conceptual terms/stage boundaries used by category-selection docs, or the present working formulation of M.  
-  **Relationship:** Conceptual context for category-selection architecture framing.
+  **Relationship:** Conceptual context for category-selection architecture framing. Refined by the IdOB traversal proposal.
+
+- [s2m_idob_traversal_proposal.md](s2m_idob_traversal_proposal.md)  
+  **What it is:** Research proposal for bounded IdOB traversal.  
+  **Status/authority:** Research proposal (non-normative).  
+  **Open when:** You need the mechanical chain from structure through legal candidates, correspondence, and directional discrimination.  
+  **Relationship:** Downstream research authority for traversal. Category Selection supplies a possible cue source; it is not the traversal mechanism.
 
 - [s2m_program_reference.md](s2m_program_reference.md)  
   **What it is:** S2M implementation contract/context.  
@@ -246,8 +261,8 @@ Typical progression for a new cycle:
 → characterization runs  
 → `category_selection_observation.md`
 
-At any step, open normative requirements for authoritative behavior/path/ownership questions. Open `ts_program_principle.md` when judging whether a step counts as progress. Open the program closeout for the consolidated status of the present characterization cycle.
+At any step, open normative requirements for authoritative behavior/path/ownership questions. Open `ts_program_principle.md` when judging whether a step counts as progress. Open the program closeout for the consolidated status of the present characterization cycle. For IdOB traversal questions, open the S2M index.
 
 ## Extensibility
 
-This family is extensible. Register new category-selection/characterization documents here with role, status, consult trigger, and dependency relationships.
+This family is extensible. Register new category-selection/characterization documents here. Traversal research is registered under the S2M index.
