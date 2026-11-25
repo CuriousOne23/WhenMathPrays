@@ -44,13 +44,33 @@ New S2M documents should be registered here. Category Selection characterization
   **Open when:** You need the current mechanical model of IdOB traversal, the bounded responsibility of Path A, the anti-fabrication principles, or the list of open joints.  
   **Relationship:** Immediate research authority for traversal questions. Refines the relational proposal; does not replace its five-stage distinctions.
 
-### Program / realization (future)
+### Program / realization
 
 - [s2m_program_reference.md](s2m_program_reference.md)  
   **What it is:** Existing S2M implementation contract/context (pre-traversal).  
   **Status/authority:** Program reference for prior S2M realization boundaries.  
   **Open when:** You need the earlier execution/contract context.  
-  **Relationship:** Companion to the relational proposal. A traversal-specific program reference is not yet derived.
+  **Relationship:** Companion to the relational proposal.
+
+- [s2m_idob_traversal_program_reference.md](s2m_idob_traversal_program_reference.md)  
+  **What it is:** Implementation-facing mapping of the traversal proposal onto currently realized code/config/data surfaces, including explicit blocked/unavailable stages.  
+  **Status/authority:** Traversal realization mapping contract (non-normative, implementation-facing).  
+  **Open when:** You need to know what traversal stages are directly realizable, derivable, observability-gapped, or architecture-blocked in current software.
+  **Relationship:** Derived from traversal proposal and bounded by 20-series requirements.
+
+- [s2m_idob_traversal_experiment_plan.md](s2m_idob_traversal_experiment_plan.md)  
+  **What it is:** Frozen bounded experiment design for challenging the traversal proposal against current realization without semantic-policy change.  
+  **Status/authority:** Execution-control plan for traversal experiments.  
+  **Open when:** You need the authorized case matrix, stop conditions, and replay verification protocol for traversal observation runs.
+  **Relationship:** Executes against the traversal program reference; predecessor to traversal observation records.
+
+### Observation / experiment record
+
+- [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md)  
+  **What it is:** Executed facts and bounded interpretation from the frozen traversal experiment plan, including unavailable quantities and anomalies.  
+  **Status/authority:** Empirical observation record (non-normative).  
+  **Open when:** You need run evidence, case-by-case outputs, replay status, and explicit not-established claims for traversal stages.
+  **Relationship:** Downstream of the traversal experiment plan; does not define architecture.
 
 ### Related
 
@@ -62,7 +82,10 @@ New S2M documents should be registered here. Category Selection characterization
 For traversal questions:
 
 `s2m_idob_traversal_proposal.md`  
-(then, if needed) `s2m_relational_proposal.md`  
+(then) `s2m_idob_traversal_program_reference.md`  
+(then) `s2m_idob_traversal_experiment_plan.md`  
+(then) `s2m_idob_traversal_observation.md`  
+(if needed for prior conceptual context) `s2m_relational_proposal.md`  
 → normative requirements (20.705, 20.45, 20.40.050)  
 → Category Selection index for cue characterization
 
