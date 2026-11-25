@@ -114,7 +114,7 @@ New S2M documents should be registered here. Category Selection characterization
 - Normative Path A / IdOB / ISc requirements remain in the 20-series documents.
 
 #### TS realization qualification guidance
-[20.740_ts_realization_qualification_guidance.md](//WhenMathPrays/thought_simulator/requirements_20/20.740_ts_realization_qualification_guidance.md)
+[20.740_ts_realization_qualification_guidance.md](../../../../../20.740_ts_realization_qualification_guidance.md)
 
 What it is: General TS engineering guidance for realization qualification, bounded utility, structural-health assessment, surrogate discipline, validity-boundary characterization, safe deferral, and future pickup.
 
