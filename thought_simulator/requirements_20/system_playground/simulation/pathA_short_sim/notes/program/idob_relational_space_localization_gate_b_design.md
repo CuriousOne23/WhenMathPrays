@@ -96,7 +96,7 @@ The following are reused without modification (see research plan for exact rules
 
 - $R_{\text{total}}$ cardinality: $n \in \{32, 64, 128, 256\}$
 - organizational groups: $G_1 \dots G_8$
-- base grouping: $\text{base_group}(r_j) = G_{((j \bmod 8) + 1)}$
+- base grouping: $\text{base} \\_ \text{group(}r\_j) = G_{((j \bmod 8) + 1)}$
 - overlap: $o \in \{0, 0.10, 0.25, 0.50\}$ with the already-frozen cyclic overlap injection
 - $R_{\text{necessary}}$: the already-frozen deterministic Gate A necessary-set construction
 - activation counts: $k \in \{1, 2, 3, 4\}$
