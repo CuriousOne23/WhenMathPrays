@@ -151,11 +151,12 @@ This audit reclassifies outcomes by checking each chain link explicitly.
 ### BOUNDED INTERPRETATION
 
 1. Aggregate candidate support is observable in current TS.
-2. Evidence-specific support is only reconstructible where a narrow affirmative evidence->cue attachment can be established from existing surfaces.
-3. For many evidence-candidate pairs, the missing link is explicitly:
+2. Evidence-specific support is not yet established as an explicit represented correspondence chain. In narrow single-source/single-observation conditions, an evidence-to-cue association can be uniquely reconstructed from existing surfaces; that reconstruction is locally useful but is not equivalent to an explicit evidence-to-cue attachment fact.
+3. The downstream cue/property-to-candidate step also remains grounded in aggregate candidate-support surfaces rather than a generic first-class correspondence fact. Therefore, the audit establishes narrow reconstructed chains, not explicit complete correspondence chains.
+4. For many evidence-candidate pairs, the missing link is explicitly:
    - `missing_link:evidence_to_cue_attachment`.
-4. This is a successful fog-clearing outcome even where evidence-specific support is unavailable.
-5. Opposition remains unavailable due missing affirmative conflict basis and was not inferred from absence/negation/mismatch.
+5. This is a successful fog-clearing outcome even where evidence-specific support is unavailable.
+6. Opposition remains unavailable due missing affirmative conflict basis and was not inferred from absence/negation/mismatch.
 
 ### NOT ESTABLISHED
 
