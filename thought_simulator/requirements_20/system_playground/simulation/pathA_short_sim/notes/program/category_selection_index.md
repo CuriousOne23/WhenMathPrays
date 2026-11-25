@@ -177,9 +177,9 @@ Record each finding in the document that owns that information type. Do not dupl
 ### Related S2M authority/context
 
 - [s2m_relational_proposal.md](s2m_relational_proposal.md)  
-  **What it is:** Conceptual S2M model proposal.  
+  **What it is:** Conceptual S2M model proposal. Now also contains the working formulation of meaning (research hypothesis): meaning is the contextually resolved relational structure that the current utterance, its qualifiers, available relational knowledge, applicable categories, and context make relevant.  
   **Status/authority:** Conceptual authority/context (non-normative requirements).  
-  **Open when:** You need S2M conceptual terms/stage boundaries used by category-selection docs.  
+  **Open when:** You need S2M conceptual terms/stage boundaries used by category-selection docs, or the present working formulation of M.  
   **Relationship:** Conceptual context for category-selection architecture framing.
 
 - [s2m_program_reference.md](s2m_program_reference.md)  
