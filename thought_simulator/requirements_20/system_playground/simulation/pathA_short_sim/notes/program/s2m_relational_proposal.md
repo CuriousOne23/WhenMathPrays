@@ -5,6 +5,8 @@
 **Door:** This page is linked from the short-sim README so a Frontier AI or new session can find it.  
 **Implementation contract:** s2m_program_reference.md — concrete data shapes, attachment point, non-mutation rules, and first-seed acceptance criteria. Read both before coding.
 
+**Refinement:** The mechanical model of how Path A traverses IdOB relational space (structure → legal candidates → evidence correspondence → directional discrimination) is now recorded in [s2m_idob_traversal_proposal.md](s2m_idob_traversal_proposal.md). That document refines this conceptual work; it does not erase the five-stage distinction, default meaning, or the working formulation below. See also [s2m_index.md](s2m_index.md).
+
 ## Working formulation of meaning (research hypothesis)
 
 Meaning is the contextually resolved relational structure that the current utterance, its qualifiers, available relational knowledge, applicable categories, and context make relevant.
@@ -327,18 +329,7 @@ It does **not** claim that:
 
 - an interpretation list is itself the meaning of a word;
 - combining all interpretation lists yields the meaning of a sentence;
-- the candidate inventories or interpretation majors are exhaustive or definitive;
-- producing a finite composite establishes human-like understanding; or
-- the present taxonomy is the only possible organization of meaning.
+- the candidate inventories or interpretation majors are the meaning;
+- the system thereby knows or understands what the sentence means.
 
-These distinctions keep the S2M bridge inspectable without requiring a definitive theory of meaning.
-
-## Traceability
-
-This proposal records the emerging conceptual account of the S2M mapping and the interpretation-space premise behind it.
-
-The first experimental implementation now provides a visible seed: an accountability trail from the structural floor and an initial interpretive-transfer path capable of selecting finite meaning relations from rudimentary association data. This demonstrates an executable form of the proposed bridge; it does not establish the completeness of the interpretation space, general semantic validity, large-scale behavior, or a definitive account of meaning.
-
-The short-sim README points here so the conceptual process can be found.
-
-Implementation details sufficient for correct coding live in [s2m_program_reference.md](s2m_program_reference.md). The programming reference should remain the concrete implementation contract; this proposal carries the broader rationale, interpretation-space model, and claim boundaries.
+The IdOB traversal proposal supplies a mechanical account of how structural legality and explicit evidence correspondence can produce a justified informational state without requiring comprehensive meaning. The five-stage distinctions and this working formulation remain intact.
