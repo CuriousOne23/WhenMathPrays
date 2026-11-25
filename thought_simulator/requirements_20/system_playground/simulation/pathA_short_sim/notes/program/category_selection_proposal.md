@@ -15,6 +15,32 @@ It is additive. It does not replace the five-stage S2M model (structural relatio
 
 A category result is not itself meaning. A category cue, score, top_category, or matching candidate is not automatically a written meaning relation.
 
+## Category utility and qualification
+
+Category is an engineering/structural abstraction whose legitimacy is utility-driven rather than an assumed fundamental division of meaning. A proposed category is not legitimate merely because its members form a plausible semantic, conceptual, cognitive, or ontological grouping. Conceptual coherence by itself is not sufficient justification.
+
+The underlying motivation is tractability. Categories provide a way to partition or organize a potentially large relational or search space so that realization, retrieval/search, active consideration, structural organization, and explanation can remain tractable.
+
+A proposed category must justify its structural existence through identifiable utility to the TS realization. The qualification questions are:
+
+1. What does the category buy us in terms of realization?
+2. What does the category buy us in terms of efficiency?
+3. What does the category buy us in terms of scalability?
+4. What does the category buy us in terms of understanding or structural/programming explanation?
+
+A category may be useful because it:
+
+- creates a realizable structural partition;
+- reduces unnecessary search or active consideration;
+- permits scaling without requiring the entire relational space to be simultaneously active;
+- improves inspectability, organization, programming clarity, or explanation.
+
+Conversely, a useful engineering partition does not have to be claimed as a fundamental semantic or cognitive division. The present canonical category taxonomy is not asserted to have been validated by these criteria; that remains a matter for later characterization and experiment.
+
+If a proposed category provides no meaningful benefit in realization, efficiency, scalability, or structural/programming understanding, there is no sufficient engineering justification for carrying that category merely because a plausible semantic grouping can be described.
+
+This clarification concerns why category structure exists in the realization. It does not enlarge what Category Selection is currently authorized to do: Category Selection can make candidate interpretations relevant for consideration; a category result is not itself meaning; selection remains distinct from S2M legitimation; Category Selection does not replace S2M; and correspondence, directional discrimination, or traversal mechanics are not moved into Category Selection.
+
 ## Baseline
 
 When no usable category cue is active:
