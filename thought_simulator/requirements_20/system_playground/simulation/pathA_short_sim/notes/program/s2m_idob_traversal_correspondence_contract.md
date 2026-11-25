@@ -35,7 +35,7 @@ Explicit opposition is not permitted to be inferred from:
 - low score/probability;
 - refusal/unselected state.
 
-If no explicit opposing relation is represented, opposition remains unresolved.
+If the current realization lacks an explicit opposing-relation mechanism or affirmative conflict basis, opposition is unavailable; unresolved is reserved for cases where an applicable representation/evaluation mechanism exists but cannot yet complete.
 
 ## Contract A — Evidence-to-candidate correspondence
 
