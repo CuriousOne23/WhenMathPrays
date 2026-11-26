@@ -113,6 +113,7 @@ New S2M documents should be registered here. Category Selection characterization
 
 - Category Selection family remains under [category_selection_index.md](category_selection_index.md). Category evidence may participate in traversal correspondence once an explicit relation is declared; it is not itself the traversal mechanism.
 - Normative Path A / IdOB / ISc requirements remain in the 20-series documents.
+- Downstream research track started after the traversal characterization closeout: [idob_relational_space_localization_index.md](idob_relational_space_localization_index.md) (IdOB relational-space localization; research, non-normative; does not reopen the traversal cycle).
 
 #### TS realization qualification guidance
 [20.740_ts_realization_qualification_guidance.md](../../../../../20.740_ts_realization_qualification_guidance.md)

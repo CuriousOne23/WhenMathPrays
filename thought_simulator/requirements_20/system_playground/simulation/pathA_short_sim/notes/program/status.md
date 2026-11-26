@@ -28,7 +28,7 @@ That goal is closed. Further expansion of S2M paths is not the current aim; cate
 Two additional views exist. Both are independent and speculative or summary; neither is a definitive conclusion and neither updates this account or the requirements.
 
 - **ShortSim Trajectory** — speculative trajectory quality relative to the goal above (advances / neutral / drifts, with reason). Emitted to Helm. Does not replace the ShortSim Status distance report.
-- **Path A Account** — larger Path A status door at [../../../../path_a_status.md](../../../../path_a_status.md). Readable summary of where Path A is, what is locked, next step, and why. Kept from drifting by its bot; does not author requirements.
+- **Path A Account** — larger Path A status door at [../../../../../path_a_status.md](../../../../../path_a_status.md). Readable summary of where Path A is, what is locked, next step, and why. Kept from drifting by its bot; does not author requirements.
 
 Read them as second views, not as the account.
 

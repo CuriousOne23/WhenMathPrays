@@ -40,7 +40,7 @@
 
 ### Local/generated-output conventions
 - Local output ignore boundary pattern: [local_characterization/.gitignore](../../../local_characterization/.gitignore).
-- Root ignore policy including `*.tschar.json` and local characterization subtree: [.gitignore](../../../../../../../../../.gitignore).
+- Root ignore policy including `*.tschar.json` and local characterization subtree: [.gitignore](../../../../../../../../.gitignore).
 
 ## 2) Proposed files/modules under `scalability/`
 
@@ -128,7 +128,7 @@ Notes:
 | 7. Determine qualification state | Existing characterization records under [local_characterization/](../../../local_characterization/) and formal docs (for bounded interpretation) | If explicit coverage evidence is absent or ambiguous, return `unresolved`; no invented qualification registry. |
 | 8. Invoke regression | Existing scripts in [support/tools/](../../../support/tools/), notably [pipeline_readiness_check.py](../../../support/tools/pipeline_readiness_check.py) and [s2m_category_selection_replay.py](../../../support/tools/s2m_category_selection_replay.py) | Use adapter/subprocess orchestration; do not re-implement regressions. |
 | 9. Evaluate boundary + disposition | Decision framework in [scalability_program.md](scalability_program.md) + evidence from stages 4–8 | Disposition assembly is new. |
-| 10. Emit findings/reports | Local artifact/persistence discipline pattern from [artifacts.py](../../../characterization/artifacts.py) and ignore conventions in [.gitignore](../../../../../../../../../.gitignore) | Scalability report writer/session store is new but should mirror proven persistence/identity discipline. |
+| 10. Emit findings/reports | Local artifact/persistence discipline pattern from [artifacts.py](../../../characterization/artifacts.py) and ignore conventions in [.gitignore](../../../../../../../../.gitignore) | Scalability report writer/session store is new but should mirror proven persistence/identity discipline. |
 
 ## 6) Proposed report/session output structure under `local_scalability/`
 
