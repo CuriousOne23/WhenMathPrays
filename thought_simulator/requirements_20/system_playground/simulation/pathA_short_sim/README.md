@@ -83,7 +83,7 @@ S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teac
 
   With no selection cue (the seed currently writes `selection_cues: []`), `meaning_relations` and `active_space` are empty: the run reports `default_meaning` and lists `candidate_interpretations` without legitimizing them (`s2m/loop.py`, `s2m/legitimate.py`).
 
-  With `--enable-category-selection` (default off), TPU commits `tp.semantic.isc_category_result` (`primitives_pathA_short.py:729-745`) and `s2m/loop.py:28-49` reads its `category_cue` / `top_category` to resolve `active_space`; the seed's own `selection_cues` stays `[]` (`idob/experimental_seed.py:59`). The cue path and candidate states (`category_supported`, `legitimized`, `refused`) are described in [user_guide.md §5](user_guide.md#5-read-category-selection-observation).
+  With `--enable-category-selection` (default off), TPU copies the merged ISc category result into `tp.semantic.isc_category_result` (`primitives_pathA_short.py:657-672`). `s2m/loop.py:28-37` reads `category_cue` and `top_category` from it; a non-empty cue resolves `active_space` and lets `s2m/legitimate.py` legitimize only the licensed candidates that match the selected category. The cue is reported in `cue_state` and `category_result` of `s2m_meaning`; the seed's own `selection_cues` stays `[]` (`idob/experimental_seed.py:58-59`). A cue with no licensed candidate leaves `meaning_relations` empty and marks the candidate `refused`. Replay: `PYTHONPATH=. python3 support/tools/s2m_category_selection_replay.py`.
 
 - **Disabled:**
   ```bash
@@ -91,11 +91,14 @@ S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teac
   ```
   Both blocks are disabled and do not appear in the log. Existing floor and claim behavior is unchanged.
 
+- **Other `run_examples.py` flags** (`run_examples.py:214-264`): `--no-category-observations` (skip the canonical S2M cases and the category-selection demos), `--enable-category-selection`, `--execution-case` (only `sky_blue`), and the characterization flags `--characterize`, `--char-type`, `--char-session-id`, `--char-run-index`, `--char-version`, `--char-params-json`, `--char-params-file`. Characterization mode is handled by the `characterization/` package (`dispatcher.py`, `artifacts.py`, `infra_smoke.py`); the only registered type is `infra_smoke`. Artifacts are written under `local_characterization/` (`characterization/artifacts.py:47-50`). Details are in the characterization notes under `notes/program/`, not on this page.
+
 The primitive that performs the mapping is IdOB. Details and acceptance criteria: [notes/program/s2m_program_reference.md](notes/program/s2m_program_reference.md).
 
 ## Simulation directories
 
 - `desks/` — SOB, SROB, CnOB, SmOB.
+- `characterization/` — characterization run dispatcher, artifact writer, and the `infra_smoke` type (used only with `run_examples.py --characterize`).
 - `idob/` — sum, packet, claim, and connection record.
 - `characterization/` — Milestone-1 characterization library used by `run_examples.py --characterize`.
 - `scalability/` — bounded Path A scalability analysis library used by `run_scalability.py`.
@@ -370,6 +373,7 @@ pathA_short_sim/
 |   |-- path_a_realization_charter.md
 |   `-- IdOB_unified_plan.md
 |
+|-- characterization/
 |-- desks/
 |-- idob/
 |   |-- sum.py
