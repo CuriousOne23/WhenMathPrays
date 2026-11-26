@@ -189,6 +189,10 @@ Controlled integration/promotion of a user-accepted proposal into established/ve
 
 That separate program is not yet defined.
 
+## Related programs
+
+The runner, `scalability/` package modules, and first-pass replay checks are registered in [scalability_index.md](scalability_index.md) under Implementation programs. This guide remains the operator how-to for [run_scalability.py](../../../run_scalability.py).
+
 ## Related references
 
 - [scalability_program.md](scalability_program.md)
@@ -196,3 +200,4 @@ That separate program is not yet defined.
 - [scalability_gap_analysis.md](scalability_gap_analysis.md)
 - [scalability_implementation_plan.md](scalability_implementation_plan.md)
 - [scalability_implementation_mapping.md](scalability_implementation_mapping.md)
+- [scalability_index.md](scalability_index.md)
