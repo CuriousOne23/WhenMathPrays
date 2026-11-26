@@ -31,10 +31,10 @@ Current downstream seam remains candidate-record shaped:
 
 Observed from current consumer path:
 
-- [apply](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/loop.py:25) reads proposals and computes `selection_state`.
-- [legitimate](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/legitimate.py:19) consumes `from/relation/to/major` (and optional `subcategory`) for bounded license checks.
-- [write_meaning_relations](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/write.py:4) preserves relation payload for output.
-- [build_record](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/record.py:58) stores candidate interpretations and meaning relations.
+- [apply](../../s2m/loop.py#L25) reads proposals and computes `selection_state`.
+- [legitimate](../../s2m/legitimate.py#L19) consumes `from/relation/to/major` (and optional `subcategory`) for bounded license checks.
+- [write_meaning_relations](../../s2m/write.py#L4) preserves relation payload for output.
+- [build_record](../../s2m/record.py#L58) stores candidate interpretations and meaning relations.
 
 No association-file origin/path metadata was required by consumers in this path.
 
@@ -51,9 +51,9 @@ No association-file origin/path metadata was required by consumers in this path.
 
 ### Structural-key preservation characterization
 
-- [apply_seed](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/idob/experimental_seed.py:34) emits `crossing_fields.structural_key: null`.
+- [apply_seed](../../idob/experimental_seed.py#L34) emits `crossing_fields.structural_key: null`.
 - Characterization artifact reported `seed_structural_key: null` for every case.
-- [\_idob_structural_key](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/primitives_pathA_short.py:925) exists as helper but is not on the current realized `s2m_seed.crossing_fields.structural_key` emission path.
+- [\_idob_structural_key](../../primitives_pathA_short.py#L925) exists as helper but is not on the current realized `s2m_seed.crossing_fields.structural_key` emission path.
 
 Bounded conclusion: current path does not show "generated then destroyed" structural key behavior on this seam; structural_key is presently unrealized (null) for this path.
 

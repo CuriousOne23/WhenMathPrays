@@ -18,10 +18,10 @@ This plan starts the successor cycle for category selection while preserving the
 
 Normative behavior and ownership remain in:
 
-- [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md)
-- [20.105_tp_requirements.md](../../../20.105_tp_requirements.md)
-- [20.116.010_tp_envelope_index.md](../../../20.116.010_tp_envelope_index.md)
-- [20.40.050_idob_prim.md](../../../20.40.050_idob_prim.md)
+- [20.45_ts_isc_scoring.md](../../../../../20.45_ts_isc_scoring.md)
+- [20.105_tp_requirements.md](../../../../../20.105_tp_requirements.md)
+- [20.116.010_tp_envelope_index.md](../../../../../20.116.010_tp_envelope_index.md)
+- [20.40.050_idob_prim.md](../../../../../20.40.050_idob_prim.md)
 
 Related program context:
 

@@ -28,10 +28,10 @@ For the complete category-selection document map, document roles, authority rela
 
 ### 3.1 Normative requirements authorities (own requirements/equations/field authority)
 
-- [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md)
-- [20.105_tp_requirements.md](../../../20.105_tp_requirements.md)
-- [20.116.010_tp_envelope_index.md](../../../20.116.010_tp_envelope_index.md)
-- [20.40.050_idob_prim.md](../../../20.40.050_idob_prim.md)
+- [20.45_ts_isc_scoring.md](../../../../../20.45_ts_isc_scoring.md)
+- [20.105_tp_requirements.md](../../../../../20.105_tp_requirements.md)
+- [20.116.010_tp_envelope_index.md](../../../../../20.116.010_tp_envelope_index.md)
+- [20.40.050_idob_prim.md](../../../../../20.40.050_idob_prim.md)
 
 ### 3.2 Program reference authority (this document)
 

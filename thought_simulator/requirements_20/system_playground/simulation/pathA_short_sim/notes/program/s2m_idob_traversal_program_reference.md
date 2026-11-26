@@ -3,7 +3,7 @@
 **Date:** 2026-11-25  
 **Status:** Implementation-facing mapping for current realization; non-normative.  
 **Primary conceptual authority:** [s2m_idob_traversal_proposal.md](s2m_idob_traversal_proposal.md).  
-**Normative boundaries:** [20.705_patha_pathb_flow.md](../../../20.705_patha_pathb_flow.md), [20.45_ts_isc_scoring.md](../../../20.45_ts_isc_scoring.md), [20.40.050_idob_prim.md](../../../20.40.050_idob_prim.md).  
+**Normative boundaries:** [20.705_patha_pathb_flow.md](../../../../../20.705_patha_pathb_flow.md), [20.45_ts_isc_scoring.md](../../../../../20.45_ts_isc_scoring.md), [20.40.050_idob_prim.md](../../../../../20.40.050_idob_prim.md).  
 
 ## Purpose
 
@@ -84,9 +84,9 @@ Reference plan and observation:
 
 ### Pre-experiment structural assessment
 
-- Current candidate producer remains surrogate endpoint association expansion ([propose](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/propose.py:21)).
-- Proposal door legality (`structural_key -> meaning_group_candidates`) is not realized; seed `crossing_fields.structural_key` remains null on this path ([apply_seed](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/idob/experimental_seed.py:34)).
-- Candidate consumer seam is proposal-shaped candidate records through [apply](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/loop.py:25), [legitimate](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/legitimate.py:19), [write_meaning_relations](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/write.py:4), and [build_record](/C:/Users/jeffg/Documents/GitHub/WhenMathPrays/thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/s2m/record.py:58).
+- Current candidate producer remains surrogate endpoint association expansion ([propose](../../s2m/propose.py#L21)).
+- Proposal door legality (`structural_key -> meaning_group_candidates`) is not realized; seed `crossing_fields.structural_key` remains null on this path ([apply_seed](../../idob/experimental_seed.py#L34)).
+- Candidate consumer seam is proposal-shaped candidate records through [apply](../../s2m/loop.py#L25), [legitimate](../../s2m/legitimate.py#L19), [write_meaning_relations](../../s2m/write.py#L4), and [build_record](../../s2m/record.py#L58).
 
 ### Provisional classification (before C1-C6)
 

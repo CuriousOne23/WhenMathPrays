@@ -12,7 +12,7 @@ Read these in order. Do not start from the reference lists further down.
 4. [notes/program/s2m_structure/result.md](notes/program/s2m_structure/result.md) and [notes/program/known_words.md](notes/program/known_words.md) — the connection record, the open holes, and words that are not invented.
 5. [notes/program/packet_sync/README.md](notes/program/packet_sync/README.md) — teaching names against `tp.idob`. Present fields and absent fields. Not \(M\).
 6. [notes/program/coverage_map.md](notes/program/coverage_map.md) — conversational coverage roadmap. History is on the map and out of the sim.
-7. [notes/program/s2m_relational_proposal.md](notes/program/s2m_relational_proposal.md) — emerging S2M relational mapping proposal (seed, categories, plasticity, audit). Independent of current requirements definitions.
+7. [notes/program/s2m_relational_proposal.md](notes/program/s2m_relational_proposal.md) — emerging S2M relational mapping proposal (seed, categories, plasticity, audit). Independent of current requirements definitions. Research proposal (non-normative); not the current goal. Its working formulation of meaning is a research hypothesis, refined by the research-only [notes/program/s2m_idob_traversal_proposal.md](notes/program/s2m_idob_traversal_proposal.md).
 8. [notes/program/category_selection_proposal.md](notes/program/category_selection_proposal.md) — next realization proposal (sentence-internal or prior-CEx category choice).
 
 Current face: SOB, SROB, CnOB, and SmOB write the structure floor. IdOB sums that floor and writes the teaching packet into `tp.idob`. `idob_packet` is that same sum (teaching name). Crossing fields (six structure IDs, rank, \(M\), CIE, `meaning_delta_h`) are not present on the packet written by IdOB; they are absent, not zero. A constructable shell view that copies the sum and sets those fields explicitly to null is available via `idob/crossing.py` (`crossing_from_packet`). It is not what the main simulator writes into `tp.idob`. The narrow S2M record is connections and holes, not \(M\). Both are accounted on the status page. A readable claim and a connection record are written from that packet. They do not compute \(M\). RBU, RB, TR, RTU, and CTP are mechanical routing beside the floor, not the parent of SOB.
@@ -21,14 +21,14 @@ Force ops such as polar, command, request, and exclamative are open holes. They 
 
 ## Document indexes under notes/program
 
-Use these navigation indexes to find the right family. They do not duplicate content; they route questions. The family indexes also register the corresponding characterization and experimentation programs. Operator how-to for `run_examples.py` stays in [user_guide.md](user_guide.md). The current goal remains the one stated in [notes/program/status.md](notes/program/status.md).
+Use these navigation indexes to find the right family. They do not duplicate content; they route questions. The family indexes also register the corresponding characterization and experimentation programs. Operator how-to for `run_examples.py` stays in [user_guide.md](user_guide.md). The indexes do not set the goal. The current goal, per [notes/program/status.md](notes/program/status.md), is "Controlled category selection (sentence-internal cue or prior-CEx cue) so a non-default category can be chosen without mutating the floor." Each family below is labelled current goal family, research, active research, or sibling program; the narrow S2M seed is historical / accomplished.
 
-- [notes/program/category_selection_index.md](notes/program/category_selection_index.md) — Category Selection document family (characterization, qualification, palette, observations, program closeout). Cue-source and empirical records for category evidence.
-- [notes/program/s2m_index.md](notes/program/s2m_index.md) — S2M document family (relational proposal and IdOB traversal proposal). Owns the mechanical chain from structure through legal candidates, correspondence, and directional discrimination.
-- [notes/program/idob_relational_space_localization_index.md](notes/program/idob_relational_space_localization_index.md) — IdOB relational-space localization — bounded research into whether a replaceable organizational/index layer over stable IdOB relational identities can help Path A identify a tractable active relational surface without treating organizational selection as meaning. Gate A / Phase 3 has been executed with bounded fixture-relative and oracle-relative classification CONTINUE; use the track index for current status before any Gate B work.
-- [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — Scalability document family (expansion principles, user guide, decision states).
+- [notes/program/category_selection_index.md](notes/program/category_selection_index.md) — Category Selection document family (characterization, qualification, palette, observations, program closeout). Cue-source and empirical records for category evidence. **Current goal family** (category selection; see status.md). The present characterization cycle is closed at its characterized boundary ([program closeout](notes/program/category_selection_characterization_program_closeout.md)).
+- [notes/program/s2m_index.md](notes/program/s2m_index.md) — S2M document family (relational proposal and IdOB traversal proposal). Owns the mechanical chain from structure through legal candidates, correspondence, and directional discrimination. **Research (non-normative); not the current goal.** The narrow S2M seed is historical / accomplished; the current IdOB traversal characterization cycle is closed at its present-realization boundary ([closeout](notes/program/s2m_idob_traversal_characterization_closeout.md)).
+- [notes/program/idob_relational_space_localization_index.md](notes/program/idob_relational_space_localization_index.md) — IdOB relational-space localization — bounded research into whether a replaceable organizational/index layer over stable IdOB relational identities can help Path A identify a tractable active relational surface without treating organizational selection as meaning. Gate A / Phase 3 has been executed with bounded fixture-relative and oracle-relative classification CONTINUE; Gate B design is frozen; Gate B execution is not performed and not authorized. **Active research (non-normative); not the current goal.** Use the track index for current status before any Gate B work.
+- [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — Scalability document family (expansion principles, user guide, decision states). **Sibling program; not the current goal.**
 
-For IdOB traversal questions open the S2M index. For Category Selection characterization questions open the Category Selection index.
+For IdOB traversal (research) questions open the S2M index. For IdOB relational-space localization (research) questions open the localization index. For Category Selection characterization questions open the Category Selection index.
 
 ## Expanding Path A
 
@@ -83,7 +83,7 @@ S2M runs as two additive outputs attached by **IdOB**. Neither replaces the teac
 
   With no selection cue (the seed currently writes `selection_cues: []`), `meaning_relations` and `active_space` are empty: the run reports `default_meaning` and lists `candidate_interpretations` without legitimizing them (`s2m/loop.py`, `s2m/legitimate.py`).
 
-With `--enable-category-selection` (default off), TPU copies the merged ISc category result into `tp.semantic.isc_category_result` (`primitives_pathA_short.py:657-672`). `s2m/loop.py:28-37` reads `category_cue` and `top_category` from it; a non-empty cue resolves `active_space` and lets `s2m/legitimate.py` legitimize only the licensed candidates that match the selected category. The cue is reported in `cue_state` and `category_result` of `s2m_meaning`; the seed's own `selection_cues` stays `[]` (`idob/experimental_seed.py:58-59`). A cue with no licensed candidate leaves `meaning_relations` empty and marks the candidate `refused`. Replay: `PYTHONPATH=. python3 support/tools/s2m_category_selection_replay.py`.
+  With `--enable-category-selection` (default off), TPU copies the merged ISc category result into `tp.semantic.isc_category_result` (`primitives_pathA_short.py:657-672`). `s2m/loop.py:28-37` reads `category_cue` and `top_category` from it; a non-empty cue resolves `active_space` and lets `s2m/legitimate.py` legitimize only the licensed candidates that match the selected category. The cue is reported in `cue_state` and `category_result` of `s2m_meaning`; the seed's own `selection_cues` stays `[]` (`idob/experimental_seed.py:58-59`). A cue with no licensed candidate leaves `meaning_relations` empty and marks the candidate `refused`. Replay: `PYTHONPATH=. python3 support/tools/s2m_category_selection_replay.py`.
 
 - **Disabled:**
   ```bash
@@ -118,7 +118,7 @@ Official expansions (20.700.010): Structural Observation Block (SOB), Structural
 
 # **1. What the Simulator Does**
 
-The Path‑A short simulator's original five sentence families are still listed below. The claim ledger and CSE also cover action, command, request, reporting, relative, and exclamative sentences. Implemented utterances run across this pipeline (SOB → SROB → CnOB → SmOB → SSG → RBU → RB → TR → TRU → RTU → CTP → IdOB → OuBA):
+The Path‑A short simulator's original five sentence families are still listed below. The claim ledger and CSE also cover action, command, request, reporting, relative, and exclamative sentences. Implemented utterances run across this pipeline (InB → IIInB → IE → CEx → CE → ISc → TPU → SOB → SROB → CnOB → SmOB → SSG → RBU → RB → TR → TRU → RTU → CTP → IdOB → OuBA; `pathA_short_simulator.py:17-23`):
 
 ### **Supported Families**
 1. **Copular / State Descriptive**  
@@ -340,6 +340,9 @@ IdOB teaching card (packet, dict `semantic_core`): [debug/primitives/IdOB.md](de
 
 - S2M index:  
   [notes/program/s2m_index.md](notes/program/s2m_index.md)
+
+- IdOB relational-space localization index (research):  
+  [notes/program/idob_relational_space_localization_index.md](notes/program/idob_relational_space_localization_index.md)
 
 - Scalability index:  
   [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md)
