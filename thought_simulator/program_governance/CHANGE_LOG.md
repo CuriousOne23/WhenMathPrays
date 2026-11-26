@@ -218,3 +218,4 @@
 2026-11-25 | ShortSim Docs | 8 AM run; range 94da76c..7465fcf; E1–E2 on branch shortsim-docs/20261125-7465fcf (PR not open) | write=no
 2026-11-25 | ShortSim Trajectory | DRIFTS mildly note filed (8347eeb) | write=no
 2026-11-25 | ShortSim Trajectory | NEUTRAL (leaning drift if it continues) note filed (9c7ebe4) | write=no
+2026-11-26 | Path A Account drift | main @ baf4574; door/status.md drift report filed | write=no
