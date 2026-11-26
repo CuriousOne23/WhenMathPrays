@@ -12,6 +12,7 @@ Use this page to route S2M questions by document role and authority.
 - Open **research proposals** for conceptual models that have not yet been frozen as architecture.
 - Open **program references** for realization contracts once they exist.
 - Open **observation and characterization docs** for empirical records.
+- Open **replay and experimentation programs** below for the S2M-focused scripts. Operator how-to for ordinary runs of `run_examples.py` lives in [../../user_guide.md](../../user_guide.md).
 
 This index is intentionally brief and does not duplicate technical detail from the linked documents.
 
@@ -164,6 +165,36 @@ Then, as needed:
 
 → normative requirements (20.705, 20.45, 20.40.050)  
 → Category Selection index for cue characterization
+
+## S2M replay and experimentation programs
+
+These scripts exercise the realized S2M seed, meaning, claim, connection, and hole behavior. They do not define architecture. Operator how-to for ordinary S2M-enabled runs is in [../../user_guide.md](../../user_guide.md) (`run_examples.py`; disable with `--no-s2m-seed`).
+
+### Operator entry (shared)
+
+- [run_examples.py](../../run_examples.py) — shared operator entry. S2M accountability and meaning blocks are enabled by default. How-to: [../../user_guide.md](../../user_guide.md) section 1. Category-selection characterization surfaces are registered under [category_selection_index.md](category_selection_index.md).
+
+### Seed and meaning contract
+
+- [support/tools/seed_replay.py](../../support/tools/seed_replay.py) — optional S2M seed without mutating `tp.idob`.
+- [support/tools/s2m_meaning_replay.py](../../support/tools/s2m_meaning_replay.py) — S2M Part I + Part II without mutating `tp.idob`.
+- [support/tools/s2m_canonical_sentences_replay.py](../../support/tools/s2m_canonical_sentences_replay.py) — canonical three-sentence default-meaning contract.
+- [support/tools/s2m_schema_replay.py](../../support/tools/s2m_schema_replay.py) — connection schema and closed relation list match the definition.
+- [support/tools/s2m_rung0_replay.py](../../support/tools/s2m_rung0_replay.py) — first mapping rung; structure must be unchanged.
+- [support/tools/s2m_rung1_replay.py](../../support/tools/s2m_rung1_replay.py) — readable claim from the packet; structure unchanged; \(M\) is not computed.
+
+### Selection, claims, connections, and holes
+
+- [support/tools/s2m_category_selection_replay.py](../../support/tools/s2m_category_selection_replay.py) — category-cue scoring and S2M selection boundaries. Also listed under the Category Selection index; reused as a scalability regression check.
+- [support/tools/s2m_connection_replay.py](../../support/tools/s2m_connection_replay.py) — connection writer does not reopen the cut or invent a winner.
+- [support/tools/s2m_notice_replay.py](../../support/tools/s2m_notice_replay.py) — two supported relations are noticed and not ranked.
+- [support/tools/s2m_missing_hole_replay.py](../../support/tools/s2m_missing_hole_replay.py) — an asked empty end is a hole; a locative sentence does not invent a state hole.
+- [support/tools/s2m_unlisted_op_replay.py](../../support/tools/s2m_unlisted_op_replay.py) — a selected op off the relation list is a hole, not a new relation.
+- [support/tools/s2m_reporting_link_replay.py](../../support/tools/s2m_reporting_link_replay.py) — a reporting op with a speaker is a connection; no speaker is a hole.
+- [support/tools/s2m_query_claim_replay.py](../../support/tools/s2m_query_claim_replay.py) — a wh-question claims its focus and theme; a declarative does not gain a query.
+- [support/tools/s2m_polar_claim_replay.py](../../support/tools/s2m_polar_claim_replay.py) — a polar question claims its question; the declarative does not.
+- [support/tools/s2m_exclamative_claim_replay.py](../../support/tools/s2m_exclamative_claim_replay.py) — an exclamation claims its theme; a wh-question does not use that wording.
+- [support/tools/s2m_report_request_replay.py](../../support/tools/s2m_report_request_replay.py) — reporting and request claims use packet ops; they do not invent a speaker.
 
 ## Extensibility
 

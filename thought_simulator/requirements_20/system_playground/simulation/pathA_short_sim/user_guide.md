@@ -9,7 +9,9 @@ Catalog (ten cards; the family enum has ten values, including `agent_action`, `i
 Packet contract: [architecture/IdOB_unified_plan.md](architecture/IdOB_unified_plan.md).  
 Charter: [architecture/path_a_realization_charter.md](architecture/path_a_realization_charter.md).  
 S2M program contract and Phase III/IV: [notes/program/s2m_program_reference.md](notes/program/s2m_program_reference.md).  
-Category selection concept: [notes/program/category_selection_proposal.md](notes/program/category_selection_proposal.md).
+Category selection concept: [notes/program/category_selection_proposal.md](notes/program/category_selection_proposal.md).  
+Category Selection program and characterization surfaces: [notes/program/category_selection_index.md](notes/program/category_selection_index.md).  
+Scalability operator entry (`run_scalability.py`), not documented in this guide: [notes/program/scalability/scalability_user_guide.md](notes/program/scalability/scalability_user_guide.md).
 
 **Official expansions:** Structural Observation Block (SOB), Structural Refinement Observation Block (SROB), Constraint Observation Block (CnOB), Semantic Observation Block (SmOB), Identity Observation Block (IdOB). Debug field names (`struct_segments`, `struct_roles`, smoothing) are teaching aliases of those jobs. Full contracts: `20.40.010`–`20.40.050`.
 
@@ -66,8 +68,8 @@ Milestone-1 characterization type:
 
 Execution controls used together with characterization:
 
-- `--execution-case`
-- `--enable-category-selection`
+- `--execution-case` (currently only `sky_blue`; that is also the default)
+- `--enable-category-selection` (opt-in for the selected execution case; not the default)
 - `--no-s2m-seed`
 - `--no-category-observations`
 
@@ -447,7 +449,10 @@ Neither `run_examples.py` nor `pathA_short_simulator.py` open YAML by hand. The 
 ### 14.1 Top-level Python
 
 **`run_examples.py`**  
-Entry point / driver. Defines example sentences and observation cases. Calls `run_pathA_short`. Prints or logs the trace and labeled S2M/category blocks. Does not mutate the TP.
+Entry point / driver. Defines example sentences and observation cases. Calls `run_pathA_short`. Prints or logs the trace and labeled S2M/category blocks. Does not mutate the TP. When `--characterize` is set, it observes that one selected TS execution through the `characterization/` package and writes success-only evidence under `local_characterization/`. See section 1.
+
+**`characterization/`**  
+Milestone-1 characterization library imported by the runner: `dispatcher.py` resolves type/version (currently `infra_smoke` @ `1.0`), `infra_smoke.py` collects runtime observations, and `artifacts.py` persists the success envelope.
 
 **`pathA_short_simulator.py`**  
 Macro sequencer. Runs primitives in order. Captures snapshots. No dictionary loading of its own.
@@ -504,7 +509,9 @@ Final TP + full trace + labeled S2M/category blocks
 
 | File | Purpose |
 |------|--------|
-| `run_examples.py` | Runs examples and observation cases; prints trace and labeled blocks |
+| `run_examples.py` | Operator entry: runs examples and observation cases; optional `--characterize` mode; prints trace and labeled blocks |
+| `pathA_dbug.py` | Reads `run.log` and writes `debug_out.md`; does not read `.tschar.json` |
+| `characterization/` | Milestone-1 characterization library used by `run_examples.py --characterize` |
 | `pathA_short_simulator.py` | Macro sequencer |
 | `tp_substrate.py` | TP structure |
 | `primitives_pathA_short.py` | Lineup; loads many support files |
@@ -516,6 +523,8 @@ Final TP + full trace + labeled S2M/category blocks
 | `debug/primitives/IdOB.md` | Observer card for IdOB |
 | `notes/program/s2m_program_reference.md` | S2M executable contract, Phase III/IV |
 | `notes/program/category_selection_proposal.md` | Category-selection phenomenon and boundaries |
+| `notes/program/category_selection_index.md` | Category Selection document and program index |
+| `notes/program/scalability/scalability_user_guide.md` | Operator how-to for `run_scalability.py` (separate entry) |
 
 ---
 

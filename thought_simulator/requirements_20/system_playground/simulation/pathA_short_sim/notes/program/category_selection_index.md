@@ -11,6 +11,7 @@ Use this page to route questions by document role and authority.
 - Open **normative requirements** for authoritative behavior/ownership/path rules.
 - Open **program/research/reference docs** for category-selection design, implementation scope, and characterization method.
 - Open **observation docs** for empirical records and experiment outcomes.
+- Open **executable programs** below for the operator entry and characterization library. Operator how-to for `run_examples.py` lives in [../../user_guide.md](../../user_guide.md); this index does not repeat it.
 
 This index is intentionally brief and does not duplicate technical detail from the linked documents.
 
@@ -262,6 +263,47 @@ Typical progression for a new cycle:
 → `category_selection_observation.md`
 
 At any step, open normative requirements for authoritative behavior/path/ownership questions. Open `ts_program_principle.md` when judging whether a step counts as progress. Open the program closeout for the consolidated status of the present characterization cycle. For IdOB traversal questions, open the S2M index.
+
+## Characterization and experimentation programs
+
+These are the executable surfaces that implement or exercise Category Selection characterization. They are not a second operator guide.
+
+### Operator entry
+
+- [run_examples.py](../../run_examples.py)  
+  **What it is:** Operator entry for Path A short-sim examples, default category-selection observation cases, and opt-in characterization of one TS execution.  
+  **Status/authority:** Live runner on `main`. `--enable-category-selection` is opt-in for the selected execution case. S2M blocks and observation cases are on by default (disable with `--no-s2m-seed` and `--no-category-observations`). `--execution-case` currently accepts only `sky_blue`. Milestone-1 characterization type is `infra_smoke`.  
+  **Open when:** You need to run the simulator, the observation cases, or a characterization invocation.  
+  **How to run:** [../../user_guide.md](../../user_guide.md) section 1, including the Characterization subsection. Do not treat this index as a command reference.
+
+- [pathA_dbug.py](../../pathA_dbug.py)  
+  **What it is:** Debugger, training, and teaching tool. Reads a `run.log` produced by `run_examples.py` and writes `debug_out.md`. It does not interpret `.tschar.json` characterization artifacts.  
+  **Open when:** You need a teaching document from a logged run.  
+  **How to run:** [../../user_guide.md](../../user_guide.md) section 1.
+
+### Characterization package
+
+Milestone-1 library used by `run_examples.py --characterize`. The dispatcher registry currently has one type: `infra_smoke` @ `1.0`.
+
+- [characterization/__init__.py](../../characterization/__init__.py)  
+  **What it is:** Package surface and `CharacterizationError` raised after CLI validation.
+
+- [characterization/dispatcher.py](../../characterization/dispatcher.py)  
+  **What it is:** Resolves a characterization type and requested version to a params resolver and runner.
+
+- [characterization/infra_smoke.py](../../characterization/infra_smoke.py)  
+  **What it is:** Milestone-1 `infra_smoke` collector. Records runtime observations from a normal TS result (`truth_relation`, primitive sequence, and present S2M/category fields) and marks `entropy` and `top_vs_second_margin` as `unavailable`. It is infrastructure/sanity characterization, not a substantive category-selection experiment.
+
+- [characterization/artifacts.py](../../characterization/artifacts.py)  
+  **What it is:** Success-only artifact envelope (`schema_id` `ts.characterization.run`) and persistence under `local_characterization/sessions/<session_id>/runs/<run_index>__<type>__<version>.tschar.json`. Canonical identity is `(session_id, run_index)`; a successful identity is not overwritten.
+
+### Related replay checks
+
+- [support/tools/characterization_artifact_replay.py](../../support/tools/characterization_artifact_replay.py)  
+  **What it is:** Batch 3A verification of characterization artifact persistence (envelope, path formatting, identity conflict, and local-output boundary).
+
+- [support/tools/s2m_category_selection_replay.py](../../support/tools/s2m_category_selection_replay.py)  
+  **What it is:** Replay for category-cue scoring and S2M selection boundaries. Also reused as a scalability regression check when `run_scalability.py --run-regression` is set. Also listed under the S2M index.
 
 ## Extensibility
 

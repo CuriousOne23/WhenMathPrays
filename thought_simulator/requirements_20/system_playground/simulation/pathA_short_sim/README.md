@@ -21,7 +21,7 @@ Force ops such as polar, command, request, and exclamative are open holes. They 
 
 ## Document indexes under notes/program
 
-Use these navigation indexes to find the right family. They do not duplicate content; they route questions.
+Use these navigation indexes to find the right family. They do not duplicate content; they route questions. The family indexes also register the corresponding characterization and experimentation programs. Operator how-to for `run_examples.py` stays in [user_guide.md](user_guide.md). The current goal remains the one stated in [notes/program/status.md](notes/program/status.md).
 
 - [notes/program/category_selection_index.md](notes/program/category_selection_index.md) — Category Selection document family (characterization, qualification, palette, observations, program closeout). Cue-source and empirical records for category evidence.
 - [notes/program/s2m_index.md](notes/program/s2m_index.md) — S2M document family (relational proposal and IdOB traversal proposal). Owns the mechanical chain from structure through legal candidates, correspondence, and directional discrimination.
@@ -35,8 +35,8 @@ For IdOB traversal questions open the S2M index. For Category Selection characte
 Expanding Path A? Start with the scalability program and user guide before treating new YAML/reference coverage as established behavior.
 
 - [notes/program/scalability/scalability_program.md](notes/program/scalability/scalability_program.md) — governing principles, expansion definition, regression versus progression, decision states.
-- [notes/program/scalability/scalability_user_guide.md](notes/program/scalability/scalability_user_guide.md) — practical sequence after an expansion (placeholder until audit).
-- [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — navigation for the scalability document family.
+- [notes/program/scalability/scalability_user_guide.md](notes/program/scalability/scalability_user_guide.md) — practical operator guide for the accepted first bounded implementation, including `run_scalability.py`.
+- [notes/program/scalability/scalability_index.md](notes/program/scalability/scalability_index.md) — navigation for the scalability document family, including the `scalability/` package and first-pass replay checks.
 
 ## S2M mapping (experimental; on main via PR #194/#197; historical)
 
@@ -95,8 +95,10 @@ The primitive that performs the mapping is IdOB. Details and acceptance criteria
 
 - `desks/` — SOB, SROB, CnOB, SmOB.
 - `idob/` — sum, packet, claim, and connection record.
+- `characterization/` — Milestone-1 characterization library used by `run_examples.py --characterize`.
+- `scalability/` — bounded Path A scalability analysis library used by `run_scalability.py`.
 - `support/` — YAML cards, schemas, relation list, replays.
-- `notes/program/` — status and onboarding pages.
+- `notes/program/` — status, onboarding pages, and document-family indexes.
 - `architecture/` — names and the packet contract. Reference, not the first reading.
 
 Run checks from [user_guide.md](user_guide.md). The claim check is `PYTHONPATH=. python3 support/tools/claim_ledger_replay.py`.
@@ -151,6 +153,8 @@ It explains:
 - how to inspect TP evolution as two columns (OB-set vs packet)
 
 S2M mapping (experimental, now historical): enabled by default; disable with `--no-s2m-seed`. See the S2M mapping section above. The mapping is performed by IdOB.
+
+Category-selection behavior on the selected execution case is opt-in (`--enable-category-selection`). Characterization mode (`--characterize`; Milestone-1 type `infra_smoke`) observes one TS execution and is documented in the User Guide. Bounded scalability analysis is a separate operator entry, `run_scalability.py`; see [notes/program/scalability/scalability_user_guide.md](notes/program/scalability/scalability_user_guide.md).
 
 ---
 
@@ -352,6 +356,7 @@ pathA_short_sim/
 |-- replay_parity_harness.py
 |-- generate_cutover_readiness_report.py
 |-- ie_compat_intake.py
+|-- run_scalability.py
 |-- requirements.txt
 |
 |-- architecture/
@@ -373,6 +378,8 @@ pathA_short_sim/
 |-- s2m/
 |-- mapping/
 |-- stores/
+|-- characterization/
+|-- scalability/
 |
 |-- support/
 |   |-- dictionaries/

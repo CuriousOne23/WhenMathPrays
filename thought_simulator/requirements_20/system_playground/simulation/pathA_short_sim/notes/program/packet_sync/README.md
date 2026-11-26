@@ -37,7 +37,15 @@ It does not invent an ID. It does not birth \(M\). It does not apply CIE. It doe
 
 ## Constructable shell
 
-`idob/crossing.py` (`crossing_from_packet`) builds a shell view that copies the sum and sets the crossing fields (six IDs, key, rank, \(M\), CIE, `meaning_delta_h`, etc.) explicitly to null. Replay: `support/tools/tp_idob_shell_replay.py`. This view is available; it is not the value IdOB writes in a normal run.
+`idob/crossing.py` (`crossing_from_packet`) builds a shell view that copies the sum and sets the crossing fields (six IDs, key, rank, \(M\), CIE, `meaning_delta_h`, etc.) explicitly to null. Replay: [../../../support/tools/tp_idob_shell_replay.py](../../../support/tools/tp_idob_shell_replay.py). This view is available; it is not the value IdOB writes in a normal run.
+
+Related packet-sync evaluation and replay programs (none of these write a structure ID):
+
+- [../../../support/tools/structure_id_eval.py](../../../support/tools/structure_id_eval.py) — falsify the six structure IDs against the floor; write no ID value. Record: [id_eval.md](id_eval.md).
+- [../../../support/tools/structure_id_check_replay.py](../../../support/tools/structure_id_check_replay.py) — guardrail: no invented ID, no key, no missing verdict.
+- [../../../support/tools/unplaced_source_replay.py](../../../support/tools/unplaced_source_replay.py) — unplaced differences have floor sources; they are not structure IDs. Record: [unplaced.md](unplaced.md).
+- [../../../support/tools/smob_residue_field_replay.py](../../../support/tools/smob_residue_field_replay.py) — SmOB residue field wiring on the short-simulator TP (`smoothing_residue`).
+- [../../../support/tools/tp_idob_shell_replay.py](../../../support/tools/tp_idob_shell_replay.py) — the constructable shell copies the sum and leaves crossing fields null.
 
 ## Next
 

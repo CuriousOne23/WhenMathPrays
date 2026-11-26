@@ -22,6 +22,23 @@ This folder is the comprehensive view of `pathA_short_sim`. A later reader, huma
 11. [s2m_structure/result.md](s2m_structure/result.md) — what the first connection writer showed.
 12. [packet_sync/README.md](packet_sync/README.md) — name map. `idob_packet` is a view over `tp.idob`. Crossing fields are absent.
 
+## Document family indexes
+
+These navigation indexes were added after the 2026-10-08 reading order above. They route the Path A characterization works under this folder; they do not replace [status.md](status.md) as the goal account.
+
+- [category_selection_index.md](category_selection_index.md) — Category Selection documents, plus the `run_examples.py` / `characterization/` operator and library surfaces. Operator how-to: [../../user_guide.md](../../user_guide.md).
+- [s2m_index.md](s2m_index.md) — S2M documents and the S2M-focused replay scripts under `support/tools/`.
+- [idob_relational_space_localization_index.md](idob_relational_space_localization_index.md) — IdOB relational-space localization track, including the Gate A / Phase 3 characterization program.
+- [scalability/scalability_index.md](scalability/scalability_index.md) — scalability documents, `run_scalability.py`, and the `scalability/` package. Operator how-to: [scalability/scalability_user_guide.md](scalability/scalability_user_guide.md).
+
+Packet-sync evaluation and replay programs are listed under [packet_sync/README.md](packet_sync/README.md). Remaining characterization and experimentation programs under `support/tools/` and the short-sim root, not owned by the family indexes above:
+
+- Floor, form, claim, and activation replays in [../../support/tools/](../../support/tools/): `action_row_replay.py`, `activation_guard_replay.py`, `activation_guard_2_replay.py`, `activation_tree_replay.py`, `activation_tree_2_replay.py`, `activation_tree_3_replay.py`, `adverb_claim_replay.py`, `claim_join_replay.py`, `claim_ledger_replay.py`, `command_circle_replay.py`, `command_theme_claim_replay.py`, `copula_claim_replay.py`, `copular_core_replay.py`, `exclamative_not_wh_replay.py`, `form_hole_replay.py`, `helper_op_replay.py`, `jumps_circle_replay.py`, `jumps_hat_replay.py`, `known_word_boundary_replay.py`, `location_op_replay.py`, `locative_core_replay.py`, `please_circle_replay.py`, `polar_cue_replay.py`, `query_core_replay.py`, `recipient_op_replay.py`, `recipient_relative_claim_replay.py`, `relative_op_replay.py`, `reporting_op_replay.py`, `schema_enum_replay.py`, `spain_core_replay.py`, `speaker_hat_replay.py`, `state_op_replay.py`, `unknown_not_np_replay.py`, `wh_op_replay.py`, `why_state_replay.py`. Each script's module docstring states the specific contract it checks. The claim check used from the door is `claim_ledger_replay.py`.
+- [../../support/tools/pipeline_readiness_check.py](../../support/tools/pipeline_readiness_check.py) — deterministic full-pipeline readiness check (`pipeline_ready=True/False`); also reused as a scalability `--run-regression` script.
+- [../../support/tools/ouba_stability_check.py](../../support/tools/ouba_stability_check.py) — OuBA assembly stability check on synthetic IdOB packets (`ouba_stability=True/False`).
+- [../../replay_parity_harness.py](../../replay_parity_harness.py) — deterministic replay-parity harness for intake and token/segment cases (`--case`, `--format`, `--output`).
+- [../../generate_cutover_readiness_report.py](../../generate_cutover_readiness_report.py) — runs the example sentence set and writes `cutover_readiness_report.json` plus [../cutover_readiness_report.md](../cutover_readiness_report.md).
+
 ## What this pass does not do
 
 - It does not edit Python, YAML, or evidence JSON.

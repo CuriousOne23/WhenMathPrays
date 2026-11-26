@@ -72,4 +72,11 @@ Do not proceed automatically into Gate B execution or Gate C.
 - [idob_relational_space_localization_observation.md](idob_relational_space_localization_observation.md)  
   **Role:** executed Gate A / Phase 3 characterization evidence, measured observations, and Gate A mechanical classification.
 
+## Characterization program
+
+- [support/tools/idob_relational_space_localization_phase3_characterization.py](../../support/tools/idob_relational_space_localization_phase3_characterization.py)  
+  **What it is:** Gate A / Phase 3 characterization executable for this track. Builds the frozen fixture-relative, oracle-only characterization, writes JSON under `local_characterization/sessions/idob_relational_space_localization_phase3/runs/`, and prints the Gate A classification. It does not claim a production Path A selector or that Path A possesses oracle information.  
+  **Open when:** You need the executable that produced the Gate A / Phase 3 evidence.  
+  **Relationship:** The observation record is [idob_relational_space_localization_observation.md](idob_relational_space_localization_observation.md). Gate B execution is not performed and is not authorized by this listing.
+
 Future observation/realization/characterization/closeout documents should be registered here only when they are actually created.
