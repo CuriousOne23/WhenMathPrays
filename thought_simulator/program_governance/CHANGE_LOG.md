@@ -220,3 +220,4 @@
 2026-11-25 | ShortSim Trajectory | NEUTRAL (leaning drift if it continues) note filed (9c7ebe4) | write=no
 2026-11-26 | Path A Account drift | main @ baf4574; door/status.md drift report filed | write=no
 2026-11-26 | ShortSim Docs | program-index pass (main 9c7ebe4); PR #216 opened, not merged (branch shortsim-docs/20261126-9c7ebe4, commit b414b45) | write=no
+2026-11-27 | ShortSim Status goal-distance | 1:05 PM Phoenix; Path A characterization report filed | write=no
