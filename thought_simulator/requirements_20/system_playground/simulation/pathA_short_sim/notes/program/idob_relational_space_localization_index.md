@@ -66,6 +66,8 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - P0/P1 evidence: **RECORDED**.
 - P0/P1 observation: **RECORDED**.
 - P0/P1 results: **BEING REVIEWED**.
+- S2M structure observation-surface proposal: **PREPARED FOR REVIEW**.
+- S2M structure observation-surface design: **PREPARED FOR REVIEW**.
 - Natural-structure discovery probe: **NOT DESIGNED / NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
@@ -80,12 +82,12 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 - **Information/Representation Sufficiency characterization:** implemented and executed after approved pre-execution review; evidence, observation, classifications, and bounded interpretation human-approved.
 - **Pre-localization provenance boundary:** contract approved (non-normative boundary only; no source selected/authorized).
-- **Current program state:** architectural gap statement approved; functional reframing recorded; P0/P1 constructive-control execution completed; results being reviewed.
+- **Current program state:** S2M structure observation-surface proposal/design prepared for review; no new characterization execution authorized.
 
 ## Current next step
 
-Human/CP/Grok review of the executed P0/P1 constructive-control evidence and observation, followed by a separate decision on any subsequent authorized step.  
-Do not proceed automatically into source selection, localization read/access change, representation-family design beyond the P0/P1 package, architecture proposal/change, HOW-2, Gate C, production selector work, or Category/YAML integration.
+Human/CP/Grok review of the S2M structure observation-surface proposal/design package, followed by a separate authorization decision before any characterization execution.  
+Do not proceed automatically into implementation/execution, source selection, localization read/access change, architecture proposal/change, HOW-2, Gate C, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
 
@@ -147,6 +149,12 @@ Do not proceed automatically into source selection, localization read/access cha
 
 - [idob_relational_space_localization_constructive_control_p0_p1_observation.md](idob_relational_space_localization_constructive_control_p0_p1_observation.md)  
   **Role:** executed P0/P1 constructive-control evidence summary, analytic expectation comparison, permutation/shortcut audit results, completeness/replay status, and mechanical classifications.
+
+- [idob_relational_space_localization_s2m_structure_observation_surface_proposal.md](idob_relational_space_localization_s2m_structure_observation_surface_proposal.md)  
+  **Role:** bounded proposal for selecting legitimate existing S2M observation surfaces and defining primary structure-characterization objective with subordinate utility channel.
+
+- [idob_relational_space_localization_s2m_structure_observation_surface_design.md](idob_relational_space_localization_s2m_structure_observation_surface_design.md)  
+  **Role:** scientific characterization design for candidate observation surfaces, controlled variation classes, controls/audits, replay/completeness expectations, and HOLD/invalid outcomes.
 
 ## Characterization program
 
