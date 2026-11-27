@@ -751,10 +751,15 @@ Gate B design and any later characterization do not automatically establish:
 - W1-W3 representation-family direction: reviewed and NOT AUTHORIZED
 - Pre-localization information-provenance contract: AUTHORIZED and recorded (see [idob_relational_space_localization_pre_localization_information_provenance_contract.md](idob_relational_space_localization_pre_localization_information_provenance_contract.md))
 - Pre-localization information-provenance contract review state: APPROVED (non-normative boundary approval only)
-- Source-candidate analysis: COMPLETED / RECORDED (see [idob_relational_space_localization_source_candidate_analysis.md](idob_relational_space_localization_source_candidate_analysis.md))
-- Architectural Gap Statement: CREATED / BEING REVIEWED (see [idob_relational_space_localization_architectural_gap_statement.md](idob_relational_space_localization_architectural_gap_statement.md))
-- Current program state: HOLD AT ARCHITECTURAL GAP STATEMENT
+- Source-candidate analysis: APPROVED / RECORDED (see [idob_relational_space_localization_source_candidate_analysis.md](idob_relational_space_localization_source_candidate_analysis.md))
+- Source-candidate analysis review state: APPROVED
+- Architectural Gap Statement: APPROVED / RECORDED (see [idob_relational_space_localization_architectural_gap_statement.md](idob_relational_space_localization_architectural_gap_statement.md))
+- Functional reframing and competing-conjecture trajectory: RECORDED (see [idob_relational_space_localization_functional_reframing.md](idob_relational_space_localization_functional_reframing.md))
+- Constructive-control P0/P1 proposal: PREPARED / BEING REVIEWED (see [idob_relational_space_localization_constructive_control_p0_p1_proposal.md](idob_relational_space_localization_constructive_control_p0_p1_proposal.md))
+- Constructive-control P0/P1 mechanical design: PREPARED / BEING REVIEWED (see [idob_relational_space_localization_constructive_control_p0_p1_design.md](idob_relational_space_localization_constructive_control_p0_p1_design.md))
+- Current program state: REVIEW/DECISION ON P0/P1 CONSTRUCTIVE-CONTROL PACKAGE
 - Localization source selection: NOT AUTHORIZED
 - Localization read/access change: NOT AUTHORIZED
-- Representation-family design/new characterization/implementation-execution: NOT AUTHORIZED
+- Representation-family design beyond the scoped P0/P1 package: NOT AUTHORIZED
 - Architecture proposal/change: NOT AUTHORIZED
+- P0/P1 implementation/execution: NOT AUTHORIZED pending separate approval

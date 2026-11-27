@@ -4,7 +4,7 @@
 **Status:** Research finding/boundary statement (non-normative).  
 **Purpose:** Objectify the architectural boundary reached by localization research without selecting a source, proposing architecture, or authorizing implementation.
 
-Review state: **BEING REVIEWED**
+Review state: **APPROVED**
 
 ## 1) Current architecture (bounded)
 
@@ -26,6 +26,12 @@ Current TS architecture does not presently define:
 Current TS architecture contains clean pre-IdOB information and identifiable structural, routing/context, and intake distinctions, but it does not define a relational-space localization operation, designate a pre-IdOB localization input, or provide a localization-specific read/access contract. The localization research therefore cannot presently define a legitimate non-oracle generation path from existing runtime information to a localization representation without making an additional architectural decision.
 
 This identifies a gap. It does not declare that TS must be changed.
+
+Refinement boundary:
+
+The Architectural Gap Statement remains valid relative to the earlier localization research framing.  
+It does not establish a missing TS requirement.  
+The broader functional question remains whether meaning construction benefits from contextual differentiation of relational material under non-oracle conditions at all.
 
 ## 3) Why this gap matters (bounded sequence)
 

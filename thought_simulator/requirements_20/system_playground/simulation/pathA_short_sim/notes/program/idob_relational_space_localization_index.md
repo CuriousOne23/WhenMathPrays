@@ -48,15 +48,18 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - W1-W3 representation-family direction: **REVIEWED, NOT AUTHORIZED**.
 - Provenance-boundary documentation: **AUTHORIZED**.
 - Pre-Localization Information-Provenance Contract review state: **APPROVED**.
-- Source-candidate analysis: **COMPLETED / RECORDED**.
-- Architectural Gap Statement: **CREATED / BEING REVIEWED**.
-- Current program state: **HOLD AT ARCHITECTURAL GAP STATEMENT**.
+- Source-candidate analysis: **APPROVED / RECORDED**.
+- Architectural Gap Statement: **APPROVED / RECORDED**.
+- Functional reframing and competing-conjecture trajectory: **RECORDED**.
+- Constructive-control P0/P1 proposal: **PREPARED / BEING REVIEWED**.
+- Constructive-control P0/P1 mechanical design: **PREPARED / BEING REVIEWED**.
+- Current program state: **REVIEW/DECISION ON P0/P1 CONSTRUCTIVE-CONTROL PACKAGE**.
 - Localization source selection: **NOT AUTHORIZED**.
 - Localization read/access change: **NOT AUTHORIZED**.
 - Representation-family design: **NOT AUTHORIZED**.
-- New characterization: **NOT AUTHORIZED**.
+- New characterization beyond scoped P0/P1 proposal package: **NOT AUTHORIZED**.
 - Architecture proposal/change: **NOT AUTHORIZED**.
-- Implementation/execution (next cycle work): **NOT AUTHORIZED**.
+- Implementation/execution (including P0/P1): **NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
 - Final YAML/IdOB representation design authorized: **NO**.
@@ -70,12 +73,12 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 - **Information/Representation Sufficiency characterization:** implemented and executed after approved pre-execution review; evidence, observation, classifications, and bounded interpretation human-approved.
 - **Pre-localization provenance boundary:** contract approved (non-normative boundary only; no source selected/authorized).
-- **Current program hold:** architectural gap identified and recorded; no architecture change authorized.
+- **Current program state:** architectural gap statement approved; functional reframing recorded; P0/P1 package prepared for review; no implementation authorized.
 
 ## Current next step
 
-Human/CP/Grok review of the Architectural Gap Statement, followed by a separate decision whether to close the localization track or authorize an architecture-proposal cycle.  
-Do not proceed automatically into source selection, localization read/access change, representation-family design, new characterization, architecture proposal/change, implementation/execution, HOW-2, Gate C, production selector work, or Category/YAML integration.
+Human/CP/Grok review of the P0/P1 constructive-control proposal/design package, followed by a separate authorization decision on bounded P0/P1 implementation/execution only.  
+Do not proceed automatically into source selection, localization read/access change, representation-family design beyond the P0/P1 package, architecture proposal/change, implementation/execution, HOW-2, Gate C, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
 
@@ -124,7 +127,16 @@ Do not proceed automatically into source selection, localization read/access cha
   **Role:** completed source-candidate analysis with independent status dimensions and provenance-classification record.
 
 - [idob_relational_space_localization_architectural_gap_statement.md](idob_relational_space_localization_architectural_gap_statement.md)  
-  **Role:** research finding/boundary statement objectifying the current architectural gap and hold state; not an architecture proposal.
+  **Role:** research finding/boundary statement objectifying the current architectural gap and boundary constraints; not an architecture proposal.
+
+- [idob_relational_space_localization_functional_reframing.md](idob_relational_space_localization_functional_reframing.md)  
+  **Role:** approved functional reframing and competing-conjecture trajectory record preserving active probing while maintaining non-authorization boundaries.
+
+- [idob_relational_space_localization_constructive_control_p0_p1_proposal.md](idob_relational_space_localization_constructive_control_p0_p1_proposal.md)  
+  **Role:** bounded constructive-control phase proposal defining P0/P1 objective, scope, and non-authorization boundaries.
+
+- [idob_relational_space_localization_constructive_control_p0_p1_design.md](idob_relational_space_localization_constructive_control_p0_p1_design.md)  
+  **Role:** frozen mechanical design for P0/P1 fixture models, procedure contracts, perturbation regimes, expected behaviors, audits, and evidence requirements.
 
 ## Characterization program
 
