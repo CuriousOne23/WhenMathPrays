@@ -227,3 +227,4 @@
 2026-11-27 | ShortSim Status goal-distance | 1:58 PM Phoenix; Path A characterization report filed | write=no
 2026-11-27 | ShortSim Status goal-distance | 2:58 PM Phoenix; Path A characterization report filed | write=no
 2026-11-27 | ShortSim Status goal-distance | 3:52 PM Phoenix; Path A characterization report filed | write=no
+2026-11-27 | ShortSim Trajectory | NEUTRAL (mixed: the gap work advances, the P0/P1 direction leans toward drift) note filed (27657bf) | write=no
