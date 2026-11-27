@@ -178,6 +178,46 @@ Feature-channel identifiers may be renamed or permuted per fixture instance. The
 
 The permutation audit targets dependence on arbitrary labels. It must not swap canonical binary values `{0,1}` unless the procedure is explicitly invariant to that swap.
 
+### 7.1 Frozen permutation audit schedule
+Permutation audits are deterministic, predeclared, and do not alter the canonical structural values consumed by the procedure.
+
+For every P0 and P1 fixture instance, evaluate the following presentation variants:
+
+   1. Identity presentation
+
+      - entity order: (Ea, Eb, Ec)
+      - feature-channel identifiers: canonical ordering
+   
+   2. Entity permutation A
+
+      - entity order: (Eb, Ec, Ea)
+      - -channel identifiers: canonical ordering
+
+   3. Entity permutation B
+
+      - entity order: (Ec, Ea, Eb)
+      - feature-channel identifiers: canonical ordering
+
+   4. Feature-channel rename
+
+      - entity order: (Ea, Eb, Ec)
+      - feature-channel identifiers renamed by a fixed cyclic permutation
+      - canonical structural values are unchanged
+
+The procedure must operate on canonical entity/structural relationships rather than presentation position or arbitrary feature-channel names.
+
+The permutation audit passes only if, for each underlying fixture instance and regime:
+
+   * entity permutation does not change the emitted interpretation;
+   * feature-channel renaming does not change the emitted interpretation;
+   * expected S0/S1/S2 outcome counts remain unchanged;
+   * transform traces identify the applied presentation variant;
+   * exact replay reproduces the same variant and result.
+
+Canonical binary values {0,1} are never swapped by the feature-channel rename.
+
+These presentation variants are audit replications of the same underlying fixture conditions. They do not change the frozen P0/P1 generative distributions or create additional independent experimental conditions.
+
 ## 8) Required anti-shortcut audits
 
 The characterization must preserve:
@@ -198,6 +238,8 @@ The characterization must preserve:
 - deterministic trace;
 - exact replay;
 - completeness.
+
+The held-out/permutation-generalization audit uses the frozen presentation schedule in Section 7.1; no implementation-time permutation schedule may be substituted.
 
 ## 9) Evidence fields and outcomes
 
