@@ -42,7 +42,15 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Information/Representation Sufficiency implementation: **PERFORMED (Phase 2 characterization implementation)**.
 - Information/Representation Sufficiency execution: **PERFORMED**.
 - Information/Representation Sufficiency observation: **RECORDED**.
-- Information/Representation Sufficiency characterization review state: **BEING REVIEWED**.
+- Information/Representation Sufficiency characterization review state: **APPROVED**.
+- Information/Representation Sufficiency closeout interpretation record: **RECORDED**.
+- R4 diagnostic review: **RECORDED**.
+- W1-W3 representation-family direction: **REVIEWED, NOT AUTHORIZED**.
+- Provenance-boundary documentation: **AUTHORIZED**.
+- Localization source selection: **NOT AUTHORIZED**.
+- Representation-family design: **NOT AUTHORIZED**.
+- New characterization: **NOT AUTHORIZED**.
+- Implementation/execution (next cycle work): **NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
 - Final YAML/IdOB representation design authorized: **NO**.
@@ -54,12 +62,13 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - **Gate A:** organizational leverage under oracle/surrogate localization information. Status: CONTINUE (bounded fixture-relative / oracle-relative).
 - **Gate B:** one provisional non-oracle localization HOW. Executed; mechanical classification NEGATIVE; human review APPROVED. Stopping rule: no HOW-2 in this cycle.
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
-- **Next cycle:** information/representation sufficiency characterization at proposal/design stage only (no implementation/execution authorization).
+- **Information/Representation Sufficiency characterization:** implemented and executed after approved pre-execution review; evidence, observation, classifications, and bounded interpretation human-approved.
+- **Current unresolved upstream boundary:** pre-localization source provenance and localization-use authorization (no source selected).
 
 ## Current next step
 
-Human review of the executed Information/Representation Sufficiency characterization observation.  
-Do not proceed automatically into HOW-2, Gate C, production selector work, or Category/YAML integration.
+Human/CP/Grok review of the pre-localization information-provenance contract.  
+Do not proceed automatically into source selection, representation-family design, new characterization, implementation/execution, HOW-2, Gate C, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
 
@@ -97,6 +106,12 @@ Do not proceed automatically into HOW-2, Gate C, production selector work, or Ca
 
 - [idob_relational_space_localization_information_representation_sufficiency_observation.md](idob_relational_space_localization_information_representation_sufficiency_observation.md)  
   **Role:** executed Information/Representation Sufficiency characterization evidence and bounded outcome reporting (including primary vs supplemental-domain separation and R0/R2/R3 split reporting).
+
+- [idob_relational_space_localization_information_representation_sufficiency_closeout.md](idob_relational_space_localization_information_representation_sufficiency_closeout.md)  
+  **Role:** human-approved characterization closeout record, bounded interpretation, approved R4 diagnostic, W1-W3 non-authorization rationale, and trajectory boundary updates.
+
+- [idob_relational_space_localization_pre_localization_information_provenance_contract.md](idob_relational_space_localization_pre_localization_information_provenance_contract.md)  
+  **Role:** boundary contract for pre-localization source provenance, ownership/read constraints, prohibited provenance, and current non-authorizations.
 
 ## Characterization program
 

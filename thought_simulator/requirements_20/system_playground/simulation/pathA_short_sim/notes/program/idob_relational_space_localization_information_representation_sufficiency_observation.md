@@ -7,9 +7,13 @@
 
 ## 0) Review state
 
-Review state: **BEING REVIEWED**
+Review state: **APPROVED**
 
-Only the human may establish APPROVED.
+Human review approved:
+
+- execution/evidence;
+- per-level classifications;
+- bounded interpretation.
 
 ## 1) Fixture reference
 

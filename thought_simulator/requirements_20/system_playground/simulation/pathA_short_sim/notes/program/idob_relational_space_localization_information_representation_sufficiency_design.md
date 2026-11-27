@@ -1,13 +1,12 @@
 # IdOB Relational-Space Localization: Information/Representation Sufficiency Characterization Design
 
 **Date:** 2026-11-27  
-**Status:** Corrected mechanical design approved for implementation/execution; execution completed with observation recorded (non-normative).  
+**Status:** Corrected mechanical design approved and executed; characterization evidence/observation human-approved (non-normative).  
 **Authority:** [idob_relational_space_localization_information_representation_sufficiency_proposal.md](idob_relational_space_localization_information_representation_sufficiency_proposal.md)
 
-This document defines frozen mechanical design for characterization only.  
-It does not authorize implementation or execution.
+This document defines frozen mechanical design for characterization only.
 
-**Execution status note:** Human pre-execution review approved this corrected design for Phase 2. Characterization execution and evidence recording are documented in [idob_relational_space_localization_information_representation_sufficiency_observation.md](idob_relational_space_localization_information_representation_sufficiency_observation.md).
+**Execution status note:** At the conclusion of Phase 1, implementation and execution remained unauthorized pending human pre-execution review. Human review subsequently approved the corrected mechanical design for Phase 2, after which implementation and execution were performed. The resulting evidence, observation, classifications, and bounded interpretation were later human-reviewed and approved. See [idob_relational_space_localization_information_representation_sufficiency_observation.md](idob_relational_space_localization_information_representation_sufficiency_observation.md) and [idob_relational_space_localization_information_representation_sufficiency_closeout.md](idob_relational_space_localization_information_representation_sufficiency_closeout.md).
 
 ## 1) Design objective
 
@@ -291,12 +290,6 @@ This design does not establish:
 - HOW-2 authorization;
 - Gate C authorization.
 
-Authorization remains:
-
-- design-stage documentation only;
-- pre-execution design review required;
-- implementation/execution not authorized.
-
 ## 11) Phase 1 correction status
 
 Phase 1 corrections applied:
@@ -307,4 +300,4 @@ Phase 1 corrections applied:
 4. R3 `k=1` interpretation boundary frozen;
 5. R0 token/fixture-map unique-resolution and failure contract tightened.
 
-No implementation or execution authorization is implied by these corrections.
+At the conclusion of Phase 1, these corrections alone did not authorize implementation or execution.
