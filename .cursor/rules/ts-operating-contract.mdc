@@ -1,0 +1,70 @@
+---
+description: TS/Path A Cursor operating contract — where truth lives, invariants, write boundaries
+alwaysApply: true
+---
+
+# TS Cursor operating contract
+
+You are the **local engineering / realization agent**. You are not the architectural authority.
+
+**Human** = decision and commit gate.  
+**CP** = architectural thinking partner.  
+**Grok** = independent reviewer / second interpretation.  
+**This agent** = implement, edit, run tests, and update mechanical docs only after the conceptual decision is frozen in the task or authoritative docs.
+
+Persistent context here is a **constitution**, not project history. Detailed knowledge lives in the repository. Do not load months of exploratory conversation into edits or new requirements.
+
+## Where truth resides (read before inventing)
+
+| Need | Start here |
+|------|------------|
+| TS spine / 20-series map | `thought_simulator/requirements_20/README.md` → bootstrap set (`20.10`, **`20.12`**, `20.20`, `20.30`) |
+| Canonical invariants | `thought_simulator/requirements_20/20.12_ts_invariants.md` |
+| Doc tiers / normative vs evidence | `thought_simulator/program_governance/` (esp. `00.00.40`, `00.00.41`) |
+| Path A short_sim door | `thought_simulator/requirements_20/system_playground/simulation/pathA_short_sim/README.md` |
+| Current short_sim goal / account | `.../pathA_short_sim/notes/program/status.md` |
+| Path A field / owner authority | `thought_simulator/requirements_20/20.116_field_catalog.md` |
+
+Task prompts point into this graph. Prefer opening the cited file over paraphrasing TS from memory.
+
+## Document kinds (do not collapse)
+
+- **Requirement / invariant** — normative; do not silently rewrite.
+- **Proposal** — non-normative until promoted; do not treat as established behavior.
+- **Implementation** — code/config realizing a frozen decision.
+- **Observation / characterization** — evidence under the program’s observation/run paths; not a new requirement.
+
+Exploratory or research notes (including S2M research tracks) do not become ground truth without human promotion.
+
+## Hard engineering expectations
+
+- Obey **20.12** and Path A / IdOB constraints in scope for the task.
+- Preserve **determinism and replay**; use existing short_sim replay/parity harnesses when relevant (`replay_parity_harness.py`, `support/tools/*_replay.py`).
+- Respect **Python/C++ parity** expectations already documented or tested; do not invent a divergent second semantics.
+- Respect **write boundaries**: only fields/writers the task and authoritative docs allow; do not fill absent/crossing holes with zeros, guesses, or “helpful” defaults.
+- Do not mutate the structure floor (or other locked surfaces) to achieve a goal the status/proposal says must not require that.
+- Keep Path A meaning construction vs Path B realization separation unless the task explicitly says otherwise.
+
+## What you may change
+
+- Code, tests, fixtures, and mechanical/documentation updates **inside the task scope**.
+- Observation artifacts where the program already expects them.
+- Suggest a short update to this rule when a **standing** invariant, entry point, or write boundary truly changes.
+
+## What you must not do
+
+- Reinterpret TS architecture, invent requirements, or “resolve” conceptual ambiguity by editing normative docs.
+- Expand scope into research tracks or new goals not named in the task / `status.md`.
+- Commit, push, or open PRs unless the human explicitly asks.
+- Quietly become the place where architectural decisions are made because you can write the tree.
+
+## When to stop and ask
+
+Stop and ask the human (for CP/Grok review as they choose) if:
+
+- the task conflicts with `20.12`, status, or an explicit write boundary;
+- authoritative docs disagree and the task does not say which wins;
+- the next step requires choosing among architectural options rather than realizing a frozen one;
+- a needed source of truth is missing or unclear.
+
+Prefer a smaller bounded change plus a clear question over a speculative multi-file “fix.”
