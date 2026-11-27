@@ -183,22 +183,22 @@ Permutation audits are deterministic, predeclared, and do not alter the canonica
 
 For every P0 and P1 fixture instance, evaluate the following presentation variants:
 
-   1. Identity presentation
+   1. **Identity presentation**
 
       - entity order: (Ea, Eb, Ec)
       - feature-channel identifiers: canonical ordering
    
-   2. Entity permutation A
+   2. **Entity permutation A**
 
       - entity order: (Eb, Ec, Ea)
       - -channel identifiers: canonical ordering
 
-   3. Entity permutation B
+   3. **Entity permutation B**
 
       - entity order: (Ec, Ea, Eb)
       - feature-channel identifiers: canonical ordering
 
-   4. Feature-channel rename
+   4. **Feature-channel rename**
 
       - entity order: (Ea, Eb, Ec)
       - feature-channel identifiers renamed by a fixed cyclic permutation
