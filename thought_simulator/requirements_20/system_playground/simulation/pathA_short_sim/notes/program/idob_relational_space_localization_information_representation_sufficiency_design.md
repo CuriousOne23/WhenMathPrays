@@ -1,11 +1,13 @@
 # IdOB Relational-Space Localization: Information/Representation Sufficiency Characterization Design
 
 **Date:** 2026-11-27  
-**Status:** Corrected mechanical design (Phase 1); pre-execution review required (non-normative).  
+**Status:** Corrected mechanical design approved for implementation/execution; execution completed with observation recorded (non-normative).  
 **Authority:** [idob_relational_space_localization_information_representation_sufficiency_proposal.md](idob_relational_space_localization_information_representation_sufficiency_proposal.md)
 
 This document defines frozen mechanical design for characterization only.  
 It does not authorize implementation or execution.
+
+**Execution status note:** Human pre-execution review approved this corrected design for Phase 2. Characterization execution and evidence recording are documented in [idob_relational_space_localization_information_representation_sufficiency_observation.md](idob_relational_space_localization_information_representation_sufficiency_observation.md).
 
 ## 1) Design objective
 

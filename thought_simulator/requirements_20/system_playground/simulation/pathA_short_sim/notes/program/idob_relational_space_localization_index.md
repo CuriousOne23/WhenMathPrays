@@ -37,11 +37,12 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Gate B closeout interpretation/status record: **RECORDED**.
 - Information/Representation Sufficiency proposal: **AUTHORIZED**.
 - Information/Representation Sufficiency mechanical-design development: **AUTHORIZED**.
-- Information/Representation Sufficiency pre-execution review: **REVISION REQUIRED (received)**.
+- Information/Representation Sufficiency pre-execution review: **APPROVED**.
 - Information/Representation Sufficiency Phase 1 design corrections: **APPLIED**.
-- Information/Representation Sufficiency corrected design review state: **BEING REVIEWED**.
-- Information/Representation Sufficiency implementation: **NOT AUTHORIZED**.
-- Information/Representation Sufficiency execution: **NOT AUTHORIZED**.
+- Information/Representation Sufficiency implementation: **PERFORMED (Phase 2 characterization implementation)**.
+- Information/Representation Sufficiency execution: **PERFORMED**.
+- Information/Representation Sufficiency observation: **RECORDED**.
+- Information/Representation Sufficiency characterization review state: **BEING REVIEWED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
 - Final YAML/IdOB representation design authorized: **NO**.
@@ -57,8 +58,8 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 
 ## Current next step
 
-Human review of corrected Phase 1 mechanical design before any implementation/execution authorization decision.  
-Do not proceed automatically into implementation/execution, Gate C, HOW-2, production selector work, or Category/YAML integration.
+Human review of the executed Information/Representation Sufficiency characterization observation.  
+Do not proceed automatically into HOW-2, Gate C, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
 
@@ -92,7 +93,10 @@ Do not proceed automatically into implementation/execution, Gate C, HOW-2, produ
   **Role:** frozen research question and authorization boundary for the Information/Representation Sufficiency characterization cycle.
 
 - [idob_relational_space_localization_information_representation_sufficiency_design.md](idob_relational_space_localization_information_representation_sufficiency_design.md)  
-  **Role:** corrected mechanical characterization design (Phase 1) for representation ladder, decoder neutrality, domain-qualified sufficiency evaluation, and per-level outcome classifications (documentation/design-stage only).
+  **Role:** corrected/frozen mechanical characterization design for representation ladder, decoder neutrality, domain-qualified sufficiency evaluation, and per-level outcome classifications.
+
+- [idob_relational_space_localization_information_representation_sufficiency_observation.md](idob_relational_space_localization_information_representation_sufficiency_observation.md)  
+  **Role:** executed Information/Representation Sufficiency characterization evidence and bounded outcome reporting (including primary vs supplemental-domain separation and R0/R2/R3 split reporting).
 
 ## Characterization program
 
@@ -105,5 +109,10 @@ Do not proceed automatically into implementation/execution, Gate C, HOW-2, produ
   **What it is:** Gate B characterization executable for this track. Reuses Gate A fixture construction, applies the frozen provisional non-oracle HOW and q-schedule, writes JSON under `local_characterization/sessions/idob_relational_space_localization_gate_b/runs/`, and prints the Gate B classification. It does not claim a production Path A selector or that Path A can generate `X_base`.  
   **Open when:** You need the executable that produced the Gate B evidence.  
   **Relationship:** The observation record is [idob_relational_space_localization_gate_b_observation.md](idob_relational_space_localization_gate_b_observation.md).
+
+- [support/tools/idob_relational_space_localization_information_representation_sufficiency_characterization.py](../../support/tools/idob_relational_space_localization_information_representation_sufficiency_characterization.py)  
+  **What it is:** Information/Representation Sufficiency characterization executable for this track. Freezes Gate A fixture map, evaluates R0-R4 under the corrected frozen design, enforces exact reproduction vs leverage separation, primary vs supplemental-domain separation, and replay/completeness contracts; writes JSON under `local_characterization/sessions/idob_relational_space_localization_information_representation_sufficiency/runs/`.  
+  **Open when:** You need the executable that produced Information/Representation Sufficiency evidence.  
+  **Relationship:** The observation record is [idob_relational_space_localization_information_representation_sufficiency_observation.md](idob_relational_space_localization_information_representation_sufficiency_observation.md).
 
 Future observation/realization/characterization/closeout documents should be registered here only when they are actually created.

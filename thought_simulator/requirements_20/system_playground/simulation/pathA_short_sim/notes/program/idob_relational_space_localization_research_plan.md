@@ -745,4 +745,4 @@ Gate B design and any later characterization do not automatically establish:
 - Production selector implementation: NOT AUTHORIZED
 - CATEGORY/YAML integration: NOT AUTHORIZED
 - HOW-2 within this cycle: NOT AUTHORIZED
-- Next cycle (information/representation sufficiency): proposal and mechanical-design development AUTHORIZED; implementation/execution NOT AUTHORIZED
+- Next cycle (information/representation sufficiency): proposal/design approved; characterization implementation/execution performed; observation recorded (see [idob_relational_space_localization_information_representation_sufficiency_observation.md](idob_relational_space_localization_information_representation_sufficiency_observation.md))
