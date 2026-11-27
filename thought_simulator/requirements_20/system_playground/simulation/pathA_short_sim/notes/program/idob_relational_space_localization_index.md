@@ -51,16 +51,21 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Source-candidate analysis: **APPROVED / RECORDED**.
 - Architectural Gap Statement: **APPROVED / RECORDED**.
 - Functional reframing and competing-conjecture trajectory: **RECORDED / BEING REVIEWED**.
-- Constructive-control P0/P1 proposal: **BEING REVIEWED**.
-- Constructive-control P0/P1 mechanical design: **BEING REVIEWED**.
+- Constructive-control P0/P1 proposal: **APPROVED FOR IMPLEMENTATION/EXECUTION**.
+- Constructive-control P0/P1 mechanical design: **APPROVED FOR IMPLEMENTATION/EXECUTION**.
 - Current program state: **REVIEW/DECISION ON P0/P1 CONSTRUCTIVE-CONTROL PACKAGE**.
 - Localization source selection: **NOT AUTHORIZED**.
 - Localization read/access change: **NOT AUTHORIZED**.
 - Representation-family design: **NOT AUTHORIZED**.
 - New characterization beyond scoped P0/P1 proposal package: **NOT AUTHORIZED**.
 - Architecture proposal/change: **NOT AUTHORIZED**.
-- P0/P1 implementation: **NOT AUTHORIZED**.
-- P0/P1 execution: **NOT AUTHORIZED**.
+- P0 implementation: **PERFORMED**.
+- P1 implementation: **PERFORMED**.
+- P0 execution: **PERFORMED**.
+- P1 execution: **PERFORMED**.
+- P0/P1 evidence: **RECORDED**.
+- P0/P1 observation: **RECORDED**.
+- P0/P1 results: **BEING REVIEWED**.
 - Natural-structure discovery probe: **NOT DESIGNED / NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
@@ -75,12 +80,12 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 - **Information/Representation Sufficiency characterization:** implemented and executed after approved pre-execution review; evidence, observation, classifications, and bounded interpretation human-approved.
 - **Pre-localization provenance boundary:** contract approved (non-normative boundary only; no source selected/authorized).
-- **Current program state:** architectural gap statement approved; functional reframing recorded; P0/P1 package prepared for review; no implementation authorized.
+- **Current program state:** architectural gap statement approved; functional reframing recorded; P0/P1 constructive-control execution completed; results being reviewed.
 
 ## Current next step
 
-Human/CP/Grok review of the P0/P1 constructive-control proposal/design package, followed by a separate authorization decision on bounded P0/P1 implementation/execution only.  
-Do not proceed automatically into source selection, localization read/access change, representation-family design beyond the P0/P1 package, architecture proposal/change, implementation/execution, HOW-2, Gate C, production selector work, or Category/YAML integration.
+Human/CP/Grok review of the executed P0/P1 constructive-control evidence and observation, followed by a separate decision on any subsequent authorized step.  
+Do not proceed automatically into source selection, localization read/access change, representation-family design beyond the P0/P1 package, architecture proposal/change, HOW-2, Gate C, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
 
@@ -140,6 +145,9 @@ Do not proceed automatically into source selection, localization read/access cha
 - [idob_relational_space_localization_constructive_control_p0_p1_design.md](idob_relational_space_localization_constructive_control_p0_p1_design.md)  
   **Role:** frozen mechanical design for P0/P1 fixture models, procedure contracts, perturbation regimes, expected behaviors, audits, and evidence requirements.
 
+- [idob_relational_space_localization_constructive_control_p0_p1_observation.md](idob_relational_space_localization_constructive_control_p0_p1_observation.md)  
+  **Role:** executed P0/P1 constructive-control evidence summary, analytic expectation comparison, permutation/shortcut audit results, completeness/replay status, and mechanical classifications.
+
 ## Characterization program
 
 - [support/tools/idob_relational_space_localization_phase3_characterization.py](../../support/tools/idob_relational_space_localization_phase3_characterization.py)  
@@ -156,5 +164,10 @@ Do not proceed automatically into source selection, localization read/access cha
   **What it is:** Information/Representation Sufficiency characterization executable for this track. Freezes Gate A fixture map, evaluates R0-R4 under the corrected frozen design, enforces exact reproduction vs leverage separation, primary vs supplemental-domain separation, and replay/completeness contracts; writes JSON under `local_characterization/sessions/idob_relational_space_localization_information_representation_sufficiency/runs/`.  
   **Open when:** You need the executable that produced Information/Representation Sufficiency evidence.  
   **Relationship:** The observation record is [idob_relational_space_localization_information_representation_sufficiency_observation.md](idob_relational_space_localization_information_representation_sufficiency_observation.md).
+
+- [support/tools/idob_relational_space_localization_constructive_control_p0_p1_characterization.py](../../support/tools/idob_relational_space_localization_constructive_control_p0_p1_characterization.py)  
+  **What it is:** P0/P1 constructive-control characterization executable for this track. Implements the approved frozen constructive controls (P0 deterministic, P1 informative-but-nondeterminative), S0/S1/S2 regimes, permutation audits, anti-shortcut audits, completeness, and exact replay; writes JSON under `local_characterization/sessions/idob_relational_space_localization_constructive_control_p0_p1/runs/`.  
+  **Open when:** You need the executable that produced P0/P1 constructive-control evidence.  
+  **Relationship:** The observation record is [idob_relational_space_localization_constructive_control_p0_p1_observation.md](idob_relational_space_localization_constructive_control_p0_p1_observation.md).
 
 Future observation/realization/characterization/closeout documents should be registered here only when they are actually created.

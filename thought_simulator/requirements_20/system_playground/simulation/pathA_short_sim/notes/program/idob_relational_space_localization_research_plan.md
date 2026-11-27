@@ -755,13 +755,18 @@ Gate B design and any later characterization do not automatically establish:
 - Source-candidate analysis review state: APPROVED
 - Architectural Gap Statement: APPROVED / RECORDED (see [idob_relational_space_localization_architectural_gap_statement.md](idob_relational_space_localization_architectural_gap_statement.md))
 - Functional reframing and competing-conjecture trajectory: RECORDED / BEING REVIEWED (see [idob_relational_space_localization_functional_reframing.md](idob_relational_space_localization_functional_reframing.md))
-- Constructive-control P0/P1 proposal: BEING REVIEWED (see [idob_relational_space_localization_constructive_control_p0_p1_proposal.md](idob_relational_space_localization_constructive_control_p0_p1_proposal.md))
-- Constructive-control P0/P1 mechanical design: BEING REVIEWED (see [idob_relational_space_localization_constructive_control_p0_p1_design.md](idob_relational_space_localization_constructive_control_p0_p1_design.md))
-- Current program state: REVIEW/DECISION ON P0/P1 CONSTRUCTIVE-CONTROL PACKAGE
+- Constructive-control P0/P1 proposal: APPROVED FOR IMPLEMENTATION/EXECUTION (see [idob_relational_space_localization_constructive_control_p0_p1_proposal.md](idob_relational_space_localization_constructive_control_p0_p1_proposal.md))
+- Constructive-control P0/P1 mechanical design: APPROVED FOR IMPLEMENTATION/EXECUTION (see [idob_relational_space_localization_constructive_control_p0_p1_design.md](idob_relational_space_localization_constructive_control_p0_p1_design.md))
+- P0 implementation: PERFORMED
+- P1 implementation: PERFORMED
+- P0 execution: PERFORMED
+- P1 execution: PERFORMED
+- P0/P1 evidence: RECORDED
+- P0/P1 observation: RECORDED (see [idob_relational_space_localization_constructive_control_p0_p1_observation.md](idob_relational_space_localization_constructive_control_p0_p1_observation.md))
+- P0/P1 results: BEING REVIEWED
+- Current program state: REVIEW OF EXECUTED P0/P1 CONSTRUCTIVE-CONTROL EVIDENCE
 - Localization source selection: NOT AUTHORIZED
 - Localization read/access change: NOT AUTHORIZED
 - Representation-family design beyond the scoped P0/P1 package: NOT AUTHORIZED
 - Architecture proposal/change: NOT AUTHORIZED
-- P0/P1 implementation: NOT AUTHORIZED
-- P0/P1 execution: NOT AUTHORIZED
 - Natural-structure discovery probe: NOT DESIGNED / NOT AUTHORIZED
