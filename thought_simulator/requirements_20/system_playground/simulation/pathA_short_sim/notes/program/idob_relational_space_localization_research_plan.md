@@ -736,9 +736,11 @@ Gate B design and any later characterization do not automatically establish:
 
 ### CURRENT STATUS
 
-- Gate B design: FROZEN / READY FOR LATER EXECUTION
-- Gate B execution: NOT PERFORMED
-- Gate B observations: NONE YET
+- Gate B design: FROZEN
+- Gate B execution: PERFORMED (2026-11-27)
+- Gate B mechanical classification: NEGATIVE (see gate_b_observation)
+- Gate B observations: RECORDED
 - Gate C: NOT AUTHORIZED
 - Production selector implementation: NOT AUTHORIZED
 - CATEGORY/YAML integration: NOT AUTHORIZED
+- HOW-2 within this cycle: NOT AUTHORIZED
