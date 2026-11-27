@@ -4,7 +4,7 @@
 **Status:** Frozen research/characterization skeleton (non-normative).  
 **Track:** IdOB Relational-Space Organization for Tractable Path A Selection.
 
-**Execution status note:** This document preserves the frozen pre-execution research and characterization authority. Gate A / Phase 3 has subsequently been executed. The bounded fixture-relative and oracle-relative Gate A classification is CONTINUE. See [idob_relational_space_localization_observation.md](idob_relational_space_localization_observation.md) for characterization evidence and [idob_relational_space_localization_index.md](idob_relational_space_localization_index.md) for current track status and navigation.
+**Execution status note:** This document preserves the frozen pre-execution research and characterization authority. Gate A / Phase 3 has subsequently been executed with bounded fixture-relative/oracle-relative classification CONTINUE, and Gate B has subsequently been executed with bounded fixture-relative/provisional-HOW-relative classification NEGATIVE. See [idob_relational_space_localization_observation.md](idob_relational_space_localization_observation.md), [idob_relational_space_localization_gate_b_observation.md](idob_relational_space_localization_gate_b_observation.md), [idob_relational_space_localization_gate_b_closeout.md](idob_relational_space_localization_gate_b_closeout.md), and [idob_relational_space_localization_index.md](idob_relational_space_localization_index.md) for current status and bounded interpretation/authorization updates.
 
 ## 1) Purpose
 
@@ -739,8 +739,10 @@ Gate B design and any later characterization do not automatically establish:
 - Gate B design: FROZEN
 - Gate B execution: PERFORMED (2026-11-27)
 - Gate B mechanical classification: NEGATIVE (see gate_b_observation)
+- Gate B human review disposition: APPROVED (see gate_b_closeout)
 - Gate B observations: RECORDED
 - Gate C: NOT AUTHORIZED
 - Production selector implementation: NOT AUTHORIZED
 - CATEGORY/YAML integration: NOT AUTHORIZED
 - HOW-2 within this cycle: NOT AUTHORIZED
+- Next cycle (information/representation sufficiency): proposal and mechanical-design development AUTHORIZED; implementation/execution NOT AUTHORIZED

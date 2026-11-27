@@ -24,7 +24,7 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 ## Current research status
 
 - Previous S2M IdOB traversal characterization cycle: **CLOSED** (present-realization boundary).
-- This track: **NEW**.
+- This track: **ACTIVE**.
 - Research skeleton: **FROZEN**.
 - Gate A / Phase 3 executed: **YES**.
 - Gate A classification: **CONTINUE**.
@@ -32,22 +32,31 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Gate B mechanical design: **FROZEN**.
 - Gate B execution: **YES**.
 - Gate B classification: **NEGATIVE** (fixture-relative / provisional-HOW-relative).
+- Gate B human review state: **APPROVED**.
 - Gate B observations: **RECORDED**.
+- Gate B closeout interpretation/status record: **RECORDED**.
+- Information/Representation Sufficiency proposal: **AUTHORIZED**.
+- Information/Representation Sufficiency mechanical-design development: **AUTHORIZED**.
+- Information/Representation Sufficiency pre-execution review: **REQUIRED**.
+- Information/Representation Sufficiency implementation: **NOT AUTHORIZED**.
+- Information/Representation Sufficiency execution: **NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
 - Final YAML/IdOB representation design authorized: **NO**.
+- HOW-2: **NOT AUTHORIZED**.
 - Gate C: **NOT AUTHORIZED**.
 
 ## Gate navigation (summary only)
 
 - **Gate A:** organizational leverage under oracle/surrogate localization information. Status: CONTINUE (bounded fixture-relative / oracle-relative).
-- **Gate B:** one provisional non-oracle localization HOW. Executed; mechanical classification NEGATIVE. Stopping rule: no HOW-2 in this cycle.
+- **Gate B:** one provisional non-oracle localization HOW. Executed; mechanical classification NEGATIVE; human review APPROVED. Stopping rule: no HOW-2 in this cycle.
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
+- **Next cycle:** information/representation sufficiency characterization at proposal/design stage only (no implementation/execution authorization).
 
 ## Current next step
 
-Human/CP/Grok review of the Gate B observation.  
-Do not proceed automatically into Gate C, HOW-2, production selector work, or Category/YAML integration.
+Conduct pre-execution design review for the Information/Representation Sufficiency characterization proposal and mechanical design.  
+Do not proceed automatically into implementation/execution, Gate C, HOW-2, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
 
@@ -73,6 +82,15 @@ Do not proceed automatically into Gate C, HOW-2, production selector work, or Ca
 
 - [idob_relational_space_localization_gate_b_observation.md](idob_relational_space_localization_gate_b_observation.md)  
   **Role:** executed Gate B characterization evidence, measured observations, and Gate B mechanical classification (NEGATIVE).
+
+- [idob_relational_space_localization_gate_b_closeout.md](idob_relational_space_localization_gate_b_closeout.md)  
+  **Role:** Gate B human-review disposition (APPROVED), bounded Gate A+Gate B interpretation, stopping boundaries, and next-cycle authorization boundary.
+
+- [idob_relational_space_localization_information_representation_sufficiency_proposal.md](idob_relational_space_localization_information_representation_sufficiency_proposal.md)  
+  **Role:** frozen research question and authorization boundary for the Information/Representation Sufficiency characterization cycle.
+
+- [idob_relational_space_localization_information_representation_sufficiency_design.md](idob_relational_space_localization_information_representation_sufficiency_design.md)  
+  **Role:** mechanical characterization design for representation ladder, decoder neutrality, and per-level outcome classifications (documentation/design-stage only).
 
 ## Characterization program
 

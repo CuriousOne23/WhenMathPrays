@@ -5,6 +5,14 @@
 **Method authority:** [idob_relational_space_localization_research_plan.md](idob_relational_space_localization_research_plan.md).  
 **Mechanical design:** [idob_relational_space_localization_gate_b_design.md](idob_relational_space_localization_gate_b_design.md).
 
+## 0) Post-execution review status
+
+- Human review state: **APPROVED**
+- Gate B mechanical outcome: **NEGATIVE** (accepted as correct for the frozen characterization)
+
+Interpretation boundaries, stopping boundaries, and next-cycle design-stage authorization are recorded in [idob_relational_space_localization_gate_b_closeout.md](idob_relational_space_localization_gate_b_closeout.md).  
+This observation record remains mechanical evidence-only.
+
 ## 1) Fixture reference
 
 This record reports execution of the frozen Gate B characterization exactly as specified in the research plan and mechanical design. It does not redesign the provisional HOW, create HOW-2, begin Gate C, or promote results into requirements.
