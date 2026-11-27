@@ -2,85 +2,171 @@
 
 **Date:** 2026-11-27  
 **Status:** Research proposal for controlled discrimination (non-normative).  
-**Purpose:** Define a bounded constructive-control phase that can discriminate no-signal behavior from real structure-sensitive behavior without selecting a production source or architecture.
+**Purpose:** Define a bounded constructive-control phase that validates the characterization framework against two frozen preconstructed structural-information regimes.
 
 Review state: **BEING REVIEWED**
 
-## 1) Objective
+## 1) Scientific distinction (frozen)
 
-Establish whether a frozen structure-sensitive procedure can:
+P0 and P1 are constructive controls. Their generative distributions are deliberately constructed to contain known structural utility. Execution validates the characterization framework and its controls; it does not discover utility in naturally occurring TS structure.
 
-- fail on no-structure controls (P0) when only informative structure is removed; and
-- succeed on structure-present controls (P1) only when the informative structural bit is available.
+- **P0:** exact deterministic structural-information constructive control.
+- **P1:** informative-but-nondeterminative structural-information constructive control.
 
-This proposal does not claim production feasibility and does not define HOW-2.
+Neither control is a natural-structure discovery probe. That research object remains undesigned and unauthorized.
 
-## 2) Program question addressed
+## 2) Program question addressed (bounded)
 
 Functional question:
 
 Can contextual differentiation of relational material improve meaning construction under non-oracle conditions?
 
-This phase addresses the question only through synthetic controls under strict information boundaries.
+This proposal addresses that question only through frozen synthetic controls with strict information boundaries.
 
-## 3) Phase scope
+## 3) Phase scope and non-authorization boundary
 
-Authorized in this proposed phase:
+In scope for the P0/P1 package:
 
-- synthetic fixture generation for P0 and P1;
-- frozen procedure and audit logic;
-- bounded control execution and evidence reporting.
+- synthetic fixture construction for P0 and P1;
+- frozen procedures and perturbation schedules `S0/S1/S2`;
+- frozen anti-shortcut audits and expected behavior contracts.
 
-Not authorized:
+Not authorized by this proposal:
 
-- architecture proposal/selection;
-- production selector;
+- implementation or execution;
+- evidence generation;
+- natural-structure discovery probes;
+- localization source selection;
+- architecture proposal/change;
 - HOW-2;
 - Gate C;
+- production selector work;
 - Category/YAML integration.
 
-## 4) Constructive controls
+## 4) Frozen control definitions
 
-### P0 (no-structure control)
+### 4.1 P0 (exact deterministic structural-information control)
 
-- latent tuple `U=(P,Q,R)` with deterministic outcome `O=P xor R`;
-- decoy channels `X=(x1,x2)` derived from `U`;
-- structural channels `Ea,Eb,Ec` contain recoverable `P,Q,R`.
+Latent tuple:
 
-The procedure uses only `Ea,Eb` to decode `P xor R`.
+- `U=(P,Q,R)`, with `P,Q,R in {0,1}`.
 
-Expected control behavior:
+Opaque structural features:
 
-- S0 (unaltered structure): perfect decoding;
-- S1 (no structural channels): no better than frozen blind fallback;
-- S2 (structure neutralized): no better than frozen blind fallback.
+- `F(Ea)=P xor Q`
+- `F(Eb)=Q xor R`
+- `F(Ec)=R`
 
-### P1 (single informative structural bit)
+Outcome:
 
-- informative bit `S` is encoded in structure;
-- outcome `O=S`;
-- decoys are independent of `O`.
+- `O=P xor R`.
 
-Procedure:
+Deterministic invariant:
 
-- if decoded `S=1`, emit `R_B`;
-- else emit `R_A`.
+- `F(Ea) xor F(Eb) = O`.
 
-Expected control behavior:
+Construction rule:
 
-- S0: 100%;
-- S2 (neutralized `S` preserving marginals): chance-level 50%;
-- S1 (no `S` access): chance-level 50%.
+- compute `d = F(Ea) xor F(Eb)`;
+- emit `R_A` if `d=0`;
+- emit `R_B` if `d=1`.
 
-## 5) Why this phase is needed
+If required structural inputs are unavailable/invalid, apply the frozen abstention/fallback rule defined in the mechanical design.
 
-This phase is a discriminative control step between pure oracle-relative sufficiency findings and any future claim about non-oracle functional leverage. It supplies evidence about whether a fixed structure-sensitive mechanism behaves appropriately when signal is present, absent, or neutralized.
+P0 therefore satisfies `S => O` and is an exact deterministic positive control.
 
-## 6) Decision value
+Expected `S0` behavior: `48/48 = 100%`.
 
-A valid P0/P1 characterization can support bounded conclusions on:
+### 4.2 P1 (informative-but-nondeterminative structural-information control)
 
-- whether the control stack can detect and use frozen structure-embedded signal;
-- whether success collapses when that signal is removed or neutralized.
+Latent tuple and outcome:
 
-It cannot by itself identify real TS sources, authorize architecture changes, or justify production deployment.
+- `U=(P,Q)`, `P,Q in {0,1}`;
+- `S=P xor Q`;
+- `O=P`.
+
+Frozen distribution:
+
+- `P(U=(0,0))=3/8`
+- `P(U=(0,1))=1/8`
+- `P(U=(1,0))=3/8`
+- `P(U=(1,1))=1/8`.
+
+So:
+
+- `P(O=0)=P(O=1)=1/2`.
+
+Non-determinacy:
+
+- `S=0` preimages: `(0,0)` and `(1,1)` include both outcome values;
+- `S=1` preimages: `(0,1)` and `(1,0)` include both outcome values;
+- therefore `S` does not determine `O` (`S =/> O`).
+
+Informativeness:
+
+- `P(S=0)=1/2`, `P(O=0|S=0)=3/4`;
+- `P(S=1)=1/2`, `P(O=0|S=1)=1/4`;
+- so `P(O|S=s) != P(O)`.
+
+Frozen P1 rule:
+
+- `S=0 => R_A`
+- `S=1 => R_B`.
+
+The procedure must not receive latent tuples, outcomes, correct action labels, oracle answers, answer tables, evaluator outputs, or reversible encodings of these.
+
+Expected `S0` accuracy: `36/48 = 75%`.  
+Strongest balanced `S`-blind baseline: `24/48 = 50%`.
+
+## 5) Frozen finite schedule
+
+The P1 schedule is fixed at 48 instances:
+
+- `U=(0,0)`: 18 instances;
+- `U=(0,1)`: 6 instances;
+- `U=(1,0)`: 18 instances;
+- `U=(1,1)`: 6 instances.
+
+This exactly realizes `3/8, 1/8, 3/8, 1/8` and analytically yields `36/48` under the frozen P1 rule in `S0`.
+
+## 6) Frozen perturbation expectations
+
+- **P0:** `S0=48/48`, `S1=24/48`, `S2=24/48`.
+- **P1:** `S0=36/48`, `S1=24/48`, `S2=24/48`.
+
+The P0/P1 contrast is intentional and scientifically central.
+
+## 7) Feature-permutation wording (frozen)
+
+Feature-channel identifiers may be renamed or permuted per fixture instance. The canonical structural values consumed by the procedure remain invariant.
+
+Do not swap canonical binary values `{0,1}` under label-permutation wording unless a value-invariant rule is explicitly defined.
+
+## 8) Required anti-shortcut audits (frozen set)
+
+The package preserves requirement for:
+
+- outcome withholding;
+- evaluator isolation;
+- entity-order-only audit;
+- entity-identity-only audit;
+- feature-label-only audit;
+- output-frequency baseline;
+- `X`-only baseline;
+- `S2`-only shortcut audit;
+- fixture-index/seed audit;
+- arm-identity audit;
+- direct/indirect evaluator-label leakage audit;
+- `S1` ambiguity;
+- held-out/permutation generalization;
+- deterministic trace;
+- exact replay;
+- completeness checks.
+
+## 9) Explicit non-claims
+
+- P0 validates the exact/deterministic information case.
+- P1 validates the incomplete/informative but nondeterminative case.
+- Neither control discovers utility in naturally occurring TS structural information.
+- Successful execution would validate the experimental framework's ability to detect two preconstructed regimes only.
+- Successful execution would not establish a naturally occurring TS mechanism, localization requirement, or meaning theory.

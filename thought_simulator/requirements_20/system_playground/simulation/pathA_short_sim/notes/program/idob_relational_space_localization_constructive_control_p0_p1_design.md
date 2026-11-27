@@ -2,254 +2,229 @@
 
 **Date:** 2026-11-27  
 **Status:** Frozen mechanical design for characterization planning (non-normative).  
-**Purpose:** Mechanically specify a bounded P0/P1 constructive-control characterization so implementation/execution (if authorized later) requires no new consequential experimental choice.
+**Purpose:** Mechanically specify the reviewed P0/P1 constructive controls so implementation/execution (if later authorized) requires no new consequential experimental choice.
 
 Review state: **BEING REVIEWED**
 
-## 1) Design objective
+## 1) Scientific role (frozen)
 
-Freeze a deterministic characterization that distinguishes:
+P0 and P1 are constructive controls with intentionally preconstructed structural utility. They are for framework/control validation only and are not natural-structure discovery probes.
 
-- structure-sensitive success when informative structure is present;
-- collapse to baseline when informative structure is absent or neutralized.
+- **P0:** exact deterministic structural-information control (`S => O`).
+- **P1:** informative-but-nondeterminative structural-information control (`S =/> O`, while `P(O|S) != P(O)`).
 
-No production source or architecture is selected by this design.
+## 2) Common contracts
 
-## 2) Scope and non-scope
-
-In scope:
-
-- synthetic fixtures for P0 and P1;
-- frozen procedure `I`;
-- frozen perturbation schedule `S0/S1/S2`;
-- frozen audits, outcomes, and evidence fields.
-
-Out of scope:
-
-- architecture/source authorization;
-- HOW-2;
-- Gate C;
-- production selector;
-- Category/YAML integration.
-
-## 3) Common notation and contracts
-
-- outcome space: `O in {0,1}`;
 - action space: `R_A` predicts `O=0`, `R_B` predicts `O=1`;
-- deterministic fixture id required for every instance;
+- deterministic fixture IDs and ordering required;
 - deterministic replay required for generators, transforms, and procedure;
-- no stochastic branch points in runtime evaluation.
+- runtime procedure may consume only declared structural inputs and frozen rule logic.
 
-## 4) P0 fixture model (no-structure control)
+Procedure must not read: latent tuples, outcome labels, correct actions, evaluator outputs, oracle answers, answer tables, ranking fields, or equivalent encodings.
 
-Latent tuple:
-
-- `U=(P,Q,R)` with `P,Q,R in {0,1}`.
-
-Outcome:
-
-- `O = P xor R`.
-
-Decoy channels:
-
-- `x1 = P xor Q`
-- `x2 = Q xor R`
-
-Structural channels:
-
-- `Ea = P`
-- `Eb = R`
-- `Ec = Q`
-
-Frozen dataset:
-
-- all 8 latent tuples included;
-- each tuple repeated 6 times;
-- total `48` instances;
-- fixture order is lexicographic by `(P,Q,R,repeat_index)`;
-- this yields exactly `24` instances with `O=0` and `24` with `O=1`.
-
-## 5) P1 fixture model (single informative structural bit)
+## 3) P0 frozen definition
 
 Latent tuple:
 
-- `V=(S,N1,N2)` with all bits in `{0,1}`.
+- `U=(P,Q,R)`, `P,Q,R in {0,1}`.
+
+Structural features:
+
+- `F(Ea)=P xor Q`
+- `F(Eb)=Q xor R`
+- `F(Ec)=R`.
 
 Outcome:
 
-- `O=S`.
+- `O=P xor R`.
 
-Decoys (independent of `S` under full enumeration):
+Invariant:
 
-- `y1=N1`
-- `y2=N2`.
+- `F(Ea) xor F(Eb)=O`.
 
-Structural payload:
+Frozen procedure:
 
-- `S` is encoded as structural bit `Es`.
-
-Frozen dataset:
-
-- all 8 tuples `(S,N1,N2)` included;
-- each tuple repeated 6 times;
-- total `48` instances;
-- fixture order lexicographic by `(S,N1,N2,repeat_index)`;
-- exactly `24` instances with `O=0` and `24` with `O=1`.
-
-## 6) Frozen procedure I
-
-### 6.1 P0 procedure
-
-Inputs consumed by `I`:
-
-- `Ea`, `Eb`.
-
-Rule:
-
-- compute `d = Ea xor Eb`;
+- `d = F(Ea) xor F(Eb)`;
 - emit `R_A` if `d=0`;
 - emit `R_B` if `d=1`.
 
-### 6.2 P1 procedure
+Do not replace structural channels with direct `P`, `Q`, or `R` channels.
 
-Inputs consumed by `I`:
+P0 fixture schedule:
 
-- `Es`.
+- all 8 tuples `(P,Q,R)`;
+- each repeated 6 times;
+- total 48 instances;
+- lexicographic order by `(P,Q,R,repeat_index)`;
+- balanced outcomes: 24 with `O=0`, 24 with `O=1`.
 
-Rule:
+## 4) P1 frozen definition
 
-- emit `R_B` if `Es=1`;
-- emit `R_A` if `Es=0`.
+Latent tuple:
 
-Procedure boundary:
+- `U=(P,Q)`, `P,Q in {0,1}`.
 
-- `I` must not read outcome labels, ranking, coverage, or any post-hoc performance field.
+Structural bit:
 
-## 7) Frozen perturbation schedule S0/S1/S2
+- `S=P xor Q`.
 
-### 7.1 S0 (unaltered)
+Outcome:
 
-- provide the fixture exactly as generated.
+- `O=P`.
 
-### 7.2 S1 (no-structure)
+Frozen distribution:
 
-Structural channels are removed before `I`.
+- `(0,0): 3/8`
+- `(0,1): 1/8`
+- `(1,0): 3/8`
+- `(1,1): 1/8`.
 
-Frozen no-structure behavior:
+Finite 48-instance realization:
 
-- when required structural inputs are absent, `I` emits fallback action `R_A` deterministically.
+- `(0,0)`: 18 instances;
+- `(0,1)`: 6 instances;
+- `(1,0)`: 18 instances;
+- `(1,1)`: 6 instances.
 
-No adaptive fallback is permitted.
+So:
 
-### 7.3 S2 (neutralized structure)
+- `P(O=0)=P(O=1)=1/2`;
+- `P(S=0)=P(S=1)=1/2`;
+- `P(O=0|S=0)=3/4`;
+- `P(O=0|S=1)=1/4`.
 
-Principle:
+Therefore `S` is informative but not determinative.
 
-- preserve structural shape and marginals while breaking informative correspondence to outcome.
+Frozen P1 procedure:
 
-#### P0 S2 transform
+- `S=0 => R_A`
+- `S=1 => R_B`.
 
-- keep `x1,x2` unchanged;
-- set `Ea2 = Q`;
-- set `Eb2 = P`;
-- set `Ec2 = R`.
+## 5) Frozen perturbation schedule
 
-This preserves channel shape and balanced marginals while making the decoded bit `Ea2 xor Eb2 = Q xor P`, which is independent of `O = P xor R` under full enumeration.
+### 5.1 S0 (unaltered)
 
-#### P1 S2 transform
+Use fixtures exactly as generated.
 
-Assign neutralized bit:
+### 5.2 S1 (no tested structural information)
 
-- `Es2 = N1` (equivalently decoy channel `y1`).
+Remove tested structural input channels before the procedure.
 
-By full tuple enumeration:
+Frozen deterministic S-blind fallback:
 
-- `P(Es2=1) = 1/2`;
-- `P(O=1 | Es2=1) = 1/2`;
-- `P(O=1 | Es2=0) = 1/2`.
+- emit `R_A` whenever required structural input is unavailable/invalid.
 
-So `Es2` is balanced and outcome-independent in the finite fixture.
+This fallback is fixed pre-execution and cannot be chosen after observing outcomes.
 
-## 8) Information boundaries
+### 5.3 S2 (neutralized structure)
 
-Procedure `I` may consume only:
+S2 preserves structural count/type/interface/availability/marginal value distribution while destroying association with `O`.
 
-- declared structural channels for the condition;
-- fixed channel identifiers;
-- frozen deterministic rules.
+#### P1 S2 neutralization (frozen deterministic schedule)
 
-`I` may not consume:
+Use the 48 fixed-order P1 instances as listed in Section 4.
 
-- latent tuples directly;
-- outcome labels;
-- evaluation metrics;
-- ranking/oracle fields;
-- any non-declared auxiliary channel.
+1. Partition indices into two strata by true outcome `O`:  
+   `I0 = [indices with O=0]` and `I1 = [indices with O=1]`.  
+   Each stratum has 24 indices.
+2. Within each stratum, keep frozen index order.
+3. Assign neutralized structural bit by alternating within each stratum:  
+   for the `j`-th index in either stratum, set `S_neutral = j mod 2`.
 
-## 9) Pre-execution expected behaviors (frozen)
+This is deterministic, predeclared, replayable, and auditable from the frozen schedule.
 
-### 9.1 P0 expectations
+It yields exactly:
 
-- `P0-S0`: `48/48` correct.
-- `P0-S1`: `24/48` correct (constant `R_A` fallback on balanced outcomes).
-- `P0-S2`: `24/48` correct.
+- `P(S_neutral=0)=P(S_neutral=1)=1/2`;
+- `P(O=0|S_neutral=0)=P(O=0|S_neutral=1)=1/2`.
 
-### 9.2 P1 expectations
+Applying the frozen P1 rule (`S_neutral=0 => R_A`, `S_neutral=1 => R_B`) therefore yields exactly `24/48 = 50%`.
 
-- `P1-S0`: `48/48` correct.
-- `P1-S2`: `24/48` correct.
-- `P1-S1`: `24/48` correct.
+#### P0 S2 neutralization (restored to frozen P0 semantics)
 
-These expectations are frozen reference contracts for execution validation.
+Keep decoy channels unchanged.
 
-## 10) Required audits
+For each instance, define neutralized structural features:
 
-The characterization must include and report:
+- `F(Ea)_neutral = P xor Q`
+- `F(Eb)_neutral = Q xor P = P xor Q`
+- `F(Ec)_neutral = R`.
 
-1. fixture balance audit (`O=0`/`O=1` counts per regime);
-2. transform audit (S1 removal and S2 mapping reproducibility);
-3. replay audit (identical outputs from same frozen inputs);
-4. boundary audit (no unauthorized field reads by `I`);
-5. expected-behavior contract audit versus Section 9.
+Then:
 
-## 11) Outcome labels
+- decoded bit `d_neutral = F(Ea)_neutral xor F(Eb)_neutral = 0` for all instances;
+- procedure emits constant `R_A`;
+- with balanced outcomes, expected accuracy is exactly `24/48 = 50%`.
 
-Per regime outcome:
+This preserves channel shape and blocks the informative deterministic invariant without exposing shortcuts.
 
-- `CONTROL_VALIDATED`: observed equals frozen expected;
-- `CONTROL_FAILED`: observed differs from frozen expected;
-- `INVALID_EXECUTION`: missing required fields or failed determinism/replay contract.
+## 6) Expected behavior contracts (frozen)
 
-Overall characterization state:
+### P0
 
-- `VALIDATED_WITHIN_FIXTURE` only if all required regimes are `CONTROL_VALIDATED`;
-- else `NOT_VALIDATED_WITHIN_FIXTURE`.
+- `S0`: `48/48 = 100%`
+- `S1`: `24/48 = 50%`
+- `S2`: `24/48 = 50%`.
 
-## 12) Evidence schema requirements
+### P1
 
-Each reported regime record must include:
+- `S0`: `36/48 = 75%`
+- `S1`: `24/48 = 50%`
+- `S2`: `24/48 = 50%`.
 
-- `phase_id` (`P0` or `P1`);
-- `regime_id` (`S0`,`S1`,`S2`);
-- `fixture_size`;
-- `correct_count`;
-- `accuracy`;
-- `expected_correct_count`;
-- `expected_accuracy`;
-- `outcome_label`;
-- balance summary (`count_O0`,`count_O1`);
-- transform trace id and deterministic replay hash;
+## 7) Feature-permutation contract
+
+Feature-channel identifiers may be renamed or permuted per fixture instance. The canonical structural values consumed by the procedure remain invariant.
+
+The permutation audit targets dependence on arbitrary labels. It must not swap canonical binary values `{0,1}` unless the procedure is explicitly invariant to that swap.
+
+## 8) Required anti-shortcut audits
+
+The characterization must preserve:
+
+- outcome withholding;
+- evaluator isolation;
+- entity-order-only audit;
+- entity-identity-only audit;
+- feature-label-only audit;
+- output-frequency baseline;
+- `X`-only baseline;
+- `S2`-only shortcut audit;
+- fixture-index/seed audit;
+- arm-identity audit;
+- direct/indirect evaluator-label leakage audit;
+- `S1` ambiguity;
+- held-out/permutation generalization;
+- deterministic trace;
+- exact replay;
+- completeness.
+
+## 9) Evidence fields and outcomes
+
+Each regime record must include:
+
+- phase (`P0`/`P1`);
+- regime (`S0`/`S1`/`S2`);
+- fixture size;
+- expected correct;
+- observed correct;
+- expected accuracy;
+- observed accuracy;
+- balance counts (`O=0`,`O=1`);
+- transform trace identity;
+- replay hash;
 - boundary-audit pass/fail.
 
-## 13) Completion requirements
+Per-regime outcome labels:
 
-A completed characterization record requires:
+- `CONTROL_VALIDATED`
+- `CONTROL_FAILED`
+- `INVALID_EXECUTION`.
 
-- all mandated regimes evaluated (`P0:S0,S1,S2` and `P1:S0,S1,S2`);
-- all Section 10 audits present;
-- deterministic replay pass;
-- no missing evidence fields from Section 12.
+Overall state:
 
-## 14) Explicit non-authorization statement
+- `VALIDATED_WITHIN_FIXTURE` only if all required regimes are `CONTROL_VALIDATED`.
 
-This design does not authorize implementation, execution, architecture proposal, source selection, production selector development, HOW-2, Gate C, or Category/YAML integration.
+## 10) Explicit non-authorization
+
+This design does not authorize implementation, execution, evidence generation, natural-structure discovery probing, architecture changes, HOW-2, Gate C, production integration, or Category/YAML integration.

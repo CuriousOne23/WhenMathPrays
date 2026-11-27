@@ -50,16 +50,18 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Pre-Localization Information-Provenance Contract review state: **APPROVED**.
 - Source-candidate analysis: **APPROVED / RECORDED**.
 - Architectural Gap Statement: **APPROVED / RECORDED**.
-- Functional reframing and competing-conjecture trajectory: **RECORDED**.
-- Constructive-control P0/P1 proposal: **PREPARED / BEING REVIEWED**.
-- Constructive-control P0/P1 mechanical design: **PREPARED / BEING REVIEWED**.
+- Functional reframing and competing-conjecture trajectory: **RECORDED / BEING REVIEWED**.
+- Constructive-control P0/P1 proposal: **BEING REVIEWED**.
+- Constructive-control P0/P1 mechanical design: **BEING REVIEWED**.
 - Current program state: **REVIEW/DECISION ON P0/P1 CONSTRUCTIVE-CONTROL PACKAGE**.
 - Localization source selection: **NOT AUTHORIZED**.
 - Localization read/access change: **NOT AUTHORIZED**.
 - Representation-family design: **NOT AUTHORIZED**.
 - New characterization beyond scoped P0/P1 proposal package: **NOT AUTHORIZED**.
 - Architecture proposal/change: **NOT AUTHORIZED**.
-- Implementation/execution (including P0/P1): **NOT AUTHORIZED**.
+- P0/P1 implementation: **NOT AUTHORIZED**.
+- P0/P1 execution: **NOT AUTHORIZED**.
+- Natural-structure discovery probe: **NOT DESIGNED / NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
 - Final YAML/IdOB representation design authorized: **NO**.
@@ -130,7 +132,7 @@ Do not proceed automatically into source selection, localization read/access cha
   **Role:** research finding/boundary statement objectifying the current architectural gap and boundary constraints; not an architecture proposal.
 
 - [idob_relational_space_localization_functional_reframing.md](idob_relational_space_localization_functional_reframing.md)  
-  **Role:** approved functional reframing and competing-conjecture trajectory record preserving active probing while maintaining non-authorization boundaries.
+  **Role:** functional reframing and competing-conjecture trajectory record under review; distinguishes conceptual direction from document approval state.
 
 - [idob_relational_space_localization_constructive_control_p0_p1_proposal.md](idob_relational_space_localization_constructive_control_p0_p1_proposal.md)  
   **Role:** bounded constructive-control phase proposal defining P0/P1 objective, scope, and non-authorization boundaries.
