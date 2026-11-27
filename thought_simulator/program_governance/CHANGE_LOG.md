@@ -201,3 +201,22 @@
 2026-11-22 | Helm | HM-002: classify and bounded-repair README-link failures exposed after HM-001; CIE Markdown false positive and verified moved/renamed links repaired; playground 20.190 glossary link held (archived; 20.700 is live authority). HM-003 proposed: stale old-directory paths remain in Doc Dependency Check scripts | write=no
 2026-11-22 | Helm | HM-002 held glossary item human-approved 1:35 PM America/Phoenix and applied as two-link form (20.700 live authority + archived 20.190, not live); no other HM-002 content changes; HM-003 unchanged | write=no
 2026-11-22 | Helm | HM-003: class-A stale validator paths repaired in a separate PR (identity_tables.py and shorthand_patterns.py included); not resolved pending merge; E items (archived 20.190/20.150 glossary targets) left unretargeted; newly exposed content findings proposed as HM-004 (stale identity canonical_path / shorthand_registry paths), HM-005 (frontmatter/IDs in requirements_20), HM-006 (document references), HM-007 (20.200 matrix parse/coverage) | write=no
+2026-11-23 | Flow weekly safety net | F-000 | none | write=no
+2026-11-23 | Catalog weekly safety net | C-005 | class=name-collision | 20.700_master_glossary.md line 167 and 20.700.050 lines 71 and 123; bare `meaning_semantics` vs TP export alias / packet Φ; next id C-006 | owner=human | write=no
+2026-11-23 | Terms weekly safety net | T-058–T-059 | T-042–T-057 still live, not re-emitted; next id T-060; out-of-scope FYI: 20.40.050 v3.3 HLR-063 heading inserted under HLR-054, footer still v3.2 | owner=human | write=no
+2026-11-23 | Inventory weekly safety net | INVENTORY.md top-100; keep=99 gitignore=1 delete=0 (sha b204030); only non-keep: simulations/zombie_love_plot.png (rank 8, 108424 bytes, tracked, suggested gitignore); PR #207 check: $null, _bak.md, and playground INB JSON gone; verification JSON kept; tests/fidelity_asymmetry_sensitivity.png and debug_query_log.txt untracked; /debug_query_log.txt in .gitignore; zombie_love_plot.png still tracked | write=no
+2026-11-23 | ShortSim Docs scheduled drift watch | main 105530c..27bb926 (159 commits); live main 072d117 adds only two notes; goal drift none; D1–D3 doc-only PR #211 opened (README.md only, branch shortsim-docs/20261123-27bb926, not merged); D4 proposal only (status.md:74); N3, N4, N5, N7 open; N1, N2, N6 fixed; baseline 1–7 (and 8–9) fixed by merged #202 | write=no
+2026-11-23 | Path A Account | main @ 96e888e; door unchanged since 19019f6; 2 new flags (status.md L6–10 / L61–67 omit Stage 6 PASS, Stage 7 campaign matrix, Palette v1; door still says next step is one minimum S2M path); still open loose 20.705 pointer / status.md door link / wording L17–18 / unlinked S2M docs; independent view, not definitive | write=no
+2026-11-23 | Helm | digest 2026-11-23; recorded Flow F-000, Catalog C-005, Terms T-058–T-059, Inventory 2026-11-23, ShortSim Docs 2026-11-23 (PR #211 not merged), Path A Account 2026-11-23; governance reports only | write=no
+2026-11-23 | ShortSim Status goal-distance | ~3:55 PM Phoenix; category-selection report filed | write=no
+2026-11-24 | Path A Account drift | main @ 9ef6397; door/status.md drift report filed | write=no
+2026-11-24 | ShortSim Docs | 8 AM run; range 27bb926..e4f4740; S1–S5 on branch shortsim-docs/20261124-e4f4740 (PR not open) | write=no
+2026-11-24 | ShortSim Status goal-distance | 8:52 AM Phoenix; category-selection report filed | write=no
+2026-11-25 | Path A Account drift | main @ 7465fcf; door/status.md drift report filed | write=no
+2026-11-25 | ShortSim Trajectory | two notes filed (ADVANCES modestly; NEUTRAL on #211) | write=no
+2026-11-25 | ShortSim Status goal-distance | 12:50 PM Phoenix; category-selection report filed | write=no
+2026-11-25 | ShortSim Docs | 8 AM run; range 94da76c..7465fcf; E1–E2 on branch shortsim-docs/20261125-7465fcf (PR not open) | write=no
+2026-11-25 | ShortSim Trajectory | DRIFTS mildly note filed (8347eeb) | write=no
+2026-11-25 | ShortSim Trajectory | NEUTRAL (leaning drift if it continues) note filed (9c7ebe4) | write=no
+2026-11-26 | Path A Account drift | main @ baf4574; door/status.md drift report filed | write=no
+2026-11-26 | ShortSim Docs | program-index pass (main 9c7ebe4); PR #216 opened, not merged (branch shortsim-docs/20261126-9c7ebe4, commit b414b45) | write=no
