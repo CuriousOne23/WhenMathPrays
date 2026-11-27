@@ -221,3 +221,6 @@
 2026-11-26 | Path A Account drift | main @ baf4574; door/status.md drift report filed | write=no
 2026-11-26 | ShortSim Docs | program-index pass (main 9c7ebe4); PR #216 opened, not merged (branch shortsim-docs/20261126-9c7ebe4, commit b414b45) | write=no
 2026-11-27 | ShortSim Status goal-distance | 1:05 PM Phoenix; Path A characterization report filed | write=no
+2026-11-26 | ShortSim Docs | scheduled 8:04 AM MST run; range 7465fcf..baf4574; T1–T9 in doc-only PR #217 (branch shortsim-docs/20261126-baf4574, commit 2696b665, open, not merged) | write=no
+2026-11-26 | ShortSim Trajectory | NEUTRAL, leaning ADVANCES note filed (b414b45 / PR #217) | write=no
+2026-11-27 | ShortSim Docs | scheduled 8:00 AM MST run; range baf4574..4b9431a; M1–M2 on branch shortsim-docs/20261127-4b9431a (commit 25bb9df, PR not open) | write=no
