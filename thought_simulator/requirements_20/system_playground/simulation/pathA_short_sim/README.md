@@ -98,9 +98,8 @@ The primitive that performs the mapping is IdOB. Details and acceptance criteria
 ## Simulation directories
 
 - `desks/` — SOB, SROB, CnOB, SmOB.
-- `characterization/` — characterization run dispatcher, artifact writer, and the `infra_smoke` type (used only with `run_examples.py --characterize`).
+- `characterization/` — Milestone-1 characterization library: run dispatcher, artifact writer, and the `infra_smoke` type (used only with `run_examples.py --characterize`).
 - `idob/` — sum, packet, claim, and connection record.
-- `characterization/` — Milestone-1 characterization library used by `run_examples.py --characterize`.
 - `scalability/` — bounded Path A scalability analysis library used by `run_scalability.py`.
 - `support/` — YAML cards, schemas, relation list, replays.
 - `notes/program/` — status, onboarding pages, and document-family indexes.
@@ -387,7 +386,6 @@ pathA_short_sim/
 |-- s2m/
 |-- mapping/
 |-- stores/
-|-- characterization/
 |-- scalability/
 |
 |-- support/
