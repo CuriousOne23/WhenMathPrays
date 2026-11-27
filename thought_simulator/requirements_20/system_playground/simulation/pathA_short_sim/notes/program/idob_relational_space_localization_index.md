@@ -37,7 +37,9 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Gate B closeout interpretation/status record: **RECORDED**.
 - Information/Representation Sufficiency proposal: **AUTHORIZED**.
 - Information/Representation Sufficiency mechanical-design development: **AUTHORIZED**.
-- Information/Representation Sufficiency pre-execution review: **REQUIRED**.
+- Information/Representation Sufficiency pre-execution review: **REVISION REQUIRED (received)**.
+- Information/Representation Sufficiency Phase 1 design corrections: **APPLIED**.
+- Information/Representation Sufficiency corrected design review state: **BEING REVIEWED**.
 - Information/Representation Sufficiency implementation: **NOT AUTHORIZED**.
 - Information/Representation Sufficiency execution: **NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
@@ -55,7 +57,7 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 
 ## Current next step
 
-Conduct pre-execution design review for the Information/Representation Sufficiency characterization proposal and mechanical design.  
+Human review of corrected Phase 1 mechanical design before any implementation/execution authorization decision.  
 Do not proceed automatically into implementation/execution, Gate C, HOW-2, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
@@ -90,7 +92,7 @@ Do not proceed automatically into implementation/execution, Gate C, HOW-2, produ
   **Role:** frozen research question and authorization boundary for the Information/Representation Sufficiency characterization cycle.
 
 - [idob_relational_space_localization_information_representation_sufficiency_design.md](idob_relational_space_localization_information_representation_sufficiency_design.md)  
-  **Role:** mechanical characterization design for representation ladder, decoder neutrality, and per-level outcome classifications (documentation/design-stage only).
+  **Role:** corrected mechanical characterization design (Phase 1) for representation ladder, decoder neutrality, domain-qualified sufficiency evaluation, and per-level outcome classifications (documentation/design-stage only).
 
 ## Characterization program
 
