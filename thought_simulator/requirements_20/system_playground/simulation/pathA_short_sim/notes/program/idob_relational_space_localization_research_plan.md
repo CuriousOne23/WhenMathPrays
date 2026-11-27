@@ -750,5 +750,11 @@ Gate B design and any later characterization do not automatically establish:
 - Information/Representation Sufficiency closeout: recorded (see [idob_relational_space_localization_information_representation_sufficiency_closeout.md](idob_relational_space_localization_information_representation_sufficiency_closeout.md))
 - W1-W3 representation-family direction: reviewed and NOT AUTHORIZED
 - Pre-localization information-provenance contract: AUTHORIZED and recorded (see [idob_relational_space_localization_pre_localization_information_provenance_contract.md](idob_relational_space_localization_pre_localization_information_provenance_contract.md))
+- Pre-localization information-provenance contract review state: APPROVED (non-normative boundary approval only)
+- Source-candidate analysis: COMPLETED / RECORDED (see [idob_relational_space_localization_source_candidate_analysis.md](idob_relational_space_localization_source_candidate_analysis.md))
+- Architectural Gap Statement: CREATED / BEING REVIEWED (see [idob_relational_space_localization_architectural_gap_statement.md](idob_relational_space_localization_architectural_gap_statement.md))
+- Current program state: HOLD AT ARCHITECTURAL GAP STATEMENT
 - Localization source selection: NOT AUTHORIZED
+- Localization read/access change: NOT AUTHORIZED
 - Representation-family design/new characterization/implementation-execution: NOT AUTHORIZED
+- Architecture proposal/change: NOT AUTHORIZED

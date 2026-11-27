@@ -47,9 +47,15 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - R4 diagnostic review: **RECORDED**.
 - W1-W3 representation-family direction: **REVIEWED, NOT AUTHORIZED**.
 - Provenance-boundary documentation: **AUTHORIZED**.
+- Pre-Localization Information-Provenance Contract review state: **APPROVED**.
+- Source-candidate analysis: **COMPLETED / RECORDED**.
+- Architectural Gap Statement: **CREATED / BEING REVIEWED**.
+- Current program state: **HOLD AT ARCHITECTURAL GAP STATEMENT**.
 - Localization source selection: **NOT AUTHORIZED**.
+- Localization read/access change: **NOT AUTHORIZED**.
 - Representation-family design: **NOT AUTHORIZED**.
 - New characterization: **NOT AUTHORIZED**.
+- Architecture proposal/change: **NOT AUTHORIZED**.
 - Implementation/execution (next cycle work): **NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
@@ -63,12 +69,13 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - **Gate B:** one provisional non-oracle localization HOW. Executed; mechanical classification NEGATIVE; human review APPROVED. Stopping rule: no HOW-2 in this cycle.
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 - **Information/Representation Sufficiency characterization:** implemented and executed after approved pre-execution review; evidence, observation, classifications, and bounded interpretation human-approved.
-- **Current unresolved upstream boundary:** pre-localization source provenance and localization-use authorization (no source selected).
+- **Pre-localization provenance boundary:** contract approved (non-normative boundary only; no source selected/authorized).
+- **Current program hold:** architectural gap identified and recorded; no architecture change authorized.
 
 ## Current next step
 
-Human/CP/Grok review of the pre-localization information-provenance contract.  
-Do not proceed automatically into source selection, representation-family design, new characterization, implementation/execution, HOW-2, Gate C, production selector work, or Category/YAML integration.
+Human/CP/Grok review of the Architectural Gap Statement, followed by a separate decision whether to close the localization track or authorize an architecture-proposal cycle.  
+Do not proceed automatically into source selection, localization read/access change, representation-family design, new characterization, architecture proposal/change, implementation/execution, HOW-2, Gate C, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
 
@@ -112,6 +119,12 @@ Do not proceed automatically into source selection, representation-family design
 
 - [idob_relational_space_localization_pre_localization_information_provenance_contract.md](idob_relational_space_localization_pre_localization_information_provenance_contract.md)  
   **Role:** boundary contract for pre-localization source provenance, ownership/read constraints, prohibited provenance, and current non-authorizations.
+
+- [idob_relational_space_localization_source_candidate_analysis.md](idob_relational_space_localization_source_candidate_analysis.md)  
+  **Role:** completed source-candidate analysis with independent status dimensions and provenance-classification record.
+
+- [idob_relational_space_localization_architectural_gap_statement.md](idob_relational_space_localization_architectural_gap_statement.md)  
+  **Role:** research finding/boundary statement objectifying the current architectural gap and hold state; not an architecture proposal.
 
 ## Characterization program
 

@@ -1,10 +1,19 @@
 # IdOB Relational-Space Localization: Pre-Localization Information-Provenance Contract
 
 **Date:** 2026-11-27  
-**Status:** Research boundary/contract document (non-normative).  
+**Status:** Human-reviewed and approved research boundary/contract document (non-normative).  
 **Purpose:** Define provenance boundaries for any future pre-localization candidate input without selecting an input, authorizing localization use, or asserting sufficiency.
 
 This document is not a normative 20-series requirements change.
+
+## 0) Review state and approval boundary
+
+- Review state: **APPROVED**
+- Document kind remains: **non-normative research boundary/contract**
+- Approval does not change any normative TS requirement.
+- Approval does not select a localization source.
+- Approval does not create a localization read/access edge.
+- Approval does not establish localization sufficiency.
 
 ## 1) Governing distinction
 
@@ -15,6 +24,10 @@ A field or source being present and readable before IdOB does not by itself auth
 Authorization for localization does not establish experimental sufficiency.
 
 Experimental sufficiency does not establish production availability or architectural authorization.
+
+Additional status distinction used by the candidate analysis:
+
+`present != readable != research-eligible != localization-authorized != sufficient`
 
 ## 2) Definitions
 
