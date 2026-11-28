@@ -53,7 +53,7 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Functional reframing and competing-conjecture trajectory: **RECORDED / BEING REVIEWED**.
 - Constructive-control P0/P1 proposal: **APPROVED FOR IMPLEMENTATION/EXECUTION**.
 - Constructive-control P0/P1 mechanical design: **APPROVED FOR IMPLEMENTATION/EXECUTION**.
-- Current program state: **REVIEW/DECISION ON P0/P1 CONSTRUCTIVE-CONTROL PACKAGE**.
+- Current program state: **S2M structure observation-surface characterization executed once; results BEING REVIEWED**.
 - Localization source selection: **NOT AUTHORIZED**.
 - Localization read/access change: **NOT AUTHORIZED**.
 - Representation-family design: **NOT AUTHORIZED**.
@@ -67,7 +67,12 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - P0/P1 observation: **RECORDED**.
 - P0/P1 results: **BEING REVIEWED**.
 - S2M structure observation-surface proposal: **PREPARED FOR REVIEW**.
-- S2M structure observation-surface design completion: **PREPARED FOR REVIEW / EXECUTION NOT AUTHORIZED**.
+- S2M structure observation-surface design completion: **PREPARED FOR REVIEW**.
+- S2M structure observation-surface implementation: **PERFORMED**.
+- S2M structure observation-surface execution: **PERFORMED**.
+- S2M structure observation-surface evidence: **RECORDED**.
+- S2M structure observation-surface observation: **RECORDED**.
+- S2M structure observation-surface results: **BEING REVIEWED**.
 - Natural-structure discovery probe: **NOT DESIGNED / NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
@@ -82,12 +87,12 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 - **Information/Representation Sufficiency characterization:** implemented and executed after approved pre-execution review; evidence, observation, classifications, and bounded interpretation human-approved.
 - **Pre-localization provenance boundary:** contract approved (non-normative boundary only; no source selected/authorized).
-- **Current program state:** S2M structure observation-surface design completion prepared for review; execution not authorized.
+- **Current program state:** S2M structure observation-surface characterization executed once under frozen M1-M6 scope; results recorded and pending review.
 
 ## Current next step
 
-Human/CP/Grok review of the completed S2M structure observation-surface design package, followed by a separate explicit authorization decision before any characterization execution.  
-Do not proceed automatically into implementation/execution, source selection, localization read/access change, architecture proposal/change, HOW-2, Gate C, production selector work, or Category/YAML integration.
+Human/CP/Grok review of the executed bounded S2M structure observation-surface package (artifact + observation), followed by an explicit disposition decision before any follow-on characterization.  
+Do not proceed automatically into new implementation/execution cycles, source selection, localization read/access change, architecture proposal/change, HOW-2, Gate C, production selector work, or Category/YAML integration.
 
 ## Not yet authorized
 
@@ -156,6 +161,9 @@ Do not proceed automatically into implementation/execution, source selection, lo
 - [idob_relational_space_localization_s2m_structure_observation_surface_design.md](idob_relational_space_localization_s2m_structure_observation_surface_design.md)  
   **Role:** scientific characterization design for candidate observation surfaces, controlled variation classes, controls/audits, replay/completeness expectations, and HOLD/invalid outcomes.
 
+- [idob_relational_space_localization_s2m_structure_observation_surface_observation.md](idob_relational_space_localization_s2m_structure_observation_surface_observation.md)  
+  **Role:** executed bounded M1-M6 characterization observation record, control/audit outcomes, replay/completeness status, and explicit claim boundaries.
+
 ## Characterization program
 
 - [support/tools/idob_relational_space_localization_phase3_characterization.py](../../support/tools/idob_relational_space_localization_phase3_characterization.py)  
@@ -177,5 +185,10 @@ Do not proceed automatically into implementation/execution, source selection, lo
   **What it is:** P0/P1 constructive-control characterization executable for this track. Implements the approved frozen constructive controls (P0 deterministic, P1 informative-but-nondeterminative), S0/S1/S2 regimes, permutation audits, anti-shortcut audits, completeness, and exact replay; writes JSON under `local_characterization/sessions/idob_relational_space_localization_constructive_control_p0_p1/runs/`.  
   **Open when:** You need the executable that produced P0/P1 constructive-control evidence.  
   **Relationship:** The observation record is [idob_relational_space_localization_constructive_control_p0_p1_observation.md](idob_relational_space_localization_constructive_control_p0_p1_observation.md).
+
+- [support/tools/idob_relational_space_localization_s2m_structure_observation_surface_characterization.py](../../support/tools/idob_relational_space_localization_s2m_structure_observation_surface_characterization.py)  
+  **What it is:** bounded S2M structure-observation-surface characterization executable for this track. Realizes the frozen M1-M6 matrix from retained authority artifacts, computes frozen controls/audits, enforces semantic-slice replay/completeness checks, and writes JSON under `local_characterization/sessions/idob_relational_space_localization_s2m_structure_observation_surface/runs/`.  
+  **Open when:** You need the executable that produced the bounded S2M structure-observation-surface evidence package.  
+  **Relationship:** The observation record is [idob_relational_space_localization_s2m_structure_observation_surface_observation.md](idob_relational_space_localization_s2m_structure_observation_surface_observation.md).
 
 Future observation/realization/characterization/closeout documents should be registered here only when they are actually created.
