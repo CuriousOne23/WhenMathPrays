@@ -67,7 +67,7 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - P0/P1 observation: **RECORDED**.
 - P0/P1 results: **BEING REVIEWED**.
 - S2M structure observation-surface proposal: **PREPARED FOR REVIEW**.
-- S2M structure observation-surface design: **PREPARED FOR REVIEW**.
+- S2M structure observation-surface design completion: **PREPARED FOR REVIEW / EXECUTION NOT AUTHORIZED**.
 - Natural-structure discovery probe: **NOT DESIGNED / NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
@@ -82,11 +82,11 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 - **Information/Representation Sufficiency characterization:** implemented and executed after approved pre-execution review; evidence, observation, classifications, and bounded interpretation human-approved.
 - **Pre-localization provenance boundary:** contract approved (non-normative boundary only; no source selected/authorized).
-- **Current program state:** S2M structure observation-surface proposal/design prepared for review; no new characterization execution authorized.
+- **Current program state:** S2M structure observation-surface design completion prepared for review; execution not authorized.
 
 ## Current next step
 
-Human/CP/Grok review of the S2M structure observation-surface proposal/design package, followed by a separate authorization decision before any characterization execution.  
+Human/CP/Grok review of the completed S2M structure observation-surface design package, followed by a separate explicit authorization decision before any characterization execution.  
 Do not proceed automatically into implementation/execution, source selection, localization read/access change, architecture proposal/change, HOW-2, Gate C, production selector work, or Category/YAML integration.
 
 ## Not yet authorized

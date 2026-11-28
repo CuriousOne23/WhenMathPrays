@@ -1,126 +1,165 @@
 # IdOB Relational-Space Localization S2M Structure Observation Surface Design
 
 **Date:** 2026-11-27  
-**Status:** Scientific characterization design prepared for review (non-normative).  
-**Purpose:** Translate the S2M-structure observation-surface proposal into a bounded mechanical characterization design without execution.
+**Status:** Scientific characterization design completion prepared for review (non-normative).  
+**Purpose:** Freeze bounded execution prerequisites for S2M-structure observation-surface characterization without executing it.
 
 Review state: **BEING REVIEWED**
 
 ## 1) Design intent and scope
 
-Design a bounded characterization that can observe stable organization in S2M transition surfaces already present in current realization, without presupposing structure form (basis/narrowing/localization) and without requiring architecture invention.
+This design characterizes observable organization in already-realized S2M transition surfaces, without presupposing basis-parameter, narrowing, or localization form.
 
-This design is not an experiment execution authorization.
+Primary objective: structure characterization.  
+Secondary objective: separately record measurable leverage where present.
 
-## 2) Candidate observation surfaces used by the design
+This document is not execution authorization.
 
-From current record:
+## 2) Candidate observation surfaces used by this design
 
-1. **S_surface_seed** — bounded realized seed/written-relation surface (`S_t` bounded surface).
-2. **S_surface_candidates** — surrogate finite endpoint-association candidate surface (`C_t` surrogate).
-3. **S_surface_support** — aggregate candidate-support/correspondence-state information.
+From current authority/observation record:
 
-Boundaries preserved:
+1. **S_surface_seed** — bounded realized seed/written-relation surface (`S_t` bounded surface).  
+   Authority: [s2m_idob_traversal_program_reference.md](s2m_idob_traversal_program_reference.md), [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md), [s2m_idob_traversal_characterization_closeout.md](s2m_idob_traversal_characterization_closeout.md).
+2. **S_surface_candidates** — surrogate finite endpoint-association candidate surface (`C_t` surrogate).  
+   Authority: same as above.
+3. **S_surface_support** — aggregate candidate-support/correspondence-state surface (including unresolved/unavailable states).  
+   Authority: [s2m_idob_traversal_correspondence_observation.md](s2m_idob_traversal_correspondence_observation.md), [s2m_idob_traversal_characterization_closeout.md](s2m_idob_traversal_characterization_closeout.md).
 
-- Surrogate remains surrogate.
-- Door legality, traversal `D_t/Q_t/B_t/P_t/H_t`, and other unavailable stages remain unavailable unless separately authorized.
+Boundary preserved: surrogate surfaces remain surrogate; no promotion to door-legal surfaces.
 
-## 3) Controlled structural variation classes (no new architecture)
+## 3) Frozen first-run bounded case matrix
 
-Allowed variation classes derive from already observed/represented conditions:
+The first-run matrix is frozen as the smallest discriminative set that covers:
 
-- cue presence vs cue absence;
-- sentence-only vs prior-context cue provenance;
+- cue absence vs cue presence;
+- sentence-only vs prior-context provenance;
 - repeated vs non-repeated prior evidence;
-- mixed-source evidence vs single-source evidence;
-- candidate-surface available vs unresolved/unavailable case classes.
+- mixed-source prior evidence;
+- candidate-surface available vs unresolved/unavailable.
 
-UNRESOLVED (requires separate authorization if later executed):
+### 3.1 Retained matrix cells
 
-- exact prospective case matrix for this new characterization run set, if not restricted to already-recorded artifact classes.
+| Cell ID | Condition class | Authority case anchor(s) | Surface availability |
+|---|---|---|---|
+| M1 | cue absent, sentence-only, candidate available | `TC02_no_correspondence` in [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md) | seed/candidates/support observable |
+| M2 | cue present, sentence-only, candidate available | `TC10_multi_candidate` in [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md) | seed/candidates/support observable |
+| M3 | cue present, prior-context single-source, candidate available | `TC01_support` in [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md) | seed/candidates/support observable |
+| M4 | cue present, prior-context repeated evidence, candidate available | `CR06_duplicate_dependency` in [s2m_idob_traversal_correspondence_observation.md](s2m_idob_traversal_correspondence_observation.md) | seed/candidates/support observable |
+| M5 | cue present, prior-context mixed-source, candidate available | `CR08_independence_unavailable` in [s2m_idob_traversal_correspondence_observation.md](s2m_idob_traversal_correspondence_observation.md) | seed/candidates/support observable |
+| M6 | candidate-surface unresolved/unavailable boundary condition | `CR03_unresolved_record` and `TC04_unresolved_correspondence` anchors in [s2m_idob_traversal_correspondence_observation.md](s2m_idob_traversal_correspondence_observation.md) and [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md) | unresolved/unavailable state explicitly represented |
+
+### 3.2 Why this matrix is sufficient for first bounded characterization
+
+This matrix is not exhaustive over S2M space. It is sufficient for first bounded characterization because it includes:
+
+- both cue regimes (present/absent),
+- both provenance regimes (sentence-only/prior-context),
+- repeated vs non-repeated prior context,
+- mixed-source prior context,
+- an explicit unresolved/unavailable boundary class.
+
+It therefore supports first-pass organization and boundary/stage observations without introducing new condition classes.
 
 ## 4) Primary observation classes
 
-Primary classes are structure-characterization outputs (not utility claims):
+Primary structure-characterization outputs:
 
-1. **Observed organization class**  
-   stable partitioning/configuration patterns across variation classes.
-2. **Observed dependency class**  
-   dependence/interaction patterns among represented dimensions.
-3. **Observed boundary/stage class**  
-   transitions among available / unresolved / unavailable representational states.
-4. **Observed trajectory-like class**  
-   reproducible directional ordering over represented states without assuming monotonic narrowing.
-5. **Observed invariance class**  
-   organization preserved under allowed presentation/control transforms.
-
-These classes allow non-deterministic, non-basis-like, non-monotonic structure.
+1. observed organization class (stable configuration/partition patterns);
+2. observed dependency class (interaction/dependence patterns where represented);
+3. observed boundary/stage class (available vs unresolved/unavailable transitions);
+4. observed trajectory-like class (reproducible directional ordering without monotonic-narrowing assumption);
+5. observed invariance class (organization preserved under legitimate controls).
 
 ## 5) Secondary utility channel
 
-Secondary channel (separately reported):
+Secondary channel is separately reported:
 
-- measurable leverage indications over the S2M transition from observed organization.
+- measurable leverage indications over transition behavior.
 
-Primary and secondary channels must remain separated:
+No utility finding is required for primary structural observation validity.
 
-- no utility claim required for primary structural observation validity;
-- no structural-form conclusion forced by utility patterns alone.
+## 6) Frozen per-surface control mappings
 
-## 6) Controls (neutralization/removal/permutation)
+Control mappings are frozen only where current represented fields support them without semantic invention.
 
-Use control discipline patterned after P0/P1 where justified, but adapted to naturally occurring represented surfaces:
+### 6.1 S_surface_seed
 
-1. **Removal controls**  
-   remove specific represented inputs from the characterization view while preserving remaining represented fields.
-2. **Neutralization controls**  
-   preserve interface/count/marginals where possible while disrupting targeted association.
-3. **Permutation controls**  
-   reorder/rename presentation channels without changing canonical represented values.
+- **Removal control (frozen):** compare M3 (prior-context present) vs M1 (no prior cue) under documented cases.
+  - Affected represented fields: seed/written-relation presence/count and associated cue-observation context (no seed semantic change).
+- **Permutation control:** unavailable for this surface in current authority (no independent canonical channel-permutation contract for this surface analogous to P0/P1 channel audits).
+- **Neutralization control:** unavailable without introducing synthetic semantics.
 
-Control rule: no new semantic fields or read edges may be introduced to realize controls.
+Disposition: retain surface; use removal + boundary comparisons only.
 
-UNRESOLVED:
+### 6.2 S_surface_candidates
 
-- exact neutralization rule for each candidate surface when a faithful neutralization cannot be specified from current represented fields without semantic invention.
+- **Removal control (frozen):** M3 vs M1 cue-removal comparison on candidate-state outcomes.
+- **Boundary control (frozen):** M3/M1/M2/M4/M5 (available) vs M6 (unresolved/unavailable) to characterize stage/boundary behavior.
+- **Permutation control:** unavailable without introducing new candidate-presentation semantics.
+- **Neutralization control:** unavailable for faithful association disruption without semantic invention.
 
-## 7) Shortcut/leakage checks
+Disposition: retain surface; available/removal/boundary controls are sufficient for bounded interpretation.
+
+### 6.3 S_surface_support
+
+- **Removal control (frozen):** compare support-state transitions between M3 and M1.
+- **Provenance-variation control (frozen):** compare M3 vs M4 vs M5 for single-source/repeated/mixed-source represented dependency behavior.
+- **Boundary control (frozen):** compare available support-state cells vs M6 unresolved/unavailable class.
+- **Neutralization control:** unavailable without introducing new evidence/candidate semantics.
+- **Permutation control:** unavailable without new correspondence representation semantics.
+
+Disposition: retain surface; no fabricated neutralization substitutes introduced.
+
+## 7) Shortcut/leakage checks (frozen)
 
 Required checks for any later execution:
 
 - oracle/privileged information exclusion;
-- post-transition information exclusion;
+- post-transition leakage exclusion;
 - evaluator isolation;
 - direct/indirect label leakage checks;
-- presentation-position/identifier shortcut checks;
-- seed/index/arm shortcut checks;
-- ambiguity and unavailable-state handling checks.
+- position/name shortcut checks where applicable;
+- unresolved/unavailable-state handling integrity.
 
-If a leakage check fails, classify invalid; do not patch semantics post hoc.
+Failure handling: classify invalid; do not post-hoc patch semantics.
 
-## 8) Replay and reproducibility expectations
+## 8) Frozen semantic-slice replay policy
 
-Design-level requirements:
+Replay identity is evaluated on a **semantic experimental slice**.
 
-- deterministic fixture/schedule declaration before execution;
-- deterministic trace schema;
-- exact replay on the declared deterministic components;
-- completeness accounting for all declared cells.
+### 8.1 Fields requiring exact replay identity
 
-UNRESOLVED:
+For each retained matrix cell:
 
-- full-object replay scope if future runs include fields known to contain runtime timestamps; semantic-slice replay must remain exact.
+1. cell identity (`M1..M6`) and authority-anchored condition class;
+2. qualified surface availability state (available / unresolved / unavailable as represented);
+3. represented cue-provenance state (sentence-only/prior-context where present);
+4. represented candidate/support state outputs used for scientific comparison;
+5. control identity (removal/boundary/provenance-variation comparison role);
+6. derived characterization outputs computed from the semantic slice.
+
+### 8.2 Legitimate exclusions from exact identity
+
+Excluded from strict identity only when non-semantic and runtime-volatile:
+
+- runtime timestamps and generated run metadata fields documented as unstable in prior observations;
+- artifact-run identifiers/path wrappers that do not alter semantic case content.
+
+Authority basis for this exclusion:
+
+- [s2m_idob_traversal_observation.md](s2m_idob_traversal_observation.md) explicitly records full-object mismatch from timestamp churn while semantic replay controls pass.
+- [s2m_idob_traversal_correspondence_observation.md](s2m_idob_traversal_correspondence_observation.md) records semantic-slice duplicate-run equality.
+
+No semantic field may be excluded for convenience.
 
 ## 9) Outcome classes
 
 ### 9.1 Informative negative outcomes
 
-- **NO_STABLE_ORGANIZATION_OBSERVED_WITHIN_SURFACE**  
-  no reproducible organization beyond controls under declared boundaries.
-- **SURFACE_TOO_COARSE_FOR_PRIMARY_OBJECTIVE**  
-  represented surface supports bounded utility/observability but not primary structure characterization fidelity.
-- **UTILITY_NEGATIVE_WITH_STRUCTURE_OBSERVED**  
-  reproducible organization observed, but no measurable leverage in secondary channel.
+- **NO_STABLE_ORGANIZATION_OBSERVED_WITHIN_SURFACE**
+- **SURFACE_TOO_COARSE_FOR_PRIMARY_OBJECTIVE**
+- **UTILITY_NEGATIVE_WITH_STRUCTURE_OBSERVED**
 
 ### 9.2 Invalid/boundary-violation outcomes
 
@@ -132,28 +171,52 @@ UNRESOLVED:
 
 ### 9.3 Hold outcome
 
-- **HOLD_NO_LEGITIMATE_SURFACE**  
-  no candidate surface can satisfy proposal criteria without circularity/leakage/new authority/reopen.
+- **HOLD_NO_LEGITIMATE_SURFACE**
 
 ## 10) Stopping rules
 
-Stop and return **HOLD** (or invalid class) rather than inventing rules if:
+Stop and return invalid/HOLD rather than inventing rules if:
 
-1. a required element needs new read authority or architecture changes;
-2. candidate surface requires post-transition/oracle-derived dependence;
-3. neutralization/control cannot be defined without semantic invention;
-4. closed S2M traversal cycle would be implicitly reopened;
-5. unsupported assumptions would be needed to continue.
+1. new read authority/architecture is needed;
+2. required condition depends on oracle/post-transition information;
+3. control definition requires semantic invention;
+4. closed S2M traversal cycle would be reopened;
+5. semantic replay slice cannot be deterministically reproduced.
 
-## 11) Explicit unresolved items
+## 11) Authority-integrity audit of resolved prerequisites
 
-Marked unresolved pending separate review/authorization:
+### 11.1 Case matrix prerequisite
 
-- exact future case matrix (if beyond existing recorded variation classes);
-- per-surface neutralization mappings where represented fields are insufficient;
-- exact replay-scope policy when runtime metadata fields are inherently unstable.
+- Result: **PASS**
+- No new information class, read edge, or architecture introduced.
+- All retained cells are authority-anchored to existing recorded cases.
 
-## 12) Non-authorizations preserved
+### 11.2 Control-mapping prerequisite
+
+- Result: **PASS (bounded)**
+- Legitimate removal/boundary/provenance-variation controls frozen.
+- Unsupported neutralization/permutation mappings explicitly marked unavailable; none fabricated.
+
+### 11.3 Replay-policy prerequisite
+
+- Result: **PASS**
+- Semantic-slice replay scope frozen.
+- Runtime-volatile metadata exclusions justified by existing observation records.
+
+## 12) Remaining unresolved items
+
+None.
+
+## 13) Execution-readiness assessment
+
+**READY FOR REVIEW**
+
+Meaning of this assessment:
+
+- design prerequisites are frozen sufficiently for a later explicit authorization decision;
+- execution remains not authorized by this document.
+
+## 14) Non-authorizations preserved
 
 This design does not authorize:
 
