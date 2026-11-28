@@ -549,6 +549,46 @@ When Phase 3 completes, the closeout record must include, at minimum:
 4. Do not represent unavailable prerequisites as if realized.
 5. Do not collapse unresolved questions into implicit defaults.
 6. If Gate A evidence is insufficient, record `INSUFFICIENT_EVIDENCE` and stop.
+7. Do not treat newly raised questions, interesting observations, higher-resolution opportunities, or follow-up hypotheses as automatic authorization to deviate from the pre-established experimental trajectory (see trajectory-deviation criterion below).
+
+### Trajectory-deviation criterion
+
+This localization/S2M characterization program is exploratory. Experiments in a poorly characterized space are expected to raise new questions.
+
+The appearance of new questions, interesting observations, opportunities for higher-resolution characterization, or follow-up hypotheses does not by itself justify changing the pre-established experimental trajectory.
+
+Where an experiment produces results that are interpretable within its frozen question, controls, observation surfaces, and claim boundaries, the normal disposition is:
+
+record the result → preserve newly raised questions → close/review the experiment as appropriate → continue the pre-established experimental trajectory.
+
+Questions raised by an experiment may be recorded for later investigation without becoming the immediate next experiment.
+
+**Deviation criterion.** Deviation from the pre-established experimental trajectory is warranted when an experimental result is sufficiently unexpected that it materially compromises one or more of the following for subsequent planned experiments:
+
+- foundational assumptions on which those experiments depend;
+- validity of the observation surface or experimental instrument;
+- interpretation of the variables or distinctions being tested;
+- experimental validity;
+- ability to interpret subsequent results correctly.
+
+In that case, pause the dependent experimental sequence and investigate the unexpected result only to the degree necessary to restore interpretability or determine that the planned sequence is no longer valid.
+
+**Decision logic (frozen).**
+
+- Expected/encouraging and interpretable result → record and normally continue the planned trajectory.
+- Unexpected but still interpretable result → record as an observation/open question and normally continue the planned trajectory.
+- Unexpected result that materially undermines interpretation or validity of subsequent planned experiments → pause and investigate before continuing.
+
+**Blocking versus non-blocking questions.**
+
+- **non-blocking question:** a question raised by an experiment whose unresolved state does not materially impair interpretation or validity of subsequent planned experiments.
+- **blocking question:** a question whose unresolved state would materially impair interpretation or validity of subsequent planned experiments.
+
+Only a blocking question justifies interruption of the pre-established experimental trajectory on that basis.
+
+**Intent.** This rule prevents experimental drift in an unknown research space. Unexpected or interesting findings must be recorded and retained for later investigation; they must not be ignored. The pre-established trajectory is not immutable: an experiment that undermines assumptions needed for subsequent experiments may stop or redirect the sequence. The governing distinction is that “raises additional questions” is not equivalent to “invalidates or compromises the interpretability of subsequent planned work.”
+
+Gate/phase stopping rules elsewhere in this plan remain in force for their scoped cycles. This criterion governs whether newly raised questions may interrupt the pre-established multi-experiment trajectory; it does not replace those scoped stopping rules.
 
 ## 8) Present-realization closeout boundary (track boundary statement)
 
