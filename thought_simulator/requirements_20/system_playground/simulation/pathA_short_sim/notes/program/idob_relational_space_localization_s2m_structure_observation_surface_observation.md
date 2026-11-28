@@ -1,11 +1,12 @@
 # IdOB Relational-Space Localization Observation (S2M Structure Observation Surface)
 
 **Date:** 2026-11-28  
-**Status:** Executed characterization observation record (non-normative).  
+**Status:** EXECUTED / PENDING REVIEW (characterization observation record; non-normative).  
 **Proposal authority:** [idob_relational_space_localization_s2m_structure_observation_surface_proposal.md](idob_relational_space_localization_s2m_structure_observation_surface_proposal.md).  
 **Design authority:** [idob_relational_space_localization_s2m_structure_observation_surface_design.md](idob_relational_space_localization_s2m_structure_observation_surface_design.md).
 
-Review state: **BEING REVIEWED**
+Review state: **BEING REVIEWED**  
+Note: This edit corrects interpretation of existing evidence only. It is not a new experiment and does not change the evidence itself.
 
 ## 1) Scope
 
@@ -73,14 +74,22 @@ Source artifacts referenced by the bounded run:
 
 ## 5) Primary observations (bounded to retained surfaces)
 
+- M1 vs M3 shows a cue-related difference in represented legitimized/supporting signal.
+- M3 vs M4 vs M5 shows provenance/repetition/mixed-source-related differences in represented dependency organization.
+- M6 exposes an unresolved/availability boundary under the retained observation surfaces.
+
+Underlying cell notes (unchanged evidence):
+
 - Cue-absent M1 showed no legitimized/supporting signal.
 - Cue-present M3 showed a bounded legitimized/supporting signal.
 - M4 and M5 separated on dependency-state organization (`Dependent` represented in M4, not in M5).
-- M6 realized the expected unresolved boundary condition.
+- M6 realized the expected unresolved boundary condition (intentionally frozen as unresolved/unavailable).
 
-These are bounded characterization observations in retained surfaces only. They are not architectural claims.
+These are case-bounded characterization observations on the selected TC/CR anchor records under the frozen contrasts, in retained surfaces only. They are not architectural claims.
 
 ## 6) Secondary utility channel (separate, subordinate)
+
+Secondary S2M leverage findings remain explicitly subordinate to primary structure characterization.
 
 Bounded indications recorded:
 
@@ -99,14 +108,25 @@ Non-findings retained:
 - semantic-slice exact replay: pass (matching fingerprint on duplicate extraction pass)
 - integrity: `PASS`
 
-## 8) Informative negatives and boundary outcomes
+## 8) Interpretation of outcomes (evidence unchanged)
 
-- informative negative outcome recorded: `SURFACE_TOO_COARSE_FOR_PRIMARY_OBJECTIVE`
-  - Interpretation: at least one retained boundary condition (M6) remains unresolved under currently retained surfaces; this is informative and does not license architecture invention.
+Global interpretation of this executed package:
+
+- `PARTIAL_PRIMARY_CHARACTERIZATION_WITH_UNRESOLVED_BOUNDARY`
+
+Localized M6 limitation (not a global surface-coarseness verdict):
+
+- `SURFACE_TOO_COARSE_AT_M6_BOUNDARY`
+  - M6 was intentionally frozen as an unresolved/unavailable boundary condition. Its remaining unresolved state is evidence of that observational boundary represented by M6, not by itself evidence that all retained S2M observation surfaces are too coarse for the primary objective.
+  - The previous global label `SURFACE_TOO_COARSE_FOR_PRIMARY_OBJECTIVE` is withdrawn as the package-level result; it overstated the M6 boundary as a global primary-objective failure.
+
+This interpretive correction does not change underlying experimental evidence, cell membership, controls, audits, completeness, replay, or integrity results.
 
 ## 9) Explicit claim boundary
 
 This run supports only bounded surface-level organization characterization under the frozen matrix and retained authority.
+
+M1-M5 findings are case-bounded evidence of distinguishable organization across the selected TC/CR anchor records under the frozen contrasts. They do **not** establish that the observed organization generalizes across other members of the corresponding natural condition classes.
 
 It does **not** establish:
 
@@ -114,5 +134,5 @@ It does **not** establish:
 - architecture requirements or architecture change;
 - a realized localization mechanism;
 - basis-parameter structure as a required form;
-- monotonic narrowing as a required form;
+- monotonic narrowing claim / localization claim / general S2M structure claim;
 - natural-structure discovery closeout.
