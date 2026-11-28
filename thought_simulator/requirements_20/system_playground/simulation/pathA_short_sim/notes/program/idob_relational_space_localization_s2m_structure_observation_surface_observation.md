@@ -1,6 +1,6 @@
 # IdOB Relational-Space Localization Observation (S2M Structure Observation Surface)
 
-**Date:** 2026-11-28  
+**Date:** 2026-11-27  
 **Status:** EXECUTED / PENDING REVIEW (characterization observation record; non-normative).  
 **Proposal authority:** [idob_relational_space_localization_s2m_structure_observation_surface_proposal.md](idob_relational_space_localization_s2m_structure_observation_surface_proposal.md).  
 **Design authority:** [idob_relational_space_localization_s2m_structure_observation_surface_design.md](idob_relational_space_localization_s2m_structure_observation_surface_design.md).
