@@ -803,10 +803,23 @@ Gate B design and any later characterization do not automatically establish:
 - P1 execution: PERFORMED
 - P0/P1 evidence: RECORDED
 - P0/P1 observation: RECORDED (see [idob_relational_space_localization_constructive_control_p0_p1_observation.md](idob_relational_space_localization_constructive_control_p0_p1_observation.md))
-- P0/P1 results: BEING REVIEWED
-- Current program state: REVIEW OF EXECUTED P0/P1 CONSTRUCTIVE-CONTROL EVIDENCE
+- P0/P1 results: RECORDED (no longer the immediate/active review point; program advanced through subsequent S2M structure-observation-surface cycle)
+- S2M structure observation-surface proposal: COMPLETED / REVIEWED (see [idob_relational_space_localization_s2m_structure_observation_surface_proposal.md](idob_relational_space_localization_s2m_structure_observation_surface_proposal.md))
+- S2M structure observation-surface design: COMPLETED / REVIEWED (see [idob_relational_space_localization_s2m_structure_observation_surface_design.md](idob_relational_space_localization_s2m_structure_observation_surface_design.md))
+- S2M structure observation-surface implementation: PERFORMED
+- S2M structure observation-surface execution: PERFORMED (one frozen M1-M6 characterization)
+- S2M structure observation-surface evidence: RECORDED
+- S2M structure observation-surface observation: RECORDED (see [idob_relational_space_localization_s2m_structure_observation_surface_observation.md](idob_relational_space_localization_s2m_structure_observation_surface_observation.md))
+- S2M structure observation-surface evidence review / interpretive correction: PERFORMED
+- S2M structure observation-surface review state: APPROVED
+- S2M structure observation-surface closeout: RECORDED (see [idob_relational_space_localization_s2m_structure_observation_surface_closeout.md](idob_relational_space_localization_s2m_structure_observation_surface_closeout.md))
+- S2M structure observation-surface experimental unit: CLOSED at stated claim boundary
+- Questions raised by M1-M6 unit: RETAINED / NON-BLOCKING under research-plan trajectory-deviation criterion
+- Current program state: RETURN TO BROADER BREADTH-FIRST S2M-SPACE EXPLORATION (next specific experiment NOT SELECTED / NOT AUTHORIZED by this closeout)
 - Localization source selection: NOT AUTHORIZED
 - Localization read/access change: NOT AUTHORIZED
 - Representation-family design beyond the scoped P0/P1 package: NOT AUTHORIZED
 - Architecture proposal/change: NOT AUTHORIZED
 - Natural-structure discovery probe: NOT DESIGNED / NOT AUTHORIZED
+- Higher-resolution re-characterization of the same M1-M5 neighborhood: NOT AUTOMATICALLY AUTHORIZED
+- Next characterization/experiment: NOT SELECTED / NOT AUTHORIZED

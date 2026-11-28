@@ -1,12 +1,13 @@
 # IdOB Relational-Space Localization Observation (S2M Structure Observation Surface)
 
 **Date:** 2026-11-27  
-**Status:** EXECUTED / PENDING REVIEW (characterization observation record; non-normative).  
+**Status:** EXECUTED / CLOSED (characterization observation record; non-normative).  
 **Proposal authority:** [idob_relational_space_localization_s2m_structure_observation_surface_proposal.md](idob_relational_space_localization_s2m_structure_observation_surface_proposal.md).  
-**Design authority:** [idob_relational_space_localization_s2m_structure_observation_surface_design.md](idob_relational_space_localization_s2m_structure_observation_surface_design.md).
+**Design authority:** [idob_relational_space_localization_s2m_structure_observation_surface_design.md](idob_relational_space_localization_s2m_structure_observation_surface_design.md).  
+**Closeout:** [idob_relational_space_localization_s2m_structure_observation_surface_closeout.md](idob_relational_space_localization_s2m_structure_observation_surface_closeout.md).
 
-Review state: **BEING REVIEWED**  
-Note: This edit corrects interpretation of existing evidence only. It is not a new experiment and does not change the evidence itself.
+Review state: **APPROVED**  
+Note: An earlier interpretive correction of package-level outcome language did not change the evidence itself. Human review and unit closeout are recorded in the closeout document.
 
 ## 1) Scope
 

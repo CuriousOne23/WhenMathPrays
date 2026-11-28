@@ -53,11 +53,11 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - Functional reframing and competing-conjecture trajectory: **RECORDED / BEING REVIEWED**.
 - Constructive-control P0/P1 proposal: **APPROVED FOR IMPLEMENTATION/EXECUTION**.
 - Constructive-control P0/P1 mechanical design: **APPROVED FOR IMPLEMENTATION/EXECUTION**.
-- Current program state: **S2M structure observation-surface characterization executed once; results BEING REVIEWED**.
+- Current program state: **BOUNDED M1-M6 S2M structure-observation-surface unit CLOSED; return to broader breadth-first S2M-space exploration; next experiment NOT SELECTED / NOT AUTHORIZED**.
 - Localization source selection: **NOT AUTHORIZED**.
 - Localization read/access change: **NOT AUTHORIZED**.
 - Representation-family design: **NOT AUTHORIZED**.
-- New characterization beyond scoped P0/P1 proposal package: **NOT AUTHORIZED**.
+- New characterization beyond an explicitly reviewed/authorized next package: **NOT AUTHORIZED**.
 - Architecture proposal/change: **NOT AUTHORIZED**.
 - P0 implementation: **PERFORMED**.
 - P1 implementation: **PERFORMED**.
@@ -65,14 +65,18 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - P1 execution: **PERFORMED**.
 - P0/P1 evidence: **RECORDED**.
 - P0/P1 observation: **RECORDED**.
-- P0/P1 results: **BEING REVIEWED**.
-- S2M structure observation-surface proposal: **PREPARED FOR REVIEW**.
-- S2M structure observation-surface design completion: **PREPARED FOR REVIEW**.
+- P0/P1 results: **RECORDED** (no longer the immediate/active review point).
+- S2M structure observation-surface proposal: **COMPLETED / REVIEWED**.
+- S2M structure observation-surface design completion: **COMPLETED / REVIEWED**.
 - S2M structure observation-surface implementation: **PERFORMED**.
 - S2M structure observation-surface execution: **PERFORMED**.
 - S2M structure observation-surface evidence: **RECORDED**.
 - S2M structure observation-surface observation: **RECORDED**.
-- S2M structure observation-surface results: **BEING REVIEWED**.
+- S2M structure observation-surface evidence review / interpretive correction: **PERFORMED**.
+- S2M structure observation-surface review state: **APPROVED**.
+- S2M structure observation-surface closeout: **RECORDED**.
+- S2M structure observation-surface experimental unit: **CLOSED** at stated claim boundary.
+- Questions raised by M1-M6 unit: **RETAINED / NON-BLOCKING** (do not automatically authorize higher-resolution re-characterization of M1-M5).
 - Natural-structure discovery probe: **NOT DESIGNED / NOT AUTHORIZED**.
 - Production selector research authorized: **NO**.
 - Category integration authorized: **NO**.
@@ -87,12 +91,14 @@ Frozen track authority: [idob_relational_space_localization_research_plan.md](id
 - **Gate C:** structural-health / representation qualification of what Gate B actually produces. Not authorized.
 - **Information/Representation Sufficiency characterization:** implemented and executed after approved pre-execution review; evidence, observation, classifications, and bounded interpretation human-approved.
 - **Pre-localization provenance boundary:** contract approved (non-normative boundary only; no source selected/authorized).
-- **Current program state:** S2M structure observation-surface characterization executed once under frozen M1-M6 scope; results recorded and pending review.
+- **S2M structure observation-surface characterization:** bounded M1-M6 unit executed, reviewed (including interpretive correction), and closed; open questions retained as non-blocking under the research-plan trajectory-deviation criterion.
+- **Current program state:** return to broader breadth-first exploration of other aspects/properties of S2M space; next specific experiment not selected or authorized by the closeout.
 
 ## Current next step
 
-Human/CP/Grok review of the executed bounded S2M structure observation-surface package (artifact + observation), followed by an explicit disposition decision before any follow-on characterization.  
-Do not proceed automatically into new implementation/execution cycles, source selection, localization read/access change, architecture proposal/change, HOW-2, Gate C, production selector work, or Category/YAML integration.
+Discuss/design/review a next breadth-first experimental view of S2M space as a separate package before any implementation or execution.  
+Do not automatically deepen the closed M1-M5 neighborhood, resolve M6, select a localization source, add a read edge, propose architecture, open HOW-2 or Gate C, or reopen the closed S2M traversal characterization cycle.  
+This closeout does not authorize a next experiment.
 
 ## Not yet authorized
 
@@ -100,7 +106,9 @@ Do not proceed automatically into new implementation/execution cycles, source se
 - HOW-2 / retuned provisional selector within this cycle;
 - production selector work;
 - Category integration work;
-- final YAML/IdOB representation design.
+- final YAML/IdOB representation design;
+- higher-resolution re-characterization of the closed M1-M5 neighborhood;
+- any next characterization run merely by virtue of this closeout.
 
 ## Document registry
 
@@ -164,6 +172,9 @@ Do not proceed automatically into new implementation/execution cycles, source se
 - [idob_relational_space_localization_s2m_structure_observation_surface_observation.md](idob_relational_space_localization_s2m_structure_observation_surface_observation.md)  
   **Role:** executed bounded M1-M6 characterization observation record, control/audit outcomes, replay/completeness status, and explicit claim boundaries.
 
+- [idob_relational_space_localization_s2m_structure_observation_surface_closeout.md](idob_relational_space_localization_s2m_structure_observation_surface_closeout.md)  
+  **Role:** human-approved closeout of the bounded M1-M6 structure-observation-surface unit; corrected claim boundaries; non-blocking open questions; restoration of broader breadth-first S2M-space exploration without authorizing a next experiment.
+
 ## Characterization program
 
 - [support/tools/idob_relational_space_localization_phase3_characterization.py](../../support/tools/idob_relational_space_localization_phase3_characterization.py)  
@@ -189,6 +200,6 @@ Do not proceed automatically into new implementation/execution cycles, source se
 - [support/tools/idob_relational_space_localization_s2m_structure_observation_surface_characterization.py](../../support/tools/idob_relational_space_localization_s2m_structure_observation_surface_characterization.py)  
   **What it is:** bounded S2M structure-observation-surface characterization executable for this track. Realizes the frozen M1-M6 matrix from retained authority artifacts, computes frozen controls/audits, enforces semantic-slice replay/completeness checks, and writes JSON under `local_characterization/sessions/idob_relational_space_localization_s2m_structure_observation_surface/runs/`.  
   **Open when:** You need the executable that produced the bounded S2M structure-observation-surface evidence package.  
-  **Relationship:** The observation record is [idob_relational_space_localization_s2m_structure_observation_surface_observation.md](idob_relational_space_localization_s2m_structure_observation_surface_observation.md).
+  **Relationship:** The observation record is [idob_relational_space_localization_s2m_structure_observation_surface_observation.md](idob_relational_space_localization_s2m_structure_observation_surface_observation.md). The unit closeout is [idob_relational_space_localization_s2m_structure_observation_surface_closeout.md](idob_relational_space_localization_s2m_structure_observation_surface_closeout.md).
 
 Future observation/realization/characterization/closeout documents should be registered here only when they are actually created.
